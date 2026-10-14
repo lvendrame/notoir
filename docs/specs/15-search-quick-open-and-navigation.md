@@ -1,5 +1,7 @@
 # 15 — Workspace Search, Quick Open & Navigation
 
+**Status:** Not started — Go to Line (M9), search, Quick Open, navigation (M16)
+
 ## Purpose
 
 Define workspace-wide search, Quick Open (fuzzy file finder), Go to Symbol, and navigation history (Back/Forward).

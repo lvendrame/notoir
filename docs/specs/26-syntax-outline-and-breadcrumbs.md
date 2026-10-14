@@ -1,5 +1,7 @@
 # 26 — Syntax Highlighting, Outline & Breadcrumbs
 
+**Status:** Not started — syntax (M12), outline and breadcrumbs (M15)
+
 ## Purpose
 
 Define language identification, syntax highlighting, the generic Outline panel, Go to Symbol and breadcrumbs. Notoir is

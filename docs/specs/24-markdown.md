@@ -1,5 +1,7 @@
 # 24 — Markdown
 
+**Status:** Not started — M13
+
 ## Purpose
 
 Markdown is a first-class file type. Define editing aids, the three display modes (Editor / Preview / Editor|Preview),

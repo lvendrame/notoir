@@ -1,5 +1,7 @@
 # 29 — MCP Server
 
+**Status:** Not started — M20, M21
+
 ## Purpose
 
 Notoir acts primarily as an **MCP server**, exposing its workspace, documents, editor and (read-only) Git state to MCP

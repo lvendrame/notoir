@@ -1,5 +1,7 @@
 # 13 — Minimap
 
+**Status:** Not started — M9
+
 ## Purpose
 
 Define the optional structural minimap: rendering, interaction, markers, settings and performance limits.

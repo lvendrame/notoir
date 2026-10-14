@@ -129,6 +129,7 @@ pub fn encode(text: &str, enc: TextEncoding) -> Result<Vec<u8>, Unmappable> {
 mod tests {
     use super::*;
 
+    // spec 02: "UTF-16 file with BOM round-trips"
     #[test]
     fn utf16le_with_bom_round_trips() {
         let enc = TextEncoding {

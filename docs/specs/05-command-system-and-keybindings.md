@@ -1,5 +1,7 @@
 # 05 — Command System & Keybindings
 
+**Status:** Partial — command registry, when-expressions, keymap (M1); UI wiring (M3), keybindings file in use (M9)
+
 ## Purpose
 
 Define the single command infrastructure used by menus, toolbar, keyboard shortcuts, the Command Palette, context menus,

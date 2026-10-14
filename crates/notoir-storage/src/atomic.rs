@@ -161,6 +161,7 @@ mod tests {
     }
 
     #[cfg(unix)]
+    // spec 09: "Save preserves Unix permissions"
     #[test]
     fn preserves_unix_permissions() {
         use std::os::unix::fs::PermissionsExt;

@@ -1,5 +1,7 @@
 # 10 — External Changes & File Watching
 
+**Status:** Not started — M8
+
 ## Purpose
 
 Detect and safely handle changes made to files outside Notoir (other editors, Git, scripts, sync tools, MCP

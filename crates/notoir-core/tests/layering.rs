@@ -22,6 +22,7 @@ fn dependencies(crate_dir: &str) -> Vec<String> {
         .collect()
 }
 
+// spec 01: "Domain crates do not depend on UI or IO crates"
 #[test]
 fn domain_crates_do_not_depend_on_ui_or_io_crates() {
     for crate_dir in ["notoir-core", "notoir-editor"] {

@@ -1,5 +1,7 @@
 # 16 — Command Palette
 
+**Status:** Not started — M9
+
 ## Purpose
 
 Define the Command Palette UI: the central entry point that keeps advanced features out of permanent chrome.

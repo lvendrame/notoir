@@ -1,5 +1,7 @@
 # 25 — JSON
 
+**Status:** Not started — M14
+
 ## Purpose
 
 Define JSON support: validation, formatting, structural navigation, and the Tree view in three modes (Text / Tree /

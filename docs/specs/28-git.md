@@ -1,5 +1,7 @@
 # 28 — Git & Source Control
 
+**Status:** Not started — M18, M19
+
 ## Purpose
 
 Define Git integration: architecture, repository detection, status and decorations, the Source Control panel, commit,

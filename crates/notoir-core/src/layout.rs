@@ -391,6 +391,7 @@ mod tests {
         GroupId(n)
     }
 
+    // spec 03: "Nested split layout"
     #[test]
     fn split_right_then_down_builds_nested_layout() {
         let mut t = LayoutTree::new(g(1));

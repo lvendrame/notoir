@@ -1,5 +1,7 @@
 # 09 — Save, Autosave & Recovery
 
+**Status:** Partial — atomic writes and recovery store (M2); save pipeline (M5), autosave and recovery prompt (M8)
+
 ## Purpose
 
 Define three independent systems: **Save** (user writes to the real file), **Autosave** (optional automatic Save), and

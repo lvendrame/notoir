@@ -1,5 +1,7 @@
 # 07 — Workspace & Explorer
 
+**Status:** Not started — M7
+
 ## Purpose
 
 Define the workspace model (any directory, no mandatory metadata), the optional `.notoir/` directory, and the Explorer

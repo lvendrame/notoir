@@ -1,5 +1,7 @@
 # 04 — Tabs
 
+**Status:** Not started — M5
+
 ## Purpose
 
 Define tab presentation, state indicators, pinning, ordering, closing, the tab context menu, and reopening closed tabs.

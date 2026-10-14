@@ -100,6 +100,7 @@ pub fn denormalize(text: &str, ending: LineEnding) -> String {
 mod tests {
     use super::*;
 
+    // spec 02: "CRLF preserved"
     #[test]
     fn crlf_detected_and_round_trips() {
         let text = "a\r\nb\r\nc";
@@ -116,6 +117,7 @@ mod tests {
         assert_eq!(denormalize(&norm, info.ending), text);
     }
 
+    // spec 02: "Mixed line endings are reported, not silently changed"
     #[test]
     fn mixed_line_endings_report_majority() {
         let text = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\r\n12\r\n";

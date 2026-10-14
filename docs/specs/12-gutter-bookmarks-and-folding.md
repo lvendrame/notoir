@@ -1,5 +1,7 @@
 # 12 — Gutter, Bookmarks & Folding
 
+**Status:** Not started — gutter (M4), bookmarks and folding (M15)
+
 ## Purpose
 
 Define the reusable `EditorGutter` (line numbers, fold controls, bookmarks, Git change indicators, future diagnostics),

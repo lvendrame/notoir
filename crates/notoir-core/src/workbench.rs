@@ -691,6 +691,7 @@ mod tests {
         wb.document(doc).unwrap().buffer.rope().line_to_char(line)
     }
 
+    // spec 02: "Opening an open file reuses the document"
     #[test]
     fn opening_an_open_file_reuses_the_document() {
         let mut wb = Workbench::new();
@@ -704,6 +705,7 @@ mod tests {
         assert_eq!(wb.document(doc).unwrap().buffer.text(), "ab");
     }
 
+    // spec 03: "Split right creates a second group with a view of the same document"
     #[test]
     fn split_right_creates_group_with_view_of_same_document() {
         let mut wb = Workbench::new();
@@ -716,6 +718,7 @@ mod tests {
         wb.layout.check().unwrap();
     }
 
+    // spec 03: "Closing the last tab of a group collapses the split"
     #[test]
     fn closing_last_tab_of_a_group_collapses_the_split() {
         let mut wb = Workbench::new();
@@ -727,6 +730,7 @@ mod tests {
         assert_eq!(wb.documents.len(), 1, "other view still holds the document");
     }
 
+    // spec 03: "Duplicate views share one buffer but have independent cursors"
     #[test]
     fn duplicate_views_share_buffer_with_independent_cursors() {
         let mut wb = Workbench::new();
@@ -744,6 +748,7 @@ mod tests {
         assert_eq!(wb.layout.active().tabs, vec![a, b]);
     }
 
+    // spec 03: "Selections follow remote edits"
     #[test]
     fn selections_follow_remote_edits() {
         let mut wb = Workbench::new();
@@ -758,6 +763,7 @@ mod tests {
         );
     }
 
+    // spec 11: "Undo across duplicate views"
     #[test]
     fn undo_across_duplicate_views_restores_selection_in_undoing_view() {
         let mut wb = Workbench::new();
@@ -772,6 +778,7 @@ mod tests {
         assert_eq!(wb.view(b).unwrap().selection.primary(), Range::caret(2));
     }
 
+    // spec 02: "Editing marks dirty and undo to saved revision clears it"
     #[test]
     fn dirty_tracking_and_undo_to_saved() {
         let mut wb = Workbench::new();
@@ -822,6 +829,7 @@ mod tests {
         assert_eq!(err, Err(WorkbenchError::ReadOnly));
     }
 
+    // spec 03: "Dropping a tab on a group edge creates a split"
     #[test]
     fn dropping_tab_on_bottom_edge_creates_split() {
         let mut wb = Workbench::new();
@@ -869,6 +877,7 @@ mod tests {
         wb.layout.check().unwrap();
     }
 
+    // spec 06: "Events are delivered after the frame's commands, in order"
     #[test]
     fn events_are_emitted_in_order() {
         let mut wb = Workbench::new();

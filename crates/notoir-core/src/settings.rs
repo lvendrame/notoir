@@ -729,6 +729,7 @@ mod tests {
         SettingValue::Str(x.into())
     }
 
+    // spec 20: "Workspace overrides user"
     #[test]
     fn workspace_overrides_user() {
         let mut user = SettingsLayer::default();
@@ -739,6 +740,7 @@ mod tests {
         assert_eq!(r.int("editor.tabSize", Some("rust")), 2);
     }
 
+    // spec 20: "Language-specific beats general"
     #[test]
     fn language_specific_beats_general() {
         let mut user = SettingsLayer::default();
@@ -757,6 +759,7 @@ mod tests {
         assert_eq!(r.str("editor.wordWrap", None), "off");
     }
 
+    // spec 20: "Invalid value falls through"
     #[test]
     fn invalid_value_falls_through_with_warning() {
         let mut user = SettingsLayer::default();
@@ -782,6 +785,7 @@ mod tests {
         assert_eq!(r.int("editor.tabSize", None), 4);
     }
 
+    // spec 20: "Restricted setting in untrusted workspace"
     #[test]
     fn restricted_setting_needs_trust() {
         let mut ws = SettingsLayer::default();

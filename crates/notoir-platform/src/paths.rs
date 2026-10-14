@@ -39,7 +39,12 @@ pub struct AppPaths {
 impl AppPaths {
     /// Resolves directories from `NOTOIR_HOME` when set, else the OS defaults.
     pub fn resolve() -> Result<Self, PathsError> {
-        match std::env::var_os(HOME_ENV) {
+        Self::resolve_with(std::env::var_os(HOME_ENV))
+    }
+
+    /// [`AppPaths::resolve`] with the `NOTOIR_HOME` value passed in.
+    pub fn resolve_with(home: Option<std::ffi::OsString>) -> Result<Self, PathsError> {
+        match home {
             Some(root) if !root.is_empty() => Ok(Self::under(Path::new(&root))),
             _ => Self::platform_default(),
         }
@@ -143,6 +148,21 @@ mod tests {
             assert!(dir.is_dir(), "{}", dir.display());
         }
         assert_eq!(paths.recovery, root.path().join("data/recovery"));
+    }
+
+    // spec 31: "NOTOIR_HOME overrides all directories"
+    #[test]
+    fn notoir_home_value_relocates_and_creates_every_directory() {
+        let root = tempfile::tempdir().unwrap();
+        let paths = AppPaths::resolve_with(Some(root.path().as_os_str().to_owned())).unwrap();
+        paths.ensure_dirs().unwrap();
+        for name in ["config", "data", "cache", "logs", "data/recovery"] {
+            assert!(root.path().join(name).is_dir(), "{name}");
+        }
+        assert_eq!(
+            AppPaths::resolve_with(Some("".into())).unwrap(),
+            AppPaths::platform_default().unwrap()
+        );
     }
 
     #[test]

@@ -241,6 +241,7 @@ mod tests {
         now
     }
 
+    // spec 11: "Typing a word is one undo step"
     #[test]
     fn typing_a_word_coalesces_and_word_boundary_splits() {
         let mut buf = TextBuffer::new("");
@@ -261,6 +262,7 @@ mod tests {
         assert_eq!(buf.text(), "ab");
     }
 
+    // spec 11: "Paste is one undo step"
     #[test]
     fn other_edits_are_single_steps() {
         let mut buf = TextBuffer::new("x");

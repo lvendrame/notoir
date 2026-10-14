@@ -1,5 +1,7 @@
 # 35 — Logging & Error Handling
 
+**Status:** Partial — structured logging and panic hook (M0); error-to-notification mapping (M3+)
+
 ## Purpose
 
 Define structured logging (what, where, privacy), error types and how errors reach users, and panic handling. Notoir

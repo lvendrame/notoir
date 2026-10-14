@@ -1,5 +1,7 @@
 # 32 — Permissions & Security
 
+**Status:** Not started — M20 (MCP), M22 (plugins)
+
 ## Purpose
 
 Define the shared permission model for the two trust boundaries — MCP clients and Lua plugins — plus workspace trust,

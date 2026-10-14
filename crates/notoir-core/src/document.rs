@@ -197,3 +197,22 @@ impl Document {
         self.disk_state = DiskState::InSync;
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn large_file_thresholds() {
+        let limits = LargeFileLimits {
+            size_bytes: 100,
+            lines: 3,
+            longest_line: 5,
+            max_editable_bytes: 1000,
+        };
+        assert!(!limits.is_large(10, "a\nb"));
+        assert!(limits.is_large(101, ""));
+        assert!(limits.is_large(10, "1\n2\n3\n4"));
+        assert!(limits.is_large(10, "123456"));
+    }
+}

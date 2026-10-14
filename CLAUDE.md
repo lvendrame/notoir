@@ -9,6 +9,11 @@ Architecture: [`01-architecture.md`](docs/specs/01-architecture.md). Design syst
 Read [`docs/plan/orchestrator.md`](docs/plan/orchestrator.md). Pick the first milestone not `Done`, read its specs,
 turn their Gherkin scenarios into Rust tests, implement, verify, then update the status row with notes.
 
+Spec traceability ([`docs/plan/spec-coverage.md`](docs/plan/spec-coverage.md), generated): tag each test that covers a
+scenario with `// spec NN: "Exact scenario title"`, keep each spec's `**Status:**` line current, and run
+`cargo run -p spec-check -- --write`. `cargo test` fails when tags, statuses and the report disagree. Only tag a test
+when it asserts every `Then` of the scenario (at least at model level).
+
 ## Layout
 
 - `crates/notoir-core` — domain: documents registry, editor views, groups/layout tree, commands, events, settings model,
@@ -22,6 +27,7 @@ turn their Gherkin scenarios into Rust tests, implement, verify, then update the
 - `crates/notoir-mcp` — rmcp server, tool schemas, transport, bridge.
 - `crates/notoir-plugins` — mlua host, manifest, plugin API.
 - `apps/notoir` — eframe binary: shell, theme, icons, i18n, widgets, editor widget, panels.
+- `tools/spec-check` — spec status / scenario-coverage checker and report generator.
 
 `notoir-core` and `notoir-editor` must never depend on egui, tokio, or IO crates (enforced by
 `crates/notoir-core/tests/layering.rs`).

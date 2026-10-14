@@ -1,5 +1,7 @@
 # 19 — Status Bar & Notifications
 
+**Status:** Not started — M3
+
 ## Purpose
 
 Define the status bar items and their click actions, background-activity indication, and the notification (toast)

@@ -1,5 +1,7 @@
 # 22 — Internationalization
 
+**Status:** Partial — embedded locales, 14 languages, plurals, detection (M0); language pickers and switching UI (M3, M10)
+
 ## Purpose
 
 Notoir is multi-language from the first milestone, following the approach proven in `string_art_it_desktop`

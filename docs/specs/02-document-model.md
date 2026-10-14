@@ -1,5 +1,7 @@
 # 02 — Document Model
 
+**Status:** Partial — document model, encodings, line endings, language detection (M1); loading files and large-file mode (M5)
+
 ## Purpose
 
 Define `Document`: the in-memory representation of an open file or Scratchpad, independent of any tab or view. Covers

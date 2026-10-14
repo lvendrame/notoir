@@ -1,5 +1,7 @@
 # 17 — Shell Layout, Panels, Empty State & First Run
 
+**Status:** Partial — empty state rendering (M0); panels and activity bar (M3), first run (M10)
+
 ## Purpose
 
 Define the window layout, the generic panel system (primary sidebar, secondary sidebar, bottom panel), the empty state

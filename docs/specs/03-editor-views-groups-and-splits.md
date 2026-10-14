@@ -1,5 +1,7 @@
 # 03 — Editor Views, Groups & Splits
 
+**Status:** Partial — views, groups, layout tree, split/duplicate/move/dock (M1, domain); rendering, tab drag and Maximize panel restore (M6)
+
 ## Purpose
 
 Define `EditorView` (per-tab presentation state over a document), `EditorGroup` (a tab strip + active view), the

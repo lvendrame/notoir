@@ -86,6 +86,7 @@ impl ScratchpadStore {
 mod tests {
     use super::*;
 
+    // spec 08: "New scratchpad numbering"
     #[test]
     fn numbering_reuses_lowest_gap() {
         let dir = tempfile::tempdir().unwrap();

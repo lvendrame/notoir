@@ -371,6 +371,7 @@ mod tests {
         r
     }
 
+    // spec 05: "Menu, shortcut, and palette all save through the same handler"
     #[test]
     fn every_source_runs_the_same_handler() {
         let r = registry();
@@ -394,6 +395,7 @@ mod tests {
         );
     }
 
+    // spec 05: "Disabled command is not executed"
     #[test]
     fn disabled_command_is_not_executed() {
         let r = registry();

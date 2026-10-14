@@ -1,5 +1,7 @@
 # 30 — Lua Plugins
 
+**Status:** Not started — M22, M23
+
 ## Purpose
 
 Define the Lua plugin system: package format, manifest and permissions, runtime isolation, the stable `notoir` API,

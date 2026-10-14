@@ -7,6 +7,19 @@ Per milestone: read the listed specs → define data models / commands / UI stat
 into tests → implement → `cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test
 --workspace` → CI green on Windows/macOS/Linux → refactor → update this table.
 
+## Spec status
+
+Per-spec status and scenario coverage: [`spec-coverage.md`](spec-coverage.md) (generated — do not edit).
+
+- Each spec starts with `**Status:** Done | Partial | Not started — <what is done (milestone); what is pending (milestone)>`.
+- A test covers a Gherkin scenario with a comment tag right above it: `// spec 03: "Nested split layout"` (exact title).
+  Tags in `apps/*/tests/` count as app-level (UI) coverage; all others as domain-level.
+- `cargo test` runs `tools/spec-check`: it fails on tags that match no scenario, duplicate scenario titles, missing or
+  invalid status lines, a `Done` spec with untested scenarios, a `Not started` spec with tagged tests, or a stale
+  report. Regenerate with `cargo run -p spec-check -- --write`.
+- Closing a milestone: tag the tests for every scenario it implemented, update the status line of each spec it
+  touched, regenerate the report.
+
 ## Phase 1 — Core editor foundation
 
 | # | Milestone | Specs | Status | Notes |

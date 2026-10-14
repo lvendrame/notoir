@@ -461,6 +461,7 @@ mod tests {
         }
     }
 
+    // spec 21: "Built-in themes meet contrast"
     #[test]
     fn built_in_themes_meet_contrast() {
         for id in ThemeId::ALL {

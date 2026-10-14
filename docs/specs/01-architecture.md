@@ -1,5 +1,7 @@
 # 01 — Architecture
 
+**Status:** Partial — crates, layering test, lints (M0); background worker model lands with the first async work (M5, M7)
+
 ## Purpose
 
 Define the Rust workspace layout, crate responsibilities and dependency rules, application state ownership, the

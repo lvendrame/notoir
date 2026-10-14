@@ -1,5 +1,7 @@
 # 08 — Opening Files, Scratchpads & Recent
 
+**Status:** Partial — Scratchpad and recent storage (M2); open/new flows and menus (M5, M7)
+
 ## Purpose
 
 Define the ways content enters Notoir — Open File, Open Workspace, New File, New Scratchpad, New Window, drag and drop,

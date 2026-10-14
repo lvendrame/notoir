@@ -460,6 +460,7 @@ mod tests {
         assert_eq!(db.load_session("/other").unwrap(), None);
     }
 
+    // spec 23: "Corrupt database"
     #[test]
     fn corrupt_database_is_set_aside() {
         let dir = tempfile::tempdir().unwrap();
@@ -531,6 +532,8 @@ mod tests {
         }
     }
 
+    // spec 08: "Pinned workspaces stay on top"
+    // spec 08: "Clear keeps pinned"
     #[test]
     fn recent_ordering_pins_and_clear() {
         let db = StateDb::open_in_memory().unwrap();
@@ -569,6 +572,7 @@ mod tests {
         assert!(all.iter().all(|e| e.path != "/f1"));
     }
 
+    // spec 23: "Two windows write concurrently"
     #[test]
     fn two_connections_write_concurrently() {
         let dir = tempfile::tempdir().unwrap();

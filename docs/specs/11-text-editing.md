@@ -1,5 +1,7 @@
 # 11 — Text Editing
 
+**Status:** Partial — transactions, undo coalescing, selections (M1); editor widget (M4), find/replace (M9)
+
 ## Purpose
 
 Define the editor widget's editing behaviour: input, cursor movement, selection, clipboard, undo/redo, in-document

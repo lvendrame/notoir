@@ -1,5 +1,7 @@
 # 18 — Menus, Toolbar & Context Menus
 
+**Status:** Not started — M3
+
 ## Purpose
 
 Define the main menu structure, the minimal toolbar with contextual controls, and context-menu conventions. Every item

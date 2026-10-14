@@ -496,6 +496,7 @@ mod tests {
         assert!(dir.exists());
     }
 
+    // spec 09: "Discarded recovery is kept briefly"
     #[test]
     fn discard_keeps_data_for_seven_days() {
         let root = tempfile::tempdir().unwrap();

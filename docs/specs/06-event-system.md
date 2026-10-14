@@ -1,5 +1,7 @@
 # 06 — Event System
 
+**Status:** Partial — typed events and outbox (M1); frame-end subscribers (M3+)
+
 ## Purpose
 
 Define typed application events: who emits them, when they are delivered, and who may subscribe — keeping a clear

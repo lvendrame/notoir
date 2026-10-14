@@ -1,5 +1,7 @@
 # 00 — Overview & Scope
 
+**Status:** Partial — product scope fixed; scenarios need the app shell (M3) and file opening (M5)
+
 ## Purpose
 
 Define what Notoir is, the product principles every other spec must respect, the phase boundaries, and the UX

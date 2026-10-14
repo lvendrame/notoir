@@ -1,5 +1,7 @@
 # 33 — Testing & CI
 
+**Status:** Partial — CI workflow, kittest and render snapshots (M0); crash suite (M8), performance budgets (M4)
+
 ## Purpose
 
 Define the testing strategy (unit, integration, UI, visual snapshots, reliability/crash tests, performance budgets) and

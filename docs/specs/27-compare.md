@@ -1,5 +1,7 @@
 # 27 — Compare (Diff)
 
+**Status:** Not started — M17
+
 ## Purpose
 
 Define the built-in comparison tool: sources, the diff model, the side-by-side diff view, navigation, whitespace

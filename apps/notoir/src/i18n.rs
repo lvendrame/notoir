@@ -349,6 +349,7 @@ mod tests {
         k
     }
 
+    // spec 22: "All locales have the same keys"
     #[test]
     fn all_locales_have_identical_keys() {
         let en = base_keys(Language::En);
@@ -383,6 +384,7 @@ mod tests {
         assert_eq!(tn_in(Language::En, "common:fileCount", 4, &[]), "4 files");
     }
 
+    // spec 22: "Unsupported locale falls back to English"
     #[test]
     fn detect() {
         assert_eq!(Language::detect(Some("pt-PT"), None), Language::PtBr);
@@ -393,6 +395,7 @@ mod tests {
         assert_eq!(Language::detect(Some("fr"), Some("ja")), Language::Ja);
     }
 
+    // spec 22: "Polish plural forms"
     #[test]
     fn polish_plural_forms() {
         let f = |n| tn_in(Language::Pl, "common:fileCount", n, &[]);

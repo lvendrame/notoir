@@ -1,5 +1,7 @@
 # 21 — Themes, Design System & Accessibility
 
+**Status:** Partial — tokens, three built-in themes, icons, contrast checks (M0); theme switching UI (M3), custom themes (M26)
+
 ## Purpose
 
 Define the visual language, design tokens, the three built-in themes, the theme file format, typography, iconography,

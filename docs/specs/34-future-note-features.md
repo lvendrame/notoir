@@ -1,5 +1,7 @@
 # 34 — Future Note Features (Phase 6)
 
+**Status:** Not started — Phase 6 (M24, M25)
+
 ## Purpose
 
 Record note-oriented features that are **not** initial blockers but that the architecture must allow without

@@ -373,6 +373,7 @@ exclude = ["**/.git", "**/node_modules"]
         assert!(matches!(&v["files.exclude"], SettingValue::List(l) if l.len() == 2));
     }
 
+    // spec 20: "Comments are preserved"
     #[test]
     fn writing_preserves_comments_and_order() {
         let out = set_setting(
@@ -437,6 +438,7 @@ exclude = ["**/.git", "**/node_modules"]
         assert_eq!(p.unsupported, vec!["when".to_owned(), "mixed".to_owned()]);
     }
 
+    // spec 20: "Workspace settings file created lazily"
     #[test]
     fn workspace_file_is_created_lazily_with_only_that_setting() {
         let ws = tempfile::tempdir().unwrap();
@@ -454,6 +456,7 @@ exclude = ["**/.git", "**/node_modules"]
         );
     }
 
+    // spec 20: "Parse error keeps last good values"
     #[test]
     fn parse_error_keeps_previous_values() {
         let dir = tempfile::tempdir().unwrap();

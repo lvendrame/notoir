@@ -1,5 +1,7 @@
 # 23 — Session & State Persistence
 
+**Status:** Partial — SQLite state store and migrations (M2); session save/restore (M8)
+
 ## Purpose
 
 Define what transient state Notoir remembers, where it is stored, the storage technology choice, migrations and

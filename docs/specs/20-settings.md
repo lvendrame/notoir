@@ -1,5 +1,7 @@
 # 20 — Settings
 
+**Status:** Partial — schema, scope resolution, settings files (M1, M2); Settings tab and keyboard editor (M10)
+
 ## Purpose
 
 Define the settings schema, storage, scope resolution (Default → User → Workspace → language-specific), the

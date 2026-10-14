@@ -1,5 +1,7 @@
 # 14 — View Options & Zen Mode
 
+**Status:** Not started — zoom and wrap (M4), Zen Mode (M10)
+
 ## Purpose
 
 Define zoom, word wrap, whitespace rendering, current-line highlight, full screen and Zen Mode.

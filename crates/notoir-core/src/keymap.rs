@@ -512,6 +512,7 @@ mod tests {
         }
     }
 
+    // spec 05: "Platform modifiers"
     #[test]
     fn mod_maps_per_platform() {
         assert!(ks("Mod+S", Platform::Mac).mods.cmd);
@@ -528,6 +529,7 @@ mod tests {
         assert_eq!(ks("Ctrl++", Platform::Linux).key, "+");
     }
 
+    // spec 05: "User binding overrides default"
     #[test]
     fn user_binding_overrides_default() {
         let p = Platform::Windows;
@@ -542,6 +544,7 @@ mod tests {
         assert_eq!(run(&mut map, "Ctrl+Shift+S", p), cmd("file.saveAll"));
     }
 
+    // spec 05: "Removing a default binding"
     #[test]
     fn removing_a_default_binding() {
         let p = Platform::Linux;
@@ -555,6 +558,7 @@ mod tests {
         assert_eq!(run(&mut map, "Ctrl+Shift+K", p), KeyResult::NoMatch);
     }
 
+    // spec 05: "Chord binding"
     #[test]
     fn chords_wait_for_second_key() {
         let p = Platform::Mac;

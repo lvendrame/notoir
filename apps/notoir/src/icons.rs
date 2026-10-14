@@ -188,6 +188,7 @@ pub fn app_icon() -> egui::IconData {
 mod tests {
     use super::*;
 
+    // spec 21: "Every icon asset exists"
     #[test]
     fn every_icon_rasterizes_with_visible_pixels() {
         for &icon in Icon::ALL {
