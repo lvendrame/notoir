@@ -28,6 +28,10 @@
     "activityBar": "Etkinlik Çubuğu",
     "primarySidebarRight": "Birincil Kenar Çubuğu Sağda",
     "toolbar": "Araç Çubuğu",
-    "statusBar": "Durum Çubuğu"
+    "statusBar": "Durum Çubuğu",
+    "lineNumbers": "Satır Numaraları",
+    "whitespace": "Boşluklar",
+    "currentLineHighlight": "Geçerli Satır Vurgusu",
+    "wordWrap": "Sözcük Kaydırma"
   }
 }

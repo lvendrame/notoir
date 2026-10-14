@@ -28,6 +28,10 @@
     "activityBar": "Barra de Atividades",
     "primarySidebarRight": "Barra Lateral Principal à Direita",
     "toolbar": "Barra de Ferramentas",
-    "statusBar": "Barra de Status"
+    "statusBar": "Barra de Status",
+    "lineNumbers": "Números de Linha",
+    "whitespace": "Espaços em Branco",
+    "currentLineHighlight": "Realce da Linha Atual",
+    "wordWrap": "Quebra de Linha"
   }
 }

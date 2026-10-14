@@ -35,9 +35,9 @@ pub fn script_for(lang: Language) -> Option<Script> {
     }
 }
 
-/// Installs the font families. `cjk` is the system face for CJK UI
-/// languages, once [`system_fonts::request`] has found it.
-pub fn install(ctx: &egui::Context, cjk: Option<system_fonts::SystemFont>) {
+/// Installs the font families. `cjk` are the system faces found so far for
+/// the scripts in use (UI language and editor text).
+pub fn install(ctx: &egui::Context, cjk: &[system_fonts::SystemFont]) {
     let mut fonts = FontDefinitions::default();
     let mut add = |name: &str, bytes: &'static [u8]| {
         fonts
@@ -60,8 +60,12 @@ pub fn install(ctx: &egui::Context, cjk: Option<system_fonts::SystemFont>) {
         name.to_owned()
     };
     let mut fallbacks = Vec::new();
-    if let Some(f) = cjk {
-        fallbacks.push(fallback("cjk-system", f.bytes, f.index));
+    for f in cjk {
+        fallbacks.push(fallback(
+            &format!("cjk-system-{:?}", f.script),
+            f.bytes,
+            f.index,
+        ));
     }
     fallbacks.push(fallback(
         "cjk-language-names",
@@ -98,6 +102,60 @@ pub fn install(ctx: &egui::Context, cjk: Option<system_fonts::SystemFont>) {
             .insert(FontFamily::Name(weight.into()), chain);
     }
     ctx.set_fonts(fonts);
+}
+
+/// CJK scripts whose glyphs appear in `text`. Han ideographs without kana or
+/// hangul use the UI language's preference (Japanese UI → Japanese face).
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct CjkUse {
+    pub han: bool,
+    pub kana: bool,
+    pub hangul: bool,
+}
+
+impl CjkUse {
+    pub fn scan(&mut self, text: &str) {
+        if text.is_ascii() {
+            return;
+        }
+        for c in text.chars() {
+            match c as u32 {
+                0x3040..=0x30FF | 0x31F0..=0x31FF | 0xFF66..=0xFF9F => self.kana = true,
+                0x1100..=0x11FF | 0x3130..=0x318F | 0xAC00..=0xD7AF => self.hangul = true,
+                0x3400..=0x4DBF | 0x4E00..=0x9FFF | 0xF900..=0xFAFF => self.han = true,
+                _ => {}
+            }
+        }
+    }
+
+    pub fn any(&self) -> bool {
+        self.han || self.kana || self.hangul
+    }
+
+    pub fn merge(&mut self, other: CjkUse) {
+        self.han |= other.han;
+        self.kana |= other.kana;
+        self.hangul |= other.hangul;
+    }
+
+    /// System font scripts needed, given the UI language.
+    pub fn scripts(&self, ui: Language) -> Vec<Script> {
+        let mut out = Vec::new();
+        if self.kana {
+            out.push(Script::Japanese);
+        }
+        if self.hangul {
+            out.push(Script::Korean);
+        }
+        if self.han && !self.kana {
+            out.push(match ui {
+                Language::Ja => Script::Japanese,
+                Language::Ko => Script::Korean,
+                _ => Script::SimplifiedChinese,
+            });
+        }
+        out
+    }
 }
 
 /// Bold/semibold text uses a named family since egui has no weight axis.

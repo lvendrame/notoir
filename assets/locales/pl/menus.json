@@ -28,6 +28,10 @@
     "activityBar": "Pasek aktywności",
     "primarySidebarRight": "Główny pasek boczny po prawej",
     "toolbar": "Pasek narzędzi",
-    "statusBar": "Pasek stanu"
+    "statusBar": "Pasek stanu",
+    "lineNumbers": "Numery wierszy",
+    "whitespace": "Białe znaki",
+    "currentLineHighlight": "Wyróżnienie bieżącego wiersza",
+    "wordWrap": "Zawijanie wierszy"
   }
 }

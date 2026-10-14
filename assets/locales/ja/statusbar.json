@@ -2,5 +2,10 @@
   "chordPending": "({{keys}}) が押されました。2 番目のキーを待っています…",
   "notifications": "通知",
   "noNotifications": "新しい通知はありません",
-  "clearAll": "すべてクリア"
+  "clearAll": "すべてクリア",
+  "lnCol": "{{line}} 行、{{col}} 列",
+  "selected": "({{count}} 個選択)",
+  "spaces": "スペース: {{size}}",
+  "tabSize": "タブのサイズ: {{size}}",
+  "plainText": "プレーン テキスト"
 }

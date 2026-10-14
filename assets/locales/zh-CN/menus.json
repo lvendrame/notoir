@@ -28,6 +28,10 @@
     "activityBar": "活动栏",
     "primarySidebarRight": "主侧边栏位于右侧",
     "toolbar": "工具栏",
-    "statusBar": "状态栏"
+    "statusBar": "状态栏",
+    "lineNumbers": "行号",
+    "whitespace": "空白字符",
+    "currentLineHighlight": "当前行突出显示",
+    "wordWrap": "自动换行"
   }
 }

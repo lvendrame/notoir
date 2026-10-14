@@ -9,12 +9,14 @@ use notoir_core::keymap::Platform;
 use crate::core::AppCore;
 
 mod app;
+mod editor;
 mod preferences;
 mod view;
 
 pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform) {
     let mut specs = Vec::new();
     view::specs(&mut specs);
+    editor::specs(&mut specs);
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);
     for spec in specs {

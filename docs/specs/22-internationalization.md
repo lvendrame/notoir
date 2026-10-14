@@ -1,6 +1,6 @@
 # 22 — Internationalization
 
-**Status:** Partial — locales, plurals, detection, language switching and picker (M0, M3); remaining namespaces arrive with their features
+**Status:** Partial — locales, plurals, detection, language switching and picker, lazy CJK fallback for editor text (M0, M3, M4); remaining namespaces arrive with their features
 
 ## Purpose
 

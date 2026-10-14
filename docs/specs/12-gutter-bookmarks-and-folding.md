@@ -1,6 +1,6 @@
 # 12 — Gutter, Bookmarks & Folding
 
-**Status:** Not started — gutter (M4), bookmarks and folding (M15)
+**Status:** Partial — line-number gutter lane incl. relative mode (M4); bookmarks, folding and other lanes (M15)
 
 ## Purpose
 

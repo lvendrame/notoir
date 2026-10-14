@@ -2,5 +2,10 @@
   "chordPending": "Нажато ({{keys}}). Ожидание второй клавиши…",
   "notifications": "Уведомления",
   "noNotifications": "Новых уведомлений нет",
-  "clearAll": "Очистить все"
+  "clearAll": "Очистить все",
+  "lnCol": "Стр {{line}}, стлб {{col}}",
+  "selected": "(выделено: {{count}})",
+  "spaces": "Пробелы: {{size}}",
+  "tabSize": "Размер табуляции: {{size}}",
+  "plainText": "Обычный текст"
 }

@@ -27,7 +27,14 @@
     "showOutput": "出力を表示",
     "togglePanel": "パネルの切り替え",
     "movePanel": "パネルを移動",
-    "toggleFullScreen": "全画面表示"
+    "toggleFullScreen": "全画面表示",
+    "toggleWordWrap": "折り返しの切り替え",
+    "zoomIn": "拡大",
+    "zoomOut": "縮小",
+    "zoomReset": "ズームのリセット",
+    "toggleLineNumbers": "行番号の切り替え",
+    "toggleWhitespace": "空白文字の表示切り替え",
+    "toggleCurrentLineHighlight": "現在行の強調表示の切り替え"
   },
   "preferences": {
     "changeTheme": "テーマの変更…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "通知を表示",
     "clearNotifications": "すべての通知をクリア"
+  },
+  "file": {
+    "newUntitled": "新しいファイル"
+  },
+  "edit": {
+    "undo": "元に戻す",
+    "redo": "やり直し",
+    "cut": "切り取り",
+    "copy": "コピー",
+    "paste": "貼り付け",
+    "selectAll": "すべて選択"
   }
 }

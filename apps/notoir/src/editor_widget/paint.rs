@@ -1,0 +1,382 @@
+//! Painting: background, current line, selections, text, whitespace, carets,
+//! IME preedit, gutter (line numbers) and the vertical scrollbar.
+
+use egui::{Align2, Color32, Pos2, Rect, Sense, Stroke, Vec2};
+use notoir_editor::display_map::line_text;
+use notoir_editor::wrap::{char_cols, col_of};
+use notoir_editor::{Range, Selection};
+use unicode_segmentation::UnicodeSegmentation;
+
+use super::{
+    CursorStyle, EditorOptions, LineNumbers, Metrics, SCROLLBAR_W, ViewCache, Whitespace, scroll_y,
+    set_scroll_y,
+};
+use crate::shell::Kit;
+use crate::theme::Tok;
+
+/// One visible display row.
+struct Row {
+    line: usize,
+    sub_row: usize,
+    /// Char offset of the row start in the document.
+    start: usize,
+    /// Chars in the row (excluding the line break).
+    len: usize,
+    text: String,
+    /// Whether this row ends its line.
+    last: bool,
+    y: f32,
+}
+
+fn visible_rows(cache: &mut ViewCache, m: &Metrics) -> Vec<Row> {
+    let sy = scroll_y(cache, m);
+    let first = (sy / m.row_h).floor().max(0.0) as usize;
+    let total = cache.map.total_rows();
+    let count = m.visible_rows() + 2;
+    let mut rows = Vec::with_capacity(count);
+    let mut current_line = usize::MAX;
+    let mut line_chars: Vec<char> = Vec::new();
+    let mut starts: Vec<usize> = Vec::new();
+    for row in first..(first + count).min(total) {
+        let r = cache.map.row_to_line(row);
+        if r.line != current_line {
+            current_line = r.line;
+            line_chars = line_text(&cache.rope, r.line).chars().collect();
+            starts = cache.map.row_starts(&cache.rope, r.line);
+        }
+        let s = starts[r.sub_row.min(starts.len() - 1)];
+        let e = starts
+            .get(r.sub_row + 1)
+            .copied()
+            .unwrap_or(line_chars.len());
+        rows.push(Row {
+            line: r.line,
+            sub_row: r.sub_row,
+            start: cache.rope.line_to_char(r.line) + s,
+            len: e - s,
+            text: line_chars[s..e].iter().collect(),
+            last: r.sub_row + 1 >= starts.len(),
+            y: m.text.top() + row as f32 * m.row_h - sy,
+        });
+    }
+    rows
+}
+
+/// Expands tabs to spaces so text columns line up with the grid.
+fn display_text(text: &str, tab: usize) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut col = 0;
+    for c in text.chars() {
+        let w = char_cols(c, col, tab);
+        if c == '\t' {
+            out.extend(std::iter::repeat_n(' ', w));
+        } else {
+            out.push(c);
+        }
+        col += w;
+    }
+    out
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn paint(
+    ui: &egui::Ui,
+    kit: &mut Kit,
+    cache: &mut ViewCache,
+    sel: &Selection,
+    m: &Metrics,
+    opts: &EditorOptions,
+    focused: bool,
+    now: f64,
+) -> crate::fonts::CjkUse {
+    let mut cjk = crate::fonts::CjkUse::default();
+    let painter = ui.painter_at(m.rect);
+    let tab = opts.indent.tab_size;
+    painter.rect_filled(m.rect, 0.0, kit.color(Tok::EditorBackground));
+    painter.rect_filled(m.gutter, 0.0, kit.color(Tok::GutterBackground));
+    let rows = visible_rows(cache, m);
+    let primary = sel.primary();
+    let caret_line = cache
+        .rope
+        .char_to_line(primary.head.min(cache.rope.len_chars()));
+    let text_painter = painter.with_clip_rect(m.text.intersect(m.rect));
+    let x0 = m.text.left() - cache.scroll_x;
+    let col_x = |col: usize| x0 + col as f32 * m.char_w;
+
+    // Current line (every row of the caret's line) when nothing is selected.
+    if opts.highlight_line && sel.is_empty() {
+        for row in rows.iter().filter(|r| r.line == caret_line) {
+            let r = Rect::from_min_size(
+                Pos2::new(m.gutter.right(), row.y),
+                Vec2::new(m.rect.right() - m.gutter.right(), m.row_h),
+            );
+            painter.rect_filled(r, 0.0, kit.color(Tok::EditorLineHighlight));
+        }
+    }
+
+    let sel_color = if focused {
+        kit.color(Tok::EditorSelection)
+    } else {
+        kit.color(Tok::EditorSelectionInactive)
+    };
+    let text_color = kit.color(Tok::EditorForeground);
+    let ws_color = kit.color(Tok::EditorWhitespace);
+    for row in &rows {
+        let row_end = row.start + row.len;
+        // Selections.
+        for r in sel.ranges().iter().filter(|r| !r.is_empty()) {
+            let (a, b) = (r.from().max(row.start), r.to().min(row_end));
+            let covers_break = row.last && r.to() > row_end && r.from() <= row_end;
+            if a > b || (a == b && !covers_break) {
+                continue;
+            }
+            let ca = col_of(&row.text, a - row.start, tab);
+            let cb = col_of(&row.text, b - row.start, tab);
+            let extra = if covers_break { m.char_w * 0.6 } else { 0.0 };
+            let rect = Rect::from_min_max(
+                Pos2::new(col_x(ca), row.y),
+                Pos2::new(col_x(cb) + extra, row.y + m.row_h),
+            );
+            text_painter.rect_filled(rect, 2.0, sel_color);
+        }
+        // Text.
+        cjk.scan(&row.text);
+        let shown = display_text(&row.text, tab);
+        if shown.is_ascii() {
+            text_painter.text(
+                Pos2::new(x0, row.y + m.row_h / 2.0),
+                Align2::LEFT_CENTER,
+                &shown,
+                m.font.clone(),
+                text_color,
+            );
+        } else {
+            // Place each grapheme on its grid column so wide/fallback glyphs stay aligned.
+            let mut col = 0;
+            for g in row.text.graphemes(true) {
+                let first = g.chars().next().unwrap_or(' ');
+                let w: usize = if first == '\t' {
+                    char_cols('\t', col, tab)
+                } else {
+                    g.chars()
+                        .map(|c| char_cols(c, col, tab))
+                        .sum::<usize>()
+                        .max(1)
+                };
+                if first != '\t' && first != ' ' {
+                    text_painter.text(
+                        Pos2::new(col_x(col), row.y + m.row_h / 2.0),
+                        Align2::LEFT_CENTER,
+                        g,
+                        m.font.clone(),
+                        text_color,
+                    );
+                }
+                col += w;
+            }
+        }
+        // Whitespace markers.
+        paint_whitespace(
+            &text_painter,
+            row,
+            sel,
+            opts.whitespace,
+            tab,
+            col_x,
+            m,
+            ws_color,
+        );
+    }
+
+    // IME preedit, drawn at the caret with an underline.
+    if let Some(pre) = &cache.preedit
+        && let Some(rect) = caret_rect_in(&rows, primary.head, m, tab, &col_x)
+    {
+        let galley = text_painter.layout_no_wrap(pre.clone(), m.font.clone(), text_color);
+        let bg = Rect::from_min_size(rect.min, Vec2::new(galley.size().x, m.row_h));
+        text_painter.rect_filled(bg, 0.0, kit.color(Tok::EditorBackground));
+        text_painter.galley(
+            Pos2::new(rect.left(), rect.center().y - galley.size().y / 2.0),
+            galley,
+            text_color,
+        );
+        text_painter.line_segment(
+            [
+                Pos2::new(bg.left(), bg.bottom() - 2.0),
+                Pos2::new(bg.right(), bg.bottom() - 2.0),
+            ],
+            Stroke::new(1.0, text_color),
+        );
+    }
+
+    // Carets.
+    let blink_on = !opts.blink || (now - cache.blink_epoch).rem_euclid(1.0) < 0.5;
+    if focused && blink_on && cache.preedit.is_none() {
+        let color = kit.color(Tok::EditorCursor);
+        for r in sel.ranges() {
+            if let Some(rect) = caret_rect_in(&rows, r.head, m, tab, &col_x) {
+                let caret = match opts.cursor {
+                    CursorStyle::Line => Rect::from_min_size(rect.min, Vec2::new(2.0, m.row_h)),
+                    CursorStyle::Block => {
+                        Rect::from_min_size(rect.min, Vec2::new(m.char_w, m.row_h))
+                    }
+                    CursorStyle::Underline => Rect::from_min_size(
+                        Pos2::new(rect.left(), rect.bottom() - 2.0),
+                        Vec2::new(m.char_w, 2.0),
+                    ),
+                };
+                text_painter.rect_filled(
+                    caret,
+                    0.0,
+                    if opts.cursor == CursorStyle::Block {
+                        color.gamma_multiply(0.6)
+                    } else {
+                        color
+                    },
+                );
+            }
+        }
+    }
+
+    // Gutter.
+    if opts.line_numbers != LineNumbers::Off {
+        let gp = painter.with_clip_rect(m.gutter);
+        let active = kit.color(Tok::GutterLineNumberActive);
+        let normal = kit.color(Tok::GutterLineNumber);
+        for row in rows.iter().filter(|r| r.sub_row == 0) {
+            let is_current = row.line == caret_line;
+            let n = match opts.line_numbers {
+                LineNumbers::Relative if !is_current => row.line.abs_diff(caret_line),
+                _ => row.line + 1,
+            };
+            let color = if is_current && opts.highlight_gutter {
+                active
+            } else {
+                normal
+            };
+            gp.text(
+                Pos2::new(m.gutter.right() - m.char_w, row.y + m.row_h / 2.0),
+                Align2::RIGHT_CENTER,
+                n.to_string(),
+                m.font.clone(),
+                color,
+            );
+        }
+    }
+    cjk
+}
+
+fn caret_rect_in(
+    rows: &[Row],
+    pos: usize,
+    m: &Metrics,
+    tab: usize,
+    col_x: &impl Fn(usize) -> f32,
+) -> Option<Rect> {
+    // At a wrap boundary the caret belongs to the following row.
+    let row = rows.iter().find(|r| {
+        r.start <= pos && (pos < r.start + r.len || (r.last && pos == r.start + r.len))
+    })?;
+    let col = col_of(&row.text, pos - row.start, tab);
+    Some(Rect::from_min_size(
+        Pos2::new(col_x(col), row.y),
+        Vec2::new(2.0, m.row_h),
+    ))
+}
+
+#[allow(clippy::too_many_arguments)]
+fn paint_whitespace(
+    painter: &egui::Painter,
+    row: &Row,
+    sel: &Selection,
+    mode: Whitespace,
+    tab: usize,
+    col_x: impl Fn(usize) -> f32,
+    m: &Metrics,
+    color: Color32,
+) {
+    if mode == Whitespace::None {
+        return;
+    }
+    let chars: Vec<char> = row.text.chars().collect();
+    let leading = chars.iter().take_while(|c| c.is_whitespace()).count();
+    let trailing_from = chars.len() - chars.iter().rev().take_while(|c| c.is_whitespace()).count();
+    let selected = |i: usize| {
+        let p = row.start + i;
+        sel.ranges()
+            .iter()
+            .any(|r: &Range| !r.is_empty() && p >= r.from() && p < r.to())
+    };
+    let mut col = 0;
+    for (i, c) in chars.iter().enumerate() {
+        let w = char_cols(*c, col, tab);
+        let show = c.is_whitespace()
+            && match mode {
+                Whitespace::All => true,
+                Whitespace::Selection => selected(i),
+                Whitespace::Trailing => i >= trailing_from,
+                Whitespace::Boundary => {
+                    i < leading
+                        || i >= trailing_from
+                        || (*c == ' ' && chars.get(i + 1) == Some(&' '))
+                }
+                Whitespace::None => false,
+            };
+        if show {
+            let center = Pos2::new(
+                col_x(col) + m.char_w * w as f32 / 2.0,
+                row.y + m.row_h / 2.0,
+            );
+            if *c == '\t' {
+                let a = Pos2::new(col_x(col) + 2.0, center.y);
+                let b = Pos2::new(col_x(col + w) - 3.0, center.y);
+                painter.line_segment([a, b], Stroke::new(1.0, color));
+                painter.line_segment([b, b + Vec2::new(-3.0, -3.0)], Stroke::new(1.0, color));
+                painter.line_segment([b, b + Vec2::new(-3.0, 3.0)], Stroke::new(1.0, color));
+            } else {
+                painter.circle_filled(center, (m.char_w * 0.08).max(1.0), color);
+            }
+        }
+        col += w;
+    }
+}
+
+/// Thin vertical scrollbar; drag the thumb or click the track to jump.
+pub(super) fn scrollbar(
+    ui: &egui::Ui,
+    kit: &mut Kit,
+    id: egui::Id,
+    cache: &mut ViewCache,
+    m: &Metrics,
+) {
+    let track = Rect::from_min_max(
+        Pos2::new(m.rect.right() - SCROLLBAR_W, m.rect.top()),
+        m.rect.max,
+    );
+    let total = cache.map.total_rows() as f32 * m.row_h + m.text.height() - m.row_h;
+    if total <= m.text.height() + 0.5 {
+        return;
+    }
+    let sy = scroll_y(cache, m);
+    let thumb_h = (m.text.height() / total * track.height()).max(24.0);
+    let thumb_y =
+        track.top() + sy / (total - m.text.height()).max(1.0) * (track.height() - thumb_h);
+    let thumb = Rect::from_min_size(
+        Pos2::new(track.left() + 2.0, thumb_y),
+        Vec2::new(SCROLLBAR_W - 4.0, thumb_h),
+    );
+    let resp = ui.interact(track, id.with("vscroll"), Sense::click_and_drag());
+    if let Some(p) = resp.interact_pointer_pos()
+        && (resp.dragged() || resp.clicked())
+    {
+        let frac = ((p.y - track.top() - thumb_h / 2.0) / (track.height() - thumb_h).max(1.0))
+            .clamp(0.0, 1.0);
+        set_scroll_y(cache, m, frac * (total - m.text.height()));
+    }
+    let color = if resp.hovered() || resp.dragged() {
+        kit.color(Tok::MinimapViewportHover)
+    } else {
+        kit.color(Tok::MinimapViewport)
+    };
+    ui.painter().rect_filled(thumb, 3.0, color);
+}

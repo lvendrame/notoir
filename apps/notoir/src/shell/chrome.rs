@@ -222,7 +222,101 @@ pub fn status_bar(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
                             InvocationSource::StatusBar,
                         ));
                     }
+                    for item in document_items(core).into_iter().rev() {
+                        ui.add_space(6.0);
+                        let font = if item.mono {
+                            crate::fonts::mono(12.0)
+                        } else {
+                            egui::FontId::proportional(12.0)
+                        };
+                        ui.label(
+                            RichText::new(item.text)
+                                .font(font)
+                                .color(kit.color(Tok::TextSecondary)),
+                        );
+                    }
                 });
             });
         });
+}
+
+/// One status bar readout for the active document.
+pub struct StatusItem {
+    pub text: String,
+    /// Numbers render in the monospace face (spec 21).
+    pub mono: bool,
+}
+
+/// Left-to-right: cursor position, indentation, encoding, line ending,
+/// language, zoom (only when not 100 %).
+pub fn document_items(core: &AppCore) -> Vec<StatusItem> {
+    let wb = &core.workbench;
+    let Some(view) = wb.active_view().and_then(|v| wb.view(v)) else {
+        return Vec::new();
+    };
+    let Some(doc) = wb.document(view.document_id) else {
+        return Vec::new();
+    };
+    let lang = Some(doc.language.as_str());
+    let tab = core.settings.int("editor.tabSize", lang).max(1) as usize;
+    let rope = doc.buffer.rope();
+    let head = view.selection.primary().head.min(rope.len_chars());
+    let line = rope.char_to_line(head);
+    let rel = head - rope.line_to_char(line);
+    let col =
+        notoir_editor::wrap::col_of(&notoir_editor::display_map::line_text(rope, line), rel, tab)
+            + 1;
+    let selected: usize = view
+        .selection
+        .ranges()
+        .iter()
+        .map(|r| r.to() - r.from())
+        .sum();
+    let mut position = t!("statusbar:lnCol", line = line + 1, col = col);
+    if selected > 0 {
+        position.push(' ');
+        position.push_str(&t!("statusbar:selected", count = selected));
+    }
+    let indent = if core.settings.bool("editor.insertSpaces", lang) {
+        t!("statusbar:spaces", size = tab)
+    } else {
+        t!("statusbar:tabSize", size = tab)
+    };
+    let language = if doc.language == notoir_editor::LanguageId::PLAINTEXT {
+        t!("statusbar:plainText")
+    } else {
+        notoir_editor::language::definition(doc.language)
+            .name
+            .to_owned()
+    };
+    let mut items = vec![
+        StatusItem {
+            text: position,
+            mono: true,
+        },
+        StatusItem {
+            text: indent,
+            mono: false,
+        },
+        StatusItem {
+            text: doc.encoding.label(),
+            mono: false,
+        },
+        StatusItem {
+            text: doc.line_ending.label().to_owned(),
+            mono: false,
+        },
+        StatusItem {
+            text: language,
+            mono: false,
+        },
+    ];
+    let zoom = (core.zoom_for(view.id) * 100.0).round() as u32;
+    if zoom != 100 {
+        items.push(StatusItem {
+            text: format!("{zoom}%"),
+            mono: true,
+        });
+    }
+    items
 }

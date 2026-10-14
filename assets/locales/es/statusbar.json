@@ -2,5 +2,10 @@
   "chordPending": "Se pulsó ({{keys}}). Esperando la segunda tecla…",
   "notifications": "Notificaciones",
   "noNotifications": "No hay notificaciones nuevas",
-  "clearAll": "Borrar todo"
+  "clearAll": "Borrar todo",
+  "lnCol": "Lín {{line}}, col {{col}}",
+  "selected": "({{count}} seleccionados)",
+  "spaces": "Espacios: {{size}}",
+  "tabSize": "Tamaño de tabulación: {{size}}",
+  "plainText": "Texto sin formato"
 }

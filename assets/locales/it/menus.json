@@ -28,6 +28,10 @@
     "activityBar": "Barra delle attività",
     "primarySidebarRight": "Barra laterale principale a destra",
     "toolbar": "Barra degli strumenti",
-    "statusBar": "Barra di stato"
+    "statusBar": "Barra di stato",
+    "lineNumbers": "Numeri di riga",
+    "whitespace": "Spazi",
+    "currentLineHighlight": "Evidenziazione riga corrente",
+    "wordWrap": "A capo automatico"
   }
 }

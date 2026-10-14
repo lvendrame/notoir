@@ -2,5 +2,10 @@
   "chordPending": "È stato premuto ({{keys}}). In attesa del secondo tasto…",
   "notifications": "Notifiche",
   "noNotifications": "Nessuna nuova notifica",
-  "clearAll": "Cancella tutto"
+  "clearAll": "Cancella tutto",
+  "lnCol": "Riga {{line}}, col {{col}}",
+  "selected": "({{count}} selezionati)",
+  "spaces": "Spazi: {{size}}",
+  "tabSize": "Dimensione tabulazione: {{size}}",
+  "plainText": "Testo normale"
 }

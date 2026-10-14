@@ -1,6 +1,6 @@
 # 11 — Text Editing
 
-**Status:** Partial — transactions, undo coalescing, selections (M1); editor widget (M4), find/replace (M9)
+**Status:** Partial — transactions, undo coalescing, selections (M1); editor widget: typing, grapheme/word editing, Enter with indent and Markdown lists, Tab indent/outdent, clipboard, select all, mouse selection, IME, read-only (M4); line operations and find/replace (M9), multi-cursor UI (M17)
 
 ## Purpose
 
@@ -23,7 +23,8 @@ EditorWidget (apps/notoir/editor_widget)
   heights outside the viewport are estimated and corrected as they become visible (scroll anchoring keeps the top
   visible line stable).
 - Monospace default font (JetBrains Mono, configurable; proportional fonts supported but column-based features assume
-  monospace).
+  monospace). Word wrap is computed by `notoir-editor::wrap` on the column grid (tabs to tab stops, East-Asian wide
+  characters as two columns) and each display row is painted on that grid, so row math and pixels always agree.
 - Caret blinks (configurable `editor.cursorBlinking = blink | solid`), styles `line | block | underline`.
 - IME: preedit text rendered inline with underline; candidate window positioned via `egui::output.ime` cursor rect.
 - Tabs render at `editor.tabSize` columns; grapheme clusters (emoji, combining marks) move and delete as one unit;

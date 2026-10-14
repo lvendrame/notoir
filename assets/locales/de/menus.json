@@ -28,6 +28,10 @@
     "activityBar": "Aktivitätsleiste",
     "primarySidebarRight": "Primäre Seitenleiste rechts",
     "toolbar": "Symbolleiste",
-    "statusBar": "Statusleiste"
+    "statusBar": "Statusleiste",
+    "lineNumbers": "Zeilennummern",
+    "whitespace": "Leerzeichen",
+    "currentLineHighlight": "Aktuelle Zeile hervorheben",
+    "wordWrap": "Zeilenumbruch"
   }
 }

@@ -69,6 +69,9 @@ pub enum Effect {
     OpenLanguagePicker,
     ShowAbout,
     ToggleNotificationCentre,
+    /// Put keyboard focus in this view's editor.
+    FocusEditor(notoir_core::ids::ViewId),
+    CopyText(String),
 }
 
 /// How the app starts (resolved by `main`, or by tests).
@@ -119,6 +122,10 @@ pub struct AppCore {
     pub effects: Vec<Effect>,
     /// Milliseconds since app start (monotonic clock for timers).
     pub now_ms: u64,
+    /// Global editor zoom in percent (`editor.zoomScope = "global"`).
+    pub zoom: u32,
+    /// The editor widget had keyboard focus last frame.
+    pub editor_focused: bool,
 }
 
 impl AppCore {
@@ -219,6 +226,8 @@ impl AppCore {
             theme_override: opts.theme_override,
             effects: Vec::new(),
             now_ms: 0,
+            zoom: 100,
+            editor_focused: false,
         }
     }
 
@@ -230,6 +239,87 @@ impl AppCore {
 
     pub fn toolbar_visible(&self) -> bool {
         self.settings.bool("workbench.toolbar.visible", None)
+    }
+
+    /// Word wrap for a view: its override, else the language setting (off in
+    /// large-file mode unless overridden).
+    pub fn wrap_enabled(&self, view: notoir_core::ids::ViewId) -> bool {
+        let Some(v) = self.workbench.view(view) else {
+            return false;
+        };
+        if let Some(on) = v.wrap_override {
+            return on;
+        }
+        let doc = self.workbench.document(v.document_id);
+        if doc.is_some_and(|d| d.large_file) {
+            return false;
+        }
+        let lang = doc.map(|d| d.language.as_str());
+        self.settings.str("editor.wordWrap", lang) != "off"
+    }
+
+    /// Effective zoom factor for a view.
+    pub fn zoom_for(&self, view: notoir_core::ids::ViewId) -> f32 {
+        let per_view = self.settings.str("editor.zoomScope", None) == "view";
+        match self.workbench.view(view).and_then(|v| v.zoom) {
+            Some(z) if per_view => z,
+            _ => self.zoom as f32 / 100.0,
+        }
+    }
+
+    /// Editor widget options for a view from the resolved settings.
+    pub fn editor_options(
+        &self,
+        view: notoir_core::ids::ViewId,
+    ) -> crate::editor_widget::EditorOptions {
+        use crate::editor_widget::{CursorStyle, EditorOptions, LineNumbers, Whitespace, WrapMode};
+        let doc = self
+            .workbench
+            .view(view)
+            .and_then(|v| self.workbench.document(v.document_id));
+        let lang = doc.map(|d| d.language.as_str());
+        let s = &self.settings;
+        let wrap = if !self.wrap_enabled(view) {
+            WrapMode::Off
+        } else if s.str("editor.wordWrap", lang) == "column" {
+            WrapMode::Column(s.int("editor.wordWrapColumn", lang).max(10) as usize)
+        } else {
+            WrapMode::On
+        };
+        let highlight = s.str("editor.highlightCurrentLine", lang);
+        EditorOptions {
+            font_size: s.int("editor.fontSize", lang) as f32,
+            line_height: s.float("editor.lineHeight", lang) as f32,
+            zoom: self.zoom_for(view),
+            indent: notoir_editor::edit_ops::IndentStyle {
+                tab_size: s.int("editor.tabSize", lang).max(1) as usize,
+                insert_spaces: s.bool("editor.insertSpaces", lang),
+            },
+            wrap,
+            line_numbers: match s.str("editor.lineNumbers", lang) {
+                "off" => LineNumbers::Off,
+                "relative" => LineNumbers::Relative,
+                _ => LineNumbers::On,
+            },
+            whitespace: match s.str("editor.renderWhitespace", lang) {
+                "none" => Whitespace::None,
+                "boundary" => Whitespace::Boundary,
+                "trailing" => Whitespace::Trailing,
+                "all" => Whitespace::All,
+                _ => Whitespace::Selection,
+            },
+            highlight_line: matches!(highlight, "line" | "all"),
+            highlight_gutter: matches!(highlight, "gutter" | "all"),
+            cursor: match s.str("editor.cursorStyle", lang) {
+                "block" => CursorStyle::Block,
+                "underline" => CursorStyle::Underline,
+                _ => CursorStyle::Line,
+            },
+            blink: s.str("editor.cursorBlinking", lang) != "solid",
+            markdown_lists: lang == Some("markdown"),
+            empty_selection_clipboard: s.bool("editor.emptySelectionClipboard", lang),
+            padding: 8.0,
+        }
     }
 
     pub fn status_bar_visible(&self) -> bool {
@@ -256,8 +346,35 @@ impl AppCore {
             .set_bool("statusBarVisible", self.status_bar_visible())
             .set_bool("fullScreen", fullscreen)
             .set_bool("hasWorkspace", false)
-            .set_bool("editorFocus", false)
+            .set_bool("editorFocus", self.editor_focused)
             .set_bool("textInputFocus", false);
+        if let Some(view) = self
+            .workbench
+            .active_view()
+            .and_then(|v| self.workbench.view(v))
+        {
+            let doc = self.workbench.document(view.document_id);
+            let language = doc.map_or("plaintext", |d| d.language.as_str());
+            c.set_bool("hasActiveEditor", true)
+                .set_str("languageId", language)
+                .set_bool("readOnly", doc.is_some_and(|d| d.is_read_only()))
+                .set_bool("hasSelection", !view.selection.is_empty())
+                .set_bool("canUndo", doc.is_some_and(|d| d.buffer.can_undo()))
+                .set_bool("canRedo", doc.is_some_and(|d| d.buffer.can_redo()))
+                .set_bool("wordWrap", self.wrap_enabled(view.id));
+        }
+        c.set_bool(
+            "lineNumbersVisible",
+            self.settings.str("editor.lineNumbers", None) != "off",
+        )
+        .set_bool(
+            "whitespaceVisible",
+            self.settings.str("editor.renderWhitespace", None) == "all",
+        )
+        .set_bool(
+            "currentLineHighlight",
+            self.settings.str("editor.highlightCurrentLine", None) != "none",
+        );
         for &p in REGISTERED_PANELS {
             c.set_bool(
                 format!("panel.{}.visible", panel_key(p)),

@@ -28,6 +28,10 @@
     "activityBar": "Activity Bar",
     "primarySidebarRight": "Primary Sidebar on Right",
     "toolbar": "Toolbar",
-    "statusBar": "Status Bar"
+    "statusBar": "Status Bar",
+    "lineNumbers": "Line Numbers",
+    "whitespace": "Whitespace",
+    "currentLineHighlight": "Current Line Highlight",
+    "wordWrap": "Word Wrap"
   }
 }

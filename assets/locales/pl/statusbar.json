@@ -2,5 +2,10 @@
   "chordPending": "Naciśnięto ({{keys}}). Oczekiwanie na drugi klawisz…",
   "notifications": "Powiadomienia",
   "noNotifications": "Brak nowych powiadomień",
-  "clearAll": "Wyczyść wszystko"
+  "clearAll": "Wyczyść wszystko",
+  "lnCol": "Wiersz {{line}}, kol. {{col}}",
+  "selected": "(zaznaczono: {{count}})",
+  "spaces": "Spacje: {{size}}",
+  "tabSize": "Rozmiar tabulatora: {{size}}",
+  "plainText": "Zwykły tekst"
 }

@@ -9,7 +9,7 @@ use std::sync::{Mutex, OnceLock};
 use skrifa::instance::{LocationRef, Size};
 use skrifa::{FontRef, MetadataProvider};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Script {
     Japanese,
     SimplifiedChinese,

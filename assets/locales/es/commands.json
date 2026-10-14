@@ -27,7 +27,14 @@
     "showOutput": "Mostrar salida",
     "togglePanel": "Alternar panel",
     "movePanel": "Mover panel",
-    "toggleFullScreen": "Pantalla completa"
+    "toggleFullScreen": "Pantalla completa",
+    "toggleWordWrap": "Alternar ajuste de línea",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "zoomReset": "Restablecer zoom",
+    "toggleLineNumbers": "Alternar números de línea",
+    "toggleWhitespace": "Alternar espacios en blanco",
+    "toggleCurrentLineHighlight": "Alternar resaltado de línea actual"
   },
   "preferences": {
     "changeTheme": "Cambiar tema…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "Mostrar notificaciones",
     "clearNotifications": "Borrar todas las notificaciones"
+  },
+  "file": {
+    "newUntitled": "Nuevo archivo"
+  },
+  "edit": {
+    "undo": "Deshacer",
+    "redo": "Rehacer",
+    "cut": "Cortar",
+    "copy": "Copiar",
+    "paste": "Pegar",
+    "selectAll": "Seleccionar todo"
   }
 }

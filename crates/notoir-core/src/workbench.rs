@@ -578,6 +578,8 @@ impl Workbench {
         d.revision += 1;
         let revision = d.revision;
         let len = d.buffer.len_chars();
+        let changes = Arc::new(changes);
+        d.record_change(revision, changes.clone());
         self.views.map_selections(doc, &changes, view);
         if let Some(v) = view.and_then(|v| self.views.get_mut(v)) {
             v.selection = selection_after.clamp(len);
@@ -586,7 +588,7 @@ impl Workbench {
             doc,
             revision,
             origin,
-            changes: Arc::new(changes),
+            changes,
         });
         Ok(())
     }
@@ -625,12 +627,14 @@ impl Workbench {
         };
         for changes in applied.changes {
             d.revision += 1;
+            let changes = Arc::new(changes);
+            d.record_change(d.revision, changes.clone());
             self.views.map_selections(doc, &changes, Some(view));
             self.events.emit(AppEvent::DocumentChanged {
                 doc,
                 revision: d.revision,
                 origin: origin.clone(),
-                changes: Arc::new(changes),
+                changes,
             });
         }
         if let Some(v) = self.views.get_mut(view) {
@@ -894,6 +898,26 @@ mod tests {
             .unwrap();
         assert!(opened < changed);
         assert!(wb.events.is_empty());
+    }
+
+    #[test]
+    fn caches_can_catch_up_from_recent_changes() {
+        let mut wb = Workbench::new();
+        let (doc, v) = open(&mut wb, "a.md", "");
+        type_at(&mut wb, v, 0, "a", 0);
+        type_at(&mut wb, v, 1, "b", 10);
+        wb.undo(v).unwrap();
+        let d = wb.document(doc).unwrap();
+        assert_eq!(
+            d.changes_since(0).map(|c| c.len()),
+            Some(d.revision as usize)
+        );
+        assert_eq!(d.changes_since(d.revision).map(|c| c.len()), Some(0));
+        let mut rope = notoir_editor::Rope::from_str("");
+        for cs in d.changes_since(0).unwrap() {
+            cs.apply(&mut rope);
+        }
+        assert_eq!(rope.to_string(), d.buffer.text());
     }
 
     #[test]

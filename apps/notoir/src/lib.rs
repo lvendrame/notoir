@@ -6,6 +6,7 @@ pub const BRAND: &str = "Notoir";
 pub mod app;
 pub mod commands;
 pub mod core;
+pub mod editor_widget;
 pub mod fonts;
 pub mod i18n;
 pub mod icons;

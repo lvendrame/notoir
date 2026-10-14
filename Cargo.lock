@@ -2074,11 +2074,13 @@ checksum = "2bf50223579dc7cdcfb3bfcacf7069ff68243f8c363f62ffa99cf000a6b9c451"
 name = "notoir"
 version = "0.1.0"
 dependencies = [
+ "arboard",
  "eframe",
  "egui",
  "egui_kittest",
  "image",
  "notoir-core",
+ "notoir-editor",
  "notoir-platform",
  "notoir-storage",
  "resvg",
@@ -2090,6 +2092,7 @@ dependencies = [
  "tracing",
  "tracing-appender",
  "tracing-subscriber",
+ "unicode-segmentation",
 ]
 
 [[package]]
@@ -2113,6 +2116,8 @@ dependencies = [
  "proptest",
  "ropey",
  "thiserror 2.0.21",
+ "unicode-segmentation",
+ "unicode-width",
 ]
 
 [[package]]

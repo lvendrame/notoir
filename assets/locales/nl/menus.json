@@ -28,6 +28,10 @@
     "activityBar": "Activiteitenbalk",
     "primarySidebarRight": "Primaire zijbalk rechts",
     "toolbar": "Werkbalk",
-    "statusBar": "Statusbalk"
+    "statusBar": "Statusbalk",
+    "lineNumbers": "Regelnummers",
+    "whitespace": "Witruimte",
+    "currentLineHighlight": "Markering huidige regel",
+    "wordWrap": "Regelterugloop"
   }
 }

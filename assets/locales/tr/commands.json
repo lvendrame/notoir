@@ -27,7 +27,14 @@
     "showOutput": "Çıktıyı Göster",
     "togglePanel": "Paneli Aç/Kapat",
     "movePanel": "Paneli Taşı",
-    "toggleFullScreen": "Tam Ekran"
+    "toggleFullScreen": "Tam Ekran",
+    "toggleWordWrap": "Sözcük Kaydırmayı Aç/Kapat",
+    "zoomIn": "Yakınlaştır",
+    "zoomOut": "Uzaklaştır",
+    "zoomReset": "Yakınlaştırmayı Sıfırla",
+    "toggleLineNumbers": "Satır Numaralarını Aç/Kapat",
+    "toggleWhitespace": "Boşlukları Aç/Kapat",
+    "toggleCurrentLineHighlight": "Geçerli Satır Vurgusunu Aç/Kapat"
   },
   "preferences": {
     "changeTheme": "Temayı Değiştir…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "Bildirimleri Göster",
     "clearNotifications": "Tüm Bildirimleri Temizle"
+  },
+  "file": {
+    "newUntitled": "Yeni Dosya"
+  },
+  "edit": {
+    "undo": "Geri Al",
+    "redo": "Yinele",
+    "cut": "Kes",
+    "copy": "Kopyala",
+    "paste": "Yapıştır",
+    "selectAll": "Tümünü Seç"
   }
 }

@@ -27,7 +27,14 @@
     "showOutput": "Uitvoer tonen",
     "togglePanel": "Paneel in-/uitschakelen",
     "movePanel": "Paneel verplaatsen",
-    "toggleFullScreen": "Volledig scherm"
+    "toggleFullScreen": "Volledig scherm",
+    "toggleWordWrap": "Regelterugloop in-/uitschakelen",
+    "zoomIn": "Inzoomen",
+    "zoomOut": "Uitzoomen",
+    "zoomReset": "Zoom herstellen",
+    "toggleLineNumbers": "Regelnummers in-/uitschakelen",
+    "toggleWhitespace": "Witruimte in-/uitschakelen",
+    "toggleCurrentLineHighlight": "Markering huidige regel in-/uitschakelen"
   },
   "preferences": {
     "changeTheme": "Thema wijzigen…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "Meldingen tonen",
     "clearNotifications": "Alle meldingen wissen"
+  },
+  "file": {
+    "newUntitled": "Nieuw bestand"
+  },
+  "edit": {
+    "undo": "Ongedaan maken",
+    "redo": "Opnieuw",
+    "cut": "Knippen",
+    "copy": "Kopiëren",
+    "paste": "Plakken",
+    "selectAll": "Alles selecteren"
   }
 }

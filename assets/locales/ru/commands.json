@@ -27,7 +27,14 @@
     "showOutput": "Показать вывод",
     "togglePanel": "Показать или скрыть панель",
     "movePanel": "Переместить панель",
-    "toggleFullScreen": "Полноэкранный режим"
+    "toggleFullScreen": "Полноэкранный режим",
+    "toggleWordWrap": "Переключить перенос строк",
+    "zoomIn": "Увеличить",
+    "zoomOut": "Уменьшить",
+    "zoomReset": "Сбросить масштаб",
+    "toggleLineNumbers": "Показать или скрыть номера строк",
+    "toggleWhitespace": "Показать или скрыть пробелы",
+    "toggleCurrentLineHighlight": "Переключить выделение текущей строки"
   },
   "preferences": {
     "changeTheme": "Сменить тему…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "Показать уведомления",
     "clearNotifications": "Очистить все уведомления"
+  },
+  "file": {
+    "newUntitled": "Новый файл"
+  },
+  "edit": {
+    "undo": "Отменить",
+    "redo": "Повторить",
+    "cut": "Вырезать",
+    "copy": "Копировать",
+    "paste": "Вставить",
+    "selectAll": "Выделить всё"
   }
 }

@@ -38,7 +38,8 @@ pub fn keystroke(key: egui::Key, mods: egui::Modifiers, platform: Platform) -> O
 /// and their commands queued. Skipped while a text field has focus so typing
 /// and text-editing keys reach the field.
 pub fn dispatch_keys(ctx: &egui::Context, core: &mut AppCore, context: &ContextSnapshot) {
-    if ctx.egui_wants_keyboard_input() {
+    // Other text fields (picker filter…) keep their keys; the editor does not.
+    if ctx.egui_wants_keyboard_input() && !core.editor_focused {
         core.keymap.cancel_pending();
         return;
     }

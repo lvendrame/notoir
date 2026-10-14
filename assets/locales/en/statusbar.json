@@ -2,5 +2,10 @@
   "chordPending": "({{keys}}) was pressed. Waiting for second key…",
   "notifications": "Notifications",
   "noNotifications": "No new notifications",
-  "clearAll": "Clear All"
+  "clearAll": "Clear All",
+  "lnCol": "Ln {{line}}, Col {{col}}",
+  "selected": "({{count}} selected)",
+  "spaces": "Spaces: {{size}}",
+  "tabSize": "Tab Size: {{size}}",
+  "plainText": "Plain Text"
 }

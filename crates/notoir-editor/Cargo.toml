@@ -13,6 +13,8 @@ ropey.workspace = true
 encoding_rs.workspace = true
 chardetng.workspace = true
 thiserror.workspace = true
+unicode-segmentation.workspace = true
+unicode-width.workspace = true
 
 [dev-dependencies]
 proptest.workspace = true

@@ -1,6 +1,6 @@
 # 19 — Status Bar & Notifications
 
-**Status:** Partial — status bar shell, notifications, toasts, notification centre (M3); document items (M4, M5)
+**Status:** Partial — status bar shell, notifications, toasts, centre (M3); document readouts: position, indentation, encoding, line ending, language, zoom (M4); clickable pickers (M5, M10)
 
 ## Purpose
 

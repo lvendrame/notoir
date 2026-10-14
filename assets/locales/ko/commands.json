@@ -27,7 +27,14 @@
     "showOutput": "출력 표시",
     "togglePanel": "패널 전환",
     "movePanel": "패널 이동",
-    "toggleFullScreen": "전체 화면"
+    "toggleFullScreen": "전체 화면",
+    "toggleWordWrap": "자동 줄 바꿈 전환",
+    "zoomIn": "확대",
+    "zoomOut": "축소",
+    "zoomReset": "확대/축소 초기화",
+    "toggleLineNumbers": "줄 번호 전환",
+    "toggleWhitespace": "공백 문자 전환",
+    "toggleCurrentLineHighlight": "현재 줄 강조 표시 전환"
   },
   "preferences": {
     "changeTheme": "테마 변경…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "알림 표시",
     "clearNotifications": "모든 알림 지우기"
+  },
+  "file": {
+    "newUntitled": "새 파일"
+  },
+  "edit": {
+    "undo": "실행 취소",
+    "redo": "다시 실행",
+    "cut": "잘라내기",
+    "copy": "복사",
+    "paste": "붙여넣기",
+    "selectAll": "모두 선택"
   }
 }

@@ -43,6 +43,9 @@ pub struct UiState {
     pub notification_centre_open: bool,
     /// Notification whose details are expanded.
     pub expanded_detail: Option<u64>,
+    pub editors: crate::editor_widget::EditorCaches,
+    /// Editor that should take keyboard focus next frame.
+    pub focus_editor: Option<notoir_core::ids::ViewId>,
 }
 
 /// Collects invocations produced while rendering one frame.

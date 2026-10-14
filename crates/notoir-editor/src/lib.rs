@@ -6,10 +6,14 @@
 
 pub mod buffer;
 pub mod change;
+pub mod display_map;
+pub mod edit_ops;
 pub mod encoding;
 pub mod language;
 pub mod line_ending;
+pub mod motion;
 pub mod selection;
+pub mod wrap;
 
 pub use buffer::{Applied, EditKind, EditRequest, TextBuffer};
 pub use change::{Assoc, ChangeError, ChangeSet, Edit};

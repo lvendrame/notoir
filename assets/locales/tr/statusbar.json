@@ -2,5 +2,10 @@
   "chordPending": "({{keys}}) tuşuna basıldı. İkinci tuş bekleniyor…",
   "notifications": "Bildirimler",
   "noNotifications": "Yeni bildirim yok",
-  "clearAll": "Tümünü Temizle"
+  "clearAll": "Tümünü Temizle",
+  "lnCol": "Sat {{line}}, Süt {{col}}",
+  "selected": "({{count}} seçili)",
+  "spaces": "Boşluk: {{size}}",
+  "tabSize": "Sekme Boyutu: {{size}}",
+  "plainText": "Düz Metin"
 }

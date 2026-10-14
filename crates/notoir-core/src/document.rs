@@ -1,10 +1,12 @@
 //! `Document`: an open file, Untitled buffer, Scratchpad or virtual document,
 //! independent of any tab (docs/specs/02-document-model.md).
 
+use std::collections::VecDeque;
 use std::path::{Path, PathBuf};
+use std::sync::Arc;
 
 use notoir_editor::encoding::TextEncoding;
-use notoir_editor::{LanguageId, LineEnding, TextBuffer};
+use notoir_editor::{ChangeSet, LanguageId, LineEnding, TextBuffer};
 
 use crate::ids::DocumentId;
 
@@ -135,7 +137,13 @@ pub struct Document {
     pub language_overridden: bool,
     pub read_only: ReadOnly,
     pub large_file: bool,
+    /// Recent change sets by resulting revision, so caches (display maps,
+    /// highlighting) can catch up incrementally.
+    recent_changes: VecDeque<(u64, Arc<ChangeSet>)>,
 }
+
+/// Change sets kept per document for incremental cache updates.
+const RECENT_CHANGES: usize = 64;
 
 impl Document {
     pub fn new(id: DocumentId, origin: DocumentOrigin, loaded: LoadedText) -> Self {
@@ -156,7 +164,35 @@ impl Document {
             language_overridden: false,
             read_only: loaded.read_only,
             large_file: loaded.large_file,
+            recent_changes: VecDeque::new(),
         }
+    }
+
+    /// Records a change that produced `revision` (called by the workbench).
+    pub fn record_change(&mut self, revision: u64, changes: Arc<ChangeSet>) {
+        if self.recent_changes.len() == RECENT_CHANGES {
+            self.recent_changes.pop_front();
+        }
+        self.recent_changes.push_back((revision, changes));
+    }
+
+    /// Change sets that turn revision `since` into the current revision, in
+    /// order; `None` when the history no longer reaches back that far.
+    pub fn changes_since(&self, since: u64) -> Option<Vec<Arc<ChangeSet>>> {
+        if since == self.revision {
+            return Some(Vec::new());
+        }
+        let first = self
+            .recent_changes
+            .iter()
+            .position(|(r, _)| *r == since + 1)?;
+        let out: Vec<_> = self
+            .recent_changes
+            .iter()
+            .skip(first)
+            .map(|(_, c)| c.clone())
+            .collect();
+        (out.len() as u64 == self.revision - since).then_some(out)
     }
 
     /// Unsaved relative to disk. Scratchpads persist themselves and are never

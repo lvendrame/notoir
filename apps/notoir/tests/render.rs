@@ -55,3 +55,29 @@ fn overlay_snapshots() {
             .unwrap();
     }
 }
+
+#[test]
+fn editor_snapshots() {
+    for theme in [ThemeId::Midnight, ThemeId::Paper] {
+        let mut app = common::start(common::with_language(Language::En, theme));
+        let ctrl = egui::Modifiers {
+            ctrl: true,
+            command: true,
+            ..Default::default()
+        };
+        app.harness.key_press_modifiers(ctrl, egui::Key::N);
+        app.harness.run_steps(2);
+        let sample = "# Notoir\n\nA fast, native text editor.\n\n\tfn main() {\n\t    println!(\"hello\");   \n\t}\n\n日本語のテキストも表示できます。\nThis is a long line that keeps going so that word wrap has something to do when the window is not wide enough to show it all at once, which is the point of this sample.\n";
+        app.harness.event(egui::Event::Paste(sample.into()));
+        app.harness.run_steps(2);
+        app.harness
+            .key_press_modifiers(egui::Modifiers::SHIFT, egui::Key::ArrowUp);
+        app.harness
+            .key_press_modifiers(egui::Modifiers::SHIFT, egui::Key::ArrowUp);
+        app.harness.run_steps(3);
+        if let Ok(img) = app.harness.render() {
+            img.save(out_dir().join(format!("editor-{}.png", theme.id())))
+                .unwrap();
+        }
+    }
+}

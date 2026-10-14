@@ -8,17 +8,17 @@ use std::time::Instant;
 
 use notoir_core::command::{CommandInvocation, InvocationSource};
 use notoir_core::panels::PanelArea;
-use notoir_platform::system_fonts;
+use notoir_platform::system_fonts::{self, Script};
 use serde_json::json;
 
 use crate::core::{AppCore, Effect, StartOptions, ThemeChoice};
 use crate::fonts;
 use crate::i18n::{self, Language};
 use crate::icons::IconCache;
-use crate::input;
 use crate::shell::overlays::{Picker, PickerEvent, PickerKind};
 use crate::shell::{Actions, Kit, UiState, chrome, empty_state, overlays, panels};
 use crate::theme::{Theme, ThemeId, Tok};
+use crate::{editor_widget, input};
 
 /// Env overrides for manual checks and snapshots (not persisted).
 pub const LANG_ENV: &str = "NOTOIR_LANG";
@@ -31,8 +31,10 @@ pub struct NotoirApp {
     theme: Theme,
     icons: IconCache,
     started: Instant,
-    /// (language, whether the CJK system face was included) last installed.
-    fonts_installed: Option<(Language, bool)>,
+    /// System CJK scripts included in the last font install.
+    fonts_installed: Option<Vec<Script>>,
+    /// CJK scripts seen in editor text this session.
+    cjk_seen: fonts::CjkUse,
     wait_for_fonts: bool,
 }
 
@@ -71,10 +73,13 @@ impl NotoirApp {
             icons: IconCache::default(),
             started: Instant::now(),
             fonts_installed: None,
+            cjk_seen: fonts::CjkUse::default(),
             wait_for_fonts: opts.wait_for_fonts,
         };
         app.apply_language(ctx);
         app.theme.apply(ctx);
+        // Ctrl/Cmd +/-/0 are Notoir's editor zoom commands, not UI scaling.
+        ctx.options_mut(|o| o.zoom_with_keyboard = false);
         app
     }
 
@@ -87,25 +92,33 @@ impl NotoirApp {
         self.ensure_fonts(ctx);
     }
 
-    /// Installs fonts for the current language; the CJK system face loads in
-    /// the background and is added when ready.
+    /// Installs fonts: bundled faces plus system CJK faces for the UI
+    /// language and any CJK text the editor showed. Faces load in the
+    /// background and are added when ready.
     fn ensure_fonts(&mut self, ctx: &egui::Context) {
-        let lang = self.core.language;
-        let face = match fonts::script_for(lang) {
-            Some(script) if self.wait_for_fonts => system_fonts::cjk_font(script),
-            Some(script) => match system_fonts::ready(script) {
-                Some(found) => found,
-                None => {
+        let mut scripts: Vec<Script> = fonts::script_for(self.core.language).into_iter().collect();
+        scripts.extend(self.cjk_seen.scripts(self.core.language));
+        scripts.sort();
+        scripts.dedup();
+        let mut faces = Vec::new();
+        for script in scripts {
+            let face = if self.wait_for_fonts {
+                Some(system_fonts::cjk_font(script))
+            } else {
+                let ready = system_fonts::ready(script);
+                if ready.is_none() {
                     let repaint = ctx.clone();
                     system_fonts::request(script, move || repaint.request_repaint());
-                    None
                 }
-            },
-            None => None,
-        };
-        let want = (lang, face.is_some());
-        if self.fonts_installed != Some(want) {
-            fonts::install(ctx, face);
+                ready
+            };
+            if let Some(Some(f)) = face {
+                faces.push(f);
+            }
+        }
+        let want: Vec<Script> = faces.iter().map(|f| f.script).collect();
+        if self.fonts_installed.as_ref() != Some(&want) {
+            fonts::install(ctx, &faces);
             self.fonts_installed = Some(want);
         }
     }
@@ -151,6 +164,8 @@ impl NotoirApp {
                     self.ui.picker = Some(Picker::new(PickerKind::Language, &self.core))
                 }
                 Effect::ShowAbout => self.ui.about_open = true,
+                Effect::FocusEditor(view) => self.ui.focus_editor = Some(view),
+                Effect::CopyText(text) => ctx.copy_text(text),
                 Effect::ToggleNotificationCentre => {
                     self.ui.notification_centre_open = !centre_was_open;
                     if self.ui.notification_centre_open {
@@ -247,9 +262,45 @@ impl eframe::App for NotoirApp {
             }
             let sizes = panels::show(ui, &mut kit, &self.core, &mut actions);
             let editor_fill = kit.color(Tok::BgEditor);
+            let active = self.core.workbench.active_view();
+            let options = active.map(|v| self.core.editor_options(v));
+            let focus_request = self.ui.focus_editor.take();
+            let mut editor_focused = false;
+            let mut zoom_steps = 0;
             egui::CentralPanel::no_frame()
                 .frame(egui::Frame::new().fill(editor_fill))
-                .show(ui, |ui| empty_state::show(ui, &mut kit, self.core.platform));
+                .show(ui, |ui| match (active, options) {
+                    (Some(view), Some(opts)) => {
+                        let out = editor_widget::show(
+                            ui,
+                            &mut kit,
+                            &mut self.core.workbench,
+                            &mut self.ui.editors,
+                            view,
+                            &opts,
+                            focus_request == Some(view),
+                            now as f64 / 1000.0,
+                        );
+                        editor_focused = out.focused;
+                        self.cjk_seen.merge(out.cjk);
+                        zoom_steps = out.zoom_steps;
+                    }
+                    _ => empty_state::show(ui, &mut kit, self.core.platform),
+                });
+            self.core.editor_focused = editor_focused;
+            match zoom_steps.cmp(&0) {
+                std::cmp::Ordering::Greater => actions.push(CommandInvocation::new(
+                    "view.zoomIn",
+                    InvocationSource::Internal,
+                )),
+                std::cmp::Ordering::Less => actions.push(CommandInvocation::new(
+                    "view.zoomOut",
+                    InvocationSource::Internal,
+                )),
+                std::cmp::Ordering::Equal => {}
+            }
+            let workbench = &self.core.workbench;
+            self.ui.editors.retain(|v| workbench.view(v).is_some());
 
             let (hovered, dismissed) = overlays::toasts(
                 &ctx,

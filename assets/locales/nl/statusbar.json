@@ -2,5 +2,10 @@
   "chordPending": "({{keys}}) is ingedrukt. Wachten op tweede toets…",
   "notifications": "Meldingen",
   "noNotifications": "Geen nieuwe meldingen",
-  "clearAll": "Alles wissen"
+  "clearAll": "Alles wissen",
+  "lnCol": "Rg {{line}}, kol {{col}}",
+  "selected": "({{count}} geselecteerd)",
+  "spaces": "Spaties: {{size}}",
+  "tabSize": "Tabgrootte: {{size}}",
+  "plainText": "Platte tekst"
 }

@@ -1,6 +1,6 @@
 # 14 — View Options & Zen Mode
 
-**Status:** Not started — zoom and wrap (M4), Zen Mode (M10)
+**Status:** Partial — global and per-view zoom, word wrap toggle, whitespace and current-line rendering (M4); Zen Mode (M10)
 
 ## Purpose
 

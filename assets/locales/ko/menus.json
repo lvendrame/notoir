@@ -28,6 +28,10 @@
     "activityBar": "작업 표시줄",
     "primarySidebarRight": "오른쪽 기본 사이드바",
     "toolbar": "도구 모음",
-    "statusBar": "상태 표시줄"
+    "statusBar": "상태 표시줄",
+    "lineNumbers": "줄 번호",
+    "whitespace": "공백 문자",
+    "currentLineHighlight": "현재 줄 강조 표시",
+    "wordWrap": "자동 줄 바꿈"
   }
 }

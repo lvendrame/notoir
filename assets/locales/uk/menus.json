@@ -28,6 +28,10 @@
     "activityBar": "Панель дій",
     "primarySidebarRight": "Основна бічна панель праворуч",
     "toolbar": "Панель інструментів",
-    "statusBar": "Рядок стану"
+    "statusBar": "Рядок стану",
+    "lineNumbers": "Номери рядків",
+    "whitespace": "Пробіли",
+    "currentLineHighlight": "Виділення поточного рядка",
+    "wordWrap": "Перенесення рядків"
   }
 }

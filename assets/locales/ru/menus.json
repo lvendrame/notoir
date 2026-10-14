@@ -28,6 +28,10 @@
     "activityBar": "Панель действий",
     "primarySidebarRight": "Основная боковая панель справа",
     "toolbar": "Панель инструментов",
-    "statusBar": "Строка состояния"
+    "statusBar": "Строка состояния",
+    "lineNumbers": "Номера строк",
+    "whitespace": "Пробелы",
+    "currentLineHighlight": "Выделение текущей строки",
+    "wordWrap": "Перенос строк"
   }
 }

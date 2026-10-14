@@ -28,6 +28,10 @@
     "activityBar": "アクティビティ バー",
     "primarySidebarRight": "プライマリ サイドバーを右に配置",
     "toolbar": "ツールバー",
-    "statusBar": "ステータス バー"
+    "statusBar": "ステータス バー",
+    "lineNumbers": "行番号",
+    "whitespace": "空白文字",
+    "currentLineHighlight": "現在行の強調表示",
+    "wordWrap": "折り返し"
   }
 }

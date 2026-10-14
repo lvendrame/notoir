@@ -2,5 +2,10 @@
   "chordPending": "已按下 ({{keys}})。正在等待第二个键…",
   "notifications": "通知",
   "noNotifications": "没有新通知",
-  "clearAll": "全部清除"
+  "clearAll": "全部清除",
+  "lnCol": "行 {{line}}，列 {{col}}",
+  "selected": "(已选择 {{count}} 个)",
+  "spaces": "空格: {{size}}",
+  "tabSize": "制表符大小: {{size}}",
+  "plainText": "纯文本"
 }

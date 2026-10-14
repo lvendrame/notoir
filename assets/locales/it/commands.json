@@ -27,7 +27,14 @@
     "showOutput": "Mostra output",
     "togglePanel": "Mostra/nascondi pannello",
     "movePanel": "Sposta pannello",
-    "toggleFullScreen": "Schermo intero"
+    "toggleFullScreen": "Schermo intero",
+    "toggleWordWrap": "Attiva/disattiva a capo automatico",
+    "zoomIn": "Ingrandisci",
+    "zoomOut": "Riduci",
+    "zoomReset": "Reimposta zoom",
+    "toggleLineNumbers": "Mostra/nascondi numeri di riga",
+    "toggleWhitespace": "Mostra/nascondi spazi",
+    "toggleCurrentLineHighlight": "Attiva/disattiva evidenziazione riga corrente"
   },
   "preferences": {
     "changeTheme": "Cambia tema…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "Mostra notifiche",
     "clearNotifications": "Cancella tutte le notifiche"
+  },
+  "file": {
+    "newUntitled": "Nuovo file"
+  },
+  "edit": {
+    "undo": "Annulla",
+    "redo": "Ripeti",
+    "cut": "Taglia",
+    "copy": "Copia",
+    "paste": "Incolla",
+    "selectAll": "Seleziona tutto"
   }
 }

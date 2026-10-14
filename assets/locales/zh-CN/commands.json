@@ -27,7 +27,14 @@
     "showOutput": "显示输出",
     "togglePanel": "切换面板",
     "movePanel": "移动面板",
-    "toggleFullScreen": "全屏"
+    "toggleFullScreen": "全屏",
+    "toggleWordWrap": "切换自动换行",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "zoomReset": "重置缩放",
+    "toggleLineNumbers": "切换行号",
+    "toggleWhitespace": "切换空白字符",
+    "toggleCurrentLineHighlight": "切换当前行突出显示"
   },
   "preferences": {
     "changeTheme": "更改主题…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "显示通知",
     "clearNotifications": "清除所有通知"
+  },
+  "file": {
+    "newUntitled": "新建文件"
+  },
+  "edit": {
+    "undo": "撤销",
+    "redo": "重做",
+    "cut": "剪切",
+    "copy": "复制",
+    "paste": "粘贴",
+    "selectAll": "全选"
   }
 }

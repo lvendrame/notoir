@@ -27,7 +27,14 @@
     "showOutput": "Show Output",
     "togglePanel": "Toggle Panel",
     "movePanel": "Move Panel",
-    "toggleFullScreen": "Full Screen"
+    "toggleFullScreen": "Full Screen",
+    "toggleWordWrap": "Toggle Word Wrap",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "zoomReset": "Reset Zoom",
+    "toggleLineNumbers": "Toggle Line Numbers",
+    "toggleWhitespace": "Toggle Whitespace",
+    "toggleCurrentLineHighlight": "Toggle Current Line Highlight"
   },
   "preferences": {
     "changeTheme": "Change Theme…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "Show Notifications",
     "clearNotifications": "Clear All Notifications"
+  },
+  "file": {
+    "newUntitled": "New File"
+  },
+  "edit": {
+    "undo": "Undo",
+    "redo": "Redo",
+    "cut": "Cut",
+    "copy": "Copy",
+    "paste": "Paste",
+    "selectAll": "Select All"
   }
 }

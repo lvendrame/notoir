@@ -27,7 +27,14 @@
     "showOutput": "Показати вивід",
     "togglePanel": "Показати або сховати панель",
     "movePanel": "Перемістити панель",
-    "toggleFullScreen": "Повноекранний режим"
+    "toggleFullScreen": "Повноекранний режим",
+    "toggleWordWrap": "Перемкнути перенесення рядків",
+    "zoomIn": "Збільшити",
+    "zoomOut": "Зменшити",
+    "zoomReset": "Скинути масштаб",
+    "toggleLineNumbers": "Показати або сховати номери рядків",
+    "toggleWhitespace": "Показати або сховати пробіли",
+    "toggleCurrentLineHighlight": "Перемкнути виділення поточного рядка"
   },
   "preferences": {
     "changeTheme": "Змінити тему…",
@@ -43,5 +50,16 @@
   "workbench": {
     "showNotifications": "Показати сповіщення",
     "clearNotifications": "Очистити всі сповіщення"
+  },
+  "file": {
+    "newUntitled": "Новий файл"
+  },
+  "edit": {
+    "undo": "Скасувати дію",
+    "redo": "Повторити",
+    "cut": "Вирізати",
+    "copy": "Копіювати",
+    "paste": "Вставити",
+    "selectAll": "Виділити все"
   }
 }
