@@ -1,0 +1,18 @@
+{
+  "ok": "OK",
+  "cancel": "Abbrechen",
+  "close": "Schließen",
+  "save": "Speichern",
+  "dontSave": "Nicht speichern",
+  "retry": "Erneut versuchen",
+  "showDetails": "Details anzeigen",
+  "learnMore": "Mehr erfahren",
+  "language": "Sprache",
+  "reveal": {
+    "finder": "Im Finder anzeigen",
+    "explorer": "Im Datei-Explorer anzeigen",
+    "fileManager": "Übergeordneten Ordner öffnen"
+  },
+  "fileCount_one": "{{count}} Datei",
+  "fileCount_other": "{{count}} Dateien"
+}

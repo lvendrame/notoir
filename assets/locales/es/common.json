@@ -1,0 +1,18 @@
+{
+  "ok": "Aceptar",
+  "cancel": "Cancelar",
+  "close": "Cerrar",
+  "save": "Guardar",
+  "dontSave": "No guardar",
+  "retry": "Reintentar",
+  "showDetails": "Mostrar detalles",
+  "learnMore": "Más información",
+  "language": "Idioma",
+  "reveal": {
+    "finder": "Mostrar en Finder",
+    "explorer": "Mostrar en el Explorador de archivos",
+    "fileManager": "Abrir carpeta contenedora"
+  },
+  "fileCount_one": "{{count}} archivo",
+  "fileCount_other": "{{count}} archivos"
+}

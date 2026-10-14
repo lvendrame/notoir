@@ -1,0 +1,46 @@
+# cargo-deny (docs/specs/32-permissions-and-security.md, 33-testing-and-ci.md).
+# Bundled fonts are OFL-1.1 (assets/fonts/ui/OFL-*.txt) and icons ISC
+# (assets/icons/lucide/LICENSE); they are assets, not crates.
+
+[graph]
+all-features = false
+
+[advisories]
+version = 2
+yanked = "deny"
+
+[licenses]
+version = 2
+confidence-threshold = 0.9
+unused-allowed-license = "allow"
+allow = [
+    "MIT",
+    "MIT-0",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "Unicode-3.0",
+    "MPL-2.0",
+    "BSL-1.0",
+    "CC0-1.0",
+    "OFL-1.1",
+    "Unlicense",
+    # egui default_fonts (Ubuntu Light): fallback glyphs only.
+    "Ubuntu-font-1.0",
+]
+
+# Notoir crates are unpublished and no license has been chosen yet.
+[licenses.private]
+ignore = true
+
+[bans]
+multiple-versions = "allow"
+wildcards = "deny"
+allow-wildcard-paths = true
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"

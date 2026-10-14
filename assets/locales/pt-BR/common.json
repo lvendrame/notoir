@@ -1,0 +1,18 @@
+{
+  "ok": "OK",
+  "cancel": "Cancelar",
+  "close": "Fechar",
+  "save": "Salvar",
+  "dontSave": "Não Salvar",
+  "retry": "Tentar Novamente",
+  "showDetails": "Mostrar Detalhes",
+  "learnMore": "Saiba Mais",
+  "language": "Idioma",
+  "reveal": {
+    "finder": "Mostrar no Finder",
+    "explorer": "Mostrar no Explorador de Arquivos",
+    "fileManager": "Abrir Pasta"
+  },
+  "fileCount_one": "{{count}} arquivo",
+  "fileCount_other": "{{count}} arquivos"
+}

@@ -1,0 +1,18 @@
+{
+  "ok": "OK",
+  "cancel": "Annuler",
+  "close": "Fermer",
+  "save": "Enregistrer",
+  "dontSave": "Ne pas enregistrer",
+  "retry": "Réessayer",
+  "showDetails": "Afficher les détails",
+  "learnMore": "En savoir plus",
+  "language": "Langue",
+  "reveal": {
+    "finder": "Afficher dans le Finder",
+    "explorer": "Afficher dans l'Explorateur de fichiers",
+    "fileManager": "Ouvrir le dossier parent"
+  },
+  "fileCount_one": "{{count}} fichier",
+  "fileCount_other": "{{count}} fichiers"
+}

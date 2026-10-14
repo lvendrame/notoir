@@ -1,0 +1,28 @@
+[package]
+name = "notoir"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "Notoir — a fast native text editor and workspace"
+
+[lints]
+workspace = true
+
+[dependencies]
+notoir-platform.workspace = true
+eframe.workspace = true
+egui.workspace = true
+resvg.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+tracing-appender.workspace = true
+
+[dev-dependencies]
+egui_kittest = { workspace = true, features = ["wgpu", "snapshot", "eframe"] }
+image.workspace = true
+tempfile.workspace = true

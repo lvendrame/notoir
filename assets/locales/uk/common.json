@@ -1,0 +1,20 @@
+{
+  "ok": "ОК",
+  "cancel": "Скасувати",
+  "close": "Закрити",
+  "save": "Зберегти",
+  "dontSave": "Не зберігати",
+  "retry": "Повторити",
+  "showDetails": "Показати подробиці",
+  "learnMore": "Дізнатися більше",
+  "language": "Мова",
+  "reveal": {
+    "finder": "Показати у Finder",
+    "explorer": "Показати у Провіднику",
+    "fileManager": "Відкрити теку"
+  },
+  "fileCount_one": "{{count}} файл",
+  "fileCount_few": "{{count}} файли",
+  "fileCount_many": "{{count}} файлів",
+  "fileCount_other": "{{count}} файлу"
+}

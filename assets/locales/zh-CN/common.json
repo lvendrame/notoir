@@ -1,0 +1,17 @@
+{
+  "ok": "确定",
+  "cancel": "取消",
+  "close": "关闭",
+  "save": "保存",
+  "dontSave": "不保存",
+  "retry": "重试",
+  "showDetails": "显示详细信息",
+  "learnMore": "了解更多",
+  "language": "语言",
+  "reveal": {
+    "finder": "在访达中显示",
+    "explorer": "在文件资源管理器中显示",
+    "fileManager": "打开所在文件夹"
+  },
+  "fileCount_other": "{{count}} 个文件"
+}

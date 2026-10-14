@@ -1,0 +1,20 @@
+{
+  "ok": "OK",
+  "cancel": "Anuluj",
+  "close": "Zamknij",
+  "save": "Zapisz",
+  "dontSave": "Nie zapisuj",
+  "retry": "Ponów",
+  "showDetails": "Pokaż szczegóły",
+  "learnMore": "Dowiedz się więcej",
+  "language": "Język",
+  "reveal": {
+    "finder": "Pokaż w Finderze",
+    "explorer": "Pokaż w Eksploratorze plików",
+    "fileManager": "Otwórz folder nadrzędny"
+  },
+  "fileCount_one": "{{count}} plik",
+  "fileCount_few": "{{count}} pliki",
+  "fileCount_many": "{{count}} plików",
+  "fileCount_other": "{{count}} pliku"
+}

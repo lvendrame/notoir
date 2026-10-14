@@ -1,0 +1,20 @@
+{
+  "ok": "ОК",
+  "cancel": "Отмена",
+  "close": "Закрыть",
+  "save": "Сохранить",
+  "dontSave": "Не сохранять",
+  "retry": "Повторить",
+  "showDetails": "Показать подробности",
+  "learnMore": "Узнать больше",
+  "language": "Язык",
+  "reveal": {
+    "finder": "Показать в Finder",
+    "explorer": "Показать в Проводнике",
+    "fileManager": "Открыть папку"
+  },
+  "fileCount_one": "{{count}} файл",
+  "fileCount_few": "{{count}} файла",
+  "fileCount_many": "{{count}} файлов",
+  "fileCount_other": "{{count}} файла"
+}

@@ -1,0 +1,18 @@
+{
+  "ok": "OK",
+  "cancel": "Annulla",
+  "close": "Chiudi",
+  "save": "Salva",
+  "dontSave": "Non salvare",
+  "retry": "Riprova",
+  "showDetails": "Mostra dettagli",
+  "learnMore": "Ulteriori informazioni",
+  "language": "Lingua",
+  "reveal": {
+    "finder": "Mostra nel Finder",
+    "explorer": "Mostra in Esplora file",
+    "fileManager": "Apri cartella superiore"
+  },
+  "fileCount_one": "{{count}} file",
+  "fileCount_other": "{{count}} file"
+}

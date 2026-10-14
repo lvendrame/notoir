@@ -1,0 +1,18 @@
+{
+  "ok": "OK",
+  "cancel": "Annuleren",
+  "close": "Sluiten",
+  "save": "Opslaan",
+  "dontSave": "Niet opslaan",
+  "retry": "Opnieuw proberen",
+  "showDetails": "Details tonen",
+  "learnMore": "Meer informatie",
+  "language": "Taal",
+  "reveal": {
+    "finder": "Tonen in Finder",
+    "explorer": "Tonen in Verkenner",
+    "fileManager": "Bovenliggende map openen"
+  },
+  "fileCount_one": "{{count}} bestand",
+  "fileCount_other": "{{count}} bestanden"
+}

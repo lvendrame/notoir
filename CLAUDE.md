@@ -23,14 +23,20 @@ turn their Gherkin scenarios into Rust tests, implement, verify, then update the
 - `crates/notoir-plugins` — mlua host, manifest, plugin API.
 - `apps/notoir` — eframe binary: shell, theme, icons, i18n, widgets, editor widget, panels.
 
-`notoir-core` and `notoir-editor` must never depend on egui, tokio, or IO crates.
+`notoir-core` and `notoir-editor` must never depend on egui, tokio, or IO crates (enforced by
+`crates/notoir-core/tests/layering.rs`).
+
+Crates are created by the milestone that first needs them (storage M2, workspace M7, git M18, mcp M20, plugins M22) —
+no empty placeholder crates.
 
 ## Assets
 
 - Icons: `assets/icons/lucide/*.svg` pinned to lucide-static **1.48.0**, plus `assets/icons/custom/`. Add icons by
   copying from lucide-static 1.48.0 and adding a row to `icons!` in `apps/notoir/src/icons.rs`.
 - Fonts: Manrope (UI) + JetBrains Mono (editor, numeric readouts) in `assets/fonts/`; CJK via system fonts.
-- App icons: `assets/app-icon/` generated from `notoir.svg` (`cargo run -p notoir --example gen_icons`).
+- App icons: `assets/app-icon/` generated from `notoir.svg` (`cargo run -p notoir --example gen_icons`, then the
+  `iconutil` / `magick` commands in that example's doc comment).
+- Themes: `assets/themes/*.toml` (spec 21 format); every `Tok` in `apps/notoir/src/theme.rs` must be defined.
 - Locales: `assets/locales/<lng>/<ns>.json` (14 languages, i18next-style JSON). Keep all in sync; key-parity test enforces it.
 
 ## Rules
@@ -39,6 +45,12 @@ turn their Gherkin scenarios into Rust tests, implement, verify, then update the
 - UI, menus, toolbar, shortcuts, palette, plugins and MCP all go through the command registry — no duplicated logic.
 - Never block the UI thread on IO, Git, search or plugin work.
 - Never write a user file except through the save pipeline (spec 09).
+
+## Manual checks
+
+- `NOTOIR_HOME=<dir>` relocates all app directories; `NOTOIR_LANG=<code>` / `NOTOIR_THEME=<id>` override language/theme
+  until the settings UI exists; `NOTOIR_LOG=debug` raises log verbosity.
+- `cargo test -p notoir --test render` writes PNG snapshots to `target/ui-snapshots`.
 
 ## Before considering any change done
 

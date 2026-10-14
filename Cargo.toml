@@ -1,0 +1,47 @@
+[workspace]
+members = ["crates/*", "apps/*"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+publish = false
+
+[workspace.dependencies]
+notoir-core = { path = "crates/notoir-core" }
+notoir-editor = { path = "crates/notoir-editor" }
+notoir-platform = { path = "crates/notoir-platform" }
+
+eframe = { version = "0.36.2", default-features = false, features = ["default_fonts", "glow", "wayland", "x11"] }
+egui = "0.36.2"
+egui_kittest = "0.36.2"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+toml = "0.9"
+thiserror = "2.0.21"
+anyhow = "1.0.104"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+tracing-appender = "0.2"
+resvg = "0.48.1"
+image = { version = "0.25.10", default-features = false, features = ["png"] }
+skrifa = "0.44.0"
+fontdb = { version = "0.24.0", default-features = false, features = ["std", "fs"] }
+directories = "6.0.0"
+sys-locale = "0.3.2"
+tempfile = "3"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"

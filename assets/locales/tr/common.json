@@ -1,0 +1,18 @@
+{
+  "ok": "Tamam",
+  "cancel": "İptal",
+  "close": "Kapat",
+  "save": "Kaydet",
+  "dontSave": "Kaydetme",
+  "retry": "Yeniden Dene",
+  "showDetails": "Ayrıntıları Göster",
+  "learnMore": "Daha Fazla Bilgi",
+  "language": "Dil",
+  "reveal": {
+    "finder": "Finder'da Göster",
+    "explorer": "Dosya Gezgini'nde Göster",
+    "fileManager": "Bulunduğu Klasörü Aç"
+  },
+  "fileCount_one": "{{count}} dosya",
+  "fileCount_other": "{{count}} dosya"
+}

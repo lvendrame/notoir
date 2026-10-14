@@ -1,0 +1,17 @@
+{
+  "ok": "OK",
+  "cancel": "キャンセル",
+  "close": "閉じる",
+  "save": "保存",
+  "dontSave": "保存しない",
+  "retry": "再試行",
+  "showDetails": "詳細を表示",
+  "learnMore": "詳細情報",
+  "language": "言語",
+  "reveal": {
+    "finder": "Finder で表示",
+    "explorer": "エクスプローラーで表示",
+    "fileManager": "親フォルダーを開く"
+  },
+  "fileCount_other": "{{count}} 個のファイル"
+}

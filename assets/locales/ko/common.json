@@ -1,0 +1,17 @@
+{
+  "ok": "확인",
+  "cancel": "취소",
+  "close": "닫기",
+  "save": "저장",
+  "dontSave": "저장 안 함",
+  "retry": "다시 시도",
+  "showDetails": "세부 정보 표시",
+  "learnMore": "자세히 알아보기",
+  "language": "언어",
+  "reveal": {
+    "finder": "Finder에서 보기",
+    "explorer": "파일 탐색기에서 보기",
+    "fileManager": "상위 폴더 열기"
+  },
+  "fileCount_other": "파일 {{count}}개"
+}

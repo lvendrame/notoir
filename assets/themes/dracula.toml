@@ -1,0 +1,90 @@
+# Built-in theme (docs/specs/21-themes-and-design-system.md). Palette: Dracula (https://draculatheme.com, MIT).
+[meta]
+id = "dracula"
+name = "Dracula"
+kind = "dark"
+format = 1
+
+[ui]
+"bg.app" = "#21222c"
+"bg.panel" = "#21222c"
+"bg.panelRaised" = "#343746"
+"bg.editor" = "#282a36"
+"bg.overlay" = "#343746"
+border = "#191a21"
+"border.strong" = "#44475a"
+"text.primary" = "#f8f8f2"
+"text.secondary" = "#c5c8d6"
+"text.tertiary" = "#8390bd"
+"text.disabled" = "#565a70"
+accent = "#bd93f9"
+"accent.strong" = "#9b6ef3"
+danger = "#ff5555"
+warning = "#ffb86c"
+success = "#50fa7b"
+info = "#8be9fd"
+"accent.soft" = { base = "accent", alpha = 0.14 }
+"focus.ring" = { base = "accent" }
+"shadow.float" = { color = "#000000", alpha = 0.4 }
+
+[editor]
+background = { base = "bg.editor" }
+foreground = { base = "text.primary" }
+findMatch = { base = "warning", alpha = 0.25 }
+findMatchCurrent = { base = "warning", alpha = 0.5 }
+bracketMatch = { base = "accent", alpha = 0.25 }
+"gutter.background" = { base = "bg.editor" }
+"gutter.lineNumber" = { base = "text.tertiary" }
+"gutter.lineNumberActive" = { base = "text.primary" }
+"minimap.block" = { base = "text.tertiary", alpha = 0.6 }
+"minimap.viewport" = { base = "text.primary", alpha = 0.08 }
+"minimap.viewportHover" = { base = "text.primary", alpha = 0.14 }
+lineHighlight = "#2f3241"
+selection = "#44475a"
+selectionInactive = "#3a3c4e"
+cursor = "#f8f8f2"
+whitespace = "#44475a"
+indentGuide = "#343746"
+ruler = "#343746"
+
+[syntax]
+comment = { color = "#6272a4", italic = true }
+keyword = "#ff79c6"
+string = "#f1fa8c"
+number = "#bd93f9"
+constant = "#bd93f9"
+function = "#50fa7b"
+type = { color = "#8be9fd", italic = true }
+variable = "#f8f8f2"
+property = "#8be9fd"
+operator = "#ff79c6"
+punctuation = "#f8f8f2"
+tag = "#ff79c6"
+attribute = "#50fa7b"
+regex = "#ff5555"
+escape = "#ff79c6"
+heading = { color = "#bd93f9", bold = true }
+emphasis = { color = "#f1fa8c", italic = true }
+strong = { color = "#ffb86c", bold = true }
+link = "#8be9fd"
+code = "#50fa7b"
+quote = { color = "#f1fa8c", italic = true }
+listMarker = "#8be9fd"
+invalid = "#ff5555"
+
+[git]
+added = "#50fa7b"
+modified = "#ffb86c"
+deleted = "#ff5555"
+untracked = "#8be9fd"
+renamed = "#bd93f9"
+conflict = "#ff79c6"
+ignored = "#6272a4"
+
+[diff]
+insertedLine = { base = "git.added", alpha = 0.12 }
+removedLine = { base = "git.deleted", alpha = 0.12 }
+insertedText = { base = "git.added", alpha = 0.3 }
+removedText = { base = "git.deleted", alpha = 0.3 }
+gutterInserted = { base = "git.added" }
+gutterRemoved = { base = "git.deleted" }

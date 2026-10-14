@@ -1,0 +1,18 @@
+{
+  "ok": "OK",
+  "cancel": "Cancel",
+  "close": "Close",
+  "save": "Save",
+  "dontSave": "Don't Save",
+  "retry": "Retry",
+  "showDetails": "Show Details",
+  "learnMore": "Learn More",
+  "language": "Language",
+  "reveal": {
+    "finder": "Reveal in Finder",
+    "explorer": "Reveal in File Explorer",
+    "fileManager": "Open Containing Folder"
+  },
+  "fileCount_one": "{{count}} file",
+  "fileCount_other": "{{count}} files"
+}
