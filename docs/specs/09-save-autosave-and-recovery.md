@@ -106,7 +106,7 @@ can override (spec 20).
   "app_version": "0.3.0",
   "pid": 41231,
   "workspace": "/Users/me/notes",
-  "updated_at": "2026-10-14T14:43:02Z",
+  "updated_at_ms": 1791989382000,
   "clean_exit": false,
   "entries": ["e1", "e2"]
 }
@@ -123,17 +123,17 @@ can override (spec 20).
   "title": "a.md",
   "revision": 182,
   "base_disk_hash": "xxh3:9f…",
-  "base_disk_mtime": "2026-10-14T14:20:11Z",
-  "encoding": "utf-8",
+  "base_disk_mtime_ms": 1791988811000,
+  "encoding": "UTF-8",
   "bom": false,
   "line_ending": "lf",
   "language": "markdown",
   "content_hash": "xxh3:a1…",
-  "snapshot_at": "2026-10-14T14:43:02Z"
+  "snapshot_at_ms": 1791989382000
 }
 ```
 
-Full-content snapshots (not diffs) — simpler and corruption-resistant. Each write is temp-file + fsync + rename;
+Timestamps are Unix milliseconds; a `content_hash` mismatch marks the entry damaged. Full-content snapshots (not diffs) — simpler and corruption-resistant. Each write is temp-file + fsync + rename;
 content written before metadata; metadata lists `content_hash` so a torn pair is detected.
 
 ### Scheduling

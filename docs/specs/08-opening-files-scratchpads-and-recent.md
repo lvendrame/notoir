@@ -33,7 +33,7 @@ Scratchpads are named, persistent, unsaved-to-file notes — the "notepad" use c
 
 - `file.newScratchpad`: creates "Scratch N" (N = lowest unused positive integer), language from
   `scratchpad.defaultLanguage` (default `markdown`).
-- Content is persisted continuously to the Scratchpad store in app data (`<data>/scratchpads/<scratch_id>.md` +
+- Content is persisted continuously to the Scratchpad store in app data (`<data>/scratchpads/<scratch_id>.txt` +
   metadata row in the state DB), debounced 500 ms after edits and on exit. This is **not** autosave to a user file and
   works even with autosave Off.
 - They survive restarts and crashes; they reopen in their previous tab positions.

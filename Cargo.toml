@@ -12,6 +12,7 @@ publish = false
 notoir-core = { path = "crates/notoir-core" }
 notoir-editor = { path = "crates/notoir-editor" }
 notoir-platform = { path = "crates/notoir-platform" }
+notoir-storage = { path = "crates/notoir-storage" }
 
 eframe = { version = "0.36.2", default-features = false, features = ["default_fonts", "glow", "wayland", "x11"] }
 egui = "0.36.2"
@@ -35,6 +36,10 @@ ropey = "1.6"
 encoding_rs = "0.8"
 chardetng = "0.1"
 proptest = "1"
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+toml_edit = "0.25.17"
+uuid = { version = "1.28.0", features = ["v4"] }
+xxhash-rust = { version = "0.8.19", features = ["xxh3"] }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
