@@ -14,10 +14,10 @@ use crate::core::{AppCore, Effect, StartOptions, ThemeChoice};
 use crate::fonts;
 use crate::i18n::{self, Language};
 use crate::icons::IconCache;
+use crate::input;
 use crate::shell::overlays::{Picker, PickerEvent};
-use crate::shell::{self, Actions, Kit, UiState, chrome, empty_state, overlays, panels};
+use crate::shell::{self, Actions, Kit, UiState, chrome, overlays, panels};
 use crate::theme::{Theme, ThemeId, Tok};
-use crate::{editor_widget, input};
 
 /// Env overrides for manual checks and snapshots (not persisted).
 pub const LANG_ENV: &str = "NOTOIR_LANG";
@@ -279,32 +279,32 @@ impl eframe::App for NotoirApp {
             }
             let sizes = panels::show(ui, &mut kit, &self.core, &mut actions);
             let editor_fill = kit.color(Tok::BgEditor);
-            let active = self.core.workbench.active_view();
-            let options = active.map(|v| self.core.editor_options(v));
             let focus_request = self.ui.focus_editor.take();
-            let mut editor_focused = false;
-            let mut zoom_steps = 0;
+            let mut layout_out = shell::layout::LayoutOutput::default();
             egui::CentralPanel::no_frame()
                 .frame(egui::Frame::new().fill(editor_fill))
-                .show(ui, |ui| match (active, options) {
-                    (Some(view), Some(opts)) => {
-                        shell::tabs::strip(ui, &mut kit, &self.core, &context, &mut actions);
-                        let out = editor_widget::show(
-                            ui,
-                            &mut kit,
-                            &mut self.core.workbench,
-                            &mut self.ui.editors,
-                            view,
-                            &opts,
-                            focus_request == Some(view),
-                            now as f64 / 1000.0,
-                        );
-                        editor_focused = out.focused;
-                        self.cjk_seen.merge(out.cjk);
-                        zoom_steps = out.zoom_steps;
-                    }
-                    _ => empty_state::show(ui, &mut kit, &self.core, &mut actions),
+                .show(ui, |ui| {
+                    layout_out = shell::layout::show(
+                        ui,
+                        &mut kit,
+                        &mut self.core,
+                        &mut self.ui.editors,
+                        &mut self.ui.tab_drag,
+                        focus_request,
+                        &context,
+                        &mut actions,
+                        now as f64 / 1000.0,
+                    );
                 });
+            let editor_focused = layout_out.editor_focused;
+            let zoom_steps = layout_out.zoom_steps;
+            self.cjk_seen.merge(layout_out.cjk);
+            if let Some(view) = layout_out.activate {
+                let _ = self.core.workbench.activate_view(view);
+            }
+            for (path, index, delta, min) in layout_out.resizes {
+                self.core.workbench.layout.resize(&path, index, delta, min);
+            }
             self.core.editor_focused = editor_focused;
             match zoom_steps.cmp(&0) {
                 std::cmp::Ordering::Greater => actions.push(CommandInvocation::new(

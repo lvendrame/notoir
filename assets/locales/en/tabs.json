@@ -4,5 +4,6 @@
   "scratchTooltip": "Scratchpad — not saved to a file",
   "pin": "Pin Tab",
   "unpin": "Unpin Tab",
-  "showAll": "Show All Tabs"
+  "showAll": "Show All Tabs",
+  "dropHere": "Drop a file here"
 }

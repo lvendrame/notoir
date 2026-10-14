@@ -38,7 +38,14 @@
     "togglePin": "Tabblad vastmaken of losmaken",
     "duplicate": "Weergave dupliceren",
     "activate": "Tabblad activeren",
-    "reopenClosedTab": "Gesloten tabblad heropenen"
+    "reopenClosedTab": "Gesloten tabblad heropenen",
+    "splitLeft": "Links splitsen",
+    "splitRight": "Rechts splitsen",
+    "splitUp": "Boven splitsen",
+    "splitDown": "Onder splitsen",
+    "singleEditor": "Eén editor",
+    "moveTab": "Tabblad verplaatsen",
+    "dockTab": "Tabblad koppelen"
   },
   "preferences": {
     "changeTheme": "Thema wijzigen…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Meldingen tonen",
-    "clearNotifications": "Alle meldingen wissen"
+    "clearNotifications": "Alle meldingen wissen",
+    "maximizeGroup": "Editorgroep maximaliseren",
+    "focusNextGroup": "Focus op volgende editorgroep",
+    "focusPreviousGroup": "Focus op vorige editorgroep",
+    "focusGroup": "Focus op editorgroep",
+    "moveTabToNextGroup": "Tabblad naar volgende groep verplaatsen",
+    "moveTabToPreviousGroup": "Tabblad naar vorige groep verplaatsen"
   },
   "file": {
     "newUntitled": "Nieuw bestand",

@@ -38,7 +38,14 @@
     "togglePin": "Épingler ou détacher l'onglet",
     "duplicate": "Dupliquer la vue",
     "activate": "Activer l'onglet",
-    "reopenClosedTab": "Rouvrir l'onglet fermé"
+    "reopenClosedTab": "Rouvrir l'onglet fermé",
+    "splitLeft": "Fractionner à gauche",
+    "splitRight": "Fractionner à droite",
+    "splitUp": "Fractionner en haut",
+    "splitDown": "Fractionner en bas",
+    "singleEditor": "Éditeur unique",
+    "moveTab": "Déplacer l'onglet",
+    "dockTab": "Ancrer l'onglet"
   },
   "preferences": {
     "changeTheme": "Changer de thème…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Afficher les notifications",
-    "clearNotifications": "Effacer toutes les notifications"
+    "clearNotifications": "Effacer toutes les notifications",
+    "maximizeGroup": "Agrandir le groupe d'éditeurs",
+    "focusNextGroup": "Groupe d'éditeurs suivant",
+    "focusPreviousGroup": "Groupe d'éditeurs précédent",
+    "focusGroup": "Activer le groupe d'éditeurs",
+    "moveTabToNextGroup": "Déplacer l'onglet vers le groupe suivant",
+    "moveTabToPreviousGroup": "Déplacer l'onglet vers le groupe précédent"
   },
   "file": {
     "newUntitled": "Nouveau fichier",

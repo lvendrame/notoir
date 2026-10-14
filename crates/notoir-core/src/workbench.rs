@@ -271,7 +271,8 @@ impl Workbench {
         self.duplicate_into(view, group, TabPosition::Index(index))
     }
 
-    fn duplicate_into(
+    /// A copy of `view` (same document, position and folds) in `group`.
+    pub fn duplicate_into(
         &mut self,
         view: ViewId,
         group: GroupId,
@@ -323,6 +324,12 @@ impl Workbench {
         if self.layout.group(group).is_none() {
             return Err(WorkbenchError::NoSuchGroup);
         }
+        // `index` is a position in the strip as it looked before the move.
+        let old = self.layout.group(source).and_then(|g| g.index_of(view));
+        let index = match old {
+            Some(i) if source == group && i < index => index - 1,
+            _ => index,
+        };
         self.layout.group_mut(source).expect("exists").remove(view);
         self.add_tab(view, group, TabPosition::Index(index))?;
         self.remove_group_if_empty(source);
@@ -351,6 +358,26 @@ impl Workbench {
         self.add_tab(view, new, TabPosition::End)?;
         self.remove_group_if_empty(source);
         self.activate_view(view)?;
+        self.events.emit(AppEvent::LayoutChanged);
+        Ok(new)
+    }
+
+    /// Alt/Option-drop on a group edge: a copy of the view in a new group.
+    pub fn duplicate_to_split(
+        &mut self,
+        view: ViewId,
+        target: GroupId,
+        dir: Direction,
+    ) -> Result<GroupId, WorkbenchError> {
+        if self.view(view).is_none() {
+            return Err(WorkbenchError::NoSuchView);
+        }
+        if self.layout.group(target).is_none() {
+            return Err(WorkbenchError::NoSuchGroup);
+        }
+        let new = GroupId(self.ids.fresh());
+        self.layout.split(target, dir, new);
+        self.duplicate_into(view, new, TabPosition::End)?;
         self.events.emit(AppEvent::LayoutChanged);
         Ok(new)
     }
@@ -843,6 +870,33 @@ mod tests {
         let bottom = wb.move_view_to_split(b, top, Direction::Down).unwrap();
         assert_eq!(wb.layout.group(top).unwrap().tabs, vec![a]);
         assert_eq!(wb.layout.group(bottom).unwrap().tabs, vec![b]);
+        wb.layout.check().unwrap();
+    }
+
+    #[test]
+    fn reorder_within_group_uses_pre_move_index() {
+        let mut wb = Workbench::new();
+        let (_, a) = open(&mut wb, "a.md", "");
+        let (_, b) = open(&mut wb, "b.md", "");
+        let (_, c) = open(&mut wb, "c.md", "");
+        let g = wb.layout.active_group;
+        // Drop "a" between "b" and "c" (strip index 2 before the move).
+        wb.move_view(a, g, 2).unwrap();
+        assert_eq!(wb.layout.active().tabs, vec![b, a, c]);
+        wb.move_view(c, g, 0).unwrap();
+        assert_eq!(wb.layout.active().tabs, vec![c, b, a]);
+    }
+
+    #[test]
+    fn alt_drop_on_edge_duplicates_into_new_group() {
+        let mut wb = Workbench::new();
+        let (doc, a) = open(&mut wb, "a.md", "");
+        let g = wb.layout.active_group;
+        let new = wb.duplicate_to_split(a, g, Direction::Right).unwrap();
+        assert_eq!(wb.layout.group(g).unwrap().tabs, vec![a]);
+        let copy = wb.layout.group(new).unwrap().tabs[0];
+        assert_ne!(copy, a);
+        assert_eq!(wb.view(copy).unwrap().document_id, doc);
         wb.layout.check().unwrap();
     }
 

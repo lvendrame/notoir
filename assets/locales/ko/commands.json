@@ -38,7 +38,14 @@
     "togglePin": "탭 고정 또는 고정 해제",
     "duplicate": "보기 복제",
     "activate": "탭 활성화",
-    "reopenClosedTab": "닫은 탭 다시 열기"
+    "reopenClosedTab": "닫은 탭 다시 열기",
+    "splitLeft": "왼쪽으로 분할",
+    "splitRight": "오른쪽으로 분할",
+    "splitUp": "위로 분할",
+    "splitDown": "아래로 분할",
+    "singleEditor": "단일 편집기",
+    "moveTab": "탭 이동",
+    "dockTab": "탭 도킹"
   },
   "preferences": {
     "changeTheme": "테마 변경…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "알림 표시",
-    "clearNotifications": "모든 알림 지우기"
+    "clearNotifications": "모든 알림 지우기",
+    "maximizeGroup": "편집기 그룹 최대화",
+    "focusNextGroup": "다음 편집기 그룹에 포커스",
+    "focusPreviousGroup": "이전 편집기 그룹에 포커스",
+    "focusGroup": "편집기 그룹에 포커스",
+    "moveTabToNextGroup": "탭을 다음 그룹으로 이동",
+    "moveTabToPreviousGroup": "탭을 이전 그룹으로 이동"
   },
   "file": {
     "newUntitled": "새 파일",

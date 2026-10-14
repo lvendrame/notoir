@@ -1,6 +1,6 @@
 # 03 — Editor Views, Groups & Splits
 
-**Status:** Partial — views, groups, layout tree, split/duplicate/move/dock (M1, domain); rendering, tab drag and Maximize panel restore (M6)
+**Status:** Done — layout tree and operations (M1); rendering with splitters, per-group tab strips, tab drag reorder/move/dock with preview, Alt/Option copy, Esc cancel, Maximize with exact panel restore (M6). OS file drops open in the group under the pointer as a tab (edge docking for file drops and Explorer drags arrive with the Explorer, M7)
 
 ## Purpose
 

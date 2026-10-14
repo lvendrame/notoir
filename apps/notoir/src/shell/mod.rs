@@ -10,6 +10,7 @@ use crate::theme::{ICON, Theme, Tok};
 
 pub mod chrome;
 pub mod empty_state;
+pub mod layout;
 pub mod overlays;
 pub mod panels;
 pub mod prompts;
@@ -48,6 +49,7 @@ pub struct UiState {
     pub editors: crate::editor_widget::EditorCaches,
     /// Editor that should take keyboard focus next frame.
     pub focus_editor: Option<notoir_core::ids::ViewId>,
+    pub tab_drag: Option<layout::TabDrag>,
 }
 
 /// Collects invocations produced while rendering one frame.

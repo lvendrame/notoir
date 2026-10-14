@@ -38,7 +38,14 @@
     "togglePin": "Закріпити або відкріпити вкладку",
     "duplicate": "Дублювати подання",
     "activate": "Активувати вкладку",
-    "reopenClosedTab": "Відкрити закриту вкладку"
+    "reopenClosedTab": "Відкрити закриту вкладку",
+    "splitLeft": "Розділити ліворуч",
+    "splitRight": "Розділити праворуч",
+    "splitUp": "Розділити вгору",
+    "splitDown": "Розділити вниз",
+    "singleEditor": "Один редактор",
+    "moveTab": "Перемістити вкладку",
+    "dockTab": "Закріпити вкладку"
   },
   "preferences": {
     "changeTheme": "Змінити тему…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Показати сповіщення",
-    "clearNotifications": "Очистити всі сповіщення"
+    "clearNotifications": "Очистити всі сповіщення",
+    "maximizeGroup": "Розгорнути групу редакторів",
+    "focusNextGroup": "Перейти до наступної групи редакторів",
+    "focusPreviousGroup": "Перейти до попередньої групи редакторів",
+    "focusGroup": "Перейти до групи редакторів",
+    "moveTabToNextGroup": "Перемістити вкладку до наступної групи",
+    "moveTabToPreviousGroup": "Перемістити вкладку до попередньої групи"
   },
   "file": {
     "newUntitled": "Новий файл",

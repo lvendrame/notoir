@@ -38,7 +38,14 @@
     "togglePin": "Pin or Unpin Tab",
     "duplicate": "Duplicate View",
     "activate": "Activate Tab",
-    "reopenClosedTab": "Reopen Closed Tab"
+    "reopenClosedTab": "Reopen Closed Tab",
+    "splitLeft": "Split Left",
+    "splitRight": "Split Right",
+    "splitUp": "Split Up",
+    "splitDown": "Split Down",
+    "singleEditor": "Single Editor",
+    "moveTab": "Move Tab",
+    "dockTab": "Dock Tab"
   },
   "preferences": {
     "changeTheme": "Change Theme…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Show Notifications",
-    "clearNotifications": "Clear All Notifications"
+    "clearNotifications": "Clear All Notifications",
+    "maximizeGroup": "Maximize Editor Group",
+    "focusNextGroup": "Focus Next Editor Group",
+    "focusPreviousGroup": "Focus Previous Editor Group",
+    "focusGroup": "Focus Editor Group",
+    "moveTabToNextGroup": "Move Tab to Next Group",
+    "moveTabToPreviousGroup": "Move Tab to Previous Group"
   },
   "file": {
     "newUntitled": "New File",

@@ -69,16 +69,19 @@ pub(super) fn specs(out: &mut Specs) {
 }
 
 fn toggle_primary(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    core.exit_maximize();
     core.panels.toggle_area(PanelArea::Primary);
     CommandOutcome::Done
 }
 
 fn toggle_secondary(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    core.exit_maximize();
     core.panels.toggle_area(PanelArea::Secondary);
     CommandOutcome::Done
 }
 
 fn toggle_bottom(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    core.exit_maximize();
     core.panels.toggle_area(PanelArea::Bottom);
     CommandOutcome::Done
 }
@@ -112,17 +115,20 @@ fn toggle_primary_side(core: &mut AppCore, _: &CommandInvocation) -> CommandOutc
 }
 
 fn show_explorer(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    core.exit_maximize();
     core.panels.show(PanelId::Explorer);
     CommandOutcome::Done
 }
 
 fn show_output(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    core.exit_maximize();
     core.panels.show(PanelId::Output);
     CommandOutcome::Done
 }
 
 /// Args: `{ "panel": "explorer" }`.
 fn toggle_panel(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    core.exit_maximize();
     match arg(inv, "panel").and_then(panel_from_key) {
         Some(p) => {
             core.panels.toggle(p);
@@ -134,6 +140,7 @@ fn toggle_panel(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
 
 /// Args: `{ "panel": "outline", "area": "primary" | "secondary" | "bottom" }`.
 fn move_panel(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    core.exit_maximize();
     let area = match arg(inv, "area") {
         Some("primary") => PanelArea::Primary,
         Some("secondary") => PanelArea::Secondary,

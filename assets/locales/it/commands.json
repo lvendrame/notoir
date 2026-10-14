@@ -38,7 +38,14 @@
     "togglePin": "Aggiungi o rimuovi puntina dalla scheda",
     "duplicate": "Duplica vista",
     "activate": "Attiva scheda",
-    "reopenClosedTab": "Riapri scheda chiusa"
+    "reopenClosedTab": "Riapri scheda chiusa",
+    "splitLeft": "Dividi a sinistra",
+    "splitRight": "Dividi a destra",
+    "splitUp": "Dividi in alto",
+    "splitDown": "Dividi in basso",
+    "singleEditor": "Editor singolo",
+    "moveTab": "Sposta scheda",
+    "dockTab": "Ancora scheda"
   },
   "preferences": {
     "changeTheme": "Cambia tema…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Mostra notifiche",
-    "clearNotifications": "Cancella tutte le notifiche"
+    "clearNotifications": "Cancella tutte le notifiche",
+    "maximizeGroup": "Ingrandisci gruppo di editor",
+    "focusNextGroup": "Attiva gruppo di editor successivo",
+    "focusPreviousGroup": "Attiva gruppo di editor precedente",
+    "focusGroup": "Attiva gruppo di editor",
+    "moveTabToNextGroup": "Sposta scheda nel gruppo successivo",
+    "moveTabToPreviousGroup": "Sposta scheda nel gruppo precedente"
   },
   "file": {
     "newUntitled": "Nuovo file",

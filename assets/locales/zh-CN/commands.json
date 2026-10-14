@@ -38,7 +38,14 @@
     "togglePin": "固定或取消固定标签页",
     "duplicate": "复制视图",
     "activate": "激活标签页",
-    "reopenClosedTab": "重新打开关闭的标签页"
+    "reopenClosedTab": "重新打开关闭的标签页",
+    "splitLeft": "向左拆分",
+    "splitRight": "向右拆分",
+    "splitUp": "向上拆分",
+    "splitDown": "向下拆分",
+    "singleEditor": "单一编辑器",
+    "moveTab": "移动标签页",
+    "dockTab": "停靠标签页"
   },
   "preferences": {
     "changeTheme": "更改主题…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "显示通知",
-    "clearNotifications": "清除所有通知"
+    "clearNotifications": "清除所有通知",
+    "maximizeGroup": "最大化编辑器组",
+    "focusNextGroup": "聚焦到下一个编辑器组",
+    "focusPreviousGroup": "聚焦到上一个编辑器组",
+    "focusGroup": "聚焦到编辑器组",
+    "moveTabToNextGroup": "将标签页移到下一个组",
+    "moveTabToPreviousGroup": "将标签页移到上一个组"
   },
   "file": {
     "newUntitled": "新建文件",

@@ -173,6 +173,8 @@ pub struct EditorOutput {
     pub focused: bool,
     /// Ctrl/Cmd + wheel: zoom one step in (+1) or out (-1).
     pub zoom_steps: i32,
+    /// Clicked or dragged in: its view should become the active one.
+    pub interacted: bool,
     /// CJK scripts in the visible text (fonts are loaded on demand).
     pub cjk: crate::fonts::CjkUse,
 }
@@ -225,6 +227,7 @@ pub fn show(
     }
     let focused = response.has_focus();
     out.focused = focused;
+    out.interacted = response.clicked() || response.drag_started() || response.double_clicked();
     if focused {
         ui.memory_mut(|m| {
             m.set_focus_lock_filter(

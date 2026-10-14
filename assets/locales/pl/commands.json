@@ -38,7 +38,14 @@
     "togglePin": "Przypnij lub odepnij kartę",
     "duplicate": "Duplikuj widok",
     "activate": "Aktywuj kartę",
-    "reopenClosedTab": "Otwórz ponownie zamkniętą kartę"
+    "reopenClosedTab": "Otwórz ponownie zamkniętą kartę",
+    "splitLeft": "Podziel w lewo",
+    "splitRight": "Podziel w prawo",
+    "splitUp": "Podziel w górę",
+    "splitDown": "Podziel w dół",
+    "singleEditor": "Pojedynczy edytor",
+    "moveTab": "Przenieś kartę",
+    "dockTab": "Zadokuj kartę"
   },
   "preferences": {
     "changeTheme": "Zmień motyw…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Pokaż powiadomienia",
-    "clearNotifications": "Wyczyść wszystkie powiadomienia"
+    "clearNotifications": "Wyczyść wszystkie powiadomienia",
+    "maximizeGroup": "Maksymalizuj grupę edytorów",
+    "focusNextGroup": "Przejdź do następnej grupy edytorów",
+    "focusPreviousGroup": "Przejdź do poprzedniej grupy edytorów",
+    "focusGroup": "Przejdź do grupy edytorów",
+    "moveTabToNextGroup": "Przenieś kartę do następnej grupy",
+    "moveTabToPreviousGroup": "Przenieś kartę do poprzedniej grupy"
   },
   "file": {
     "newUntitled": "Nowy plik",

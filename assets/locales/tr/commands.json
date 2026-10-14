@@ -38,7 +38,14 @@
     "togglePin": "Sekmeyi Sabitle veya Sabitlemeyi Kaldır",
     "duplicate": "Görünümü Çoğalt",
     "activate": "Sekmeyi Etkinleştir",
-    "reopenClosedTab": "Kapatılan Sekmeyi Yeniden Aç"
+    "reopenClosedTab": "Kapatılan Sekmeyi Yeniden Aç",
+    "splitLeft": "Sola Böl",
+    "splitRight": "Sağa Böl",
+    "splitUp": "Yukarı Böl",
+    "splitDown": "Aşağı Böl",
+    "singleEditor": "Tek Düzenleyici",
+    "moveTab": "Sekmeyi Taşı",
+    "dockTab": "Sekmeyi Yerleştir"
   },
   "preferences": {
     "changeTheme": "Temayı Değiştir…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Bildirimleri Göster",
-    "clearNotifications": "Tüm Bildirimleri Temizle"
+    "clearNotifications": "Tüm Bildirimleri Temizle",
+    "maximizeGroup": "Düzenleyici Grubunu Ekranı Kapla",
+    "focusNextGroup": "Sonraki Düzenleyici Grubuna Odaklan",
+    "focusPreviousGroup": "Önceki Düzenleyici Grubuna Odaklan",
+    "focusGroup": "Düzenleyici Grubuna Odaklan",
+    "moveTabToNextGroup": "Sekmeyi Sonraki Gruba Taşı",
+    "moveTabToPreviousGroup": "Sekmeyi Önceki Gruba Taşı"
   },
   "file": {
     "newUntitled": "Yeni Dosya",

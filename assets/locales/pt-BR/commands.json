@@ -38,7 +38,14 @@
     "togglePin": "Fixar ou Desafixar Aba",
     "duplicate": "Duplicar Visualização",
     "activate": "Ativar Aba",
-    "reopenClosedTab": "Reabrir Aba Fechada"
+    "reopenClosedTab": "Reabrir Aba Fechada",
+    "splitLeft": "Dividir à Esquerda",
+    "splitRight": "Dividir à Direita",
+    "splitUp": "Dividir Acima",
+    "splitDown": "Dividir Abaixo",
+    "singleEditor": "Editor Único",
+    "moveTab": "Mover Aba",
+    "dockTab": "Encaixar Aba"
   },
   "preferences": {
     "changeTheme": "Alterar Tema…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Mostrar Notificações",
-    "clearNotifications": "Limpar Todas as Notificações"
+    "clearNotifications": "Limpar Todas as Notificações",
+    "maximizeGroup": "Maximizar Grupo de Editores",
+    "focusNextGroup": "Focar Próximo Grupo de Editores",
+    "focusPreviousGroup": "Focar Grupo de Editores Anterior",
+    "focusGroup": "Focar Grupo de Editores",
+    "moveTabToNextGroup": "Mover Aba para o Próximo Grupo",
+    "moveTabToPreviousGroup": "Mover Aba para o Grupo Anterior"
   },
   "file": {
     "newUntitled": "Novo Arquivo",

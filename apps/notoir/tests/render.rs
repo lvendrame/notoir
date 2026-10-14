@@ -123,3 +123,36 @@ fn tabs_and_prompt_snapshot() {
         img.save(out_dir().join("prompt-unsaved.png")).unwrap();
     }
 }
+
+#[test]
+fn split_layout_snapshot() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut files = Vec::new();
+    for (name, text) in [
+        (
+            "README.md",
+            "# Notoir\n\nA text editor.\n\n- splits\n- tabs\n",
+        ),
+        ("config.json", "{\n  \"theme\": \"midnight\"\n}\n"),
+    ] {
+        let p = dir.path().join(name);
+        std::fs::write(&p, text).unwrap();
+        files.push((p, None));
+    }
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = files;
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "view.splitRight", serde_json::Value::Null);
+    common::run(
+        &mut app,
+        "workbench.moveTabToNextGroup",
+        serde_json::Value::Null,
+    );
+    common::run(&mut app, "view.splitDown", serde_json::Value::Null);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("splits.png")).unwrap();
+    }
+}

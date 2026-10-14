@@ -4,5 +4,6 @@
   "scratchTooltip": "Notizzettel – nicht in einer Datei gespeichert",
   "pin": "Tab anheften",
   "unpin": "Tab lösen",
-  "showAll": "Alle Tabs anzeigen"
+  "showAll": "Alle Tabs anzeigen",
+  "dropHere": "Datei hier ablegen"
 }

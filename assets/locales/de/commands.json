@@ -38,7 +38,14 @@
     "togglePin": "Tab anheften oder lösen",
     "duplicate": "Ansicht duplizieren",
     "activate": "Tab aktivieren",
-    "reopenClosedTab": "Geschlossenen Tab wieder öffnen"
+    "reopenClosedTab": "Geschlossenen Tab wieder öffnen",
+    "splitLeft": "Links teilen",
+    "splitRight": "Rechts teilen",
+    "splitUp": "Oben teilen",
+    "splitDown": "Unten teilen",
+    "singleEditor": "Einzelner Editor",
+    "moveTab": "Tab verschieben",
+    "dockTab": "Tab andocken"
   },
   "preferences": {
     "changeTheme": "Design ändern…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Benachrichtigungen anzeigen",
-    "clearNotifications": "Alle Benachrichtigungen löschen"
+    "clearNotifications": "Alle Benachrichtigungen löschen",
+    "maximizeGroup": "Editorgruppe maximieren",
+    "focusNextGroup": "Nächste Editorgruppe fokussieren",
+    "focusPreviousGroup": "Vorherige Editorgruppe fokussieren",
+    "focusGroup": "Editorgruppe fokussieren",
+    "moveTabToNextGroup": "Tab in nächste Gruppe verschieben",
+    "moveTabToPreviousGroup": "Tab in vorherige Gruppe verschieben"
   },
   "file": {
     "newUntitled": "Neue Datei",

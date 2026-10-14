@@ -133,6 +133,8 @@ pub struct AppCore {
     /// The editor widget had keyboard focus last frame.
     pub editor_focused: bool,
     pub files: crate::files::FileState,
+    /// Panels as they were before Maximize Editor Group (restored exactly).
+    pub maximize_saved: Option<PanelLayout>,
 }
 
 impl AppCore {
@@ -235,6 +237,7 @@ impl AppCore {
             now_ms: 0,
             zoom: 100,
             editor_focused: false,
+            maximize_saved: None,
             files: crate::files::FileState::new(
                 opts.dialogs
                     .clone()
@@ -252,6 +255,29 @@ impl AppCore {
 
     pub fn toolbar_visible(&self) -> bool {
         self.settings.bool("workbench.toolbar.visible", None)
+    }
+
+    /// Maximize Editor Group: hides other groups and every panel; toggling
+    /// again restores the panels exactly.
+    pub fn toggle_maximize(&mut self) {
+        if self.workbench.layout.maximized.is_some() {
+            self.exit_maximize();
+            return;
+        }
+        let group = self.workbench.layout.active_group;
+        self.maximize_saved = Some(self.panels.clone());
+        self.panels.hide_all();
+        self.workbench.toggle_maximize(group);
+    }
+
+    /// Leaves maximized mode (when a panel or another group is requested).
+    pub fn exit_maximize(&mut self) {
+        if let Some(g) = self.workbench.layout.maximized {
+            self.workbench.toggle_maximize(g);
+        }
+        if let Some(saved) = self.maximize_saved.take() {
+            self.panels = saved;
+        }
     }
 
     /// Word wrap for a view: its override, else the language setting (off in

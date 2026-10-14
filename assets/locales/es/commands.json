@@ -38,7 +38,14 @@
     "togglePin": "Fijar o desfijar pestaña",
     "duplicate": "Duplicar vista",
     "activate": "Activar pestaña",
-    "reopenClosedTab": "Reabrir pestaña cerrada"
+    "reopenClosedTab": "Reabrir pestaña cerrada",
+    "splitLeft": "Dividir a la izquierda",
+    "splitRight": "Dividir a la derecha",
+    "splitUp": "Dividir arriba",
+    "splitDown": "Dividir abajo",
+    "singleEditor": "Editor único",
+    "moveTab": "Mover pestaña",
+    "dockTab": "Acoplar pestaña"
   },
   "preferences": {
     "changeTheme": "Cambiar tema…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "Mostrar notificaciones",
-    "clearNotifications": "Borrar todas las notificaciones"
+    "clearNotifications": "Borrar todas las notificaciones",
+    "maximizeGroup": "Maximizar grupo de editores",
+    "focusNextGroup": "Enfocar el siguiente grupo de editores",
+    "focusPreviousGroup": "Enfocar el grupo de editores anterior",
+    "focusGroup": "Enfocar grupo de editores",
+    "moveTabToNextGroup": "Mover pestaña al siguiente grupo",
+    "moveTabToPreviousGroup": "Mover pestaña al grupo anterior"
   },
   "file": {
     "newUntitled": "Nuevo archivo",

@@ -38,7 +38,14 @@
     "togglePin": "タブのピン留め/解除",
     "duplicate": "ビューの複製",
     "activate": "タブをアクティブにする",
-    "reopenClosedTab": "閉じたタブを再度開く"
+    "reopenClosedTab": "閉じたタブを再度開く",
+    "splitLeft": "左に分割",
+    "splitRight": "右に分割",
+    "splitUp": "上に分割",
+    "splitDown": "下に分割",
+    "singleEditor": "単一エディター",
+    "moveTab": "タブを移動",
+    "dockTab": "タブをドッキング"
   },
   "preferences": {
     "changeTheme": "テーマの変更…",
@@ -53,7 +60,13 @@
   },
   "workbench": {
     "showNotifications": "通知を表示",
-    "clearNotifications": "すべての通知をクリア"
+    "clearNotifications": "すべての通知をクリア",
+    "maximizeGroup": "エディター グループを最大化",
+    "focusNextGroup": "次のエディター グループにフォーカス",
+    "focusPreviousGroup": "前のエディター グループにフォーカス",
+    "focusGroup": "エディター グループにフォーカス",
+    "moveTabToNextGroup": "タブを次のグループに移動",
+    "moveTabToPreviousGroup": "タブを前のグループに移動"
   },
   "file": {
     "newUntitled": "新しいファイル",

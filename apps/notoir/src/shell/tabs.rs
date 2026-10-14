@@ -8,7 +8,9 @@ use std::collections::HashMap;
 use egui::{Pos2, Rect, Sense, Stroke, Vec2};
 use notoir_core::command::{CommandInvocation, InvocationSource};
 use notoir_core::document::{Document, DocumentOrigin, ReadOnly};
-use notoir_core::ids::ViewId;
+use notoir_core::ids::{GroupId, ViewId};
+
+use super::layout::TabDrag;
 use notoir_core::when::ContextSnapshot;
 use serde_json::json;
 
@@ -138,15 +140,23 @@ fn invoke(actions: &mut Actions, id: &'static str, view: ViewId) {
     );
 }
 
-/// Draws the active group's tab strip.
+/// Draws one group's tab strip. Tab rectangles are reported for drop targets;
+/// dragging a tab starts a [`TabDrag`].
+#[allow(clippy::too_many_arguments)]
 pub fn strip(
     ui: &mut egui::Ui,
     kit: &mut Kit,
     core: &AppCore,
+    group_id: GroupId,
     context: &ContextSnapshot,
     actions: &mut Actions,
-) {
-    let group = core.workbench.layout.active();
+    drag: &mut Option<TabDrag>,
+    tab_rects: &mut Vec<(ViewId, Rect)>,
+) -> Rect {
+    let Some(group) = core.workbench.layout.group(group_id) else {
+        return Rect::NOTHING;
+    };
+    let focused_group = core.workbench.layout.active_group == group_id;
     let tabs = group.tabs.clone();
     let active = group.active;
     let (rect, bg_resp) = ui.allocate_exact_size(
@@ -159,6 +169,10 @@ pub fn strip(
         Stroke::new(1.0, kit.color(Tok::Border)),
     );
     if bg_resp.double_clicked() {
+        actions.push(
+            CommandInvocation::new("workbench.focusGroup", InvocationSource::Internal)
+                .with_args(json!({ "group": group_id.0 })),
+        );
         actions.push(CommandInvocation::new(
             "file.newUntitled",
             InvocationSource::Internal,
@@ -176,13 +190,13 @@ pub fn strip(
             .layout(egui::Layout::left_to_right(egui::Align::Center)),
     );
     egui::ScrollArea::horizontal()
-        .id_salt("tab-strip")
+        .id_salt(("tab-strip", group_id))
         .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysHidden)
         .show(&mut child, |ui| {
             ui.spacing_mut().item_spacing.x = 0.0;
             ui.horizontal(|ui| {
                 for &view in &tabs {
-                    tab(
+                    let tab_rect = tab(
                         ui,
                         kit,
                         core,
@@ -190,8 +204,12 @@ pub fn strip(
                         view,
                         labels.get(&view).cloned().unwrap_or_default(),
                         Some(view) == active,
+                        focused_group,
                         actions,
+                        drag,
+                        group_id,
                     );
+                    tab_rects.push((view, tab_rect));
                 }
             });
         });
@@ -221,6 +239,7 @@ pub fn strip(
             }
         }
     });
+    rect
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -232,13 +251,16 @@ fn tab(
     view: ViewId,
     label: String,
     active: bool,
+    focused_group: bool,
     actions: &mut Actions,
-) {
+    drag: &mut Option<TabDrag>,
+    group: GroupId,
+) -> Rect {
     let Some(v) = core.workbench.view(view) else {
-        return;
+        return Rect::NOTHING;
     };
     let Some(doc) = core.workbench.document(v.document_id) else {
-        return;
+        return Rect::NOTHING;
     };
     let font = egui::FontId::proportional(13.0);
     let text_color = if active {
@@ -256,7 +278,11 @@ fn tab(
         + 8.0
         + 20.0
         + 8.0;
-    let (rect, resp) = ui.allocate_exact_size(Vec2::new(width, TAB_STRIP_HEIGHT), Sense::click());
+    let (rect, resp) =
+        ui.allocate_exact_size(Vec2::new(width, TAB_STRIP_HEIGHT), Sense::click_and_drag());
+    if resp.drag_started() {
+        *drag = Some(TabDrag { view, from: group });
+    }
     let resp = resp.on_hover_text(match &doc.origin {
         DocumentOrigin::File { path, .. } => path.display().to_string(),
         DocumentOrigin::Scratchpad { .. } => t!("tabs:scratchTooltip"),
@@ -271,7 +297,15 @@ fn tab(
                 rect.left_top() + Vec2::new(0.0, 1.0),
                 rect.right_top() + Vec2::new(0.0, 1.0),
             ],
-            Stroke::new(2.0, kit.color(Tok::Accent)),
+            // The focused group's active tab gets the full accent.
+            Stroke::new(
+                2.0,
+                if focused_group {
+                    kit.color(Tok::Accent)
+                } else {
+                    kit.color(Tok::Accent).gamma_multiply(0.45)
+                },
+            ),
         );
     } else if hovered {
         painter.rect_filled(rect, 0.0, kit.color(Tok::BgPanelRaised));
@@ -353,4 +387,5 @@ fn tab(
         let items = menus::visible_items(&context_items(core, view), &core.commands);
         super::chrome::menu_items(ui, kit, core, context, &items, actions);
     });
+    rect
 }
