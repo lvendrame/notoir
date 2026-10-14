@@ -1,6 +1,6 @@
 # 06 — Event System
 
-**Status:** Partial — typed events and outbox (M1); frame-end subscribers (M3+)
+**Status:** Partial — typed events, outbox, frame-end drain (M1, M3); document subscribers (M5+)
 
 ## Purpose
 

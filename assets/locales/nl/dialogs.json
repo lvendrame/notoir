@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Versie {{version}}",
+    "tagline": "Schrijf. Verbind. Onthoud.",
+    "licenses": "Lettertypen: Manrope en JetBrains Mono (SIL Open Font License 1.1). Pictogrammen: Lucide (ISC-licentie)."
+  },
+  "picker": {
+    "theme": "Kleurthema selecteren",
+    "language": "Weergavetaal selecteren",
+    "filter": "Typ om te filteren",
+    "noResults": "Geen overeenkomende resultaten",
+    "themeAuto": "Automatisch (systeem volgen)"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "explorer": {
+    "title": "Verkenner",
+    "noFolder": "Geen map geopend",
+    "noFolderHint": "Open een map om de bestanden hier te bekijken."
+  },
+  "search": {
+    "title": "Zoeken"
+  },
+  "sourceControl": {
+    "title": "Broncodebeheer"
+  },
+  "outline": {
+    "title": "Overzicht"
+  },
+  "plugins": {
+    "title": "Plug-ins"
+  },
+  "markdownPreview": {
+    "title": "Markdown-voorbeeld"
+  },
+  "jsonTree": {
+    "title": "JSON-boom"
+  },
+  "mcpActivity": {
+    "title": "MCP-activiteit"
+  },
+  "output": {
+    "title": "Uitvoer",
+    "empty": "Nog geen uitvoer."
+  },
+  "problems": {
+    "title": "Problemen"
+  },
+  "gitOutput": {
+    "title": "Git-uitvoer"
+  },
+  "pluginOutput": {
+    "title": "Plug-inuitvoer"
+  },
+  "menu": {
+    "moveToPrimary": "Naar primaire zijbalk verplaatsen",
+    "moveToSecondary": "Naar secundaire zijbalk verplaatsen",
+    "moveToBottom": "Naar onderpaneel verplaatsen",
+    "hide": "Verbergen",
+    "more": "Meer acties…",
+    "close": "Sluiten"
+  }
+}

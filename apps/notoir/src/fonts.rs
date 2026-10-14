@@ -35,7 +35,9 @@ pub fn script_for(lang: Language) -> Option<Script> {
     }
 }
 
-pub fn install(ctx: &egui::Context, lang: Language) {
+/// Installs the font families. `cjk` is the system face for CJK UI
+/// languages, once [`system_fonts::request`] has found it.
+pub fn install(ctx: &egui::Context, cjk: Option<system_fonts::SystemFont>) {
     let mut fonts = FontDefinitions::default();
     let mut add = |name: &str, bytes: &'static [u8]| {
         fonts
@@ -58,7 +60,7 @@ pub fn install(ctx: &egui::Context, lang: Language) {
         name.to_owned()
     };
     let mut fallbacks = Vec::new();
-    if let Some(f) = script_for(lang).and_then(system_fonts::cjk_font) {
+    if let Some(f) = cjk {
         fallbacks.push(fallback("cjk-system", f.bytes, f.index));
     }
     fallbacks.push(fallback(

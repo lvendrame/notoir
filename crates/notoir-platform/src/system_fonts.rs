@@ -82,14 +82,58 @@ fn database() -> &'static fontdb::Database {
     })
 }
 
-/// The installed face for `script`, if any (scans/reads once per script).
-pub fn cjk_font(script: Script) -> Option<SystemFont> {
+fn cache() -> &'static Mutex<HashMap<u8, Option<SystemFont>>> {
     static CACHE: OnceLock<Mutex<HashMap<u8, Option<SystemFont>>>> = OnceLock::new();
-    let cache = CACHE.get_or_init(Default::default);
-    let mut cache = cache.lock().unwrap_or_else(|e| e.into_inner());
-    *cache
-        .entry(script as u8)
-        .or_insert_with(|| find(database(), script))
+    CACHE.get_or_init(Default::default)
+}
+
+/// The installed face for `script`, if any (scans/reads once per script).
+/// Blocks for the system font scan (~1 s cold); UI code uses [`request`].
+pub fn cjk_font(script: Script) -> Option<SystemFont> {
+    if let Some(found) = ready(script) {
+        return found;
+    }
+    let found = find(database(), script);
+    cache()
+        .lock()
+        .unwrap_or_else(|e| e.into_inner())
+        .insert(script as u8, found);
+    found
+}
+
+/// Non-blocking: `Some(result)` once the lookup for `script` finished.
+pub fn ready(script: Script) -> Option<Option<SystemFont>> {
+    cache()
+        .lock()
+        .unwrap_or_else(|e| e.into_inner())
+        .get(&(script as u8))
+        .copied()
+}
+
+/// Starts the lookup for `script` on a background thread (no-op if done or
+/// running) and calls `on_done` when it finishes.
+pub fn request(script: Script, on_done: impl FnOnce() + Send + 'static) {
+    static RUNNING: OnceLock<Mutex<Vec<u8>>> = OnceLock::new();
+    if ready(script).is_some() {
+        return;
+    }
+    let mut running = RUNNING
+        .get_or_init(Default::default)
+        .lock()
+        .unwrap_or_else(|e| e.into_inner());
+    if running.contains(&(script as u8)) {
+        return;
+    }
+    running.push(script as u8);
+    let spawned = std::thread::Builder::new()
+        .name("notoir-fonts".into())
+        .spawn(move || {
+            cjk_font(script);
+            on_done();
+        });
+    if let Err(e) = spawned {
+        tracing::warn!(error = %e, "could not start font scan thread");
+    }
 }
 
 fn find(db: &fontdb::Database, script: Script) -> Option<SystemFont> {

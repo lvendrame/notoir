@@ -1,0 +1,8 @@
+{
+  "settingsParse": "Seu arquivo de configurações tem um erro na linha {{line}}. As configurações anteriores continuam em vigor.",
+  "keybindingsParse": "Seu arquivo de atalhos tem um erro na linha {{line}}. Os atalhos padrão estão em uso.",
+  "keybindingsInvalid": "{{count}} atalhos em keybindings.toml não puderam ser usados.",
+  "stateDbCorrupt": "O Notoir não conseguiu ler a sessão salva e iniciou do zero. Seus arquivos e dados de recuperação não salvos não foram afetados.",
+  "stateDbNewer": "Os dados da sessão salva vêm de uma versão mais nova do Notoir e não serão atualizados.",
+  "settingsWriteFailed": "Não foi possível salvar as configurações."
+}

@@ -1,0 +1,47 @@
+{
+  "category": {
+    "file": "Dosya",
+    "edit": "Düzen",
+    "selection": "Seçim",
+    "view": "Görünüm",
+    "navigate": "Gezinme",
+    "git": "Git",
+    "tools": "Araçlar",
+    "plugins": "Eklentiler",
+    "help": "Yardım",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "compare": "Karşılaştır",
+    "mcp": "MCP",
+    "preferences": "Tercihler"
+  },
+  "view": {
+    "togglePrimarySidebar": "Birincil Kenar Çubuğunu Aç/Kapat",
+    "toggleSecondarySidebar": "İkincil Kenar Çubuğunu Aç/Kapat",
+    "toggleBottomPanel": "Alt Paneli Aç/Kapat",
+    "toggleToolbar": "Araç Çubuğunu Aç/Kapat",
+    "toggleStatusBar": "Durum Çubuğunu Aç/Kapat",
+    "toggleActivityBar": "Etkinlik Çubuğunu Aç/Kapat",
+    "togglePrimarySidebarPosition": "Birincil Kenar Çubuğunun Konumunu Değiştir",
+    "showExplorer": "Gezgini Göster",
+    "showOutput": "Çıktıyı Göster",
+    "togglePanel": "Paneli Aç/Kapat",
+    "movePanel": "Paneli Taşı",
+    "toggleFullScreen": "Tam Ekran"
+  },
+  "preferences": {
+    "changeTheme": "Temayı Değiştir…",
+    "changeLanguage": "Görüntüleme Dilini Değiştir…"
+  },
+  "help": {
+    "about": "Notoir Hakkında"
+  },
+  "app": {
+    "quit": "Çıkış",
+    "quitMac": "Notoir'dan Çık"
+  },
+  "workbench": {
+    "showNotifications": "Bildirimleri Göster",
+    "clearNotifications": "Tüm Bildirimleri Temizle"
+  }
+}

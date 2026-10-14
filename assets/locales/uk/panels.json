@@ -1,0 +1,49 @@
+{
+  "explorer": {
+    "title": "Провідник",
+    "noFolder": "Теку не відкрито",
+    "noFolderHint": "Відкрийте теку, щоб переглядати її файли тут."
+  },
+  "search": {
+    "title": "Пошук"
+  },
+  "sourceControl": {
+    "title": "Керування версіями"
+  },
+  "outline": {
+    "title": "Структура"
+  },
+  "plugins": {
+    "title": "Плагіни"
+  },
+  "markdownPreview": {
+    "title": "Попередній перегляд Markdown"
+  },
+  "jsonTree": {
+    "title": "Дерево JSON"
+  },
+  "mcpActivity": {
+    "title": "Активність MCP"
+  },
+  "output": {
+    "title": "Вивід",
+    "empty": "Виводу ще немає."
+  },
+  "problems": {
+    "title": "Проблеми"
+  },
+  "gitOutput": {
+    "title": "Вивід Git"
+  },
+  "pluginOutput": {
+    "title": "Вивід плагінів"
+  },
+  "menu": {
+    "moveToPrimary": "Перемістити на основну бічну панель",
+    "moveToSecondary": "Перемістити на додаткову бічну панель",
+    "moveToBottom": "Перемістити на нижню панель",
+    "hide": "Сховати",
+    "more": "Інші дії…",
+    "close": "Закрити"
+  }
+}

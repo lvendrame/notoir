@@ -56,7 +56,8 @@ no empty placeholder crates.
 
 - `NOTOIR_HOME=<dir>` relocates all app directories; `NOTOIR_LANG=<code>` / `NOTOIR_THEME=<id>` override language/theme
   until the settings UI exists; `NOTOIR_LOG=debug` raises log verbosity.
-- `cargo test -p notoir --test render` writes PNG snapshots to `target/ui-snapshots`.
+- `cargo test -p notoir --test render` writes PNG snapshots to `target/ui-snapshots`; copy the ones that changed into
+  `docs/design/` (the visual reference, spec 21) when a milestone changes the look.
 
 ## Before considering any change done
 

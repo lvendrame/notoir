@@ -1,0 +1,33 @@
+{
+  "top": {
+    "app": "Notoir",
+    "file": "Dosya",
+    "edit": "Düzen",
+    "selection": "Seçim",
+    "view": "Görünüm",
+    "navigate": "Gezinme",
+    "git": "Git",
+    "tools": "Araçlar",
+    "plugins": "Eklentiler",
+    "help": "Yardım"
+  },
+  "comingSoon": "Yakında",
+  "sub": {
+    "openRecent": "Son Kullanılanı Aç",
+    "convertCase": "Büyük/Küçük Harf Dönüştür",
+    "panels": "Paneller",
+    "appearance": "Görünüş",
+    "layout": "Düzenleyici Düzeni",
+    "branches": "Dallar",
+    "mcp": "MCP"
+  },
+  "item": {
+    "primarySidebar": "Birincil Kenar Çubuğu",
+    "secondarySidebar": "İkincil Kenar Çubuğu",
+    "bottomPanel": "Alt Panel",
+    "activityBar": "Etkinlik Çubuğu",
+    "primarySidebarRight": "Birincil Kenar Çubuğu Sağda",
+    "toolbar": "Araç Çubuğu",
+    "statusBar": "Durum Çubuğu"
+  }
+}

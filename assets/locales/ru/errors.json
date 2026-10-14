@@ -1,0 +1,4 @@
+{
+  "unknownCommand": "Неизвестная команда: {{command}}",
+  "invalidCommandArgs": "Недопустимые аргументы команды {{command}}."
+}

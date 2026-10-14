@@ -1,0 +1,8 @@
+{
+  "settingsParse": "Je instellingenbestand bevat een fout op regel {{line}}. De vorige instellingen blijven van kracht.",
+  "keybindingsParse": "Je sneltoetsenbestand bevat een fout op regel {{line}}. De standaardsneltoetsen worden gebruikt.",
+  "keybindingsInvalid": "{{count}} sneltoetsen in keybindings.toml konden niet worden gebruikt.",
+  "stateDbCorrupt": "Notoir kon de opgeslagen sessie niet lezen en is opnieuw begonnen. Je bestanden en niet-opgeslagen herstelgegevens zijn niet aangetast.",
+  "stateDbNewer": "Opgeslagen sessiegegevens komen van een nieuwere versie van Notoir en worden niet bijgewerkt.",
+  "settingsWriteFailed": "Instellingen konden niet worden opgeslagen."
+}

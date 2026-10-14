@@ -1,0 +1,33 @@
+{
+  "top": {
+    "app": "Notoir",
+    "file": "文件",
+    "edit": "编辑",
+    "selection": "选择",
+    "view": "查看",
+    "navigate": "转到",
+    "git": "Git",
+    "tools": "工具",
+    "plugins": "插件",
+    "help": "帮助"
+  },
+  "comingSoon": "即将推出",
+  "sub": {
+    "openRecent": "打开最近的文件",
+    "convertCase": "转换大小写",
+    "panels": "面板",
+    "appearance": "外观",
+    "layout": "编辑器布局",
+    "branches": "分支",
+    "mcp": "MCP"
+  },
+  "item": {
+    "primarySidebar": "主侧边栏",
+    "secondarySidebar": "辅助侧边栏",
+    "bottomPanel": "底部面板",
+    "activityBar": "活动栏",
+    "primarySidebarRight": "主侧边栏位于右侧",
+    "toolbar": "工具栏",
+    "statusBar": "状态栏"
+  }
+}

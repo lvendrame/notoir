@@ -1,0 +1,33 @@
+{
+  "top": {
+    "app": "Notoir",
+    "file": "Bestand",
+    "edit": "Bewerken",
+    "selection": "Selectie",
+    "view": "Beeld",
+    "navigate": "Navigeren",
+    "git": "Git",
+    "tools": "Extra",
+    "plugins": "Plug-ins",
+    "help": "Help"
+  },
+  "comingSoon": "Binnenkort beschikbaar",
+  "sub": {
+    "openRecent": "Recent openen",
+    "convertCase": "Hoofdletters wijzigen",
+    "panels": "Panelen",
+    "appearance": "Uiterlijk",
+    "layout": "Editorindeling",
+    "branches": "Branches",
+    "mcp": "MCP"
+  },
+  "item": {
+    "primarySidebar": "Primaire zijbalk",
+    "secondarySidebar": "Secundaire zijbalk",
+    "bottomPanel": "Onderpaneel",
+    "activityBar": "Activiteitenbalk",
+    "primarySidebarRight": "Primaire zijbalk rechts",
+    "toolbar": "Werkbalk",
+    "statusBar": "Statusbalk"
+  }
+}

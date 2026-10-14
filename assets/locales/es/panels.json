@@ -1,0 +1,49 @@
+{
+  "explorer": {
+    "title": "Explorador",
+    "noFolder": "No hay ninguna carpeta abierta",
+    "noFolderHint": "Abre una carpeta para explorar sus archivos aquí."
+  },
+  "search": {
+    "title": "Buscar"
+  },
+  "sourceControl": {
+    "title": "Control de código fuente"
+  },
+  "outline": {
+    "title": "Esquema"
+  },
+  "plugins": {
+    "title": "Complementos"
+  },
+  "markdownPreview": {
+    "title": "Vista previa de Markdown"
+  },
+  "jsonTree": {
+    "title": "Árbol JSON"
+  },
+  "mcpActivity": {
+    "title": "Actividad MCP"
+  },
+  "output": {
+    "title": "Salida",
+    "empty": "Todavía no hay salida."
+  },
+  "problems": {
+    "title": "Problemas"
+  },
+  "gitOutput": {
+    "title": "Salida de Git"
+  },
+  "pluginOutput": {
+    "title": "Salida de complementos"
+  },
+  "menu": {
+    "moveToPrimary": "Mover a la barra lateral principal",
+    "moveToSecondary": "Mover a la barra lateral secundaria",
+    "moveToBottom": "Mover al panel inferior",
+    "hide": "Ocultar",
+    "more": "Más acciones…",
+    "close": "Cerrar"
+  }
+}

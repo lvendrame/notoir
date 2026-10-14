@@ -1,6 +1,6 @@
 # 19 — Status Bar & Notifications
 
-**Status:** Not started — M3
+**Status:** Partial — status bar shell, notifications, toasts, notification centre (M3); document items (M4, M5)
 
 ## Purpose
 

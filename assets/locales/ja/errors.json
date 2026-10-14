@@ -1,0 +1,4 @@
+{
+  "unknownCommand": "不明なコマンド: {{command}}",
+  "invalidCommandArgs": "コマンド {{command}} の引数が無効です。"
+}

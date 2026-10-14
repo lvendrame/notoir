@@ -1,0 +1,8 @@
+{
+  "settingsParse": "设置文件第 {{line}} 行有错误。仍在使用之前的设置。",
+  "keybindingsParse": "快捷键文件第 {{line}} 行有错误。正在使用默认快捷键。",
+  "keybindingsInvalid": "keybindings.toml 中有 {{count}} 个快捷键无法使用。",
+  "stateDbCorrupt": "Notoir 无法读取已保存的会话，已重新开始。你的文件和未保存的恢复数据不受影响。",
+  "stateDbNewer": "已保存的会话数据来自更新版本的 Notoir，将不会被更新。",
+  "settingsWriteFailed": "无法保存设置。"
+}

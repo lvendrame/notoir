@@ -1,0 +1,49 @@
+{
+  "explorer": {
+    "title": "Gezgin",
+    "noFolder": "Açık klasör yok",
+    "noFolderHint": "Dosyalarına buradan göz atmak için bir klasör açın."
+  },
+  "search": {
+    "title": "Ara"
+  },
+  "sourceControl": {
+    "title": "Kaynak Denetimi"
+  },
+  "outline": {
+    "title": "Ana Hat"
+  },
+  "plugins": {
+    "title": "Eklentiler"
+  },
+  "markdownPreview": {
+    "title": "Markdown Önizlemesi"
+  },
+  "jsonTree": {
+    "title": "JSON Ağacı"
+  },
+  "mcpActivity": {
+    "title": "MCP Etkinliği"
+  },
+  "output": {
+    "title": "Çıktı",
+    "empty": "Henüz çıktı yok."
+  },
+  "problems": {
+    "title": "Sorunlar"
+  },
+  "gitOutput": {
+    "title": "Git Çıktısı"
+  },
+  "pluginOutput": {
+    "title": "Eklenti Çıktısı"
+  },
+  "menu": {
+    "moveToPrimary": "Birincil Kenar Çubuğuna Taşı",
+    "moveToSecondary": "İkincil Kenar Çubuğuna Taşı",
+    "moveToBottom": "Alt Panele Taşı",
+    "hide": "Gizle",
+    "more": "Diğer Eylemler…",
+    "close": "Kapat"
+  }
+}

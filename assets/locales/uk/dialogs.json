@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Версія {{version}}",
+    "tagline": "Пиши. Поєднуй. Пам’ятай.",
+    "licenses": "Шрифти: Manrope і JetBrains Mono (SIL Open Font License 1.1). Піктограми: Lucide (ліцензія ISC)."
+  },
+  "picker": {
+    "theme": "Вибір колірної теми",
+    "language": "Вибір мови інтерфейсу",
+    "filter": "Введіть текст для фільтрування",
+    "noResults": "Немає збігів",
+    "themeAuto": "Автоматично (як у системі)"
+  }
+}

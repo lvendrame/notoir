@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Version {{version}}",
+    "tagline": "Écrire. Relier. Se souvenir.",
+    "licenses": "Polices : Manrope et JetBrains Mono (SIL Open Font License 1.1). Icônes : Lucide (licence ISC)."
+  },
+  "picker": {
+    "theme": "Choisir un thème de couleurs",
+    "language": "Choisir la langue d'affichage",
+    "filter": "Tapez pour filtrer",
+    "noResults": "Aucun résultat",
+    "themeAuto": "Automatique (suivre le système)"
+  }
+}

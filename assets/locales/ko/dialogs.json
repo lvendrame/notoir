@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "버전 {{version}}",
+    "tagline": "쓰고. 잇고. 기억하세요.",
+    "licenses": "글꼴: Manrope, JetBrains Mono(SIL Open Font License 1.1). 아이콘: Lucide(ISC 라이선스)."
+  },
+  "picker": {
+    "theme": "색 테마 선택",
+    "language": "표시 언어 선택",
+    "filter": "입력하여 필터링",
+    "noResults": "일치하는 결과 없음",
+    "themeAuto": "자동(시스템 설정 따름)"
+  }
+}

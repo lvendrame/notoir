@@ -1,6 +1,6 @@
 # 16 — Command Palette
 
-**Status:** Not started — M9
+**Status:** Partial — second-step picker with live theme preview (M3); Command Palette (M9)
 
 ## Purpose
 

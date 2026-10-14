@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Version {{version}}",
+    "tagline": "Schreiben. Verbinden. Erinnern.",
+    "licenses": "Schriften: Manrope und JetBrains Mono (SIL Open Font License 1.1). Symbole: Lucide (ISC-Lizenz)."
+  },
+  "picker": {
+    "theme": "Farbdesign auswählen",
+    "language": "Anzeigesprache auswählen",
+    "filter": "Zum Filtern tippen",
+    "noResults": "Keine passenden Ergebnisse",
+    "themeAuto": "Automatisch (System folgen)"
+  }
+}

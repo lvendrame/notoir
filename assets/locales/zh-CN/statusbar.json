@@ -1,0 +1,6 @@
+{
+  "chordPending": "已按下 ({{keys}})。正在等待第二个键…",
+  "notifications": "通知",
+  "noNotifications": "没有新通知",
+  "clearAll": "全部清除"
+}

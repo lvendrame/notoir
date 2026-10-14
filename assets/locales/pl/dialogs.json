@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Wersja {{version}}",
+    "tagline": "Pisz. Łącz. Pamiętaj.",
+    "licenses": "Czcionki: Manrope i JetBrains Mono (SIL Open Font License 1.1). Ikony: Lucide (licencja ISC)."
+  },
+  "picker": {
+    "theme": "Wybierz motyw kolorów",
+    "language": "Wybierz język interfejsu",
+    "filter": "Wpisz, aby filtrować",
+    "noResults": "Brak pasujących wyników",
+    "themeAuto": "Automatycznie (zgodnie z systemem)"
+  }
+}

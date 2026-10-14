@@ -109,6 +109,26 @@ impl Language {
         }
     }
 
+    /// English name, shown next to the native one in pickers.
+    pub fn english_name(self) -> &'static str {
+        match self {
+            Language::En => "English",
+            Language::PtBr => "Portuguese (Brazil)",
+            Language::Es => "Spanish",
+            Language::Fr => "French",
+            Language::De => "German",
+            Language::It => "Italian",
+            Language::Nl => "Dutch",
+            Language::Pl => "Polish",
+            Language::Ja => "Japanese",
+            Language::Ru => "Russian",
+            Language::Uk => "Ukrainian",
+            Language::Tr => "Turkish",
+            Language::ZhCn => "Chinese (Simplified)",
+            Language::Ko => "Korean",
+        }
+    }
+
     pub fn from_code(code: &str) -> Option<Language> {
         Language::ALL
             .into_iter()

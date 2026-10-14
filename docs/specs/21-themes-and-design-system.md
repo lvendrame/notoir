@@ -1,6 +1,6 @@
 # 21 — Themes, Design System & Accessibility
 
-**Status:** Partial — tokens, three built-in themes, icons, contrast checks (M0); theme switching UI (M3), custom themes (M26)
+**Status:** Partial — tokens, built-in themes, icons, contrast, theme switching incl. auto (M0, M3); custom themes (M26)
 
 ## Purpose
 
@@ -14,8 +14,10 @@ text is the hero. Avoid: rounded cards, large whitespace, dashboard aesthetics, 
 animation, unnecessary separators. Elevation is expressed by background lightness steps, not shadows (shadows only for
 floating overlays: palette, menus, toasts, drag previews).
 
-A visual reference mockup will live at `docs/design/notoir-mockup.html` (produced in M3); when this document and the
-mockup disagree, this document defines the rule and the mockup is updated.
+The visual reference is the set of rendered app screenshots in `docs/design/*.png`, produced by
+`cargo test -p notoir --test render` (output in `target/ui-snapshots`) and copied there whenever a milestone changes
+the look. They show the real app rather than a separate mockup that could drift; when a screenshot and this document
+disagree, this document defines the rule and the UI is fixed.
 
 ## Design Tokens
 

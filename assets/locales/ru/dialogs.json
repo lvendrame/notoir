@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Версия {{version}}",
+    "tagline": "Пиши. Связывай. Вспоминай.",
+    "licenses": "Шрифты: Manrope и JetBrains Mono (SIL Open Font License 1.1). Значки: Lucide (лицензия ISC)."
+  },
+  "picker": {
+    "theme": "Выбор цветовой темы",
+    "language": "Выбор языка интерфейса",
+    "filter": "Введите текст для фильтрации",
+    "noResults": "Нет совпадений",
+    "themeAuto": "Автоматически (как в системе)"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "category": {
+    "file": "File",
+    "edit": "Edit",
+    "selection": "Selection",
+    "view": "View",
+    "navigate": "Navigate",
+    "git": "Git",
+    "tools": "Tools",
+    "plugins": "Plugins",
+    "help": "Help",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "compare": "Compare",
+    "mcp": "MCP",
+    "preferences": "Preferences"
+  },
+  "view": {
+    "togglePrimarySidebar": "Toggle Primary Sidebar",
+    "toggleSecondarySidebar": "Toggle Secondary Sidebar",
+    "toggleBottomPanel": "Toggle Bottom Panel",
+    "toggleToolbar": "Toggle Toolbar",
+    "toggleStatusBar": "Toggle Status Bar",
+    "toggleActivityBar": "Toggle Activity Bar",
+    "togglePrimarySidebarPosition": "Toggle Primary Sidebar Position",
+    "showExplorer": "Show Explorer",
+    "showOutput": "Show Output",
+    "togglePanel": "Toggle Panel",
+    "movePanel": "Move Panel",
+    "toggleFullScreen": "Full Screen"
+  },
+  "preferences": {
+    "changeTheme": "Change Theme…",
+    "changeLanguage": "Change Display Language…"
+  },
+  "help": {
+    "about": "About Notoir"
+  },
+  "app": {
+    "quit": "Exit",
+    "quitMac": "Quit Notoir"
+  },
+  "workbench": {
+    "showNotifications": "Show Notifications",
+    "clearNotifications": "Clear All Notifications"
+  }
+}

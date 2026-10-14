@@ -1,0 +1,49 @@
+{
+  "explorer": {
+    "title": "Explorer",
+    "noFolder": "No folder opened",
+    "noFolderHint": "Open a folder to browse its files here."
+  },
+  "search": {
+    "title": "Search"
+  },
+  "sourceControl": {
+    "title": "Source Control"
+  },
+  "outline": {
+    "title": "Outline"
+  },
+  "plugins": {
+    "title": "Plugins"
+  },
+  "markdownPreview": {
+    "title": "Markdown Preview"
+  },
+  "jsonTree": {
+    "title": "JSON Tree"
+  },
+  "mcpActivity": {
+    "title": "MCP Activity"
+  },
+  "output": {
+    "title": "Output",
+    "empty": "No output yet."
+  },
+  "problems": {
+    "title": "Problems"
+  },
+  "gitOutput": {
+    "title": "Git Output"
+  },
+  "pluginOutput": {
+    "title": "Plugin Output"
+  },
+  "menu": {
+    "moveToPrimary": "Move to Primary Sidebar",
+    "moveToSecondary": "Move to Secondary Sidebar",
+    "moveToBottom": "Move to Bottom Panel",
+    "hide": "Hide",
+    "more": "More Actions…",
+    "close": "Close"
+  }
+}

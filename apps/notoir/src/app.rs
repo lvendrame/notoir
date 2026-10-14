@@ -1,184 +1,305 @@
-//! `NotoirApp`: the eframe application. In M0 it renders only the empty state
-//! (docs/specs/17-shell-layout-and-panels.md §Empty State); actions are wired
-//! to commands from M3 on.
+//! `NotoirApp`: the eframe application and its frame loop.
+//!
+//! Per frame: pump background results → keyboard → render chrome (collecting
+//! command invocations) → run queued commands → apply effects that need the
+//! egui context → drain events.
 
-use egui::text::LayoutJob;
-use egui::{Align, Color32, FontId, Layout, RichText, TextFormat};
+use std::time::Instant;
 
-use notoir_core::keymap::{KeyChord, Platform};
+use notoir_core::command::{CommandInvocation, InvocationSource};
+use notoir_core::panels::PanelArea;
+use notoir_platform::system_fonts;
+use serde_json::json;
 
+use crate::core::{AppCore, Effect, StartOptions, ThemeChoice};
+use crate::fonts;
 use crate::i18n::{self, Language};
-use crate::icons::{Icon, IconCache};
-use crate::theme::{ICON, Theme, ThemeId, Tok};
-use crate::{fonts, t};
+use crate::icons::IconCache;
+use crate::input;
+use crate::shell::overlays::{Picker, PickerEvent, PickerKind};
+use crate::shell::{Actions, Kit, UiState, chrome, empty_state, overlays, panels};
+use crate::theme::{Theme, ThemeId, Tok};
 
-/// Env overrides used by snapshot tests and manual checks until the settings
-/// system lands (M2/M3).
+/// Env overrides for manual checks and snapshots (not persisted).
 pub const LANG_ENV: &str = "NOTOIR_LANG";
 pub const THEME_ENV: &str = "NOTOIR_THEME";
 
 pub struct NotoirApp {
-    pub language: Language,
-    pub theme: Theme,
+    pub core: AppCore,
+    pub ui: UiState,
+    theme_id: ThemeId,
+    theme: Theme,
     icons: IconCache,
+    started: Instant,
+    /// (language, whether the CJK system face was included) last installed.
+    fonts_installed: Option<(Language, bool)>,
+    wait_for_fonts: bool,
 }
 
 impl NotoirApp {
+    /// Production entry: paths and overrides from the environment.
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
-        let language = Language::detect(
-            notoir_platform::os_locale().as_deref(),
-            std::env::var(LANG_ENV).ok().as_deref(),
-        );
-        let theme = std::env::var(THEME_ENV)
+        let paths = notoir_platform::AppPaths::resolve()
+            .or_else(|_| {
+                notoir_platform::AppPaths::resolve_with(Some(
+                    std::env::temp_dir().join("notoir").into(),
+                ))
+            })
+            .expect("app directories");
+        let mut opts = StartOptions::new(paths);
+        opts.os_locale = notoir_platform::os_locale();
+        opts.language_override = std::env::var(LANG_ENV)
             .ok()
-            .and_then(|id| ThemeId::from_id(&id))
-            .unwrap_or_else(|| {
-                let dark = cc.egui_ctx.system_theme() != Some(egui::Theme::Light);
-                ThemeId::for_system(dark)
-            });
-        Self::with_context(&cc.egui_ctx, language, theme)
+            .as_deref()
+            .and_then(Language::from_code);
+        opts.theme_override = std::env::var(THEME_ENV)
+            .ok()
+            .as_deref()
+            .and_then(ThemeId::from_id);
+        Self::with_options(&cc.egui_ctx, opts)
     }
 
-    /// Builds the app for an existing context (also used by UI tests).
-    pub fn with_context(ctx: &egui::Context, language: Language, theme: ThemeId) -> Self {
+    pub fn with_options(ctx: &egui::Context, opts: StartOptions) -> Self {
+        let repaint = ctx.clone();
+        let core = AppCore::new(&opts, move || repaint.request_repaint());
+        let theme_id = core.theme(system_dark(ctx));
         let mut app = Self {
-            language,
-            theme: theme.load(),
+            core,
+            ui: UiState::default(),
+            theme_id,
+            theme: theme_id.load(),
             icons: IconCache::default(),
+            started: Instant::now(),
+            fonts_installed: None,
+            wait_for_fonts: opts.wait_for_fonts,
         };
-        app.set_language(ctx, language);
-        app.set_theme(ctx, theme);
+        app.apply_language(ctx);
+        app.theme.apply(ctx);
         app
     }
 
-    pub fn set_language(&mut self, ctx: &egui::Context, language: Language) {
-        self.language = language;
-        i18n::set_language(language);
-        fonts::install(ctx, language);
-        tracing::info!(language = language.code(), "language set");
+    pub fn theme_id(&self) -> ThemeId {
+        self.theme_id
     }
 
-    pub fn set_theme(&mut self, ctx: &egui::Context, theme: ThemeId) {
-        self.theme = theme.load();
-        self.theme.apply(ctx);
-        tracing::info!(theme = theme.id(), "theme set");
+    fn apply_language(&mut self, ctx: &egui::Context) {
+        i18n::set_language(self.core.language);
+        self.ensure_fonts(ctx);
     }
 
-    fn empty_state(&mut self, ui: &mut egui::Ui) {
-        let (primary, secondary, tertiary) = (
-            self.theme.color(Tok::TextPrimary),
-            self.theme.color(Tok::TextSecondary),
-            self.theme.color(Tok::TextTertiary),
-        );
-        let width = 340.0_f32.min(ui.available_width());
-        let top = (ui.available_height() * 0.24).max(16.0);
-        ui.add_space(top);
-        ui.vertical_centered(|ui| {
-            let mut wordmark = LayoutJob::default();
-            wordmark.append(
-                "NOTOIR",
-                0.0,
-                TextFormat {
-                    font_id: fonts::extrabold(13.0),
-                    color: tertiary,
-                    extra_letter_spacing: 4.0,
-                    ..Default::default()
-                },
-            );
-            ui.label(wordmark);
-            ui.add_space(20.0);
-            ui.label(
-                RichText::new(t!("welcome:startWriting"))
-                    .font(fonts::semibold(24.0))
-                    .color(primary),
-            );
-            ui.add_space(28.0);
+    /// Installs fonts for the current language; the CJK system face loads in
+    /// the background and is added when ready.
+    fn ensure_fonts(&mut self, ctx: &egui::Context) {
+        let lang = self.core.language;
+        let face = match fonts::script_for(lang) {
+            Some(script) if self.wait_for_fonts => system_fonts::cjk_font(script),
+            Some(script) => match system_fonts::ready(script) {
+                Some(found) => found,
+                None => {
+                    let repaint = ctx.clone();
+                    system_fonts::request(script, move || repaint.request_repaint());
+                    None
+                }
+            },
+            None => None,
+        };
+        let want = (lang, face.is_some());
+        if self.fonts_installed != Some(want) {
+            fonts::install(ctx, face);
+            self.fonts_installed = Some(want);
+        }
+    }
 
-            ui.allocate_ui_with_layout(
-                egui::vec2(width, 0.0),
-                Layout::top_down(Align::Min),
-                |ui| {
-                    let rows = [
-                        (Icon::Plus, "welcome:newScratchpad", shortcut("Mod+Alt+N")),
-                        (Icon::FolderOpen, "welcome:openFile", shortcut("Mod+O")),
-                        (
-                            Icon::Folder,
-                            "welcome:openWorkspace",
-                            shortcut("Mod+K Mod+O"),
-                        ),
-                    ];
-                    for (icon, key, keys) in rows {
-                        self.action_row(ui, icon, &t!(key), &keys);
+    fn set_theme(&mut self, ctx: &egui::Context, id: ThemeId) {
+        if id != self.theme_id {
+            self.theme_id = id;
+            self.theme = id.load();
+            self.theme.apply(ctx);
+            self.core
+                .workbench
+                .events
+                .emit(notoir_core::AppEvent::ThemeChanged {
+                    theme: id.id().to_owned(),
+                });
+        }
+    }
+
+    fn apply_effects(&mut self, ctx: &egui::Context, centre_was_open: bool) {
+        for effect in std::mem::take(&mut self.core.effects) {
+            match effect {
+                Effect::ApplyTheme => {
+                    let id = self.core.theme(system_dark(ctx));
+                    self.set_theme(ctx, id);
+                }
+                Effect::ApplyLanguage => {
+                    self.apply_language(ctx);
+                    let lang = self.core.language.code().to_owned();
+                    self.core
+                        .workbench
+                        .events
+                        .emit(notoir_core::AppEvent::LanguageChanged { lang });
+                }
+                Effect::ToggleFullScreen => {
+                    let full = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
+                    ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(!full));
+                }
+                Effect::Quit => ctx.send_viewport_cmd(egui::ViewportCommand::Close),
+                Effect::OpenThemePicker => {
+                    self.ui.picker = Some(Picker::new(PickerKind::Theme, &self.core))
+                }
+                Effect::OpenLanguagePicker => {
+                    self.ui.picker = Some(Picker::new(PickerKind::Language, &self.core))
+                }
+                Effect::ShowAbout => self.ui.about_open = true,
+                Effect::ToggleNotificationCentre => {
+                    self.ui.notification_centre_open = !centre_was_open;
+                    if self.ui.notification_centre_open {
+                        self.core.notifications.mark_read();
                     }
-                    ui.add_space(24.0);
-                    // Section-label style (spec 21): 11 px, uppercase, tertiary.
-                    ui.label(
-                        RichText::new(t!("welcome:recent").to_uppercase())
-                            .font(fonts::extrabold(11.0))
-                            .color(tertiary),
-                    );
-                    ui.add_space(4.0);
-                    ui.label(
-                        RichText::new(t!("welcome:noRecent"))
-                            .size(13.0)
-                            .color(secondary),
-                    );
-                },
-            );
-
-            ui.add_space(40.0);
-            let mut hint = LayoutJob::default();
-            hint.append(
-                &shortcut("Mod+Shift+P"),
-                0.0,
-                TextFormat::simple(fonts::mono(12.0), secondary),
-            );
-            hint.append(
-                &format!(" — {}", t!("welcome:commandPalette")),
-                0.0,
-                TextFormat::simple(FontId::proportional(12.0), tertiary),
-            );
-            ui.label(hint);
-        });
+                }
+            }
+        }
     }
 
-    fn action_row(&mut self, ui: &mut egui::Ui, icon: Icon, label: &str, keys: &str) {
-        let color = |tok| self.theme.color(tok);
-        let (accent, text, muted) = (
-            color(Tok::Accent),
-            color(Tok::TextPrimary),
-            color(Tok::TextTertiary),
-        );
-        ui.horizontal(|ui| {
-            ui.set_min_height(28.0);
-            let image = self.icons.image(ui.ctx(), icon, ICON, accent);
-            ui.add(image);
-            ui.add_space(4.0);
-            ui.label(RichText::new(label).size(14.0).color(text));
-            ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                ui.label(RichText::new(keys).font(fonts::mono(12.0)).color(muted));
-            });
-        });
+    fn handle_picker(&mut self, ctx: &egui::Context, top_offset: f32) {
+        let Some(picker) = self.ui.picker.as_mut() else {
+            return;
+        };
+        let kind = picker.kind;
+        let mut kit = Kit {
+            theme: &self.theme,
+            icons: &mut self.icons,
+        };
+        let Some(event) = picker.show(ctx, &mut kit, top_offset) else {
+            return;
+        };
+        match event {
+            PickerEvent::Preview(value) => {
+                if let Some(choice) = ThemeChoice::from_setting(&value) {
+                    self.set_theme(ctx, choice.resolve(system_dark(ctx)));
+                }
+            }
+            PickerEvent::Accept(value) => {
+                self.ui.picker = None;
+                let inv = match kind {
+                    PickerKind::Theme => {
+                        CommandInvocation::new("preferences.changeTheme", InvocationSource::Palette)
+                            .with_args(json!({ "theme": value }))
+                    }
+                    PickerKind::Language => CommandInvocation::new(
+                        "preferences.changeLanguage",
+                        InvocationSource::Palette,
+                    )
+                    .with_args(json!({ "language": value })),
+                };
+                self.core.enqueue(inv);
+            }
+            PickerEvent::Cancel => {
+                self.ui.picker = None;
+                let id = self.core.theme(system_dark(ctx));
+                self.set_theme(ctx, id);
+            }
+        }
     }
 }
 
-/// Platform-formatted chord for a default binding written with `Mod`
-/// (`Mod+Alt+N` → `⌥⌘N` / `Ctrl+Alt+N`).
-fn shortcut(chord: &str) -> String {
-    let platform = Platform::current();
-    KeyChord::parse(chord, platform).map_or_else(|_| chord.to_owned(), |c| c.display(platform))
+fn system_dark(ctx: &egui::Context) -> bool {
+    ctx.system_theme() != Some(egui::Theme::Light)
 }
 
 impl eframe::App for NotoirApp {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
-        let frame = egui::Frame::new().fill(self.theme.color(Tok::BgEditor));
-        egui::CentralPanel::no_frame()
-            .frame(frame)
-            .show(ui, |ui| self.empty_state(ui));
+        let ctx = ui.ctx().clone();
+        self.core.now_ms = self.started.elapsed().as_millis() as u64;
+        let now = self.core.now_ms;
+        self.core.pump_io();
+        self.ensure_fonts(&ctx);
+        if self.ui.picker.is_none() {
+            // Theme "auto" follows the OS.
+            let id = self.core.theme(system_dark(&ctx));
+            self.set_theme(&ctx, id);
+        }
+        self.core.notifications.tick(now);
+
+        let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
+        let context = self.core.context(fullscreen);
+        if !(self.ui.about_open || self.ui.picker.is_some()) {
+            input::dispatch_keys(&ctx, &mut self.core, &context);
+        }
+        let centre_was_open = self.ui.notification_centre_open;
+
+        let mut actions = Actions::default();
+        let mut top_offset = chrome::MENU_BAR_HEIGHT;
+        let mut bottom_offset = 0.0;
+        {
+            let mut kit = Kit {
+                theme: &self.theme,
+                icons: &mut self.icons,
+            };
+            chrome::menu_bar(ui, &mut kit, &self.core, &context, &mut actions);
+            if self.core.toolbar_visible() {
+                chrome::toolbar(ui, &mut kit, &self.core, &context, &mut actions);
+                top_offset += chrome::TOOLBAR_HEIGHT;
+            }
+            if self.core.status_bar_visible() {
+                chrome::status_bar(ui, &mut kit, &self.core, &mut actions);
+                bottom_offset += chrome::STATUS_BAR_HEIGHT;
+            }
+            let sizes = panels::show(ui, &mut kit, &self.core, &mut actions);
+            let editor_fill = kit.color(Tok::BgEditor);
+            egui::CentralPanel::no_frame()
+                .frame(egui::Frame::new().fill(editor_fill))
+                .show(ui, |ui| empty_state::show(ui, &mut kit, self.core.platform));
+
+            let (hovered, dismissed) = overlays::toasts(
+                &ctx,
+                &mut kit,
+                &self.core,
+                &mut self.ui,
+                bottom_offset,
+                &mut actions,
+            );
+            overlays::notification_centre(
+                &ctx,
+                &mut kit,
+                &self.core,
+                &mut self.ui,
+                bottom_offset,
+                &mut actions,
+            );
+            overlays::about(&ctx, &mut kit, &mut self.ui);
+            for id in hovered {
+                self.core.notifications.hold(id, now);
+            }
+            for id in dismissed {
+                self.core.notifications.dismiss(id);
+            }
+            for (area, size) in [
+                (PanelArea::Primary, sizes.primary),
+                (PanelArea::Secondary, sizes.secondary),
+                (PanelArea::Bottom, sizes.bottom),
+            ] {
+                if let Some(s) = size {
+                    self.core.panels.set_size(area, s);
+                }
+            }
+        }
+        self.handle_picker(&ctx, top_offset);
+
+        for inv in actions.0 {
+            self.core.enqueue(inv);
+        }
+        self.core.run_queued(&context);
+        self.apply_effects(&ctx, centre_was_open);
+        for event in self.core.workbench.events.drain() {
+            tracing::trace!(?event, "event");
+        }
+        if let Some(expiry) = self.core.notifications.next_expiry() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(expiry.saturating_sub(now)));
+        }
     }
 
     fn clear_color(&self, _visuals: &egui::Visuals) -> [f32; 4] {
-        let c: Color32 = self.theme.color(Tok::BgApp);
-        egui::Rgba::from(c).to_array()
+        egui::Rgba::from(self.theme.color(Tok::BgApp)).to_array()
     }
 }

@@ -1,0 +1,4 @@
+{
+  "unknownCommand": "알 수 없는 명령: {{command}}",
+  "invalidCommandArgs": "{{command}} 명령의 인수가 잘못되었습니다."
+}

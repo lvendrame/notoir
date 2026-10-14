@@ -1,0 +1,33 @@
+{
+  "top": {
+    "app": "Notoir",
+    "file": "File",
+    "edit": "Edit",
+    "selection": "Selection",
+    "view": "View",
+    "navigate": "Navigate",
+    "git": "Git",
+    "tools": "Tools",
+    "plugins": "Plugins",
+    "help": "Help"
+  },
+  "comingSoon": "Coming soon",
+  "sub": {
+    "openRecent": "Open Recent",
+    "convertCase": "Convert Case",
+    "panels": "Panels",
+    "appearance": "Appearance",
+    "layout": "Editor Layout",
+    "branches": "Branches",
+    "mcp": "MCP"
+  },
+  "item": {
+    "primarySidebar": "Primary Sidebar",
+    "secondarySidebar": "Secondary Sidebar",
+    "bottomPanel": "Bottom Panel",
+    "activityBar": "Activity Bar",
+    "primarySidebarRight": "Primary Sidebar on Right",
+    "toolbar": "Toolbar",
+    "statusBar": "Status Bar"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "版本 {{version}}",
+    "tagline": "书写。连接。回忆。",
+    "licenses": "字体：Manrope 和 JetBrains Mono（SIL Open Font License 1.1）。图标：Lucide（ISC 许可证）。"
+  },
+  "picker": {
+    "theme": "选择颜色主题",
+    "language": "选择显示语言",
+    "filter": "输入以筛选",
+    "noResults": "没有匹配的结果",
+    "themeAuto": "自动（跟随系统）"
+  }
+}

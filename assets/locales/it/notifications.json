@@ -1,0 +1,8 @@
+{
+  "settingsParse": "Il file delle impostazioni contiene un errore alla riga {{line}}. Restano valide le impostazioni precedenti.",
+  "keybindingsParse": "Il file delle scorciatoie contiene un errore alla riga {{line}}. Sono in uso le scorciatoie predefinite.",
+  "keybindingsInvalid": "Impossibile usare {{count}} scorciatoie di keybindings.toml.",
+  "stateDbCorrupt": "Notoir non è riuscito a leggere la sessione salvata ed è ripartito da zero. I tuoi file e i dati di ripristino non salvati non sono interessati.",
+  "stateDbNewer": "I dati della sessione provengono da una versione più recente di Notoir e non verranno aggiornati.",
+  "settingsWriteFailed": "Impossibile salvare le impostazioni."
+}

@@ -1,0 +1,8 @@
+{
+  "settingsParse": "Plik ustawień zawiera błąd w wierszu {{line}}. Obowiązują poprzednie ustawienia.",
+  "keybindingsParse": "Plik skrótów zawiera błąd w wierszu {{line}}. Używane są skróty domyślne.",
+  "keybindingsInvalid": "Nie można użyć skrótów z keybindings.toml (liczba: {{count}}).",
+  "stateDbCorrupt": "Notoir nie mógł odczytać zapisanej sesji i rozpoczął od nowa. Twoje pliki i niezapisane dane odzyskiwania nie zostały naruszone.",
+  "stateDbNewer": "Zapisane dane sesji pochodzą z nowszej wersji Notoir i nie będą aktualizowane.",
+  "settingsWriteFailed": "Nie można zapisać ustawień."
+}

@@ -1,0 +1,49 @@
+{
+  "explorer": {
+    "title": "エクスプローラー",
+    "noFolder": "フォルダーが開かれていません",
+    "noFolderHint": "フォルダーを開くと、ここでファイルを参照できます。"
+  },
+  "search": {
+    "title": "検索"
+  },
+  "sourceControl": {
+    "title": "ソース管理"
+  },
+  "outline": {
+    "title": "アウトライン"
+  },
+  "plugins": {
+    "title": "プラグイン"
+  },
+  "markdownPreview": {
+    "title": "Markdown プレビュー"
+  },
+  "jsonTree": {
+    "title": "JSON ツリー"
+  },
+  "mcpActivity": {
+    "title": "MCP アクティビティ"
+  },
+  "output": {
+    "title": "出力",
+    "empty": "まだ出力はありません。"
+  },
+  "problems": {
+    "title": "問題"
+  },
+  "gitOutput": {
+    "title": "Git の出力"
+  },
+  "pluginOutput": {
+    "title": "プラグインの出力"
+  },
+  "menu": {
+    "moveToPrimary": "プライマリ サイドバーへ移動",
+    "moveToSecondary": "セカンダリ サイドバーへ移動",
+    "moveToBottom": "下部パネルへ移動",
+    "hide": "非表示",
+    "more": "その他のアクション…",
+    "close": "閉じる"
+  }
+}

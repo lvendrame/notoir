@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Sürüm {{version}}",
+    "tagline": "Yaz. Bağla. Hatırla.",
+    "licenses": "Yazı tipleri: Manrope ve JetBrains Mono (SIL Open Font License 1.1). Simgeler: Lucide (ISC Lisansı)."
+  },
+  "picker": {
+    "theme": "Renk Teması Seç",
+    "language": "Görüntüleme Dilini Seç",
+    "filter": "Filtrelemek için yazın",
+    "noResults": "Eşleşen sonuç yok",
+    "themeAuto": "Otomatik (sistemi izle)"
+  }
+}

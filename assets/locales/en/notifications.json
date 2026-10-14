@@ -1,0 +1,8 @@
+{
+  "settingsParse": "Your settings file has an error on line {{line}}. Previous settings are still in effect.",
+  "keybindingsParse": "Your keybindings file has an error on line {{line}}. Default shortcuts are in use.",
+  "keybindingsInvalid": "{{count}} shortcuts in keybindings.toml could not be used.",
+  "stateDbCorrupt": "Notoir could not read its saved session and started fresh. Your files and unsaved recovery data are not affected.",
+  "stateDbNewer": "Saved session data comes from a newer version of Notoir and will not be updated.",
+  "settingsWriteFailed": "Could not save settings."
+}

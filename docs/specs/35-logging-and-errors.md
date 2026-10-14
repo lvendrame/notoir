@@ -1,6 +1,6 @@
 # 35 — Logging & Error Handling
 
-**Status:** Partial — structured logging and panic hook (M0); error-to-notification mapping (M3+)
+**Status:** Partial — structured logging, panic hook (M0); user errors as notifications (M3); worker panic isolation (M5)
 
 ## Purpose
 

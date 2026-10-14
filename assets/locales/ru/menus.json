@@ -1,0 +1,33 @@
+{
+  "top": {
+    "app": "Notoir",
+    "file": "Файл",
+    "edit": "Правка",
+    "selection": "Выделение",
+    "view": "Вид",
+    "navigate": "Переход",
+    "git": "Git",
+    "tools": "Инструменты",
+    "plugins": "Плагины",
+    "help": "Справка"
+  },
+  "comingSoon": "Скоро",
+  "sub": {
+    "openRecent": "Открыть недавние",
+    "convertCase": "Изменить регистр",
+    "panels": "Панели",
+    "appearance": "Внешний вид",
+    "layout": "Макет редактора",
+    "branches": "Ветви",
+    "mcp": "MCP"
+  },
+  "item": {
+    "primarySidebar": "Основная боковая панель",
+    "secondarySidebar": "Дополнительная боковая панель",
+    "bottomPanel": "Нижняя панель",
+    "activityBar": "Панель действий",
+    "primarySidebarRight": "Основная боковая панель справа",
+    "toolbar": "Панель инструментов",
+    "statusBar": "Строка состояния"
+  }
+}

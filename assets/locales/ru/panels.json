@@ -1,0 +1,49 @@
+{
+  "explorer": {
+    "title": "Проводник",
+    "noFolder": "Папка не открыта",
+    "noFolderHint": "Откройте папку, чтобы просматривать её файлы здесь."
+  },
+  "search": {
+    "title": "Поиск"
+  },
+  "sourceControl": {
+    "title": "Система контроля версий"
+  },
+  "outline": {
+    "title": "Структура"
+  },
+  "plugins": {
+    "title": "Плагины"
+  },
+  "markdownPreview": {
+    "title": "Предпросмотр Markdown"
+  },
+  "jsonTree": {
+    "title": "Дерево JSON"
+  },
+  "mcpActivity": {
+    "title": "Активность MCP"
+  },
+  "output": {
+    "title": "Вывод",
+    "empty": "Вывода пока нет."
+  },
+  "problems": {
+    "title": "Проблемы"
+  },
+  "gitOutput": {
+    "title": "Вывод Git"
+  },
+  "pluginOutput": {
+    "title": "Вывод плагинов"
+  },
+  "menu": {
+    "moveToPrimary": "Переместить на основную боковую панель",
+    "moveToSecondary": "Переместить на дополнительную боковую панель",
+    "moveToBottom": "Переместить на нижнюю панель",
+    "hide": "Скрыть",
+    "more": "Другие действия…",
+    "close": "Закрыть"
+  }
+}

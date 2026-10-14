@@ -1,0 +1,33 @@
+{
+  "top": {
+    "app": "Notoir",
+    "file": "파일",
+    "edit": "편집",
+    "selection": "선택",
+    "view": "보기",
+    "navigate": "이동",
+    "git": "Git",
+    "tools": "도구",
+    "plugins": "플러그인",
+    "help": "도움말"
+  },
+  "comingSoon": "곧 제공 예정",
+  "sub": {
+    "openRecent": "최근 항목 열기",
+    "convertCase": "대/소문자 변환",
+    "panels": "패널",
+    "appearance": "모양",
+    "layout": "편집기 레이아웃",
+    "branches": "분기",
+    "mcp": "MCP"
+  },
+  "item": {
+    "primarySidebar": "기본 사이드바",
+    "secondarySidebar": "보조 사이드바",
+    "bottomPanel": "하단 패널",
+    "activityBar": "작업 표시줄",
+    "primarySidebarRight": "오른쪽 기본 사이드바",
+    "toolbar": "도구 모음",
+    "statusBar": "상태 표시줄"
+  }
+}

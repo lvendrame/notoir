@@ -1,0 +1,49 @@
+{
+  "explorer": {
+    "title": "탐색기",
+    "noFolder": "열린 폴더 없음",
+    "noFolderHint": "폴더를 열면 여기에서 파일을 탐색할 수 있습니다."
+  },
+  "search": {
+    "title": "검색"
+  },
+  "sourceControl": {
+    "title": "소스 제어"
+  },
+  "outline": {
+    "title": "개요"
+  },
+  "plugins": {
+    "title": "플러그인"
+  },
+  "markdownPreview": {
+    "title": "Markdown 미리 보기"
+  },
+  "jsonTree": {
+    "title": "JSON 트리"
+  },
+  "mcpActivity": {
+    "title": "MCP 활동"
+  },
+  "output": {
+    "title": "출력",
+    "empty": "아직 출력이 없습니다."
+  },
+  "problems": {
+    "title": "문제"
+  },
+  "gitOutput": {
+    "title": "Git 출력"
+  },
+  "pluginOutput": {
+    "title": "플러그인 출력"
+  },
+  "menu": {
+    "moveToPrimary": "기본 사이드바로 이동",
+    "moveToSecondary": "보조 사이드바로 이동",
+    "moveToBottom": "하단 패널로 이동",
+    "hide": "숨기기",
+    "more": "추가 작업…",
+    "close": "닫기"
+  }
+}

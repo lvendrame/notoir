@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "バージョン {{version}}",
+    "tagline": "書く。つなぐ。思い出す。",
+    "licenses": "フォント: Manrope、JetBrains Mono (SIL Open Font License 1.1)。アイコン: Lucide (ISC ライセンス)。"
+  },
+  "picker": {
+    "theme": "配色テーマの選択",
+    "language": "表示言語の選択",
+    "filter": "入力して絞り込み",
+    "noResults": "一致する結果はありません",
+    "themeAuto": "自動 (システムに従う)"
+  }
+}

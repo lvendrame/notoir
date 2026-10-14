@@ -1,6 +1,6 @@
 # 17 — Shell Layout, Panels, Empty State & First Run
 
-**Status:** Partial — empty state rendering (M0); panels and activity bar (M3), first run (M10)
+**Status:** Partial — panel model, activity bar, sidebars, bottom panel, empty state (M0, M3); Scratchpad-on-type (M5), first run (M10), panel drag-docking (later)
 
 ## Purpose
 

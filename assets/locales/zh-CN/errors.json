@@ -1,0 +1,4 @@
+{
+  "unknownCommand": "未知命令：{{command}}",
+  "invalidCommandArgs": "命令 {{command}} 的参数无效。"
+}

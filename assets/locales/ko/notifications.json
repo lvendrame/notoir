@@ -1,0 +1,8 @@
+{
+  "settingsParse": "설정 파일의 {{line}}번째 줄에 오류가 있습니다. 이전 설정이 계속 적용됩니다.",
+  "keybindingsParse": "단축키 파일의 {{line}}번째 줄에 오류가 있습니다. 기본 단축키를 사용합니다.",
+  "keybindingsInvalid": "keybindings.toml의 단축키 {{count}}개를 사용할 수 없습니다.",
+  "stateDbCorrupt": "Notoir가 저장된 세션을 읽을 수 없어 새로 시작했습니다. 파일과 저장되지 않은 복구 데이터는 영향을 받지 않았습니다.",
+  "stateDbNewer": "저장된 세션 데이터는 최신 버전의 Notoir에서 만들어졌으므로 업데이트되지 않습니다.",
+  "settingsWriteFailed": "설정을 저장할 수 없습니다."
+}

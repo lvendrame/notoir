@@ -1,0 +1,8 @@
+{
+  "settingsParse": "Tu archivo de configuración tiene un error en la línea {{line}}. Se mantiene la configuración anterior.",
+  "keybindingsParse": "Tu archivo de atajos tiene un error en la línea {{line}}. Se usan los atajos predeterminados.",
+  "keybindingsInvalid": "No se pudieron usar {{count}} atajos de keybindings.toml.",
+  "stateDbCorrupt": "Notoir no pudo leer la sesión guardada y empezó de cero. Tus archivos y los datos de recuperación no guardados no se han visto afectados.",
+  "stateDbNewer": "Los datos de la sesión guardada proceden de una versión más reciente de Notoir y no se actualizarán.",
+  "settingsWriteFailed": "No se pudo guardar la configuración."
+}

@@ -1,6 +1,6 @@
 # 22 — Internationalization
 
-**Status:** Partial — embedded locales, 14 languages, plurals, detection (M0); language pickers and switching UI (M3, M10)
+**Status:** Partial — locales, plurals, detection, language switching and picker (M0, M3); remaining namespaces arrive with their features
 
 ## Purpose
 

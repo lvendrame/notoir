@@ -1,0 +1,33 @@
+{
+  "top": {
+    "app": "Notoir",
+    "file": "Файл",
+    "edit": "Редагування",
+    "selection": "Виділення",
+    "view": "Вигляд",
+    "navigate": "Перехід",
+    "git": "Git",
+    "tools": "Інструменти",
+    "plugins": "Плагіни",
+    "help": "Довідка"
+  },
+  "comingSoon": "Незабаром",
+  "sub": {
+    "openRecent": "Відкрити нещодавні",
+    "convertCase": "Змінити регістр",
+    "panels": "Панелі",
+    "appearance": "Зовнішній вигляд",
+    "layout": "Макет редактора",
+    "branches": "Гілки",
+    "mcp": "MCP"
+  },
+  "item": {
+    "primarySidebar": "Основна бічна панель",
+    "secondarySidebar": "Додаткова бічна панель",
+    "bottomPanel": "Нижня панель",
+    "activityBar": "Панель дій",
+    "primarySidebarRight": "Основна бічна панель праворуч",
+    "toolbar": "Панель інструментів",
+    "statusBar": "Рядок стану"
+  }
+}

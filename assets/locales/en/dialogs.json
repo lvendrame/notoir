@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Version {{version}}",
+    "tagline": "Write. Connect. Recall.",
+    "licenses": "Fonts: Manrope and JetBrains Mono (SIL Open Font License 1.1). Icons: Lucide (ISC License)."
+  },
+  "picker": {
+    "theme": "Select Color Theme",
+    "language": "Select Display Language",
+    "filter": "Type to filter",
+    "noResults": "No matching results",
+    "themeAuto": "Auto (follow system)"
+  }
+}

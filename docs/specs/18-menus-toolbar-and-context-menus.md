@@ -1,6 +1,6 @@
 # 18 — Menus, Toolbar & Context Menus
 
-**Status:** Not started — M3
+**Status:** Partial — data-driven menu bar, minimal toolbar (M3); items appear with their commands; contextual controls (M13, M14, M17)
 
 ## Purpose
 
@@ -16,6 +16,9 @@ contribute.
   item asks for more input.
 - Disabled items are shown disabled (not hidden) unless the whole feature is unavailable (e.g. Git menu items in a
   non-repo show "Initialize Repository" and "Clone Repository…" enabled, the rest disabled).
+- Menus are declared in full (this spec) but an item whose command is not registered in the build is hidden;
+  separators are normalized around hidden items. A top-level menu with no implemented items shows one disabled
+  "Coming soon" entry, so the top-level set never changes between releases.
 - Separators group logically; no more than ~7 items per group.
 
 ## File
@@ -76,8 +79,7 @@ Select Next Occurrence / Select All Occurrences (Phase 2)
 Column Selection Mode                          (Phase 2)
 ```
 
-Phase-2 items are present but disabled with tooltip "Coming soon" only in pre-release builds; release builds hide
-unimplemented items.
+Phase-2 items appear once their commands exist (see the rule below).
 
 ## View
 
@@ -124,6 +126,7 @@ Reload Plugins
 ─────
 Settings                           Mod+,   (in app menu on macOS)
 Keyboard Shortcuts
+Change Theme…
 Change Language…
 ```
 

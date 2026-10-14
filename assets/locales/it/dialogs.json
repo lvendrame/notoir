@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Versione {{version}}",
+    "tagline": "Scrivi. Collega. Ricorda.",
+    "licenses": "Caratteri: Manrope e JetBrains Mono (SIL Open Font License 1.1). Icone: Lucide (licenza ISC)."
+  },
+  "picker": {
+    "theme": "Seleziona tema colori",
+    "language": "Seleziona lingua di visualizzazione",
+    "filter": "Digita per filtrare",
+    "noResults": "Nessun risultato",
+    "themeAuto": "Automatico (segui il sistema)"
+  }
+}

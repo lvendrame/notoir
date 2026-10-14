@@ -12,6 +12,7 @@ workspace = true
 [dependencies]
 notoir-core.workspace = true
 notoir-platform.workspace = true
+notoir-storage.workspace = true
 eframe.workspace = true
 egui.workspace = true
 resvg.workspace = true

@@ -1,0 +1,4 @@
+{
+  "unknownCommand": "Bilinmeyen komut: {{command}}",
+  "invalidCommandArgs": "{{command}} komutu için geçersiz bağımsız değişkenler."
+}

@@ -1,0 +1,8 @@
+{
+  "settingsParse": "Ayarlar dosyanızın {{line}}. satırında bir hata var. Önceki ayarlar geçerli olmaya devam ediyor.",
+  "keybindingsParse": "Kısayol dosyanızın {{line}}. satırında bir hata var. Varsayılan kısayollar kullanılıyor.",
+  "keybindingsInvalid": "keybindings.toml içindeki {{count}} kısayol kullanılamadı.",
+  "stateDbCorrupt": "Notoir kayıtlı oturumu okuyamadı ve yeniden başladı. Dosyalarınız ve kaydedilmemiş kurtarma verileriniz etkilenmedi.",
+  "stateDbNewer": "Kayıtlı oturum verileri Notoir'ın daha yeni bir sürümüne ait ve güncellenmeyecek.",
+  "settingsWriteFailed": "Ayarlar kaydedilemedi."
+}

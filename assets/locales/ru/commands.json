@@ -1,0 +1,47 @@
+{
+  "category": {
+    "file": "Файл",
+    "edit": "Правка",
+    "selection": "Выделение",
+    "view": "Вид",
+    "navigate": "Переход",
+    "git": "Git",
+    "tools": "Инструменты",
+    "plugins": "Плагины",
+    "help": "Справка",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "compare": "Сравнение",
+    "mcp": "MCP",
+    "preferences": "Параметры"
+  },
+  "view": {
+    "togglePrimarySidebar": "Показать или скрыть основную боковую панель",
+    "toggleSecondarySidebar": "Показать или скрыть дополнительную боковую панель",
+    "toggleBottomPanel": "Показать или скрыть нижнюю панель",
+    "toggleToolbar": "Показать или скрыть панель инструментов",
+    "toggleStatusBar": "Показать или скрыть строку состояния",
+    "toggleActivityBar": "Показать или скрыть панель действий",
+    "togglePrimarySidebarPosition": "Сменить сторону основной боковой панели",
+    "showExplorer": "Показать проводник",
+    "showOutput": "Показать вывод",
+    "togglePanel": "Показать или скрыть панель",
+    "movePanel": "Переместить панель",
+    "toggleFullScreen": "Полноэкранный режим"
+  },
+  "preferences": {
+    "changeTheme": "Сменить тему…",
+    "changeLanguage": "Сменить язык интерфейса…"
+  },
+  "help": {
+    "about": "О программе Notoir"
+  },
+  "app": {
+    "quit": "Выход",
+    "quitMac": "Завершить Notoir"
+  },
+  "workbench": {
+    "showNotifications": "Показать уведомления",
+    "clearNotifications": "Очистить все уведомления"
+  }
+}

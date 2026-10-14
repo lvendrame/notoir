@@ -1,0 +1,47 @@
+{
+  "category": {
+    "file": "File",
+    "edit": "Modifica",
+    "selection": "Selezione",
+    "view": "Visualizza",
+    "navigate": "Vai",
+    "git": "Git",
+    "tools": "Strumenti",
+    "plugins": "Plugin",
+    "help": "Aiuto",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "compare": "Confronta",
+    "mcp": "MCP",
+    "preferences": "Preferenze"
+  },
+  "view": {
+    "togglePrimarySidebar": "Mostra/nascondi barra laterale principale",
+    "toggleSecondarySidebar": "Mostra/nascondi barra laterale secondaria",
+    "toggleBottomPanel": "Mostra/nascondi pannello inferiore",
+    "toggleToolbar": "Mostra/nascondi barra degli strumenti",
+    "toggleStatusBar": "Mostra/nascondi barra di stato",
+    "toggleActivityBar": "Mostra/nascondi barra delle attività",
+    "togglePrimarySidebarPosition": "Cambia posizione della barra laterale principale",
+    "showExplorer": "Mostra Esplora risorse",
+    "showOutput": "Mostra output",
+    "togglePanel": "Mostra/nascondi pannello",
+    "movePanel": "Sposta pannello",
+    "toggleFullScreen": "Schermo intero"
+  },
+  "preferences": {
+    "changeTheme": "Cambia tema…",
+    "changeLanguage": "Cambia lingua di visualizzazione…"
+  },
+  "help": {
+    "about": "Informazioni su Notoir"
+  },
+  "app": {
+    "quit": "Esci",
+    "quitMac": "Esci da Notoir"
+  },
+  "workbench": {
+    "showNotifications": "Mostra notifiche",
+    "clearNotifications": "Cancella tutte le notifiche"
+  }
+}

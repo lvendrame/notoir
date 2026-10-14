@@ -1,0 +1,47 @@
+{
+  "category": {
+    "file": "ファイル",
+    "edit": "編集",
+    "selection": "選択",
+    "view": "表示",
+    "navigate": "移動",
+    "git": "Git",
+    "tools": "ツール",
+    "plugins": "プラグイン",
+    "help": "ヘルプ",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "compare": "比較",
+    "mcp": "MCP",
+    "preferences": "設定"
+  },
+  "view": {
+    "togglePrimarySidebar": "プライマリ サイドバーの切り替え",
+    "toggleSecondarySidebar": "セカンダリ サイドバーの切り替え",
+    "toggleBottomPanel": "下部パネルの切り替え",
+    "toggleToolbar": "ツールバーの切り替え",
+    "toggleStatusBar": "ステータス バーの切り替え",
+    "toggleActivityBar": "アクティビティ バーの切り替え",
+    "togglePrimarySidebarPosition": "プライマリ サイドバーの位置を切り替え",
+    "showExplorer": "エクスプローラーを表示",
+    "showOutput": "出力を表示",
+    "togglePanel": "パネルの切り替え",
+    "movePanel": "パネルを移動",
+    "toggleFullScreen": "全画面表示"
+  },
+  "preferences": {
+    "changeTheme": "テーマの変更…",
+    "changeLanguage": "表示言語の変更…"
+  },
+  "help": {
+    "about": "Notoir について"
+  },
+  "app": {
+    "quit": "終了",
+    "quitMac": "Notoir を終了"
+  },
+  "workbench": {
+    "showNotifications": "通知を表示",
+    "clearNotifications": "すべての通知をクリア"
+  }
+}

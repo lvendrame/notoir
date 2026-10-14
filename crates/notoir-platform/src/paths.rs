@@ -109,6 +109,15 @@ impl AppPaths {
         }
     }
 
+    /// User-scope `settings.toml`.
+    pub fn user_settings_file(&self) -> PathBuf {
+        self.config.join("settings.toml")
+    }
+
+    pub fn keybindings_file(&self) -> PathBuf {
+        self.config.join("keybindings.toml")
+    }
+
     /// Creates every directory (idempotent).
     pub fn ensure_dirs(&self) -> Result<(), PathsError> {
         for dir in self.all() {

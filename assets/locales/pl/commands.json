@@ -1,0 +1,47 @@
+{
+  "category": {
+    "file": "Plik",
+    "edit": "Edycja",
+    "selection": "Zaznaczenie",
+    "view": "Widok",
+    "navigate": "Nawigacja",
+    "git": "Git",
+    "tools": "Narzędzia",
+    "plugins": "Wtyczki",
+    "help": "Pomoc",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "compare": "Porównaj",
+    "mcp": "MCP",
+    "preferences": "Preferencje"
+  },
+  "view": {
+    "togglePrimarySidebar": "Przełącz główny pasek boczny",
+    "toggleSecondarySidebar": "Przełącz dodatkowy pasek boczny",
+    "toggleBottomPanel": "Przełącz panel dolny",
+    "toggleToolbar": "Przełącz pasek narzędzi",
+    "toggleStatusBar": "Przełącz pasek stanu",
+    "toggleActivityBar": "Przełącz pasek aktywności",
+    "togglePrimarySidebarPosition": "Zmień położenie głównego paska bocznego",
+    "showExplorer": "Pokaż eksplorator",
+    "showOutput": "Pokaż dane wyjściowe",
+    "togglePanel": "Przełącz panel",
+    "movePanel": "Przenieś panel",
+    "toggleFullScreen": "Pełny ekran"
+  },
+  "preferences": {
+    "changeTheme": "Zmień motyw…",
+    "changeLanguage": "Zmień język interfejsu…"
+  },
+  "help": {
+    "about": "O programie Notoir"
+  },
+  "app": {
+    "quit": "Zakończ",
+    "quitMac": "Zakończ Notoir"
+  },
+  "workbench": {
+    "showNotifications": "Pokaż powiadomienia",
+    "clearNotifications": "Wyczyść wszystkie powiadomienia"
+  }
+}

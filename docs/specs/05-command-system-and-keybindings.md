@@ -1,6 +1,6 @@
 # 05 — Command System & Keybindings
 
-**Status:** Partial — command registry, when-expressions, keymap (M1); UI wiring (M3), keybindings file in use (M9)
+**Status:** Partial — command registry, when-expressions, keymap (M1); keyboard dispatch, menu/toolbar wiring (M3); Command Palette (M9), shortcuts editor (M10)
 
 ## Purpose
 
@@ -81,7 +81,8 @@ pub struct KeyBinding { pub chord: KeyChord /* 1 or 2 keystrokes */, pub command
 - Conflicts are surfaced in the Keyboard Shortcuts editor (Tools → Keyboard Shortcuts) with a warning icon.
 - Keys are matched on logical key (`egui::Key`) with modifiers; `Mod++` matches both `=` and numpad `+`.
 - When a text field other than the editor has focus (palette, find box, settings), only bindings whose `when` allows
-  `textInputFocus` fire; standard text-editing keys are delivered to the field.
+  `textInputFocus` fire; standard text-editing keys are delivered to the field. (Until the first such binding exists,
+  the dispatcher simply skips the keymap while a text field has focus; overlays handle their own Enter/Esc/arrows.)
 
 ### Initial Default Shortcuts
 
@@ -111,6 +112,9 @@ pub struct KeyBinding { pub chord: KeyChord /* 1 or 2 keystrokes */, pub command
 | `markdown.toggleBold` / `toggleItalic` | Ctrl+B / Ctrl+I (Markdown editor focus) | Cmd+B / Cmd+I |
 | `markdown.togglePreview` / `openPreviewToSide` | Ctrl+Shift+V / Ctrl+K V | Cmd+Shift+V / Cmd+K V |
 | `view.toggleBottomPanel` | Ctrl+J | Cmd+J |
+| `view.toggleSecondarySidebar` | Ctrl+Alt+B | Cmd+Option+B |
+| `view.showExplorer` / `view.showOutput` | Ctrl+Shift+E / Ctrl+Shift+U | Cmd+Shift+E / Cmd+Shift+U |
+| `view.toggleFullScreen` | F11 | Ctrl+Cmd+F |
 | `view.zenMode` | Ctrl+K Z | Cmd+K Z |
 | `view.splitRight` | Ctrl+\ | Cmd+\ |
 | `edit.duplicateLine` | Ctrl+Shift+D | Cmd+Shift+D |

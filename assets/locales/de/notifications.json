@@ -1,0 +1,8 @@
+{
+  "settingsParse": "Ihre Einstellungsdatei enthält in Zeile {{line}} einen Fehler. Die bisherigen Einstellungen bleiben aktiv.",
+  "keybindingsParse": "Ihre Tastenkürzel-Datei enthält in Zeile {{line}} einen Fehler. Es werden die Standardkürzel verwendet.",
+  "keybindingsInvalid": "{{count}} Tastenkürzel aus keybindings.toml konnten nicht verwendet werden.",
+  "stateDbCorrupt": "Notoir konnte die gespeicherte Sitzung nicht lesen und hat neu begonnen. Ihre Dateien und ungespeicherte Wiederherstellungsdaten sind nicht betroffen.",
+  "stateDbNewer": "Die gespeicherten Sitzungsdaten stammen von einer neueren Notoir-Version und werden nicht aktualisiert.",
+  "settingsWriteFailed": "Einstellungen konnten nicht gespeichert werden."
+}

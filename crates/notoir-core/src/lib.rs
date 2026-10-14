@@ -10,6 +10,8 @@ pub mod events;
 pub mod ids;
 pub mod keymap;
 pub mod layout;
+pub mod notifications;
+pub mod panels;
 pub mod settings;
 pub mod view;
 pub mod when;

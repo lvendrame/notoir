@@ -1,0 +1,49 @@
+{
+  "explorer": {
+    "title": "资源管理器",
+    "noFolder": "尚未打开文件夹",
+    "noFolderHint": "打开文件夹即可在此浏览其中的文件。"
+  },
+  "search": {
+    "title": "搜索"
+  },
+  "sourceControl": {
+    "title": "源代码管理"
+  },
+  "outline": {
+    "title": "大纲"
+  },
+  "plugins": {
+    "title": "插件"
+  },
+  "markdownPreview": {
+    "title": "Markdown 预览"
+  },
+  "jsonTree": {
+    "title": "JSON 树"
+  },
+  "mcpActivity": {
+    "title": "MCP 活动"
+  },
+  "output": {
+    "title": "输出",
+    "empty": "暂无输出。"
+  },
+  "problems": {
+    "title": "问题"
+  },
+  "gitOutput": {
+    "title": "Git 输出"
+  },
+  "pluginOutput": {
+    "title": "插件输出"
+  },
+  "menu": {
+    "moveToPrimary": "移到主侧边栏",
+    "moveToSecondary": "移到辅助侧边栏",
+    "moveToBottom": "移到底部面板",
+    "hide": "隐藏",
+    "more": "更多操作…",
+    "close": "关闭"
+  }
+}

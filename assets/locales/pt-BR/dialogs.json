@@ -1,0 +1,14 @@
+{
+  "about": {
+    "version": "Versão {{version}}",
+    "tagline": "Escreva. Conecte. Lembre.",
+    "licenses": "Fontes: Manrope e JetBrains Mono (SIL Open Font License 1.1). Ícones: Lucide (Licença ISC)."
+  },
+  "picker": {
+    "theme": "Selecionar Tema de Cores",
+    "language": "Selecionar Idioma de Exibição",
+    "filter": "Digite para filtrar",
+    "noResults": "Nenhum resultado correspondente",
+    "themeAuto": "Automático (seguir o sistema)"
+  }
+}

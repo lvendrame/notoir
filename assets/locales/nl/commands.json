@@ -1,0 +1,47 @@
+{
+  "category": {
+    "file": "Bestand",
+    "edit": "Bewerken",
+    "selection": "Selectie",
+    "view": "Beeld",
+    "navigate": "Navigeren",
+    "git": "Git",
+    "tools": "Extra",
+    "plugins": "Plug-ins",
+    "help": "Help",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "compare": "Vergelijken",
+    "mcp": "MCP",
+    "preferences": "Voorkeuren"
+  },
+  "view": {
+    "togglePrimarySidebar": "Primaire zijbalk in-/uitschakelen",
+    "toggleSecondarySidebar": "Secundaire zijbalk in-/uitschakelen",
+    "toggleBottomPanel": "Onderpaneel in-/uitschakelen",
+    "toggleToolbar": "Werkbalk in-/uitschakelen",
+    "toggleStatusBar": "Statusbalk in-/uitschakelen",
+    "toggleActivityBar": "Activiteitenbalk in-/uitschakelen",
+    "togglePrimarySidebarPosition": "Positie primaire zijbalk wisselen",
+    "showExplorer": "Verkenner tonen",
+    "showOutput": "Uitvoer tonen",
+    "togglePanel": "Paneel in-/uitschakelen",
+    "movePanel": "Paneel verplaatsen",
+    "toggleFullScreen": "Volledig scherm"
+  },
+  "preferences": {
+    "changeTheme": "Thema wijzigen…",
+    "changeLanguage": "Weergavetaal wijzigen…"
+  },
+  "help": {
+    "about": "Over Notoir"
+  },
+  "app": {
+    "quit": "Afsluiten",
+    "quitMac": "Notoir afsluiten"
+  },
+  "workbench": {
+    "showNotifications": "Meldingen tonen",
+    "clearNotifications": "Alle meldingen wissen"
+  }
+}

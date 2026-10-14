@@ -1,0 +1,33 @@
+{
+  "top": {
+    "app": "Notoir",
+    "file": "ファイル",
+    "edit": "編集",
+    "selection": "選択",
+    "view": "表示",
+    "navigate": "移動",
+    "git": "Git",
+    "tools": "ツール",
+    "plugins": "プラグイン",
+    "help": "ヘルプ"
+  },
+  "comingSoon": "近日公開",
+  "sub": {
+    "openRecent": "最近使用した項目を開く",
+    "convertCase": "大文字と小文字の変換",
+    "panels": "パネル",
+    "appearance": "外観",
+    "layout": "エディターのレイアウト",
+    "branches": "ブランチ",
+    "mcp": "MCP"
+  },
+  "item": {
+    "primarySidebar": "プライマリ サイドバー",
+    "secondarySidebar": "セカンダリ サイドバー",
+    "bottomPanel": "下部パネル",
+    "activityBar": "アクティビティ バー",
+    "primarySidebarRight": "プライマリ サイドバーを右に配置",
+    "toolbar": "ツールバー",
+    "statusBar": "ステータス バー"
+  }
+}

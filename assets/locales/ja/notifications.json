@@ -1,0 +1,8 @@
+{
+  "settingsParse": "設定ファイルの {{line}} 行目にエラーがあります。以前の設定が引き続き使用されます。",
+  "keybindingsParse": "キー割り当てファイルの {{line}} 行目にエラーがあります。既定のショートカットを使用しています。",
+  "keybindingsInvalid": "keybindings.toml のショートカット {{count}} 件を使用できませんでした。",
+  "stateDbCorrupt": "Notoir は保存されたセッションを読み取れなかったため、新しく開始しました。ファイルと未保存の復元データには影響ありません。",
+  "stateDbNewer": "保存されたセッション データは新しいバージョンの Notoir のものなので、更新されません。",
+  "settingsWriteFailed": "設定を保存できませんでした。"
+}
