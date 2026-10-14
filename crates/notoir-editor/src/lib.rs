@@ -3,3 +3,17 @@
 //! Markdown/JSON structure and diff model.
 //!
 //! Pure logic: no egui, no async runtime, no filesystem or network IO.
+
+pub mod buffer;
+pub mod change;
+pub mod encoding;
+pub mod language;
+pub mod line_ending;
+pub mod selection;
+
+pub use buffer::{Applied, EditKind, EditRequest, TextBuffer};
+pub use change::{Assoc, ChangeError, ChangeSet, Edit};
+pub use language::LanguageId;
+pub use line_ending::LineEnding;
+pub use ropey::Rope;
+pub use selection::{Range, Selection};

@@ -31,6 +31,10 @@ fontdb = { version = "0.24.0", default-features = false, features = ["std", "fs"
 directories = "6.0.0"
 sys-locale = "0.3.2"
 tempfile = "3"
+ropey = "1.6"
+encoding_rs = "0.8"
+chardetng = "0.1"
+proptest = "1"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

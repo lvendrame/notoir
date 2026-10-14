@@ -5,6 +5,8 @@
 use egui::text::LayoutJob;
 use egui::{Align, Color32, FontId, Layout, RichText, TextFormat};
 
+use notoir_core::keymap::{KeyChord, Platform};
+
 use crate::i18n::{self, Language};
 use crate::icons::{Icon, IconCache};
 use crate::theme::{ICON, Theme, ThemeId, Tok};
@@ -97,9 +99,13 @@ impl NotoirApp {
                 Layout::top_down(Align::Min),
                 |ui| {
                     let rows = [
-                        (Icon::Plus, "welcome:newScratchpad", shortcut(&["Alt", "N"])),
-                        (Icon::FolderOpen, "welcome:openFile", shortcut(&["O"])),
-                        (Icon::Folder, "welcome:openWorkspace", chord(&["K"], &["O"])),
+                        (Icon::Plus, "welcome:newScratchpad", shortcut("Mod+Alt+N")),
+                        (Icon::FolderOpen, "welcome:openFile", shortcut("Mod+O")),
+                        (
+                            Icon::Folder,
+                            "welcome:openWorkspace",
+                            shortcut("Mod+K Mod+O"),
+                        ),
                     ];
                     for (icon, key, keys) in rows {
                         self.action_row(ui, icon, &t!(key), &keys);
@@ -123,7 +129,7 @@ impl NotoirApp {
             ui.add_space(40.0);
             let mut hint = LayoutJob::default();
             hint.append(
-                &shortcut(&["Shift", "P"]),
+                &shortcut("Mod+Shift+P"),
                 0.0,
                 TextFormat::simple(fonts::mono(12.0), secondary),
             );
@@ -156,38 +162,11 @@ impl NotoirApp {
     }
 }
 
-/// Platform-formatted shortcut with the primary modifier (`Mod`) prepended:
-/// `⌥⌘N` on macOS, `Ctrl+Alt+N` elsewhere.
-pub fn shortcut(keys: &[&str]) -> String {
-    format_shortcut(cfg!(target_os = "macos"), keys)
-}
-
-/// Two-stroke chord, e.g. `⌘K ⌘O` / `Ctrl+K Ctrl+O`.
-pub fn chord(first: &[&str], second: &[&str]) -> String {
-    format!("{} {}", shortcut(first), shortcut(second))
-}
-
-pub fn format_shortcut(mac: bool, keys: &[&str]) -> String {
-    if mac {
-        // macOS order: ⌃ ⌥ ⇧ ⌘ then the key.
-        let mut out = String::new();
-        for (name, symbol) in [("Ctrl", "⌃"), ("Alt", "⌥"), ("Shift", "⇧")] {
-            if keys.contains(&name) {
-                out.push_str(symbol);
-            }
-        }
-        out.push('⌘');
-        for key in keys {
-            if !matches!(*key, "Ctrl" | "Alt" | "Shift") {
-                out.push_str(key);
-            }
-        }
-        out
-    } else {
-        let mut parts = vec!["Ctrl"];
-        parts.extend(keys.iter().copied());
-        parts.join("+")
-    }
+/// Platform-formatted chord for a default binding written with `Mod`
+/// (`Mod+Alt+N` → `⌥⌘N` / `Ctrl+Alt+N`).
+fn shortcut(chord: &str) -> String {
+    let platform = Platform::current();
+    KeyChord::parse(chord, platform).map_or_else(|_| chord.to_owned(), |c| c.display(platform))
 }
 
 impl eframe::App for NotoirApp {
@@ -201,18 +180,5 @@ impl eframe::App for NotoirApp {
     fn clear_color(&self, _visuals: &egui::Visuals) -> [f32; 4] {
         let c: Color32 = self.theme.color(Tok::BgApp);
         egui::Rgba::from(c).to_array()
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn shortcuts_follow_platform_conventions() {
-        assert_eq!(format_shortcut(true, &["Alt", "N"]), "⌥⌘N");
-        assert_eq!(format_shortcut(true, &["Shift", "P"]), "⇧⌘P");
-        assert_eq!(format_shortcut(false, &["Alt", "N"]), "Ctrl+Alt+N");
-        assert_eq!(format_shortcut(false, &["Shift", "P"]), "Ctrl+Shift+P");
     }
 }

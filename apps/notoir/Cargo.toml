@@ -10,6 +10,7 @@ description = "Notoir — a fast native text editor and workspace"
 workspace = true
 
 [dependencies]
+notoir-core.workspace = true
 notoir-platform.workspace = true
 eframe.workspace = true
 egui.workspace = true

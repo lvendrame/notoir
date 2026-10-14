@@ -8,7 +8,7 @@ Text|Tree) with bidirectional selection sync. The raw text is always the source 
 ## Parsing
 
 - Span-preserving parser in `notoir-editor::json` producing `JsonNode { kind, key, key_range, value_range, children }`
-  with byte ranges into the rope. Candidate: `jsonc-parser` crate; otherwise a hand-written recursive-descent parser
+  with char ranges into the rope (parsers may work on bytes internally and convert). Candidate: `jsonc-parser` crate; otherwise a hand-written recursive-descent parser
   (JSON is small enough to own; owning it gives error recovery and exact ranges).
 - Dialects: strict JSON for `.json`; JSONC (comments, trailing commas) for `.jsonc`, `tsconfig.json`, `.vscode/*.json`
   and `files.associations`. JSON Lines (`.jsonl`, `.ndjson`): each line parsed separately; tree shows one root per line.

@@ -1,0 +1,199 @@
+//! `Document`: an open file, Untitled buffer, Scratchpad or virtual document,
+//! independent of any tab (docs/specs/02-document-model.md).
+
+use std::path::{Path, PathBuf};
+
+use notoir_editor::encoding::TextEncoding;
+use notoir_editor::{LanguageId, LineEnding, TextBuffer};
+
+use crate::ids::DocumentId;
+
+/// Identity key for a file path. Built by the caller from a canonical path
+/// (symlinks resolved); case is folded on case-insensitive file systems.
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+pub struct PathKey(String);
+
+impl PathKey {
+    pub fn new(canonical: &Path, case_insensitive: bool) -> Self {
+        let s = canonical.to_string_lossy().replace('\\', "/");
+        Self(if case_insensitive {
+            s.to_lowercase()
+        } else {
+            s
+        })
+    }
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum DocumentOrigin {
+    File { path: PathBuf, key: PathKey },
+    Scratchpad { scratch_id: String, title: String },
+    Untitled { n: u32 },
+    Virtual { title: String },
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum DiskState {
+    InSync,
+    ModifiedExternally,
+    DeletedExternally,
+    Unknown,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ReadOnly {
+    No,
+    FileSystem,
+    User,
+    LargeFile,
+    /// Opened with replacement characters (spec 02 §Loading step 3).
+    LossyDecode,
+}
+
+/// Large-file thresholds (`files.largeFile.*`).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct LargeFileLimits {
+    pub size_bytes: u64,
+    pub lines: usize,
+    pub longest_line: usize,
+    pub max_editable_bytes: u64,
+}
+
+impl Default for LargeFileLimits {
+    fn default() -> Self {
+        Self {
+            size_bytes: 20 * 1024 * 1024,
+            lines: 300_000,
+            longest_line: 20_000,
+            max_editable_bytes: 512 * 1024 * 1024,
+        }
+    }
+}
+
+impl LargeFileLimits {
+    pub fn is_large(&self, size_bytes: u64, text: &str) -> bool {
+        if size_bytes > self.size_bytes {
+            return true;
+        }
+        let mut lines = 0;
+        for line in text.split('\n') {
+            lines += 1;
+            if lines > self.lines || line.chars().count() > self.longest_line {
+                return true;
+            }
+        }
+        false
+    }
+}
+
+/// Text and metadata produced by loading (decoding/normalizing happens in the
+/// IO layer using `notoir_editor::{encoding, line_ending}`).
+#[derive(Clone, Debug)]
+pub struct LoadedText {
+    /// `\n`-normalized text.
+    pub text: String,
+    pub encoding: TextEncoding,
+    pub line_ending: LineEnding,
+    pub mixed_line_endings: bool,
+    pub language: LanguageId,
+    pub read_only: ReadOnly,
+    pub large_file: bool,
+    pub content_hash: Option<u64>,
+}
+
+impl LoadedText {
+    /// An empty UTF-8 document with platform line endings.
+    pub fn empty(language: LanguageId) -> Self {
+        Self {
+            text: String::new(),
+            encoding: TextEncoding::UTF8,
+            line_ending: LineEnding::platform_default(),
+            mixed_line_endings: false,
+            language,
+            read_only: ReadOnly::No,
+            large_file: false,
+            content_hash: None,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct Document {
+    pub id: DocumentId,
+    pub origin: DocumentOrigin,
+    pub buffer: TextBuffer,
+    /// +1 on every applied change, including undo/redo.
+    pub revision: u64,
+    /// History state matching the disk content; `None` = never saved.
+    pub saved_state: Option<u64>,
+    pub saved_content_hash: Option<u64>,
+    pub disk_state: DiskState,
+    pub encoding: TextEncoding,
+    pub line_ending: LineEnding,
+    pub mixed_line_endings: bool,
+    pub language: LanguageId,
+    pub language_overridden: bool,
+    pub read_only: ReadOnly,
+    pub large_file: bool,
+}
+
+impl Document {
+    pub fn new(id: DocumentId, origin: DocumentOrigin, loaded: LoadedText) -> Self {
+        let buffer = TextBuffer::new(&loaded.text);
+        let saved_state = matches!(origin, DocumentOrigin::File { .. }).then(|| buffer.state());
+        Self {
+            id,
+            origin,
+            buffer,
+            revision: 0,
+            saved_state,
+            saved_content_hash: loaded.content_hash,
+            disk_state: DiskState::InSync,
+            encoding: loaded.encoding,
+            line_ending: loaded.line_ending,
+            mixed_line_endings: loaded.mixed_line_endings,
+            language: loaded.language,
+            language_overridden: false,
+            read_only: loaded.read_only,
+            large_file: loaded.large_file,
+        }
+    }
+
+    /// Unsaved relative to disk. Scratchpads persist themselves and are never
+    /// dirty in the save-prompt sense; Untitled documents are dirty when non-empty.
+    pub fn is_dirty(&self) -> bool {
+        match &self.origin {
+            DocumentOrigin::File { .. } => {
+                self.saved_state != Some(self.buffer.state())
+                    || self.disk_state == DiskState::DeletedExternally
+            }
+            DocumentOrigin::Untitled { .. } => self.buffer.len_chars() > 0,
+            DocumentOrigin::Scratchpad { .. } | DocumentOrigin::Virtual { .. } => false,
+        }
+    }
+
+    pub fn is_read_only(&self) -> bool {
+        self.read_only != ReadOnly::No
+    }
+
+    pub fn path(&self) -> Option<&Path> {
+        match &self.origin {
+            DocumentOrigin::File { path, .. } => Some(path),
+            _ => None,
+        }
+    }
+
+    pub fn path_key(&self) -> Option<&PathKey> {
+        match &self.origin {
+            DocumentOrigin::File { key, .. } => Some(key),
+            _ => None,
+        }
+    }
+
+    /// Records that the content of history state `state` is now on disk.
+    pub fn mark_saved(&mut self, state: u64, content_hash: u64) {
+        self.saved_state = Some(state);
+        self.saved_content_hash = Some(content_hash);
+        self.disk_state = DiskState::InSync;
+    }
+}

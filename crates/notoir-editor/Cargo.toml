@@ -9,3 +9,10 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
+ropey.workspace = true
+encoding_rs.workspace = true
+chardetng.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true

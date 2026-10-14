@@ -9,6 +9,11 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
+notoir-editor.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
 
 [dev-dependencies]
 toml.workspace = true
+proptest.workspace = true

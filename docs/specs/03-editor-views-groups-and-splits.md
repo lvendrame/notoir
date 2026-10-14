@@ -15,7 +15,7 @@ pub struct EditorView {
     pub id: ViewId,
     pub document_id: DocumentId,
     pub kind: ViewKind,                  // Text | MarkdownPreview | MarkdownSplit | JsonTree | JsonSplit | Diff(..) | Settings
-    pub selections: Selections,          // primary + secondary carets/ranges (byte offsets into rope)
+    pub selection: Selection,            // primary + secondary carets/ranges (char offsets into the rope)
     pub scroll: ScrollPosition,          // top display row + sub-row pixel offset + horizontal offset
     pub zoom: Option<f32>,               // only when editor.zoomScope = "view"
     pub folds: FoldState,                // folded ranges anchored to buffer positions
