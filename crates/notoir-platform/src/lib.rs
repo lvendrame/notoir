@@ -1,7 +1,10 @@
 //! Cross-platform integration (docs/specs/31-platform-packaging-and-updates.md):
 //! application directories, OS locale, platform labels and system fonts.
 
+pub mod dialogs;
 pub mod paths;
+pub mod reveal;
+pub mod single_instance;
 pub mod system_fonts;
 
 pub use paths::{AppPaths, PathsError};

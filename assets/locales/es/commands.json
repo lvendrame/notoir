@@ -34,7 +34,11 @@
     "zoomReset": "Restablecer zoom",
     "toggleLineNumbers": "Alternar números de línea",
     "toggleWhitespace": "Alternar espacios en blanco",
-    "toggleCurrentLineHighlight": "Alternar resaltado de línea actual"
+    "toggleCurrentLineHighlight": "Alternar resaltado de línea actual",
+    "togglePin": "Fijar o desfijar pestaña",
+    "duplicate": "Duplicar vista",
+    "activate": "Activar pestaña",
+    "reopenClosedTab": "Reabrir pestaña cerrada"
   },
   "preferences": {
     "changeTheme": "Cambiar tema…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Borrar todas las notificaciones"
   },
   "file": {
-    "newUntitled": "Nuevo archivo"
+    "newUntitled": "Nuevo archivo",
+    "open": "Abrir archivo…",
+    "newScratchpad": "Nueva nota rápida",
+    "newWindow": "Nueva ventana",
+    "save": "Guardar",
+    "saveAs": "Guardar como…",
+    "saveAll": "Guardar todo",
+    "revert": "Revertir archivo",
+    "close": "Cerrar",
+    "closeOthers": "Cerrar otros",
+    "closeToRight": "Cerrar pestañas a la derecha",
+    "closeSaved": "Cerrar pestañas guardadas",
+    "closeAll": "Cerrar todo",
+    "copyPath": "Copiar ruta",
+    "reveal": "Mostrar en el administrador de archivos",
+    "openRecent": "Abrir archivo reciente",
+    "openScratchpad": "Abrir nota rápida",
+    "removeRecent": "Quitar de abiertos recientemente",
+    "pinRecent": "Fijar elemento reciente",
+    "clearRecent": "Borrar abiertos recientemente"
   },
   "edit": {
     "undo": "Deshacer",
@@ -61,5 +84,15 @@
     "copy": "Copiar",
     "paste": "Pegar",
     "selectAll": "Seleccionar todo"
+  },
+  "navigate": {
+    "nextTab": "Pestaña siguiente",
+    "previousTab": "Pestaña anterior",
+    "switchTab": "Cambiar a la pestaña anterior"
+  },
+  "editor": {
+    "changeLineEnding": "Cambiar secuencia de fin de línea…",
+    "changeEncoding": "Cambiar codificación del archivo…",
+    "changeLanguageMode": "Cambiar modo de lenguaje…"
   }
 }

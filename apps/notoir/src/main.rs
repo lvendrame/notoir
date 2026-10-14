@@ -1,10 +1,17 @@
 //! Notoir — a fast native text editor and workspace.
 
-use notoir::{app, icons, logging};
+use std::sync::mpsc::channel;
+use std::sync::{Arc, OnceLock};
+
+use notoir::{app, cli, icons, logging};
 use notoir_platform::AppPaths;
+use notoir_platform::single_instance::{self, Claim, InstanceRequest};
 
 fn main() -> eframe::Result {
-    if std::env::args().any(|a| a == "--version" || a == "-V") {
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    let cwd = std::env::current_dir().unwrap_or_default();
+    let cli = cli::parse(&args, &cwd);
+    if cli.version {
         println!("notoir {}", env!("CARGO_PKG_VERSION"));
         return Ok(());
     }
@@ -16,6 +23,32 @@ fn main() -> eframe::Result {
             None
         }
     };
+
+    // Single instance: hand the command line to a running window (spec 31).
+    let (tx, rx) = channel::<InstanceRequest>();
+    let repaint: Arc<OnceLock<egui::Context>> = Arc::new(OnceLock::new());
+    let mut instance_rx = None;
+    if !cli.new_window {
+        let request = InstanceRequest {
+            cwd: cwd.clone(),
+            args: args.clone(),
+        };
+        let waker = repaint.clone();
+        match single_instance::claim(&single_instance::socket_name(), &request, move |req| {
+            let _ = tx.send(req);
+            if let Some(ctx) = waker.get() {
+                ctx.request_repaint();
+            }
+        }) {
+            Ok(Claim::Forwarded) => {
+                tracing::info!("forwarded to the running Notoir");
+                return Ok(());
+            }
+            Ok(Claim::Primary) => instance_rx = Some(rx),
+            Err(e) => tracing::warn!(error = %e, "single-instance socket unavailable"),
+        }
+    }
+
     tracing::info!(
         version = env!("CARGO_PKG_VERSION"),
         os = std::env::consts::OS,
@@ -23,7 +56,6 @@ fn main() -> eframe::Result {
         paths = ?paths.as_ref().ok(),
         "starting Notoir"
     );
-
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_title("Notoir")
@@ -33,10 +65,17 @@ fn main() -> eframe::Result {
             .with_icon(icons::app_icon()),
         ..Default::default()
     };
+    let launch = app::Launch {
+        open_paths: cli.paths,
+        instance_rx,
+    };
     let result = eframe::run_native(
         "Notoir",
         options,
-        Box::new(|cc| Ok(Box::new(app::NotoirApp::new(cc)))),
+        Box::new(move |cc| {
+            let _ = repaint.set(cc.egui_ctx.clone());
+            Ok(Box::new(app::NotoirApp::new(cc, launch)))
+        }),
     );
     tracing::info!("exiting Notoir");
     result

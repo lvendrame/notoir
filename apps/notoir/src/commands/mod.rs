@@ -10,6 +10,7 @@ use crate::core::AppCore;
 
 mod app;
 mod editor;
+mod file;
 mod preferences;
 mod view;
 
@@ -17,6 +18,7 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     let mut specs = Vec::new();
     view::specs(&mut specs);
     editor::specs(&mut specs);
+    file::specs(&mut specs);
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);
     for spec in specs {

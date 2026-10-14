@@ -34,7 +34,11 @@
     "zoomReset": "ズームのリセット",
     "toggleLineNumbers": "行番号の切り替え",
     "toggleWhitespace": "空白文字の表示切り替え",
-    "toggleCurrentLineHighlight": "現在行の強調表示の切り替え"
+    "toggleCurrentLineHighlight": "現在行の強調表示の切り替え",
+    "togglePin": "タブのピン留め/解除",
+    "duplicate": "ビューの複製",
+    "activate": "タブをアクティブにする",
+    "reopenClosedTab": "閉じたタブを再度開く"
   },
   "preferences": {
     "changeTheme": "テーマの変更…",
@@ -52,7 +56,26 @@
     "clearNotifications": "すべての通知をクリア"
   },
   "file": {
-    "newUntitled": "新しいファイル"
+    "newUntitled": "新しいファイル",
+    "open": "ファイルを開く…",
+    "newScratchpad": "新しいスクラッチパッド",
+    "newWindow": "新しいウィンドウ",
+    "save": "保存",
+    "saveAs": "名前を付けて保存…",
+    "saveAll": "すべて保存",
+    "revert": "ファイルを元に戻す",
+    "close": "閉じる",
+    "closeOthers": "その他を閉じる",
+    "closeToRight": "右側のタブを閉じる",
+    "closeSaved": "保存済みのタブを閉じる",
+    "closeAll": "すべて閉じる",
+    "copyPath": "パスのコピー",
+    "reveal": "ファイル マネージャーで表示",
+    "openRecent": "最近使用したファイルを開く",
+    "openScratchpad": "スクラッチパッドを開く",
+    "removeRecent": "最近使用した項目から削除",
+    "pinRecent": "最近使用した項目をピン留め",
+    "clearRecent": "最近開いた項目をクリア"
   },
   "edit": {
     "undo": "元に戻す",
@@ -61,5 +84,15 @@
     "copy": "コピー",
     "paste": "貼り付け",
     "selectAll": "すべて選択"
+  },
+  "navigate": {
+    "nextTab": "次のタブ",
+    "previousTab": "前のタブ",
+    "switchTab": "前のタブに切り替え"
+  },
+  "editor": {
+    "changeLineEnding": "行末のシーケンスの変更…",
+    "changeEncoding": "ファイルのエンコードの変更…",
+    "changeLanguageMode": "言語モードの変更…"
   }
 }

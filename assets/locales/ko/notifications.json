@@ -4,5 +4,20 @@
   "keybindingsInvalid": "keybindings.toml의 단축키 {{count}}개를 사용할 수 없습니다.",
   "stateDbCorrupt": "Notoir가 저장된 세션을 읽을 수 없어 새로 시작했습니다. 파일과 저장되지 않은 복구 데이터는 영향을 받지 않았습니다.",
   "stateDbNewer": "저장된 세션 데이터는 최신 버전의 Notoir에서 만들어졌으므로 업데이트되지 않습니다.",
-  "settingsWriteFailed": "설정을 저장할 수 없습니다."
+  "settingsWriteFailed": "설정을 저장할 수 없습니다.",
+  "fileMissing": "“{{name}}”이(가) 더 이상 없습니다.",
+  "removeFromRecent": "최근 항목에서 제거",
+  "openDenied": "“{{name}}”을(를) 열 수 없습니다. 권한이 거부되었습니다.",
+  "openTooLarge": "“{{name}}”은(는) 너무 커서 열 수 없습니다.",
+  "openFailed": "“{{name}}”을(를) 열 수 없습니다.",
+  "lossyDecode": "“{{name}}”에 디코딩할 수 없는 문자가 있어 읽기 전용으로 열었습니다. 상태 표시줄에서 다른 인코딩으로 다시 여세요.",
+  "mixedLineEndings": "“{{name}}”에 여러 종류의 줄 끝이 섞여 있습니다. 상태 표시줄에 표시된 종류로 저장됩니다.",
+  "saveAsOpenDirty": "“{{name}}”이(가) 저장되지 않은 변경 내용과 함께 열려 있습니다. 먼저 저장하거나 닫으세요.",
+  "saveDenied": "“{{name}}”을(를) 저장할 수 없습니다. 권한이 거부되었습니다.",
+  "saveDiskFull": "“{{name}}”을(를) 저장할 수 없습니다. 디스크가 가득 찼습니다.",
+  "saveUnmappable": "“{{name}}”을(를) 저장할 수 없습니다. 일부 문자를 이 인코딩으로 표현할 수 없습니다. 인코딩으로 저장을 사용하세요.",
+  "saveFailed": "“{{name}}”을(를) 저장할 수 없습니다.",
+  "scratchUnavailable": "Notoir 데이터를 열 수 없어 스크래치패드를 사용할 수 없습니다.",
+  "scratchWriteFailed": "스크래치패드를 디스크에 쓸 수 없습니다.",
+  "workspaceNotYet": "폴더를 작업 공간으로 여는 기능은 아직 제공되지 않습니다."
 }

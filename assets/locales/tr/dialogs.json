@@ -9,6 +9,46 @@
     "language": "Görüntüleme Dilini Seç",
     "filter": "Filtrelemek için yazın",
     "noResults": "Eşleşen sonuç yok",
-    "themeAuto": "Otomatik (sistemi izle)"
+    "themeAuto": "Otomatik (sistemi izle)",
+    "lineEnding": "Satır Sonu Dizisini Seçin",
+    "encodingAction": "Eylem Seçin",
+    "encoding": "Kodlama Seçin",
+    "languageMode": "Dil Modunu Seçin",
+    "reopenWithEncoding": "Kodlamayla Yeniden Aç",
+    "saveWithEncoding": "Kodlamayla Kaydet"
+  },
+  "open": {
+    "title": "Dosya Aç"
+  },
+  "saveAs": {
+    "title": "Farklı Kaydet"
+  },
+  "unsaved": {
+    "title": "“{{name}}” dosyasında yaptığınız değişiklikleri kaydetmek istiyor musunuz?",
+    "titleMany": "{{count}} belgedeki değişiklikleri kaydetmek istiyor musunuz?",
+    "body": "Kaydetmezseniz değişiklikleriniz kaybolur.",
+    "saveAll": "Tümünü Kaydet"
+  },
+  "scratchpad": {
+    "title": "“{{name}}” saklansın mı?",
+    "body": "Saklanan karalamalar Dosya → Son Kullanılanı Aç → Karalamalar altında kalır.",
+    "keep": "Karalamayı Sakla",
+    "saveAs": "Farklı Kaydet…",
+    "delete": "Sil"
+  },
+  "conflict": {
+    "title": "“{{name}}” siz açtıktan sonra diskte değişti.",
+    "body": "Sizin sürümünüzle üzerine yazılsın mı?",
+    "overwrite": "Üzerine Yaz"
+  },
+  "revert": {
+    "title": "“{{name}}” dosyasındaki kaydedilmemiş değişiklikler atılsın mı?",
+    "body": "Dosya diskten yeniden yüklenecek. Bunu geri alabilirsiniz.",
+    "confirm": "Geri Döndür"
+  },
+  "binary": {
+    "title": "“{{name}}” ikili bir dosya gibi görünüyor.",
+    "body": "Yine de salt okunur açılsın mı?",
+    "openAnyway": "Yine de Aç"
   }
 }

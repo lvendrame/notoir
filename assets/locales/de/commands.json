@@ -34,7 +34,11 @@
     "zoomReset": "Zoom zurücksetzen",
     "toggleLineNumbers": "Zeilennummern ein/aus",
     "toggleWhitespace": "Leerzeichen anzeigen ein/aus",
-    "toggleCurrentLineHighlight": "Hervorhebung der aktuellen Zeile ein/aus"
+    "toggleCurrentLineHighlight": "Hervorhebung der aktuellen Zeile ein/aus",
+    "togglePin": "Tab anheften oder lösen",
+    "duplicate": "Ansicht duplizieren",
+    "activate": "Tab aktivieren",
+    "reopenClosedTab": "Geschlossenen Tab wieder öffnen"
   },
   "preferences": {
     "changeTheme": "Design ändern…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Alle Benachrichtigungen löschen"
   },
   "file": {
-    "newUntitled": "Neue Datei"
+    "newUntitled": "Neue Datei",
+    "open": "Datei öffnen…",
+    "newScratchpad": "Neuer Notizzettel",
+    "newWindow": "Neues Fenster",
+    "save": "Speichern",
+    "saveAs": "Speichern unter…",
+    "saveAll": "Alle speichern",
+    "revert": "Datei wiederherstellen",
+    "close": "Schließen",
+    "closeOthers": "Andere schließen",
+    "closeToRight": "Tabs rechts schließen",
+    "closeSaved": "Gespeicherte Tabs schließen",
+    "closeAll": "Alle schließen",
+    "copyPath": "Pfad kopieren",
+    "reveal": "Im Dateimanager anzeigen",
+    "openRecent": "Zuletzt verwendete Datei öffnen",
+    "openScratchpad": "Notizzettel öffnen",
+    "removeRecent": "Aus zuletzt geöffneten entfernen",
+    "pinRecent": "Zuletzt verwendetes Element anheften",
+    "clearRecent": "Zuletzt geöffnete löschen"
   },
   "edit": {
     "undo": "Rückgängig",
@@ -61,5 +84,15 @@
     "copy": "Kopieren",
     "paste": "Einfügen",
     "selectAll": "Alles auswählen"
+  },
+  "navigate": {
+    "nextTab": "Nächster Tab",
+    "previousTab": "Vorheriger Tab",
+    "switchTab": "Zum vorherigen Tab wechseln"
+  },
+  "editor": {
+    "changeLineEnding": "Zeilenendesequenz ändern…",
+    "changeEncoding": "Dateicodierung ändern…",
+    "changeLanguageMode": "Sprachmodus ändern…"
   }
 }

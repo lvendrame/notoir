@@ -19,7 +19,8 @@
     "appearance": "Wygląd",
     "layout": "Układ edytora",
     "branches": "Gałęzie",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "Brudnopisy"
   },
   "item": {
     "primarySidebar": "Główny pasek boczny",

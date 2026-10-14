@@ -4,5 +4,20 @@
   "keybindingsInvalid": "No se pudieron usar {{count}} atajos de keybindings.toml.",
   "stateDbCorrupt": "Notoir no pudo leer la sesión guardada y empezó de cero. Tus archivos y los datos de recuperación no guardados no se han visto afectados.",
   "stateDbNewer": "Los datos de la sesión guardada proceden de una versión más reciente de Notoir y no se actualizarán.",
-  "settingsWriteFailed": "No se pudo guardar la configuración."
+  "settingsWriteFailed": "No se pudo guardar la configuración.",
+  "fileMissing": "«{{name}}» ya no existe.",
+  "removeFromRecent": "Quitar de recientes",
+  "openDenied": "No se pudo abrir «{{name}}». Permiso denegado.",
+  "openTooLarge": "«{{name}}» es demasiado grande para abrirlo.",
+  "openFailed": "No se pudo abrir «{{name}}».",
+  "lossyDecode": "«{{name}}» contiene caracteres que no se pudieron decodificar. Se abrió en solo lectura; vuelve a abrirlo con otra codificación desde la barra de estado.",
+  "mixedLineEndings": "«{{name}}» tiene finales de línea mezclados. Se guardará con el que aparece en la barra de estado.",
+  "saveAsOpenDirty": "«{{name}}» está abierto con cambios sin guardar. Guárdalo o ciérralo primero.",
+  "saveDenied": "No se pudo guardar «{{name}}». Permiso denegado.",
+  "saveDiskFull": "No se pudo guardar «{{name}}». El disco está lleno.",
+  "saveUnmappable": "No se pudo guardar «{{name}}»: algunos caracteres no se pueden representar en su codificación. Usa Guardar con codificación.",
+  "saveFailed": "No se pudo guardar «{{name}}».",
+  "scratchUnavailable": "Las notas rápidas no están disponibles porque no se pudieron abrir los datos de Notoir.",
+  "scratchWriteFailed": "No se pudo escribir una nota rápida en el disco.",
+  "workspaceNotYet": "Todavía no se pueden abrir carpetas como espacios de trabajo."
 }

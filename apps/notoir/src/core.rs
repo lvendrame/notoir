@@ -65,17 +65,17 @@ pub enum Effect {
     ApplyLanguage,
     ToggleFullScreen,
     Quit,
-    OpenThemePicker,
-    OpenLanguagePicker,
+    OpenPicker(crate::shell::overlays::PickerKind),
     ShowAbout,
     ToggleNotificationCentre,
+    FocusWindow,
     /// Put keyboard focus in this view's editor.
     FocusEditor(notoir_core::ids::ViewId),
     CopyText(String),
 }
 
 /// How the app starts (resolved by `main`, or by tests).
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct StartOptions {
     pub paths: AppPaths,
     pub os_locale: Option<String>,
@@ -86,6 +86,10 @@ pub struct StartOptions {
     /// Tests: block on the CJK system font lookup instead of loading it in the
     /// background.
     pub wait_for_fonts: bool,
+    /// File dialogs (native unless a test scripts them).
+    pub dialogs: Option<std::sync::Arc<dyn crate::files::Dialogs>>,
+    /// Files from the command line, with optional `--goto` line/column.
+    pub open_paths: Vec<(std::path::PathBuf, Option<(usize, usize)>)>,
 }
 
 impl StartOptions {
@@ -97,6 +101,8 @@ impl StartOptions {
             language_override: None,
             theme_override: None,
             wait_for_fonts: false,
+            dialogs: None,
+            open_paths: Vec::new(),
         }
     }
 }
@@ -126,10 +132,11 @@ pub struct AppCore {
     pub zoom: u32,
     /// The editor widget had keyboard focus last frame.
     pub editor_focused: bool,
+    pub files: crate::files::FileState,
 }
 
 impl AppCore {
-    pub fn new(opts: &StartOptions, wake: impl Fn() + Send + 'static) -> Self {
+    pub fn new(opts: &StartOptions, wake: impl Fn() + Send + Sync + 'static) -> Self {
         let paths = opts.paths.clone();
         if let Err(e) = paths.ensure_dirs() {
             tracing::error!(error = %e, "could not create app directories");
@@ -228,6 +235,12 @@ impl AppCore {
             now_ms: 0,
             zoom: 100,
             editor_focused: false,
+            files: crate::files::FileState::new(
+                opts.dialogs
+                    .clone()
+                    .unwrap_or_else(|| std::sync::Arc::new(crate::files::NativeDialogs)),
+                opts.paths.scratchpads.clone(),
+            ),
         }
     }
 
@@ -267,6 +280,25 @@ impl AppCore {
         }
     }
 
+    /// Indentation for a document: detected (when `editor.detectIndentation`)
+    /// or from settings.
+    pub fn indent_style(
+        &self,
+        doc: notoir_core::ids::DocumentId,
+    ) -> notoir_editor::edit_ops::IndentStyle {
+        let d = self.workbench.document(doc);
+        let lang = d.map(|d| d.language.as_str());
+        if self.settings.bool("editor.detectIndentation", lang)
+            && let Some(style) = d.and_then(|d| d.indentation)
+        {
+            return style;
+        }
+        notoir_editor::edit_ops::IndentStyle {
+            tab_size: self.settings.int("editor.tabSize", lang).max(1) as usize,
+            insert_spaces: self.settings.bool("editor.insertSpaces", lang),
+        }
+    }
+
     /// Editor widget options for a view from the resolved settings.
     pub fn editor_options(
         &self,
@@ -291,10 +323,13 @@ impl AppCore {
             font_size: s.int("editor.fontSize", lang) as f32,
             line_height: s.float("editor.lineHeight", lang) as f32,
             zoom: self.zoom_for(view),
-            indent: notoir_editor::edit_ops::IndentStyle {
-                tab_size: s.int("editor.tabSize", lang).max(1) as usize,
-                insert_spaces: s.bool("editor.insertSpaces", lang),
-            },
+            indent: doc.map_or_else(
+                || notoir_editor::edit_ops::IndentStyle {
+                    tab_size: s.int("editor.tabSize", lang).max(1) as usize,
+                    insert_spaces: s.bool("editor.insertSpaces", lang),
+                },
+                |d| self.indent_style(d.id),
+            ),
             wrap,
             line_numbers: match s.str("editor.lineNumbers", lang) {
                 "off" => LineNumbers::Off,
@@ -450,6 +485,28 @@ impl AppCore {
     pub fn pump_io(&mut self) {
         for result in self.io.drain() {
             match result {
+                IoResult::FilesPicked(paths) => {
+                    for p in paths {
+                        self.open_path(&p, crate::files::OpenAt::default());
+                    }
+                }
+                IoResult::SaveAsPicked { doc, path } => self.handle_save_as_picked(doc, path),
+                IoResult::Loaded(outcome) => self.handle_loaded(*outcome),
+                IoResult::Saved(outcome) => self.handle_saved(*outcome),
+                IoResult::ScratchpadWriteFailed { error } => {
+                    tracing::error!(%error, "scratchpad write failed");
+                    let now = self.now_ms;
+                    self.notifications.notify(
+                        Notification::new(
+                            Severity::Error,
+                            Translatable::new("notifications:scratchWriteFailed"),
+                        )
+                        .detail(error)
+                        .dedupe("scratch-write"),
+                        now,
+                    );
+                }
+                IoResult::Instance(req) => self.handle_instance_request(req),
                 IoResult::SettingsWriteFailed { path, error } => {
                     tracing::error!(%path, %error, "settings write failed");
                     let now = self.now_ms;
@@ -564,4 +621,49 @@ fn build_keymap(
         );
     }
     keymap
+}
+
+impl AppCore {
+    /// After construction: reopen Scratchpads, load recent files, open the
+    /// command-line files.
+    pub fn startup(&mut self, open_paths: &[(std::path::PathBuf, Option<(usize, usize)>)]) {
+        self.load_recent();
+        self.restore_scratchpads();
+        for (path, at) in open_paths {
+            self.open_cli_path(path, *at);
+        }
+    }
+
+    fn open_cli_path(&mut self, path: &std::path::Path, at: Option<(usize, usize)>) {
+        if path.is_dir() {
+            // Workspaces arrive in M7.
+            let now = self.now_ms;
+            self.notifications.notify(
+                Notification::new(
+                    Severity::Info,
+                    Translatable::new("notifications:workspaceNotYet"),
+                ),
+                now,
+            );
+            return;
+        }
+        self.open_path(
+            path,
+            crate::files::OpenAt {
+                line_col: at,
+                restore: None,
+            },
+        );
+    }
+
+    /// Command line forwarded by a second launch.
+    pub fn handle_instance_request(
+        &mut self,
+        req: notoir_platform::single_instance::InstanceRequest,
+    ) {
+        for (path, at) in crate::cli::paths(&req.args, &req.cwd) {
+            self.open_cli_path(&path, at);
+        }
+        self.effects.push(Effect::FocusWindow);
+    }
 }

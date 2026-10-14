@@ -19,7 +19,8 @@
     "appearance": "Görünüş",
     "layout": "Düzenleyici Düzeni",
     "branches": "Dallar",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "Karalamalar"
   },
   "item": {
     "primarySidebar": "Birincil Kenar Çubuğu",

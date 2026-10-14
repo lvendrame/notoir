@@ -1,6 +1,6 @@
 # 31 — Platform Abstraction, Packaging & Updates
 
-**Status:** Partial — app paths with NOTOIR_HOME, system fonts (M0); dialogs and single instance (M5), packaging (M11), updates (M26)
+**Status:** Partial — app paths, system fonts (M0); async file dialogs, reveal in file manager, single instance (M5); packaging (M11), updates (M26)
 
 ## Purpose
 

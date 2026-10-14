@@ -34,7 +34,11 @@
     "zoomReset": "Resetuj powiększenie",
     "toggleLineNumbers": "Przełącz numery wierszy",
     "toggleWhitespace": "Przełącz białe znaki",
-    "toggleCurrentLineHighlight": "Przełącz wyróżnienie bieżącego wiersza"
+    "toggleCurrentLineHighlight": "Przełącz wyróżnienie bieżącego wiersza",
+    "togglePin": "Przypnij lub odepnij kartę",
+    "duplicate": "Duplikuj widok",
+    "activate": "Aktywuj kartę",
+    "reopenClosedTab": "Otwórz ponownie zamkniętą kartę"
   },
   "preferences": {
     "changeTheme": "Zmień motyw…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Wyczyść wszystkie powiadomienia"
   },
   "file": {
-    "newUntitled": "Nowy plik"
+    "newUntitled": "Nowy plik",
+    "open": "Otwórz plik…",
+    "newScratchpad": "Nowy brudnopis",
+    "newWindow": "Nowe okno",
+    "save": "Zapisz",
+    "saveAs": "Zapisz jako…",
+    "saveAll": "Zapisz wszystko",
+    "revert": "Przywróć plik",
+    "close": "Zamknij",
+    "closeOthers": "Zamknij pozostałe",
+    "closeToRight": "Zamknij karty po prawej",
+    "closeSaved": "Zamknij zapisane karty",
+    "closeAll": "Zamknij wszystko",
+    "copyPath": "Kopiuj ścieżkę",
+    "reveal": "Pokaż w menedżerze plików",
+    "openRecent": "Otwórz ostatni plik",
+    "openScratchpad": "Otwórz brudnopis",
+    "removeRecent": "Usuń z ostatnio otwartych",
+    "pinRecent": "Przypnij ostatni element",
+    "clearRecent": "Wyczyść ostatnio otwarte"
   },
   "edit": {
     "undo": "Cofnij",
@@ -61,5 +84,15 @@
     "copy": "Kopiuj",
     "paste": "Wklej",
     "selectAll": "Zaznacz wszystko"
+  },
+  "navigate": {
+    "nextTab": "Następna karta",
+    "previousTab": "Poprzednia karta",
+    "switchTab": "Przełącz na poprzednią kartę"
+  },
+  "editor": {
+    "changeLineEnding": "Zmień sekwencję końca wiersza…",
+    "changeEncoding": "Zmień kodowanie pliku…",
+    "changeLanguageMode": "Zmień tryb języka…"
   }
 }

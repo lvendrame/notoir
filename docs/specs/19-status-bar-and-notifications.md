@@ -1,6 +1,6 @@
 # 19 — Status Bar & Notifications
 
-**Status:** Partial — status bar shell, notifications, toasts, centre (M3); document readouts: position, indentation, encoding, line ending, language, zoom (M4); clickable pickers (M5, M10)
+**Status:** Partial — status bar shell, notifications (M3); document readouts (M4); encoding/line-ending/language pickers from the status bar (M5); Go to Line and indentation pickers (M9, M10)
 
 ## Purpose
 

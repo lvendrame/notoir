@@ -9,6 +9,46 @@
     "language": "选择显示语言",
     "filter": "输入以筛选",
     "noResults": "没有匹配的结果",
-    "themeAuto": "自动（跟随系统）"
+    "themeAuto": "自动（跟随系统）",
+    "lineEnding": "选择行尾序列",
+    "encodingAction": "选择操作",
+    "encoding": "选择编码",
+    "languageMode": "选择语言模式",
+    "reopenWithEncoding": "通过编码重新打开",
+    "saveWithEncoding": "通过编码保存"
+  },
+  "open": {
+    "title": "打开文件"
+  },
+  "saveAs": {
+    "title": "另存为"
+  },
+  "unsaved": {
+    "title": "是否要保存对“{{name}}”的更改？",
+    "titleMany": "是否要保存对 {{count}} 个文档的更改？",
+    "body": "如果不保存，你的更改将丢失。",
+    "saveAll": "全部保存"
+  },
+  "scratchpad": {
+    "title": "保留“{{name}}”？",
+    "body": "保留的草稿可在“文件”→“打开最近的文件”→“草稿”中找到。",
+    "keep": "保留草稿",
+    "saveAs": "另存为…",
+    "delete": "删除"
+  },
+  "conflict": {
+    "title": "“{{name}}”在你打开后已在磁盘上被更改。",
+    "body": "用你的版本覆盖它？",
+    "overwrite": "覆盖"
+  },
+  "revert": {
+    "title": "放弃对“{{name}}”的未保存更改？",
+    "body": "将从磁盘重新加载文件。你可以撤销此操作。",
+    "confirm": "还原"
+  },
+  "binary": {
+    "title": "“{{name}}”似乎是二进制文件。",
+    "body": "仍以只读方式打开？",
+    "openAnyway": "仍要打开"
   }
 }

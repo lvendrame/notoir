@@ -46,7 +46,8 @@ pub fn menu_bar(
         .show(ui, |ui| {
             egui::MenuBar::new().ui(ui, |ui| {
                 for menu in menus::menu_bar(core.platform) {
-                    let items = menus::visible_items(&menu.items, &core.commands);
+                    let items =
+                        menus::visible_items(&menus::expand(&menu.items, core), &core.commands);
                     ui.menu_button(t!(menu.label), |ui| {
                         ui.set_min_width(220.0);
                         if items.is_empty() {
@@ -60,7 +61,7 @@ pub fn menu_bar(
         });
 }
 
-fn menu_items(
+pub(crate) fn menu_items(
     ui: &mut egui::Ui,
     kit: &mut Kit,
     core: &AppCore,
@@ -79,6 +80,24 @@ fn menu_items(
                     menu_items(ui, kit, core, context, items, actions);
                 });
             }
+            MenuItem::Entry { id, args, text } => {
+                let Some(spec) = core.commands.get(&(*id).into()) else {
+                    continue;
+                };
+                if ui
+                    .add_enabled(
+                        spec.enablement.eval(context),
+                        egui::Button::new(text.as_str()),
+                    )
+                    .clicked()
+                {
+                    actions.push(
+                        CommandInvocation::new(*id, InvocationSource::Menu).with_args(args.clone()),
+                    );
+                    ui.close();
+                }
+            }
+            MenuItem::Dynamic(_) => {}
             MenuItem::Command {
                 id,
                 args,
@@ -229,11 +248,22 @@ pub fn status_bar(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
                         } else {
                             egui::FontId::proportional(12.0)
                         };
-                        ui.label(
-                            RichText::new(item.text)
-                                .font(font)
-                                .color(kit.color(Tok::TextSecondary)),
-                        );
+                        let text = RichText::new(item.text)
+                            .font(font)
+                            .color(kit.color(Tok::TextSecondary));
+                        match item.command {
+                            Some(cmd) => {
+                                if ui.add(egui::Button::new(text).frame(false)).clicked() {
+                                    actions.push(CommandInvocation::new(
+                                        cmd,
+                                        InvocationSource::StatusBar,
+                                    ));
+                                }
+                            }
+                            None => {
+                                ui.label(text);
+                            }
+                        }
                     }
                 });
             });
@@ -245,6 +275,8 @@ pub struct StatusItem {
     pub text: String,
     /// Numbers render in the monospace face (spec 21).
     pub mono: bool,
+    /// Command run on click (pickers).
+    pub command: Option<&'static str>,
 }
 
 /// Left-to-right: cursor position, indentation, encoding, line ending,
@@ -257,8 +289,8 @@ pub fn document_items(core: &AppCore) -> Vec<StatusItem> {
     let Some(doc) = wb.document(view.document_id) else {
         return Vec::new();
     };
-    let lang = Some(doc.language.as_str());
-    let tab = core.settings.int("editor.tabSize", lang).max(1) as usize;
+    let indent_style = core.indent_style(doc.id);
+    let tab = indent_style.tab_size;
     let rope = doc.buffer.rope();
     let head = view.selection.primary().head.min(rope.len_chars());
     let line = rope.char_to_line(head);
@@ -277,7 +309,7 @@ pub fn document_items(core: &AppCore) -> Vec<StatusItem> {
         position.push(' ');
         position.push_str(&t!("statusbar:selected", count = selected));
     }
-    let indent = if core.settings.bool("editor.insertSpaces", lang) {
+    let indent = if indent_style.insert_spaces {
         t!("statusbar:spaces", size = tab)
     } else {
         t!("statusbar:tabSize", size = tab)
@@ -293,22 +325,27 @@ pub fn document_items(core: &AppCore) -> Vec<StatusItem> {
         StatusItem {
             text: position,
             mono: true,
+            command: None,
         },
         StatusItem {
             text: indent,
             mono: false,
+            command: None,
         },
         StatusItem {
             text: doc.encoding.label(),
             mono: false,
+            command: Some("editor.changeEncoding"),
         },
         StatusItem {
             text: doc.line_ending.label().to_owned(),
             mono: false,
+            command: Some("editor.changeLineEnding"),
         },
         StatusItem {
             text: language,
             mono: false,
+            command: Some("editor.changeLanguageMode"),
         },
     ];
     let zoom = (core.zoom_for(view.id) * 100.0).round() as u32;
@@ -316,6 +353,7 @@ pub fn document_items(core: &AppCore) -> Vec<StatusItem> {
         items.push(StatusItem {
             text: format!("{zoom}%"),
             mono: true,
+            command: Some("view.zoomReset"),
         });
     }
     items

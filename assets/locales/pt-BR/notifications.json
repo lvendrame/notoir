@@ -4,5 +4,20 @@
   "keybindingsInvalid": "{{count}} atalhos em keybindings.toml não puderam ser usados.",
   "stateDbCorrupt": "O Notoir não conseguiu ler a sessão salva e iniciou do zero. Seus arquivos e dados de recuperação não salvos não foram afetados.",
   "stateDbNewer": "Os dados da sessão salva vêm de uma versão mais nova do Notoir e não serão atualizados.",
-  "settingsWriteFailed": "Não foi possível salvar as configurações."
+  "settingsWriteFailed": "Não foi possível salvar as configurações.",
+  "fileMissing": "“{{name}}” não existe mais.",
+  "removeFromRecent": "Remover dos Recentes",
+  "openDenied": "Não foi possível abrir “{{name}}”. Permissão negada.",
+  "openTooLarge": "“{{name}}” é grande demais para abrir.",
+  "openFailed": "Não foi possível abrir “{{name}}”.",
+  "lossyDecode": "“{{name}}” contém caracteres que não puderam ser decodificados. Foi aberto somente leitura; reabra-o com outra codificação pela barra de status.",
+  "mixedLineEndings": "“{{name}}” tem finais de linha mistos. Ele será salvo com o tipo mostrado na barra de status.",
+  "saveAsOpenDirty": "“{{name}}” está aberto com alterações não salvas. Salve-o ou feche-o primeiro.",
+  "saveDenied": "Não foi possível salvar “{{name}}”. Permissão negada.",
+  "saveDiskFull": "Não foi possível salvar “{{name}}”. O disco está cheio.",
+  "saveUnmappable": "Não foi possível salvar “{{name}}”: alguns caracteres não podem ser representados na codificação. Use Salvar com Codificação.",
+  "saveFailed": "Não foi possível salvar “{{name}}”.",
+  "scratchUnavailable": "Os rascunhos não estão disponíveis porque não foi possível abrir os dados do Notoir.",
+  "scratchWriteFailed": "Não foi possível gravar um rascunho no disco.",
+  "workspaceNotYet": "Abrir pastas como espaços de trabalho ainda não está disponível."
 }

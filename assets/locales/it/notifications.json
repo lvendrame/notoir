@@ -4,5 +4,20 @@
   "keybindingsInvalid": "Impossibile usare {{count}} scorciatoie di keybindings.toml.",
   "stateDbCorrupt": "Notoir non è riuscito a leggere la sessione salvata ed è ripartito da zero. I tuoi file e i dati di ripristino non salvati non sono interessati.",
   "stateDbNewer": "I dati della sessione provengono da una versione più recente di Notoir e non verranno aggiornati.",
-  "settingsWriteFailed": "Impossibile salvare le impostazioni."
+  "settingsWriteFailed": "Impossibile salvare le impostazioni.",
+  "fileMissing": "«{{name}}» non esiste più.",
+  "removeFromRecent": "Rimuovi dai recenti",
+  "openDenied": "Impossibile aprire «{{name}}». Autorizzazione negata.",
+  "openTooLarge": "«{{name}}» è troppo grande per essere aperto.",
+  "openFailed": "Impossibile aprire «{{name}}».",
+  "lossyDecode": "«{{name}}» contiene caratteri che non è stato possibile decodificare. È stato aperto in sola lettura; riaprilo con un'altra codifica dalla barra di stato.",
+  "mixedLineEndings": "«{{name}}» contiene fine riga misti. Verrà salvato con quello mostrato nella barra di stato.",
+  "saveAsOpenDirty": "«{{name}}» è aperto con modifiche non salvate. Salvalo o chiudilo prima.",
+  "saveDenied": "Impossibile salvare «{{name}}». Autorizzazione negata.",
+  "saveDiskFull": "Impossibile salvare «{{name}}». Il disco è pieno.",
+  "saveUnmappable": "Impossibile salvare «{{name}}»: alcuni caratteri non possono essere rappresentati nella sua codifica. Usa Salva con codifica.",
+  "saveFailed": "Impossibile salvare «{{name}}».",
+  "scratchUnavailable": "Gli appunti non sono disponibili perché non è stato possibile aprire i dati di Notoir.",
+  "scratchWriteFailed": "Non è stato possibile scrivere un appunto sul disco.",
+  "workspaceNotYet": "L'apertura di cartelle come aree di lavoro non è ancora disponibile."
 }

@@ -4,5 +4,20 @@
   "keybindingsInvalid": "keybindings.toml 中有 {{count}} 个快捷键无法使用。",
   "stateDbCorrupt": "Notoir 无法读取已保存的会话，已重新开始。你的文件和未保存的恢复数据不受影响。",
   "stateDbNewer": "已保存的会话数据来自更新版本的 Notoir，将不会被更新。",
-  "settingsWriteFailed": "无法保存设置。"
+  "settingsWriteFailed": "无法保存设置。",
+  "fileMissing": "“{{name}}”已不存在。",
+  "removeFromRecent": "从最近使用中移除",
+  "openDenied": "无法打开“{{name}}”。权限被拒绝。",
+  "openTooLarge": "“{{name}}”太大，无法打开。",
+  "openFailed": "无法打开“{{name}}”。",
+  "lossyDecode": "“{{name}}”包含无法解码的字符，已以只读方式打开；请在状态栏中用其他编码重新打开。",
+  "mixedLineEndings": "“{{name}}”包含混合的行尾。保存时将使用状态栏中显示的类型。",
+  "saveAsOpenDirty": "“{{name}}”已打开且有未保存的更改。请先保存或关闭它。",
+  "saveDenied": "无法保存“{{name}}”。权限被拒绝。",
+  "saveDiskFull": "无法保存“{{name}}”。磁盘已满。",
+  "saveUnmappable": "无法保存“{{name}}”：某些字符无法用其编码表示。请使用“通过编码保存”。",
+  "saveFailed": "无法保存“{{name}}”。",
+  "scratchUnavailable": "无法打开 Notoir 的数据，草稿不可用。",
+  "scratchWriteFailed": "无法将草稿写入磁盘。",
+  "workspaceNotYet": "暂不支持将文件夹作为工作区打开。"
 }

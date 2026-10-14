@@ -1,6 +1,6 @@
 # 02 — Document Model
 
-**Status:** Partial — document model, encodings, line endings, language detection (M1); loading files and large-file mode (M5)
+**Status:** Partial — document model, encodings, line endings, language detection (M1); file loading with binary/lossy/size handling, indentation detection, encoding and line-ending changes (M5); large-file mode effects on minimap/syntax/preview (M9, M12, M13)
 
 ## Purpose
 
@@ -77,8 +77,8 @@ Binary detection: if the first 8 KiB contain NUL bytes (and are not valid UTF-16
 ## Encoding and Line Ending Changes
 
 - Status bar encoding item → "Reopen with Encoding…" (reloads from disk; prompts if dirty) or "Save with Encoding…".
-- Status bar line-ending item → LF / CRLF / CR. Changing it is an undoable document-level edit that marks the document
-  dirty (it changes saved bytes) but does not alter the rope.
+- Status bar line-ending item → LF / CRLF / CR. Changing it marks the document dirty (it changes saved bytes) but does
+  not alter the rope. It is not yet recorded in undo history (metadata edits are a later refinement).
 - BOM presence is preserved on save unless changed via "Save with Encoding…".
 
 ## Large-File Mode

@@ -4,5 +4,20 @@
   "keybindingsInvalid": "keybindings.toml のショートカット {{count}} 件を使用できませんでした。",
   "stateDbCorrupt": "Notoir は保存されたセッションを読み取れなかったため、新しく開始しました。ファイルと未保存の復元データには影響ありません。",
   "stateDbNewer": "保存されたセッション データは新しいバージョンの Notoir のものなので、更新されません。",
-  "settingsWriteFailed": "設定を保存できませんでした。"
+  "settingsWriteFailed": "設定を保存できませんでした。",
+  "fileMissing": "“{{name}}” はもう存在しません。",
+  "removeFromRecent": "最近使用した項目から削除",
+  "openDenied": "“{{name}}” を開けませんでした。アクセスが拒否されました。",
+  "openTooLarge": "“{{name}}” は大きすぎて開けません。",
+  "openFailed": "“{{name}}” を開けませんでした。",
+  "lossyDecode": "“{{name}}” にはデコードできない文字が含まれているため、読み取り専用で開きました。ステータス バーから別のエンコードで開き直してください。",
+  "mixedLineEndings": "“{{name}}” には複数の種類の行末が混在しています。ステータス バーに表示されている種類で保存されます。",
+  "saveAsOpenDirty": "“{{name}}” は未保存の変更がある状態で開かれています。先に保存するか閉じてください。",
+  "saveDenied": "“{{name}}” を保存できませんでした。アクセスが拒否されました。",
+  "saveDiskFull": "“{{name}}” を保存できませんでした。ディスクがいっぱいです。",
+  "saveUnmappable": "“{{name}}” を保存できませんでした: 一部の文字はこのエンコードで表現できません。[エンコード付きで保存] を使用してください。",
+  "saveFailed": "“{{name}}” を保存できませんでした。",
+  "scratchUnavailable": "Notoir のデータを開けなかったため、スクラッチパッドを使用できません。",
+  "scratchWriteFailed": "スクラッチパッドをディスクに書き込めませんでした。",
+  "workspaceNotYet": "フォルダーをワークスペースとして開く機能はまだ利用できません。"
 }

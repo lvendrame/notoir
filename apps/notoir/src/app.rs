@@ -9,20 +9,26 @@ use std::time::Instant;
 use notoir_core::command::{CommandInvocation, InvocationSource};
 use notoir_core::panels::PanelArea;
 use notoir_platform::system_fonts::{self, Script};
-use serde_json::json;
 
 use crate::core::{AppCore, Effect, StartOptions, ThemeChoice};
 use crate::fonts;
 use crate::i18n::{self, Language};
 use crate::icons::IconCache;
-use crate::shell::overlays::{Picker, PickerEvent, PickerKind};
-use crate::shell::{Actions, Kit, UiState, chrome, empty_state, overlays, panels};
+use crate::shell::overlays::{Picker, PickerEvent};
+use crate::shell::{self, Actions, Kit, UiState, chrome, empty_state, overlays, panels};
 use crate::theme::{Theme, ThemeId, Tok};
 use crate::{editor_widget, input};
 
 /// Env overrides for manual checks and snapshots (not persisted).
 pub const LANG_ENV: &str = "NOTOIR_LANG";
 pub const THEME_ENV: &str = "NOTOIR_THEME";
+
+/// What `main` hands the app: command-line files and forwarded launches.
+pub struct Launch {
+    pub open_paths: Vec<(std::path::PathBuf, Option<(usize, usize)>)>,
+    pub instance_rx:
+        Option<std::sync::mpsc::Receiver<notoir_platform::single_instance::InstanceRequest>>,
+}
 
 pub struct NotoirApp {
     pub core: AppCore,
@@ -36,11 +42,13 @@ pub struct NotoirApp {
     /// CJK scripts seen in editor text this session.
     cjk_seen: fonts::CjkUse,
     wait_for_fonts: bool,
+    instance_rx:
+        Option<std::sync::mpsc::Receiver<notoir_platform::single_instance::InstanceRequest>>,
 }
 
 impl NotoirApp {
     /// Production entry: paths and overrides from the environment.
-    pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
+    pub fn new(cc: &eframe::CreationContext<'_>, launch: Launch) -> Self {
         let paths = notoir_platform::AppPaths::resolve()
             .or_else(|_| {
                 notoir_platform::AppPaths::resolve_with(Some(
@@ -49,6 +57,7 @@ impl NotoirApp {
             })
             .expect("app directories");
         let mut opts = StartOptions::new(paths);
+        opts.open_paths = launch.open_paths;
         opts.os_locale = notoir_platform::os_locale();
         opts.language_override = std::env::var(LANG_ENV)
             .ok()
@@ -58,12 +67,15 @@ impl NotoirApp {
             .ok()
             .as_deref()
             .and_then(ThemeId::from_id);
-        Self::with_options(&cc.egui_ctx, opts)
+        let mut app = Self::with_options(&cc.egui_ctx, opts);
+        app.instance_rx = launch.instance_rx;
+        app
     }
 
     pub fn with_options(ctx: &egui::Context, opts: StartOptions) -> Self {
         let repaint = ctx.clone();
-        let core = AppCore::new(&opts, move || repaint.request_repaint());
+        let mut core = AppCore::new(&opts, move || repaint.request_repaint());
+        core.startup(&opts.open_paths);
         let theme_id = core.theme(system_dark(ctx));
         let mut app = Self {
             core,
@@ -75,6 +87,7 @@ impl NotoirApp {
             fonts_installed: None,
             cjk_seen: fonts::CjkUse::default(),
             wait_for_fonts: opts.wait_for_fonts,
+            instance_rx: None,
         };
         app.apply_language(ctx);
         app.theme.apply(ctx);
@@ -157,15 +170,11 @@ impl NotoirApp {
                     ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(!full));
                 }
                 Effect::Quit => ctx.send_viewport_cmd(egui::ViewportCommand::Close),
-                Effect::OpenThemePicker => {
-                    self.ui.picker = Some(Picker::new(PickerKind::Theme, &self.core))
-                }
-                Effect::OpenLanguagePicker => {
-                    self.ui.picker = Some(Picker::new(PickerKind::Language, &self.core))
-                }
+                Effect::OpenPicker(kind) => self.ui.picker = Some(Picker::new(kind, &self.core)),
                 Effect::ShowAbout => self.ui.about_open = true,
                 Effect::FocusEditor(view) => self.ui.focus_editor = Some(view),
                 Effect::CopyText(text) => ctx.copy_text(text),
+                Effect::FocusWindow => ctx.send_viewport_cmd(egui::ViewportCommand::Focus),
                 Effect::ToggleNotificationCentre => {
                     self.ui.notification_centre_open = !centre_was_open;
                     if self.ui.notification_centre_open {
@@ -196,18 +205,7 @@ impl NotoirApp {
             }
             PickerEvent::Accept(value) => {
                 self.ui.picker = None;
-                let inv = match kind {
-                    PickerKind::Theme => {
-                        CommandInvocation::new("preferences.changeTheme", InvocationSource::Palette)
-                            .with_args(json!({ "theme": value }))
-                    }
-                    PickerKind::Language => CommandInvocation::new(
-                        "preferences.changeLanguage",
-                        InvocationSource::Palette,
-                    )
-                    .with_args(json!({ "language": value })),
-                };
-                self.core.enqueue(inv);
+                self.core.enqueue(Picker::accept(kind, &value));
             }
             PickerEvent::Cancel => {
                 self.ui.picker = None;
@@ -228,6 +226,14 @@ impl eframe::App for NotoirApp {
         self.core.now_ms = self.started.elapsed().as_millis() as u64;
         let now = self.core.now_ms;
         self.core.pump_io();
+        let forwarded: Vec<_> = self
+            .instance_rx
+            .as_ref()
+            .map(|rx| rx.try_iter().collect())
+            .unwrap_or_default();
+        for req in forwarded {
+            self.core.handle_instance_request(req);
+        }
         self.ensure_fonts(&ctx);
         if self.ui.picker.is_none() {
             // Theme "auto" follows the OS.
@@ -235,15 +241,26 @@ impl eframe::App for NotoirApp {
             self.set_theme(&ctx, id);
         }
         self.core.notifications.tick(now);
+        self.core.flush_scratchpads(false);
+        if ctx.input(|i| i.viewport().close_requested()) {
+            if self.core.request_quit() {
+                self.core.flush_scratchpads(true);
+                self.core.flush_io();
+            } else {
+                ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
+            }
+        }
 
         let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
         let context = self.core.context(fullscreen);
-        if !(self.ui.about_open || self.ui.picker.is_some()) {
+        if !(self.ui.about_open || self.ui.picker.is_some() || !self.core.files.prompts.is_empty())
+        {
             input::dispatch_keys(&ctx, &mut self.core, &context);
         }
         let centre_was_open = self.ui.notification_centre_open;
 
         let mut actions = Actions::default();
+        let mut prompt_answer = None;
         let mut top_offset = chrome::MENU_BAR_HEIGHT;
         let mut bottom_offset = 0.0;
         {
@@ -271,6 +288,7 @@ impl eframe::App for NotoirApp {
                 .frame(egui::Frame::new().fill(editor_fill))
                 .show(ui, |ui| match (active, options) {
                     (Some(view), Some(opts)) => {
+                        shell::tabs::strip(ui, &mut kit, &self.core, &context, &mut actions);
                         let out = editor_widget::show(
                             ui,
                             &mut kit,
@@ -285,7 +303,7 @@ impl eframe::App for NotoirApp {
                         self.cjk_seen.merge(out.cjk);
                         zoom_steps = out.zoom_steps;
                     }
-                    _ => empty_state::show(ui, &mut kit, self.core.platform),
+                    _ => empty_state::show(ui, &mut kit, &self.core, &mut actions),
                 });
             self.core.editor_focused = editor_focused;
             match zoom_steps.cmp(&0) {
@@ -319,6 +337,9 @@ impl eframe::App for NotoirApp {
                 &mut actions,
             );
             overlays::about(&ctx, &mut kit, &mut self.ui);
+            if let Some(answer) = shell::prompts::show(&ctx, &mut kit, &self.core) {
+                prompt_answer = Some(answer);
+            }
             for id in hovered {
                 self.core.notifications.hold(id, now);
             }
@@ -342,8 +363,39 @@ impl eframe::App for NotoirApp {
         }
         self.core.run_queued(&context);
         self.apply_effects(&ctx, centre_was_open);
+        // Typing on the empty state starts a Scratchpad (spec 17).
+        if self.core.workbench.active_view().is_none()
+            && !ctx.egui_wants_keyboard_input()
+            && self.ui.picker.is_none()
+            && !self.ui.about_open
+            && self.core.files.prompts.is_empty()
+        {
+            let typed: String = ctx.input(|i| {
+                i.events
+                    .iter()
+                    .filter_map(|e| match e {
+                        egui::Event::Text(t) => Some(t.as_str()),
+                        _ => None,
+                    })
+                    .collect()
+            });
+            if !typed.is_empty() {
+                self.core.new_scratchpad_with_text(&typed);
+            }
+        }
+        if let Some(answer) = prompt_answer {
+            self.core.answer_prompt(answer);
+        }
         for event in self.core.workbench.events.drain() {
+            if let notoir_core::AppEvent::DocumentChanged { doc, .. } = &event {
+                self.core.scratchpad_changed(*doc);
+            }
             tracing::trace!(?event, "event");
+        }
+        if let Some(due) = self.core.next_scratch_due() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(
+                due.saturating_sub(now) + 1,
+            ));
         }
         if let Some(expiry) = self.core.notifications.next_expiry() {
             ctx.request_repaint_after(std::time::Duration::from_millis(expiry.saturating_sub(now)));

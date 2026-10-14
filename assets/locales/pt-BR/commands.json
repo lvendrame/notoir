@@ -34,7 +34,11 @@
     "zoomReset": "Redefinir Zoom",
     "toggleLineNumbers": "Alternar Números de Linha",
     "toggleWhitespace": "Alternar Espaços em Branco",
-    "toggleCurrentLineHighlight": "Alternar Realce da Linha Atual"
+    "toggleCurrentLineHighlight": "Alternar Realce da Linha Atual",
+    "togglePin": "Fixar ou Desafixar Aba",
+    "duplicate": "Duplicar Visualização",
+    "activate": "Ativar Aba",
+    "reopenClosedTab": "Reabrir Aba Fechada"
   },
   "preferences": {
     "changeTheme": "Alterar Tema…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Limpar Todas as Notificações"
   },
   "file": {
-    "newUntitled": "Novo Arquivo"
+    "newUntitled": "Novo Arquivo",
+    "open": "Abrir Arquivo…",
+    "newScratchpad": "Novo Rascunho",
+    "newWindow": "Nova Janela",
+    "save": "Salvar",
+    "saveAs": "Salvar Como…",
+    "saveAll": "Salvar Tudo",
+    "revert": "Reverter Arquivo",
+    "close": "Fechar",
+    "closeOthers": "Fechar Outros",
+    "closeToRight": "Fechar Abas à Direita",
+    "closeSaved": "Fechar Abas Salvas",
+    "closeAll": "Fechar Tudo",
+    "copyPath": "Copiar Caminho",
+    "reveal": "Mostrar no Gerenciador de Arquivos",
+    "openRecent": "Abrir Arquivo Recente",
+    "openScratchpad": "Abrir Rascunho",
+    "removeRecent": "Remover dos Abertos Recentemente",
+    "pinRecent": "Fixar Item Recente",
+    "clearRecent": "Limpar Abertos Recentemente"
   },
   "edit": {
     "undo": "Desfazer",
@@ -61,5 +84,15 @@
     "copy": "Copiar",
     "paste": "Colar",
     "selectAll": "Selecionar Tudo"
+  },
+  "navigate": {
+    "nextTab": "Próxima Aba",
+    "previousTab": "Aba Anterior",
+    "switchTab": "Alternar para a Aba Anterior"
+  },
+  "editor": {
+    "changeLineEnding": "Alterar Sequência de Fim de Linha…",
+    "changeEncoding": "Alterar Codificação do Arquivo…",
+    "changeLanguageMode": "Alterar Modo de Linguagem…"
   }
 }

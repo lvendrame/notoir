@@ -4,5 +4,20 @@
   "keybindingsInvalid": "keybindings.toml içindeki {{count}} kısayol kullanılamadı.",
   "stateDbCorrupt": "Notoir kayıtlı oturumu okuyamadı ve yeniden başladı. Dosyalarınız ve kaydedilmemiş kurtarma verileriniz etkilenmedi.",
   "stateDbNewer": "Kayıtlı oturum verileri Notoir'ın daha yeni bir sürümüne ait ve güncellenmeyecek.",
-  "settingsWriteFailed": "Ayarlar kaydedilemedi."
+  "settingsWriteFailed": "Ayarlar kaydedilemedi.",
+  "fileMissing": "“{{name}}” artık yok.",
+  "removeFromRecent": "Son Kullanılanlardan Kaldır",
+  "openDenied": "“{{name}}” açılamadı. İzin reddedildi.",
+  "openTooLarge": "“{{name}}” açılamayacak kadar büyük.",
+  "openFailed": "“{{name}}” açılamadı.",
+  "lossyDecode": "“{{name}}” çözülemeyen karakterler içeriyor. Salt okunur açıldı; durum çubuğundan başka bir kodlamayla yeniden açın.",
+  "mixedLineEndings": "“{{name}}” karışık satır sonları içeriyor. Durum çubuğunda gösterilen türle kaydedilecek.",
+  "saveAsOpenDirty": "“{{name}}” kaydedilmemiş değişikliklerle açık. Önce kaydedin veya kapatın.",
+  "saveDenied": "“{{name}}” kaydedilemedi. İzin reddedildi.",
+  "saveDiskFull": "“{{name}}” kaydedilemedi. Disk dolu.",
+  "saveUnmappable": "“{{name}}” kaydedilemedi: bazı karakterler bu kodlamada gösterilemiyor. Kodlamayla Kaydet seçeneğini kullanın.",
+  "saveFailed": "“{{name}}” kaydedilemedi.",
+  "scratchUnavailable": "Notoir verileri açılamadığı için karalamalar kullanılamıyor.",
+  "scratchWriteFailed": "Bir karalama diske yazılamadı.",
+  "workspaceNotYet": "Klasörleri çalışma alanı olarak açmak henüz kullanılamıyor."
 }

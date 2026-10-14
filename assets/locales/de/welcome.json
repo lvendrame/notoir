@@ -5,5 +5,8 @@
   "openWorkspace": "Arbeitsbereich öffnen…",
   "recent": "Zuletzt verwendet",
   "noRecent": "Keine zuletzt verwendeten Dateien oder Arbeitsbereiche",
-  "commandPalette": "Befehlspalette"
+  "commandPalette": "Befehlspalette",
+  "pin": "Anheften",
+  "unpin": "Lösen",
+  "removeRecent": "Aus der Liste entfernen"
 }

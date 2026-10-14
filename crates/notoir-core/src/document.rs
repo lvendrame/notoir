@@ -101,6 +101,8 @@ pub struct LoadedText {
     pub read_only: ReadOnly,
     pub large_file: bool,
     pub content_hash: Option<u64>,
+    /// Detected indentation (`editor.detectIndentation`).
+    pub indentation: Option<notoir_editor::edit_ops::IndentStyle>,
 }
 
 impl LoadedText {
@@ -115,6 +117,7 @@ impl LoadedText {
             read_only: ReadOnly::No,
             large_file: false,
             content_hash: None,
+            indentation: None,
         }
     }
 }
@@ -137,6 +140,7 @@ pub struct Document {
     pub language_overridden: bool,
     pub read_only: ReadOnly,
     pub large_file: bool,
+    pub indentation: Option<notoir_editor::edit_ops::IndentStyle>,
     /// Recent change sets by resulting revision, so caches (display maps,
     /// highlighting) can catch up incrementally.
     recent_changes: VecDeque<(u64, Arc<ChangeSet>)>,
@@ -164,6 +168,7 @@ impl Document {
             language_overridden: false,
             read_only: loaded.read_only,
             large_file: loaded.large_file,
+            indentation: loaded.indentation,
             recent_changes: VecDeque::new(),
         }
     }

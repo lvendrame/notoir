@@ -34,7 +34,11 @@
     "zoomReset": "Yakınlaştırmayı Sıfırla",
     "toggleLineNumbers": "Satır Numaralarını Aç/Kapat",
     "toggleWhitespace": "Boşlukları Aç/Kapat",
-    "toggleCurrentLineHighlight": "Geçerli Satır Vurgusunu Aç/Kapat"
+    "toggleCurrentLineHighlight": "Geçerli Satır Vurgusunu Aç/Kapat",
+    "togglePin": "Sekmeyi Sabitle veya Sabitlemeyi Kaldır",
+    "duplicate": "Görünümü Çoğalt",
+    "activate": "Sekmeyi Etkinleştir",
+    "reopenClosedTab": "Kapatılan Sekmeyi Yeniden Aç"
   },
   "preferences": {
     "changeTheme": "Temayı Değiştir…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Tüm Bildirimleri Temizle"
   },
   "file": {
-    "newUntitled": "Yeni Dosya"
+    "newUntitled": "Yeni Dosya",
+    "open": "Dosya Aç…",
+    "newScratchpad": "Yeni Karalama",
+    "newWindow": "Yeni Pencere",
+    "save": "Kaydet",
+    "saveAs": "Farklı Kaydet…",
+    "saveAll": "Tümünü Kaydet",
+    "revert": "Dosyayı Geri Döndür",
+    "close": "Kapat",
+    "closeOthers": "Diğerlerini Kapat",
+    "closeToRight": "Sağdaki Sekmeleri Kapat",
+    "closeSaved": "Kaydedilmiş Sekmeleri Kapat",
+    "closeAll": "Tümünü Kapat",
+    "copyPath": "Yolu Kopyala",
+    "reveal": "Dosya Yöneticisinde Göster",
+    "openRecent": "Son Kullanılan Dosyayı Aç",
+    "openScratchpad": "Karalama Aç",
+    "removeRecent": "Son Açılanlardan Kaldır",
+    "pinRecent": "Son Öğeyi Sabitle",
+    "clearRecent": "Son Açılanları Temizle"
   },
   "edit": {
     "undo": "Geri Al",
@@ -61,5 +84,15 @@
     "copy": "Kopyala",
     "paste": "Yapıştır",
     "selectAll": "Tümünü Seç"
+  },
+  "navigate": {
+    "nextTab": "Sonraki Sekme",
+    "previousTab": "Önceki Sekme",
+    "switchTab": "Önceki Sekmeye Geç"
+  },
+  "editor": {
+    "changeLineEnding": "Satır Sonu Dizisini Değiştir…",
+    "changeEncoding": "Dosya Kodlamasını Değiştir…",
+    "changeLanguageMode": "Dil Modunu Değiştir…"
   }
 }

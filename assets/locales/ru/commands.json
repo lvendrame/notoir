@@ -34,7 +34,11 @@
     "zoomReset": "Сбросить масштаб",
     "toggleLineNumbers": "Показать или скрыть номера строк",
     "toggleWhitespace": "Показать или скрыть пробелы",
-    "toggleCurrentLineHighlight": "Переключить выделение текущей строки"
+    "toggleCurrentLineHighlight": "Переключить выделение текущей строки",
+    "togglePin": "Закрепить или открепить вкладку",
+    "duplicate": "Дублировать представление",
+    "activate": "Активировать вкладку",
+    "reopenClosedTab": "Открыть закрытую вкладку"
   },
   "preferences": {
     "changeTheme": "Сменить тему…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Очистить все уведомления"
   },
   "file": {
-    "newUntitled": "Новый файл"
+    "newUntitled": "Новый файл",
+    "open": "Открыть файл…",
+    "newScratchpad": "Новый черновик",
+    "newWindow": "Новое окно",
+    "save": "Сохранить",
+    "saveAs": "Сохранить как…",
+    "saveAll": "Сохранить все",
+    "revert": "Отменить изменения в файле",
+    "close": "Закрыть",
+    "closeOthers": "Закрыть другие",
+    "closeToRight": "Закрыть вкладки справа",
+    "closeSaved": "Закрыть сохранённые вкладки",
+    "closeAll": "Закрыть все",
+    "copyPath": "Копировать путь",
+    "reveal": "Показать в файловом менеджере",
+    "openRecent": "Открыть недавний файл",
+    "openScratchpad": "Открыть черновик",
+    "removeRecent": "Удалить из недавних",
+    "pinRecent": "Закрепить недавний элемент",
+    "clearRecent": "Очистить список недавних"
   },
   "edit": {
     "undo": "Отменить",
@@ -61,5 +84,15 @@
     "copy": "Копировать",
     "paste": "Вставить",
     "selectAll": "Выделить всё"
+  },
+  "navigate": {
+    "nextTab": "Следующая вкладка",
+    "previousTab": "Предыдущая вкладка",
+    "switchTab": "Переключиться на предыдущую вкладку"
+  },
+  "editor": {
+    "changeLineEnding": "Изменить последовательность конца строки…",
+    "changeEncoding": "Изменить кодировку файла…",
+    "changeLanguageMode": "Изменить режим языка…"
   }
 }

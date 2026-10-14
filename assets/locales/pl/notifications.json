@@ -4,5 +4,20 @@
   "keybindingsInvalid": "Nie można użyć skrótów z keybindings.toml (liczba: {{count}}).",
   "stateDbCorrupt": "Notoir nie mógł odczytać zapisanej sesji i rozpoczął od nowa. Twoje pliki i niezapisane dane odzyskiwania nie zostały naruszone.",
   "stateDbNewer": "Zapisane dane sesji pochodzą z nowszej wersji Notoir i nie będą aktualizowane.",
-  "settingsWriteFailed": "Nie można zapisać ustawień."
+  "settingsWriteFailed": "Nie można zapisać ustawień.",
+  "fileMissing": "Plik „{{name}}” już nie istnieje.",
+  "removeFromRecent": "Usuń z ostatnich",
+  "openDenied": "Nie można otworzyć „{{name}}”. Odmowa dostępu.",
+  "openTooLarge": "Plik „{{name}}” jest zbyt duży, aby go otworzyć.",
+  "openFailed": "Nie można otworzyć „{{name}}”.",
+  "lossyDecode": "Plik „{{name}}” zawiera znaki, których nie udało się zdekodować. Otworzono go tylko do odczytu; otwórz go ponownie z innym kodowaniem z paska stanu.",
+  "mixedLineEndings": "Plik „{{name}}” ma mieszane końce wierszy. Zostanie zapisany z tym widocznym na pasku stanu.",
+  "saveAsOpenDirty": "Plik „{{name}}” jest otwarty z niezapisanymi zmianami. Najpierw go zapisz lub zamknij.",
+  "saveDenied": "Nie można zapisać „{{name}}”. Odmowa dostępu.",
+  "saveDiskFull": "Nie można zapisać „{{name}}”. Dysk jest pełny.",
+  "saveUnmappable": "Nie można zapisać „{{name}}”: niektórych znaków nie da się przedstawić w tym kodowaniu. Użyj opcji Zapisz z kodowaniem.",
+  "saveFailed": "Nie można zapisać „{{name}}”.",
+  "scratchUnavailable": "Brudnopisy są niedostępne, ponieważ nie można otworzyć danych Notoir.",
+  "scratchWriteFailed": "Nie udało się zapisać brudnopisu na dysku.",
+  "workspaceNotYet": "Otwieranie folderów jako obszarów roboczych nie jest jeszcze dostępne."
 }

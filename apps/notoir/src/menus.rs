@@ -26,7 +26,21 @@ pub enum MenuItem {
         label: &'static str,
         items: Vec<MenuItem>,
     },
+    /// A command with a literal (user data) label, e.g. a recent file path.
+    Entry {
+        id: &'static str,
+        args: Value,
+        text: String,
+    },
+    /// Replaced at render time by [`expand`].
+    Dynamic(DynamicMenu),
     Separator,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum DynamicMenu {
+    RecentFiles,
+    KeptScratchpads,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -85,7 +99,16 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         cmd("file.openWorkspace"),
         sub(
             "menus:sub.openRecent",
-            vec![cmd("file.openRecent"), SEP, cmd("file.clearRecent")],
+            vec![
+                MenuItem::Dynamic(DynamicMenu::RecentFiles),
+                SEP,
+                sub(
+                    "menus:sub.scratchpads",
+                    vec![MenuItem::Dynamic(DynamicMenu::KeptScratchpads)],
+                ),
+                SEP,
+                cmd("file.clearRecent"),
+            ],
         ),
         SEP,
         cmd("file.save"),
@@ -381,17 +404,57 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
     menus
 }
 
+/// Replaces dynamic placeholders with entries from the app state.
+pub fn expand(items: &[MenuItem], core: &AppCore) -> Vec<MenuItem> {
+    let mut out = Vec::new();
+    for item in items {
+        match item {
+            MenuItem::Dynamic(DynamicMenu::RecentFiles) => {
+                for r in core
+                    .files
+                    .recent_files
+                    .iter()
+                    .take(crate::files::RECENT_SHOWN)
+                {
+                    // Pinned entries come first (state DB ordering).
+                    out.push(MenuItem::Entry {
+                        id: "file.openRecent",
+                        args: json!({ "path": r.path }),
+                        text: r.path.clone(),
+                    });
+                }
+            }
+            MenuItem::Dynamic(DynamicMenu::KeptScratchpads) => {
+                for s in core.kept_scratchpads() {
+                    out.push(MenuItem::Entry {
+                        id: "file.openScratchpad",
+                        args: json!({ "id": s.scratch_id }),
+                        text: s.title,
+                    });
+                }
+            }
+            MenuItem::Submenu { label, items } => out.push(MenuItem::Submenu {
+                label,
+                items: expand(items, core),
+            }),
+            other => out.push(other.clone()),
+        }
+    }
+    out
+}
+
 /// Items whose commands exist, with separators normalized (no leading,
 /// trailing or doubled separators) and empty submenus removed.
 pub fn visible_items(items: &[MenuItem], registry: &CommandRegistry<AppCore>) -> Vec<MenuItem> {
     let mut out: Vec<MenuItem> = Vec::new();
     for item in items {
         match item {
-            MenuItem::Command { id, .. } => {
+            MenuItem::Command { id, .. } | MenuItem::Entry { id, .. } => {
                 if registry.get(&(*id).into()).is_some() {
                     out.push(item.clone());
                 }
             }
+            MenuItem::Dynamic(_) => {}
             MenuItem::Submenu { label, items } => {
                 let inner = visible_items(items, registry);
                 if !inner.is_empty() {
@@ -451,7 +514,8 @@ mod tests {
         items.iter().any(|i| match i {
             MenuItem::Command { id: c, .. } => *c == id,
             MenuItem::Submenu { items, .. } => contains(items, id),
-            MenuItem::Separator => false,
+            MenuItem::Entry { id: c, .. } => *c == id,
+            MenuItem::Dynamic(_) | MenuItem::Separator => false,
         })
     }
 

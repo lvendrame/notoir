@@ -5,5 +5,8 @@
   "openWorkspace": "작업 공간 열기…",
   "recent": "최근 항목",
   "noRecent": "최근 파일이나 작업 공간이 없습니다",
-  "commandPalette": "명령 팔레트"
+  "commandPalette": "명령 팔레트",
+  "pin": "고정",
+  "unpin": "고정 해제",
+  "removeRecent": "목록에서 제거"
 }

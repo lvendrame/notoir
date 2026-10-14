@@ -34,7 +34,11 @@
     "zoomReset": "Reset Zoom",
     "toggleLineNumbers": "Toggle Line Numbers",
     "toggleWhitespace": "Toggle Whitespace",
-    "toggleCurrentLineHighlight": "Toggle Current Line Highlight"
+    "toggleCurrentLineHighlight": "Toggle Current Line Highlight",
+    "togglePin": "Pin or Unpin Tab",
+    "duplicate": "Duplicate View",
+    "activate": "Activate Tab",
+    "reopenClosedTab": "Reopen Closed Tab"
   },
   "preferences": {
     "changeTheme": "Change Theme…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Clear All Notifications"
   },
   "file": {
-    "newUntitled": "New File"
+    "newUntitled": "New File",
+    "open": "Open File…",
+    "newScratchpad": "New Scratchpad",
+    "newWindow": "New Window",
+    "save": "Save",
+    "saveAs": "Save As…",
+    "saveAll": "Save All",
+    "revert": "Revert File",
+    "close": "Close",
+    "closeOthers": "Close Others",
+    "closeToRight": "Close Tabs to the Right",
+    "closeSaved": "Close Saved Tabs",
+    "closeAll": "Close All",
+    "copyPath": "Copy Path",
+    "reveal": "Reveal in File Manager",
+    "openRecent": "Open Recent File",
+    "openScratchpad": "Open Scratchpad",
+    "removeRecent": "Remove from Recently Opened",
+    "pinRecent": "Pin Recent Item",
+    "clearRecent": "Clear Recently Opened"
   },
   "edit": {
     "undo": "Undo",
@@ -61,5 +84,15 @@
     "copy": "Copy",
     "paste": "Paste",
     "selectAll": "Select All"
+  },
+  "navigate": {
+    "nextTab": "Next Tab",
+    "previousTab": "Previous Tab",
+    "switchTab": "Switch to Previous Tab"
+  },
+  "editor": {
+    "changeLineEnding": "Change End of Line Sequence…",
+    "changeEncoding": "Change File Encoding…",
+    "changeLanguageMode": "Change Language Mode…"
   }
 }

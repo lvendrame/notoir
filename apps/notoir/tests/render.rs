@@ -81,3 +81,45 @@ fn editor_snapshots() {
         }
     }
 }
+
+#[test]
+fn tabs_and_prompt_snapshot() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut files = Vec::new();
+    for (name, text) in [
+        ("README.md", "# Notoir\n\nNotes.\n"),
+        ("config.json", "{\n  \"a\": 1\n}\n"),
+        ("todo.txt", "milk\n"),
+    ] {
+        let p = dir.path().join(name);
+        std::fs::write(&p, text).unwrap();
+        files.push((p, None));
+    }
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = files;
+    });
+    common::settle(&mut app);
+    app.harness.event(egui::Event::Text("edited ".into()));
+    app.harness.run_steps(2);
+    common::run(&mut app, "file.newScratchpad", serde_json::Value::Null);
+    let first = app.harness.state().core.workbench.layout.active().tabs[0];
+    common::run(
+        &mut app,
+        "view.togglePin",
+        serde_json::json!({ "view": first.0 }),
+    );
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("tabs.png")).unwrap();
+    }
+    let dirty = app.harness.state().core.workbench.layout.active().tabs[2];
+    common::run(
+        &mut app,
+        "file.close",
+        serde_json::json!({ "view": dirty.0 }),
+    );
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("prompt-unsaved.png")).unwrap();
+    }
+}

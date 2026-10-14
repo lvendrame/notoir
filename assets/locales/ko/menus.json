@@ -19,7 +19,8 @@
     "appearance": "모양",
     "layout": "편집기 레이아웃",
     "branches": "분기",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "스크래치패드"
   },
   "item": {
     "primarySidebar": "기본 사이드바",

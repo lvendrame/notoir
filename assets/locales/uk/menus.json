@@ -19,7 +19,8 @@
     "appearance": "Зовнішній вигляд",
     "layout": "Макет редактора",
     "branches": "Гілки",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "Чернетки"
   },
   "item": {
     "primarySidebar": "Основна бічна панель",

@@ -34,7 +34,11 @@
     "zoomReset": "重置缩放",
     "toggleLineNumbers": "切换行号",
     "toggleWhitespace": "切换空白字符",
-    "toggleCurrentLineHighlight": "切换当前行突出显示"
+    "toggleCurrentLineHighlight": "切换当前行突出显示",
+    "togglePin": "固定或取消固定标签页",
+    "duplicate": "复制视图",
+    "activate": "激活标签页",
+    "reopenClosedTab": "重新打开关闭的标签页"
   },
   "preferences": {
     "changeTheme": "更改主题…",
@@ -52,7 +56,26 @@
     "clearNotifications": "清除所有通知"
   },
   "file": {
-    "newUntitled": "新建文件"
+    "newUntitled": "新建文件",
+    "open": "打开文件…",
+    "newScratchpad": "新建草稿",
+    "newWindow": "新建窗口",
+    "save": "保存",
+    "saveAs": "另存为…",
+    "saveAll": "全部保存",
+    "revert": "还原文件",
+    "close": "关闭",
+    "closeOthers": "关闭其他",
+    "closeToRight": "关闭右侧标签页",
+    "closeSaved": "关闭已保存的标签页",
+    "closeAll": "全部关闭",
+    "copyPath": "复制路径",
+    "reveal": "在文件管理器中显示",
+    "openRecent": "打开最近的文件",
+    "openScratchpad": "打开草稿",
+    "removeRecent": "从最近打开中移除",
+    "pinRecent": "固定最近项目",
+    "clearRecent": "清除最近打开"
   },
   "edit": {
     "undo": "撤销",
@@ -61,5 +84,15 @@
     "copy": "复制",
     "paste": "粘贴",
     "selectAll": "全选"
+  },
+  "navigate": {
+    "nextTab": "下一个标签页",
+    "previousTab": "上一个标签页",
+    "switchTab": "切换到上一个标签页"
+  },
+  "editor": {
+    "changeLineEnding": "更改行尾序列…",
+    "changeEncoding": "更改文件编码…",
+    "changeLanguageMode": "更改语言模式…"
   }
 }

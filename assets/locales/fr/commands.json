@@ -34,7 +34,11 @@
     "zoomReset": "Réinitialiser le zoom",
     "toggleLineNumbers": "Afficher/masquer les numéros de ligne",
     "toggleWhitespace": "Afficher/masquer les espaces",
-    "toggleCurrentLineHighlight": "Activer/désactiver la surbrillance de la ligne active"
+    "toggleCurrentLineHighlight": "Activer/désactiver la surbrillance de la ligne active",
+    "togglePin": "Épingler ou détacher l'onglet",
+    "duplicate": "Dupliquer la vue",
+    "activate": "Activer l'onglet",
+    "reopenClosedTab": "Rouvrir l'onglet fermé"
   },
   "preferences": {
     "changeTheme": "Changer de thème…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Effacer toutes les notifications"
   },
   "file": {
-    "newUntitled": "Nouveau fichier"
+    "newUntitled": "Nouveau fichier",
+    "open": "Ouvrir un fichier…",
+    "newScratchpad": "Nouveau brouillon",
+    "newWindow": "Nouvelle fenêtre",
+    "save": "Enregistrer",
+    "saveAs": "Enregistrer sous…",
+    "saveAll": "Tout enregistrer",
+    "revert": "Rétablir le fichier",
+    "close": "Fermer",
+    "closeOthers": "Fermer les autres",
+    "closeToRight": "Fermer les onglets à droite",
+    "closeSaved": "Fermer les onglets enregistrés",
+    "closeAll": "Tout fermer",
+    "copyPath": "Copier le chemin",
+    "reveal": "Afficher dans le gestionnaire de fichiers",
+    "openRecent": "Ouvrir un fichier récent",
+    "openScratchpad": "Ouvrir un brouillon",
+    "removeRecent": "Retirer des éléments récents",
+    "pinRecent": "Épingler l'élément récent",
+    "clearRecent": "Effacer les éléments récents"
   },
   "edit": {
     "undo": "Annuler",
@@ -61,5 +84,15 @@
     "copy": "Copier",
     "paste": "Coller",
     "selectAll": "Tout sélectionner"
+  },
+  "navigate": {
+    "nextTab": "Onglet suivant",
+    "previousTab": "Onglet précédent",
+    "switchTab": "Basculer vers l'onglet précédent"
+  },
+  "editor": {
+    "changeLineEnding": "Changer la séquence de fin de ligne…",
+    "changeEncoding": "Changer l'encodage du fichier…",
+    "changeLanguageMode": "Changer le mode de langage…"
   }
 }

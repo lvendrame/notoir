@@ -9,6 +9,46 @@
     "language": "Weergavetaal selecteren",
     "filter": "Typ om te filteren",
     "noResults": "Geen overeenkomende resultaten",
-    "themeAuto": "Automatisch (systeem volgen)"
+    "themeAuto": "Automatisch (systeem volgen)",
+    "lineEnding": "Regeleindereeks selecteren",
+    "encodingAction": "Actie selecteren",
+    "encoding": "Codering selecteren",
+    "languageMode": "Taalmodus selecteren",
+    "reopenWithEncoding": "Opnieuw openen met codering",
+    "saveWithEncoding": "Opslaan met codering"
+  },
+  "open": {
+    "title": "Bestand openen"
+  },
+  "saveAs": {
+    "title": "Opslaan als"
+  },
+  "unsaved": {
+    "title": "Wil je de wijzigingen in ‘{{name}}’ opslaan?",
+    "titleMany": "Wil je de wijzigingen in {{count}} documenten opslaan?",
+    "body": "Je wijzigingen gaan verloren als je ze niet opslaat.",
+    "saveAll": "Alles opslaan"
+  },
+  "scratchpad": {
+    "title": "‘{{name}}’ bewaren?",
+    "body": "Bewaarde kladblokken blijven beschikbaar via Bestand → Recent openen → Kladblokken.",
+    "keep": "Kladblok bewaren",
+    "saveAs": "Opslaan als…",
+    "delete": "Verwijderen"
+  },
+  "conflict": {
+    "title": "‘{{name}}’ is op de schijf gewijzigd sinds je het opende.",
+    "body": "Overschrijven met jouw versie?",
+    "overwrite": "Overschrijven"
+  },
+  "revert": {
+    "title": "Niet-opgeslagen wijzigingen in ‘{{name}}’ verwerpen?",
+    "body": "Het bestand wordt opnieuw van schijf geladen. Je kunt dit ongedaan maken.",
+    "confirm": "Terugzetten"
+  },
+  "binary": {
+    "title": "‘{{name}}’ lijkt een binair bestand te zijn.",
+    "body": "Toch alleen-lezen openen?",
+    "openAnyway": "Toch openen"
   }
 }

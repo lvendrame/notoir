@@ -5,5 +5,8 @@
   "openWorkspace": "Werkruimte openen…",
   "recent": "Recent",
   "noRecent": "Geen recente bestanden of werkruimten",
-  "commandPalette": "Opdrachtpalet"
+  "commandPalette": "Opdrachtpalet",
+  "pin": "Vastmaken",
+  "unpin": "Losmaken",
+  "removeRecent": "Uit de lijst verwijderen"
 }

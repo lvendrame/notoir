@@ -9,6 +9,46 @@
     "language": "Select Display Language",
     "filter": "Type to filter",
     "noResults": "No matching results",
-    "themeAuto": "Auto (follow system)"
+    "themeAuto": "Auto (follow system)",
+    "lineEnding": "Select End of Line Sequence",
+    "encodingAction": "Select Action",
+    "encoding": "Select Encoding",
+    "languageMode": "Select Language Mode",
+    "reopenWithEncoding": "Reopen with Encoding",
+    "saveWithEncoding": "Save with Encoding"
+  },
+  "open": {
+    "title": "Open File"
+  },
+  "saveAs": {
+    "title": "Save As"
+  },
+  "unsaved": {
+    "title": "Do you want to save the changes you made to “{{name}}”?",
+    "titleMany": "Do you want to save the changes to {{count}} documents?",
+    "body": "Your changes will be lost if you don't save them.",
+    "saveAll": "Save All"
+  },
+  "scratchpad": {
+    "title": "Keep “{{name}}”?",
+    "body": "Kept Scratchpads stay available under File → Open Recent → Scratchpads.",
+    "keep": "Keep Scratchpad",
+    "saveAs": "Save As…",
+    "delete": "Delete"
+  },
+  "conflict": {
+    "title": "“{{name}}” changed on disk since you opened it.",
+    "body": "Overwrite it with your version?",
+    "overwrite": "Overwrite"
+  },
+  "revert": {
+    "title": "Discard unsaved changes to “{{name}}”?",
+    "body": "The file will be reloaded from disk. You can undo this.",
+    "confirm": "Revert"
+  },
+  "binary": {
+    "title": "“{{name}}” appears to be a binary file.",
+    "body": "Open it read-only anyway?",
+    "openAnyway": "Open Anyway"
   }
 }

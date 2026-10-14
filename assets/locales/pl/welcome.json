@@ -5,5 +5,8 @@
   "openWorkspace": "Otwórz obszar roboczy…",
   "recent": "Ostatnie",
   "noRecent": "Brak ostatnich plików i obszarów roboczych",
-  "commandPalette": "Paleta poleceń"
+  "commandPalette": "Paleta poleceń",
+  "pin": "Przypnij",
+  "unpin": "Odepnij",
+  "removeRecent": "Usuń z listy"
 }

@@ -1,6 +1,6 @@
 # 09 — Save, Autosave & Recovery
 
-**Status:** Partial — atomic writes and recovery store (M2); save pipeline (M5), autosave and recovery prompt (M8)
+**Status:** Partial — atomic writes and recovery store (M2); save pipeline with conflict check, Save As, Save All, Revert, unsaved-changes prompts (M5); autosave, recovery prompt and hot exit (M8)
 
 ## Purpose
 
@@ -58,9 +58,9 @@ Your changes will be lost if you don't save them.        (wording is accurate: r
 [Save]  [Don't Save]  [Cancel]
 ```
 
-Multiple dirty documents on quit: one dialog listing them with checkboxes → [Save Selected] [Don't Save] [Cancel].
+Multiple dirty documents on quit: one dialog listing them → [Save All] [Don't Save] [Cancel]. (Per-document checkboxes are a later refinement.)
 
-`app.hotExit` (default **true**): on quit/window close, instead of prompting, dirty documents are kept in the recovery
+`app.hotExit` (default **true**, effective from M8 when recovery restore exists; until then quitting prompts): on quit/window close, instead of prompting, dirty documents are kept in the recovery
 store and restored silently on next launch (like Scratchpads). With hot exit off, the prompts above appear.
 
 ## Autosave

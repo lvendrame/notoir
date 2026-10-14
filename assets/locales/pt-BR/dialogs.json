@@ -9,6 +9,46 @@
     "language": "Selecionar Idioma de Exibição",
     "filter": "Digite para filtrar",
     "noResults": "Nenhum resultado correspondente",
-    "themeAuto": "Automático (seguir o sistema)"
+    "themeAuto": "Automático (seguir o sistema)",
+    "lineEnding": "Selecionar Sequência de Fim de Linha",
+    "encodingAction": "Selecionar Ação",
+    "encoding": "Selecionar Codificação",
+    "languageMode": "Selecionar Modo de Linguagem",
+    "reopenWithEncoding": "Reabrir com Codificação",
+    "saveWithEncoding": "Salvar com Codificação"
+  },
+  "open": {
+    "title": "Abrir Arquivo"
+  },
+  "saveAs": {
+    "title": "Salvar Como"
+  },
+  "unsaved": {
+    "title": "Deseja salvar as alterações feitas em “{{name}}”?",
+    "titleMany": "Deseja salvar as alterações em {{count}} documentos?",
+    "body": "Suas alterações serão perdidas se você não salvá-las.",
+    "saveAll": "Salvar Tudo"
+  },
+  "scratchpad": {
+    "title": "Manter “{{name}}”?",
+    "body": "Rascunhos mantidos ficam disponíveis em Arquivo → Abrir Recente → Rascunhos.",
+    "keep": "Manter Rascunho",
+    "saveAs": "Salvar Como…",
+    "delete": "Excluir"
+  },
+  "conflict": {
+    "title": "“{{name}}” foi alterado no disco desde que você o abriu.",
+    "body": "Substituí-lo pela sua versão?",
+    "overwrite": "Substituir"
+  },
+  "revert": {
+    "title": "Descartar alterações não salvas em “{{name}}”?",
+    "body": "O arquivo será recarregado do disco. Você pode desfazer isso.",
+    "confirm": "Reverter"
+  },
+  "binary": {
+    "title": "“{{name}}” parece ser um arquivo binário.",
+    "body": "Abri-lo somente leitura mesmo assim?",
+    "openAnyway": "Abrir Mesmo Assim"
   }
 }

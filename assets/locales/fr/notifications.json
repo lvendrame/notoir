@@ -4,5 +4,20 @@
   "keybindingsInvalid": "{{count}} raccourcis de keybindings.toml n'ont pas pu être utilisés.",
   "stateDbCorrupt": "Notoir n'a pas pu lire la session enregistrée et a redémarré à neuf. Vos fichiers et vos données de récupération non enregistrées ne sont pas affectés.",
   "stateDbNewer": "Les données de session proviennent d'une version plus récente de Notoir et ne seront pas mises à jour.",
-  "settingsWriteFailed": "Impossible d'enregistrer les paramètres."
+  "settingsWriteFailed": "Impossible d'enregistrer les paramètres.",
+  "fileMissing": "« {{name}} » n'existe plus.",
+  "removeFromRecent": "Retirer des récents",
+  "openDenied": "Impossible d'ouvrir « {{name}} ». Autorisation refusée.",
+  "openTooLarge": "« {{name}} » est trop volumineux pour être ouvert.",
+  "openFailed": "Impossible d'ouvrir « {{name}} ».",
+  "lossyDecode": "« {{name}} » contient des caractères qui n'ont pas pu être décodés. Il est ouvert en lecture seule ; rouvrez-le avec un autre encodage depuis la barre d'état.",
+  "mixedLineEndings": "« {{name}} » contient des fins de ligne mélangées. Il sera enregistré avec celle affichée dans la barre d'état.",
+  "saveAsOpenDirty": "« {{name}} » est ouvert avec des modifications non enregistrées. Enregistrez-le ou fermez-le d'abord.",
+  "saveDenied": "Impossible d'enregistrer « {{name}} ». Autorisation refusée.",
+  "saveDiskFull": "Impossible d'enregistrer « {{name}} ». Le disque est plein.",
+  "saveUnmappable": "Impossible d'enregistrer « {{name}} » : certains caractères ne peuvent pas être représentés dans son encodage. Utilisez Enregistrer avec l'encodage.",
+  "saveFailed": "Impossible d'enregistrer « {{name}} ».",
+  "scratchUnavailable": "Les brouillons ne sont pas disponibles car les données de Notoir n'ont pas pu être ouvertes.",
+  "scratchWriteFailed": "Un brouillon n'a pas pu être écrit sur le disque.",
+  "workspaceNotYet": "L'ouverture de dossiers comme espaces de travail n'est pas encore disponible."
 }

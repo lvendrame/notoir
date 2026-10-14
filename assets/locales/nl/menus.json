@@ -19,7 +19,8 @@
     "appearance": "Uiterlijk",
     "layout": "Editorindeling",
     "branches": "Branches",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "Kladblokken"
   },
   "item": {
     "primarySidebar": "Primaire zijbalk",

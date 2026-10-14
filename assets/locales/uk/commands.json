@@ -34,7 +34,11 @@
     "zoomReset": "Скинути масштаб",
     "toggleLineNumbers": "Показати або сховати номери рядків",
     "toggleWhitespace": "Показати або сховати пробіли",
-    "toggleCurrentLineHighlight": "Перемкнути виділення поточного рядка"
+    "toggleCurrentLineHighlight": "Перемкнути виділення поточного рядка",
+    "togglePin": "Закріпити або відкріпити вкладку",
+    "duplicate": "Дублювати подання",
+    "activate": "Активувати вкладку",
+    "reopenClosedTab": "Відкрити закриту вкладку"
   },
   "preferences": {
     "changeTheme": "Змінити тему…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Очистити всі сповіщення"
   },
   "file": {
-    "newUntitled": "Новий файл"
+    "newUntitled": "Новий файл",
+    "open": "Відкрити файл…",
+    "newScratchpad": "Нова чернетка",
+    "newWindow": "Нове вікно",
+    "save": "Зберегти",
+    "saveAs": "Зберегти як…",
+    "saveAll": "Зберегти все",
+    "revert": "Відновити файл",
+    "close": "Закрити",
+    "closeOthers": "Закрити інші",
+    "closeToRight": "Закрити вкладки праворуч",
+    "closeSaved": "Закрити збережені вкладки",
+    "closeAll": "Закрити все",
+    "copyPath": "Копіювати шлях",
+    "reveal": "Показати у файловому менеджері",
+    "openRecent": "Відкрити нещодавній файл",
+    "openScratchpad": "Відкрити чернетку",
+    "removeRecent": "Вилучити з нещодавніх",
+    "pinRecent": "Закріпити нещодавній елемент",
+    "clearRecent": "Очистити список нещодавніх"
   },
   "edit": {
     "undo": "Скасувати дію",
@@ -61,5 +84,15 @@
     "copy": "Копіювати",
     "paste": "Вставити",
     "selectAll": "Виділити все"
+  },
+  "navigate": {
+    "nextTab": "Наступна вкладка",
+    "previousTab": "Попередня вкладка",
+    "switchTab": "Перейти до попередньої вкладки"
+  },
+  "editor": {
+    "changeLineEnding": "Змінити послідовність кінця рядка…",
+    "changeEncoding": "Змінити кодування файлу…",
+    "changeLanguageMode": "Змінити режим мови…"
   }
 }

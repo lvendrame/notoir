@@ -19,7 +19,8 @@
     "appearance": "Darstellung",
     "layout": "Editor-Layout",
     "branches": "Branches",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "Notizzettel"
   },
   "item": {
     "primarySidebar": "Primäre Seitenleiste",

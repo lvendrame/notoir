@@ -19,7 +19,8 @@
     "appearance": "Внешний вид",
     "layout": "Макет редактора",
     "branches": "Ветви",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "Черновики"
   },
   "item": {
     "primarySidebar": "Основная боковая панель",

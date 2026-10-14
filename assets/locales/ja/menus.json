@@ -19,7 +19,8 @@
     "appearance": "外観",
     "layout": "エディターのレイアウト",
     "branches": "ブランチ",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "スクラッチパッド"
   },
   "item": {
     "primarySidebar": "プライマリ サイドバー",

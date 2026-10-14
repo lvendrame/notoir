@@ -457,6 +457,20 @@ impl Schema {
             Scopes::NO_LANGUAGE,
             C::Files,
         );
+        def(
+            "scratchpad.defaultLanguage",
+            T::Str,
+            s_("markdown"),
+            Scopes::USER_ONLY,
+            C::Files,
+        );
+        def(
+            "workbench.tabs.closeAllKeepsPinned",
+            T::Bool,
+            V::Bool(false),
+            Scopes::USER_ONLY,
+            C::Appearance,
+        );
         // Workspace
         def(
             "explorer.showHidden",

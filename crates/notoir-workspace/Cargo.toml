@@ -1,0 +1,20 @@
+[package]
+name = "notoir-workspace"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+notoir-core.workspace = true
+notoir-editor.workspace = true
+notoir-storage.workspace = true
+encoding_rs.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

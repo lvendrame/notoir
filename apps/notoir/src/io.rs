@@ -11,10 +11,43 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::mpsc::{Receiver, Sender, channel};
 use std::time::{Duration, Instant};
 
-/// Outcome of an IO job that the UI must react to.
+/// Messages for the UI thread: IO job outcomes, dialog answers, requests from
+/// other Notoir processes.
 #[derive(Debug)]
 pub enum IoResult {
-    SettingsWriteFailed { path: String, error: String },
+    SettingsWriteFailed {
+        path: String,
+        error: String,
+    },
+    /// Open dialog answer (empty = cancelled).
+    FilesPicked(Vec<std::path::PathBuf>),
+    /// Save As dialog answer for a document.
+    SaveAsPicked {
+        doc: notoir_core::ids::DocumentId,
+        path: Option<std::path::PathBuf>,
+    },
+    Loaded(Box<crate::files::LoadOutcome>),
+    Saved(Box<crate::files::SaveOutcome>),
+    ScratchpadWriteFailed {
+        error: String,
+    },
+    /// Another launch forwarded its command line (single instance).
+    Instance(notoir_platform::single_instance::InstanceRequest),
+}
+
+/// Posts messages to the UI thread from any thread and wakes it.
+#[derive(Clone)]
+pub struct Poster {
+    tx: Sender<IoResult>,
+    wake: Arc<dyn Fn() + Send + Sync>,
+}
+
+impl Poster {
+    pub fn post(&self, msg: IoResult) {
+        if self.tx.send(msg).is_ok() {
+            (self.wake)();
+        }
+    }
 }
 
 type Job = Box<dyn FnOnce() -> Option<IoResult> + Send>;
@@ -23,13 +56,19 @@ pub struct IoQueue {
     jobs: Sender<Job>,
     results: Receiver<IoResult>,
     pending: Arc<AtomicUsize>,
+    poster: Poster,
 }
 
 impl IoQueue {
     /// Starts the IO thread; `wake` is called after every job (request a repaint).
-    pub fn start(wake: impl Fn() + Send + 'static) -> Self {
+    pub fn start(wake: impl Fn() + Send + Sync + 'static) -> Self {
+        let wake: Arc<dyn Fn() + Send + Sync> = Arc::new(wake);
         let (jobs, job_rx) = channel::<Job>();
         let (result_tx, results) = channel();
+        let poster = Poster {
+            tx: result_tx.clone(),
+            wake: wake.clone(),
+        };
         let pending = Arc::new(AtomicUsize::new(0));
         let counter = pending.clone();
         let spawned = std::thread::Builder::new()
@@ -55,7 +94,12 @@ impl IoQueue {
             jobs,
             results,
             pending,
+            poster,
         }
+    }
+
+    pub fn poster(&self) -> Poster {
+        self.poster.clone()
     }
 
     pub fn submit(&self, job: impl FnOnce() -> Option<IoResult> + Send + 'static) {

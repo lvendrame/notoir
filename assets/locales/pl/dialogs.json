@@ -9,6 +9,46 @@
     "language": "Wybierz język interfejsu",
     "filter": "Wpisz, aby filtrować",
     "noResults": "Brak pasujących wyników",
-    "themeAuto": "Automatycznie (zgodnie z systemem)"
+    "themeAuto": "Automatycznie (zgodnie z systemem)",
+    "lineEnding": "Wybierz sekwencję końca wiersza",
+    "encodingAction": "Wybierz akcję",
+    "encoding": "Wybierz kodowanie",
+    "languageMode": "Wybierz tryb języka",
+    "reopenWithEncoding": "Otwórz ponownie z kodowaniem",
+    "saveWithEncoding": "Zapisz z kodowaniem"
+  },
+  "open": {
+    "title": "Otwórz plik"
+  },
+  "saveAs": {
+    "title": "Zapisz jako"
+  },
+  "unsaved": {
+    "title": "Czy zapisać zmiany wprowadzone w „{{name}}”?",
+    "titleMany": "Czy zapisać zmiany w dokumentach (liczba: {{count}})?",
+    "body": "Jeśli ich nie zapiszesz, zmiany zostaną utracone.",
+    "saveAll": "Zapisz wszystko"
+  },
+  "scratchpad": {
+    "title": "Zachować „{{name}}”?",
+    "body": "Zachowane brudnopisy są dostępne w menu Plik → Otwórz ostatnie → Brudnopisy.",
+    "keep": "Zachowaj brudnopis",
+    "saveAs": "Zapisz jako…",
+    "delete": "Usuń"
+  },
+  "conflict": {
+    "title": "Plik „{{name}}” zmienił się na dysku od czasu otwarcia.",
+    "body": "Zastąpić go Twoją wersją?",
+    "overwrite": "Zastąp"
+  },
+  "revert": {
+    "title": "Odrzucić niezapisane zmiany w „{{name}}”?",
+    "body": "Plik zostanie ponownie wczytany z dysku. Możesz to cofnąć.",
+    "confirm": "Przywróć"
+  },
+  "binary": {
+    "title": "Plik „{{name}}” wygląda na plik binarny.",
+    "body": "Otworzyć go mimo to tylko do odczytu?",
+    "openAnyway": "Otwórz mimo to"
   }
 }

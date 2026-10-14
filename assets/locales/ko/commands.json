@@ -34,7 +34,11 @@
     "zoomReset": "확대/축소 초기화",
     "toggleLineNumbers": "줄 번호 전환",
     "toggleWhitespace": "공백 문자 전환",
-    "toggleCurrentLineHighlight": "현재 줄 강조 표시 전환"
+    "toggleCurrentLineHighlight": "현재 줄 강조 표시 전환",
+    "togglePin": "탭 고정 또는 고정 해제",
+    "duplicate": "보기 복제",
+    "activate": "탭 활성화",
+    "reopenClosedTab": "닫은 탭 다시 열기"
   },
   "preferences": {
     "changeTheme": "테마 변경…",
@@ -52,7 +56,26 @@
     "clearNotifications": "모든 알림 지우기"
   },
   "file": {
-    "newUntitled": "새 파일"
+    "newUntitled": "새 파일",
+    "open": "파일 열기…",
+    "newScratchpad": "새 스크래치패드",
+    "newWindow": "새 창",
+    "save": "저장",
+    "saveAs": "다른 이름으로 저장…",
+    "saveAll": "모두 저장",
+    "revert": "파일 되돌리기",
+    "close": "닫기",
+    "closeOthers": "다른 항목 닫기",
+    "closeToRight": "오른쪽 탭 닫기",
+    "closeSaved": "저장된 탭 닫기",
+    "closeAll": "모두 닫기",
+    "copyPath": "경로 복사",
+    "reveal": "파일 관리자에서 표시",
+    "openRecent": "최근 파일 열기",
+    "openScratchpad": "스크래치패드 열기",
+    "removeRecent": "최근에 연 항목에서 제거",
+    "pinRecent": "최근 항목 고정",
+    "clearRecent": "최근에 연 항목 지우기"
   },
   "edit": {
     "undo": "실행 취소",
@@ -61,5 +84,15 @@
     "copy": "복사",
     "paste": "붙여넣기",
     "selectAll": "모두 선택"
+  },
+  "navigate": {
+    "nextTab": "다음 탭",
+    "previousTab": "이전 탭",
+    "switchTab": "이전 탭으로 전환"
+  },
+  "editor": {
+    "changeLineEnding": "줄 끝 시퀀스 변경…",
+    "changeEncoding": "파일 인코딩 변경…",
+    "changeLanguageMode": "언어 모드 변경…"
   }
 }

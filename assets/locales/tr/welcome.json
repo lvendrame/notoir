@@ -5,5 +5,8 @@
   "openWorkspace": "Çalışma Alanı Aç…",
   "recent": "Son Kullanılanlar",
   "noRecent": "Son kullanılan dosya veya çalışma alanı yok",
-  "commandPalette": "Komut Paleti"
+  "commandPalette": "Komut Paleti",
+  "pin": "Sabitle",
+  "unpin": "Sabitlemeyi Kaldır",
+  "removeRecent": "Listeden Kaldır"
 }

@@ -1,6 +1,6 @@
 # 04 — Tabs
 
-**Status:** Not started — M5
+**Status:** Partial — tab strip with states, disambiguation, pin, close/close others/to the right/saved/all, context menu, reopen closed tab, overflow list (M5); drag reorder and split/move-group items (M6), compare items (M17)
 
 ## Purpose
 

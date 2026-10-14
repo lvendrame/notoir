@@ -9,6 +9,46 @@
     "language": "Seleziona lingua di visualizzazione",
     "filter": "Digita per filtrare",
     "noResults": "Nessun risultato",
-    "themeAuto": "Automatico (segui il sistema)"
+    "themeAuto": "Automatico (segui il sistema)",
+    "lineEnding": "Seleziona sequenza di fine riga",
+    "encodingAction": "Seleziona azione",
+    "encoding": "Seleziona codifica",
+    "languageMode": "Seleziona modalità linguaggio",
+    "reopenWithEncoding": "Riapri con codifica",
+    "saveWithEncoding": "Salva con codifica"
+  },
+  "open": {
+    "title": "Apri file"
+  },
+  "saveAs": {
+    "title": "Salva con nome"
+  },
+  "unsaved": {
+    "title": "Vuoi salvare le modifiche apportate a «{{name}}»?",
+    "titleMany": "Vuoi salvare le modifiche a {{count}} documenti?",
+    "body": "Se non le salvi, le modifiche andranno perse.",
+    "saveAll": "Salva tutto"
+  },
+  "scratchpad": {
+    "title": "Conservare «{{name}}»?",
+    "body": "Gli appunti conservati restano disponibili in File → Apri recenti → Appunti.",
+    "keep": "Conserva appunto",
+    "saveAs": "Salva con nome…",
+    "delete": "Elimina"
+  },
+  "conflict": {
+    "title": "«{{name}}» è stato modificato sul disco da quando l'hai aperto.",
+    "body": "Sovrascriverlo con la tua versione?",
+    "overwrite": "Sovrascrivi"
+  },
+  "revert": {
+    "title": "Scartare le modifiche non salvate a «{{name}}»?",
+    "body": "Il file verrà ricaricato dal disco. Puoi annullare l'operazione.",
+    "confirm": "Ripristina"
+  },
+  "binary": {
+    "title": "«{{name}}» sembra un file binario.",
+    "body": "Aprirlo comunque in sola lettura?",
+    "openAnyway": "Apri comunque"
   }
 }

@@ -5,5 +5,8 @@
   "openWorkspace": "Ouvrir un espace de travail…",
   "recent": "Récents",
   "noRecent": "Aucun fichier ni espace de travail récent",
-  "commandPalette": "Palette de commandes"
+  "commandPalette": "Palette de commandes",
+  "pin": "Épingler",
+  "unpin": "Détacher",
+  "removeRecent": "Retirer de la liste"
 }

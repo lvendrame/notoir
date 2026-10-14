@@ -19,7 +19,8 @@
     "appearance": "外观",
     "layout": "编辑器布局",
     "branches": "分支",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "草稿"
   },
   "item": {
     "primarySidebar": "主侧边栏",

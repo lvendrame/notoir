@@ -9,6 +9,46 @@
     "language": "Seleccionar idioma de la interfaz",
     "filter": "Escribe para filtrar",
     "noResults": "No hay resultados",
-    "themeAuto": "Automático (según el sistema)"
+    "themeAuto": "Automático (según el sistema)",
+    "lineEnding": "Seleccionar secuencia de fin de línea",
+    "encodingAction": "Seleccionar acción",
+    "encoding": "Seleccionar codificación",
+    "languageMode": "Seleccionar modo de lenguaje",
+    "reopenWithEncoding": "Reabrir con codificación",
+    "saveWithEncoding": "Guardar con codificación"
+  },
+  "open": {
+    "title": "Abrir archivo"
+  },
+  "saveAs": {
+    "title": "Guardar como"
+  },
+  "unsaved": {
+    "title": "¿Quieres guardar los cambios realizados en «{{name}}»?",
+    "titleMany": "¿Quieres guardar los cambios en {{count}} documentos?",
+    "body": "Si no los guardas, perderás los cambios.",
+    "saveAll": "Guardar todo"
+  },
+  "scratchpad": {
+    "title": "¿Conservar «{{name}}»?",
+    "body": "Las notas rápidas conservadas siguen disponibles en Archivo → Abrir reciente → Notas rápidas.",
+    "keep": "Conservar nota rápida",
+    "saveAs": "Guardar como…",
+    "delete": "Eliminar"
+  },
+  "conflict": {
+    "title": "«{{name}}» cambió en el disco desde que lo abriste.",
+    "body": "¿Sobrescribirlo con tu versión?",
+    "overwrite": "Sobrescribir"
+  },
+  "revert": {
+    "title": "¿Descartar los cambios sin guardar de «{{name}}»?",
+    "body": "El archivo se volverá a cargar desde el disco. Puedes deshacerlo.",
+    "confirm": "Revertir"
+  },
+  "binary": {
+    "title": "«{{name}}» parece ser un archivo binario.",
+    "body": "¿Abrirlo de todos modos en modo de solo lectura?",
+    "openAnyway": "Abrir de todos modos"
   }
 }

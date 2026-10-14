@@ -245,7 +245,33 @@ pub fn about(ctx: &egui::Context, kit: &mut Kit, ui_state: &mut UiState) {
 pub enum PickerKind {
     Theme,
     Language,
+    LineEnding,
+    /// First step of the encoding picker: Reopen with / Save with.
+    EncodingAction,
+    Encoding {
+        reopen: bool,
+    },
+    LanguageMode,
 }
+
+/// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
+pub const ENCODINGS: &[(&str, &str)] = &[
+    ("utf-8", "UTF-8"),
+    ("utf-8-bom", "UTF-8 BOM"),
+    ("utf-16le", "UTF-16 LE"),
+    ("utf-16be", "UTF-16 BE"),
+    ("windows-1252", "Western (Windows 1252)"),
+    ("iso-8859-15", "Western (ISO 8859-15)"),
+    ("windows-1250", "Central European (Windows 1250)"),
+    ("windows-1251", "Cyrillic (Windows 1251)"),
+    ("koi8-r", "Cyrillic (KOI8-R)"),
+    ("windows-1254", "Turkish (Windows 1254)"),
+    ("shift_jis", "Japanese (Shift JIS)"),
+    ("euc-jp", "Japanese (EUC-JP)"),
+    ("gbk", "Simplified Chinese (GBK)"),
+    ("big5", "Traditional Chinese (Big5)"),
+    ("euc-kr", "Korean (EUC-KR)"),
+];
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct PickerItem {
@@ -271,9 +297,29 @@ pub enum PickerEvent {
 
 impl Picker {
     pub fn new(kind: PickerKind, core: &AppCore) -> Self {
+        let doc = core
+            .workbench
+            .active_document()
+            .and_then(|d| core.workbench.document(d));
         let current = match kind {
             PickerKind::Theme => core.theme_choice.setting_value().to_owned(),
             PickerKind::Language => core.language.code().to_owned(),
+            PickerKind::LineEnding => doc
+                .map(|d| d.line_ending.label().to_lowercase())
+                .unwrap_or_default(),
+            PickerKind::EncodingAction => "reopen".to_owned(),
+            PickerKind::Encoding { .. } => doc
+                .map(|d| {
+                    if d.encoding.bom && d.encoding.encoding == encoding_rs::UTF_8 {
+                        "utf-8-bom".to_owned()
+                    } else {
+                        d.encoding.encoding.name().to_lowercase()
+                    }
+                })
+                .unwrap_or_default(),
+            PickerKind::LanguageMode => doc
+                .map(|d| d.language.as_str().to_owned())
+                .unwrap_or_default(),
         };
         let selected = Self::all_items(kind)
             .iter()
@@ -313,7 +359,69 @@ impl Picker {
                     detail: l.english_name().to_owned(),
                 })
                 .collect(),
+            PickerKind::LineEnding => [
+                ("lf", "LF", "\\n"),
+                ("crlf", "CRLF", "\\r\\n"),
+                ("cr", "CR", "\\r"),
+            ]
+            .into_iter()
+            .map(|(v, l, d)| PickerItem {
+                value: v.to_owned(),
+                label: l.to_owned(),
+                detail: d.to_owned(),
+            })
+            .collect(),
+            PickerKind::EncodingAction => vec![
+                PickerItem {
+                    value: "reopen".into(),
+                    label: t!("dialogs:picker.reopenWithEncoding"),
+                    detail: String::new(),
+                },
+                PickerItem {
+                    value: "save".into(),
+                    label: t!("dialogs:picker.saveWithEncoding"),
+                    detail: String::new(),
+                },
+            ],
+            PickerKind::Encoding { .. } => ENCODINGS
+                .iter()
+                .map(|(v, l)| PickerItem {
+                    value: (*v).to_owned(),
+                    label: (*l).to_owned(),
+                    detail: (*v).to_owned(),
+                })
+                .collect(),
+            PickerKind::LanguageMode => notoir_editor::language::LANGUAGES
+                .iter()
+                .map(|l| PickerItem {
+                    value: l.id.as_str().to_owned(),
+                    label: if l.id == notoir_editor::LanguageId::PLAINTEXT {
+                        t!("statusbar:plainText")
+                    } else {
+                        l.name.to_owned()
+                    },
+                    detail: l.id.as_str().to_owned(),
+                })
+                .collect(),
         }
+    }
+
+    /// The command an accepted value runs.
+    pub fn accept(kind: PickerKind, value: &str) -> notoir_core::command::CommandInvocation {
+        use notoir_core::command::{CommandInvocation, InvocationSource};
+        use serde_json::json;
+        let (id, args) = match kind {
+            PickerKind::Theme => ("preferences.changeTheme", json!({ "theme": value })),
+            PickerKind::Language => ("preferences.changeLanguage", json!({ "language": value })),
+            PickerKind::LineEnding => ("editor.changeLineEnding", json!({ "eol": value })),
+            PickerKind::EncodingAction => ("editor.changeEncoding", json!({ "action": value })),
+            PickerKind::Encoding { reopen } => (
+                "editor.changeEncoding",
+                json!({ "action": if reopen { "reopen" } else { "save" }, "encoding": value }),
+            ),
+            PickerKind::LanguageMode => ("editor.changeLanguageMode", json!({ "language": value })),
+        };
+        CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
 
     /// Items matching the query (case-insensitive, label or detail).
@@ -364,6 +472,10 @@ impl Picker {
         let title = match self.kind {
             PickerKind::Theme => t!("dialogs:picker.theme"),
             PickerKind::Language => t!("dialogs:picker.language"),
+            PickerKind::LineEnding => t!("dialogs:picker.lineEnding"),
+            PickerKind::EncodingAction => t!("dialogs:picker.encodingAction"),
+            PickerKind::Encoding { .. } => t!("dialogs:picker.encoding"),
+            PickerKind::LanguageMode => t!("dialogs:picker.languageMode"),
         };
         let width = 560.0_f32.min(ctx.content_rect().width() - 32.0);
         let area = egui::Area::new(egui::Id::new("picker"))

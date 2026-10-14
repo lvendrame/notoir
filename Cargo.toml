@@ -13,6 +13,7 @@ notoir-core = { path = "crates/notoir-core" }
 notoir-editor = { path = "crates/notoir-editor" }
 notoir-platform = { path = "crates/notoir-platform" }
 notoir-storage = { path = "crates/notoir-storage" }
+notoir-workspace = { path = "crates/notoir-workspace" }
 
 eframe = { version = "0.36.2", default-features = false, features = ["default_fonts", "glow", "wayland", "x11"] }
 egui = "0.36.2"
@@ -36,6 +37,9 @@ ropey = "1.6"
 encoding_rs = "0.8"
 chardetng = "0.1"
 proptest = "1"
+rfd = "0.17.2"
+pollster = "1.0.1"
+interprocess = "2.4.5"
 arboard = { version = "3.6.1", default-features = false }
 unicode-segmentation = "1.13.3"
 unicode-width = "0.2.2"

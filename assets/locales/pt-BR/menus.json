@@ -19,7 +19,8 @@
     "appearance": "Aparência",
     "layout": "Layout do Editor",
     "branches": "Branches",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "scratchpads": "Rascunhos"
   },
   "item": {
     "primarySidebar": "Barra Lateral Principal",

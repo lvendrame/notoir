@@ -9,6 +9,7 @@ pub mod change;
 pub mod display_map;
 pub mod edit_ops;
 pub mod encoding;
+pub mod indent_detect;
 pub mod language;
 pub mod line_ending;
 pub mod motion;

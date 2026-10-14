@@ -29,7 +29,9 @@ pub(super) fn specs(out: &mut Specs) {
 /// No args: open the theme picker. `{ "theme": "<id>|auto" }`: apply and persist.
 fn change_theme(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     let Some(value) = arg(inv, "theme") else {
-        core.effects.push(Effect::OpenThemePicker);
+        core.effects.push(Effect::OpenPicker(
+            crate::shell::overlays::PickerKind::Theme,
+        ));
         return CommandOutcome::Done;
     };
     let Some(choice) = ThemeChoice::from_setting(value) else {
@@ -48,7 +50,9 @@ fn change_theme(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
 /// No args: open the language picker. `{ "language": "<code>" }`: apply and persist.
 fn change_language(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     let Some(code) = arg(inv, "language") else {
-        core.effects.push(Effect::OpenLanguagePicker);
+        core.effects.push(Effect::OpenPicker(
+            crate::shell::overlays::PickerKind::Language,
+        ));
         return CommandOutcome::Done;
     };
     let Some(language) = Language::from_code(code) else {

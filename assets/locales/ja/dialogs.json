@@ -9,6 +9,46 @@
     "language": "表示言語の選択",
     "filter": "入力して絞り込み",
     "noResults": "一致する結果はありません",
-    "themeAuto": "自動 (システムに従う)"
+    "themeAuto": "自動 (システムに従う)",
+    "lineEnding": "行末のシーケンスを選択",
+    "encodingAction": "操作を選択",
+    "encoding": "エンコードを選択",
+    "languageMode": "言語モードを選択",
+    "reopenWithEncoding": "エンコード付きで再度開く",
+    "saveWithEncoding": "エンコード付きで保存"
+  },
+  "open": {
+    "title": "ファイルを開く"
+  },
+  "saveAs": {
+    "title": "名前を付けて保存"
+  },
+  "unsaved": {
+    "title": "“{{name}}” への変更を保存しますか?",
+    "titleMany": "{{count}} 個のドキュメントへの変更を保存しますか?",
+    "body": "保存しないと変更は失われます。",
+    "saveAll": "すべて保存"
+  },
+  "scratchpad": {
+    "title": "“{{name}}” を保持しますか?",
+    "body": "保持したスクラッチパッドは [ファイル] → [最近使用した項目を開く] → [スクラッチパッド] から開けます。",
+    "keep": "スクラッチパッドを保持",
+    "saveAs": "名前を付けて保存…",
+    "delete": "削除"
+  },
+  "conflict": {
+    "title": "“{{name}}” は開いた後にディスク上で変更されました。",
+    "body": "自分のバージョンで上書きしますか?",
+    "overwrite": "上書き"
+  },
+  "revert": {
+    "title": "“{{name}}” の未保存の変更を破棄しますか?",
+    "body": "ファイルをディスクから再読み込みします。この操作は元に戻せます。",
+    "confirm": "元に戻す"
+  },
+  "binary": {
+    "title": "“{{name}}” はバイナリ ファイルのようです。",
+    "body": "読み取り専用で開きますか?",
+    "openAnyway": "開く"
   }
 }

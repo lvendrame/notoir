@@ -4,5 +4,20 @@
   "keybindingsInvalid": "{{count}} shortcuts in keybindings.toml could not be used.",
   "stateDbCorrupt": "Notoir could not read its saved session and started fresh. Your files and unsaved recovery data are not affected.",
   "stateDbNewer": "Saved session data comes from a newer version of Notoir and will not be updated.",
-  "settingsWriteFailed": "Could not save settings."
+  "settingsWriteFailed": "Could not save settings.",
+  "fileMissing": "“{{name}}” no longer exists.",
+  "removeFromRecent": "Remove from Recent",
+  "openDenied": "Could not open “{{name}}”. Permission denied.",
+  "openTooLarge": "“{{name}}” is too large to open.",
+  "openFailed": "Could not open “{{name}}”.",
+  "lossyDecode": "“{{name}}” contains characters that could not be decoded. It opened read-only; reopen it with another encoding from the status bar.",
+  "mixedLineEndings": "“{{name}}” has mixed line endings. It will be saved with the one shown in the status bar.",
+  "saveAsOpenDirty": "“{{name}}” is open with unsaved changes. Save or close it first.",
+  "saveDenied": "Could not save “{{name}}”. Permission denied.",
+  "saveDiskFull": "Could not save “{{name}}”. The disk is full.",
+  "saveUnmappable": "Could not save “{{name}}”: some characters cannot be represented in its encoding. Use Save with Encoding.",
+  "saveFailed": "Could not save “{{name}}”.",
+  "scratchUnavailable": "Scratchpads are unavailable because Notoir's data could not be opened.",
+  "scratchWriteFailed": "A Scratchpad could not be written to disk.",
+  "workspaceNotYet": "Opening folders as workspaces is not available yet."
 }

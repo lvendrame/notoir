@@ -9,6 +9,46 @@
     "language": "Choisir la langue d'affichage",
     "filter": "Tapez pour filtrer",
     "noResults": "Aucun résultat",
-    "themeAuto": "Automatique (suivre le système)"
+    "themeAuto": "Automatique (suivre le système)",
+    "lineEnding": "Choisir la séquence de fin de ligne",
+    "encodingAction": "Choisir une action",
+    "encoding": "Choisir l'encodage",
+    "languageMode": "Choisir le mode de langage",
+    "reopenWithEncoding": "Rouvrir avec l'encodage",
+    "saveWithEncoding": "Enregistrer avec l'encodage"
+  },
+  "open": {
+    "title": "Ouvrir un fichier"
+  },
+  "saveAs": {
+    "title": "Enregistrer sous"
+  },
+  "unsaved": {
+    "title": "Voulez-vous enregistrer les modifications apportées à « {{name}} » ?",
+    "titleMany": "Voulez-vous enregistrer les modifications de {{count}} documents ?",
+    "body": "Vos modifications seront perdues si vous ne les enregistrez pas.",
+    "saveAll": "Tout enregistrer"
+  },
+  "scratchpad": {
+    "title": "Conserver « {{name}} » ?",
+    "body": "Les brouillons conservés restent disponibles dans Fichier → Ouvrir récent → Brouillons.",
+    "keep": "Conserver le brouillon",
+    "saveAs": "Enregistrer sous…",
+    "delete": "Supprimer"
+  },
+  "conflict": {
+    "title": "« {{name}} » a été modifié sur le disque depuis son ouverture.",
+    "body": "Le remplacer par votre version ?",
+    "overwrite": "Remplacer"
+  },
+  "revert": {
+    "title": "Abandonner les modifications non enregistrées de « {{name}} » ?",
+    "body": "Le fichier sera rechargé depuis le disque. Vous pourrez annuler.",
+    "confirm": "Rétablir"
+  },
+  "binary": {
+    "title": "« {{name}} » semble être un fichier binaire.",
+    "body": "L'ouvrir quand même en lecture seule ?",
+    "openAnyway": "Ouvrir quand même"
   }
 }

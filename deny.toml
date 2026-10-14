@@ -28,6 +28,7 @@ allow = [
     "CC0-1.0",
     "OFL-1.1",
     "Unlicense",
+    "0BSD",
     # egui default_fonts (Ubuntu Light): fallback glyphs only.
     "Ubuntu-font-1.0",
 ]

@@ -1,6 +1,6 @@
 # 08 — Opening Files, Scratchpads & Recent
 
-**Status:** Partial — Scratchpad and recent storage (M2); open/new flows and menus (M5, M7)
+**Status:** Partial — Open File, New File, Scratchpads (create, persist, keep, Save As), recent files with pins, Open Recent, New Window, CLI and single-instance forwarding (M2, M5); workspaces and recent workspaces (M7)
 
 ## Purpose
 

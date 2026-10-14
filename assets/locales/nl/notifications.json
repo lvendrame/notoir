@@ -4,5 +4,20 @@
   "keybindingsInvalid": "{{count}} sneltoetsen in keybindings.toml konden niet worden gebruikt.",
   "stateDbCorrupt": "Notoir kon de opgeslagen sessie niet lezen en is opnieuw begonnen. Je bestanden en niet-opgeslagen herstelgegevens zijn niet aangetast.",
   "stateDbNewer": "Opgeslagen sessiegegevens komen van een nieuwere versie van Notoir en worden niet bijgewerkt.",
-  "settingsWriteFailed": "Instellingen konden niet worden opgeslagen."
+  "settingsWriteFailed": "Instellingen konden niet worden opgeslagen.",
+  "fileMissing": "‘{{name}}’ bestaat niet meer.",
+  "removeFromRecent": "Verwijderen uit recent",
+  "openDenied": "‘{{name}}’ kan niet worden geopend. Toegang geweigerd.",
+  "openTooLarge": "‘{{name}}’ is te groot om te openen.",
+  "openFailed": "‘{{name}}’ kan niet worden geopend.",
+  "lossyDecode": "‘{{name}}’ bevat tekens die niet konden worden gedecodeerd. Het is alleen-lezen geopend; open het via de statusbalk opnieuw met een andere codering.",
+  "mixedLineEndings": "‘{{name}}’ heeft gemengde regeleinden. Het wordt opgeslagen met het type in de statusbalk.",
+  "saveAsOpenDirty": "‘{{name}}’ is geopend met niet-opgeslagen wijzigingen. Sla het eerst op of sluit het.",
+  "saveDenied": "‘{{name}}’ kan niet worden opgeslagen. Toegang geweigerd.",
+  "saveDiskFull": "‘{{name}}’ kan niet worden opgeslagen. De schijf is vol.",
+  "saveUnmappable": "‘{{name}}’ kan niet worden opgeslagen: sommige tekens kunnen niet in de codering worden weergegeven. Gebruik Opslaan met codering.",
+  "saveFailed": "‘{{name}}’ kan niet worden opgeslagen.",
+  "scratchUnavailable": "Kladblokken zijn niet beschikbaar omdat de gegevens van Notoir niet konden worden geopend.",
+  "scratchWriteFailed": "Een kladblok kon niet naar de schijf worden geschreven.",
+  "workspaceNotYet": "Mappen openen als werkruimte is nog niet beschikbaar."
 }

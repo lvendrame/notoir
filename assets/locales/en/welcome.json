@@ -5,5 +5,8 @@
   "openWorkspace": "Open Workspace…",
   "recent": "Recent",
   "noRecent": "No recent files or workspaces",
-  "commandPalette": "Command Palette"
+  "commandPalette": "Command Palette",
+  "pin": "Pin",
+  "unpin": "Unpin",
+  "removeRecent": "Remove from List"
 }

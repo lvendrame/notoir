@@ -34,7 +34,11 @@
     "zoomReset": "Zoom herstellen",
     "toggleLineNumbers": "Regelnummers in-/uitschakelen",
     "toggleWhitespace": "Witruimte in-/uitschakelen",
-    "toggleCurrentLineHighlight": "Markering huidige regel in-/uitschakelen"
+    "toggleCurrentLineHighlight": "Markering huidige regel in-/uitschakelen",
+    "togglePin": "Tabblad vastmaken of losmaken",
+    "duplicate": "Weergave dupliceren",
+    "activate": "Tabblad activeren",
+    "reopenClosedTab": "Gesloten tabblad heropenen"
   },
   "preferences": {
     "changeTheme": "Thema wijzigen…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Alle meldingen wissen"
   },
   "file": {
-    "newUntitled": "Nieuw bestand"
+    "newUntitled": "Nieuw bestand",
+    "open": "Bestand openen…",
+    "newScratchpad": "Nieuw kladblok",
+    "newWindow": "Nieuw venster",
+    "save": "Opslaan",
+    "saveAs": "Opslaan als…",
+    "saveAll": "Alles opslaan",
+    "revert": "Bestand terugzetten",
+    "close": "Sluiten",
+    "closeOthers": "Andere sluiten",
+    "closeToRight": "Tabbladen rechts sluiten",
+    "closeSaved": "Opgeslagen tabbladen sluiten",
+    "closeAll": "Alles sluiten",
+    "copyPath": "Pad kopiëren",
+    "reveal": "Tonen in bestandsbeheer",
+    "openRecent": "Recent bestand openen",
+    "openScratchpad": "Kladblok openen",
+    "removeRecent": "Verwijderen uit recent geopend",
+    "pinRecent": "Recent item vastmaken",
+    "clearRecent": "Recent geopend wissen"
   },
   "edit": {
     "undo": "Ongedaan maken",
@@ -61,5 +84,15 @@
     "copy": "Kopiëren",
     "paste": "Plakken",
     "selectAll": "Alles selecteren"
+  },
+  "navigate": {
+    "nextTab": "Volgend tabblad",
+    "previousTab": "Vorig tabblad",
+    "switchTab": "Naar vorig tabblad schakelen"
+  },
+  "editor": {
+    "changeLineEnding": "Regeleindereeks wijzigen…",
+    "changeEncoding": "Bestandscodering wijzigen…",
+    "changeLanguageMode": "Taalmodus wijzigen…"
   }
 }

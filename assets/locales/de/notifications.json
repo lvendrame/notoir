@@ -4,5 +4,20 @@
   "keybindingsInvalid": "{{count}} Tastenkürzel aus keybindings.toml konnten nicht verwendet werden.",
   "stateDbCorrupt": "Notoir konnte die gespeicherte Sitzung nicht lesen und hat neu begonnen. Ihre Dateien und ungespeicherte Wiederherstellungsdaten sind nicht betroffen.",
   "stateDbNewer": "Die gespeicherten Sitzungsdaten stammen von einer neueren Notoir-Version und werden nicht aktualisiert.",
-  "settingsWriteFailed": "Einstellungen konnten nicht gespeichert werden."
+  "settingsWriteFailed": "Einstellungen konnten nicht gespeichert werden.",
+  "fileMissing": "„{{name}}“ existiert nicht mehr.",
+  "removeFromRecent": "Aus zuletzt verwendeten entfernen",
+  "openDenied": "„{{name}}“ konnte nicht geöffnet werden. Zugriff verweigert.",
+  "openTooLarge": "„{{name}}“ ist zu groß zum Öffnen.",
+  "openFailed": "„{{name}}“ konnte nicht geöffnet werden.",
+  "lossyDecode": "„{{name}}“ enthält Zeichen, die nicht decodiert werden konnten. Die Datei wurde schreibgeschützt geöffnet; öffnen Sie sie über die Statusleiste mit einer anderen Codierung.",
+  "mixedLineEndings": "„{{name}}“ enthält gemischte Zeilenenden. Beim Speichern wird das in der Statusleiste angezeigte verwendet.",
+  "saveAsOpenDirty": "„{{name}}“ ist mit ungespeicherten Änderungen geöffnet. Speichern oder schließen Sie die Datei zuerst.",
+  "saveDenied": "„{{name}}“ konnte nicht gespeichert werden. Zugriff verweigert.",
+  "saveDiskFull": "„{{name}}“ konnte nicht gespeichert werden. Der Datenträger ist voll.",
+  "saveUnmappable": "„{{name}}“ konnte nicht gespeichert werden: Einige Zeichen lassen sich in der Codierung nicht darstellen. Verwenden Sie „Mit Codierung speichern“.",
+  "saveFailed": "„{{name}}“ konnte nicht gespeichert werden.",
+  "scratchUnavailable": "Notizzettel sind nicht verfügbar, weil die Notoir-Daten nicht geöffnet werden konnten.",
+  "scratchWriteFailed": "Ein Notizzettel konnte nicht auf den Datenträger geschrieben werden.",
+  "workspaceNotYet": "Ordner können noch nicht als Arbeitsbereiche geöffnet werden."
 }

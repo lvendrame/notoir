@@ -9,6 +9,46 @@
     "language": "Anzeigesprache auswählen",
     "filter": "Zum Filtern tippen",
     "noResults": "Keine passenden Ergebnisse",
-    "themeAuto": "Automatisch (System folgen)"
+    "themeAuto": "Automatisch (System folgen)",
+    "lineEnding": "Zeilenendesequenz auswählen",
+    "encodingAction": "Aktion auswählen",
+    "encoding": "Codierung auswählen",
+    "languageMode": "Sprachmodus auswählen",
+    "reopenWithEncoding": "Mit Codierung erneut öffnen",
+    "saveWithEncoding": "Mit Codierung speichern"
+  },
+  "open": {
+    "title": "Datei öffnen"
+  },
+  "saveAs": {
+    "title": "Speichern unter"
+  },
+  "unsaved": {
+    "title": "Möchten Sie die Änderungen an „{{name}}“ speichern?",
+    "titleMany": "Möchten Sie die Änderungen an {{count}} Dokumenten speichern?",
+    "body": "Ihre Änderungen gehen verloren, wenn Sie sie nicht speichern.",
+    "saveAll": "Alle speichern"
+  },
+  "scratchpad": {
+    "title": "„{{name}}“ behalten?",
+    "body": "Behaltene Notizzettel bleiben unter Datei → Zuletzt geöffnet → Notizzettel verfügbar.",
+    "keep": "Notizzettel behalten",
+    "saveAs": "Speichern unter…",
+    "delete": "Löschen"
+  },
+  "conflict": {
+    "title": "„{{name}}“ wurde seit dem Öffnen auf dem Datenträger geändert.",
+    "body": "Mit Ihrer Version überschreiben?",
+    "overwrite": "Überschreiben"
+  },
+  "revert": {
+    "title": "Ungespeicherte Änderungen an „{{name}}“ verwerfen?",
+    "body": "Die Datei wird neu vom Datenträger geladen. Sie können dies rückgängig machen.",
+    "confirm": "Wiederherstellen"
+  },
+  "binary": {
+    "title": "„{{name}}“ scheint eine Binärdatei zu sein.",
+    "body": "Trotzdem schreibgeschützt öffnen?",
+    "openAnyway": "Trotzdem öffnen"
   }
 }

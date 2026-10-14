@@ -12,6 +12,8 @@ pub mod chrome;
 pub mod empty_state;
 pub mod overlays;
 pub mod panels;
+pub mod prompts;
+pub mod tabs;
 
 /// Theme + icon cache passed to every rendering function.
 pub struct Kit<'a> {

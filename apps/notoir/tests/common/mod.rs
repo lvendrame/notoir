@@ -27,6 +27,10 @@ pub fn options(home: &std::path::Path) -> StartOptions {
     opts.platform = Platform::Linux;
     opts.os_locale = Some("en-US".into());
     opts.wait_for_fonts = true;
+    // Never open real OS dialogs from tests.
+    opts.dialogs = Some(std::sync::Arc::new(
+        notoir::files::ScriptedDialogs::default(),
+    ));
     opts
 }
 
@@ -70,6 +74,8 @@ pub fn run(app: &mut TestApp, id: &'static str, args: serde_json::Value) {
 
 /// Stops the app (keeping its home) so another can start on the same data.
 pub fn restart(app: TestApp, configure: impl FnOnce(&mut StartOptions)) -> TestApp {
+    let mut app = app;
+    app.harness.state_mut().core.flush_scratchpads(true);
     app.harness.state().core.flush_io();
     let TestApp {
         harness,
@@ -79,4 +85,13 @@ pub fn restart(app: TestApp, configure: impl FnOnce(&mut StartOptions)) -> TestA
     drop(harness);
     drop(_serial);
     start_in(home, configure)
+}
+
+/// Lets background IO finish and its results reach the UI (a few rounds, since
+/// results can start more IO).
+pub fn settle(app: &mut TestApp) {
+    for _ in 0..5 {
+        app.harness.state().core.flush_io();
+        app.harness.run_steps(2);
+    }
 }

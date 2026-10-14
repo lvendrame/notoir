@@ -34,7 +34,11 @@
     "zoomReset": "Reimposta zoom",
     "toggleLineNumbers": "Mostra/nascondi numeri di riga",
     "toggleWhitespace": "Mostra/nascondi spazi",
-    "toggleCurrentLineHighlight": "Attiva/disattiva evidenziazione riga corrente"
+    "toggleCurrentLineHighlight": "Attiva/disattiva evidenziazione riga corrente",
+    "togglePin": "Aggiungi o rimuovi puntina dalla scheda",
+    "duplicate": "Duplica vista",
+    "activate": "Attiva scheda",
+    "reopenClosedTab": "Riapri scheda chiusa"
   },
   "preferences": {
     "changeTheme": "Cambia tema…",
@@ -52,7 +56,26 @@
     "clearNotifications": "Cancella tutte le notifiche"
   },
   "file": {
-    "newUntitled": "Nuovo file"
+    "newUntitled": "Nuovo file",
+    "open": "Apri file…",
+    "newScratchpad": "Nuovo appunto",
+    "newWindow": "Nuova finestra",
+    "save": "Salva",
+    "saveAs": "Salva con nome…",
+    "saveAll": "Salva tutto",
+    "revert": "Ripristina file",
+    "close": "Chiudi",
+    "closeOthers": "Chiudi altri",
+    "closeToRight": "Chiudi schede a destra",
+    "closeSaved": "Chiudi schede salvate",
+    "closeAll": "Chiudi tutto",
+    "copyPath": "Copia percorso",
+    "reveal": "Mostra nel file manager",
+    "openRecent": "Apri file recente",
+    "openScratchpad": "Apri appunto",
+    "removeRecent": "Rimuovi dagli elementi recenti",
+    "pinRecent": "Fissa elemento recente",
+    "clearRecent": "Cancella elementi recenti"
   },
   "edit": {
     "undo": "Annulla",
@@ -61,5 +84,15 @@
     "copy": "Copia",
     "paste": "Incolla",
     "selectAll": "Seleziona tutto"
+  },
+  "navigate": {
+    "nextTab": "Scheda successiva",
+    "previousTab": "Scheda precedente",
+    "switchTab": "Passa alla scheda precedente"
+  },
+  "editor": {
+    "changeLineEnding": "Cambia sequenza di fine riga…",
+    "changeEncoding": "Cambia codifica del file…",
+    "changeLanguageMode": "Cambia modalità linguaggio…"
   }
 }

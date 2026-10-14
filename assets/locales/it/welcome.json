@@ -5,5 +5,8 @@
   "openWorkspace": "Apri area di lavoro…",
   "recent": "Recenti",
   "noRecent": "Nessun file o area di lavoro recente",
-  "commandPalette": "Tavolozza comandi"
+  "commandPalette": "Tavolozza comandi",
+  "pin": "Fissa",
+  "unpin": "Sblocca",
+  "removeRecent": "Rimuovi dall'elenco"
 }
