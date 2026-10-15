@@ -247,7 +247,10 @@ fn message_box(ui: &mut egui::Ui, kit: &mut Kit, core: &mut AppCore, actions: &m
             .hint_text(hint.clone())
             .font(font.clone())
             .desired_rows(3)
-            .desired_width(ui.available_width()),
+            // `desired_width` excludes the edit's margin: ask for exactly
+            // the space there is, or the resizable sidebar grows each frame.
+            .margin(egui::Margin::symmetric(4, 2))
+            .desired_width(ui.available_width() - 8.0),
     );
     let label = t!("git:scm.message");
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::TextEdit, true, &label));
@@ -272,7 +275,8 @@ fn mod_enter(core: &AppCore) -> String {
 fn commit_button(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Actions) {
     let enabled = !core.git_busy();
     ui.horizontal(|ui| {
-        let width = (ui.available_width() - 32.0).max(80.0);
+        // The dropdown (26) and the spacing before it share the row.
+        let width = (ui.available_width() - 26.0 - ui.spacing().item_spacing.x).max(80.0);
         let text = RichText::new(t!("git:scm.commit")).color(kit.color(Tok::BgApp));
         let button = egui::Button::new(text)
             .fill(kit.color(Tok::Accent))

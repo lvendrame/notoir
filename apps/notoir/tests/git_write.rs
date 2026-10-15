@@ -1292,3 +1292,30 @@ fn auto_fetch_runs_only_when_enabled() {
         .is_empty()));
     assert_eq!(fake.calls.lock().unwrap().as_slice(), ["fetch"]);
 }
+
+#[test]
+fn source_control_panel_keeps_its_width() {
+    let (_d, root, _r) = repo();
+    std::fs::write(root.join("notes.md"), "one\ntwo\n").unwrap();
+    let mut app = open(&root, vec![]);
+    common::settle(&mut app);
+    let before = app.harness.state().core.panels.primary.size;
+    assert_eq!(
+        before,
+        notoir_core::panels::PanelArea::Primary.default_size()
+    );
+    // Repaints driven by the pointer moving over the window.
+    for i in 0..40 {
+        app.harness.hover_at(egui::Pos2::new(
+            600.0 + (i % 7) as f32,
+            300.0 + (i % 5) as f32,
+        ));
+        app.harness.run_steps(1);
+    }
+    common::settle(&mut app);
+    let after = app.harness.state().core.panels.primary.size;
+    assert!(
+        (after - before).abs() < 0.5,
+        "the sidebar grew from {before} to {after}"
+    );
+}
