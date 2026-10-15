@@ -1,6 +1,6 @@
 # 36 — Protected-File Saving
 
-**Status:** Not started — M17a
+**Status:** Done — Save as Administrator… offered on permission-denied saves of existing files; `notoir-platform::elevation` (osascript / pkexec / UAC) writes through a temp file and one elevated copy-and-rename that keeps owner and mode; same conflict check and encoding as the save pipeline (`fs_io::save_with`); cancel and failure keep the document dirty with its recovery snapshot and offer Save As (M17a). Toggle Read-Only unlocks files opened read-only by permissions so they can be edited
 
 ## Purpose
 

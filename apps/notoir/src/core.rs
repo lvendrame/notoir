@@ -95,6 +95,8 @@ pub struct StartOptions {
     pub wait_for_fonts: bool,
     /// File dialogs (native unless a test scripts them).
     pub dialogs: Option<std::sync::Arc<dyn crate::files::Dialogs>>,
+    /// Administrator authorization (native unless a test scripts it).
+    pub elevation: Option<std::sync::Arc<dyn notoir_platform::elevation::Elevation>>,
     /// Files from the command line, with optional `--goto` line/column.
     pub open_paths: Vec<(std::path::PathBuf, Option<(usize, usize)>)>,
     /// Restore the last session (`workbench.startup = restoreSession`, no
@@ -114,6 +116,7 @@ impl StartOptions {
             theme_override: None,
             wait_for_fonts: false,
             dialogs: None,
+            elevation: None,
             open_paths: Vec::new(),
             restore_session: false,
             first_run: false,
@@ -178,6 +181,7 @@ pub struct AppCore {
     pub nav: crate::navigation::NavState,
     pub search: crate::search::SearchState,
     pub compare: crate::compare::CompareState,
+    pub elevation: std::sync::Arc<dyn notoir_platform::elevation::Elevation>,
     /// Selection → Column Selection Mode.
     pub column_mode: bool,
     /// Expand Selection steps per view (before, after), for Shrink.
@@ -313,6 +317,9 @@ impl AppCore {
             nav: Default::default(),
             search: Default::default(),
             compare: Default::default(),
+            elevation: opts.elevation.clone().unwrap_or_else(|| {
+                std::sync::Arc::new(notoir_platform::elevation::NativeElevation)
+            }),
             column_mode: false,
             expand_history: Default::default(),
             breadcrumbs_focus: false,
@@ -554,6 +561,15 @@ impl AppCore {
         {
             let doc = self.workbench.document(view.document_id);
             let language = doc.map_or("plaintext", |d| d.language.as_str());
+            let path = doc.and_then(|d| d.path());
+            c.set_bool("hasFilePath", path.is_some()).set_bool(
+                "fileInWorkspace",
+                path.is_some_and(|p| {
+                    self.workspace
+                        .as_ref()
+                        .is_some_and(|w| w.relative(p).is_some())
+                }),
+            );
             c.set_bool("hasActiveEditor", true)
                 .set_str("languageId", language)
                 .set_bool("readOnly", doc.is_some_and(|d| d.is_read_only()))

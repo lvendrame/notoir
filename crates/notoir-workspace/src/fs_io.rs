@@ -179,6 +179,12 @@ pub enum SaveError {
     DiskFull,
     #[error("folder not found")]
     NotFound,
+    /// Administrator save: the user cancelled authorization.
+    #[error("authorization cancelled")]
+    ElevationCancelled,
+    /// Administrator save: authorized, but the write failed.
+    #[error("administrator save failed: {0}")]
+    Elevation(String),
     #[error(transparent)]
     Io(io::Error),
 }
@@ -204,6 +210,19 @@ pub struct Saved {
 
 /// Encodes and writes atomically after the conflict check.
 pub fn save(req: &SaveRequest) -> Result<Saved, SaveError> {
+    let opts = WriteOptions {
+        atomic: req.atomic,
+        sync: true,
+    };
+    save_with(req, |path, bytes| Ok(atomic::write(path, bytes, opts)?))
+}
+
+/// [`save`] with another final write step (administrator save, spec 36):
+/// same encoding and conflict check.
+pub fn save_with(
+    req: &SaveRequest,
+    write: impl FnOnce(&Path, &[u8]) -> Result<WriteStrategy, SaveError>,
+) -> Result<Saved, SaveError> {
     let text = line_ending::denormalize(&req.text, req.line_ending);
     let bytes = encoding::encode(&text, req.encoding)
         .map_err(|e| SaveError::Unmappable(e.encoding.to_owned()))?;
@@ -214,14 +233,7 @@ pub fn save(req: &SaveRequest) -> Result<Saved, SaveError> {
             Ok(_) | Err(_) => {}
         }
     }
-    let strategy = atomic::write(
-        &req.path,
-        &bytes,
-        WriteOptions {
-            atomic: req.atomic,
-            sync: true,
-        },
-    )?;
+    let strategy = write(&req.path, &bytes)?;
     Ok(Saved {
         hash: atomic::content_hash(&bytes),
         strategy,

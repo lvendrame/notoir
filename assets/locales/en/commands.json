@@ -107,7 +107,8 @@
     "reloadFromDisk": "Reload from Disk",
     "keepMine": "Keep My Version",
     "useDiskVersion": "Use Disk Version",
-    "autoSave": "Toggle Auto Save"
+    "autoSave": "Toggle Auto Save",
+    "saveAsAdmin": "Save as Administrator…"
   },
   "edit": {
     "undo": "Undo",
@@ -161,7 +162,9 @@
     "changeIndentation": "Change Indentation",
     "changeTabSize": "Change Tab Size",
     "formatDocument": "Format Document",
-    "copyLineNumber": "Copy Line Number"
+    "copyLineNumber": "Copy Line Number",
+    "copyFullReference": "Copy Full Reference",
+    "copyRelativeReference": "Copy Relative Reference"
   },
   "workspace": {
     "open": "Open Workspace…",

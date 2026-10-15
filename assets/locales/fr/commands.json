@@ -107,7 +107,8 @@
     "reloadFromDisk": "Recharger depuis le disque",
     "keepMine": "Conserver ma version",
     "useDiskVersion": "Utiliser la version du disque",
-    "autoSave": "Activer/désactiver l'enregistrement automatique"
+    "autoSave": "Activer/désactiver l'enregistrement automatique",
+    "saveAsAdmin": "Enregistrer en tant qu’administrateur…"
   },
   "edit": {
     "undo": "Annuler",
@@ -161,7 +162,9 @@
     "changeIndentation": "Modifier l'indentation",
     "changeTabSize": "Modifier la taille de tabulation",
     "formatDocument": "Mettre en forme le document",
-    "copyLineNumber": "Copier le numéro de ligne"
+    "copyLineNumber": "Copier le numéro de ligne",
+    "copyFullReference": "Copier la référence complète",
+    "copyRelativeReference": "Copier la référence relative"
   },
   "workspace": {
     "open": "Ouvrir un espace de travail…",

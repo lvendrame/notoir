@@ -777,6 +777,19 @@ impl AppCore {
         self.start_save(doc, path, true, None, false);
     }
 
+    /// Save as Administrator… (spec 36): the same save, with the final
+    /// write done after administrator authorization.
+    pub fn save_as_admin(&mut self, doc: DocumentId) {
+        let Some(d) = self.workbench.document(doc) else {
+            return;
+        };
+        if let DocumentOrigin::File { path, .. } = &d.origin {
+            let path = path.clone();
+            let expected = d.saved_content_hash;
+            self.start_save_with(doc, path, false, expected, false, true);
+        }
+    }
+
     /// Snapshots the document and writes it on the IO queue.
     pub fn start_save(
         &mut self,
@@ -785,6 +798,18 @@ impl AppCore {
         save_as: bool,
         expected_hash: Option<u64>,
         overwrite: bool,
+    ) {
+        self.start_save_with(doc, path, save_as, expected_hash, overwrite, false);
+    }
+
+    fn start_save_with(
+        &mut self,
+        doc: DocumentId,
+        path: PathBuf,
+        save_as: bool,
+        expected_hash: Option<u64>,
+        overwrite: bool,
+        elevated: bool,
     ) {
         self.apply_save_transforms(doc);
         let Some(d) = self.workbench.document(doc) else {
@@ -795,6 +820,7 @@ impl AppCore {
         let encoding = d.encoding;
         let line_ending = d.line_ending;
         let atomic = self.settings.bool("files.atomicSave", None);
+        let elevation = elevated.then(|| self.elevation.clone());
         self.saving.insert(doc);
         self.io.submit(move || {
             let req = SaveRequest {
@@ -806,7 +832,17 @@ impl AppCore {
                 overwrite,
                 atomic,
             };
-            let result = fs_io::save(&req);
+            let result = match elevation {
+                Some(el) => fs_io::save_with(&req, |p, bytes| {
+                    use notoir_platform::elevation::ElevationError;
+                    match el.write_file(p, bytes) {
+                        Ok(()) => Ok(notoir_storage::atomic::WriteStrategy::Atomic),
+                        Err(ElevationError::Cancelled) => Err(SaveError::ElevationCancelled),
+                        Err(e) => Err(SaveError::Elevation(e.to_string())),
+                    }
+                }),
+                None => fs_io::save(&req),
+            };
             Some(IoResult::Saved(Box::new(SaveOutcome {
                 doc,
                 state,
@@ -921,30 +957,57 @@ impl AppCore {
             Err(SaveError::Conflict) => {
                 self.files.prompts.push_back(Prompt::SaveConflict { doc });
             }
+            Err(SaveError::ElevationCancelled) => {
+                // Edits and the recovery snapshot stay; Save As stays offered.
+                self.files.pending.retain(|p| !p.waiting.contains(&doc));
+                let n = Notification::new(
+                    Severity::Info,
+                    Translatable::new("notifications:adminSaveCancelled")
+                        .arg("name", file_name(&path)),
+                )
+                .dedupe(format!("save:{}", doc.0))
+                .action(
+                    "commands:file.saveAs",
+                    CommandInvocation::new("file.saveAs", InvocationSource::Internal)
+                        .with_args(json!({ "doc": doc.0 })),
+                );
+                self.notify(n);
+            }
             Err(e) => {
                 self.files.pending.retain(|p| !p.waiting.contains(&doc));
                 let key = match e {
+                    SaveError::Elevation(_) => "notifications:adminSaveFailed",
                     SaveError::PermissionDenied => "notifications:saveDenied",
                     SaveError::DiskFull => "notifications:saveDiskFull",
                     SaveError::Unmappable(_) => "notifications:saveUnmappable",
                     _ => "notifications:saveFailed",
                 };
                 let args = json!({ "doc": doc.0 });
-                let n = Notification::new(
+                let mut n = Notification::new(
                     Severity::Error,
                     Translatable::new(key).arg("name", file_name(&path)),
                 )
                 .detail(error_detail(&e, &path))
-                .dedupe(format!("save:{}", doc.0))
-                .action(
-                    "commands:file.saveAs",
-                    CommandInvocation::new("file.saveAs", InvocationSource::Internal)
-                        .with_args(args.clone()),
-                )
-                .action(
-                    "common:retry",
-                    CommandInvocation::new("file.save", InvocationSource::Internal).with_args(args),
-                );
+                .dedupe(format!("save:{}", doc.0));
+                // Only permission failures of an existing file can elevate.
+                if matches!(e, SaveError::PermissionDenied) && !save_as {
+                    n = n.action(
+                        "commands:file.saveAsAdmin",
+                        CommandInvocation::new("file.saveAsAdmin", InvocationSource::Internal)
+                            .with_args(args.clone()),
+                    );
+                }
+                let n = n
+                    .action(
+                        "commands:file.saveAs",
+                        CommandInvocation::new("file.saveAs", InvocationSource::Internal)
+                            .with_args(args.clone()),
+                    )
+                    .action(
+                        "common:retry",
+                        CommandInvocation::new("file.save", InvocationSource::Internal)
+                            .with_args(args),
+                    );
                 self.notify(n);
             }
         }

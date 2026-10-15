@@ -91,6 +91,20 @@ pub(super) fn specs(out: &mut Specs) {
         toggle_relative_line_numbers,
     ));
     out.push(CommandSpec::new("editor.copyLineNumber", Category::Edit, copy_line_number).hidden());
+    out.push(
+        CommandSpec::new("editor.copyFullReference", Category::Edit, |c, _| {
+            copy_reference(c, false)
+        })
+        .when("hasFilePath")
+        .expect("valid"),
+    );
+    out.push(
+        CommandSpec::new("editor.copyRelativeReference", Category::Edit, |c, _| {
+            copy_reference(c, true)
+        })
+        .when("hasFilePath && fileInWorkspace")
+        .expect("valid"),
+    );
     out.push(CommandSpec::new(
         "view.toggleWhitespace",
         Category::View,
@@ -286,6 +300,39 @@ fn copy_line_number(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutco
         }
         None => super::bad_args(inv),
     }
+}
+
+/// `path:45` or `path:45-56` for the primary selection's lines (spec 37).
+fn line_reference(core: &AppCore, relative: bool) -> Option<String> {
+    let v = core.workbench.view(active(core)?)?;
+    let d = core.workbench.document(v.document_id)?;
+    let path = d.path()?;
+    let shown = if relative {
+        core.workspace.as_ref()?.relative(path)?
+    } else {
+        path.display().to_string()
+    };
+    let rope = d.buffer.rope();
+    let r = v.selection.primary();
+    let (from, to) = (r.from().min(rope.len_chars()), r.to().min(rope.len_chars()));
+    let first = rope.char_to_line(from);
+    // A selection ending at the start of a line does not include that line.
+    let mut last = rope.char_to_line(to);
+    if to > from && last > first && rope.line_to_char(last) == to {
+        last -= 1;
+    }
+    Some(if first == last {
+        format!("{shown}:{}", first + 1)
+    } else {
+        format!("{shown}:{}-{}", first + 1, last + 1)
+    })
+}
+
+fn copy_reference(core: &mut AppCore, relative: bool) -> CommandOutcome {
+    if let Some(r) = line_reference(core, relative) {
+        core.effects.push(Effect::CopyText(r));
+    }
+    CommandOutcome::Done
 }
 
 fn toggle_whitespace(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {

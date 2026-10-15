@@ -38,5 +38,7 @@
   "undo": "Rückgängig",
   "compareNoSavedVersion": "Dieses Dokument hat keine gespeicherte Version zum Vergleichen.",
   "compareNoClipboard": "Die Zwischenablage enthält keinen Text zum Vergleichen.",
-  "compareLoadFailed": "Die Datei zum Vergleichen konnte nicht geöffnet werden."
+  "compareLoadFailed": "Die Datei zum Vergleichen konnte nicht geöffnet werden.",
+  "adminSaveCancelled": "{{name}} wurde nicht gespeichert: Autorisierung abgebrochen. Ihre Änderungen bleiben erhalten.",
+  "adminSaveFailed": "{{name}} konnte nicht als Administrator gespeichert werden"
 }

@@ -38,5 +38,7 @@
   "undo": "실행 취소",
   "compareNoSavedVersion": "이 문서에는 비교할 저장된 버전이 없습니다.",
   "compareNoClipboard": "클립보드에 비교할 텍스트가 없습니다.",
-  "compareLoadFailed": "비교할 파일을 열 수 없습니다."
+  "compareLoadFailed": "비교할 파일을 열 수 없습니다.",
+  "adminSaveCancelled": "{{name}}이(가) 저장되지 않음: 인증이 취소되었습니다. 변경 내용은 유지됩니다.",
+  "adminSaveFailed": "{{name}}을(를) 관리자 권한으로 저장할 수 없음"
 }

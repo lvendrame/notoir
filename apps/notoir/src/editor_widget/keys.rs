@@ -375,6 +375,15 @@ pub(super) fn pointer(
     let Some(pointer) = response.interact_pointer_pos() else {
         return;
     };
+    // Only the primary button places the caret: a right-click opens the
+    // context menu over the selection as it is (spec 37).
+    let primary = ui.input(|i| {
+        i.pointer.button_down(egui::PointerButton::Primary)
+            || i.pointer.button_released(egui::PointerButton::Primary)
+    });
+    if !primary {
+        return;
+    }
     // Bookmark lane, fold controls and `⋯` chips act on click only.
     let lane_cmd = if m.bookmark_lane.contains(pointer) {
         Some("bookmarks.toggle")

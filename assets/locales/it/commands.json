@@ -107,7 +107,8 @@
     "reloadFromDisk": "Ricarica dal disco",
     "keepMine": "Mantieni la mia versione",
     "useDiskVersion": "Usa la versione su disco",
-    "autoSave": "Attiva/disattiva salvataggio automatico"
+    "autoSave": "Attiva/disattiva salvataggio automatico",
+    "saveAsAdmin": "Salva come amministratore…"
   },
   "edit": {
     "undo": "Annulla",
@@ -161,7 +162,9 @@
     "changeIndentation": "Cambia rientro",
     "changeTabSize": "Cambia dimensione tabulazione",
     "formatDocument": "Formatta documento",
-    "copyLineNumber": "Copia numero di riga"
+    "copyLineNumber": "Copia numero di riga",
+    "copyFullReference": "Copia riferimento completo",
+    "copyRelativeReference": "Copia riferimento relativo"
   },
   "workspace": {
     "open": "Apri area di lavoro…",

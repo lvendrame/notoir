@@ -38,5 +38,7 @@
   "undo": "Desfazer",
   "compareNoSavedVersion": "Este documento não tem versão salva para comparar.",
   "compareNoClipboard": "A área de transferência não tem texto para comparar.",
-  "compareLoadFailed": "Não foi possível abrir o arquivo para comparar."
+  "compareLoadFailed": "Não foi possível abrir o arquivo para comparar.",
+  "adminSaveCancelled": "{{name}} não foi salvo: a autorização foi cancelada. Suas alterações foram mantidas.",
+  "adminSaveFailed": "Não foi possível salvar {{name}} como administrador"
 }

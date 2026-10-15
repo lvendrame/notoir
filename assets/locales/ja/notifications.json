@@ -38,5 +38,7 @@
   "undo": "元に戻す",
   "compareNoSavedVersion": "このドキュメントには比較できる保存済みバージョンがありません。",
   "compareNoClipboard": "クリップボードに比較できるテキストがありません。",
-  "compareLoadFailed": "比較するファイルを開けませんでした。"
+  "compareLoadFailed": "比較するファイルを開けませんでした。",
+  "adminSaveCancelled": "{{name}} は保存されませんでした: 認証がキャンセルされました。変更は保持されています。",
+  "adminSaveFailed": "{{name}} を管理者として保存できませんでした"
 }

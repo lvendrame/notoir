@@ -107,7 +107,8 @@
     "reloadFromDisk": "Opnieuw laden van schijf",
     "keepMine": "Mijn versie behouden",
     "useDiskVersion": "Versie op schijf gebruiken",
-    "autoSave": "Automatisch opslaan in-/uitschakelen"
+    "autoSave": "Automatisch opslaan in-/uitschakelen",
+    "saveAsAdmin": "Opslaan als beheerder…"
   },
   "edit": {
     "undo": "Ongedaan maken",
@@ -161,7 +162,9 @@
     "changeIndentation": "Inspringing wijzigen",
     "changeTabSize": "Tabgrootte wijzigen",
     "formatDocument": "Document opmaken",
-    "copyLineNumber": "Regelnummer kopiëren"
+    "copyLineNumber": "Regelnummer kopiëren",
+    "copyFullReference": "Volledige verwijzing kopiëren",
+    "copyRelativeReference": "Relatieve verwijzing kopiëren"
   },
   "workspace": {
     "open": "Werkruimte openen…",

@@ -38,5 +38,7 @@
   "undo": "Undo",
   "compareNoSavedVersion": "This document has no saved version to compare with.",
   "compareNoClipboard": "The clipboard has no text to compare.",
-  "compareLoadFailed": "Could not open the file to compare."
+  "compareLoadFailed": "Could not open the file to compare.",
+  "adminSaveCancelled": "{{name}} was not saved: authorization was cancelled. Your changes are kept.",
+  "adminSaveFailed": "Could not save {{name}} as administrator"
 }

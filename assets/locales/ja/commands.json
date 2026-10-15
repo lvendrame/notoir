@@ -107,7 +107,8 @@
     "reloadFromDisk": "ディスクから再読み込み",
     "keepMine": "自分のバージョンを保持",
     "useDiskVersion": "ディスクのバージョンを使用",
-    "autoSave": "自動保存の切り替え"
+    "autoSave": "自動保存の切り替え",
+    "saveAsAdmin": "管理者として保存…"
   },
   "edit": {
     "undo": "元に戻す",
@@ -161,7 +162,9 @@
     "changeIndentation": "インデントの変更",
     "changeTabSize": "タブ サイズの変更",
     "formatDocument": "ドキュメントのフォーマット",
-    "copyLineNumber": "行番号をコピー"
+    "copyLineNumber": "行番号をコピー",
+    "copyFullReference": "完全な参照をコピー",
+    "copyRelativeReference": "相対参照をコピー"
   },
   "workspace": {
     "open": "ワークスペースを開く…",

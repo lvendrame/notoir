@@ -41,6 +41,7 @@ pub(super) fn specs(out: &mut Specs) {
             .when(editor)
             .expect("valid"),
     );
+    out.push(CommandSpec::new("file.saveAsAdmin", Category::File, save_as_admin).hidden());
     out.push(CommandSpec::new("file.saveAll", Category::File, save_all).keys([k("Mod+Alt+S")]));
     out.push(
         CommandSpec::new("file.revert", Category::File, revert)
@@ -195,6 +196,13 @@ fn save(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
 fn save_as(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     if let Some(doc) = doc_of(core, inv) {
         core.save_as(doc);
+    }
+    CommandOutcome::Done
+}
+
+fn save_as_admin(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    if let Some(doc) = doc_of(core, inv) {
+        core.save_as_admin(doc);
     }
     CommandOutcome::Done
 }

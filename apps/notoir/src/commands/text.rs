@@ -211,7 +211,9 @@ fn toggle_read_only(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome
     {
         doc.read_only = match doc.read_only {
             ReadOnly::No => ReadOnly::User,
-            ReadOnly::User => ReadOnly::No,
+            // A protected file can be unlocked for editing; saving it then
+            // offers Save as Administrator… (spec 36).
+            ReadOnly::User | ReadOnly::FileSystem => ReadOnly::No,
             other => other,
         };
     }

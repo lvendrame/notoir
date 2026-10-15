@@ -107,7 +107,8 @@
     "reloadFromDisk": "Wczytaj ponownie z dysku",
     "keepMine": "Zachowaj moją wersję",
     "useDiskVersion": "Użyj wersji z dysku",
-    "autoSave": "Przełącz autozapis"
+    "autoSave": "Przełącz autozapis",
+    "saveAsAdmin": "Zapisz jako administrator…"
   },
   "edit": {
     "undo": "Cofnij",
@@ -161,7 +162,9 @@
     "changeIndentation": "Zmień wcięcie",
     "changeTabSize": "Zmień szerokość tabulacji",
     "formatDocument": "Formatuj dokument",
-    "copyLineNumber": "Kopiuj numer wiersza"
+    "copyLineNumber": "Kopiuj numer wiersza",
+    "copyFullReference": "Kopiuj pełne odwołanie",
+    "copyRelativeReference": "Kopiuj odwołanie względne"
   },
   "workspace": {
     "open": "Otwórz obszar roboczy…",

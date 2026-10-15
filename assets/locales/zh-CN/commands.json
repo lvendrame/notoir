@@ -107,7 +107,8 @@
     "reloadFromDisk": "从磁盘重新加载",
     "keepMine": "保留我的版本",
     "useDiskVersion": "使用磁盘版本",
-    "autoSave": "切换自动保存"
+    "autoSave": "切换自动保存",
+    "saveAsAdmin": "以管理员身份保存…"
   },
   "edit": {
     "undo": "撤销",
@@ -161,7 +162,9 @@
     "changeIndentation": "更改缩进",
     "changeTabSize": "更改制表符大小",
     "formatDocument": "格式化文档",
-    "copyLineNumber": "复制行号"
+    "copyLineNumber": "复制行号",
+    "copyFullReference": "复制完整引用",
+    "copyRelativeReference": "复制相对引用"
   },
   "workspace": {
     "open": "打开工作区…",

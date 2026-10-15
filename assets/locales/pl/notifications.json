@@ -38,5 +38,7 @@
   "undo": "Cofnij",
   "compareNoSavedVersion": "Ten dokument nie ma zapisanej wersji do porównania.",
   "compareNoClipboard": "Schowek nie zawiera tekstu do porównania.",
-  "compareLoadFailed": "Nie można otworzyć pliku do porównania."
+  "compareLoadFailed": "Nie można otworzyć pliku do porównania.",
+  "adminSaveCancelled": "Nie zapisano {{name}}: anulowano autoryzację. Zmiany zostały zachowane.",
+  "adminSaveFailed": "Nie można zapisać {{name}} jako administrator"
 }

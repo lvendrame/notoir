@@ -107,7 +107,8 @@
     "reloadFromDisk": "Diskten Yeniden Yükle",
     "keepMine": "Benim Sürümümü Koru",
     "useDiskVersion": "Diskteki Sürümü Kullan",
-    "autoSave": "Otomatik Kaydetmeyi Aç/Kapat"
+    "autoSave": "Otomatik Kaydetmeyi Aç/Kapat",
+    "saveAsAdmin": "Yönetici Olarak Kaydet…"
   },
   "edit": {
     "undo": "Geri Al",
@@ -161,7 +162,9 @@
     "changeIndentation": "Girintiyi Değiştir",
     "changeTabSize": "Sekme Boyutunu Değiştir",
     "formatDocument": "Belgeyi Biçimlendir",
-    "copyLineNumber": "Satır Numarasını Kopyala"
+    "copyLineNumber": "Satır Numarasını Kopyala",
+    "copyFullReference": "Tam Başvuruyu Kopyala",
+    "copyRelativeReference": "Göreli Başvuruyu Kopyala"
   },
   "workspace": {
     "open": "Çalışma Alanı Aç…",

@@ -38,5 +38,7 @@
   "undo": "Annulla",
   "compareNoSavedVersion": "Questo documento non ha una versione salvata da confrontare.",
   "compareNoClipboard": "Gli appunti non contengono testo da confrontare.",
-  "compareLoadFailed": "Impossibile aprire il file da confrontare."
+  "compareLoadFailed": "Impossibile aprire il file da confrontare.",
+  "adminSaveCancelled": "{{name}} non è stato salvato: autorizzazione annullata. Le modifiche sono conservate.",
+  "adminSaveFailed": "Impossibile salvare {{name}} come amministratore"
 }

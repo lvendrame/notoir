@@ -38,5 +38,7 @@
   "undo": "撤消",
   "compareNoSavedVersion": "此文档没有可比较的已保存版本。",
   "compareNoClipboard": "剪贴板中没有可比较的文本。",
-  "compareLoadFailed": "无法打开要比较的文件。"
+  "compareLoadFailed": "无法打开要比较的文件。",
+  "adminSaveCancelled": "未保存 {{name}}:已取消授权。您的更改已保留。",
+  "adminSaveFailed": "无法以管理员身份保存 {{name}}"
 }

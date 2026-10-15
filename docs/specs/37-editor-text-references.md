@@ -1,6 +1,6 @@
 # 37 — Editor Text References
 
-**Status:** Not started — M17a
+**Status:** Done — right-click never moves the caret; Copy Full / Relative Reference in the editor context menu (`editor.copyFullReference`, `editor.copyRelativeReference`) with `hasFilePath` / `fileInWorkspace` enablement (M17a)
 
 ## Purpose
 

@@ -107,7 +107,8 @@
     "reloadFromDisk": "디스크에서 다시 로드",
     "keepMine": "내 버전 유지",
     "useDiskVersion": "디스크 버전 사용",
-    "autoSave": "자동 저장 전환"
+    "autoSave": "자동 저장 전환",
+    "saveAsAdmin": "관리자 권한으로 저장…"
   },
   "edit": {
     "undo": "실행 취소",
@@ -161,7 +162,9 @@
     "changeIndentation": "들여쓰기 변경",
     "changeTabSize": "탭 크기 변경",
     "formatDocument": "문서 서식 지정",
-    "copyLineNumber": "줄 번호 복사"
+    "copyLineNumber": "줄 번호 복사",
+    "copyFullReference": "전체 참조 복사",
+    "copyRelativeReference": "상대 참조 복사"
   },
   "workspace": {
     "open": "작업 영역 열기…",

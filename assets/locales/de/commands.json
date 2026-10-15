@@ -107,7 +107,8 @@
     "reloadFromDisk": "Vom Datenträger neu laden",
     "keepMine": "Meine Version behalten",
     "useDiskVersion": "Version vom Datenträger verwenden",
-    "autoSave": "Automatisches Speichern umschalten"
+    "autoSave": "Automatisches Speichern umschalten",
+    "saveAsAdmin": "Als Administrator speichern…"
   },
   "edit": {
     "undo": "Rückgängig",
@@ -161,7 +162,9 @@
     "changeIndentation": "Einrückung ändern",
     "changeTabSize": "Tabulatorbreite ändern",
     "formatDocument": "Dokument formatieren",
-    "copyLineNumber": "Zeilennummer kopieren"
+    "copyLineNumber": "Zeilennummer kopieren",
+    "copyFullReference": "Vollständigen Verweis kopieren",
+    "copyRelativeReference": "Relativen Verweis kopieren"
   },
   "workspace": {
     "open": "Arbeitsbereich öffnen…",
