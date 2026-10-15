@@ -135,5 +135,11 @@
       "scrollSync": "Synchroniser le défilement de l'éditeur et de l'aperçu",
       "loadRemoteImages": "Charger les images distantes dans l'aperçu"
     }
+  },
+  "json": {
+    "syncSelection": "Synchroniser la sélection de l'arbre avec le curseur",
+    "tree": {
+      "maxSize": "Taille maximale d'un document affiché en arbre (octets)"
+    }
   }
 }

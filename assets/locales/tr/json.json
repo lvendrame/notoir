@@ -1,0 +1,22 @@
+{
+  "text": "Metin",
+  "split": "Böl",
+  "tree": "Ağaç",
+  "format": "Biçimlendir",
+  "object": "nesne · {{count}}",
+  "array": "dizi · {{count}}",
+  "string": "dize",
+  "number": "sayı",
+  "boolean": "mantıksal",
+  "root": "kök",
+  "invalid": "{{line}}. satır, {{column}}. sütunda geçersiz JSON: {{message}}",
+  "filter": "Anahtara veya değere göre filtrele",
+  "tooLarge": "Bu belge ağaç görünümü için çok büyük (json.tree.maxSize).",
+  "copyValue": "Değeri Kopyala",
+  "copyKey": "Anahtarı Kopyala",
+  "copyPath": "Yolu Kopyala",
+  "copyJsPath": "Yolu Kopyala (JavaScript)",
+  "expandAllBelow": "Altındakilerin Tümünü Genişlet",
+  "collapseAllBelow": "Altındakilerin Tümünü Daralt",
+  "revealInText": "Metinde Göster"
+}

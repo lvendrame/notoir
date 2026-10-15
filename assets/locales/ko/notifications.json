@@ -30,5 +30,7 @@
   "recoveryNothing": "복구할 저장되지 않은 문서가 없습니다.",
   "sessionMissing": "지난 세션에서 더 이상 존재하지 않는 파일: {{count}}.",
   "replacedAll": "{{count}}개를 바꿨습니다.",
-  "linkMissing": "링크 대상을 찾을 수 없음: {{target}}"
+  "linkMissing": "링크 대상을 찾을 수 없음: {{target}}",
+  "jsonInvalid": "{{line}}줄 {{column}}열의 JSON이 잘못됨: {{message}}",
+  "jsonSortComments": "키를 정렬하면 이 문서의 주석이 제거되므로 실행하지 않았습니다."
 }

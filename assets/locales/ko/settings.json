@@ -135,5 +135,11 @@
       "scrollSync": "편집기와 미리 보기 스크롤 동기화",
       "loadRemoteImages": "미리 보기에서 원격 이미지 불러오기"
     }
+  },
+  "json": {
+    "syncSelection": "트리 선택을 커서와 동기화",
+    "tree": {
+      "maxSize": "트리로 표시할 최대 문서 크기 (바이트)"
+    }
   }
 }

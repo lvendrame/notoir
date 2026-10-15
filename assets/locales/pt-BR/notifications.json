@@ -30,5 +30,7 @@
   "recoveryNothing": "Não há documentos não salvos para recuperar.",
   "sessionMissing": "Arquivos da última sessão que não existem mais: {{count}}.",
   "replacedAll": "Ocorrências substituídas: {{count}}.",
-  "linkMissing": "Destino do link não encontrado: {{target}}"
+  "linkMissing": "Destino do link não encontrado: {{target}}",
+  "jsonInvalid": "JSON inválido na linha {{line}}, coluna {{column}}: {{message}}",
+  "jsonSortComments": "Ordenar Chaves removeria os comentários deste documento e não foi executado."
 }

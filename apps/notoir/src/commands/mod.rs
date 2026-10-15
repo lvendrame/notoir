@@ -11,6 +11,7 @@ use crate::core::AppCore;
 mod app;
 mod editor;
 mod file;
+mod json;
 mod layout;
 mod markdown;
 mod preferences;
@@ -30,6 +31,7 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     text::specs(&mut specs);
     settings_ui::specs(&mut specs);
     markdown::specs(&mut specs);
+    json::specs(&mut specs);
     workspace::specs(&mut specs);
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);

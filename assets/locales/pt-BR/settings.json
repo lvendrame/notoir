@@ -135,5 +135,11 @@
       "scrollSync": "Sincronizar rolagem do editor e da visualização",
       "loadRemoteImages": "Carregar imagens remotas na visualização"
     }
+  },
+  "json": {
+    "syncSelection": "Sincronizar a seleção da árvore com o cursor",
+    "tree": {
+      "maxSize": "Maior documento exibido como árvore (bytes)"
+    }
   }
 }

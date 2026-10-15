@@ -1,0 +1,22 @@
+{
+  "text": "テキスト",
+  "split": "分割",
+  "tree": "ツリー",
+  "format": "フォーマット",
+  "object": "オブジェクト · {{count}}",
+  "array": "配列 · {{count}}",
+  "string": "文字列",
+  "number": "数値",
+  "boolean": "ブール値",
+  "root": "ルート",
+  "invalid": "{{line}} 行 {{column}} 列の JSON が無効です: {{message}}",
+  "filter": "キーまたは値で絞り込む",
+  "tooLarge": "このドキュメントはツリー表示には大きすぎます (json.tree.maxSize)。",
+  "copyValue": "値をコピー",
+  "copyKey": "キーをコピー",
+  "copyPath": "パスをコピー",
+  "copyJsPath": "パスをコピー (JavaScript)",
+  "expandAllBelow": "下をすべて展開",
+  "collapseAllBelow": "下をすべて折りたたむ",
+  "revealInText": "テキストで表示"
+}

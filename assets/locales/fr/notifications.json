@@ -30,5 +30,7 @@
   "recoveryNothing": "Aucun document non enregistré à récupérer.",
   "sessionMissing": "Fichiers de la dernière session qui n'existent plus : {{count}}.",
   "replacedAll": "Occurrences remplacées : {{count}}.",
-  "linkMissing": "Cible du lien introuvable : {{target}}"
+  "linkMissing": "Cible du lien introuvable : {{target}}",
+  "jsonInvalid": "JSON non valide à la ligne {{line}}, colonne {{column}} : {{message}}",
+  "jsonSortComments": "Trier les clés supprimerait les commentaires de ce document ; l'opération n'a pas été effectuée."
 }

@@ -1,0 +1,22 @@
+{
+  "text": "Text",
+  "split": "Geteilt",
+  "tree": "Baum",
+  "format": "Formatieren",
+  "object": "Objekt · {{count}}",
+  "array": "Array · {{count}}",
+  "string": "Zeichenkette",
+  "number": "Zahl",
+  "boolean": "Boolesch",
+  "root": "Wurzel",
+  "invalid": "Ungültiges JSON in Zeile {{line}}, Spalte {{column}}: {{message}}",
+  "filter": "Nach Schlüssel oder Wert filtern",
+  "tooLarge": "Dieses Dokument ist zu groß für die Baumansicht (json.tree.maxSize).",
+  "copyValue": "Wert kopieren",
+  "copyKey": "Schlüssel kopieren",
+  "copyPath": "Pfad kopieren",
+  "copyJsPath": "Pfad kopieren (JavaScript)",
+  "expandAllBelow": "Alles darunter erweitern",
+  "collapseAllBelow": "Alles darunter reduzieren",
+  "revealInText": "Im Text anzeigen"
+}

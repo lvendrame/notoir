@@ -30,5 +30,7 @@
   "recoveryNothing": "Er zijn geen niet-opgeslagen documenten om te herstellen.",
   "sessionMissing": "Bestanden uit de vorige sessie die niet meer bestaan: {{count}}.",
   "replacedAll": "Aantal vervangen: {{count}}.",
-  "linkMissing": "Linkdoel niet gevonden: {{target}}"
+  "linkMissing": "Linkdoel niet gevonden: {{target}}",
+  "jsonInvalid": "Ongeldige JSON op regel {{line}}, kolom {{column}}: {{message}}",
+  "jsonSortComments": "Sleutels sorteren zou de opmerkingen in dit document verwijderen en is niet uitgevoerd."
 }

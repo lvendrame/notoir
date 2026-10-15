@@ -30,5 +30,7 @@
   "recoveryNothing": "Non ci sono documenti non salvati da recuperare.",
   "sessionMissing": "File dell'ultima sessione che non esistono più: {{count}}.",
   "replacedAll": "Occorrenze sostituite: {{count}}.",
-  "linkMissing": "Destinazione del link non trovata: {{target}}"
+  "linkMissing": "Destinazione del link non trovata: {{target}}",
+  "jsonInvalid": "JSON non valido alla riga {{line}}, colonna {{column}}: {{message}}",
+  "jsonSortComments": "Ordina chiavi rimuoverebbe i commenti di questo documento, quindi non è stato eseguito."
 }

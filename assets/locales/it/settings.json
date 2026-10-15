@@ -135,5 +135,11 @@
       "scrollSync": "Sincronizza lo scorrimento di editor e anteprima",
       "loadRemoteImages": "Carica immagini remote nell'anteprima"
     }
+  },
+  "json": {
+    "syncSelection": "Sincronizza la selezione dell'albero con il cursore",
+    "tree": {
+      "maxSize": "Documento più grande mostrato come albero (byte)"
+    }
   }
 }

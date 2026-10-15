@@ -135,5 +135,11 @@
       "scrollSync": "Bildlauf von Editor und Vorschau synchronisieren",
       "loadRemoteImages": "Externe Bilder in der Vorschau laden"
     }
+  },
+  "json": {
+    "syncSelection": "Baumauswahl mit dem Cursor synchronisieren",
+    "tree": {
+      "maxSize": "Größtes Dokument in der Baumansicht (Bytes)"
+    }
   }
 }

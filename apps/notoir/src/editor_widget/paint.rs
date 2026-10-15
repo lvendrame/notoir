@@ -171,6 +171,31 @@ pub(super) fn paint(
                 text_painter.rect_filled(rect, 2.0, color);
             }
         }
+        // Diagnostics: a wavy underline.
+        for &(da, db) in &opts.diagnostics {
+            let (a, b) = (da.max(row.start), db.min(row_end + 1));
+            if a >= b || a > row_end {
+                continue;
+            }
+            let ca = col_of(&row.text, a - row.start, tab);
+            let cb = col_of(&row.text, (b - row.start).min(row.len), tab).max(ca + 1);
+            let (x0, x1) = (col_x(ca), col_x(cb));
+            let y = row.y + m.row_h - 2.0;
+            let mut pts = Vec::new();
+            let mut x = x0;
+            let mut up = true;
+            while x <= x1 {
+                pts.push(Pos2::new(x, if up { y - 1.5 } else { y + 1.0 }));
+                x += 2.5;
+                up = !up;
+            }
+            if pts.len() > 1 {
+                text_painter.add(egui::Shape::line(
+                    pts,
+                    Stroke::new(1.2, kit.color(Tok::Danger)),
+                ));
+            }
+        }
         // Selections.
         for r in sel.ranges().iter().filter(|r| !r.is_empty()) {
             let (a, b) = (r.from().max(row.start), r.to().min(row_end));

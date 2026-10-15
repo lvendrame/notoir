@@ -1,0 +1,22 @@
+{
+  "text": "텍스트",
+  "split": "분할",
+  "tree": "트리",
+  "format": "서식",
+  "object": "객체 · {{count}}",
+  "array": "배열 · {{count}}",
+  "string": "문자열",
+  "number": "숫자",
+  "boolean": "부울",
+  "root": "루트",
+  "invalid": "{{line}}줄 {{column}}열의 JSON이 잘못됨: {{message}}",
+  "filter": "키 또는 값으로 필터링",
+  "tooLarge": "이 문서는 트리 보기에 너무 큽니다 (json.tree.maxSize).",
+  "copyValue": "값 복사",
+  "copyKey": "키 복사",
+  "copyPath": "경로 복사",
+  "copyJsPath": "경로 복사 (JavaScript)",
+  "expandAllBelow": "아래 모두 펼치기",
+  "collapseAllBelow": "아래 모두 접기",
+  "revealInText": "텍스트에서 표시"
+}

@@ -102,6 +102,8 @@ pub struct EditorOptions {
     pub max_width_cols: Option<usize>,
     /// Syntax highlighting (off in large-file mode).
     pub highlight: bool,
+    /// Error ranges drawn with a squiggle (JSON syntax errors).
+    pub diagnostics: Vec<(usize, usize)>,
 }
 
 /// Per-view state that only the widget needs.

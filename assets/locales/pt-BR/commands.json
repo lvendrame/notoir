@@ -151,7 +151,8 @@
     "changeLanguageMode": "Alterar Modo de Linguagem…",
     "type": "Digitar Texto",
     "changeIndentation": "Alterar Indentação",
-    "changeTabSize": "Alterar Tamanho da Tabulação"
+    "changeTabSize": "Alterar Tamanho da Tabulação",
+    "formatDocument": "Formatar Documento"
   },
   "workspace": {
     "open": "Abrir Workspace…",
@@ -210,5 +211,15 @@
     "toggleTask": "Alternar Tarefa",
     "openLink": "Abrir Link",
     "revealSource": "Revelar Fonte"
+  },
+  "json": {
+    "showText": "Mostrar Texto",
+    "showSplit": "Mostrar Texto e Árvore",
+    "showTree": "Mostrar Árvore",
+    "format": "Formatar Documento",
+    "minify": "Minificar",
+    "sortKeys": "Ordenar Chaves",
+    "goToParent": "Ir para o Pai",
+    "selectRange": "Selecionar Nó"
   }
 }

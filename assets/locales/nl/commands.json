@@ -151,7 +151,8 @@
     "changeLanguageMode": "Taalmodus wijzigen…",
     "type": "Tekst typen",
     "changeIndentation": "Inspringing wijzigen",
-    "changeTabSize": "Tabgrootte wijzigen"
+    "changeTabSize": "Tabgrootte wijzigen",
+    "formatDocument": "Document opmaken"
   },
   "workspace": {
     "open": "Werkruimte openen…",
@@ -210,5 +211,15 @@
     "toggleTask": "Taak in-/uitschakelen",
     "openLink": "Link openen",
     "revealSource": "Bron tonen"
+  },
+  "json": {
+    "showText": "Tekst tonen",
+    "showSplit": "Tekst en boom tonen",
+    "showTree": "Boom tonen",
+    "format": "Document opmaken",
+    "minify": "Minimaliseren",
+    "sortKeys": "Sleutels sorteren",
+    "goToParent": "Naar bovenliggend element",
+    "selectRange": "Knooppunt selecteren"
   }
 }

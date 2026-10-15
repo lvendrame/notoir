@@ -1,0 +1,22 @@
+{
+  "text": "Text",
+  "split": "Split",
+  "tree": "Tree",
+  "format": "Format",
+  "object": "object · {{count}}",
+  "array": "array · {{count}}",
+  "string": "string",
+  "number": "number",
+  "boolean": "boolean",
+  "root": "root",
+  "invalid": "Invalid JSON at line {{line}}, column {{column}}: {{message}}",
+  "filter": "Filter by key or value",
+  "tooLarge": "This document is too large for the tree view (json.tree.maxSize).",
+  "copyValue": "Copy Value",
+  "copyKey": "Copy Key",
+  "copyPath": "Copy Path",
+  "copyJsPath": "Copy Path (JavaScript)",
+  "expandAllBelow": "Expand All Below",
+  "collapseAllBelow": "Collapse All Below",
+  "revealInText": "Reveal in Text"
+}

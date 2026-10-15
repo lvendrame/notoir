@@ -552,6 +552,24 @@ impl Schema {
             Scopes::NO_LANGUAGE,
             C::Editor,
         );
+        // JSON
+        def(
+            "json.syncSelection",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "json.tree.maxSize",
+            T::Int {
+                min: 1024,
+                max: 1_073_741_824,
+            },
+            V::Int(20 * 1024 * 1024),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
         // Zen Mode
         def(
             "zenMode.hideTabs",

@@ -1,0 +1,22 @@
+{
+  "text": "Текст",
+  "split": "Поділ",
+  "tree": "Дерево",
+  "format": "Формат",
+  "object": "об'єкт · {{count}}",
+  "array": "масив · {{count}}",
+  "string": "рядок",
+  "number": "число",
+  "boolean": "логічне",
+  "root": "корінь",
+  "invalid": "Недійсний JSON у рядку {{line}}, стовпці {{column}}: {{message}}",
+  "filter": "Фільтр за ключем або значенням",
+  "tooLarge": "Документ завеликий для дерева (json.tree.maxSize).",
+  "copyValue": "Копіювати значення",
+  "copyKey": "Копіювати ключ",
+  "copyPath": "Копіювати шлях",
+  "copyJsPath": "Копіювати шлях (JavaScript)",
+  "expandAllBelow": "Розгорнути все нижче",
+  "collapseAllBelow": "Згорнути все нижче",
+  "revealInText": "Показати в тексті"
+}

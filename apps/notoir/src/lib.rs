@@ -17,6 +17,7 @@ pub mod i18n;
 pub mod icons;
 pub mod input;
 pub mod io;
+pub mod json;
 pub mod logging;
 pub mod markdown;
 pub mod menus;

@@ -396,3 +396,49 @@ fn markdown_split_snapshot() {
         img.save(out_dir().join("markdown-split.png")).unwrap();
     }
 }
+
+#[test]
+fn json_split_snapshot() {
+    let dir = tempfile::tempdir().unwrap();
+    let p = dir.path().join("package.json");
+    std::fs::write(
+        &p,
+        "{\n  \"name\": \"notoir\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"user\": {\n    \"name\": \"Ana\",\n    \"age\": 42,\n    \"address\": { \"city\": \"Porto\", \"zip\": null }\n  },\n  \"tags\": [\"editor\", \"native\", \"fast\"],\n  \"ratio\": 3.14\n}\n",
+    )
+    .unwrap();
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = vec![(p, None)];
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "json.showSplit", serde_json::Value::Null);
+    common::settle(&mut app);
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("json-split.png")).unwrap();
+    }
+    // Break it: the last valid tree stays, greyed, under the error banner.
+    let core = &mut app.harness.state_mut().core;
+    let v = core.workbench.active_view().unwrap();
+    let at = core
+        .workbench
+        .document(core.workbench.active_document().unwrap())
+        .unwrap()
+        .buffer
+        .text()
+        .find("3.14")
+        .unwrap()
+        + 4;
+    core.workbench
+        .set_selection(v, notoir_editor::Selection::caret(at))
+        .unwrap();
+    core.editor_focused = true;
+    app.harness
+        .event(egui::Event::Text("\n  \"broken\": 1".into()));
+    common::settle(&mut app);
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("json-error.png")).unwrap();
+    }
+}

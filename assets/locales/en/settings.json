@@ -135,5 +135,11 @@
       "scrollSync": "Sync editor and preview scrolling",
       "loadRemoteImages": "Load remote images in preview"
     }
+  },
+  "json": {
+    "syncSelection": "Sync tree selection with the cursor",
+    "tree": {
+      "maxSize": "Largest document shown as a tree (bytes)"
+    }
   }
 }

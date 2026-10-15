@@ -168,6 +168,7 @@ pub struct AppCore {
     pub queue_with_context: Vec<(CommandInvocation, ContextSnapshot)>,
     pub settings_ui: crate::settings_tab::SettingsUi,
     pub markdown: crate::markdown::MarkdownState,
+    pub json: crate::json::JsonState,
     /// Zen Mode is on (with what to restore).
     pub zen: Option<crate::settings_tab::ZenState>,
     /// Show the first-run page at startup (production launches).
@@ -289,6 +290,7 @@ impl AppCore {
             queue_with_context: Vec::new(),
             settings_ui: Default::default(),
             markdown: Default::default(),
+            json: Default::default(),
             zen: None,
             first_run_check: opts.first_run,
             language,
@@ -454,6 +456,7 @@ impl AppCore {
             center: self.find.center.contains(&view),
             set_scroll: self.find.scroll.get(&view).copied(),
             highlight: !doc.is_some_and(|d| d.large_file),
+            diagnostics: doc.map(|d| self.json_diagnostics(d.id)).unwrap_or_default(),
             max_width_cols: self
                 .zen
                 .as_ref()

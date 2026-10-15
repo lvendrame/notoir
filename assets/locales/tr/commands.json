@@ -151,7 +151,8 @@
     "changeLanguageMode": "Dil Modunu Değiştir…",
     "type": "Metin Yaz",
     "changeIndentation": "Girintiyi Değiştir",
-    "changeTabSize": "Sekme Boyutunu Değiştir"
+    "changeTabSize": "Sekme Boyutunu Değiştir",
+    "formatDocument": "Belgeyi Biçimlendir"
   },
   "workspace": {
     "open": "Çalışma Alanı Aç…",
@@ -210,5 +211,15 @@
     "toggleTask": "Görevi Aç/Kapat",
     "openLink": "Bağlantıyı Aç",
     "revealSource": "Kaynağı Göster"
+  },
+  "json": {
+    "showText": "Metni Göster",
+    "showSplit": "Metni ve Ağacı Göster",
+    "showTree": "Ağacı Göster",
+    "format": "Belgeyi Biçimlendir",
+    "minify": "Küçült",
+    "sortKeys": "Anahtarları Sırala",
+    "goToParent": "Üst Öğeye Git",
+    "selectRange": "Düğümü Seç"
   }
 }

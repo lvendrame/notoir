@@ -30,5 +30,7 @@
   "recoveryNothing": "Brak niezapisanych dokumentów do odzyskania.",
   "sessionMissing": "Pliki z ostatniej sesji, które już nie istnieją: {{count}}.",
   "replacedAll": "Zamienione wystąpienia: {{count}}.",
-  "linkMissing": "Nie znaleziono celu linku: {{target}}"
+  "linkMissing": "Nie znaleziono celu linku: {{target}}",
+  "jsonInvalid": "Nieprawidłowy JSON w wierszu {{line}}, kolumnie {{column}}: {{message}}",
+  "jsonSortComments": "Sortowanie kluczy usunęłoby komentarze z tego dokumentu, więc nie zostało wykonane."
 }

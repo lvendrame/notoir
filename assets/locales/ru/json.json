@@ -1,0 +1,22 @@
+{
+  "text": "Текст",
+  "split": "Разделить",
+  "tree": "Дерево",
+  "format": "Формат",
+  "object": "объект · {{count}}",
+  "array": "массив · {{count}}",
+  "string": "строка",
+  "number": "число",
+  "boolean": "логическое",
+  "root": "корень",
+  "invalid": "Недопустимый JSON в строке {{line}}, столбце {{column}}: {{message}}",
+  "filter": "Фильтр по ключу или значению",
+  "tooLarge": "Документ слишком велик для дерева (json.tree.maxSize).",
+  "copyValue": "Копировать значение",
+  "copyKey": "Копировать ключ",
+  "copyPath": "Копировать путь",
+  "copyJsPath": "Копировать путь (JavaScript)",
+  "expandAllBelow": "Развернуть всё ниже",
+  "collapseAllBelow": "Свернуть всё ниже",
+  "revealInText": "Показать в тексте"
+}

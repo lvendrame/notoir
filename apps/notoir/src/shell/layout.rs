@@ -69,6 +69,7 @@ pub fn show(
     drag: &mut Option<TabDrag>,
     path_drag: &mut Option<std::path::PathBuf>,
     previews: &mut super::md_preview::Previews,
+    trees: &mut super::json_tree::JsonTrees,
     focus_request: Option<ViewId>,
     context: &ContextSnapshot,
     actions: &mut Actions,
@@ -89,6 +90,7 @@ pub fn show(
         editors,
         drag,
         previews,
+        trees,
         focus_request,
         context,
         actions,
@@ -110,6 +112,7 @@ struct Renderer<'a, 'k> {
     editors: &'a mut EditorCaches,
     drag: &'a mut Option<TabDrag>,
     previews: &'a mut super::md_preview::Previews,
+    trees: &'a mut super::json_tree::JsonTrees,
     focus_request: Option<ViewId>,
     context: &'a ContextSnapshot,
     actions: &'a mut Actions,
@@ -302,16 +305,18 @@ impl Renderer<'_, '_> {
                     None => body,
                 };
                 // Markdown modes: editor, preview, or both (spec 24).
-                let md_kind = kind.unwrap_or(notoir_core::view::ViewKind::Text);
+                use notoir_core::view::ViewKind as VK;
+                let view_kind = kind.unwrap_or(VK::Text);
                 let is_md = doc.is_some_and(|d| self.core.is_markdown(d));
-                let mode = if is_md {
-                    md_kind
-                } else {
-                    notoir_core::view::ViewKind::Text
+                let is_json = doc.is_some_and(|d| self.core.is_json(d));
+                let mode = match view_kind {
+                    VK::MarkdownPreview | VK::MarkdownSplit if is_md => view_kind,
+                    VK::JsonTree | VK::JsonSplit if is_json => view_kind,
+                    _ => VK::Text,
                 };
                 let (editor_rect, preview_rect) = match mode {
-                    notoir_core::view::ViewKind::MarkdownPreview => (None, Some(body)),
-                    notoir_core::view::ViewKind::MarkdownSplit => {
+                    VK::MarkdownPreview | VK::JsonTree => (None, Some(body)),
+                    VK::MarkdownSplit | VK::JsonSplit => {
                         let ratio = self
                             .core
                             .workbench
@@ -388,7 +393,36 @@ impl Renderer<'_, '_> {
                     }
                     _ => (Some(body), None),
                 };
-                if let (Some(rect), Some(doc)) = (preview_rect, doc)
+                if let (Some(rect), Some(doc), true) = (preview_rect, doc, is_json) {
+                    if let Some((roots, error, pending)) = self.core.json_doc(doc) {
+                        let mut tui = child.new_child(egui::UiBuilder::new().max_rect(rect));
+                        tui.set_clip_rect(rect);
+                        super::json_tree::show(
+                            &mut tui,
+                            self.kit,
+                            self.core,
+                            view,
+                            doc,
+                            &roots,
+                            error.as_ref(),
+                            self.trees,
+                            self.actions,
+                        );
+                        if pending {
+                            child
+                                .ctx()
+                                .request_repaint_after(std::time::Duration::from_millis(
+                                    crate::json::PARSE_DEBOUNCE_MS,
+                                ));
+                        }
+                        if tui.ui_contains_pointer()
+                            && tui.input(|i| i.pointer.any_pressed())
+                            && self.core.workbench.active_view() != Some(view)
+                        {
+                            self.out.activate = Some(view);
+                        }
+                    }
+                } else if let (Some(rect), Some(doc)) = (preview_rect, doc)
                     && let Some((md, pending)) = self.core.markdown_doc(doc)
                 {
                     {
@@ -456,7 +490,7 @@ impl Renderer<'_, '_> {
                 if out.interacted && self.core.workbench.active_view() != Some(view) {
                     self.out.activate = Some(view);
                 }
-                if mode == notoir_core::view::ViewKind::MarkdownSplit
+                if mode == VK::MarkdownSplit
                     && self.core.settings.bool("markdown.preview.scrollSync", None)
                 {
                     self.sync_scroll(view);

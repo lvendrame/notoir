@@ -30,5 +30,7 @@
   "recoveryNothing": "Es gibt keine nicht gespeicherten Dokumente zum Wiederherstellen.",
   "sessionMissing": "Dateien der letzten Sitzung, die nicht mehr existieren: {{count}}.",
   "replacedAll": "Ersetzte Vorkommen: {{count}}.",
-  "linkMissing": "Linkziel nicht gefunden: {{target}}"
+  "linkMissing": "Linkziel nicht gefunden: {{target}}",
+  "jsonInvalid": "Ungültiges JSON in Zeile {{line}}, Spalte {{column}}: {{message}}",
+  "jsonSortComments": "Schlüssel sortieren würde die Kommentare in diesem Dokument entfernen und wurde nicht ausgeführt."
 }

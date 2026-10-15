@@ -151,7 +151,8 @@
     "changeLanguageMode": "Cambia modalità linguaggio…",
     "type": "Digita testo",
     "changeIndentation": "Cambia rientro",
-    "changeTabSize": "Cambia dimensione tabulazione"
+    "changeTabSize": "Cambia dimensione tabulazione",
+    "formatDocument": "Formatta documento"
   },
   "workspace": {
     "open": "Apri area di lavoro…",
@@ -210,5 +211,15 @@
     "toggleTask": "Attiva/disattiva attività",
     "openLink": "Apri link",
     "revealSource": "Mostra sorgente"
+  },
+  "json": {
+    "showText": "Mostra testo",
+    "showSplit": "Mostra testo e albero",
+    "showTree": "Mostra albero",
+    "format": "Formatta documento",
+    "minify": "Minimizza",
+    "sortKeys": "Ordina chiavi",
+    "goToParent": "Vai al padre",
+    "selectRange": "Seleziona nodo"
   }
 }

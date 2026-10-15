@@ -1,0 +1,22 @@
+{
+  "text": "文本",
+  "split": "拆分",
+  "tree": "树",
+  "format": "格式化",
+  "object": "对象 · {{count}}",
+  "array": "数组 · {{count}}",
+  "string": "字符串",
+  "number": "数字",
+  "boolean": "布尔值",
+  "root": "根",
+  "invalid": "第 {{line}} 行第 {{column}} 列的 JSON 无效:{{message}}",
+  "filter": "按键或值筛选",
+  "tooLarge": "此文档太大,无法以树显示 (json.tree.maxSize)。",
+  "copyValue": "复制值",
+  "copyKey": "复制键",
+  "copyPath": "复制路径",
+  "copyJsPath": "复制路径 (JavaScript)",
+  "expandAllBelow": "展开下方全部",
+  "collapseAllBelow": "折叠下方全部",
+  "revealInText": "在文本中显示"
+}

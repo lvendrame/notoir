@@ -30,5 +30,7 @@
   "recoveryNothing": "There are no unsaved documents to recover.",
   "sessionMissing": "Files from the last session no longer exist: {{count}}.",
   "replacedAll": "Replaced {{count}} occurrences.",
-  "linkMissing": "Link target not found: {{target}}"
+  "linkMissing": "Link target not found: {{target}}",
+  "jsonInvalid": "Invalid JSON at line {{line}}, column {{column}}: {{message}}",
+  "jsonSortComments": "Sort Keys would remove the comments in this document, so it was not run."
 }

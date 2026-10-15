@@ -135,5 +135,11 @@
       "scrollSync": "同步编辑器和预览的滚动",
       "loadRemoteImages": "在预览中加载远程图片"
     }
+  },
+  "json": {
+    "syncSelection": "将树的选择与光标同步",
+    "tree": {
+      "maxSize": "以树显示的最大文档 (字节)"
+    }
   }
 }

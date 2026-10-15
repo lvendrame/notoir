@@ -260,6 +260,10 @@ pub fn detect(path: Option<&str>, first_line: &str, associations: &[Association]
         if let Some(l) = LANGUAGES.iter().find(|l| l.file_names.contains(&name)) {
             return l.id;
         }
+        // VS Code-style config folders are JSON with comments (spec 25).
+        if path.contains("/.vscode/") && name.to_ascii_lowercase().ends_with(".json") {
+            return LanguageId::JSONC;
+        }
         if let Some((_, ext)) = name.rsplit_once('.') {
             let ext = ext.to_ascii_lowercase();
             if let Some(l) = LANGUAGES
@@ -340,6 +344,11 @@ mod tests {
             LanguageId("toml")
         );
         assert_eq!(detect(Some("/a/tsconfig.json"), "", &[]), LanguageId::JSONC);
+        assert_eq!(
+            detect(Some("/a/.vscode/launch.json"), "", &[]),
+            LanguageId::JSONC
+        );
+        assert_eq!(detect(Some("/a/launch.json"), "", &[]), LanguageId::JSON);
         assert_eq!(detect(Some("/a/config.JSON"), "", &[]), LanguageId::JSON);
         assert_eq!(detect(Some("/a/notes"), "", &[]), LanguageId::PLAINTEXT);
     }

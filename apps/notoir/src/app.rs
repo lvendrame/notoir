@@ -384,6 +384,7 @@ impl eframe::App for NotoirApp {
                         &mut self.ui.tab_drag,
                         &mut self.ui.explorer.drag,
                         &mut self.ui.previews,
+                        &mut self.ui.json_trees,
                         focus_request,
                         &context,
                         &mut actions,

@@ -135,5 +135,11 @@
       "scrollSync": "Scrollen van editor en voorbeeld synchroniseren",
       "loadRemoteImages": "Externe afbeeldingen laden in voorbeeld"
     }
+  },
+  "json": {
+    "syncSelection": "Boomselectie synchroniseren met de cursor",
+    "tree": {
+      "maxSize": "Grootste document in boomweergave (bytes)"
+    }
   }
 }

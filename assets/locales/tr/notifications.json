@@ -30,5 +30,7 @@
   "recoveryNothing": "Kurtarılacak kaydedilmemiş belge yok.",
   "sessionMissing": "Son oturumdaki artık bulunmayan dosyalar: {{count}}.",
   "replacedAll": "Değiştirilen eşleşme: {{count}}.",
-  "linkMissing": "Bağlantı hedefi bulunamadı: {{target}}"
+  "linkMissing": "Bağlantı hedefi bulunamadı: {{target}}",
+  "jsonInvalid": "{{line}}. satır, {{column}}. sütunda geçersiz JSON: {{message}}",
+  "jsonSortComments": "Anahtarları sıralamak bu belgedeki yorumları kaldıracağından çalıştırılmadı."
 }

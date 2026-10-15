@@ -12,6 +12,7 @@ pub mod chrome;
 pub mod empty_state;
 pub mod explorer;
 pub mod find_widget;
+pub mod json_tree;
 pub mod layout;
 pub mod md_preview;
 pub mod overlays;
@@ -64,6 +65,7 @@ pub struct UiState {
     /// Last full-screen request (tests; the OS reports the real state).
     pub fullscreen_requested: Option<bool>,
     pub previews: md_preview::Previews,
+    pub json_trees: json_tree::JsonTrees,
 }
 
 /// Collects invocations produced while rendering one frame.

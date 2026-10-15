@@ -151,7 +151,8 @@
     "changeLanguageMode": "Zmień tryb języka…",
     "type": "Wpisz tekst",
     "changeIndentation": "Zmień wcięcie",
-    "changeTabSize": "Zmień szerokość tabulacji"
+    "changeTabSize": "Zmień szerokość tabulacji",
+    "formatDocument": "Formatuj dokument"
   },
   "workspace": {
     "open": "Otwórz obszar roboczy…",
@@ -210,5 +211,15 @@
     "toggleTask": "Przełącz zadanie",
     "openLink": "Otwórz link",
     "revealSource": "Pokaż źródło"
+  },
+  "json": {
+    "showText": "Pokaż tekst",
+    "showSplit": "Pokaż tekst i drzewo",
+    "showTree": "Pokaż drzewo",
+    "format": "Formatuj dokument",
+    "minify": "Minifikuj",
+    "sortKeys": "Sortuj klucze",
+    "goToParent": "Przejdź do elementu nadrzędnego",
+    "selectRange": "Zaznacz węzeł"
   }
 }

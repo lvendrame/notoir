@@ -30,5 +30,7 @@
   "recoveryNothing": "No hay documentos sin guardar que recuperar.",
   "sessionMissing": "Archivos de la última sesión que ya no existen: {{count}}.",
   "replacedAll": "Coincidencias reemplazadas: {{count}}.",
-  "linkMissing": "No se encontró el destino del enlace: {{target}}"
+  "linkMissing": "No se encontró el destino del enlace: {{target}}",
+  "jsonInvalid": "JSON no válido en la línea {{line}}, columna {{column}}: {{message}}",
+  "jsonSortComments": "Ordenar claves eliminaría los comentarios de este documento, así que no se ejecutó."
 }

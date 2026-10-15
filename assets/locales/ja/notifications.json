@@ -30,5 +30,7 @@
   "recoveryNothing": "復元する未保存ドキュメントはありません。",
   "sessionMissing": "前回のセッションで存在しなくなったファイル: {{count}}。",
   "replacedAll": "{{count}} 件を置換しました。",
-  "linkMissing": "リンク先が見つかりません: {{target}}"
+  "linkMissing": "リンク先が見つかりません: {{target}}",
+  "jsonInvalid": "{{line}} 行 {{column}} 列の JSON が無効です: {{message}}",
+  "jsonSortComments": "キーの並べ替えはこのドキュメントのコメントを削除するため、実行しませんでした。"
 }

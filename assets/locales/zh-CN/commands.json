@@ -151,7 +151,8 @@
     "changeLanguageMode": "更改语言模式…",
     "type": "输入文本",
     "changeIndentation": "更改缩进",
-    "changeTabSize": "更改制表符大小"
+    "changeTabSize": "更改制表符大小",
+    "formatDocument": "格式化文档"
   },
   "workspace": {
     "open": "打开工作区…",
@@ -210,5 +211,15 @@
     "toggleTask": "切换任务",
     "openLink": "打开链接",
     "revealSource": "显示源代码"
+  },
+  "json": {
+    "showText": "显示文本",
+    "showSplit": "显示文本和树",
+    "showTree": "显示树",
+    "format": "格式化文档",
+    "minify": "压缩",
+    "sortKeys": "排序键",
+    "goToParent": "转到父级",
+    "selectRange": "选择节点"
   }
 }

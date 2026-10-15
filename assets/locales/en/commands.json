@@ -151,7 +151,8 @@
     "changeLanguageMode": "Change Language Mode…",
     "type": "Type Text",
     "changeIndentation": "Change Indentation",
-    "changeTabSize": "Change Tab Size"
+    "changeTabSize": "Change Tab Size",
+    "formatDocument": "Format Document"
   },
   "workspace": {
     "open": "Open Workspace…",
@@ -210,5 +211,15 @@
     "toggleTask": "Toggle Task",
     "openLink": "Open Link",
     "revealSource": "Reveal Source"
+  },
+  "json": {
+    "showText": "Show Text",
+    "showSplit": "Show Text and Tree",
+    "showTree": "Show Tree",
+    "format": "Format Document",
+    "minify": "Minify",
+    "sortKeys": "Sort Keys",
+    "goToParent": "Go to Parent",
+    "selectRange": "Select Node"
   }
 }

@@ -179,25 +179,33 @@ fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
     else {
         return;
     };
-    if !core.is_markdown(view.document_id) {
-        return;
-    }
     use notoir_core::view::ViewKind;
+    let modes: [(ViewKind, &str, &'static str); 3] = if core.is_markdown(view.document_id) {
+        [
+            (ViewKind::Text, "markdown:edit", "markdown.showEditor"),
+            (
+                ViewKind::MarkdownSplit,
+                "markdown:split",
+                "markdown.showSplit",
+            ),
+            (
+                ViewKind::MarkdownPreview,
+                "markdown:preview",
+                "markdown.showPreview",
+            ),
+        ]
+    } else if core.is_json(view.document_id) {
+        [
+            (ViewKind::Text, "json:text", "json.showText"),
+            (ViewKind::JsonSplit, "json:split", "json.showSplit"),
+            (ViewKind::JsonTree, "json:tree", "json.showTree"),
+        ]
+    } else {
+        return;
+    };
     ui.add_space(16.0);
     ui.spacing_mut().item_spacing.x = 0.0;
-    for (kind, label, id) in [
-        (ViewKind::Text, "markdown:edit", "markdown.showEditor"),
-        (
-            ViewKind::MarkdownSplit,
-            "markdown:split",
-            "markdown.showSplit",
-        ),
-        (
-            ViewKind::MarkdownPreview,
-            "markdown:preview",
-            "markdown.showPreview",
-        ),
-    ] {
+    for (kind, label, id) in modes {
         let selected = view.kind == kind;
         let text = RichText::new(t!(label)).size(12.0).color(if selected {
             kit.color(Tok::TextPrimary)
@@ -213,6 +221,17 @@ fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
         }
     }
     ui.spacing_mut().item_spacing.x = 2.0;
+    if core.is_json(view.document_id) {
+        ui.add_space(8.0);
+        let format = egui::Button::new(RichText::new(t!("json:format")).size(12.0))
+            .min_size(egui::vec2(56.0, 24.0));
+        if ui.add(format).clicked() {
+            actions.push(CommandInvocation::new(
+                "json.format",
+                InvocationSource::Toolbar,
+            ));
+        }
+    }
 }
 
 pub fn toolbar(

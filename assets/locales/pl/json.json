@@ -1,0 +1,22 @@
+{
+  "text": "Tekst",
+  "split": "Podział",
+  "tree": "Drzewo",
+  "format": "Formatuj",
+  "object": "obiekt · {{count}}",
+  "array": "tablica · {{count}}",
+  "string": "ciąg",
+  "number": "liczba",
+  "boolean": "wartość logiczna",
+  "root": "korzeń",
+  "invalid": "Nieprawidłowy JSON w wierszu {{line}}, kolumnie {{column}}: {{message}}",
+  "filter": "Filtruj według klucza lub wartości",
+  "tooLarge": "Ten dokument jest za duży dla widoku drzewa (json.tree.maxSize).",
+  "copyValue": "Kopiuj wartość",
+  "copyKey": "Kopiuj klucz",
+  "copyPath": "Kopiuj ścieżkę",
+  "copyJsPath": "Kopiuj ścieżkę (JavaScript)",
+  "expandAllBelow": "Rozwiń wszystko poniżej",
+  "collapseAllBelow": "Zwiń wszystko poniżej",
+  "revealInText": "Pokaż w tekście"
+}

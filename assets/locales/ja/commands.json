@@ -151,7 +151,8 @@
     "changeLanguageMode": "言語モードの変更…",
     "type": "テキストを入力",
     "changeIndentation": "インデントの変更",
-    "changeTabSize": "タブ サイズの変更"
+    "changeTabSize": "タブ サイズの変更",
+    "formatDocument": "ドキュメントのフォーマット"
   },
   "workspace": {
     "open": "ワークスペースを開く…",
@@ -210,5 +211,15 @@
     "toggleTask": "タスクの切り替え",
     "openLink": "リンクを開く",
     "revealSource": "ソースを表示"
+  },
+  "json": {
+    "showText": "テキストを表示",
+    "showSplit": "テキストとツリーを表示",
+    "showTree": "ツリーを表示",
+    "format": "ドキュメントのフォーマット",
+    "minify": "最小化",
+    "sortKeys": "キーを並べ替え",
+    "goToParent": "親へ移動",
+    "selectRange": "ノードを選択"
   }
 }

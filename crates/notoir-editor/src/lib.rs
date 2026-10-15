@@ -11,6 +11,7 @@ pub mod edit_ops;
 pub mod encoding;
 pub mod find;
 pub mod indent_detect;
+pub mod json;
 pub mod language;
 pub mod line_ending;
 pub mod line_ops;

@@ -1,6 +1,6 @@
 # 25 — JSON
 
-**Status:** Not started — M14
+**Status:** Done — M14 (hand-written span parser for JSON/JSONC/JSON Lines; Text/Split/Tree with virtualized tree, filter, context menu, both-way selection sync; error banner over the greyed last valid tree + editor squiggle; Format (keeps comments) / Minify / Sort Keys / Go to Parent. Deferred: JSON Tree secondary-sidebar panel, worker parse for >1 MB (small docs parse per change, large ones debounce 100 ms on the UI thread), `json.format.indent`, tree editing (Phase 6), breadcrumbs/outline (M15).)
 
 ## Purpose
 

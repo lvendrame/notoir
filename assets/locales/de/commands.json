@@ -151,7 +151,8 @@
     "changeLanguageMode": "Sprachmodus ändern…",
     "type": "Text eingeben",
     "changeIndentation": "Einrückung ändern",
-    "changeTabSize": "Tabulatorbreite ändern"
+    "changeTabSize": "Tabulatorbreite ändern",
+    "formatDocument": "Dokument formatieren"
   },
   "workspace": {
     "open": "Arbeitsbereich öffnen…",
@@ -210,5 +211,15 @@
     "toggleTask": "Aufgabe umschalten",
     "openLink": "Link öffnen",
     "revealSource": "Quelle anzeigen"
+  },
+  "json": {
+    "showText": "Text anzeigen",
+    "showSplit": "Text und Baum anzeigen",
+    "showTree": "Baum anzeigen",
+    "format": "Dokument formatieren",
+    "minify": "Minimieren",
+    "sortKeys": "Schlüssel sortieren",
+    "goToParent": "Zum übergeordneten Element",
+    "selectRange": "Knoten auswählen"
   }
 }

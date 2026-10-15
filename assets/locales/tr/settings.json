@@ -135,5 +135,11 @@
       "scrollSync": "Düzenleyici ve önizleme kaydırmasını eşitle",
       "loadRemoteImages": "Önizlemede uzak görüntüleri yükle"
     }
+  },
+  "json": {
+    "syncSelection": "Ağaç seçimini imleçle eşitle",
+    "tree": {
+      "maxSize": "Ağaç olarak gösterilecek en büyük belge (bayt)"
+    }
   }
 }

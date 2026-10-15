@@ -135,5 +135,11 @@
       "scrollSync": "Synchronizuj przewijanie edytora i podglądu",
       "loadRemoteImages": "Wczytuj zdalne obrazy w podglądzie"
     }
+  },
+  "json": {
+    "syncSelection": "Synchronizuj zaznaczenie drzewa z kursorem",
+    "tree": {
+      "maxSize": "Największy dokument pokazywany jako drzewo (bajty)"
+    }
   }
 }

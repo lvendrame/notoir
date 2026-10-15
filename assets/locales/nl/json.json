@@ -1,0 +1,22 @@
+{
+  "text": "Tekst",
+  "split": "Gesplitst",
+  "tree": "Boom",
+  "format": "Opmaken",
+  "object": "object · {{count}}",
+  "array": "array · {{count}}",
+  "string": "tekenreeks",
+  "number": "getal",
+  "boolean": "booleaans",
+  "root": "hoofdmap",
+  "invalid": "Ongeldige JSON op regel {{line}}, kolom {{column}}: {{message}}",
+  "filter": "Filteren op sleutel of waarde",
+  "tooLarge": "Dit document is te groot voor de boomweergave (json.tree.maxSize).",
+  "copyValue": "Waarde kopiëren",
+  "copyKey": "Sleutel kopiëren",
+  "copyPath": "Pad kopiëren",
+  "copyJsPath": "Pad kopiëren (JavaScript)",
+  "expandAllBelow": "Alles eronder uitvouwen",
+  "collapseAllBelow": "Alles eronder samenvouwen",
+  "revealInText": "Tonen in tekst"
+}
