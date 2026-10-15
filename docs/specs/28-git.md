@@ -8,6 +8,14 @@ Define Git integration: architecture, repository detection, status and decoratio
 branches, network operations (fetch/pull/push/sync), clone/init, file history, compare with HEAD, and the opt-in "Sync
 Notes" workflow. Git never freezes the UI and never pushes without explicit consent.
 
+## Test Repository
+
+Use `~/projects/my_documents` as the Git integration test repository. Its expected origin is
+`git@github.com:lvendrame/my_documents.git`. Tests run against this local repository and may exercise any Git workflow
+in the spec, including push and other remote operations. Mutating scenarios use generated test files and temporary
+branches, stage only those test files, preserve unrelated worktree and index changes, and restore the original branch
+and test-created state during cleanup, including after a failed scenario.
+
 ## Architecture (AD-7)
 
 `notoir-git` exposes a request/response API executed on workers; it holds no UI state:

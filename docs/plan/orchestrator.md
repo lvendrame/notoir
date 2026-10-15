@@ -47,6 +47,7 @@ Per-spec status and scenario coverage: [`spec-coverage.md`](spec-coverage.md) (g
 | M15 | Outline panel, breadcrumbs, Go to Symbol, folding providers, bookmarks | 12, 26 | Todo | |
 | M16 | Quick Open (index, fuzzy, `file:line`, prefixes), workspace search panel + replace, navigation history | 15 | Todo | |
 | M17 | Compare: sources, diff model, diff view, hunk copy, Compare Current Changes; multi-cursor + Selection menu | 27, 11 | Todo | |
+| M17a | Protected-file administrator save flow, editor right-click selection preservation, full and workspace-relative text references | 36, 37 | Todo | |
 
 ## Phase 3 — Git
 
