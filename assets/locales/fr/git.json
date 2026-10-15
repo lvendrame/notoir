@@ -1,0 +1,135 @@
+{
+  "index": "Index",
+  "deletedSide": "{{name}} (supprimé)",
+  "alreadyRunning": "Une autre opération Git est en cours.",
+  "detachedPush": "Basculez sur une branche pour pousser.",
+  "noRemote": "Ce dépôt n’a pas de distant vers lequel pousser.",
+  "emptyMessage": "Saisissez un message de commit.",
+  "resolveConflicts": "Résolvez et indexez les conflits de fusion avant de valider.",
+  "nothingStaged": "Aucune modification indexée à valider.",
+  "progress": {
+    "fetch": "Récupération…",
+    "pull": "Tirage…",
+    "push": "Envoi…",
+    "sync": "Synchronisation…",
+    "syncNotes": "Synchronisation des notes…",
+    "clone": "Clonage…"
+  },
+  "failed": {
+    "fetch": "Échec de la récupération. {{reason}}",
+    "pull": "Échec du tirage. {{reason}}",
+    "push": "Échec de l’envoi. {{reason}}",
+    "sync": "Échec de la synchronisation. {{reason}}",
+    "syncNotes": "Échec de Synchroniser les notes. {{reason}}",
+    "clone": "Échec du clonage. {{reason}}",
+    "commit": "Échec du commit. {{reason}}",
+    "checkout": "Impossible de changer de branche. {{reason}}",
+    "discard": "Impossible d’annuler les modifications. {{reason}}",
+    "stage": "Git n’a pas pu mettre à jour l’index. {{reason}}",
+    "init": "Impossible d’initialiser le dépôt. {{reason}}"
+  },
+  "reason": {
+    "auth": "Authentification requise.",
+    "locked": "Un autre processus Git est en cours d’exécution.",
+    "noGit": "Git n’est pas installé. Installez Git pour récupérer, tirer et pousser.",
+    "rejected": "Le distant contient des modifications que vous n’avez pas encore. Tirez d’abord.",
+    "noUpstream": "La branche n’a pas de branche amont.",
+    "conflict": "Des conflits ont arrêté l’opération ; vos commits locaux sont inchangés.",
+    "diverged": "La branche et sa branche amont ont divergé.",
+    "identity": "Définissez votre nom et votre e-mail dans Git (user.name et user.email) pour valider.",
+    "nothingToCommit": "Aucune modification à valider.",
+    "invalidName": "Ce nom de branche n’est pas valide.",
+    "exists": "Une branche portant ce nom existe déjà.",
+    "checkoutConflict": "Vos modifications locales de {{files}} seraient écrasées. Validez-les ou annulez-les d’abord.",
+    "cancelled": "Annulé.",
+    "other": "Consultez la sortie Git pour plus de détails."
+  },
+  "action": {
+    "showOutput": "Afficher la sortie Git"
+  },
+  "output": {
+    "empty": "Les commandes Git et leur sortie apparaissent ici.",
+    "initialized": "Dépôt Git initialisé dans {{path}}",
+    "committed": "Commit {{sha}} : {{summary}}"
+  },
+  "notes": {
+    "stepSave": "Synchroniser les notes : enregistrement des documents ouverts",
+    "stepCommit": "Synchroniser les notes : validation de toutes les modifications",
+    "committed": "Synchroniser les notes : commit {{sha}}",
+    "nothing": "Synchroniser les notes : rien à valider",
+    "stepStopped": "Synchroniser les notes : le distant a modifié les mêmes lignes ; arrêt avant le tirage",
+    "stepDone": "Synchroniser les notes : terminé",
+    "stoppedNotice": "Synchroniser les notes s’est arrêté : le distant a modifié les mêmes lignes que vos modifications locales. Vos modifications sont validées localement ; tirez, résolvez le conflit, puis poussez.",
+    "done": "Notes synchronisées."
+  },
+  "scm": {
+    "noWorkspace": "Ouvrez un dossier pour utiliser le contrôle de code source.",
+    "noRepo": "Cet espace de travail n’est pas un dépôt Git.",
+    "message": "Message de commit",
+    "messageHint": "Message ({{keys}} pour valider)",
+    "commit": "Valider",
+    "commitMore": "Autres actions de commit",
+    "staged": "Modifications indexées",
+    "changes": "Modifications",
+    "conflicts": "Conflits de fusion",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "Ouvrir le fichier",
+    "openChanges": "Ouvrir les modifications",
+    "revealInExplorer": "Afficher dans l’explorateur",
+    "sync": "Synchroniser les modifications",
+    "publish": "Publier la branche",
+    "truncated": "Trop de modifications ; la liste est tronquée."
+  },
+  "discard": {
+    "title": "Annuler les modifications de {{name}} ?",
+    "titleUntracked": "Supprimer le fichier non suivi {{name}} ?",
+    "titleMany": "Annuler les modifications de fichiers (nombre : {{count}}) ?",
+    "body": "Cette action est irréversible.",
+    "trash": "Les fichiers non suivis sont placés dans la corbeille.",
+    "confirm": "Annuler les modifications",
+    "confirmMany": "Annuler les fichiers ({{count}})"
+  },
+  "smartCommit": {
+    "title": "Aucune modification n’est indexée.",
+    "body": "Indexer toutes les modifications et valider ?",
+    "confirm": "Tout indexer et valider"
+  },
+  "diverged": {
+    "title": "Votre branche et {{upstream}} ont divergé.",
+    "rebase": "Tirer avec rebase",
+    "merge": "Tirer avec fusion"
+  },
+  "publish": {
+    "title": "Publier {{branch}} sur {{remote}} ?",
+    "body": "La branche n’a pas encore de branche amont. La publier la pousse et définit l’amont.",
+    "confirm": "Publier"
+  },
+  "syncConfirm": {
+    "title": "Synchroniser tire et pousse cette branche.",
+    "body": "Notoir tire les modifications distantes, puis pousse vos commits. La question est posée une fois par espace de travail."
+  },
+  "init": {
+    "title": "Initialiser un dépôt Git dans {{name}} ?",
+    "body": "Un dossier .git est créé à la racine de l’espace de travail.",
+    "confirm": "Initialiser"
+  },
+  "clone": {
+    "title": "Cloner un dépôt",
+    "urlHint": "URL du dépôt",
+    "cloneUrl": "Cloner {{url}}",
+    "recent": "récent",
+    "destination": "Choisissez un dossier où cloner",
+    "openTitle": "Ouvrir le dépôt cloné {{name}} ?",
+    "open": "Ouvrir"
+  },
+  "branch": {
+    "pickTitle": "Changer de branche",
+    "nameTitle": "Créer une branche",
+    "nameHint": "Nom de la nouvelle branche",
+    "createNamed": "Créer la branche {{name}}",
+    "create": "Créer une branche…",
+    "createFrom": "Créer une branche à partir de…",
+    "current": "actuelle",
+    "remote": "distante"
+  }
+}

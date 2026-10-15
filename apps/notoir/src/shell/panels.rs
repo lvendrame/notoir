@@ -44,6 +44,7 @@ fn side_panel(id: &'static str, side: Side) -> egui::Panel {
 pub struct PanelUis<'a> {
     pub explorer: &'a mut super::explorer::ExplorerUi,
     pub outline: &'a mut super::outline::OutlineUi,
+    pub scm: &'a mut super::scm_panel::ScmUi,
 }
 
 /// Renders every visible area around the editor; call before the central panel.
@@ -216,13 +217,20 @@ fn area_contents(
             if active == PanelId::Explorer && panel_hovered {
                 super::explorer::toolbar(ui, kit, core, actions);
             }
+            if active == PanelId::SourceControl {
+                super::scm_panel::toolbar(ui, kit, core, actions);
+            }
             egui::Popup::menu(&more).show(|ui| {
                 ui.set_min_width(200.0);
-                if active == PanelId::Explorer {
-                    let items = crate::menus::visible_items(
-                        &super::explorer::more_menu_items(),
-                        &core.commands,
-                    );
+                let more_items = match active {
+                    PanelId::Explorer => Some(super::explorer::more_menu_items()),
+                    PanelId::SourceControl if core.git.repo.is_some() => {
+                        Some(super::scm_panel::more_menu_items())
+                    }
+                    _ => None,
+                };
+                if let Some(items) = more_items {
+                    let items = crate::menus::visible_items(&items, &core.commands);
                     super::chrome::menu_items(ui, kit, core, context, &items, actions);
                     ui.separator();
                 }
@@ -262,6 +270,8 @@ fn area_contents(
         PanelId::Outline => super::outline::show(ui, kit, core, uis.outline, actions),
         PanelId::Search => super::search_panel::show(ui, kit, core, actions),
         PanelId::Output => output(ui, kit, core),
+        PanelId::SourceControl => super::scm_panel::show(ui, kit, core, uis.scm, actions),
+        PanelId::GitOutput => super::scm_panel::output(ui, kit, core),
         _ => {}
     }
 }

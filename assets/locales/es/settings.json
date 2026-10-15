@@ -178,6 +178,13 @@
     "pullMode": "Cómo integra pull los cambios remotos",
     "gutterBase": "Las barras de cambios del margen comparan con",
     "path": "Ruta del ejecutable git (vacío: desde PATH)",
-    "autoPush": "Hacer push automáticamente tras los commits"
+    "autoPush": "Hacer push automáticamente tras los commits",
+    "smartCommit": "Si no hay nada preparado, al confirmar"
+  },
+  "notes": {
+    "sync": {
+      "enabled": "Activar Sincronizar notas (confirma e inserta todos los cambios)",
+      "commitMessage": "Plantilla del mensaje de confirmación de Sincronizar notas"
+    }
   }
 }

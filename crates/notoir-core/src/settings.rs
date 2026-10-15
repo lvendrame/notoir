@@ -799,6 +799,30 @@ impl Schema {
             C::Git,
         );
         def("git.path", T::Str, s_(""), Scopes::USER_ONLY, C::Git);
+        def(
+            "git.smartCommit",
+            T::Enum(&["ask", "always", "never"]),
+            s_("ask"),
+            Scopes::NO_LANGUAGE,
+            C::Git,
+        );
+        def(
+            "notes.sync.commitMessage",
+            T::Str,
+            s_("Notes sync {{date}} {{time}} from {{hostname}}"),
+            Scopes::NO_LANGUAGE,
+            C::Git,
+        );
+        // Sync Notes commits and pushes: restricted, off by default.
+        s.define(SettingDef {
+            key: "notes.sync.enabled",
+            ty: T::Bool,
+            default: V::Bool(false),
+            scopes: Scopes::NO_LANGUAGE,
+            category: C::Git,
+            restricted: true,
+            tags: &["sync", "notes"],
+        });
         // Restricted: a cloned repo must not push on its own.
         s.define(SettingDef {
             key: "git.autoPush",

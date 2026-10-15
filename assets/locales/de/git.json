@@ -1,0 +1,135 @@
+{
+  "index": "Index",
+  "deletedSide": "{{name}} (gelöscht)",
+  "alreadyRunning": "Ein anderer Git-Vorgang läuft.",
+  "detachedPush": "Checken Sie einen Branch aus, um zu pushen.",
+  "noRemote": "Dieses Repository hat kein Remote zum Pushen.",
+  "emptyMessage": "Geben Sie eine Commit-Nachricht ein.",
+  "resolveConflicts": "Lösen und stagen Sie die Merge-Konflikte vor dem Commit.",
+  "nothingStaged": "Es gibt keine gestagten Änderungen zum Committen.",
+  "progress": {
+    "fetch": "Fetch läuft…",
+    "pull": "Pull läuft…",
+    "push": "Push läuft…",
+    "sync": "Synchronisierung läuft…",
+    "syncNotes": "Notizen werden synchronisiert…",
+    "clone": "Klonen läuft…"
+  },
+  "failed": {
+    "fetch": "Fetch fehlgeschlagen. {{reason}}",
+    "pull": "Pull fehlgeschlagen. {{reason}}",
+    "push": "Push fehlgeschlagen. {{reason}}",
+    "sync": "Synchronisierung fehlgeschlagen. {{reason}}",
+    "syncNotes": "Notizen synchronisieren fehlgeschlagen. {{reason}}",
+    "clone": "Klonen fehlgeschlagen. {{reason}}",
+    "commit": "Commit fehlgeschlagen. {{reason}}",
+    "checkout": "Branch konnte nicht gewechselt werden. {{reason}}",
+    "discard": "Änderungen konnten nicht verworfen werden. {{reason}}",
+    "stage": "Git konnte den Index nicht aktualisieren. {{reason}}",
+    "init": "Repository konnte nicht initialisiert werden. {{reason}}"
+  },
+  "reason": {
+    "auth": "Authentifizierung erforderlich.",
+    "locked": "Ein anderer Git-Prozess läuft.",
+    "noGit": "Git ist nicht installiert. Installieren Sie Git für Fetch, Pull und Push.",
+    "rejected": "Das Remote hat Änderungen, die Ihnen noch fehlen. Führen Sie zuerst Pull aus.",
+    "noUpstream": "Der Branch hat keinen Upstream-Branch.",
+    "conflict": "Konflikte haben den Vorgang gestoppt; Ihre lokalen Commits sind unverändert.",
+    "diverged": "Der Branch und sein Upstream sind auseinandergelaufen.",
+    "identity": "Legen Sie Ihren Namen und Ihre E-Mail in Git fest (user.name und user.email), um zu committen.",
+    "nothingToCommit": "Es gibt keine Änderungen zum Committen.",
+    "invalidName": "Das ist kein gültiger Branch-Name.",
+    "exists": "Ein Branch mit diesem Namen existiert bereits.",
+    "checkoutConflict": "Ihre lokalen Änderungen an {{files}} würden überschrieben. Committen oder verwerfen Sie sie zuerst.",
+    "cancelled": "Abgebrochen.",
+    "other": "Details finden Sie in der Git-Ausgabe."
+  },
+  "action": {
+    "showOutput": "Git-Ausgabe anzeigen"
+  },
+  "output": {
+    "empty": "Git-Befehle und ihre Ausgabe erscheinen hier.",
+    "initialized": "Git-Repository in {{path}} initialisiert",
+    "committed": "Commit {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "Notizen synchronisieren: offene Dokumente werden gespeichert",
+    "stepCommit": "Notizen synchronisieren: alle Änderungen werden committet",
+    "committed": "Notizen synchronisieren: Commit {{sha}}",
+    "nothing": "Notizen synchronisieren: nichts zu committen",
+    "stepStopped": "Notizen synchronisieren: das Remote hat dieselben Zeilen geändert; vor dem Pull gestoppt",
+    "stepDone": "Notizen synchronisieren: fertig",
+    "stoppedNotice": "Notizen synchronisieren wurde gestoppt: Das Remote hat dieselben Zeilen geändert wie Ihre lokalen Änderungen. Ihre Änderungen sind lokal committet; führen Sie Pull aus, lösen Sie den Konflikt und pushen Sie dann.",
+    "done": "Notizen synchronisiert."
+  },
+  "scm": {
+    "noWorkspace": "Öffnen Sie einen Ordner, um die Quellcodeverwaltung zu nutzen.",
+    "noRepo": "Dieser Arbeitsbereich ist kein Git-Repository.",
+    "message": "Commit-Nachricht",
+    "messageHint": "Nachricht ({{keys}} zum Committen)",
+    "commit": "Commit",
+    "commitMore": "Weitere Commit-Aktionen",
+    "staged": "Gestagte Änderungen",
+    "changes": "Änderungen",
+    "conflicts": "Merge-Konflikte",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "Datei öffnen",
+    "openChanges": "Änderungen öffnen",
+    "revealInExplorer": "Im Explorer anzeigen",
+    "sync": "Änderungen synchronisieren",
+    "publish": "Branch veröffentlichen",
+    "truncated": "Zu viele Änderungen; die Liste ist gekürzt."
+  },
+  "discard": {
+    "title": "Änderungen an {{name}} verwerfen?",
+    "titleUntracked": "Die nicht verfolgte Datei {{name}} löschen?",
+    "titleMany": "Änderungen an Dateien verwerfen (Anzahl: {{count}})?",
+    "body": "Dies kann nicht rückgängig gemacht werden.",
+    "trash": "Nicht verfolgte Dateien werden in den Papierkorb verschoben.",
+    "confirm": "Änderungen verwerfen",
+    "confirmMany": "Dateien verwerfen ({{count}})"
+  },
+  "smartCommit": {
+    "title": "Es sind keine Änderungen gestaged.",
+    "body": "Alle Änderungen stagen und committen?",
+    "confirm": "Alle stagen und committen"
+  },
+  "diverged": {
+    "title": "Ihr Branch und {{upstream}} sind auseinandergelaufen.",
+    "rebase": "Pull mit Rebase",
+    "merge": "Pull mit Merge"
+  },
+  "publish": {
+    "title": "{{branch}} auf {{remote}} veröffentlichen?",
+    "body": "Der Branch hat noch keinen Upstream. Beim Veröffentlichen wird er gepusht und der Upstream gesetzt.",
+    "confirm": "Veröffentlichen"
+  },
+  "syncConfirm": {
+    "title": "Synchronisieren führt Pull und Push für diesen Branch aus.",
+    "body": "Notoir holt die Remote-Änderungen und pusht dann Ihre Commits. Sie werden einmal pro Arbeitsbereich gefragt."
+  },
+  "init": {
+    "title": "Git-Repository in {{name}} initialisieren?",
+    "body": "Im Stammordner des Arbeitsbereichs wird ein .git-Ordner erstellt.",
+    "confirm": "Initialisieren"
+  },
+  "clone": {
+    "title": "Repository klonen",
+    "urlHint": "Repository-URL",
+    "cloneUrl": "{{url}} klonen",
+    "recent": "zuletzt",
+    "destination": "Ordner zum Klonen auswählen",
+    "openTitle": "Das geklonte Repository {{name}} öffnen?",
+    "open": "Öffnen"
+  },
+  "branch": {
+    "pickTitle": "Branch wechseln",
+    "nameTitle": "Branch erstellen",
+    "nameHint": "Name des neuen Branches",
+    "createNamed": "Branch {{name}} erstellen",
+    "create": "Branch erstellen…",
+    "createFrom": "Branch erstellen aus…",
+    "current": "aktuell",
+    "remote": "Remote"
+  }
+}

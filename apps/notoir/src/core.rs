@@ -28,8 +28,10 @@ use crate::theme::ThemeId;
 pub const REGISTERED_PANELS: &[PanelId] = &[
     PanelId::Explorer,
     PanelId::Search,
+    PanelId::SourceControl,
     PanelId::Outline,
     PanelId::Output,
+    PanelId::GitOutput,
 ];
 
 /// Theme setting: a fixed theme or "auto" (follow the OS).
@@ -97,6 +99,8 @@ pub struct StartOptions {
     pub dialogs: Option<std::sync::Arc<dyn crate::files::Dialogs>>,
     /// Git backend (git2 unless a test replaces it).
     pub git_backend: Option<std::sync::Arc<dyn notoir_git::GitBackend>>,
+    /// Network Git (system git unless a test replaces it).
+    pub git_remote: Option<std::sync::Arc<dyn notoir_git::GitRemote>>,
     /// Administrator authorization (native unless a test scripts it).
     pub elevation: Option<std::sync::Arc<dyn notoir_platform::elevation::Elevation>>,
     /// Files from the command line, with optional `--goto` line/column.
@@ -120,6 +124,7 @@ impl StartOptions {
             dialogs: None,
             elevation: None,
             git_backend: None,
+            git_remote: None,
             open_paths: Vec::new(),
             restore_session: false,
             first_run: false,
@@ -308,11 +313,15 @@ impl AppCore {
                 let w = wake.clone();
                 move || w()
             }),
-            git: crate::git::GitState::new(
-                opts.git_backend
-                    .clone()
-                    .unwrap_or_else(|| std::sync::Arc::new(notoir_git::Git2Backend)),
-            ),
+            git: {
+                let mut g = crate::git::GitState::new(
+                    opts.git_backend
+                        .clone()
+                        .unwrap_or_else(|| std::sync::Arc::new(notoir_git::Git2Backend)),
+                );
+                g.remote = opts.git_remote.clone();
+                g
+            },
             index_queue: IoQueue::start(move || wake()),
             workspace: None,
             ws_generation: 0,
@@ -571,7 +580,14 @@ impl AppCore {
             )
             .set_bool("compareSelected", self.compare.selected.is_some())
             .set_bool("columnSelection", self.column_mode)
-            .set_bool("gitRepo", self.git.repo.is_some());
+            .set_bool("gitRepo", self.git.repo.is_some())
+            .set_bool("gitBusy", self.git_busy())
+            .set_bool("gitNetwork", self.git.net.is_some())
+            .set_bool(
+                "notesSync",
+                self.settings.bool("notes.sync.enabled", None)
+                    && self.workspace.as_ref().is_some_and(|w| w.trusted),
+            );
         if let Some(view) = self
             .workbench
             .active_editor()
@@ -751,6 +767,7 @@ impl AppCore {
                     );
                 }
                 IoResult::Instance(req) => self.handle_instance_request(req),
+                IoResult::FolderPicked(path) if self.git_clone_folder(path.as_deref()) => {}
                 IoResult::FolderPicked(Some(path)) => self.open_workspace(&path),
                 IoResult::FolderPicked(None) => {}
                 IoResult::Workspace(r) => self.handle_workspace(r),

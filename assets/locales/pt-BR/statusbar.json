@@ -8,5 +8,6 @@
   "spaces": "Espaços: {{size}}",
   "tabSize": "Tamanho da Tabulação: {{size}}",
   "plainText": "Texto Simples",
-  "branch": "Branch: {{name}}"
+  "branch": "Branch: {{name}}",
+  "gitProgress": "Git: {{progress}}"
 }

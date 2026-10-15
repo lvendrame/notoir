@@ -249,6 +249,10 @@ pub enum Then {
         views: Vec<ViewId>,
         next: Option<PathBuf>,
     },
+    /// Switch Branch after saving.
+    GitCheckout(String),
+    /// Sync Notes after saving.
+    GitSyncNotes,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -278,6 +282,8 @@ pub enum Prompt {
     OpenLink { url: String },
     /// Workspace Replace All: Replace / Cancel.
     ReplaceAll { count: usize, files: usize },
+    /// Source Control confirmations.
+    Git(crate::git_write::GitPrompt),
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -1040,6 +1046,10 @@ impl AppCore {
                 self.effects.push(Effect::Quit);
             }
             Then::CloseWorkspace { views, next } => self.finish_close_workspace(views, next),
+            Then::GitCheckout(branch) => {
+                self.git_submit(crate::git_write::LocalOp::Checkout(branch))
+            }
+            Then::GitSyncNotes => self.git_sync_notes_now(),
         }
     }
 
@@ -1188,6 +1198,7 @@ impl AppCore {
             return;
         };
         match (prompt, answer) {
+            (Prompt::Git(p), a) => self.git_answer(p, a),
             (_, Answer::Cancel) => {}
             (Prompt::Unsaved { docs, then }, Answer::Primary) => {
                 self.files.pending.push(Pending {

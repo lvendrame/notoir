@@ -1,0 +1,135 @@
+{
+  "index": "Índice",
+  "deletedSide": "{{name}} (excluído)",
+  "alreadyRunning": "Outra operação do Git está em andamento.",
+  "detachedPush": "Faça checkout de uma branch para fazer push.",
+  "noRemote": "Este repositório não tem remoto para push.",
+  "emptyMessage": "Digite uma mensagem de commit.",
+  "resolveConflicts": "Resolva e prepare os conflitos de merge antes do commit.",
+  "nothingStaged": "Não há alterações preparadas para commit.",
+  "progress": {
+    "fetch": "Buscando…",
+    "pull": "Fazendo pull…",
+    "push": "Fazendo push…",
+    "sync": "Sincronizando…",
+    "syncNotes": "Sincronizando notas…",
+    "clone": "Clonando…"
+  },
+  "failed": {
+    "fetch": "Falha no fetch. {{reason}}",
+    "pull": "Falha no pull. {{reason}}",
+    "push": "Falha no push. {{reason}}",
+    "sync": "Falha na sincronização. {{reason}}",
+    "syncNotes": "Falha ao sincronizar notas. {{reason}}",
+    "clone": "Falha ao clonar. {{reason}}",
+    "commit": "Falha no commit. {{reason}}",
+    "checkout": "Não foi possível trocar de branch. {{reason}}",
+    "discard": "Não foi possível descartar as alterações. {{reason}}",
+    "stage": "O Git não conseguiu atualizar o índice. {{reason}}",
+    "init": "Não foi possível inicializar o repositório. {{reason}}"
+  },
+  "reason": {
+    "auth": "Autenticação necessária.",
+    "locked": "Outro processo do Git está em execução.",
+    "noGit": "O Git não está instalado. Instale o Git para fazer fetch, pull e push.",
+    "rejected": "O remoto tem alterações que você ainda não tem. Faça pull primeiro.",
+    "noUpstream": "A branch não tem branch upstream.",
+    "conflict": "Conflitos interromperam a operação; seus commits locais não foram alterados.",
+    "diverged": "A branch e seu upstream divergiram.",
+    "identity": "Configure seu nome e e-mail no Git (user.name e user.email) para fazer commit.",
+    "nothingToCommit": "Não há alterações para commit.",
+    "invalidName": "Esse não é um nome de branch válido.",
+    "exists": "Já existe uma branch com esse nome.",
+    "checkoutConflict": "Suas alterações locais em {{files}} seriam sobrescritas. Faça commit ou descarte-as primeiro.",
+    "cancelled": "Cancelado.",
+    "other": "Veja a Saída do Git para detalhes."
+  },
+  "action": {
+    "showOutput": "Mostrar Saída do Git"
+  },
+  "output": {
+    "empty": "Os comandos do Git e sua saída aparecem aqui.",
+    "initialized": "Repositório Git inicializado em {{path}}",
+    "committed": "Commit {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "Sincronizar Notas: salvando documentos abertos",
+    "stepCommit": "Sincronizar Notas: fazendo commit de todas as alterações",
+    "committed": "Sincronizar Notas: commit {{sha}}",
+    "nothing": "Sincronizar Notas: nada para commit",
+    "stepStopped": "Sincronizar Notas: o remoto alterou as mesmas linhas; parado antes do pull",
+    "stepDone": "Sincronizar Notas: concluído",
+    "stoppedNotice": "Sincronizar Notas parou: o remoto alterou as mesmas linhas que suas alterações locais. Suas alterações estão em um commit local; faça pull, resolva o conflito e depois faça push.",
+    "done": "Notas sincronizadas."
+  },
+  "scm": {
+    "noWorkspace": "Abra uma pasta para usar o Controle de Código-Fonte.",
+    "noRepo": "Este workspace não é um repositório Git.",
+    "message": "Mensagem de commit",
+    "messageHint": "Mensagem ({{keys}} para commit)",
+    "commit": "Commit",
+    "commitMore": "Mais ações de commit",
+    "staged": "Alterações Preparadas",
+    "changes": "Alterações",
+    "conflicts": "Conflitos de Merge",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "Abrir Arquivo",
+    "openChanges": "Abrir Alterações",
+    "revealInExplorer": "Revelar no Explorador",
+    "sync": "Sincronizar Alterações",
+    "publish": "Publicar Branch",
+    "truncated": "Alterações demais; a lista foi truncada."
+  },
+  "discard": {
+    "title": "Descartar as alterações em {{name}}?",
+    "titleUntracked": "Excluir o arquivo não rastreado {{name}}?",
+    "titleMany": "Descartar as alterações em arquivos (quantidade: {{count}})?",
+    "body": "Isso não pode ser desfeito.",
+    "trash": "Arquivos não rastreados vão para a Lixeira.",
+    "confirm": "Descartar Alterações",
+    "confirmMany": "Descartar Arquivos ({{count}})"
+  },
+  "smartCommit": {
+    "title": "Não há alterações preparadas.",
+    "body": "Preparar todas as alterações e fazer commit?",
+    "confirm": "Preparar Tudo e Commit"
+  },
+  "diverged": {
+    "title": "Sua branch e {{upstream}} divergiram.",
+    "rebase": "Pull com Rebase",
+    "merge": "Pull com Merge"
+  },
+  "publish": {
+    "title": "Publicar {{branch}} em {{remote}}?",
+    "body": "A branch ainda não tem upstream. Publicar faz push dela e define o upstream.",
+    "confirm": "Publicar"
+  },
+  "syncConfirm": {
+    "title": "Sincronizar faz pull e push desta branch.",
+    "body": "O Notoir faz pull das alterações remotas e depois push dos seus commits. Isso é perguntado uma vez por workspace."
+  },
+  "init": {
+    "title": "Inicializar um repositório Git em {{name}}?",
+    "body": "Uma pasta .git é criada na raiz do workspace.",
+    "confirm": "Inicializar"
+  },
+  "clone": {
+    "title": "Clonar Repositório",
+    "urlHint": "URL do repositório",
+    "cloneUrl": "Clonar {{url}}",
+    "recent": "recente",
+    "destination": "Escolha uma pasta para clonar",
+    "openTitle": "Abrir o repositório clonado {{name}}?",
+    "open": "Abrir"
+  },
+  "branch": {
+    "pickTitle": "Trocar de Branch",
+    "nameTitle": "Criar Branch",
+    "nameHint": "Nome da nova branch",
+    "createNamed": "Criar branch {{name}}",
+    "create": "Criar Branch…",
+    "createFrom": "Criar Branch a Partir de…",
+    "current": "atual",
+    "remote": "remota"
+  }
+}

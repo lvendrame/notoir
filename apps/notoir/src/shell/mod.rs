@@ -22,6 +22,7 @@ pub mod overlays;
 pub mod panels;
 pub mod prompts;
 pub mod recovery_ui;
+pub mod scm_panel;
 pub mod search_panel;
 pub mod settings_ui;
 pub mod tabs;
@@ -71,6 +72,7 @@ pub struct UiState {
     pub previews: md_preview::Previews,
     pub json_trees: json_tree::JsonTrees,
     pub outline: outline::OutlineUi,
+    pub scm: scm_panel::ScmUi,
 }
 
 /// Collects invocations produced while rendering one frame.

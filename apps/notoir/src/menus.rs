@@ -50,7 +50,7 @@ pub struct Menu {
     pub items: Vec<MenuItem>,
 }
 
-fn cmd(id: &'static str) -> MenuItem {
+pub(crate) fn cmd(id: &'static str) -> MenuItem {
     MenuItem::Command {
         id,
         args: Value::Null,
@@ -342,19 +342,25 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         label: "menus:top.git",
         items: vec![
             cmd("git.showSourceControl"),
-            cmd("git.status"),
+            cmd("git.showOutput"),
             SEP,
             cmd("git.commit"),
             cmd("git.commitAll"),
+            cmd("git.commitAmend"),
             SEP,
             cmd("git.pull"),
             cmd("git.push"),
             cmd("git.sync"),
             cmd("git.fetch"),
+            cmd("git.syncNotes"),
             SEP,
             sub(
                 "menus:sub.branches",
-                vec![cmd("git.switchBranch"), cmd("git.createBranch")],
+                vec![
+                    cmd("git.switchBranch"),
+                    cmd("git.createBranch"),
+                    cmd("git.createBranchFrom"),
+                ],
             ),
             SEP,
             cmd("git.viewFileChanges"),

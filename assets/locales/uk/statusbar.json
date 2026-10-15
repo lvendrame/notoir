@@ -8,5 +8,6 @@
   "spaces": "Пробіли: {{size}}",
   "tabSize": "Розмір табуляції: {{size}}",
   "plainText": "Звичайний текст",
-  "branch": "Гілка: {{name}}"
+  "branch": "Гілка: {{name}}",
+  "gitProgress": "Git: {{progress}}"
 }

@@ -1,0 +1,135 @@
+{
+  "index": "Index",
+  "deletedSide": "{{name}} (verwijderd)",
+  "alreadyRunning": "Er loopt al een andere Git-bewerking.",
+  "detachedPush": "Check een branch uit om te pushen.",
+  "noRemote": "Deze repository heeft geen remote om naar te pushen.",
+  "emptyMessage": "Voer een commitbericht in.",
+  "resolveConflicts": "Los de mergeconflicten op en stage ze voordat je commit.",
+  "nothingStaged": "Er zijn geen gestagede wijzigingen om te committen.",
+  "progress": {
+    "fetch": "Fetchen…",
+    "pull": "Pullen…",
+    "push": "Pushen…",
+    "sync": "Synchroniseren…",
+    "syncNotes": "Notities synchroniseren…",
+    "clone": "Klonen…"
+  },
+  "failed": {
+    "fetch": "Fetch mislukt. {{reason}}",
+    "pull": "Pull mislukt. {{reason}}",
+    "push": "Push mislukt. {{reason}}",
+    "sync": "Synchroniseren mislukt. {{reason}}",
+    "syncNotes": "Notities synchroniseren mislukt. {{reason}}",
+    "clone": "Klonen mislukt. {{reason}}",
+    "commit": "Commit mislukt. {{reason}}",
+    "checkout": "Kan niet van branch wisselen. {{reason}}",
+    "discard": "Kan wijzigingen niet verwerpen. {{reason}}",
+    "stage": "Git kon de index niet bijwerken. {{reason}}",
+    "init": "Kan de repository niet initialiseren. {{reason}}"
+  },
+  "reason": {
+    "auth": "Authenticatie vereist.",
+    "locked": "Er draait een ander Git-proces.",
+    "noGit": "Git is niet geïnstalleerd. Installeer Git om te fetchen, pullen en pushen.",
+    "rejected": "De remote heeft wijzigingen die je nog niet hebt. Pull eerst.",
+    "noUpstream": "De branch heeft geen upstream-branch.",
+    "conflict": "Conflicten hebben de bewerking gestopt; je lokale commits zijn ongewijzigd.",
+    "diverged": "De branch en zijn upstream zijn uiteengelopen.",
+    "identity": "Stel je naam en e-mail in Git in (user.name en user.email) om te committen.",
+    "nothingToCommit": "Er zijn geen wijzigingen om te committen.",
+    "invalidName": "Dat is geen geldige branchnaam.",
+    "exists": "Er bestaat al een branch met die naam.",
+    "checkoutConflict": "Je lokale wijzigingen in {{files}} zouden worden overschreven. Commit of verwerp ze eerst.",
+    "cancelled": "Geannuleerd.",
+    "other": "Zie de Git-uitvoer voor details."
+  },
+  "action": {
+    "showOutput": "Git-uitvoer weergeven"
+  },
+  "output": {
+    "empty": "Git-opdrachten en hun uitvoer verschijnen hier.",
+    "initialized": "Git-repository geïnitialiseerd in {{path}}",
+    "committed": "Commit {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "Notities synchroniseren: geopende documenten opslaan",
+    "stepCommit": "Notities synchroniseren: alle wijzigingen committen",
+    "committed": "Notities synchroniseren: commit {{sha}}",
+    "nothing": "Notities synchroniseren: niets om te committen",
+    "stepStopped": "Notities synchroniseren: de remote wijzigde dezelfde regels; gestopt vóór de pull",
+    "stepDone": "Notities synchroniseren: klaar",
+    "stoppedNotice": "Notities synchroniseren is gestopt: de remote wijzigde dezelfde regels als je lokale wijzigingen. Je wijzigingen zijn lokaal gecommit; pull, los het conflict op en push daarna.",
+    "done": "Notities gesynchroniseerd."
+  },
+  "scm": {
+    "noWorkspace": "Open een map om broncodebeheer te gebruiken.",
+    "noRepo": "Deze werkruimte is geen Git-repository.",
+    "message": "Commitbericht",
+    "messageHint": "Bericht ({{keys}} om te committen)",
+    "commit": "Commit",
+    "commitMore": "Meer commitacties",
+    "staged": "Gestagede wijzigingen",
+    "changes": "Wijzigingen",
+    "conflicts": "Mergeconflicten",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "Bestand openen",
+    "openChanges": "Wijzigingen openen",
+    "revealInExplorer": "Weergeven in Verkenner",
+    "sync": "Wijzigingen synchroniseren",
+    "publish": "Branch publiceren",
+    "truncated": "Te veel wijzigingen; de lijst is ingekort."
+  },
+  "discard": {
+    "title": "Wijzigingen in {{name}} verwerpen?",
+    "titleUntracked": "Het niet-gevolgde bestand {{name}} verwijderen?",
+    "titleMany": "Wijzigingen in bestanden verwerpen (aantal: {{count}})?",
+    "body": "Dit kan niet ongedaan worden gemaakt.",
+    "trash": "Niet-gevolgde bestanden gaan naar de prullenbak.",
+    "confirm": "Wijzigingen verwerpen",
+    "confirmMany": "Bestanden verwerpen ({{count}})"
+  },
+  "smartCommit": {
+    "title": "Er zijn geen gestagede wijzigingen.",
+    "body": "Alle wijzigingen stagen en committen?",
+    "confirm": "Alles stagen en committen"
+  },
+  "diverged": {
+    "title": "Je branch en {{upstream}} zijn uiteengelopen.",
+    "rebase": "Pull met rebase",
+    "merge": "Pull met merge"
+  },
+  "publish": {
+    "title": "{{branch}} publiceren naar {{remote}}?",
+    "body": "De branch heeft nog geen upstream. Publiceren pusht hem en stelt de upstream in.",
+    "confirm": "Publiceren"
+  },
+  "syncConfirm": {
+    "title": "Synchroniseren pullt en pusht deze branch.",
+    "body": "Notoir haalt de wijzigingen van de remote op en pusht daarna je commits. Dit wordt één keer per werkruimte gevraagd."
+  },
+  "init": {
+    "title": "Een Git-repository initialiseren in {{name}}?",
+    "body": "Er wordt een .git-map gemaakt in de hoofdmap van de werkruimte.",
+    "confirm": "Initialiseren"
+  },
+  "clone": {
+    "title": "Repository klonen",
+    "urlHint": "Repository-URL",
+    "cloneUrl": "{{url}} klonen",
+    "recent": "recent",
+    "destination": "Kies een map om in te klonen",
+    "openTitle": "De gekloonde repository {{name}} openen?",
+    "open": "Openen"
+  },
+  "branch": {
+    "pickTitle": "Van branch wisselen",
+    "nameTitle": "Branch maken",
+    "nameHint": "Naam van de nieuwe branch",
+    "createNamed": "Branch {{name}} maken",
+    "create": "Branch maken…",
+    "createFrom": "Branch maken vanaf…",
+    "current": "huidig",
+    "remote": "remote"
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "index": "Dizin",
+  "deletedSide": "{{name}} (silindi)",
+  "alreadyRunning": "Başka bir Git işlemi sürüyor.",
+  "detachedPush": "Push için bir dala geçin.",
+  "noRemote": "Bu deponun push yapılacak bir uzak deposu yok.",
+  "emptyMessage": "Bir commit mesajı girin.",
+  "resolveConflicts": "Commit etmeden önce birleştirme çakışmalarını çözüp hazırlayın.",
+  "nothingStaged": "Commit edilecek hazırlanmış değişiklik yok.",
+  "progress": {
+    "fetch": "Fetch yapılıyor…",
+    "pull": "Pull yapılıyor…",
+    "push": "Push yapılıyor…",
+    "sync": "Eşitleniyor…",
+    "syncNotes": "Notlar eşitleniyor…",
+    "clone": "Klonlanıyor…"
+  },
+  "failed": {
+    "fetch": "Fetch başarısız. {{reason}}",
+    "pull": "Pull başarısız. {{reason}}",
+    "push": "Push başarısız. {{reason}}",
+    "sync": "Eşitleme başarısız. {{reason}}",
+    "syncNotes": "Notları Eşitle başarısız. {{reason}}",
+    "clone": "Klonlama başarısız. {{reason}}",
+    "commit": "Commit başarısız. {{reason}}",
+    "checkout": "Dal değiştirilemedi. {{reason}}",
+    "discard": "Değişiklikler atılamadı. {{reason}}",
+    "stage": "Git dizini güncelleyemedi. {{reason}}",
+    "init": "Depo başlatılamadı. {{reason}}"
+  },
+  "reason": {
+    "auth": "Kimlik doğrulaması gerekli.",
+    "locked": "Başka bir Git işlemi çalışıyor.",
+    "noGit": "Git yüklü değil. Fetch, pull ve push için Git’i yükleyin.",
+    "rejected": "Uzak depoda henüz sizde olmayan değişiklikler var. Önce pull yapın.",
+    "noUpstream": "Dalın yukarı akış (upstream) dalı yok.",
+    "conflict": "Çakışmalar işlemi durdurdu; yerel commit’leriniz değişmedi.",
+    "diverged": "Dal ile yukarı akış dalı ayrıştı.",
+    "identity": "Commit için Git’te adınızı ve e-postanızı ayarlayın (user.name ve user.email).",
+    "nothingToCommit": "Commit edilecek değişiklik yok.",
+    "invalidName": "Bu geçerli bir dal adı değil.",
+    "exists": "Bu adda bir dal zaten var.",
+    "checkoutConflict": "{{files}} içindeki yerel değişiklikleriniz üzerine yazılır. Önce commit edin veya atın.",
+    "cancelled": "İptal edildi.",
+    "other": "Ayrıntılar için Git çıktısına bakın."
+  },
+  "action": {
+    "showOutput": "Git Çıktısını Göster"
+  },
+  "output": {
+    "empty": "Git komutları ve çıktıları burada görünür.",
+    "initialized": "{{path}} içinde Git deposu başlatıldı",
+    "committed": "Commit {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "Notları Eşitle: açık belgeler kaydediliyor",
+    "stepCommit": "Notları Eşitle: tüm değişiklikler commit ediliyor",
+    "committed": "Notları Eşitle: {{sha}} commit edildi",
+    "nothing": "Notları Eşitle: commit edilecek bir şey yok",
+    "stepStopped": "Notları Eşitle: uzak depo aynı satırları değiştirdi; pull öncesinde durduruldu",
+    "stepDone": "Notları Eşitle: tamamlandı",
+    "stoppedNotice": "Notları Eşitle durdu: uzak depo, yerel değişikliklerinizle aynı satırları değiştirdi. Değişiklikleriniz yerel olarak commit edildi; pull yapın, çakışmayı çözün, ardından push yapın.",
+    "done": "Notlar eşitlendi."
+  },
+  "scm": {
+    "noWorkspace": "Kaynak denetimini kullanmak için bir klasör açın.",
+    "noRepo": "Bu çalışma alanı bir Git deposu değil.",
+    "message": "Commit mesajı",
+    "messageHint": "Mesaj (commit için {{keys}})",
+    "commit": "Commit",
+    "commitMore": "Diğer commit eylemleri",
+    "staged": "Hazırlanan Değişiklikler",
+    "changes": "Değişiklikler",
+    "conflicts": "Birleştirme Çakışmaları",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "Dosyayı Aç",
+    "openChanges": "Değişiklikleri Aç",
+    "revealInExplorer": "Gezginde Göster",
+    "sync": "Değişiklikleri Eşitle",
+    "publish": "Dalı Yayımla",
+    "truncated": "Çok fazla değişiklik var; liste kısaltıldı."
+  },
+  "discard": {
+    "title": "{{name}} içindeki değişiklikler atılsın mı?",
+    "titleUntracked": "İzlenmeyen {{name}} dosyası silinsin mi?",
+    "titleMany": "Dosyalardaki değişiklikler atılsın mı (sayı: {{count}})?",
+    "body": "Bu işlem geri alınamaz.",
+    "trash": "İzlenmeyen dosyalar Çöp Kutusu’na taşınır.",
+    "confirm": "Değişiklikleri At",
+    "confirmMany": "Dosyaları At ({{count}})"
+  },
+  "smartCommit": {
+    "title": "Hazırlanmış değişiklik yok.",
+    "body": "Tüm değişiklikler hazırlanıp commit edilsin mi?",
+    "confirm": "Tümünü Hazırla ve Commit Et"
+  },
+  "diverged": {
+    "title": "Dalınız ve {{upstream}} ayrıştı.",
+    "rebase": "Rebase ile Pull",
+    "merge": "Merge ile Pull"
+  },
+  "publish": {
+    "title": "{{branch}}, {{remote}} üzerinde yayımlansın mı?",
+    "body": "Dalın henüz yukarı akış dalı yok. Yayımlamak onu push eder ve yukarı akışı ayarlar.",
+    "confirm": "Yayımla"
+  },
+  "syncConfirm": {
+    "title": "Eşitle bu dalı pull ve push eder.",
+    "body": "Notoir uzak değişiklikleri çeker, ardından commit’lerinizi push eder. Bu, çalışma alanı başına bir kez sorulur."
+  },
+  "init": {
+    "title": "{{name}} içinde Git deposu başlatılsın mı?",
+    "body": "Çalışma alanının kökünde bir .git klasörü oluşturulur.",
+    "confirm": "Başlat"
+  },
+  "clone": {
+    "title": "Depoyu Klonla",
+    "urlHint": "Depo URL’si",
+    "cloneUrl": "{{url}} adresini klonla",
+    "recent": "son",
+    "destination": "Klonlanacak klasörü seçin",
+    "openTitle": "Klonlanan {{name}} deposu açılsın mı?",
+    "open": "Aç"
+  },
+  "branch": {
+    "pickTitle": "Dal Değiştir",
+    "nameTitle": "Dal Oluştur",
+    "nameHint": "Yeni dal adı",
+    "createNamed": "{{name}} dalını oluştur",
+    "create": "Dal Oluştur…",
+    "createFrom": "Şuradan Dal Oluştur…",
+    "current": "geçerli",
+    "remote": "uzak"
+  }
+}

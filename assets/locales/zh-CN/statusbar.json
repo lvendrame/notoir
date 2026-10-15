@@ -8,5 +8,6 @@
   "spaces": "空格: {{size}}",
   "tabSize": "制表符大小: {{size}}",
   "plainText": "纯文本",
-  "branch": "分支:{{name}}"
+  "branch": "分支:{{name}}",
+  "gitProgress": "Git: {{progress}}"
 }

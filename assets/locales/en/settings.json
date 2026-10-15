@@ -178,6 +178,13 @@
     "pullMode": "How Pull integrates remote changes",
     "gutterBase": "Gutter change bars compare with",
     "path": "Path of the git executable (empty: from PATH)",
-    "autoPush": "Push automatically after commits"
+    "autoPush": "Push automatically after commits",
+    "smartCommit": "When nothing is staged, Commit"
+  },
+  "notes": {
+    "sync": {
+      "enabled": "Enable Sync Notes (commits and pushes every change)",
+      "commitMessage": "Sync Notes commit message template"
+    }
   }
 }

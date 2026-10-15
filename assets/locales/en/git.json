@@ -1,0 +1,135 @@
+{
+  "index": "Index",
+  "deletedSide": "{{name}} (deleted)",
+  "alreadyRunning": "Another Git operation is running.",
+  "detachedPush": "Check out a branch to push.",
+  "noRemote": "This repository has no remote to push to.",
+  "emptyMessage": "Enter a commit message.",
+  "resolveConflicts": "Resolve and stage the merge conflicts before committing.",
+  "nothingStaged": "There are no staged changes to commit.",
+  "progress": {
+    "fetch": "Fetching…",
+    "pull": "Pulling…",
+    "push": "Pushing…",
+    "sync": "Syncing…",
+    "syncNotes": "Syncing notes…",
+    "clone": "Cloning…"
+  },
+  "failed": {
+    "fetch": "Fetch failed. {{reason}}",
+    "pull": "Pull failed. {{reason}}",
+    "push": "Push failed. {{reason}}",
+    "sync": "Sync failed. {{reason}}",
+    "syncNotes": "Sync Notes failed. {{reason}}",
+    "clone": "Clone failed. {{reason}}",
+    "commit": "Commit failed. {{reason}}",
+    "checkout": "Could not switch branches. {{reason}}",
+    "discard": "Could not discard changes. {{reason}}",
+    "stage": "Git could not update the index. {{reason}}",
+    "init": "Could not initialize the repository. {{reason}}"
+  },
+  "reason": {
+    "auth": "Authentication required.",
+    "locked": "Another Git process is running.",
+    "noGit": "Git is not installed. Install Git to fetch, pull and push.",
+    "rejected": "The remote has changes you do not have yet. Pull first.",
+    "noUpstream": "The branch has no upstream branch.",
+    "conflict": "Conflicts stopped the operation; your local commits are unchanged.",
+    "diverged": "The branch and its upstream have diverged.",
+    "identity": "Set your name and email in Git (user.name and user.email) to commit.",
+    "nothingToCommit": "There are no changes to commit.",
+    "invalidName": "That is not a valid branch name.",
+    "exists": "A branch with that name already exists.",
+    "checkoutConflict": "Your local changes to {{files}} would be overwritten. Commit or discard them first.",
+    "cancelled": "Cancelled.",
+    "other": "See Git Output for details."
+  },
+  "action": {
+    "showOutput": "Show Git Output"
+  },
+  "output": {
+    "empty": "Git commands and their output appear here.",
+    "initialized": "Initialized a Git repository in {{path}}",
+    "committed": "Committed {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "Sync Notes: saving open documents",
+    "stepCommit": "Sync Notes: committing all changes",
+    "committed": "Sync Notes: committed {{sha}}",
+    "nothing": "Sync Notes: nothing to commit",
+    "stepStopped": "Sync Notes: the remote changed the same lines; stopped before pulling",
+    "stepDone": "Sync Notes: done",
+    "stoppedNotice": "Sync Notes stopped: the remote changed the same lines as your local changes. Your changes are committed locally; pull, resolve the conflict, then push.",
+    "done": "Notes synced."
+  },
+  "scm": {
+    "noWorkspace": "Open a folder to use Source Control.",
+    "noRepo": "This workspace is not a Git repository.",
+    "message": "Commit message",
+    "messageHint": "Message ({{keys}} to commit)",
+    "commit": "Commit",
+    "commitMore": "More commit actions",
+    "staged": "Staged Changes",
+    "changes": "Changes",
+    "conflicts": "Merge Conflicts",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "Open File",
+    "openChanges": "Open Changes",
+    "revealInExplorer": "Reveal in Explorer",
+    "sync": "Sync Changes",
+    "publish": "Publish Branch",
+    "truncated": "Too many changes; the list is truncated."
+  },
+  "discard": {
+    "title": "Discard changes in {{name}}?",
+    "titleUntracked": "Delete the untracked file {{name}}?",
+    "titleMany": "Discard changes in {{count}} files?",
+    "body": "This cannot be undone.",
+    "trash": "Untracked files are moved to the Trash.",
+    "confirm": "Discard Changes",
+    "confirmMany": "Discard {{count}} Files"
+  },
+  "smartCommit": {
+    "title": "There are no staged changes.",
+    "body": "Stage all changes and commit?",
+    "confirm": "Stage All & Commit"
+  },
+  "diverged": {
+    "title": "Your branch and {{upstream}} have diverged.",
+    "rebase": "Pull with Rebase",
+    "merge": "Pull with Merge"
+  },
+  "publish": {
+    "title": "Publish {{branch}} to {{remote}}?",
+    "body": "The branch has no upstream branch yet. Publishing pushes it and sets the upstream.",
+    "confirm": "Publish"
+  },
+  "syncConfirm": {
+    "title": "Sync pulls and pushes this branch.",
+    "body": "Notoir pulls the remote changes, then pushes your commits. You are asked once per workspace."
+  },
+  "init": {
+    "title": "Initialize a Git repository in {{name}}?",
+    "body": "A .git folder is created in the workspace root.",
+    "confirm": "Initialize"
+  },
+  "clone": {
+    "title": "Clone Repository",
+    "urlHint": "Repository URL",
+    "cloneUrl": "Clone {{url}}",
+    "recent": "recent",
+    "destination": "Choose a folder to clone into",
+    "openTitle": "Open the cloned repository {{name}}?",
+    "open": "Open"
+  },
+  "branch": {
+    "pickTitle": "Switch Branch",
+    "nameTitle": "Create Branch",
+    "nameHint": "New branch name",
+    "createNamed": "Create branch {{name}}",
+    "create": "Create Branch…",
+    "createFrom": "Create Branch From…",
+    "current": "current",
+    "remote": "remote"
+  }
+}

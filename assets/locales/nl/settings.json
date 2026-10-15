@@ -178,6 +178,13 @@
     "pullMode": "Hoe pull externe wijzigingen verwerkt",
     "gutterBase": "Wijzigingsbalken in de marge vergelijken met",
     "path": "Pad naar git (leeg: uit PATH)",
-    "autoPush": "Automatisch pushen na commits"
+    "autoPush": "Automatisch pushen na commits",
+    "smartCommit": "Als er niets gestaged is, bij Commit"
+  },
+  "notes": {
+    "sync": {
+      "enabled": "Notities synchroniseren inschakelen (commit en pusht alle wijzigingen)",
+      "commitMessage": "Sjabloon voor het commitbericht van Notities synchroniseren"
+    }
   }
 }

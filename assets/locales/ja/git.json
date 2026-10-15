@@ -1,0 +1,135 @@
+{
+  "index": "インデックス",
+  "deletedSide": "{{name}} (削除済み)",
+  "alreadyRunning": "別の Git 操作を実行中です。",
+  "detachedPush": "プッシュするにはブランチをチェックアウトしてください。",
+  "noRemote": "このリポジトリにはプッシュ先のリモートがありません。",
+  "emptyMessage": "コミット メッセージを入力してください。",
+  "resolveConflicts": "コミットする前にマージの競合を解決してステージしてください。",
+  "nothingStaged": "コミットするステージ済みの変更がありません。",
+  "progress": {
+    "fetch": "フェッチしています…",
+    "pull": "プルしています…",
+    "push": "プッシュしています…",
+    "sync": "同期しています…",
+    "syncNotes": "ノートを同期しています…",
+    "clone": "クローンしています…"
+  },
+  "failed": {
+    "fetch": "フェッチに失敗しました。{{reason}}",
+    "pull": "プルに失敗しました。{{reason}}",
+    "push": "プッシュに失敗しました。{{reason}}",
+    "sync": "同期に失敗しました。{{reason}}",
+    "syncNotes": "ノートの同期に失敗しました。{{reason}}",
+    "clone": "クローンに失敗しました。{{reason}}",
+    "commit": "コミットに失敗しました。{{reason}}",
+    "checkout": "ブランチを切り替えられませんでした。{{reason}}",
+    "discard": "変更を破棄できませんでした。{{reason}}",
+    "stage": "Git はインデックスを更新できませんでした。{{reason}}",
+    "init": "リポジトリを初期化できませんでした。{{reason}}"
+  },
+  "reason": {
+    "auth": "認証が必要です。",
+    "locked": "別の Git プロセスが実行中です。",
+    "noGit": "Git がインストールされていません。フェッチ、プル、プッシュするには Git をインストールしてください。",
+    "rejected": "リモートにまだ取得していない変更があります。先にプルしてください。",
+    "noUpstream": "ブランチにアップストリーム ブランチがありません。",
+    "conflict": "競合のため操作が停止しました。ローカルのコミットは変更されていません。",
+    "diverged": "ブランチとアップストリームが分岐しています。",
+    "identity": "コミットするには Git に名前とメール (user.name と user.email) を設定してください。",
+    "nothingToCommit": "コミットする変更がありません。",
+    "invalidName": "有効なブランチ名ではありません。",
+    "exists": "同じ名前のブランチが既に存在します。",
+    "checkoutConflict": "{{files}} のローカルの変更が上書きされます。先にコミットするか破棄してください。",
+    "cancelled": "キャンセルしました。",
+    "other": "詳細は Git 出力を確認してください。"
+  },
+  "action": {
+    "showOutput": "Git 出力を表示"
+  },
+  "output": {
+    "empty": "Git コマンドとその出力がここに表示されます。",
+    "initialized": "{{path}} に Git リポジトリを初期化しました",
+    "committed": "コミット {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "ノートの同期: 開いているドキュメントを保存しています",
+    "stepCommit": "ノートの同期: すべての変更をコミットしています",
+    "committed": "ノートの同期: {{sha}} をコミットしました",
+    "nothing": "ノートの同期: コミットする変更はありません",
+    "stepStopped": "ノートの同期: リモートが同じ行を変更したため、プルの前に停止しました",
+    "stepDone": "ノートの同期: 完了",
+    "stoppedNotice": "ノートの同期を停止しました: リモートがローカルの変更と同じ行を変更しました。変更はローカルにコミット済みです。プルして競合を解決してからプッシュしてください。",
+    "done": "ノートを同期しました。"
+  },
+  "scm": {
+    "noWorkspace": "ソース管理を使うにはフォルダーを開いてください。",
+    "noRepo": "このワークスペースは Git リポジトリではありません。",
+    "message": "コミット メッセージ",
+    "messageHint": "メッセージ ({{keys}} でコミット)",
+    "commit": "コミット",
+    "commitMore": "その他のコミット操作",
+    "staged": "ステージ済みの変更",
+    "changes": "変更",
+    "conflicts": "マージの競合",
+    "row": "{{name}}、{{status}} ({{section}})",
+    "openFile": "ファイルを開く",
+    "openChanges": "変更を開く",
+    "revealInExplorer": "エクスプローラーで表示",
+    "sync": "変更を同期",
+    "publish": "ブランチを公開",
+    "truncated": "変更が多すぎるため、一覧は省略されています。"
+  },
+  "discard": {
+    "title": "{{name}} の変更を破棄しますか?",
+    "titleUntracked": "追跡されていないファイル {{name}} を削除しますか?",
+    "titleMany": "{{count}} 個のファイルの変更を破棄しますか?",
+    "body": "この操作は元に戻せません。",
+    "trash": "追跡されていないファイルはゴミ箱に移動されます。",
+    "confirm": "変更を破棄",
+    "confirmMany": "{{count}} 個のファイルを破棄"
+  },
+  "smartCommit": {
+    "title": "ステージ済みの変更がありません。",
+    "body": "すべての変更をステージしてコミットしますか?",
+    "confirm": "すべてステージしてコミット"
+  },
+  "diverged": {
+    "title": "ブランチと {{upstream}} が分岐しています。",
+    "rebase": "リベースでプル",
+    "merge": "マージでプル"
+  },
+  "publish": {
+    "title": "{{branch}} を {{remote}} に公開しますか?",
+    "body": "このブランチにはまだアップストリームがありません。公開するとプッシュしてアップストリームを設定します。",
+    "confirm": "公開"
+  },
+  "syncConfirm": {
+    "title": "同期はこのブランチをプルしてプッシュします。",
+    "body": "Notoir はリモートの変更をプルしてから、あなたのコミットをプッシュします。この確認はワークスペースごとに 1 回です。"
+  },
+  "init": {
+    "title": "{{name}} に Git リポジトリを初期化しますか?",
+    "body": "ワークスペースのルートに .git フォルダーが作成されます。",
+    "confirm": "初期化"
+  },
+  "clone": {
+    "title": "リポジトリをクローン",
+    "urlHint": "リポジトリの URL",
+    "cloneUrl": "{{url}} をクローン",
+    "recent": "最近",
+    "destination": "クローン先のフォルダーを選択",
+    "openTitle": "クローンしたリポジトリ {{name}} を開きますか?",
+    "open": "開く"
+  },
+  "branch": {
+    "pickTitle": "ブランチの切り替え",
+    "nameTitle": "ブランチの作成",
+    "nameHint": "新しいブランチ名",
+    "createNamed": "ブランチ {{name}} を作成",
+    "create": "ブランチの作成…",
+    "createFrom": "ブランチの作成元を指定…",
+    "current": "現在",
+    "remote": "リモート"
+  }
+}

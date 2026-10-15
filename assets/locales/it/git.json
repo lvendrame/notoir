@@ -1,0 +1,135 @@
+{
+  "index": "Indice",
+  "deletedSide": "{{name}} (eliminato)",
+  "alreadyRunning": "È in corso un’altra operazione Git.",
+  "detachedPush": "Passa a un branch per eseguire il push.",
+  "noRemote": "Questo repository non ha un remoto per il push.",
+  "emptyMessage": "Inserisci un messaggio di commit.",
+  "resolveConflicts": "Risolvi e aggiungi allo stage i conflitti di merge prima del commit.",
+  "nothingStaged": "Non ci sono modifiche nello stage da salvare con commit.",
+  "progress": {
+    "fetch": "Fetch in corso…",
+    "pull": "Pull in corso…",
+    "push": "Push in corso…",
+    "sync": "Sincronizzazione…",
+    "syncNotes": "Sincronizzazione note…",
+    "clone": "Clonazione…"
+  },
+  "failed": {
+    "fetch": "Fetch non riuscito. {{reason}}",
+    "pull": "Pull non riuscito. {{reason}}",
+    "push": "Push non riuscito. {{reason}}",
+    "sync": "Sincronizzazione non riuscita. {{reason}}",
+    "syncNotes": "Sincronizza note non riuscito. {{reason}}",
+    "clone": "Clonazione non riuscita. {{reason}}",
+    "commit": "Commit non riuscito. {{reason}}",
+    "checkout": "Impossibile cambiare branch. {{reason}}",
+    "discard": "Impossibile annullare le modifiche. {{reason}}",
+    "stage": "Git non è riuscito ad aggiornare l’indice. {{reason}}",
+    "init": "Impossibile inizializzare il repository. {{reason}}"
+  },
+  "reason": {
+    "auth": "Autenticazione richiesta.",
+    "locked": "È in esecuzione un altro processo Git.",
+    "noGit": "Git non è installato. Installa Git per fetch, pull e push.",
+    "rejected": "Il remoto ha modifiche che non hai ancora. Esegui prima il pull.",
+    "noUpstream": "Il branch non ha un branch upstream.",
+    "conflict": "I conflitti hanno interrotto l’operazione; i tuoi commit locali sono invariati.",
+    "diverged": "Il branch e il suo upstream sono divergenti.",
+    "identity": "Imposta nome ed email in Git (user.name e user.email) per eseguire il commit.",
+    "nothingToCommit": "Non ci sono modifiche da salvare con commit.",
+    "invalidName": "Non è un nome di branch valido.",
+    "exists": "Esiste già un branch con questo nome.",
+    "checkoutConflict": "Le modifiche locali a {{files}} verrebbero sovrascritte. Esegui il commit o annullale prima.",
+    "cancelled": "Annullato.",
+    "other": "Vedi l’output di Git per i dettagli."
+  },
+  "action": {
+    "showOutput": "Mostra output di Git"
+  },
+  "output": {
+    "empty": "Qui compaiono i comandi Git e il loro output.",
+    "initialized": "Repository Git inizializzato in {{path}}",
+    "committed": "Commit {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "Sincronizza note: salvataggio dei documenti aperti",
+    "stepCommit": "Sincronizza note: commit di tutte le modifiche",
+    "committed": "Sincronizza note: commit {{sha}}",
+    "nothing": "Sincronizza note: nulla da salvare con commit",
+    "stepStopped": "Sincronizza note: il remoto ha modificato le stesse righe; interrotto prima del pull",
+    "stepDone": "Sincronizza note: completato",
+    "stoppedNotice": "Sincronizza note si è interrotto: il remoto ha modificato le stesse righe delle tue modifiche locali. Le tue modifiche sono salvate in un commit locale; esegui il pull, risolvi il conflitto e poi il push.",
+    "done": "Note sincronizzate."
+  },
+  "scm": {
+    "noWorkspace": "Apri una cartella per usare il controllo del codice sorgente.",
+    "noRepo": "Questa area di lavoro non è un repository Git.",
+    "message": "Messaggio di commit",
+    "messageHint": "Messaggio ({{keys}} per il commit)",
+    "commit": "Commit",
+    "commitMore": "Altre azioni di commit",
+    "staged": "Modifiche nello stage",
+    "changes": "Modifiche",
+    "conflicts": "Conflitti di merge",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "Apri file",
+    "openChanges": "Apri modifiche",
+    "revealInExplorer": "Mostra in Esplora",
+    "sync": "Sincronizza modifiche",
+    "publish": "Pubblica branch",
+    "truncated": "Troppe modifiche; l’elenco è troncato."
+  },
+  "discard": {
+    "title": "Annullare le modifiche a {{name}}?",
+    "titleUntracked": "Eliminare il file non tracciato {{name}}?",
+    "titleMany": "Annullare le modifiche ai file (numero: {{count}})?",
+    "body": "L’operazione non può essere annullata.",
+    "trash": "I file non tracciati vengono spostati nel Cestino.",
+    "confirm": "Annulla modifiche",
+    "confirmMany": "Annulla file ({{count}})"
+  },
+  "smartCommit": {
+    "title": "Non ci sono modifiche nello stage.",
+    "body": "Aggiungere tutte le modifiche allo stage ed eseguire il commit?",
+    "confirm": "Aggiungi tutto e commit"
+  },
+  "diverged": {
+    "title": "Il tuo branch e {{upstream}} sono divergenti.",
+    "rebase": "Pull con rebase",
+    "merge": "Pull con merge"
+  },
+  "publish": {
+    "title": "Pubblicare {{branch}} su {{remote}}?",
+    "body": "Il branch non ha ancora un upstream. Pubblicarlo esegue il push e imposta l’upstream.",
+    "confirm": "Pubblica"
+  },
+  "syncConfirm": {
+    "title": "Sincronizza esegue pull e push di questo branch.",
+    "body": "Notoir scarica le modifiche remote e poi esegue il push dei tuoi commit. Viene chiesto una volta per area di lavoro."
+  },
+  "init": {
+    "title": "Inizializzare un repository Git in {{name}}?",
+    "body": "Viene creata una cartella .git nella radice dell’area di lavoro.",
+    "confirm": "Inizializza"
+  },
+  "clone": {
+    "title": "Clona repository",
+    "urlHint": "URL del repository",
+    "cloneUrl": "Clona {{url}}",
+    "recent": "recente",
+    "destination": "Scegli una cartella in cui clonare",
+    "openTitle": "Aprire il repository clonato {{name}}?",
+    "open": "Apri"
+  },
+  "branch": {
+    "pickTitle": "Cambia branch",
+    "nameTitle": "Crea branch",
+    "nameHint": "Nome del nuovo branch",
+    "createNamed": "Crea il branch {{name}}",
+    "create": "Crea branch…",
+    "createFrom": "Crea branch da…",
+    "current": "attuale",
+    "remote": "remoto"
+  }
+}

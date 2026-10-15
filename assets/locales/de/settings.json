@@ -178,6 +178,13 @@
     "pullMode": "Wie Pull entfernte Änderungen übernimmt",
     "gutterBase": "Änderungsbalken im Rand vergleichen mit",
     "path": "Pfad zur git-Programmdatei (leer: aus PATH)",
-    "autoPush": "Nach Commits automatisch pushen"
+    "autoPush": "Nach Commits automatisch pushen",
+    "smartCommit": "Wenn nichts gestaged ist, beim Commit"
+  },
+  "notes": {
+    "sync": {
+      "enabled": "Notizen synchronisieren aktivieren (committet und pusht alle Änderungen)",
+      "commitMessage": "Vorlage der Commit-Nachricht für Notizen synchronisieren"
+    }
   }
 }

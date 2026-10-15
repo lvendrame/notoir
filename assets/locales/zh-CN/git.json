@@ -1,0 +1,135 @@
+{
+  "index": "索引",
+  "deletedSide": "{{name}} (已删除)",
+  "alreadyRunning": "另一个 Git 操作正在运行。",
+  "detachedPush": "请检出一个分支后再推送。",
+  "noRemote": "此存储库没有可推送的远程。",
+  "emptyMessage": "请输入提交消息。",
+  "resolveConflicts": "提交前请解决并暂存合并冲突。",
+  "nothingStaged": "没有可提交的暂存更改。",
+  "progress": {
+    "fetch": "正在抓取…",
+    "pull": "正在拉取…",
+    "push": "正在推送…",
+    "sync": "正在同步…",
+    "syncNotes": "正在同步笔记…",
+    "clone": "正在克隆…"
+  },
+  "failed": {
+    "fetch": "抓取失败。{{reason}}",
+    "pull": "拉取失败。{{reason}}",
+    "push": "推送失败。{{reason}}",
+    "sync": "同步失败。{{reason}}",
+    "syncNotes": "同步笔记失败。{{reason}}",
+    "clone": "克隆失败。{{reason}}",
+    "commit": "提交失败。{{reason}}",
+    "checkout": "无法切换分支。{{reason}}",
+    "discard": "无法放弃更改。{{reason}}",
+    "stage": "Git 无法更新索引。{{reason}}",
+    "init": "无法初始化存储库。{{reason}}"
+  },
+  "reason": {
+    "auth": "需要身份验证。",
+    "locked": "另一个 Git 进程正在运行。",
+    "noGit": "未安装 Git。请安装 Git 以进行抓取、拉取和推送。",
+    "rejected": "远程有你尚未获取的更改。请先拉取。",
+    "noUpstream": "该分支没有上游分支。",
+    "conflict": "冲突导致操作停止；你的本地提交保持不变。",
+    "diverged": "该分支与其上游已分叉。",
+    "identity": "请在 Git 中设置姓名和电子邮件 (user.name 和 user.email) 后再提交。",
+    "nothingToCommit": "没有可提交的更改。",
+    "invalidName": "这不是有效的分支名称。",
+    "exists": "已存在同名分支。",
+    "checkoutConflict": "你对 {{files}} 的本地更改将被覆盖。请先提交或放弃这些更改。",
+    "cancelled": "已取消。",
+    "other": "详细信息请查看 Git 输出。"
+  },
+  "action": {
+    "showOutput": "显示 Git 输出"
+  },
+  "output": {
+    "empty": "Git 命令及其输出显示在这里。",
+    "initialized": "已在 {{path}} 中初始化 Git 存储库",
+    "committed": "已提交 {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "同步笔记: 正在保存打开的文档",
+    "stepCommit": "同步笔记: 正在提交所有更改",
+    "committed": "同步笔记: 已提交 {{sha}}",
+    "nothing": "同步笔记: 没有要提交的内容",
+    "stepStopped": "同步笔记: 远程修改了相同的行；已在拉取前停止",
+    "stepDone": "同步笔记: 完成",
+    "stoppedNotice": "同步笔记已停止: 远程修改了与你本地更改相同的行。你的更改已在本地提交；请拉取、解决冲突，然后推送。",
+    "done": "笔记已同步。"
+  },
+  "scm": {
+    "noWorkspace": "打开一个文件夹以使用源代码管理。",
+    "noRepo": "此工作区不是 Git 存储库。",
+    "message": "提交消息",
+    "messageHint": "消息 (按 {{keys}} 提交)",
+    "commit": "提交",
+    "commitMore": "更多提交操作",
+    "staged": "暂存的更改",
+    "changes": "更改",
+    "conflicts": "合并冲突",
+    "row": "{{name}}，{{status}} ({{section}})",
+    "openFile": "打开文件",
+    "openChanges": "打开更改",
+    "revealInExplorer": "在资源管理器中显示",
+    "sync": "同步更改",
+    "publish": "发布分支",
+    "truncated": "更改太多；列表已截断。"
+  },
+  "discard": {
+    "title": "放弃 {{name}} 中的更改?",
+    "titleUntracked": "删除未跟踪的文件 {{name}}?",
+    "titleMany": "放弃 {{count}} 个文件中的更改?",
+    "body": "此操作无法撤消。",
+    "trash": "未跟踪的文件会移到废纸篓。",
+    "confirm": "放弃更改",
+    "confirmMany": "放弃 {{count}} 个文件"
+  },
+  "smartCommit": {
+    "title": "没有暂存的更改。",
+    "body": "暂存所有更改并提交?",
+    "confirm": "全部暂存并提交"
+  },
+  "diverged": {
+    "title": "你的分支与 {{upstream}} 已分叉。",
+    "rebase": "使用变基拉取",
+    "merge": "使用合并拉取"
+  },
+  "publish": {
+    "title": "将 {{branch}} 发布到 {{remote}}?",
+    "body": "该分支还没有上游。发布会推送它并设置上游。",
+    "confirm": "发布"
+  },
+  "syncConfirm": {
+    "title": "同步会拉取并推送此分支。",
+    "body": "Notoir 会先拉取远程更改，再推送你的提交。每个工作区只询问一次。"
+  },
+  "init": {
+    "title": "在 {{name}} 中初始化 Git 存储库?",
+    "body": "将在工作区根目录中创建 .git 文件夹。",
+    "confirm": "初始化"
+  },
+  "clone": {
+    "title": "克隆存储库",
+    "urlHint": "存储库 URL",
+    "cloneUrl": "克隆 {{url}}",
+    "recent": "最近",
+    "destination": "选择要克隆到的文件夹",
+    "openTitle": "打开克隆的存储库 {{name}}?",
+    "open": "打开"
+  },
+  "branch": {
+    "pickTitle": "切换分支",
+    "nameTitle": "创建分支",
+    "nameHint": "新分支名称",
+    "createNamed": "创建分支 {{name}}",
+    "create": "创建分支…",
+    "createFrom": "从…创建分支",
+    "current": "当前",
+    "remote": "远程"
+  }
+}

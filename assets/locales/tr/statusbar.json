@@ -8,5 +8,6 @@
   "spaces": "Boşluk: {{size}}",
   "tabSize": "Sekme Boyutu: {{size}}",
   "plainText": "Düz Metin",
-  "branch": "Dal: {{name}}"
+  "branch": "Dal: {{name}}",
+  "gitProgress": "Git: {{progress}}"
 }

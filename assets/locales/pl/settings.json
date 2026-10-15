@@ -178,6 +178,13 @@
     "pullMode": "Jak pull scala zmiany zdalne",
     "gutterBase": "Paski zmian na marginesie porównują z",
     "path": "Ścieżka do programu git (puste: z PATH)",
-    "autoPush": "Wypychaj automatycznie po commitach"
+    "autoPush": "Wypychaj automatycznie po commitach",
+    "smartCommit": "Gdy nic nie ma w poczekalni, przy zatwierdzaniu"
+  },
+  "notes": {
+    "sync": {
+      "enabled": "Włącz Synchronizuj notatki (zatwierdza i wypycha wszystkie zmiany)",
+      "commitMessage": "Szablon komunikatu zatwierdzenia dla Synchronizuj notatki"
+    }
   }
 }

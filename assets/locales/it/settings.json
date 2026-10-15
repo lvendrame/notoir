@@ -178,6 +178,13 @@
     "pullMode": "Come il pull integra le modifiche remote",
     "gutterBase": "Le barre delle modifiche nel margine confrontano con",
     "path": "Percorso dell’eseguibile git (vuoto: da PATH)",
-    "autoPush": "Esegui push automaticamente dopo i commit"
+    "autoPush": "Esegui push automaticamente dopo i commit",
+    "smartCommit": "Se non c’è nulla nello stage, Commit"
+  },
+  "notes": {
+    "sync": {
+      "enabled": "Attiva Sincronizza note (esegue commit e push di tutte le modifiche)",
+      "commitMessage": "Modello del messaggio di commit di Sincronizza note"
+    }
   }
 }

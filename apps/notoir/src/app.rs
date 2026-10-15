@@ -436,6 +436,7 @@ impl eframe::App for NotoirApp {
                 &mut panels::PanelUis {
                     explorer: &mut self.ui.explorer,
                     outline: &mut self.ui.outline,
+                    scm: &mut self.ui.scm,
                 },
                 &mut actions,
             );

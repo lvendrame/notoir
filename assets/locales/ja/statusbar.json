@@ -8,5 +8,6 @@
   "spaces": "スペース: {{size}}",
   "tabSize": "タブのサイズ: {{size}}",
   "plainText": "プレーン テキスト",
-  "branch": "ブランチ: {{name}}"
+  "branch": "ブランチ: {{name}}",
+  "gitProgress": "Git: {{progress}}"
 }

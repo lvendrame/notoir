@@ -1,8 +1,8 @@
 //! Git in the app (docs/specs/28, read side): repository detection for the
 //! workspace, debounced status refresh, Explorer/tab/status-bar decorations,
 //! gutter change bars against the index (or HEAD), file history and
-//! revision contents for Compare. Every Git call runs on the Git queue;
-//! nothing here touches the network.
+//! revision contents for Compare. Every local Git call runs on the Git
+//! queue; the write side and network operations live in `git_write`.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -12,8 +12,11 @@ use notoir_core::ids::DocumentId;
 use notoir_editor::Rope;
 use notoir_editor::diff::{DiffOptions, LineChange};
 use notoir_git::{
-    CommitSummary, DiffBase, FileStatus, GitBackend, GitError, RepoInfo, RepoStatus, StatusOpts,
+    BranchInfo, CommitSummary, DiffBase, FileStatus, GitBackend, GitError, GitOutput, GitRemote,
+    RepoInfo, RepoStatus, StatusOpts,
 };
+
+use crate::git_write::{LocalOp, NetDone, NetOp, NetRun};
 
 use crate::core::{AppCore, Effect};
 use crate::io::IoResult;
@@ -26,6 +29,8 @@ pub const GUTTER_DEBOUNCE_MS: u64 = 300;
 pub const GUTTER_MAX_LINES: usize = 50_000;
 /// Commits listed by File History.
 pub const HISTORY_LIMIT: usize = 200;
+/// Revision name for "the staged version" (`git show :0:path`).
+pub const INDEX_REV: &str = ":0";
 
 /// What a File History list is for.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -54,6 +59,7 @@ pub enum GitResult {
     Status {
         generation: u64,
         result: Result<RepoStatus, GitError>,
+        remotes: Vec<String>,
     },
     Base {
         generation: u64,
@@ -71,6 +77,23 @@ pub enum GitResult {
     Blob {
         purpose: BlobPurpose,
         result: Result<Option<String>, GitError>,
+    },
+    /// A local write operation finished (short SHA for commits).
+    Op {
+        generation: u64,
+        op: LocalOp,
+        result: Result<String, GitError>,
+    },
+    Branches {
+        generation: u64,
+        result: Result<Vec<BranchInfo>, GitError>,
+    },
+    /// Streamed output of a network operation.
+    Output(GitOutput),
+    Net {
+        generation: u64,
+        op: NetOp,
+        result: Result<NetDone, GitError>,
     },
 }
 
@@ -110,16 +133,42 @@ pub struct GitState {
     /// Bumped per workspace; results of older ones are dropped.
     pub generation: u64,
     /// Workspace root Git was detected for.
-    root: Option<PathBuf>,
+    pub(crate) root: Option<PathBuf>,
     pub status_due: Option<u64>,
     status_running: bool,
     status_again: bool,
     pub docs: HashMap<DocumentId, DocGit>,
     pub history: Option<History>,
-    /// Network Git commands run (fetch/pull/push). None run in M18; the
-    /// counter documents "no auto fetch" (spec 28).
+    /// Network Git operations started (fetch/pull/push/sync/clone); only
+    /// user commands start them (spec 28 "No auto fetch by default").
     pub network_runs: u64,
     pub last_error: Option<GitError>,
+    /// Network operations (system git unless a test replaces it).
+    pub remote: Option<Arc<dyn GitRemote>>,
+    /// The Git Output channel, oldest first.
+    pub output: std::collections::VecDeque<String>,
+    /// Commit message drafts per repository (this session).
+    pub drafts: HashMap<PathBuf, String>,
+    /// The running network operation.
+    pub net: Option<NetRun>,
+    /// Local write operations in flight.
+    pub busy: usize,
+    /// Branch picker rows (loaded before it opens) and what it is for.
+    pub branches: Vec<BranchInfo>,
+    pub branch_pick: crate::git_write::BranchPick,
+    /// Create Branch From…: the chosen start point.
+    pub create_from: Option<String>,
+    /// Remotes of the repository (from the last status).
+    pub remotes: Vec<String>,
+    /// Sync confirmed for this workspace (`git.confirmSync`).
+    pub sync_confirmed: bool,
+    /// Source Control explanation (Sync Notes stopped…).
+    pub notice: Option<notoir_core::notifications::Translatable>,
+    /// Clone Repository: URL waiting for its destination folder.
+    pub clone_url: Option<String>,
+    pub recent_urls: Vec<String>,
+    /// Next `git.autoFetch` run.
+    pub next_fetch: Option<u64>,
 }
 
 impl GitState {
@@ -137,6 +186,20 @@ impl GitState {
             history: None,
             network_runs: 0,
             last_error: None,
+            remote: None,
+            output: std::collections::VecDeque::new(),
+            drafts: HashMap::new(),
+            net: None,
+            busy: 0,
+            branches: Vec::new(),
+            branch_pick: crate::git_write::BranchPick::Switch,
+            create_from: None,
+            remotes: Vec::new(),
+            sync_confirmed: false,
+            notice: None,
+            clone_url: None,
+            recent_urls: Vec::new(),
+            next_fetch: None,
         }
     }
 }
@@ -211,6 +274,10 @@ impl AppCore {
             self.git.status = Arc::new(RepoStatus::default());
             self.git.docs.clear();
             self.git.status_due = None;
+            self.git.sync_confirmed = false;
+            self.git.next_fetch = None;
+            self.git.notice = None;
+            self.git.remotes.clear();
             if let Some(root) = root {
                 let backend = self.git.backend.clone();
                 let generation = self.git.generation;
@@ -232,14 +299,38 @@ impl AppCore {
             self.git.status_due = None;
             self.git_start_status();
         }
+        self.git_auto_fetch();
         self.git_gutters();
     }
 
     pub fn git_next_due(&self) -> Option<u64> {
-        self.git.status_due
+        match (self.git.status_due, self.git.next_fetch) {
+            (Some(a), Some(b)) => Some(a.min(b)),
+            (a, b) => a.or(b),
+        }
     }
 
-    fn git_start_status(&mut self) {
+    /// `git.autoFetch` (off by default): fetch every `git.autoFetchPeriod`
+    /// seconds; never pulls.
+    fn git_auto_fetch(&mut self) {
+        if self.git.repo.is_none() || !self.settings.bool("git.autoFetch", None) {
+            self.git.next_fetch = None;
+            return;
+        }
+        let period = self.settings.int("git.autoFetchPeriod", None).max(30) as u64 * 1000;
+        match self.git.next_fetch {
+            None => self.git.next_fetch = Some(self.now_ms + period),
+            Some(due) if self.now_ms >= due => {
+                self.git.next_fetch = Some(self.now_ms + period);
+                if !self.git_busy() {
+                    self.git_start_net(crate::git_write::NetOp::Fetch);
+                }
+            }
+            Some(_) => {}
+        }
+    }
+
+    pub(crate) fn git_start_status(&mut self) {
         let Some(repo) = self.git.repo.clone() else {
             return;
         };
@@ -252,9 +343,11 @@ impl AppCore {
         let generation = self.git.generation;
         self.git_queue.submit(move || {
             let result = backend.status(&repo, StatusOpts::default());
+            let remotes = backend.remotes(&repo).unwrap_or_default();
             Some(IoResult::Git(Box::new(GitResult::Status {
                 generation,
                 result,
+                remotes,
             })))
         });
     }
@@ -265,11 +358,21 @@ impl AppCore {
                 if let Some(r) = &repo {
                     tracing::info!(workdir = %r.workdir.display(), "git repository");
                 }
+                let found = repo.is_some();
                 self.git.repo = repo;
                 self.git_start_status();
+                // `git.pullOnOpen` (off by default).
+                if found && self.settings.bool("git.pullOnOpen", None) {
+                    self.git_pull(None);
+                }
             }
-            GitResult::Status { generation, result } if generation == self.git.generation => {
+            GitResult::Status {
+                generation,
+                result,
+                remotes,
+            } if generation == self.git.generation => {
                 self.git.status_running = false;
+                self.git.remotes = remotes;
                 match result {
                     Ok(s) => {
                         if s.truncated {
@@ -332,6 +435,20 @@ impl AppCore {
                 }
             },
             GitResult::Blob { purpose, result } => self.git_blob_loaded(purpose, result),
+            GitResult::Op {
+                generation,
+                op,
+                result,
+            } => self.git_op_done(generation, op, result),
+            GitResult::Branches { generation, result } if generation == self.git.generation => {
+                self.git_branches_loaded(result)
+            }
+            GitResult::Output(o) => self.git_output(o),
+            GitResult::Net {
+                generation,
+                op,
+                result,
+            } => self.git_net_done(generation, op, result),
             _ => {}
         }
     }
@@ -488,7 +605,12 @@ impl AppCore {
         };
         let backend = self.git.backend.clone();
         self.git_queue.submit(move || {
-            let result = backend.read_blob(&repo, &rel, &rev).map(|b| b.map(utf8));
+            let result = if rev == INDEX_REV {
+                backend.read_base(&repo, &rel, DiffBase::Index)
+            } else {
+                backend.read_blob(&repo, &rel, &rev)
+            }
+            .map(|b| b.map(utf8));
             Some(IoResult::Git(Box::new(GitResult::Blob { purpose, result })))
         });
         true

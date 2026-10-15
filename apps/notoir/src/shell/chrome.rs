@@ -292,15 +292,57 @@ pub fn status_bar(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
                         crate::theme::ICON_SM,
                         kit.color(Tok::TextSecondary),
                     ));
-                    let resp = ui.label(
-                        RichText::new(&branch)
-                            .font(crate::fonts::mono(12.0))
-                            .color(kit.color(Tok::TextSecondary)),
+                    let resp = ui.add(
+                        egui::Button::new(
+                            RichText::new(&branch)
+                                .font(crate::fonts::mono(12.0))
+                                .color(kit.color(Tok::TextSecondary)),
+                        )
+                        .frame(false),
                     );
                     let a11y = t!("statusbar:branch", name = branch.as_str());
                     resp.widget_info(|| {
+                        egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &a11y)
+                    });
+                    if resp
+                        .on_hover_text(t!("commands:git.switchBranch"))
+                        .clicked()
+                    {
+                        actions.push(CommandInvocation::new(
+                            "git.switchBranch",
+                            InvocationSource::StatusBar,
+                        ));
+                    }
+                    ui.add_space(8.0);
+                }
+                // A network Git operation: "Pushing… 45%" with Cancel.
+                if let Some(progress) = core.git_progress_label() {
+                    ui.add(egui::Spinner::new().size(11.0));
+                    let resp = ui.label(
+                        RichText::new(&progress)
+                            .size(12.0)
+                            .color(kit.color(Tok::TextSecondary)),
+                    );
+                    let a11y = t!("statusbar:gitProgress", progress = progress.as_str());
+                    resp.widget_info(|| {
                         egui::WidgetInfo::labeled(egui::WidgetType::Label, true, &a11y)
                     });
+                    if icon_button_sized(
+                        ui,
+                        kit,
+                        Icon::X,
+                        &t!("commands:git.cancel"),
+                        false,
+                        true,
+                        20.0,
+                    )
+                    .clicked()
+                    {
+                        actions.push(CommandInvocation::new(
+                            "git.cancel",
+                            InvocationSource::StatusBar,
+                        ));
+                    }
                     ui.add_space(8.0);
                 }
                 if let Some(first) = core.keymap.pending() {

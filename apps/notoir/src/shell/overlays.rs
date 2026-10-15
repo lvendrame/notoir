@@ -267,6 +267,12 @@ pub enum PickerKind {
     Compare,
     /// File History: commits touching a file (spec 28).
     GitHistory,
+    /// Switch Branch / Create Branch From… (spec 28).
+    GitBranches,
+    /// Create Branch: the new branch's name.
+    GitBranchName,
+    /// Clone Repository: URL (recent ones listed).
+    GitCloneUrl,
 }
 
 /// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
@@ -386,7 +392,10 @@ impl Picker {
             | PickerKind::Symbols
             | PickerKind::QuickOpen
             | PickerKind::Compare
-            | PickerKind::GitHistory => String::new(),
+            | PickerKind::GitHistory
+            | PickerKind::GitBranches
+            | PickerKind::GitBranchName
+            | PickerKind::GitCloneUrl => String::new(),
             PickerKind::TabSize => doc
                 .map(|d| core.indent_style(d.id).tab_size.to_string())
                 .unwrap_or_default(),
@@ -400,6 +409,17 @@ impl Picker {
         let dynamic = match kind {
             PickerKind::Symbols => symbol_items(core),
             PickerKind::GitHistory => history_items(core),
+            PickerKind::GitBranches => branch_items(core),
+            PickerKind::GitCloneUrl => core
+                .git
+                .recent_urls
+                .iter()
+                .map(|u| PickerItem {
+                    value: u.clone(),
+                    label: u.clone(),
+                    detail: t!("git:clone.recent"),
+                })
+                .collect(),
             _ => Vec::new(),
         };
         let restore = (kind == PickerKind::Symbols)
@@ -516,7 +536,10 @@ impl Picker {
             | PickerKind::Symbols
             | PickerKind::QuickOpen
             | PickerKind::Compare
-            | PickerKind::GitHistory => Vec::new(),
+            | PickerKind::GitHistory
+            | PickerKind::GitBranches
+            | PickerKind::GitBranchName
+            | PickerKind::GitCloneUrl => Vec::new(),
             PickerKind::Indentation => [
                 ("spaces", "dialogs:picker.indentSpaces"),
                 ("tabs", "dialogs:picker.indentTabs"),
@@ -597,6 +620,9 @@ impl Picker {
             PickerKind::QuickOpen => ("quickOpen.open", quick_open_args(value)),
             PickerKind::Compare => ("compare.pick", json!({ "value": value })),
             PickerKind::GitHistory => ("git.historyPick", json!({ "rev": value })),
+            PickerKind::GitBranches => ("git.branchPick", json!({ "value": value })),
+            PickerKind::GitBranchName => ("git.createBranch", json!({ "name": value })),
+            PickerKind::GitCloneUrl => ("git.clone", json!({ "url": value })),
         };
         CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
@@ -620,7 +646,36 @@ impl Picker {
         if self.kind == PickerKind::Compare {
             return self.compare_items();
         }
-        if matches!(self.kind, PickerKind::Symbols | PickerKind::GitHistory) {
+        if matches!(
+            self.kind,
+            PickerKind::GitBranchName | PickerKind::GitCloneUrl
+        ) {
+            // Free text: the typed value first, then matching recent rows.
+            let q = self.query.trim();
+            let mut rows = Vec::new();
+            if !q.is_empty() {
+                rows.push(PickerItem {
+                    value: q.to_owned(),
+                    label: if self.kind == PickerKind::GitBranchName {
+                        t!("git:branch.createNamed", name = q)
+                    } else {
+                        t!("git:clone.cloneUrl", url = q)
+                    },
+                    detail: String::new(),
+                });
+            }
+            rows.extend(
+                self.dynamic
+                    .iter()
+                    .filter(|i| i.value != q && i.value.contains(q))
+                    .cloned(),
+            );
+            return rows;
+        }
+        if matches!(
+            self.kind,
+            PickerKind::Symbols | PickerKind::GitHistory | PickerKind::GitBranches
+        ) {
             let q = self.query.trim().trim_start_matches('@').trim();
             if q.is_empty() {
                 return self.dynamic.clone();
@@ -827,6 +882,9 @@ impl Picker {
             PickerKind::QuickOpen => String::new(),
             PickerKind::Compare => t!("dialogs:compare.title"),
             PickerKind::GitHistory => t!("dialogs:git.history"),
+            PickerKind::GitBranches => t!("git:branch.pickTitle"),
+            PickerKind::GitBranchName => t!("git:branch.nameTitle"),
+            PickerKind::GitCloneUrl => t!("git:clone.title"),
         };
         if self.kind == PickerKind::Commands && enter {
             // Disabled rows (shown with "show all") do not run.
@@ -853,6 +911,8 @@ impl Picker {
                             .compare_hint
                             .clone()
                             .unwrap_or_else(|| t!("dialogs:picker.filter")),
+                        PickerKind::GitBranchName => t!("git:branch.nameHint"),
+                        PickerKind::GitCloneUrl => t!("git:clone.urlHint"),
                         _ => t!("dialogs:picker.filter"),
                     };
                     let edit = ui.add(
@@ -1149,6 +1209,36 @@ pub fn goto_line(ctx: &egui::Context, kit: &mut Kit, core: &mut AppCore, top_off
     if area.response.clicked_elsewhere() {
         core.close_goto(true);
     }
+}
+
+/// Branch picker rows: Create Branch… / Create Branch From… (when
+/// switching), then local branches (newest first) and remote branches.
+fn branch_items(core: &AppCore) -> Vec<PickerItem> {
+    let mut rows = Vec::new();
+    if core.git.branch_pick == crate::git_write::BranchPick::Switch {
+        rows.push(PickerItem {
+            value: ":create".into(),
+            label: format!("+ {}", t!("git:branch.create")),
+            detail: String::new(),
+        });
+        rows.push(PickerItem {
+            value: ":createFrom".into(),
+            label: format!("+ {}", t!("git:branch.createFrom")),
+            detail: String::new(),
+        });
+    }
+    rows.extend(core.git.branches.iter().map(|b| PickerItem {
+        value: b.name.clone(),
+        label: b.name.clone(),
+        detail: if b.current {
+            t!("git:branch.current")
+        } else if b.remote {
+            t!("git:branch.remote")
+        } else {
+            b.upstream.clone().unwrap_or_default()
+        },
+    }));
+    rows
 }
 
 /// File History rows: summary, then short SHA · author · date.

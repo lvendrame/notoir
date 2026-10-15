@@ -1,0 +1,135 @@
+{
+  "index": "인덱스",
+  "deletedSide": "{{name}} (삭제됨)",
+  "alreadyRunning": "다른 Git 작업이 실행 중입니다.",
+  "detachedPush": "푸시하려면 브랜치를 체크아웃하세요.",
+  "noRemote": "이 리포지토리에는 푸시할 원격이 없습니다.",
+  "emptyMessage": "커밋 메시지를 입력하세요.",
+  "resolveConflicts": "커밋하기 전에 병합 충돌을 해결하고 스테이징하세요.",
+  "nothingStaged": "커밋할 스테이징된 변경 내용이 없습니다.",
+  "progress": {
+    "fetch": "페치하는 중…",
+    "pull": "풀하는 중…",
+    "push": "푸시하는 중…",
+    "sync": "동기화하는 중…",
+    "syncNotes": "노트를 동기화하는 중…",
+    "clone": "복제하는 중…"
+  },
+  "failed": {
+    "fetch": "페치하지 못했습니다. {{reason}}",
+    "pull": "풀하지 못했습니다. {{reason}}",
+    "push": "푸시하지 못했습니다. {{reason}}",
+    "sync": "동기화하지 못했습니다. {{reason}}",
+    "syncNotes": "노트를 동기화하지 못했습니다. {{reason}}",
+    "clone": "복제하지 못했습니다. {{reason}}",
+    "commit": "커밋하지 못했습니다. {{reason}}",
+    "checkout": "브랜치를 전환할 수 없습니다. {{reason}}",
+    "discard": "변경 내용을 취소할 수 없습니다. {{reason}}",
+    "stage": "Git이 인덱스를 업데이트할 수 없습니다. {{reason}}",
+    "init": "리포지토리를 초기화할 수 없습니다. {{reason}}"
+  },
+  "reason": {
+    "auth": "인증이 필요합니다.",
+    "locked": "다른 Git 프로세스가 실행 중입니다.",
+    "noGit": "Git이 설치되어 있지 않습니다. 페치, 풀, 푸시하려면 Git을 설치하세요.",
+    "rejected": "원격에 아직 받지 않은 변경 내용이 있습니다. 먼저 풀하세요.",
+    "noUpstream": "브랜치에 업스트림 브랜치가 없습니다.",
+    "conflict": "충돌로 작업이 중지되었습니다. 로컬 커밋은 변경되지 않았습니다.",
+    "diverged": "브랜치와 업스트림이 갈라졌습니다.",
+    "identity": "커밋하려면 Git에 이름과 이메일(user.name 및 user.email)을 설정하세요.",
+    "nothingToCommit": "커밋할 변경 내용이 없습니다.",
+    "invalidName": "유효한 브랜치 이름이 아닙니다.",
+    "exists": "같은 이름의 브랜치가 이미 있습니다.",
+    "checkoutConflict": "{{files}}의 로컬 변경 내용을 덮어쓰게 됩니다. 먼저 커밋하거나 취소하세요.",
+    "cancelled": "취소되었습니다.",
+    "other": "자세한 내용은 Git 출력을 확인하세요."
+  },
+  "action": {
+    "showOutput": "Git 출력 표시"
+  },
+  "output": {
+    "empty": "Git 명령과 출력이 여기에 표시됩니다.",
+    "initialized": "{{path}}에 Git 리포지토리를 초기화했습니다",
+    "committed": "커밋 {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "노트 동기화: 열린 문서를 저장하는 중",
+    "stepCommit": "노트 동기화: 모든 변경 내용을 커밋하는 중",
+    "committed": "노트 동기화: {{sha}} 커밋함",
+    "nothing": "노트 동기화: 커밋할 항목 없음",
+    "stepStopped": "노트 동기화: 원격이 같은 줄을 변경하여 풀하기 전에 중지함",
+    "stepDone": "노트 동기화: 완료",
+    "stoppedNotice": "노트 동기화가 중지되었습니다: 원격이 로컬 변경 내용과 같은 줄을 변경했습니다. 변경 내용은 로컬에 커밋되었습니다. 풀하고 충돌을 해결한 다음 푸시하세요.",
+    "done": "노트를 동기화했습니다."
+  },
+  "scm": {
+    "noWorkspace": "소스 제어를 사용하려면 폴더를 여세요.",
+    "noRepo": "이 작업 영역은 Git 리포지토리가 아닙니다.",
+    "message": "커밋 메시지",
+    "messageHint": "메시지 ({{keys}}를 눌러 커밋)",
+    "commit": "커밋",
+    "commitMore": "추가 커밋 작업",
+    "staged": "스테이징된 변경 내용",
+    "changes": "변경 내용",
+    "conflicts": "병합 충돌",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "파일 열기",
+    "openChanges": "변경 내용 열기",
+    "revealInExplorer": "탐색기에서 표시",
+    "sync": "변경 내용 동기화",
+    "publish": "브랜치 게시",
+    "truncated": "변경 내용이 너무 많아 목록이 잘렸습니다."
+  },
+  "discard": {
+    "title": "{{name}}의 변경 내용을 취소할까요?",
+    "titleUntracked": "추적되지 않는 파일 {{name}}을(를) 삭제할까요?",
+    "titleMany": "파일 {{count}}개의 변경 내용을 취소할까요?",
+    "body": "이 작업은 실행 취소할 수 없습니다.",
+    "trash": "추적되지 않는 파일은 휴지통으로 이동합니다.",
+    "confirm": "변경 내용 취소",
+    "confirmMany": "파일 {{count}}개 취소"
+  },
+  "smartCommit": {
+    "title": "스테이징된 변경 내용이 없습니다.",
+    "body": "모든 변경 내용을 스테이징하고 커밋할까요?",
+    "confirm": "모두 스테이징하고 커밋"
+  },
+  "diverged": {
+    "title": "브랜치와 {{upstream}}이(가) 갈라졌습니다.",
+    "rebase": "리베이스로 풀",
+    "merge": "병합으로 풀"
+  },
+  "publish": {
+    "title": "{{branch}}을(를) {{remote}}에 게시할까요?",
+    "body": "이 브랜치에는 아직 업스트림이 없습니다. 게시하면 푸시하고 업스트림을 설정합니다.",
+    "confirm": "게시"
+  },
+  "syncConfirm": {
+    "title": "동기화는 이 브랜치를 풀하고 푸시합니다.",
+    "body": "Notoir가 원격 변경 내용을 풀한 다음 커밋을 푸시합니다. 작업 영역마다 한 번 묻습니다."
+  },
+  "init": {
+    "title": "{{name}}에 Git 리포지토리를 초기화할까요?",
+    "body": "작업 영역 루트에 .git 폴더가 만들어집니다.",
+    "confirm": "초기화"
+  },
+  "clone": {
+    "title": "리포지토리 복제",
+    "urlHint": "리포지토리 URL",
+    "cloneUrl": "{{url}} 복제",
+    "recent": "최근",
+    "destination": "복제할 폴더 선택",
+    "openTitle": "복제한 리포지토리 {{name}}을(를) 열까요?",
+    "open": "열기"
+  },
+  "branch": {
+    "pickTitle": "브랜치 전환",
+    "nameTitle": "브랜치 만들기",
+    "nameHint": "새 브랜치 이름",
+    "createNamed": "{{name}} 브랜치 만들기",
+    "create": "브랜치 만들기…",
+    "createFrom": "다음에서 브랜치 만들기…",
+    "current": "현재",
+    "remote": "원격"
+  }
+}

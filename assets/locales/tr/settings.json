@@ -178,6 +178,13 @@
     "pullMode": "Pull uzak değişiklikleri nasıl birleştirir",
     "gutterBase": "Kenar değişiklik çubukları neyle karşılaştırır",
     "path": "git yürütülebilir dosyasının yolu (boş: PATH'ten)",
-    "autoPush": "Commit sonrası otomatik push yap"
+    "autoPush": "Commit sonrası otomatik push yap",
+    "smartCommit": "Hiçbir şey hazırlanmamışken Commit"
+  },
+  "notes": {
+    "sync": {
+      "enabled": "Notları Eşitle’yi etkinleştir (tüm değişiklikleri commit edip push eder)",
+      "commitMessage": "Notları Eşitle commit mesajı şablonu"
+    }
   }
 }

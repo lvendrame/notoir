@@ -1,0 +1,135 @@
+{
+  "index": "Indeks",
+  "deletedSide": "{{name}} (usunięty)",
+  "alreadyRunning": "Trwa inna operacja Git.",
+  "detachedPush": "Przełącz na gałąź, aby wypchnąć.",
+  "noRemote": "To repozytorium nie ma zdalnego, do którego można wypchnąć.",
+  "emptyMessage": "Wpisz komunikat zatwierdzenia.",
+  "resolveConflicts": "Przed zatwierdzeniem rozwiąż konflikty scalania i dodaj je do poczekalni.",
+  "nothingStaged": "Brak zmian w poczekalni do zatwierdzenia.",
+  "progress": {
+    "fetch": "Pobieranie…",
+    "pull": "Ściąganie…",
+    "push": "Wypychanie…",
+    "sync": "Synchronizowanie…",
+    "syncNotes": "Synchronizowanie notatek…",
+    "clone": "Klonowanie…"
+  },
+  "failed": {
+    "fetch": "Pobieranie nie powiodło się. {{reason}}",
+    "pull": "Ściąganie nie powiodło się. {{reason}}",
+    "push": "Wypychanie nie powiodło się. {{reason}}",
+    "sync": "Synchronizacja nie powiodła się. {{reason}}",
+    "syncNotes": "Synchronizuj notatki nie powiodło się. {{reason}}",
+    "clone": "Klonowanie nie powiodło się. {{reason}}",
+    "commit": "Zatwierdzenie nie powiodło się. {{reason}}",
+    "checkout": "Nie można przełączyć gałęzi. {{reason}}",
+    "discard": "Nie można odrzucić zmian. {{reason}}",
+    "stage": "Git nie mógł zaktualizować indeksu. {{reason}}",
+    "init": "Nie można zainicjować repozytorium. {{reason}}"
+  },
+  "reason": {
+    "auth": "Wymagane uwierzytelnienie.",
+    "locked": "Działa inny proces Git.",
+    "noGit": "Git nie jest zainstalowany. Zainstaluj Git, aby pobierać, ściągać i wypychać.",
+    "rejected": "Zdalne repozytorium ma zmiany, których jeszcze nie masz. Najpierw ściągnij.",
+    "noUpstream": "Gałąź nie ma gałęzi nadrzędnej (upstream).",
+    "conflict": "Konflikty zatrzymały operację; lokalne zatwierdzenia pozostały bez zmian.",
+    "diverged": "Gałąź i jej gałąź nadrzędna się rozeszły.",
+    "identity": "Ustaw imię i e-mail w Git (user.name i user.email), aby zatwierdzać.",
+    "nothingToCommit": "Brak zmian do zatwierdzenia.",
+    "invalidName": "To nie jest prawidłowa nazwa gałęzi.",
+    "exists": "Gałąź o tej nazwie już istnieje.",
+    "checkoutConflict": "Lokalne zmiany w {{files}} zostałyby nadpisane. Najpierw je zatwierdź lub odrzuć.",
+    "cancelled": "Anulowano.",
+    "other": "Szczegóły znajdziesz w danych wyjściowych Git."
+  },
+  "action": {
+    "showOutput": "Pokaż dane wyjściowe Git"
+  },
+  "output": {
+    "empty": "Tutaj pojawiają się polecenia Git i ich wyniki.",
+    "initialized": "Zainicjowano repozytorium Git w {{path}}",
+    "committed": "Zatwierdzono {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "Synchronizuj notatki: zapisywanie otwartych dokumentów",
+    "stepCommit": "Synchronizuj notatki: zatwierdzanie wszystkich zmian",
+    "committed": "Synchronizuj notatki: zatwierdzono {{sha}}",
+    "nothing": "Synchronizuj notatki: nic do zatwierdzenia",
+    "stepStopped": "Synchronizuj notatki: zdalne repozytorium zmieniło te same wiersze; zatrzymano przed ściągnięciem",
+    "stepDone": "Synchronizuj notatki: gotowe",
+    "stoppedNotice": "Synchronizuj notatki zatrzymano: zdalne repozytorium zmieniło te same wiersze co Twoje lokalne zmiany. Zmiany są zatwierdzone lokalnie; ściągnij, rozwiąż konflikt, a potem wypchnij.",
+    "done": "Notatki zsynchronizowane."
+  },
+  "scm": {
+    "noWorkspace": "Otwórz folder, aby używać kontroli źródła.",
+    "noRepo": "Ten obszar roboczy nie jest repozytorium Git.",
+    "message": "Komunikat zatwierdzenia",
+    "messageHint": "Komunikat ({{keys}}, aby zatwierdzić)",
+    "commit": "Zatwierdź",
+    "commitMore": "Więcej akcji zatwierdzania",
+    "staged": "Zmiany w poczekalni",
+    "changes": "Zmiany",
+    "conflicts": "Konflikty scalania",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "Otwórz plik",
+    "openChanges": "Otwórz zmiany",
+    "revealInExplorer": "Pokaż w Eksploratorze",
+    "sync": "Synchronizuj zmiany",
+    "publish": "Opublikuj gałąź",
+    "truncated": "Zbyt wiele zmian; lista jest obcięta."
+  },
+  "discard": {
+    "title": "Odrzucić zmiany w {{name}}?",
+    "titleUntracked": "Usunąć nieśledzony plik {{name}}?",
+    "titleMany": "Odrzucić zmiany w plikach (liczba: {{count}})?",
+    "body": "Tej operacji nie można cofnąć.",
+    "trash": "Nieśledzone pliki są przenoszone do kosza.",
+    "confirm": "Odrzuć zmiany",
+    "confirmMany": "Odrzuć pliki ({{count}})"
+  },
+  "smartCommit": {
+    "title": "Brak zmian w poczekalni.",
+    "body": "Dodać wszystkie zmiany do poczekalni i zatwierdzić?",
+    "confirm": "Dodaj wszystko i zatwierdź"
+  },
+  "diverged": {
+    "title": "Twoja gałąź i {{upstream}} się rozeszły.",
+    "rebase": "Ściągnij z rebase",
+    "merge": "Ściągnij ze scaleniem"
+  },
+  "publish": {
+    "title": "Opublikować {{branch}} w {{remote}}?",
+    "body": "Gałąź nie ma jeszcze gałęzi nadrzędnej. Publikacja wypycha ją i ustawia gałąź nadrzędną.",
+    "confirm": "Opublikuj"
+  },
+  "syncConfirm": {
+    "title": "Synchronizacja ściąga i wypycha tę gałąź.",
+    "body": "Notoir ściąga zdalne zmiany, a potem wypycha Twoje zatwierdzenia. Pytanie pojawia się raz na obszar roboczy."
+  },
+  "init": {
+    "title": "Zainicjować repozytorium Git w {{name}}?",
+    "body": "W katalogu głównym obszaru roboczego zostanie utworzony folder .git.",
+    "confirm": "Zainicjuj"
+  },
+  "clone": {
+    "title": "Klonuj repozytorium",
+    "urlHint": "Adres URL repozytorium",
+    "cloneUrl": "Klonuj {{url}}",
+    "recent": "ostatnie",
+    "destination": "Wybierz folder do sklonowania",
+    "openTitle": "Otworzyć sklonowane repozytorium {{name}}?",
+    "open": "Otwórz"
+  },
+  "branch": {
+    "pickTitle": "Przełącz gałąź",
+    "nameTitle": "Utwórz gałąź",
+    "nameHint": "Nazwa nowej gałęzi",
+    "createNamed": "Utwórz gałąź {{name}}",
+    "create": "Utwórz gałąź…",
+    "createFrom": "Utwórz gałąź z…",
+    "current": "bieżąca",
+    "remote": "zdalna"
+  }
+}

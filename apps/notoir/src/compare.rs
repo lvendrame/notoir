@@ -150,8 +150,12 @@ fn file_label(p: &std::path::Path) -> String {
     )
 }
 
-/// `HEAD` stays; full SHAs shorten to 7 chars (`<sha>~1` → `abc1234~1`).
+/// `HEAD` stays; full SHAs shorten to 7 chars (`<sha>~1` → `abc1234~1`); the
+/// index reads "Index".
 fn short_rev(rev: &str) -> String {
+    if rev == crate::git::INDEX_REV {
+        return t!("git:index");
+    }
     let hex = rev.chars().take_while(char::is_ascii_hexdigit).count();
     if hex == 40 {
         format!("{}{}", &rev[..7], &rev[40..])

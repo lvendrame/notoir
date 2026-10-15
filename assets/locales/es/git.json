@@ -1,0 +1,135 @@
+{
+  "index": "Índice",
+  "deletedSide": "{{name}} (eliminado)",
+  "alreadyRunning": "Hay otra operación de Git en curso.",
+  "detachedPush": "Cambia a una rama para insertar.",
+  "noRemote": "Este repositorio no tiene un remoto al que insertar.",
+  "emptyMessage": "Escribe un mensaje de confirmación.",
+  "resolveConflicts": "Resuelve y prepara los conflictos de fusión antes de confirmar.",
+  "nothingStaged": "No hay cambios preparados para confirmar.",
+  "progress": {
+    "fetch": "Recuperando…",
+    "pull": "Extrayendo…",
+    "push": "Insertando…",
+    "sync": "Sincronizando…",
+    "syncNotes": "Sincronizando notas…",
+    "clone": "Clonando…"
+  },
+  "failed": {
+    "fetch": "Error al recuperar. {{reason}}",
+    "pull": "Error al extraer. {{reason}}",
+    "push": "Error al insertar. {{reason}}",
+    "sync": "Error al sincronizar. {{reason}}",
+    "syncNotes": "Error en Sincronizar notas. {{reason}}",
+    "clone": "Error al clonar. {{reason}}",
+    "commit": "Error al confirmar. {{reason}}",
+    "checkout": "No se pudo cambiar de rama. {{reason}}",
+    "discard": "No se pudieron descartar los cambios. {{reason}}",
+    "stage": "Git no pudo actualizar el índice. {{reason}}",
+    "init": "No se pudo inicializar el repositorio. {{reason}}"
+  },
+  "reason": {
+    "auth": "Se requiere autenticación.",
+    "locked": "Hay otro proceso de Git en ejecución.",
+    "noGit": "Git no está instalado. Instala Git para recuperar, extraer e insertar.",
+    "rejected": "El remoto tiene cambios que aún no tienes. Extrae primero.",
+    "noUpstream": "La rama no tiene rama upstream.",
+    "conflict": "Los conflictos detuvieron la operación; tus confirmaciones locales no cambiaron.",
+    "diverged": "La rama y su upstream han divergido.",
+    "identity": "Configura tu nombre y correo en Git (user.name y user.email) para confirmar.",
+    "nothingToCommit": "No hay cambios para confirmar.",
+    "invalidName": "No es un nombre de rama válido.",
+    "exists": "Ya existe una rama con ese nombre.",
+    "checkoutConflict": "Tus cambios locales en {{files}} se sobrescribirían. Confírmalos o descártalos primero.",
+    "cancelled": "Cancelado.",
+    "other": "Consulta la salida de Git para más detalles."
+  },
+  "action": {
+    "showOutput": "Mostrar salida de Git"
+  },
+  "output": {
+    "empty": "Aquí aparecen los comandos de Git y su salida.",
+    "initialized": "Repositorio Git inicializado en {{path}}",
+    "committed": "Confirmado {{sha}}: {{summary}}"
+  },
+  "notes": {
+    "stepSave": "Sincronizar notas: guardando documentos abiertos",
+    "stepCommit": "Sincronizar notas: confirmando todos los cambios",
+    "committed": "Sincronizar notas: confirmado {{sha}}",
+    "nothing": "Sincronizar notas: nada que confirmar",
+    "stepStopped": "Sincronizar notas: el remoto cambió las mismas líneas; detenido antes de extraer",
+    "stepDone": "Sincronizar notas: listo",
+    "stoppedNotice": "Sincronizar notas se detuvo: el remoto cambió las mismas líneas que tus cambios locales. Tus cambios están confirmados localmente; extrae, resuelve el conflicto y después inserta.",
+    "done": "Notas sincronizadas."
+  },
+  "scm": {
+    "noWorkspace": "Abre una carpeta para usar el Control de código fuente.",
+    "noRepo": "Este espacio de trabajo no es un repositorio Git.",
+    "message": "Mensaje de confirmación",
+    "messageHint": "Mensaje ({{keys}} para confirmar)",
+    "commit": "Confirmar",
+    "commitMore": "Más acciones de confirmación",
+    "staged": "Cambios preparados",
+    "changes": "Cambios",
+    "conflicts": "Conflictos de fusión",
+    "row": "{{name}}, {{status}} ({{section}})",
+    "openFile": "Abrir archivo",
+    "openChanges": "Abrir cambios",
+    "revealInExplorer": "Mostrar en el Explorador",
+    "sync": "Sincronizar cambios",
+    "publish": "Publicar rama",
+    "truncated": "Demasiados cambios; la lista está truncada."
+  },
+  "discard": {
+    "title": "¿Descartar los cambios de {{name}}?",
+    "titleUntracked": "¿Eliminar el archivo sin seguimiento {{name}}?",
+    "titleMany": "¿Descartar los cambios de archivos (cantidad: {{count}})?",
+    "body": "Esta acción no se puede deshacer.",
+    "trash": "Los archivos sin seguimiento se mueven a la Papelera.",
+    "confirm": "Descartar cambios",
+    "confirmMany": "Descartar archivos ({{count}})"
+  },
+  "smartCommit": {
+    "title": "No hay cambios preparados.",
+    "body": "¿Preparar todos los cambios y confirmar?",
+    "confirm": "Preparar todo y confirmar"
+  },
+  "diverged": {
+    "title": "Tu rama y {{upstream}} han divergido.",
+    "rebase": "Extraer con rebase",
+    "merge": "Extraer con merge"
+  },
+  "publish": {
+    "title": "¿Publicar {{branch}} en {{remote}}?",
+    "body": "La rama aún no tiene upstream. Al publicar se inserta y se establece el upstream.",
+    "confirm": "Publicar"
+  },
+  "syncConfirm": {
+    "title": "Sincronizar extrae e inserta esta rama.",
+    "body": "Notoir extrae los cambios remotos y luego inserta tus confirmaciones. Se pregunta una vez por espacio de trabajo."
+  },
+  "init": {
+    "title": "¿Inicializar un repositorio Git en {{name}}?",
+    "body": "Se crea una carpeta .git en la raíz del espacio de trabajo.",
+    "confirm": "Inicializar"
+  },
+  "clone": {
+    "title": "Clonar repositorio",
+    "urlHint": "URL del repositorio",
+    "cloneUrl": "Clonar {{url}}",
+    "recent": "reciente",
+    "destination": "Elige una carpeta donde clonar",
+    "openTitle": "¿Abrir el repositorio clonado {{name}}?",
+    "open": "Abrir"
+  },
+  "branch": {
+    "pickTitle": "Cambiar de rama",
+    "nameTitle": "Crear rama",
+    "nameHint": "Nombre de la nueva rama",
+    "createNamed": "Crear la rama {{name}}",
+    "create": "Crear rama…",
+    "createFrom": "Crear rama desde…",
+    "current": "actual",
+    "remote": "remota"
+  }
+}

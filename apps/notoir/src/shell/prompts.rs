@@ -6,6 +6,7 @@ use egui::{Align, Key, Layout, RichText};
 use super::Kit;
 use crate::core::AppCore;
 use crate::files::{Answer, Prompt};
+use crate::git_write::GitPrompt;
 use crate::t;
 use crate::theme::Tok;
 
@@ -23,9 +24,108 @@ fn file_name(path: &std::path::Path) -> String {
         .unwrap_or_else(|| path.display().to_string())
 }
 
+/// Source Control confirmations (spec 28).
+fn git_spec(p: &GitPrompt) -> Spec {
+    let base = |rel: &str| rel.rsplit('/').next().unwrap_or(rel).to_owned();
+    match p {
+        GitPrompt::Discard { tracked, untracked } => {
+            let all: Vec<&String> = tracked.iter().chain(untracked).collect();
+            let (title, confirm) = if all.len() == 1 {
+                let name = base(all[0]);
+                let title = if untracked.is_empty() {
+                    t!("git:discard.title", name = name)
+                } else {
+                    t!("git:discard.titleUntracked", name = name)
+                };
+                (title, t!("git:discard.confirm"))
+            } else {
+                (
+                    t!("git:discard.titleMany", count = all.len()),
+                    t!("git:discard.confirmMany", count = all.len()),
+                )
+            };
+            let mut body = t!("git:discard.body");
+            if !untracked.is_empty() {
+                body.push(' ');
+                body.push_str(&t!("git:discard.trash"));
+            }
+            Spec {
+                title,
+                body,
+                list: if all.len() > 1 {
+                    all.iter().map(|r| r.to_string()).collect()
+                } else {
+                    Vec::new()
+                },
+                buttons: vec![
+                    (confirm, Answer::Primary, true),
+                    (t!("common:cancel"), Answer::Cancel, false),
+                ],
+            }
+        }
+        GitPrompt::SmartCommit { .. } => Spec {
+            title: t!("git:smartCommit.title"),
+            body: t!("git:smartCommit.body"),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("git:smartCommit.confirm"), Answer::Primary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
+        GitPrompt::Diverged { upstream } => Spec {
+            title: t!("git:diverged.title", upstream = upstream),
+            body: String::new(),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("git:diverged.rebase"), Answer::Primary, false),
+                (t!("git:diverged.merge"), Answer::Secondary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
+        GitPrompt::Publish { branch, remote } => Spec {
+            title: t!("git:publish.title", branch = branch, remote = remote),
+            body: t!("git:publish.body"),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("git:publish.confirm"), Answer::Primary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
+        GitPrompt::SyncConfirm => Spec {
+            title: t!("git:syncConfirm.title"),
+            body: t!("git:syncConfirm.body"),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("common:ok"), Answer::Primary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
+        GitPrompt::Init(path) => Spec {
+            title: t!("git:init.title", name = file_name(path)),
+            body: t!("git:init.body"),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("git:init.confirm"), Answer::Primary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
+        GitPrompt::OpenCloned(path) => Spec {
+            title: t!("git:clone.openTitle", name = file_name(path)),
+            body: String::new(),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("git:clone.open"), Answer::Primary, false),
+                (t!("dialogs:workspace.newWindow"), Answer::Secondary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
+    }
+}
+
 fn spec(core: &AppCore, prompt: &Prompt) -> Spec {
     let title_of = |d| core.document_title(d);
     match prompt {
+        Prompt::Git(p) => git_spec(p),
         Prompt::Unsaved { docs, .. } if docs.len() == 1 => Spec {
             title: t!("dialogs:unsaved.title", name = title_of(docs[0])),
             body: t!("dialogs:unsaved.body"),
