@@ -71,11 +71,13 @@ pub fn show(
         Stroke::new(1.0, kit.color(Tok::BorderStrong)),
         egui::StrokeKind::Inside,
     );
-    // Claim the area so clicks do not reach the editor below.
+    // Claim the area so presses do not reach the editor below: the editor
+    // senses drags, and a click-only claim would still let it take the
+    // press and move the caret under the widget.
     child.interact(
         rect,
         egui::Id::new(("find-widget", view)),
-        egui::Sense::click(),
+        egui::Sense::click_and_drag(),
     );
     let mut query = w.query.clone();
     let mut replacement = w.replacement.clone();

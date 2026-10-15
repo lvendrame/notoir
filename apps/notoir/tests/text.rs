@@ -146,8 +146,6 @@ fn regex_replace_with_capture_groups_in_widget() {
     // The query box has focus: replace the seeded word.
     app.harness.key_press_modifiers(ctrl(), Key::A);
     find_field(&mut app, r"(\d+)-(\d+)-(\d+)");
-    app.harness.get_by_label("Replace").click();
-    app.harness.run_steps(1);
     let v = app.harness.state().core.workbench.active_view().unwrap();
     app.harness
         .state_mut()
@@ -531,4 +529,59 @@ fn settings_file_changes_apply_without_restart() {
         .settings
         .int("editor.tabSize", None)
         == 7));
+}
+
+/// Regression: clicking Next / Previous must not also place the caret in
+/// the editor under the widget (which restarted the search from there).
+#[test]
+fn find_buttons_walk_every_match() {
+    let body: String = (1..=40).map(|i| format!("item {i} x\n")).collect();
+    let (_d, mut app) = open(&body);
+    common::run(&mut app, "edit.find", Value::Null);
+    app.harness.key_press_modifiers(ctrl(), Key::A);
+    find_field(&mut app, "x");
+    let current = |app: &common::TestApp| {
+        let core = &app.harness.state().core;
+        let v = core.workbench.active_view().unwrap();
+        core.find.widgets[&v].current
+    };
+    let mut seen = Vec::new();
+    for _ in 0..6 {
+        app.harness.get_by_label("Next Match (Enter)").click();
+        app.harness.run_steps(3);
+        seen.push(current(&app).unwrap());
+    }
+    let start = seen[0];
+    assert_eq!(
+        seen,
+        (start..start + 6).collect::<Vec<_>>(),
+        "advances one match per click"
+    );
+    for _ in 0..3 {
+        app.harness
+            .get_by_label("Previous Match (Shift+Enter)")
+            .click();
+        app.harness.run_steps(3);
+    }
+    assert_eq!(current(&app), Some(start + 2));
+}
+
+#[test]
+fn replace_button_replaces_current_match_only() {
+    let (_d, mut app) = open("a x b x c x\n");
+    common::run(&mut app, "edit.replace", Value::Null);
+    app.harness.key_press_modifiers(ctrl(), Key::A);
+    find_field(&mut app, "x");
+    let v = app.harness.state().core.workbench.active_view().unwrap();
+    app.harness
+        .state_mut()
+        .core
+        .find
+        .widgets
+        .get_mut(&v)
+        .unwrap()
+        .replacement = "Y".into();
+    app.harness.get_by_label("Replace").click();
+    app.harness.run_steps(3);
+    assert_eq!(text(&app), "a Y b x c x\n");
 }
