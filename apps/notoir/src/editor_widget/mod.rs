@@ -100,6 +100,8 @@ pub struct EditorOptions {
     pub minimap: Option<minimap::MinimapOptions>,
     /// Zen Mode: centre a column this many characters wide.
     pub max_width_cols: Option<usize>,
+    /// Syntax highlighting (off in large-file mode).
+    pub highlight: bool,
 }
 
 /// Per-view state that only the widget needs.
@@ -122,6 +124,9 @@ pub struct ViewCache {
     last_head: usize,
     minimap_rect: Option<Rect>,
     gutter_rect: Rect,
+    /// Syntax highlighting state for the language below (spec 26).
+    highlighter: Option<notoir_editor::syntax::Highlighter>,
+    highlight_lang: Option<notoir_editor::LanguageId>,
 }
 
 impl ViewCache {
@@ -149,7 +154,29 @@ impl ViewCache {
             last_head: head,
             minimap_rect: None,
             gutter_rect: Rect::NOTHING,
+            highlighter: None,
+            highlight_lang: None,
         }
+    }
+
+    /// Line range an edit touched: (first line, old lines after it, new lines
+    /// after it).
+    fn changed_lines(
+        before: &Rope,
+        after: &Rope,
+        cs: &notoir_editor::ChangeSet,
+    ) -> (usize, usize, usize) {
+        let edits = cs.edits();
+        let (Some(first_edit), Some(last_edit)) = (edits.first(), edits.last()) else {
+            return (0, 0, 0);
+        };
+        let first = before.char_to_line(first_edit.start.min(before.len_chars()));
+        let old_last = before.char_to_line(last_edit.end.min(before.len_chars()));
+        let new_end = cs
+            .map_pos(last_edit.end, notoir_editor::Assoc::After)
+            .min(after.len_chars());
+        let new_last = after.char_to_line(new_end);
+        (first, old_last - first, new_last.saturating_sub(first))
     }
 
     /// Brings the snapshot and display map up to the document's revision.
@@ -164,11 +191,17 @@ impl ViewCache {
                         let before = self.rope.clone();
                         cs.apply(&mut self.rope);
                         self.map.apply(&before, &self.rope, &cs);
+                        if let Some(h) = self.highlighter.as_mut() {
+                            let (first, removed, inserted) =
+                                Self::changed_lines(&before, &self.rope, &cs);
+                            h.edited(first, removed, inserted);
+                        }
                     }
                 }
                 None => {
                     self.rope = doc.buffer.rope().clone();
                     self.map = DisplayMap::new(&self.rope, wrap);
+                    self.highlight_lang = None;
                 }
             }
         }
@@ -193,6 +226,12 @@ impl EditorCaches {
         self.views
             .get(&view)
             .map(|c| (c.minimap_rect, c.gutter_rect))
+    }
+
+    /// Syntax spans of a line as of the last frame (tests).
+    pub fn spans(&self, view: ViewId, line: usize) -> Option<Vec<notoir_editor::syntax::Span>> {
+        let h = self.views.get(&view)?.highlighter.as_ref()?;
+        h.spans(line).map(|s| s.to_vec())
     }
 
     /// First visible buffer line as of the last frame (tests).
@@ -240,6 +279,8 @@ impl Metrics {
 }
 
 pub const SCROLLBAR_W: f32 = 10.0;
+/// Highlighting time per frame (spec 26: 2 ms; more in debug builds).
+const HIGHLIGHT_BUDGET_MS: u64 = if cfg!(debug_assertions) { 8 } else { 3 };
 
 fn gutter_digits(lines: usize) -> usize {
     lines.max(1).to_string().len().max(3)
@@ -413,6 +454,32 @@ pub fn show(
         cache.reveal = false;
     }
 
+    // Syntax highlighting up to the viewport bottom within a frame budget;
+    // later frames continue (spec 26).
+    let language = wb
+        .view(view)
+        .and_then(|v| wb.document(v.document_id))
+        .map(|d| d.language);
+    if !opts.highlight || language.is_none() {
+        cache.highlighter = None;
+        cache.highlight_lang = None;
+    } else if cache.highlight_lang != language {
+        cache.highlight_lang = language;
+        cache.highlighter =
+            language.and_then(|l| notoir_editor::syntax::Highlighter::new(l, &cache.rope));
+    }
+    if cache.highlighter.is_some() {
+        let first_row = (scroll_y(cache, &m) / m.row_h).floor().max(0.0) as usize;
+        let last_line = cache.map.row_to_line(first_row + m.visible_rows() + 1).line;
+        let deadline =
+            std::time::Instant::now() + std::time::Duration::from_millis(HIGHLIGHT_BUDGET_MS);
+        let rope = &cache.rope;
+        if let Some(h) = cache.highlighter.as_mut()
+            && !h.highlight_to(rope, last_line, deadline)
+        {
+            ui.ctx().request_repaint();
+        }
+    }
     let selection = wb
         .view(view)
         .map(|v| v.selection.clone())

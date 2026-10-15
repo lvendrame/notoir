@@ -1,6 +1,6 @@
 # 26 — Syntax Highlighting, Outline & Breadcrumbs
 
-**Status:** Not started — syntax (M12), outline and breadcrumbs (M15)
+**Status:** Partial — language registry and mode picker (M2, M5); syntax highlighting: syntect with pure-Rust regex over two-face's bat grammar set plus `assets/syntaxes/` (PowerShell), compiled into one packdump by `notoir-editor/build.rs`, incremental per-line states with convergence after edits, viewport-first within a per-frame budget, scope → spec 21 token mapping, off in large-file mode (M12). Remaining lines continue on later frames rather than a worker thread. Outline, Go to Symbol and breadcrumbs (M15); Markdown contextual controls for the language-override scenario (M13)
 
 ## Purpose
 

@@ -17,6 +17,7 @@ pub mod line_ops;
 pub mod motion;
 pub mod natural;
 pub mod selection;
+pub mod syntax;
 pub mod wrap;
 
 pub use buffer::{Applied, EditKind, EditRequest, TextBuffer};

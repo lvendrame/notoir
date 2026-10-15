@@ -8,6 +8,14 @@ all-features = false
 [advisories]
 version = 2
 yanked = "deny"
+# Unmaintained, not vulnerable; both come with syntect and have no maintained
+# drop-in replacement there. Review when syntect moves on.
+ignore = [
+    # bincode 1: decodes Notoir's own bundled syntax packdump (never untrusted data).
+    { id = "RUSTSEC-2025-0141", reason = "syntect packdump format; input is compiled into the binary" },
+    # yaml-rust: only used at build time to compile .sublime-syntax grammars.
+    { id = "RUSTSEC-2024-0320", reason = "build-time only (notoir-editor/build.rs)" },
+]
 
 [licenses]
 version = 2

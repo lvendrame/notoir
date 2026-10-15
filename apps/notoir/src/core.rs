@@ -451,6 +451,7 @@ impl AppCore {
             find_current: self.find_highlights(view).1,
             center: self.find.center.contains(&view),
             set_scroll: self.find.scroll.get(&view).copied(),
+            highlight: !doc.is_some_and(|d| d.large_file),
             max_width_cols: self
                 .zen
                 .as_ref()

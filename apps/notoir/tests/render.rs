@@ -345,3 +345,27 @@ fn settings_welcome_zen_snapshot() {
         img.save(out_dir().join("zen.png")).unwrap();
     }
 }
+
+#[test]
+fn syntax_snapshot() {
+    let dir = tempfile::tempdir().unwrap();
+    let p = dir.path().join("main.rs");
+    std::fs::write(
+        &p,
+        "//! Notoir syntax colours.\n\nuse std::collections::HashMap;\n\n/// A counted word.\n#[derive(Debug, Clone)]\npub struct Word {\n    text: String,\n    count: usize,\n}\n\nfn main() {\n    let mut words: HashMap<&str, usize> = HashMap::new();\n    for w in \"the quick brown fox\".split(' ') {\n        *words.entry(w).or_insert(0) += 1;\n    }\n    println!(\"{} words, max {:?}\", words.len(), words.values().max());\n    let ratio = 3.14_f64 * 2.0; // inline comment\n    if ratio > 6.0 && !words.is_empty() { return; }\n}\n",
+    )
+    .unwrap();
+    for theme in [ThemeId::Midnight, ThemeId::Paper, ThemeId::Dracula] {
+        let p = p.clone();
+        let mut app = common::start(move |o| {
+            o.language_override = Some(Language::En);
+            o.theme_override = Some(theme);
+            o.open_paths = vec![(p, None)];
+        });
+        common::settle(&mut app);
+        if let Ok(img) = app.harness.render() {
+            img.save(out_dir().join(format!("syntax-{}.png", theme.id())))
+                .unwrap();
+        }
+    }
+}

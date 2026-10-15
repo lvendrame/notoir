@@ -62,6 +62,54 @@ fn visible_rows(cache: &mut ViewCache, m: &Metrics) -> Vec<Row> {
     rows
 }
 
+/// Theme colour of a syntax token.
+fn token_color(kit: &Kit, kind: notoir_editor::syntax::TokenKind, plain: Color32) -> Color32 {
+    use notoir_editor::syntax::TokenKind as K;
+    let tok = match kind {
+        K::Plain => return plain,
+        K::Comment => Tok::SyntaxComment,
+        K::Keyword => Tok::SyntaxKeyword,
+        K::String => Tok::SyntaxString,
+        K::Number => Tok::SyntaxNumber,
+        K::Constant => Tok::SyntaxConstant,
+        K::Function => Tok::SyntaxFunction,
+        K::Type => Tok::SyntaxType,
+        K::Variable => Tok::SyntaxVariable,
+        K::Property => Tok::SyntaxProperty,
+        K::Operator => Tok::SyntaxOperator,
+        K::Punctuation => Tok::SyntaxPunctuation,
+        K::Tag => Tok::SyntaxTag,
+        K::Attribute => Tok::SyntaxAttribute,
+        K::Regex => Tok::SyntaxRegex,
+        K::Escape => Tok::SyntaxEscape,
+        K::Heading => Tok::SyntaxHeading,
+        K::Emphasis => Tok::SyntaxEmphasis,
+        K::Strong => Tok::SyntaxStrong,
+        K::Link => Tok::SyntaxLink,
+        K::Code => Tok::SyntaxCode,
+        K::Quote => Tok::SyntaxQuote,
+        K::ListMarker => Tok::SyntaxListMarker,
+        K::Invalid => Tok::SyntaxInvalid,
+    };
+    kit.color(tok)
+}
+
+/// Tabs expanded for text that starts at grid column `start`.
+fn display_from(text: &str, start: usize, tab: usize) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut col = start;
+    for c in text.chars() {
+        let w = char_cols(c, col, tab);
+        if c == '\t' {
+            out.extend(std::iter::repeat_n(' ', w));
+        } else {
+            out.push(c);
+        }
+        col += w;
+    }
+    out
+}
+
 /// Expands tabs to spaces so text columns line up with the grid.
 fn display_text(text: &str, tab: usize) -> String {
     let mut out = String::with_capacity(text.len());
@@ -169,7 +217,49 @@ pub(super) fn paint(
         // Text.
         cjk.scan(&row.text);
         let shown = display_text(&row.text, tab);
-        if shown.is_ascii() {
+        let row_offset = row.start - cache.rope.line_to_char(row.line);
+        let spans = cache
+            .highlighter
+            .as_ref()
+            .and_then(|h| h.spans(row.line))
+            .cloned();
+        let color_at = |rel: usize| -> Color32 {
+            let at = row_offset + rel;
+            spans
+                .as_ref()
+                .and_then(|sp| sp.iter().find(|s| s.start <= at && at < s.end))
+                .map_or(text_color, |s| token_color(kit, s.kind, text_color))
+        };
+        if let Some(sp) = spans.as_ref().filter(|_| shown.is_ascii()) {
+            // Coloured runs on the column grid.
+            let chars: Vec<char> = row.text.chars().collect();
+            let mut bounds: Vec<usize> = vec![0, chars.len()];
+            for s in sp.iter() {
+                for b in [s.start, s.end] {
+                    if b > row_offset && b < row_offset + chars.len() {
+                        bounds.push(b - row_offset);
+                    }
+                }
+            }
+            bounds.sort_unstable();
+            bounds.dedup();
+            for w in bounds.windows(2) {
+                let (a, b) = (w[0], w[1]);
+                let piece: String = chars[a..b].iter().collect();
+                let col = col_of(&row.text, a, tab);
+                let text = display_from(&piece, col, tab);
+                if text.trim().is_empty() {
+                    continue;
+                }
+                text_painter.text(
+                    Pos2::new(col_x(col), row.y + m.row_h / 2.0),
+                    Align2::LEFT_CENTER,
+                    text,
+                    m.font.clone(),
+                    color_at(a),
+                );
+            }
+        } else if shown.is_ascii() {
             text_painter.text(
                 Pos2::new(x0, row.y + m.row_h / 2.0),
                 Align2::LEFT_CENTER,
@@ -180,6 +270,7 @@ pub(super) fn paint(
         } else {
             // Place each grapheme on its grid column so wide/fallback glyphs stay aligned.
             let mut col = 0;
+            let mut char_idx = 0;
             for g in row.text.graphemes(true) {
                 let first = g.chars().next().unwrap_or(' ');
                 let w: usize = if first == '\t' {
@@ -196,10 +287,11 @@ pub(super) fn paint(
                         Align2::LEFT_CENTER,
                         g,
                         m.font.clone(),
-                        text_color,
+                        color_at(char_idx),
                     );
                 }
                 col += w;
+                char_idx += g.chars().count();
             }
         }
         // Whitespace markers.
