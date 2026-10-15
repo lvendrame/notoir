@@ -11,7 +11,14 @@
     "title": "Broncodebeheer"
   },
   "outline": {
-    "title": "Overzicht"
+    "title": "Overzicht",
+    "noEditor": "Er is geen editor geopend.",
+    "noSymbols": "Geen symbolen in dit document.",
+    "filter": "Symbolen filteren",
+    "sortByName": "Sorteren op naam",
+    "sortByPosition": "Sorteren op positie",
+    "collapseAll": "Alles samenvouwen",
+    "expandAll": "Alles uitvouwen"
   },
   "plugins": {
     "title": "Plug-ins"
@@ -45,5 +52,10 @@
     "hide": "Verbergen",
     "more": "Meer acties…",
     "close": "Sluiten"
+  },
+  "breadcrumbs": {
+    "loading": "Laden…",
+    "empty": "Geen items",
+    "segment": "Kruimelpad: {{name}}"
   }
 }

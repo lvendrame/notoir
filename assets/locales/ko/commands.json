@@ -50,7 +50,10 @@
     "minimapSide": "미니맵 위치",
     "minimapScale": "미니맵 배율",
     "zenMode": "Zen 모드 전환",
-    "exitZenMode": "Zen 모드 종료"
+    "exitZenMode": "Zen 모드 종료",
+    "showOutline": "개요 표시",
+    "toggleBreadcrumbs": "탐색 경로 전환",
+    "toggleRelativeLineNumbers": "상대 줄 번호 전환"
   },
   "preferences": {
     "changeTheme": "테마 변경…",
@@ -143,7 +146,9 @@
     "nextTab": "다음 탭",
     "previousTab": "이전 탭",
     "switchTab": "이전 탭으로 전환",
-    "goToLine": "줄로 이동…"
+    "goToLine": "줄로 이동…",
+    "goToSymbol": "편집기에서 기호로 이동…",
+    "revealRange": "범위 표시"
   },
   "editor": {
     "changeLineEnding": "줄 끝 시퀀스 변경…",
@@ -152,7 +157,8 @@
     "type": "텍스트 입력",
     "changeIndentation": "들여쓰기 변경",
     "changeTabSize": "탭 크기 변경",
-    "formatDocument": "문서 서식 지정"
+    "formatDocument": "문서 서식 지정",
+    "copyLineNumber": "줄 번호 복사"
   },
   "workspace": {
     "open": "작업 영역 열기…",
@@ -221,5 +227,30 @@
     "sortKeys": "키 정렬",
     "goToParent": "부모로 이동",
     "selectRange": "노드 선택"
+  },
+  "fold": {
+    "fold": "접기",
+    "unfold": "펼치기",
+    "toggle": "접기 전환",
+    "foldAll": "모두 접기",
+    "unfoldAll": "모두 펼치기",
+    "foldAllExceptCurrent": "현재 영역 외 모두 접기",
+    "foldLevel1": "수준 1 접기",
+    "foldLevel2": "수준 2 접기",
+    "foldLevel3": "수준 3 접기",
+    "foldLevel4": "수준 4 접기",
+    "foldLevel5": "수준 5 접기",
+    "foldLevel6": "수준 6 접기",
+    "foldLevel7": "수준 7 접기"
+  },
+  "bookmarks": {
+    "toggle": "책갈피 전환",
+    "next": "다음 책갈피",
+    "previous": "이전 책갈피",
+    "clear": "문서의 책갈피 지우기",
+    "clearAll": "모든 책갈피 지우기"
+  },
+  "breadcrumbs": {
+    "focus": "탐색 경로에 포커스"
   }
 }

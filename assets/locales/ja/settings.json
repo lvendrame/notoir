@@ -57,7 +57,7 @@
       "visible": "ステータス バー"
     },
     "breadcrumbs": {
-      "enabled": "階層リンク"
+      "enabled": "タブの下にパンくずリストを表示"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "ミニマップの不透明度",
       "showViewport": "ミニマップの表示範囲",
       "showSearchMarks": "ミニマップの検索マーク",
-      "showSelection": "ミニマップの選択マーク"
-    }
+      "showSelection": "ミニマップの選択マーク",
+      "showBookmarks": "ミニマップにブックマークを表示"
+    },
+    "folding": "コードの折りたたみを有効にする"
   },
   "zenMode": {
     "hideTabs": "Zen モード: タブを非表示",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "ツリー表示するドキュメントの最大サイズ (バイト)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "次/前のブックマークを他の開いているファイルでも続ける"
+  },
+  "outline": {
+    "followCursor": "カーソル位置のシンボルをアウトラインで強調表示",
+    "depth": "アウトラインに表示するキーの深さ (JSON、YAML、TOML)"
   }
 }

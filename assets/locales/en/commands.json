@@ -50,7 +50,10 @@
     "minimapSide": "Minimap Position",
     "minimapScale": "Minimap Scale",
     "zenMode": "Toggle Zen Mode",
-    "exitZenMode": "Exit Zen Mode"
+    "exitZenMode": "Exit Zen Mode",
+    "showOutline": "Show Outline",
+    "toggleBreadcrumbs": "Toggle Breadcrumbs",
+    "toggleRelativeLineNumbers": "Toggle Relative Line Numbers"
   },
   "preferences": {
     "changeTheme": "Change Theme…",
@@ -143,7 +146,9 @@
     "nextTab": "Next Tab",
     "previousTab": "Previous Tab",
     "switchTab": "Switch to Previous Tab",
-    "goToLine": "Go to Line…"
+    "goToLine": "Go to Line…",
+    "goToSymbol": "Go to Symbol in Editor…",
+    "revealRange": "Reveal Range"
   },
   "editor": {
     "changeLineEnding": "Change End of Line Sequence…",
@@ -152,7 +157,8 @@
     "type": "Type Text",
     "changeIndentation": "Change Indentation",
     "changeTabSize": "Change Tab Size",
-    "formatDocument": "Format Document"
+    "formatDocument": "Format Document",
+    "copyLineNumber": "Copy Line Number"
   },
   "workspace": {
     "open": "Open Workspace…",
@@ -221,5 +227,30 @@
     "sortKeys": "Sort Keys",
     "goToParent": "Go to Parent",
     "selectRange": "Select Node"
+  },
+  "fold": {
+    "fold": "Fold",
+    "unfold": "Unfold",
+    "toggle": "Toggle Fold",
+    "foldAll": "Fold All",
+    "unfoldAll": "Unfold All",
+    "foldAllExceptCurrent": "Fold All Except Current",
+    "foldLevel1": "Fold Level 1",
+    "foldLevel2": "Fold Level 2",
+    "foldLevel3": "Fold Level 3",
+    "foldLevel4": "Fold Level 4",
+    "foldLevel5": "Fold Level 5",
+    "foldLevel6": "Fold Level 6",
+    "foldLevel7": "Fold Level 7"
+  },
+  "bookmarks": {
+    "toggle": "Toggle Bookmark",
+    "next": "Next Bookmark",
+    "previous": "Previous Bookmark",
+    "clear": "Clear Bookmarks in Document",
+    "clearAll": "Clear All Bookmarks"
+  },
+  "breadcrumbs": {
+    "focus": "Focus Breadcrumbs"
   }
 }

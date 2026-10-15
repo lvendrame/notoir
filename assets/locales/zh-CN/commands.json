@@ -50,7 +50,10 @@
     "minimapSide": "缩略图位置",
     "minimapScale": "缩略图比例",
     "zenMode": "切换禅模式",
-    "exitZenMode": "退出禅模式"
+    "exitZenMode": "退出禅模式",
+    "showOutline": "显示大纲",
+    "toggleBreadcrumbs": "切换导航路径",
+    "toggleRelativeLineNumbers": "切换相对行号"
   },
   "preferences": {
     "changeTheme": "更改主题…",
@@ -143,7 +146,9 @@
     "nextTab": "下一个标签页",
     "previousTab": "上一个标签页",
     "switchTab": "切换到上一个标签页",
-    "goToLine": "转到行…"
+    "goToLine": "转到行…",
+    "goToSymbol": "转到编辑器中的符号…",
+    "revealRange": "显示范围"
   },
   "editor": {
     "changeLineEnding": "更改行尾序列…",
@@ -152,7 +157,8 @@
     "type": "输入文本",
     "changeIndentation": "更改缩进",
     "changeTabSize": "更改制表符大小",
-    "formatDocument": "格式化文档"
+    "formatDocument": "格式化文档",
+    "copyLineNumber": "复制行号"
   },
   "workspace": {
     "open": "打开工作区…",
@@ -221,5 +227,30 @@
     "sortKeys": "排序键",
     "goToParent": "转到父级",
     "selectRange": "选择节点"
+  },
+  "fold": {
+    "fold": "折叠",
+    "unfold": "展开",
+    "toggle": "切换折叠",
+    "foldAll": "全部折叠",
+    "unfoldAll": "全部展开",
+    "foldAllExceptCurrent": "折叠除当前以外的所有区域",
+    "foldLevel1": "折叠级别 1",
+    "foldLevel2": "折叠级别 2",
+    "foldLevel3": "折叠级别 3",
+    "foldLevel4": "折叠级别 4",
+    "foldLevel5": "折叠级别 5",
+    "foldLevel6": "折叠级别 6",
+    "foldLevel7": "折叠级别 7"
+  },
+  "bookmarks": {
+    "toggle": "切换书签",
+    "next": "下一个书签",
+    "previous": "上一个书签",
+    "clear": "清除文档中的书签",
+    "clearAll": "清除所有书签"
+  },
+  "breadcrumbs": {
+    "focus": "聚焦导航路径"
   }
 }

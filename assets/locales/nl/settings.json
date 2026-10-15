@@ -57,7 +57,7 @@
       "visible": "Statusbalk"
     },
     "breadcrumbs": {
-      "enabled": "Kruimelpad"
+      "enabled": "Kruimelpad onder de tabbalk tonen"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "Dekking van minimap",
       "showViewport": "Zichtbaar gebied in minimap",
       "showSearchMarks": "Zoekmarkeringen in minimap",
-      "showSelection": "Selectiemarkeringen in minimap"
-    }
+      "showSelection": "Selectiemarkeringen in minimap",
+      "showBookmarks": "Bladwijzers in de minimap tonen"
+    },
+    "folding": "Code samenvouwen inschakelen"
   },
   "zenMode": {
     "hideTabs": "Zen-modus: tabbladen verbergen",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "Grootste document in boomweergave (bytes)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "Volgende/vorige bladwijzer gaat verder in andere open bestanden"
+  },
+  "outline": {
+    "followCursor": "Symbool bij de cursor markeren in het overzicht",
+    "depth": "Sleuteldiepte in het overzicht (JSON, YAML, TOML)"
   }
 }

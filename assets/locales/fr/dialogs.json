@@ -25,7 +25,9 @@
     "changeTabSize": "Modifier la taille de tabulation",
     "detectIndentation": "Détecter l'indentation à partir du contenu",
     "convertToSpaces": "Convertir l'indentation en espaces",
-    "convertToTabs": "Convertir l'indentation en tabulations"
+    "convertToTabs": "Convertir l'indentation en tabulations",
+    "symbols": "Atteindre le symbole",
+    "symbolLine": "ligne {{line}}"
   },
   "open": {
     "title": "Ouvrir un fichier"

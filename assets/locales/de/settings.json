@@ -57,7 +57,7 @@
       "visible": "Statusleiste"
     },
     "breadcrumbs": {
-      "enabled": "Brotkrumen"
+      "enabled": "Breadcrumbs unter der Tableiste anzeigen"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "Deckkraft der Minimap",
       "showViewport": "Sichtbereich in der Minimap",
       "showSearchMarks": "Suchmarken in der Minimap",
-      "showSelection": "Auswahlmarken in der Minimap"
-    }
+      "showSelection": "Auswahlmarken in der Minimap",
+      "showBookmarks": "Lesezeichen in der Minimap anzeigen"
+    },
+    "folding": "Code-Faltung aktivieren"
   },
   "zenMode": {
     "hideTabs": "Zen-Modus: Tabs ausblenden",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "Größtes Dokument in der Baumansicht (Bytes)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "Nächstes/Vorheriges Lesezeichen geht in anderen offenen Dateien weiter"
+  },
+  "outline": {
+    "followCursor": "Symbol am Cursor in der Gliederung hervorheben",
+    "depth": "Schlüsseltiefe in der Gliederung (JSON, YAML, TOML)"
   }
 }

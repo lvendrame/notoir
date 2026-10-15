@@ -11,7 +11,14 @@
     "title": "Kaynak Denetimi"
   },
   "outline": {
-    "title": "Ana Hat"
+    "title": "Ana Hat",
+    "noEditor": "Açık düzenleyici yok.",
+    "noSymbols": "Bu belgede sembol yok.",
+    "filter": "Sembolleri filtrele",
+    "sortByName": "Ada Göre Sırala",
+    "sortByPosition": "Konuma Göre Sırala",
+    "collapseAll": "Tümünü Daralt",
+    "expandAll": "Tümünü Genişlet"
   },
   "plugins": {
     "title": "Eklentiler"
@@ -45,5 +52,10 @@
     "hide": "Gizle",
     "more": "Diğer Eylemler…",
     "close": "Kapat"
+  },
+  "breadcrumbs": {
+    "loading": "Yükleniyor…",
+    "empty": "Girdi yok",
+    "segment": "İçerik haritası: {{name}}"
   }
 }

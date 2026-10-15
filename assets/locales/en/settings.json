@@ -57,7 +57,7 @@
       "visible": "Status bar"
     },
     "breadcrumbs": {
-      "enabled": "Breadcrumbs"
+      "enabled": "Show breadcrumbs under the tab strip"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "Minimap opacity",
       "showViewport": "Minimap viewport",
       "showSearchMarks": "Minimap search marks",
-      "showSelection": "Minimap selection marks"
-    }
+      "showSelection": "Minimap selection marks",
+      "showBookmarks": "Show bookmarks in the minimap"
+    },
+    "folding": "Enable code folding"
   },
   "zenMode": {
     "hideTabs": "Zen Mode: hide tabs",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "Largest document shown as a tree (bytes)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "Next/Previous Bookmark continues in other open files"
+  },
+  "outline": {
+    "followCursor": "Highlight the symbol at the cursor in the Outline",
+    "depth": "Key depth shown in the Outline (JSON, YAML, TOML)"
   }
 }

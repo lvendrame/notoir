@@ -50,7 +50,10 @@
     "minimapSide": "Posição do Minimapa",
     "minimapScale": "Escala do Minimapa",
     "zenMode": "Alternar Modo Zen",
-    "exitZenMode": "Sair do Modo Zen"
+    "exitZenMode": "Sair do Modo Zen",
+    "showOutline": "Mostrar Estrutura",
+    "toggleBreadcrumbs": "Alternar Trilha de Navegação",
+    "toggleRelativeLineNumbers": "Alternar Números de Linha Relativos"
   },
   "preferences": {
     "changeTheme": "Alterar Tema…",
@@ -143,7 +146,9 @@
     "nextTab": "Próxima Aba",
     "previousTab": "Aba Anterior",
     "switchTab": "Alternar para a Aba Anterior",
-    "goToLine": "Ir para a Linha…"
+    "goToLine": "Ir para a Linha…",
+    "goToSymbol": "Ir para Símbolo no Editor…",
+    "revealRange": "Revelar Intervalo"
   },
   "editor": {
     "changeLineEnding": "Alterar Sequência de Fim de Linha…",
@@ -152,7 +157,8 @@
     "type": "Digitar Texto",
     "changeIndentation": "Alterar Indentação",
     "changeTabSize": "Alterar Tamanho da Tabulação",
-    "formatDocument": "Formatar Documento"
+    "formatDocument": "Formatar Documento",
+    "copyLineNumber": "Copiar Número da Linha"
   },
   "workspace": {
     "open": "Abrir Workspace…",
@@ -221,5 +227,30 @@
     "sortKeys": "Ordenar Chaves",
     "goToParent": "Ir para o Pai",
     "selectRange": "Selecionar Nó"
+  },
+  "fold": {
+    "fold": "Recolher",
+    "unfold": "Expandir",
+    "toggle": "Alternar Recolhimento",
+    "foldAll": "Recolher Tudo",
+    "unfoldAll": "Expandir Tudo",
+    "foldAllExceptCurrent": "Recolher Tudo Exceto o Atual",
+    "foldLevel1": "Recolher Nível 1",
+    "foldLevel2": "Recolher Nível 2",
+    "foldLevel3": "Recolher Nível 3",
+    "foldLevel4": "Recolher Nível 4",
+    "foldLevel5": "Recolher Nível 5",
+    "foldLevel6": "Recolher Nível 6",
+    "foldLevel7": "Recolher Nível 7"
+  },
+  "bookmarks": {
+    "toggle": "Alternar Marcador",
+    "next": "Próximo Marcador",
+    "previous": "Marcador Anterior",
+    "clear": "Limpar Marcadores do Documento",
+    "clearAll": "Limpar Todos os Marcadores"
+  },
+  "breadcrumbs": {
+    "focus": "Focar Trilha de Navegação"
   }
 }

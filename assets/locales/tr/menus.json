@@ -22,7 +22,8 @@
     "mcp": "MCP",
     "scratchpads": "Karalamalar",
     "autoSave": "Otomatik Kaydet",
-    "sortLines": "Satırları Sırala"
+    "sortLines": "Satırları Sırala",
+    "lineNumbers": "Satır Numaraları"
   },
   "item": {
     "primarySidebar": "Birincil Kenar Çubuğu",
@@ -36,7 +37,8 @@
     "whitespace": "Boşluklar",
     "currentLineHighlight": "Geçerli Satır Vurgusu",
     "wordWrap": "Sözcük Kaydırma",
-    "minimap": "Mini Harita"
+    "minimap": "Mini Harita",
+    "breadcrumbs": "İçerik Haritası"
   },
   "autoSave": {
     "off": "Kapalı",

@@ -552,6 +552,49 @@ impl Schema {
             Scopes::NO_LANGUAGE,
             C::Editor,
         );
+        // Folding, bookmarks, outline, breadcrumbs
+        def(
+            "editor.folding",
+            T::Bool,
+            V::Bool(true),
+            Scopes::ALL,
+            C::Editor,
+        );
+        def(
+            "editor.minimap.showBookmarks",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "bookmarks.navigateAcrossFiles",
+            T::Bool,
+            V::Bool(false),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "outline.followCursor",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "outline.depth",
+            T::Int { min: 1, max: 10 },
+            V::Int(2),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "workbench.breadcrumbs.enabled",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Appearance,
+        );
         // JSON
         def(
             "json.syncSelection",

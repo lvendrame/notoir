@@ -25,7 +25,9 @@
     "changeTabSize": "탭 크기 변경",
     "detectIndentation": "내용에서 들여쓰기 감지",
     "convertToSpaces": "들여쓰기를 공백으로 변환",
-    "convertToTabs": "들여쓰기를 탭으로 변환"
+    "convertToTabs": "들여쓰기를 탭으로 변환",
+    "symbols": "기호로 이동",
+    "symbolLine": "{{line}}줄"
   },
   "open": {
     "title": "파일 열기"

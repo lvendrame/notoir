@@ -11,7 +11,14 @@
     "title": "Contrôle de code source"
   },
   "outline": {
-    "title": "Structure"
+    "title": "Structure",
+    "noEditor": "Aucun éditeur ouvert.",
+    "noSymbols": "Aucun symbole dans ce document.",
+    "filter": "Filtrer les symboles",
+    "sortByName": "Trier par nom",
+    "sortByPosition": "Trier par position",
+    "collapseAll": "Tout réduire",
+    "expandAll": "Tout développer"
   },
   "plugins": {
     "title": "Extensions"
@@ -45,5 +52,10 @@
     "hide": "Masquer",
     "more": "Plus d'actions…",
     "close": "Fermer"
+  },
+  "breadcrumbs": {
+    "loading": "Chargement…",
+    "empty": "Aucune entrée",
+    "segment": "Fil d'Ariane : {{name}}"
   }
 }

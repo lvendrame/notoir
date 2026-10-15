@@ -22,7 +22,8 @@
     "mcp": "MCP",
     "scratchpads": "Черновики",
     "autoSave": "Автосохранение",
-    "sortLines": "Сортировать строки"
+    "sortLines": "Сортировать строки",
+    "lineNumbers": "Номера строк"
   },
   "item": {
     "primarySidebar": "Основная боковая панель",
@@ -36,7 +37,8 @@
     "whitespace": "Пробелы",
     "currentLineHighlight": "Выделение текущей строки",
     "wordWrap": "Перенос строк",
-    "minimap": "Мини-карта"
+    "minimap": "Мини-карта",
+    "breadcrumbs": "Навигационная цепочка"
   },
   "autoSave": {
     "off": "Выключено",

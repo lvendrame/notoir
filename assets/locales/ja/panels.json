@@ -11,7 +11,14 @@
     "title": "ソース管理"
   },
   "outline": {
-    "title": "アウトライン"
+    "title": "アウトライン",
+    "noEditor": "エディターが開いていません。",
+    "noSymbols": "このドキュメントにシンボルはありません。",
+    "filter": "シンボルを絞り込む",
+    "sortByName": "名前で並べ替え",
+    "sortByPosition": "位置で並べ替え",
+    "collapseAll": "すべて折りたたむ",
+    "expandAll": "すべて展開"
   },
   "plugins": {
     "title": "プラグイン"
@@ -45,5 +52,10 @@
     "hide": "非表示",
     "more": "その他のアクション…",
     "close": "閉じる"
+  },
+  "breadcrumbs": {
+    "loading": "読み込み中…",
+    "empty": "項目がありません",
+    "segment": "パンくず: {{name}}"
   }
 }

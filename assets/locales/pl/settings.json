@@ -57,7 +57,7 @@
       "visible": "Pasek stanu"
     },
     "breadcrumbs": {
-      "enabled": "Ścieżka nawigacji"
+      "enabled": "Pokazuj ścieżkę nawigacji pod kartami"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "Krycie minimapy",
       "showViewport": "Widoczny obszar na minimapie",
       "showSearchMarks": "Znaczniki wyszukiwania na minimapie",
-      "showSelection": "Znaczniki zaznaczenia na minimapie"
-    }
+      "showSelection": "Znaczniki zaznaczenia na minimapie",
+      "showBookmarks": "Pokazuj zakładki na minimapie"
+    },
+    "folding": "Włącz zwijanie kodu"
   },
   "zenMode": {
     "hideTabs": "Tryb Zen: ukryj karty",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "Największy dokument pokazywany jako drzewo (bajty)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "Następna/poprzednia zakładka przechodzi do innych otwartych plików"
+  },
+  "outline": {
+    "followCursor": "Wyróżniaj symbol przy kursorze w konspekcie",
+    "depth": "Głębokość kluczy w konspekcie (JSON, YAML, TOML)"
   }
 }

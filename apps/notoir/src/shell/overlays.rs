@@ -258,6 +258,8 @@ pub enum PickerKind {
     Indentation,
     /// Second step of Indentation: 1–8.
     TabSize,
+    /// Go to Symbol in the active document (`@`).
+    Symbols,
 }
 
 /// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
@@ -298,6 +300,14 @@ pub struct Picker {
     /// Context when the palette opened; commands run with it.
     pub context: Option<notoir_core::when::ContextSnapshot>,
     scroll_to_selected: bool,
+    /// Rows computed when the picker opened (symbols).
+    dynamic: Vec<PickerItem>,
+    /// Go to Symbol: where to go back to on Esc.
+    pub restore: Option<(
+        notoir_core::ids::ViewId,
+        notoir_editor::Selection,
+        notoir_core::view::ScrollPosition,
+    )>,
 }
 
 /// One Command Palette row.
@@ -352,7 +362,7 @@ impl Picker {
             PickerKind::LanguageMode => doc
                 .map(|d| d.language.as_str().to_owned())
                 .unwrap_or_default(),
-            PickerKind::Commands | PickerKind::Indentation => String::new(),
+            PickerKind::Commands | PickerKind::Indentation | PickerKind::Symbols => String::new(),
             PickerKind::TabSize => doc
                 .map(|d| core.indent_style(d.id).tab_size.to_string())
                 .unwrap_or_default(),
@@ -363,6 +373,16 @@ impl Picker {
         } else {
             (Vec::new(), None)
         };
+        let dynamic = if kind == PickerKind::Symbols {
+            symbol_items(core)
+        } else {
+            Vec::new()
+        };
+        let restore = (kind == PickerKind::Symbols)
+            .then(|| core.workbench.active_view())
+            .flatten()
+            .and_then(|v| core.workbench.view(v))
+            .map(|v| (v.id, v.selection.clone(), v.scroll));
         let selected = Self::all_items(kind)
             .iter()
             .position(|i| i.value == current)
@@ -376,6 +396,8 @@ impl Picker {
             show_all: false,
             context,
             scroll_to_selected: true,
+            dynamic,
+            restore,
         };
         if kind == PickerKind::Commands {
             picker.selected = 0;
@@ -453,7 +475,7 @@ impl Picker {
                     detail: l.id.as_str().to_owned(),
                 })
                 .collect(),
-            PickerKind::Commands => Vec::new(),
+            PickerKind::Commands | PickerKind::Symbols => Vec::new(),
             PickerKind::Indentation => [
                 ("spaces", "dialogs:picker.indentSpaces"),
                 ("tabs", "dialogs:picker.indentTabs"),
@@ -527,6 +549,10 @@ impl Picker {
                 "editor.changeTabSize",
                 json!({ "size": value.parse::<u64>().unwrap_or(4) }),
             ),
+            PickerKind::Symbols => {
+                let (a, b) = parse_range(value).unwrap_or((0, 0));
+                ("navigate.revealRange", json!({ "start": a, "end": b }))
+            }
         };
         CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
@@ -543,6 +569,21 @@ impl Picker {
                     detail: c.shortcut.clone(),
                 })
                 .collect();
+        }
+        if self.kind == PickerKind::Symbols {
+            let q = self.query.trim().trim_start_matches('@').trim();
+            if q.is_empty() {
+                return self.dynamic.clone();
+            }
+            let mut scored: Vec<(i32, &PickerItem)> = self
+                .dynamic
+                .iter()
+                .filter_map(|i| {
+                    notoir_core::fuzzy::fuzzy_match(q, i.label.trim()).map(|m| (m.score, i))
+                })
+                .collect();
+            scored.sort_by_key(|s| std::cmp::Reverse(s.0));
+            return scored.into_iter().map(|(_, i)| i.clone()).collect();
         }
         let q = self.query.to_lowercase();
         Self::all_items(self.kind)
@@ -605,6 +646,7 @@ impl Picker {
             PickerKind::Commands => String::new(),
             PickerKind::Indentation => t!("dialogs:picker.indentation"),
             PickerKind::TabSize => t!("dialogs:picker.tabSize"),
+            PickerKind::Symbols => t!("dialogs:picker.symbols"),
         };
         if self.kind == PickerKind::Commands && enter {
             // Disabled rows (shown with "show all") do not run.
@@ -718,7 +760,10 @@ impl Picker {
         if event.is_none() && area.response.clicked_elsewhere() {
             return Some(PickerEvent::Cancel);
         }
-        if event.is_none() && self.selected != before && self.kind == PickerKind::Theme {
+        if event.is_none()
+            && self.selected != before
+            && matches!(self.kind, PickerKind::Theme | PickerKind::Symbols)
+        {
             event = self
                 .items()
                 .get(self.selected)
@@ -726,6 +771,39 @@ impl Picker {
         }
         event
     }
+}
+
+/// `"start:end"` of a symbol row.
+pub fn parse_range(value: &str) -> Option<(usize, usize)> {
+    let (a, b) = value.split_once(':')?;
+    Some((a.parse().ok()?, b.parse().ok()?))
+}
+
+/// Go to Symbol rows: the active document's outline, indented by depth.
+fn symbol_items(core: &AppCore) -> Vec<PickerItem> {
+    let Some(doc) = core.workbench.active_document() else {
+        return Vec::new();
+    };
+    let Some(s) = core.structure.docs.get(&doc) else {
+        return Vec::new();
+    };
+    let rope = core
+        .workbench
+        .document(doc)
+        .map(|d| d.buffer.rope().clone());
+    notoir_editor::outline::flatten(&s.symbols)
+        .into_iter()
+        .map(|(depth, sym)| {
+            let line = rope.as_ref().map_or(0, |r| {
+                r.char_to_line(sym.selection_range.0.min(r.len_chars())) + 1
+            });
+            PickerItem {
+                value: format!("{}:{}", sym.selection_range.0, sym.selection_range.0),
+                label: format!("{}{}", "  ".repeat(depth), sym.name),
+                detail: t!("dialogs:picker.symbolLine", line = line),
+            }
+        })
+        .collect()
 }
 
 /// Palette rows: commands listed in the palette, enabled per the captured

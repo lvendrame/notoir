@@ -57,7 +57,7 @@
       "visible": "Durum çubuğu"
     },
     "breadcrumbs": {
-      "enabled": "İçerik haritası"
+      "enabled": "İçerik haritasını sekmelerin altında göster"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "Mini harita opaklığı",
       "showViewport": "Mini haritada görünür alan",
       "showSearchMarks": "Mini haritada arama işaretleri",
-      "showSelection": "Mini haritada seçim işaretleri"
-    }
+      "showSelection": "Mini haritada seçim işaretleri",
+      "showBookmarks": "Yer işaretlerini mini haritada göster"
+    },
+    "folding": "Kod daraltmayı etkinleştir"
   },
   "zenMode": {
     "hideTabs": "Zen Modu: sekmeleri gizle",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "Ağaç olarak gösterilecek en büyük belge (bayt)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "Sonraki/önceki yer işareti diğer açık dosyalarda devam eder"
+  },
+  "outline": {
+    "followCursor": "İmleçteki sembolü ana hatta vurgula",
+    "depth": "Ana hatta gösterilen anahtar derinliği (JSON, YAML, TOML)"
   }
 }

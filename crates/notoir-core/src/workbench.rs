@@ -701,6 +701,9 @@ impl Workbench {
             .and_then(|v| self.views.get(v))
             .map(|v| v.selection.clone())
             .unwrap_or_default();
+        let before = d.buffer.rope().clone();
+        // Reloads reconcile bookmarks by line number (spec 12).
+        let reload_lines = matches!(origin, ChangeOrigin::Reload).then(|| d.bookmark_lines());
         d.buffer.edit(EditRequest {
             changes: changes.clone(),
             selection_before,
@@ -708,6 +711,13 @@ impl Workbench {
             kind,
             now_ms,
         })?;
+        match reload_lines {
+            Some(lines) => d.set_bookmark_lines(&lines),
+            None => {
+                d.map_bookmarks(Some(&before), &changes);
+                d.normalize_bookmarks();
+            }
+        }
         d.revision += 1;
         let revision = d.revision;
         let len = d.buffer.len_chars();
@@ -759,6 +769,7 @@ impl Workbench {
             ChangeOrigin::Redo
         };
         for changes in applied.changes {
+            d.map_bookmarks(None, &changes);
             d.revision += 1;
             let changes = Arc::new(changes);
             d.record_change(d.revision, changes.clone());
@@ -770,6 +781,7 @@ impl Workbench {
                 changes,
             });
         }
+        d.normalize_bookmarks();
         if let Some(v) = self.views.get_mut(view) {
             v.selection = applied.selection.clamp(len);
         }

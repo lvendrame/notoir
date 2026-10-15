@@ -355,24 +355,111 @@ pub(super) fn paint(
         }
     }
 
-    // Gutter.
+    // Folded regions: a `⋯` chip after the header line.
+    cache.fold_chips.clear();
+    for row in rows.iter().filter(|r| r.last) {
+        if row.line + 1 < cache.rope.len_lines()
+            && cache.map.is_hidden(row.line + 1)
+            && !cache.map.is_hidden(row.line)
+        {
+            let x = col_x(col_of(&row.text, row.len, tab)) + m.char_w * 0.6;
+            let chip = Rect::from_min_size(
+                Pos2::new(x, row.y + m.row_h * 0.18),
+                Vec2::new(m.char_w * 2.6, m.row_h * 0.64),
+            );
+            text_painter.rect_filled(chip, 3.0, kit.color(Tok::BgPanelRaised));
+            text_painter.rect_stroke(
+                chip,
+                3.0,
+                Stroke::new(1.0, kit.color(Tok::Border)),
+                egui::StrokeKind::Inside,
+            );
+            // Three dots (no font has to carry U+22EF).
+            let gap = chip.width() / 4.0;
+            for i in 1..=3 {
+                text_painter.circle_filled(
+                    Pos2::new(chip.left() + gap * i as f32, chip.center().y),
+                    1.3,
+                    kit.color(Tok::TextSecondary),
+                );
+            }
+            cache.fold_chips.push((chip, row.line));
+        }
+    }
+
+    // Gutter lanes: bookmarks (a filled bookmark shape, not colour alone).
+    let gp = painter.with_clip_rect(m.gutter);
+    for row in rows.iter().filter(|r| r.sub_row == 0) {
+        if opts.bookmarks.binary_search(&row.line).is_ok() {
+            let c = Pos2::new(m.bookmark_lane.center().x, row.y + m.row_h / 2.0);
+            let w = (m.bookmark_lane.width() * 0.5).min(8.0);
+            let h = (m.row_h * 0.62).min(13.0);
+            let top = c.y - h / 2.0;
+            let pts = vec![
+                Pos2::new(c.x - w / 2.0, top),
+                Pos2::new(c.x + w / 2.0, top),
+                Pos2::new(c.x + w / 2.0, top + h),
+                Pos2::new(c.x, top + h * 0.72),
+                Pos2::new(c.x - w / 2.0, top + h),
+            ];
+            gp.add(egui::Shape::convex_polygon(
+                pts,
+                kit.color(Tok::Accent),
+                Stroke::NONE,
+            ));
+        }
+    }
+    // Fold controls: on gutter hover, always for folded regions.
+    if let (Some(lane), Some(ranges)) = (m.fold_lane, opts.fold_ranges.as_ref()) {
+        let hover = ui.rect_contains_pointer(m.gutter);
+        for row in rows.iter().filter(|r| r.sub_row == 0) {
+            let folded = row.line + 1 < cache.rope.len_lines() && cache.map.is_hidden(row.line + 1);
+            let foldable = folded
+                || ranges
+                    .binary_search_by_key(&row.line, |r| r.start_line)
+                    .is_ok();
+            if !foldable || !(hover || folded) {
+                continue;
+            }
+            let c = Pos2::new(lane.center().x, row.y + m.row_h / 2.0);
+            let s = (m.row_h * 0.18).min(4.0);
+            let color = kit.color(if folded {
+                Tok::TextSecondary
+            } else {
+                Tok::TextTertiary
+            });
+            let pts = if folded {
+                vec![
+                    Pos2::new(c.x - s * 0.6, c.y - s),
+                    Pos2::new(c.x + s * 0.6, c.y),
+                    Pos2::new(c.x - s * 0.6, c.y + s),
+                ]
+            } else {
+                vec![
+                    Pos2::new(c.x - s, c.y - s * 0.6),
+                    Pos2::new(c.x, c.y + s * 0.6),
+                    Pos2::new(c.x + s, c.y - s * 0.6),
+                ]
+            };
+            gp.add(egui::Shape::line(pts, Stroke::new(1.4, color)));
+        }
+    }
+
+    // Line numbers.
     if opts.line_numbers != LineNumbers::Off {
-        let gp = painter.with_clip_rect(m.gutter);
+        let numbers_right = m.fold_lane.map_or(m.gutter.right(), |r| r.left());
         let active = kit.color(Tok::GutterLineNumberActive);
         let normal = kit.color(Tok::GutterLineNumber);
         for row in rows.iter().filter(|r| r.sub_row == 0) {
             let is_current = row.line == caret_line;
-            let n = match opts.line_numbers {
-                LineNumbers::Relative if !is_current => row.line.abs_diff(caret_line),
-                _ => row.line + 1,
-            };
+            let n = line_number_label(opts.line_numbers, row.line, caret_line);
             let color = if is_current && opts.highlight_gutter {
                 active
             } else {
                 normal
             };
             gp.text(
-                Pos2::new(m.gutter.right() - m.char_w, row.y + m.row_h / 2.0),
+                Pos2::new(numbers_right - m.char_w * 0.5, row.y + m.row_h / 2.0),
                 Align2::RIGHT_CENTER,
                 n.to_string(),
                 m.font.clone(),
@@ -381,6 +468,15 @@ pub(super) fn paint(
         }
     }
     cjk
+}
+
+/// The number shown for `line` (0-based): relative distance to the caret's
+/// line in relative mode (the caret's line shows its own number).
+pub(super) fn line_number_label(mode: LineNumbers, line: usize, caret_line: usize) -> usize {
+    match mode {
+        LineNumbers::Relative if line != caret_line => line.abs_diff(caret_line),
+        _ => line + 1,
+    }
 }
 
 fn caret_rect_in(

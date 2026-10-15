@@ -25,5 +25,6 @@ pub mod recovery;
 pub mod session;
 pub mod settings_tab;
 pub mod shell;
+pub mod structure;
 pub mod theme;
 pub mod workspace;

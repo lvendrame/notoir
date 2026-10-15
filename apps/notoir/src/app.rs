@@ -179,7 +179,14 @@ impl NotoirApp {
                     self.ui.fullscreen_requested = Some(on);
                 }
                 Effect::Quit => ctx.send_viewport_cmd(egui::ViewportCommand::Close),
-                Effect::OpenPicker(kind) => self.ui.picker = Some(Picker::new(kind, &self.core)),
+                Effect::OpenPicker(kind) => {
+                    if kind == crate::shell::overlays::PickerKind::Symbols
+                        && let Some(d) = self.core.workbench.active_document()
+                    {
+                        self.core.structure(d);
+                    }
+                    self.ui.picker = Some(Picker::new(kind, &self.core));
+                }
                 Effect::ShowAbout => self.ui.about_open = true,
                 Effect::FocusEditor(view) => self.ui.focus_editor = Some(view),
                 Effect::CopyText(text) => ctx.copy_text(text),
@@ -207,6 +214,17 @@ impl NotoirApp {
             return;
         };
         match event {
+            PickerEvent::Preview(value) if kind == crate::shell::overlays::PickerKind::Symbols => {
+                // Preview the location; Enter keeps it, Esc goes back.
+                if let (Some((a, b)), Some(v)) = (
+                    crate::shell::overlays::parse_range(&value),
+                    self.core.workbench.active_view(),
+                ) {
+                    let sel = notoir_editor::Selection::single(notoir_editor::Range::new(a, b));
+                    let _ = self.core.workbench.set_selection(v, sel);
+                    self.core.find.center.push(v);
+                }
+            }
             PickerEvent::Preview(value) => {
                 if let Some(choice) = ThemeChoice::from_setting(&value) {
                     self.set_theme(ctx, choice.resolve(system_dark(ctx)));
@@ -233,6 +251,13 @@ impl NotoirApp {
                 }
             }
             PickerEvent::Cancel => {
+                if let Some((v, sel, scroll)) =
+                    self.ui.picker.as_mut().and_then(|p| p.restore.take())
+                {
+                    let _ = self.core.workbench.set_selection(v, sel);
+                    self.core.find.scroll.insert(v, scroll);
+                    self.ui.focus_editor = Some(v);
+                }
                 if kind == crate::shell::overlays::PickerKind::Commands
                     && let Some(v) = self.core.workbench.active_view()
                 {
@@ -367,7 +392,10 @@ impl eframe::App for NotoirApp {
                 &mut kit,
                 &mut self.core,
                 &context,
-                &mut self.ui.explorer,
+                &mut panels::PanelUis {
+                    explorer: &mut self.ui.explorer,
+                    outline: &mut self.ui.outline,
+                },
                 &mut actions,
             );
             let editor_fill = kit.color(Tok::BgEditor);

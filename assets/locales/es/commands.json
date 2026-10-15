@@ -50,7 +50,10 @@
     "minimapSide": "Posición del minimapa",
     "minimapScale": "Escala del minimapa",
     "zenMode": "Alternar modo Zen",
-    "exitZenMode": "Salir del modo Zen"
+    "exitZenMode": "Salir del modo Zen",
+    "showOutline": "Mostrar esquema",
+    "toggleBreadcrumbs": "Alternar ruta de navegación",
+    "toggleRelativeLineNumbers": "Alternar números de línea relativos"
   },
   "preferences": {
     "changeTheme": "Cambiar tema…",
@@ -143,7 +146,9 @@
     "nextTab": "Pestaña siguiente",
     "previousTab": "Pestaña anterior",
     "switchTab": "Cambiar a la pestaña anterior",
-    "goToLine": "Ir a la línea…"
+    "goToLine": "Ir a la línea…",
+    "goToSymbol": "Ir al símbolo en el editor…",
+    "revealRange": "Mostrar intervalo"
   },
   "editor": {
     "changeLineEnding": "Cambiar secuencia de fin de línea…",
@@ -152,7 +157,8 @@
     "type": "Escribir texto",
     "changeIndentation": "Cambiar sangría",
     "changeTabSize": "Cambiar tamaño de tabulación",
-    "formatDocument": "Dar formato al documento"
+    "formatDocument": "Dar formato al documento",
+    "copyLineNumber": "Copiar número de línea"
   },
   "workspace": {
     "open": "Abrir espacio de trabajo…",
@@ -221,5 +227,30 @@
     "sortKeys": "Ordenar claves",
     "goToParent": "Ir al padre",
     "selectRange": "Seleccionar nodo"
+  },
+  "fold": {
+    "fold": "Plegar",
+    "unfold": "Desplegar",
+    "toggle": "Alternar plegado",
+    "foldAll": "Plegar todo",
+    "unfoldAll": "Desplegar todo",
+    "foldAllExceptCurrent": "Plegar todo excepto el actual",
+    "foldLevel1": "Plegar nivel 1",
+    "foldLevel2": "Plegar nivel 2",
+    "foldLevel3": "Plegar nivel 3",
+    "foldLevel4": "Plegar nivel 4",
+    "foldLevel5": "Plegar nivel 5",
+    "foldLevel6": "Plegar nivel 6",
+    "foldLevel7": "Plegar nivel 7"
+  },
+  "bookmarks": {
+    "toggle": "Alternar marcador",
+    "next": "Marcador siguiente",
+    "previous": "Marcador anterior",
+    "clear": "Borrar marcadores del documento",
+    "clearAll": "Borrar todos los marcadores"
+  },
+  "breadcrumbs": {
+    "focus": "Enfocar ruta de navegación"
   }
 }

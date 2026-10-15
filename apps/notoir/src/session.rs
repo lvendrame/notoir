@@ -60,6 +60,9 @@ pub struct TabData {
     pub wrap: Option<bool>,
     #[serde(default)]
     pub zoom: Option<f32>,
+    /// Folded regions as (header char, end char).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub folds: Vec<(usize, usize)>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -120,7 +123,7 @@ pub struct SessionState {
     pub last_geometry: Option<String>,
 }
 
-fn epoch_ms() -> i64 {
+pub(crate) fn epoch_ms() -> i64 {
     std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_or(0, |d| d.as_millis() as i64)
@@ -236,6 +239,7 @@ impl AppCore {
                         top_line: view.scroll.top_line,
                         wrap: view.wrap_override,
                         zoom: view.zoom,
+                        folds: view.folds.iter().map(|f| (f.header, f.end)).collect(),
                     });
                 }
                 GroupData { tabs, active }
@@ -361,6 +365,8 @@ impl AppCore {
         };
         if let Some(p) = data.panels {
             self.panels = p;
+            self.panels
+                .ensure_registered(crate::core::REGISTERED_PANELS);
         }
         if let Some(z) = data.zoom {
             self.zoom = z;
@@ -518,6 +524,12 @@ impl AppCore {
                 };
                 view.wrap_override = tab.wrap;
                 view.zoom = tab.zoom;
+                view.folds = tab
+                    .folds
+                    .iter()
+                    .filter(|(h, e)| h < e && *e <= len)
+                    .map(|&(header, end)| notoir_core::view::Fold { header, end })
+                    .collect();
             }
             if tab.pinned {
                 let _ = self.workbench.set_pinned(v, true);

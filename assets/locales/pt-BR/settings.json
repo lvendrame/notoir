@@ -57,7 +57,7 @@
       "visible": "Barra de status"
     },
     "breadcrumbs": {
-      "enabled": "Trilha de navegação"
+      "enabled": "Mostrar trilha de navegação abaixo das abas"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "Opacidade do minimapa",
       "showViewport": "Área visível no minimapa",
       "showSearchMarks": "Marcas de busca no minimapa",
-      "showSelection": "Marcas de seleção no minimapa"
-    }
+      "showSelection": "Marcas de seleção no minimapa",
+      "showBookmarks": "Mostrar marcadores no minimapa"
+    },
+    "folding": "Ativar recolhimento de código"
   },
   "zenMode": {
     "hideTabs": "Modo Zen: ocultar abas",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "Maior documento exibido como árvore (bytes)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "Próximo/Anterior Marcador continua em outros arquivos abertos"
+  },
+  "outline": {
+    "followCursor": "Destacar o símbolo do cursor na Estrutura",
+    "depth": "Profundidade de chaves na Estrutura (JSON, YAML, TOML)"
   }
 }

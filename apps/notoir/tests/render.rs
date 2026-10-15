@@ -442,3 +442,58 @@ fn json_split_snapshot() {
         img.save(out_dir().join("json-error.png")).unwrap();
     }
 }
+
+#[test]
+fn outline_folding_bookmarks_snapshot() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path().join("notes");
+    std::fs::create_dir_all(root.join("docs")).unwrap();
+    let p = root.join("docs/architecture.md");
+    std::fs::write(
+        &p,
+        "# Introduction\n\nNotoir is a native editor.\n\n# Architecture\n\nLayers and crates.\n\n## Editor\n\nRope buffer, display map, folding.\n\n## Git\n\nLocal git2, network via system git.\n\n## MCP\n\nTools behind permissions.\n\n# Roadmap\n\n- Phase 2: structure\n- Phase 3: Git\n",
+    )
+    .unwrap();
+    let root = root.canonicalize().unwrap();
+    let p = p.canonicalize().unwrap();
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = vec![(root, None), (p, None)];
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "view.showOutline", serde_json::Value::Null);
+    common::run(&mut app, "fold.fold", serde_json::json!({ "line": 8 }));
+    common::run(
+        &mut app,
+        "bookmarks.toggle",
+        serde_json::json!({ "line": 12 }),
+    );
+    common::run(
+        &mut app,
+        "bookmarks.toggle",
+        serde_json::json!({ "line": 20 }),
+    );
+    {
+        let core = &mut app.harness.state_mut().core;
+        let v = core.workbench.active_view().unwrap();
+        let doc = core.workbench.active_document().unwrap();
+        let at = core
+            .workbench
+            .document(doc)
+            .unwrap()
+            .buffer
+            .text()
+            .find("Tools")
+            .unwrap();
+        core.workbench
+            .set_selection(v, notoir_editor::Selection::caret(at))
+            .unwrap();
+    }
+    common::settle(&mut app);
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("outline-folding-bookmarks.png"))
+            .unwrap();
+    }
+}

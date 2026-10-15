@@ -25,7 +25,9 @@
     "changeTabSize": "Alterar Tamanho da Tabulação",
     "detectIndentation": "Detectar Indentação pelo Conteúdo",
     "convertToSpaces": "Converter Indentação em Espaços",
-    "convertToTabs": "Converter Indentação em Tabulações"
+    "convertToTabs": "Converter Indentação em Tabulações",
+    "symbols": "Ir para Símbolo",
+    "symbolLine": "linha {{line}}"
   },
   "open": {
     "title": "Abrir Arquivo"

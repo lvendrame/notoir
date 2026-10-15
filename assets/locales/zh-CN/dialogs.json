@@ -25,7 +25,9 @@
     "changeTabSize": "更改制表符大小",
     "detectIndentation": "根据内容检测缩进",
     "convertToSpaces": "将缩进转换为空格",
-    "convertToTabs": "将缩进转换为制表符"
+    "convertToTabs": "将缩进转换为制表符",
+    "symbols": "转到符号",
+    "symbolLine": "第 {{line}} 行"
   },
   "open": {
     "title": "打开文件"

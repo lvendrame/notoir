@@ -3,6 +3,7 @@
 //! what reaches here is typing, navigation and editing keys.
 
 use egui::{Event, Key};
+use notoir_core::command::{CommandInvocation, InvocationSource};
 use notoir_core::ids::ViewId;
 use notoir_core::workbench::Workbench;
 use notoir_editor::edit_ops::{self, Unit};
@@ -351,6 +352,7 @@ pub(super) fn pointer(
     m: &Metrics,
     tab: usize,
     now: f64,
+    commands: &mut Vec<CommandInvocation>,
 ) {
     if !ui.input(|i| i.pointer.any_down()) {
         cache.drag = None;
@@ -358,6 +360,33 @@ pub(super) fn pointer(
     let Some(pointer) = response.interact_pointer_pos() else {
         return;
     };
+    // Bookmark lane, fold controls and `⋯` chips act on click only.
+    let lane_cmd = if m.bookmark_lane.contains(pointer) {
+        Some("bookmarks.toggle")
+    } else if m.fold_lane.is_some_and(|r| r.contains(pointer)) {
+        Some("fold.toggle")
+    } else {
+        None
+    };
+    let chip = cache
+        .fold_chips
+        .iter()
+        .find(|(r, _)| r.contains(pointer))
+        .map(|(_, l)| *l);
+    if lane_cmd.is_some() || chip.is_some() {
+        if response.clicked() {
+            let (id, line) = match (lane_cmd, chip) {
+                (Some(id), _) => (id, super::line_at_y(cache, m, pointer.y)),
+                (None, Some(l)) => ("fold.unfold", l),
+                _ => unreachable!(),
+            };
+            commands.push(
+                CommandInvocation::new(id, InvocationSource::Internal)
+                    .with_args(serde_json::json!({ "line": line })),
+            );
+        }
+        return;
+    }
     let pos = pos_at(cache, m, pointer, tab);
     let rope = cache.rope.clone();
     let start = |mode: DragMode, r: Range, cache: &mut ViewCache, wb: &mut Workbench| {

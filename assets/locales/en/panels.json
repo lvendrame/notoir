@@ -11,7 +11,14 @@
     "title": "Source Control"
   },
   "outline": {
-    "title": "Outline"
+    "title": "Outline",
+    "noEditor": "No editor is open.",
+    "noSymbols": "No symbols in this document.",
+    "filter": "Filter symbols",
+    "sortByName": "Sort by Name",
+    "sortByPosition": "Sort by Position",
+    "collapseAll": "Collapse All",
+    "expandAll": "Expand All"
   },
   "plugins": {
     "title": "Plugins"
@@ -45,5 +52,10 @@
     "hide": "Hide",
     "more": "More Actions…",
     "close": "Close"
+  },
+  "breadcrumbs": {
+    "loading": "Loading…",
+    "empty": "No entries",
+    "segment": "Breadcrumb: {{name}}"
   }
 }

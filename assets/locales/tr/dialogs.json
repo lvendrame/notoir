@@ -25,7 +25,9 @@
     "changeTabSize": "Sekme Boyutunu Değiştir",
     "detectIndentation": "Girintiyi İçerikten Algıla",
     "convertToSpaces": "Girintiyi Boşluğa Dönüştür",
-    "convertToTabs": "Girintiyi Sekmeye Dönüştür"
+    "convertToTabs": "Girintiyi Sekmeye Dönüştür",
+    "symbols": "Sembole Git",
+    "symbolLine": "{{line}}. satır"
   },
   "open": {
     "title": "Dosya Aç"

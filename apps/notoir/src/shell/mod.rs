@@ -8,6 +8,7 @@ use notoir_core::command::CommandInvocation;
 use crate::icons::{Icon, IconCache};
 use crate::theme::{ICON, Theme, Tok};
 
+pub mod breadcrumbs;
 pub mod chrome;
 pub mod empty_state;
 pub mod explorer;
@@ -15,6 +16,7 @@ pub mod find_widget;
 pub mod json_tree;
 pub mod layout;
 pub mod md_preview;
+pub mod outline;
 pub mod overlays;
 pub mod panels;
 pub mod prompts;
@@ -66,6 +68,7 @@ pub struct UiState {
     pub fullscreen_requested: Option<bool>,
     pub previews: md_preview::Previews,
     pub json_trees: json_tree::JsonTrees,
+    pub outline: outline::OutlineUi,
 }
 
 /// Collects invocations produced while rendering one frame.

@@ -25,7 +25,9 @@
     "changeTabSize": "Change Tab Size",
     "detectIndentation": "Detect Indentation from Content",
     "convertToSpaces": "Convert Indentation to Spaces",
-    "convertToTabs": "Convert Indentation to Tabs"
+    "convertToTabs": "Convert Indentation to Tabs",
+    "symbols": "Go to Symbol",
+    "symbolLine": "line {{line}}"
   },
   "open": {
     "title": "Open File"

@@ -32,6 +32,7 @@ macro_rules! icons {
 }
 
 icons! {
+    ArrowDownAZ => "lucide/arrow-down-a-z",
     Bell => "lucide/bell",
     BookOpen => "lucide/book-open",
     Bookmark => "lucide/bookmark",
@@ -42,6 +43,7 @@ icons! {
     ChevronRight => "lucide/chevron-right",
     ChevronUp => "lucide/chevron-up",
     ChevronsDownUp => "lucide/chevrons-down-up",
+    ChevronsUpDown => "lucide/chevrons-up-down",
     CircleAlert => "lucide/circle-alert",
     CircleCheck => "lucide/circle-check",
     CircleQuestionMark => "lucide/circle-question-mark",

@@ -57,7 +57,7 @@
       "visible": "Barre d'état"
     },
     "breadcrumbs": {
-      "enabled": "Fil d'Ariane"
+      "enabled": "Afficher le fil d'Ariane sous les onglets"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "Opacité de la minimap",
       "showViewport": "Zone visible de la minimap",
       "showSearchMarks": "Repères de recherche dans la minimap",
-      "showSelection": "Repères de sélection dans la minimap"
-    }
+      "showSelection": "Repères de sélection dans la minimap",
+      "showBookmarks": "Afficher les signets dans la minimap"
+    },
+    "folding": "Activer le repli de code"
   },
   "zenMode": {
     "hideTabs": "Mode Zen : masquer les onglets",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "Taille maximale d'un document affiché en arbre (octets)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "Signet suivant/précédent continue dans les autres fichiers ouverts"
+  },
+  "outline": {
+    "followCursor": "Mettre en évidence le symbole du curseur dans la structure",
+    "depth": "Profondeur des clés dans la structure (JSON, YAML, TOML)"
   }
 }

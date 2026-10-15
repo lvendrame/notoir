@@ -11,7 +11,14 @@
     "title": "源代码管理"
   },
   "outline": {
-    "title": "大纲"
+    "title": "大纲",
+    "noEditor": "没有打开的编辑器。",
+    "noSymbols": "此文档中没有符号。",
+    "filter": "筛选符号",
+    "sortByName": "按名称排序",
+    "sortByPosition": "按位置排序",
+    "collapseAll": "全部折叠",
+    "expandAll": "全部展开"
   },
   "plugins": {
     "title": "插件"
@@ -45,5 +52,10 @@
     "hide": "隐藏",
     "more": "更多操作…",
     "close": "关闭"
+  },
+  "breadcrumbs": {
+    "loading": "正在加载…",
+    "empty": "没有条目",
+    "segment": "导航路径: {{name}}"
   }
 }

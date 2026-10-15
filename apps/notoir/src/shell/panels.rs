@@ -40,13 +40,19 @@ fn side_panel(id: &'static str, side: Side) -> egui::Panel {
     }
 }
 
+/// Per-panel UI state.
+pub struct PanelUis<'a> {
+    pub explorer: &'a mut super::explorer::ExplorerUi,
+    pub outline: &'a mut super::outline::OutlineUi,
+}
+
 /// Renders every visible area around the editor; call before the central panel.
 pub fn show(
     ui: &mut egui::Ui,
     kit: &mut Kit,
     core: &mut AppCore,
     context: &notoir_core::when::ContextSnapshot,
-    explorer_ui: &mut super::explorer::ExplorerUi,
+    uis: &mut PanelUis,
     actions: &mut Actions,
 ) -> PanelSizes {
     let layout = core.panels.clone();
@@ -100,7 +106,7 @@ pub fn show(
             .min_size(area.min_size())
             .frame(panel_frame(kit))
             .show(ui, |ui| {
-                area_contents(ui, kit, core, context, explorer_ui, area, active, actions)
+                area_contents(ui, kit, core, context, uis, area, active, actions)
             });
         let width = resp.response.rect.width();
         if (width - state.size).abs() > 0.5 {
@@ -124,7 +130,7 @@ pub fn show(
                     kit,
                     core,
                     context,
-                    explorer_ui,
+                    uis,
                     PanelArea::Bottom,
                     active,
                     actions,
@@ -150,7 +156,7 @@ fn area_contents(
     kit: &mut Kit,
     core: &mut AppCore,
     context: &notoir_core::when::ContextSnapshot,
-    explorer_ui: &mut super::explorer::ExplorerUi,
+    uis: &mut PanelUis,
     area: PanelArea,
     active: PanelId,
     actions: &mut Actions,
@@ -252,7 +258,8 @@ fn area_contents(
     });
     ui.add_space(4.0);
     match active {
-        PanelId::Explorer => super::explorer::show(ui, kit, core, context, explorer_ui, actions),
+        PanelId::Explorer => super::explorer::show(ui, kit, core, context, uis.explorer, actions),
+        PanelId::Outline => super::outline::show(ui, kit, core, uis.outline, actions),
         PanelId::Output => output(ui, kit, core),
         _ => {}
     }

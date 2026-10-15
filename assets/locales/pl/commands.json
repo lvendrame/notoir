@@ -50,7 +50,10 @@
     "minimapSide": "Położenie minimapy",
     "minimapScale": "Skala minimapy",
     "zenMode": "Przełącz tryb Zen",
-    "exitZenMode": "Wyjdź z trybu Zen"
+    "exitZenMode": "Wyjdź z trybu Zen",
+    "showOutline": "Pokaż konspekt",
+    "toggleBreadcrumbs": "Przełącz ścieżkę nawigacji",
+    "toggleRelativeLineNumbers": "Przełącz względne numery wierszy"
   },
   "preferences": {
     "changeTheme": "Zmień motyw…",
@@ -143,7 +146,9 @@
     "nextTab": "Następna karta",
     "previousTab": "Poprzednia karta",
     "switchTab": "Przełącz na poprzednią kartę",
-    "goToLine": "Przejdź do wiersza…"
+    "goToLine": "Przejdź do wiersza…",
+    "goToSymbol": "Przejdź do symbolu w edytorze…",
+    "revealRange": "Pokaż zakres"
   },
   "editor": {
     "changeLineEnding": "Zmień sekwencję końca wiersza…",
@@ -152,7 +157,8 @@
     "type": "Wpisz tekst",
     "changeIndentation": "Zmień wcięcie",
     "changeTabSize": "Zmień szerokość tabulacji",
-    "formatDocument": "Formatuj dokument"
+    "formatDocument": "Formatuj dokument",
+    "copyLineNumber": "Kopiuj numer wiersza"
   },
   "workspace": {
     "open": "Otwórz obszar roboczy…",
@@ -221,5 +227,30 @@
     "sortKeys": "Sortuj klucze",
     "goToParent": "Przejdź do elementu nadrzędnego",
     "selectRange": "Zaznacz węzeł"
+  },
+  "fold": {
+    "fold": "Zwiń",
+    "unfold": "Rozwiń",
+    "toggle": "Przełącz zwinięcie",
+    "foldAll": "Zwiń wszystko",
+    "unfoldAll": "Rozwiń wszystko",
+    "foldAllExceptCurrent": "Zwiń wszystko oprócz bieżącego",
+    "foldLevel1": "Zwiń poziom 1",
+    "foldLevel2": "Zwiń poziom 2",
+    "foldLevel3": "Zwiń poziom 3",
+    "foldLevel4": "Zwiń poziom 4",
+    "foldLevel5": "Zwiń poziom 5",
+    "foldLevel6": "Zwiń poziom 6",
+    "foldLevel7": "Zwiń poziom 7"
+  },
+  "bookmarks": {
+    "toggle": "Przełącz zakładkę",
+    "next": "Następna zakładka",
+    "previous": "Poprzednia zakładka",
+    "clear": "Wyczyść zakładki w dokumencie",
+    "clearAll": "Wyczyść wszystkie zakładki"
+  },
+  "breadcrumbs": {
+    "focus": "Aktywuj ścieżkę nawigacji"
   }
 }

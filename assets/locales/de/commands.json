@@ -50,7 +50,10 @@
     "minimapSide": "Position der Minimap",
     "minimapScale": "Größe der Minimap",
     "zenMode": "Zen-Modus umschalten",
-    "exitZenMode": "Zen-Modus beenden"
+    "exitZenMode": "Zen-Modus beenden",
+    "showOutline": "Gliederung anzeigen",
+    "toggleBreadcrumbs": "Breadcrumbs umschalten",
+    "toggleRelativeLineNumbers": "Relative Zeilennummern umschalten"
   },
   "preferences": {
     "changeTheme": "Design ändern…",
@@ -143,7 +146,9 @@
     "nextTab": "Nächster Tab",
     "previousTab": "Vorheriger Tab",
     "switchTab": "Zum vorherigen Tab wechseln",
-    "goToLine": "Gehe zu Zeile…"
+    "goToLine": "Gehe zu Zeile…",
+    "goToSymbol": "Zu Symbol im Editor wechseln…",
+    "revealRange": "Bereich anzeigen"
   },
   "editor": {
     "changeLineEnding": "Zeilenendesequenz ändern…",
@@ -152,7 +157,8 @@
     "type": "Text eingeben",
     "changeIndentation": "Einrückung ändern",
     "changeTabSize": "Tabulatorbreite ändern",
-    "formatDocument": "Dokument formatieren"
+    "formatDocument": "Dokument formatieren",
+    "copyLineNumber": "Zeilennummer kopieren"
   },
   "workspace": {
     "open": "Arbeitsbereich öffnen…",
@@ -221,5 +227,30 @@
     "sortKeys": "Schlüssel sortieren",
     "goToParent": "Zum übergeordneten Element",
     "selectRange": "Knoten auswählen"
+  },
+  "fold": {
+    "fold": "Falten",
+    "unfold": "Entfalten",
+    "toggle": "Faltung umschalten",
+    "foldAll": "Alle falten",
+    "unfoldAll": "Alle entfalten",
+    "foldAllExceptCurrent": "Alle außer aktuellem falten",
+    "foldLevel1": "Ebene 1 falten",
+    "foldLevel2": "Ebene 2 falten",
+    "foldLevel3": "Ebene 3 falten",
+    "foldLevel4": "Ebene 4 falten",
+    "foldLevel5": "Ebene 5 falten",
+    "foldLevel6": "Ebene 6 falten",
+    "foldLevel7": "Ebene 7 falten"
+  },
+  "bookmarks": {
+    "toggle": "Lesezeichen umschalten",
+    "next": "Nächstes Lesezeichen",
+    "previous": "Vorheriges Lesezeichen",
+    "clear": "Lesezeichen im Dokument löschen",
+    "clearAll": "Alle Lesezeichen löschen"
+  },
+  "breadcrumbs": {
+    "focus": "Breadcrumbs fokussieren"
   }
 }

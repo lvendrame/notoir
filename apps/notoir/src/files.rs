@@ -514,6 +514,7 @@ impl AppCore {
             key: loaded.key.clone(),
         };
         let doc = self.workbench.open_document(origin, loaded.text);
+        self.restore_bookmarks(doc);
         let group = if self.workbench.layout.group(group).is_some() {
             group
         } else {
@@ -534,6 +535,7 @@ impl AppCore {
         let read_only = loaded.text.read_only;
         let mixed = loaded.text.mixed_line_endings;
         let doc = self.workbench.open_document(origin, loaded.text);
+        self.restore_bookmarks(doc);
         let group = if self.workbench.layout.group(group).is_some() {
             group
         } else {

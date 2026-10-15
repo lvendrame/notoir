@@ -11,7 +11,14 @@
     "title": "Controllo del codice sorgente"
   },
   "outline": {
-    "title": "Struttura"
+    "title": "Struttura",
+    "noEditor": "Nessun editor aperto.",
+    "noSymbols": "Nessun simbolo in questo documento.",
+    "filter": "Filtra simboli",
+    "sortByName": "Ordina per nome",
+    "sortByPosition": "Ordina per posizione",
+    "collapseAll": "Comprimi tutto",
+    "expandAll": "Espandi tutto"
   },
   "plugins": {
     "title": "Plugin"
@@ -45,5 +52,10 @@
     "hide": "Nascondi",
     "more": "Altre azioni…",
     "close": "Chiudi"
+  },
+  "breadcrumbs": {
+    "loading": "Caricamento…",
+    "empty": "Nessuna voce",
+    "segment": "Percorso: {{name}}"
   }
 }

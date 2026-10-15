@@ -50,7 +50,10 @@
     "minimapSide": "Positie van minimap",
     "minimapScale": "Schaal van minimap",
     "zenMode": "Zen-modus in-/uitschakelen",
-    "exitZenMode": "Zen-modus verlaten"
+    "exitZenMode": "Zen-modus verlaten",
+    "showOutline": "Overzicht tonen",
+    "toggleBreadcrumbs": "Kruimelpad in-/uitschakelen",
+    "toggleRelativeLineNumbers": "Relatieve regelnummers in-/uitschakelen"
   },
   "preferences": {
     "changeTheme": "Thema wijzigen…",
@@ -143,7 +146,9 @@
     "nextTab": "Volgend tabblad",
     "previousTab": "Vorig tabblad",
     "switchTab": "Naar vorig tabblad schakelen",
-    "goToLine": "Ga naar regel…"
+    "goToLine": "Ga naar regel…",
+    "goToSymbol": "Naar symbool in editor…",
+    "revealRange": "Bereik tonen"
   },
   "editor": {
     "changeLineEnding": "Regeleindereeks wijzigen…",
@@ -152,7 +157,8 @@
     "type": "Tekst typen",
     "changeIndentation": "Inspringing wijzigen",
     "changeTabSize": "Tabgrootte wijzigen",
-    "formatDocument": "Document opmaken"
+    "formatDocument": "Document opmaken",
+    "copyLineNumber": "Regelnummer kopiëren"
   },
   "workspace": {
     "open": "Werkruimte openen…",
@@ -221,5 +227,30 @@
     "sortKeys": "Sleutels sorteren",
     "goToParent": "Naar bovenliggend element",
     "selectRange": "Knooppunt selecteren"
+  },
+  "fold": {
+    "fold": "Samenvouwen",
+    "unfold": "Uitvouwen",
+    "toggle": "Samenvouwen in-/uitschakelen",
+    "foldAll": "Alles samenvouwen",
+    "unfoldAll": "Alles uitvouwen",
+    "foldAllExceptCurrent": "Alles behalve huidige samenvouwen",
+    "foldLevel1": "Niveau 1 samenvouwen",
+    "foldLevel2": "Niveau 2 samenvouwen",
+    "foldLevel3": "Niveau 3 samenvouwen",
+    "foldLevel4": "Niveau 4 samenvouwen",
+    "foldLevel5": "Niveau 5 samenvouwen",
+    "foldLevel6": "Niveau 6 samenvouwen",
+    "foldLevel7": "Niveau 7 samenvouwen"
+  },
+  "bookmarks": {
+    "toggle": "Bladwijzer in-/uitschakelen",
+    "next": "Volgende bladwijzer",
+    "previous": "Vorige bladwijzer",
+    "clear": "Bladwijzers in document wissen",
+    "clearAll": "Alle bladwijzers wissen"
+  },
+  "breadcrumbs": {
+    "focus": "Focus op kruimelpad"
   }
 }

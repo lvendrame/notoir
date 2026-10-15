@@ -25,7 +25,9 @@
     "changeTabSize": "Cambia dimensione tabulazione",
     "detectIndentation": "Rileva il rientro dal contenuto",
     "convertToSpaces": "Converti il rientro in spazi",
-    "convertToTabs": "Converti il rientro in tabulazioni"
+    "convertToTabs": "Converti il rientro in tabulazioni",
+    "symbols": "Vai al simbolo",
+    "symbolLine": "riga {{line}}"
   },
   "open": {
     "title": "Apri file"

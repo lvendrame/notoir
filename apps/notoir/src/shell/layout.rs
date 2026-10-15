@@ -284,8 +284,34 @@ impl Renderer<'_, '_> {
                 let _ = view;
             }
             (Some(view), _) => {
+                if let Some(d) = self.core.workbench.view(view).map(|v| v.document_id) {
+                    self.core.structure(d);
+                }
                 let opts = self.core.editor_options(view);
                 let doc = self.core.workbench.view(view).map(|v| v.document_id);
+                // Breadcrumbs under the tab strip (spec 26).
+                let body = if self
+                    .core
+                    .settings
+                    .bool("workbench.breadcrumbs.enabled", None)
+                    && self.core.zen.is_none()
+                {
+                    let bar = Rect::from_min_size(
+                        body.min,
+                        Vec2::new(body.width(), super::breadcrumbs::HEIGHT),
+                    );
+                    super::breadcrumbs::bar(
+                        &mut child,
+                        self.kit,
+                        self.core,
+                        bar,
+                        view,
+                        self.actions,
+                    );
+                    Rect::from_min_max(Pos2::new(body.left(), bar.bottom()), body.max)
+                } else {
+                    body
+                };
                 let banner = doc.and_then(|d| self.core.banners.get(&d).copied().map(|b| (d, b)));
                 let body = match banner {
                     Some((doc, b)) => {
@@ -472,10 +498,14 @@ impl Renderer<'_, '_> {
                 self.out.cjk.merge(out.cjk);
                 self.actions.0.extend(out.commands);
                 if let Some(resp) = &out.response {
+                    let gutter_line = out.gutter_menu_line;
                     resp.context_menu(|ui| {
                         ui.set_min_width(220.0);
-                        let items =
-                            menus::visible_items(&editor_context_items(), &self.core.commands);
+                        let items = match gutter_line {
+                            Some(line) => gutter_context_items(line),
+                            None => editor_context_items(),
+                        };
+                        let items = menus::visible_items(&items, &self.core.commands);
                         super::chrome::menu_items(
                             ui,
                             self.kit,
@@ -582,6 +612,36 @@ const BANNER_H: f32 = 34.0;
 
 /// The editor's right-click menu (spec 11 §Editor Context Menu); items whose
 /// commands do not exist yet are left out.
+/// Gutter context menu for `line` (spec 12 §Gutter).
+fn gutter_context_items(line: usize) -> Vec<menus::MenuItem> {
+    use menus::MenuItem;
+    let at = |id: &'static str| MenuItem::Command {
+        id,
+        args: json!({ "line": line }),
+        label: None,
+        checked: None,
+    };
+    let toggle = |id: &'static str, checked: &str| MenuItem::Command {
+        id,
+        args: serde_json::Value::Null,
+        label: None,
+        checked: Some(checked.to_owned()),
+    };
+    vec![
+        at("bookmarks.toggle"),
+        at("editor.copyLineNumber"),
+        MenuItem::Submenu {
+            label: "menus:sub.lineNumbers",
+            items: vec![
+                toggle("view.toggleLineNumbers", "lineNumbersVisible"),
+                toggle("view.toggleRelativeLineNumbers", "lineNumbersRelative"),
+            ],
+        },
+        MenuItem::Separator,
+        at("fold.toggle"),
+    ]
+}
+
 fn editor_context_items() -> Vec<menus::MenuItem> {
     use menus::MenuItem;
     let cmd = |id: &'static str| MenuItem::Command {

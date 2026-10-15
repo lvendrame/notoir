@@ -104,6 +104,10 @@ pub struct EditorOptions {
     pub highlight: bool,
     /// Error ranges drawn with a squiggle (JSON syntax errors).
     pub diagnostics: Vec<(usize, usize)>,
+    /// Bookmarked lines (spec 12).
+    pub bookmarks: Vec<usize>,
+    /// Foldable regions; `None` when folding is off.
+    pub fold_ranges: Option<std::sync::Arc<Vec<notoir_editor::folding::FoldRange>>>,
 }
 
 /// Per-view state that only the widget needs.
@@ -126,6 +130,10 @@ pub struct ViewCache {
     last_head: usize,
     minimap_rect: Option<Rect>,
     gutter_rect: Rect,
+    /// `⋯` chips of folded regions drawn last frame (click unfolds).
+    fold_chips: Vec<(Rect, usize)>,
+    /// Line right-clicked in the gutter (its context menu acts on it).
+    gutter_menu_line: Option<usize>,
     /// Syntax highlighting state for the language below (spec 26).
     highlighter: Option<notoir_editor::syntax::Highlighter>,
     highlight_lang: Option<notoir_editor::LanguageId>,
@@ -156,6 +164,8 @@ impl ViewCache {
             last_head: head,
             minimap_rect: None,
             gutter_rect: Rect::NOTHING,
+            fold_chips: Vec::new(),
+            gutter_menu_line: None,
             highlighter: None,
             highlight_lang: None,
         }
@@ -261,6 +271,8 @@ pub struct EditorOutput {
     pub commands: Vec<notoir_core::command::CommandInvocation>,
     /// The editor's response (the context menu is added by the caller).
     pub response: Option<egui::Response>,
+    /// The context menu was opened on the gutter at this line.
+    pub gutter_menu_line: Option<usize>,
 }
 
 /// Geometry of the editor for one frame.
@@ -268,6 +280,10 @@ pub struct EditorOutput {
 struct Metrics {
     rect: Rect,
     gutter: Rect,
+    /// Bookmark lane (left edge of the gutter).
+    bookmark_lane: Rect,
+    /// Fold controls (right edge of the gutter), when folding is on.
+    fold_lane: Option<Rect>,
     text: Rect,
     row_h: f32,
     char_w: f32,
@@ -335,10 +351,18 @@ pub fn show(
     let row_h = (font_size * opts.line_height).round().max(1.0);
     let doc = wb.document(doc_id).expect("view's document");
     let lines = doc.buffer.rope().len_lines();
-    let gutter_w = match opts.line_numbers {
-        LineNumbers::Off => char_w,
-        _ => (gutter_digits(lines) as f32 + 2.0) * char_w,
+    let lane_w = (char_w * 1.6).max(12.0);
+    let fold_w = if opts.fold_ranges.is_some() {
+        lane_w
+    } else {
+        0.0
     };
+    let gutter_w = lane_w
+        + fold_w
+        + match opts.line_numbers {
+            LineNumbers::Off => char_w * 0.5,
+            _ => (gutter_digits(lines) as f32 + 1.0) * char_w,
+        };
     // Zen Mode: a centred column.
     let rect = match opts.max_width_cols {
         Some(cols) => {
@@ -376,9 +400,14 @@ pub fn show(
         Pos2::new(gutter.right() + opts.padding, rect.top()),
         Pos2::new(right, rect.bottom()),
     );
+    let bookmark_lane = Rect::from_min_size(gutter.min, Vec2::new(lane_w, gutter.height()));
+    let fold_lane = (fold_w > 0.0)
+        .then(|| Rect::from_min_max(Pos2::new(gutter.right() - fold_w, gutter.top()), gutter.max));
     let m = Metrics {
         rect,
         gutter,
+        bookmark_lane,
+        fold_lane,
         text,
         row_h,
         char_w,
@@ -406,6 +435,7 @@ pub fn show(
         .entry(view)
         .or_insert_with(|| ViewCache::new(doc, wrap, saved_scroll, head));
     cache.sync(doc, wrap);
+    apply_folds(wb, cache, view);
     if let Some(s) = opts.set_scroll {
         let line = s.top_line.min(cache.rope.len_lines().saturating_sub(1));
         cache.anchor_line = line;
@@ -426,6 +456,7 @@ pub fn show(
         &m,
         opts.indent.tab_size,
         now,
+        &mut out.commands,
     );
     if let Some(d) = wb
         .view(view)
@@ -434,6 +465,7 @@ pub fn show(
     {
         cache.sync(d, wrap);
     }
+    apply_folds(wb, cache, view);
     scroll(ui, &response, cache, &m, opts, &mut out);
     let head = wb.view(view).map_or(0, |v| v.selection.primary().head);
     if head != cache.last_head {
@@ -518,6 +550,13 @@ pub fn show(
         }
     }
     accessibility(&response, cache, &m);
+    if response.secondary_clicked() {
+        cache.gutter_menu_line = response
+            .interact_pointer_pos()
+            .filter(|p| m.gutter.contains(*p))
+            .map(|p| line_at_y(cache, &m, p.y));
+    }
+    out.gutter_menu_line = cache.gutter_menu_line;
     out.response = Some(response.clone());
     // Persist the scroll anchor in the view (session restore, M8).
     if let Some(v) = wb.views.get_mut(view) {
@@ -526,6 +565,36 @@ pub fn show(
         v.scroll.horizontal = cache.scroll_x;
     }
     out
+}
+
+/// Hides the view's folded lines; a caret that moved into a fold unfolds it
+/// (spec 12: the cursor never rests inside a folded region).
+fn apply_folds(wb: &mut Workbench, cache: &mut ViewCache, view: ViewId) {
+    let Some(v) = wb.views.get_mut(view) else {
+        return;
+    };
+    if !v.folds.is_empty() {
+        let len = cache.rope.len_chars();
+        let heads: Vec<usize> = v
+            .selection
+            .ranges()
+            .iter()
+            .map(|r| cache.rope.char_to_line(r.head.min(len)))
+            .collect();
+        for line in heads {
+            v.unfold_line(&cache.rope, line);
+        }
+    }
+    let hidden = v.hidden_lines(&cache.rope);
+    cache.map.set_hidden(&hidden);
+}
+
+/// Buffer line at a screen y.
+fn line_at_y(cache: &mut ViewCache, m: &Metrics, y: f32) -> usize {
+    let row = ((y - m.text.top() + scroll_y(cache, m)) / m.row_h)
+        .floor()
+        .max(0.0) as usize;
+    cache.map.row_to_line(row).line
 }
 
 /// Scroll position in pixels from the anchor.
@@ -697,6 +766,15 @@ mod tests {
         assert_eq!(zoom_step(300, true), 300);
         assert_eq!(zoom_step(50, false), 50);
         assert_eq!(zoom_step(105, false), 100);
+    }
+
+    // spec 12: "Relative line numbers"
+    #[test]
+    fn relative_line_numbers() {
+        let label = |line| paint::line_number_label(LineNumbers::Relative, line, 49);
+        assert_eq!(label(46), 3, "line 47 shows 3");
+        assert_eq!(label(49), 50, "line 50 shows 50");
+        assert_eq!(paint::line_number_label(LineNumbers::On, 46, 49), 47);
     }
 
     // spec 12: "Line numbers width does not change while scrolling"

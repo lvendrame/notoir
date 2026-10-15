@@ -25,7 +25,9 @@
     "changeTabSize": "Tabgrootte wijzigen",
     "detectIndentation": "Inspringing uit inhoud detecteren",
     "convertToSpaces": "Inspringing omzetten naar spaties",
-    "convertToTabs": "Inspringing omzetten naar tabs"
+    "convertToTabs": "Inspringing omzetten naar tabs",
+    "symbols": "Naar symbool",
+    "symbolLine": "regel {{line}}"
   },
   "open": {
     "title": "Bestand openen"

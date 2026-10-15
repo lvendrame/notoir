@@ -50,7 +50,10 @@
     "minimapSide": "Mini Harita Konumu",
     "minimapScale": "Mini Harita Ölçeği",
     "zenMode": "Zen Modunu Aç/Kapat",
-    "exitZenMode": "Zen Modundan Çık"
+    "exitZenMode": "Zen Modundan Çık",
+    "showOutline": "Ana Hattı Göster",
+    "toggleBreadcrumbs": "İçerik Haritasını Aç/Kapat",
+    "toggleRelativeLineNumbers": "Göreli Satır Numaralarını Aç/Kapat"
   },
   "preferences": {
     "changeTheme": "Temayı Değiştir…",
@@ -143,7 +146,9 @@
     "nextTab": "Sonraki Sekme",
     "previousTab": "Önceki Sekme",
     "switchTab": "Önceki Sekmeye Geç",
-    "goToLine": "Satıra Git…"
+    "goToLine": "Satıra Git…",
+    "goToSymbol": "Düzenleyicide Sembole Git…",
+    "revealRange": "Aralığı Göster"
   },
   "editor": {
     "changeLineEnding": "Satır Sonu Dizisini Değiştir…",
@@ -152,7 +157,8 @@
     "type": "Metin Yaz",
     "changeIndentation": "Girintiyi Değiştir",
     "changeTabSize": "Sekme Boyutunu Değiştir",
-    "formatDocument": "Belgeyi Biçimlendir"
+    "formatDocument": "Belgeyi Biçimlendir",
+    "copyLineNumber": "Satır Numarasını Kopyala"
   },
   "workspace": {
     "open": "Çalışma Alanı Aç…",
@@ -221,5 +227,30 @@
     "sortKeys": "Anahtarları Sırala",
     "goToParent": "Üst Öğeye Git",
     "selectRange": "Düğümü Seç"
+  },
+  "fold": {
+    "fold": "Daralt",
+    "unfold": "Genişlet",
+    "toggle": "Daraltmayı Aç/Kapat",
+    "foldAll": "Tümünü Daralt",
+    "unfoldAll": "Tümünü Genişlet",
+    "foldAllExceptCurrent": "Geçerli Hariç Tümünü Daralt",
+    "foldLevel1": "1. Düzeyi Daralt",
+    "foldLevel2": "2. Düzeyi Daralt",
+    "foldLevel3": "3. Düzeyi Daralt",
+    "foldLevel4": "4. Düzeyi Daralt",
+    "foldLevel5": "5. Düzeyi Daralt",
+    "foldLevel6": "6. Düzeyi Daralt",
+    "foldLevel7": "7. Düzeyi Daralt"
+  },
+  "bookmarks": {
+    "toggle": "Yer İşaretini Aç/Kapat",
+    "next": "Sonraki Yer İşareti",
+    "previous": "Önceki Yer İşareti",
+    "clear": "Belgedeki Yer İşaretlerini Temizle",
+    "clearAll": "Tüm Yer İşaretlerini Temizle"
+  },
+  "breadcrumbs": {
+    "focus": "İçerik Haritasına Odaklan"
   }
 }

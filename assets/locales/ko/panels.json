@@ -11,7 +11,14 @@
     "title": "소스 제어"
   },
   "outline": {
-    "title": "개요"
+    "title": "개요",
+    "noEditor": "열린 편집기가 없습니다.",
+    "noSymbols": "이 문서에 기호가 없습니다.",
+    "filter": "기호 필터링",
+    "sortByName": "이름순 정렬",
+    "sortByPosition": "위치순 정렬",
+    "collapseAll": "모두 접기",
+    "expandAll": "모두 펼치기"
   },
   "plugins": {
     "title": "플러그인"
@@ -45,5 +52,10 @@
     "hide": "숨기기",
     "more": "추가 작업…",
     "close": "닫기"
+  },
+  "breadcrumbs": {
+    "loading": "로드 중…",
+    "empty": "항목 없음",
+    "segment": "탐색 경로: {{name}}"
   }
 }

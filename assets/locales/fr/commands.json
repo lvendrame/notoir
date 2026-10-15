@@ -50,7 +50,10 @@
     "minimapSide": "Position de la minimap",
     "minimapScale": "Échelle de la minimap",
     "zenMode": "Activer/désactiver le mode Zen",
-    "exitZenMode": "Quitter le mode Zen"
+    "exitZenMode": "Quitter le mode Zen",
+    "showOutline": "Afficher la structure",
+    "toggleBreadcrumbs": "Basculer le fil d'Ariane",
+    "toggleRelativeLineNumbers": "Basculer les numéros de ligne relatifs"
   },
   "preferences": {
     "changeTheme": "Changer de thème…",
@@ -143,7 +146,9 @@
     "nextTab": "Onglet suivant",
     "previousTab": "Onglet précédent",
     "switchTab": "Basculer vers l'onglet précédent",
-    "goToLine": "Aller à la ligne…"
+    "goToLine": "Aller à la ligne…",
+    "goToSymbol": "Atteindre le symbole dans l'éditeur…",
+    "revealRange": "Afficher la plage"
   },
   "editor": {
     "changeLineEnding": "Changer la séquence de fin de ligne…",
@@ -152,7 +157,8 @@
     "type": "Saisir du texte",
     "changeIndentation": "Modifier l'indentation",
     "changeTabSize": "Modifier la taille de tabulation",
-    "formatDocument": "Mettre en forme le document"
+    "formatDocument": "Mettre en forme le document",
+    "copyLineNumber": "Copier le numéro de ligne"
   },
   "workspace": {
     "open": "Ouvrir un espace de travail…",
@@ -221,5 +227,30 @@
     "sortKeys": "Trier les clés",
     "goToParent": "Aller au parent",
     "selectRange": "Sélectionner le nœud"
+  },
+  "fold": {
+    "fold": "Replier",
+    "unfold": "Déplier",
+    "toggle": "Basculer le repli",
+    "foldAll": "Tout replier",
+    "unfoldAll": "Tout déplier",
+    "foldAllExceptCurrent": "Tout replier sauf l'élément actuel",
+    "foldLevel1": "Replier le niveau 1",
+    "foldLevel2": "Replier le niveau 2",
+    "foldLevel3": "Replier le niveau 3",
+    "foldLevel4": "Replier le niveau 4",
+    "foldLevel5": "Replier le niveau 5",
+    "foldLevel6": "Replier le niveau 6",
+    "foldLevel7": "Replier le niveau 7"
+  },
+  "bookmarks": {
+    "toggle": "Basculer le signet",
+    "next": "Signet suivant",
+    "previous": "Signet précédent",
+    "clear": "Effacer les signets du document",
+    "clearAll": "Effacer tous les signets"
+  },
+  "breadcrumbs": {
+    "focus": "Activer le fil d'Ariane"
   }
 }

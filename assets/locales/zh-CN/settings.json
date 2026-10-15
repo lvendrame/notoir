@@ -57,7 +57,7 @@
       "visible": "状态栏"
     },
     "breadcrumbs": {
-      "enabled": "导航路径"
+      "enabled": "在标签栏下方显示导航路径"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "缩略图不透明度",
       "showViewport": "缩略图可见区域",
       "showSearchMarks": "缩略图搜索标记",
-      "showSelection": "缩略图选区标记"
-    }
+      "showSelection": "缩略图选区标记",
+      "showBookmarks": "在缩略图中显示书签"
+    },
+    "folding": "启用代码折叠"
   },
   "zenMode": {
     "hideTabs": "禅模式:隐藏标签页",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "以树显示的最大文档 (字节)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "下一个/上一个书签在其他打开的文件中继续"
+  },
+  "outline": {
+    "followCursor": "在大纲中突出显示光标处的符号",
+    "depth": "大纲中显示的键深度 (JSON、YAML、TOML)"
   }
 }

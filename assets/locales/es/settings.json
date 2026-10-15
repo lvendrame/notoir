@@ -57,7 +57,7 @@
       "visible": "Barra de estado"
     },
     "breadcrumbs": {
-      "enabled": "Ruta de navegación"
+      "enabled": "Mostrar ruta de navegación bajo las pestañas"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "Opacidad del minimapa",
       "showViewport": "Zona visible en el minimapa",
       "showSearchMarks": "Marcas de búsqueda en el minimapa",
-      "showSelection": "Marcas de selección en el minimapa"
-    }
+      "showSelection": "Marcas de selección en el minimapa",
+      "showBookmarks": "Mostrar marcadores en el minimapa"
+    },
+    "folding": "Activar plegado de código"
   },
   "zenMode": {
     "hideTabs": "Modo Zen: ocultar pestañas",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "Documento más grande que se muestra como árbol (bytes)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "Marcador siguiente/anterior continúa en otros archivos abiertos"
+  },
+  "outline": {
+    "followCursor": "Resaltar el símbolo del cursor en el esquema",
+    "depth": "Profundidad de claves en el esquema (JSON, YAML, TOML)"
   }
 }

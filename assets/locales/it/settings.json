@@ -57,7 +57,7 @@
       "visible": "Barra di stato"
     },
     "breadcrumbs": {
-      "enabled": "Percorso di navigazione"
+      "enabled": "Mostra il percorso di navigazione sotto le schede"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "Opacità della minimappa",
       "showViewport": "Area visibile nella minimappa",
       "showSearchMarks": "Segni di ricerca nella minimappa",
-      "showSelection": "Segni di selezione nella minimappa"
-    }
+      "showSelection": "Segni di selezione nella minimappa",
+      "showBookmarks": "Mostra i segnalibri nella minimappa"
+    },
+    "folding": "Abilita la compressione del codice"
   },
   "zenMode": {
     "hideTabs": "Modalità Zen: nascondi schede",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "Documento più grande mostrato come albero (byte)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "Segnalibro successivo/precedente continua negli altri file aperti"
+  },
+  "outline": {
+    "followCursor": "Evidenzia il simbolo al cursore nella struttura",
+    "depth": "Profondità delle chiavi nella struttura (JSON, YAML, TOML)"
   }
 }

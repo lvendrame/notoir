@@ -22,7 +22,8 @@
     "mcp": "MCP",
     "scratchpads": "Brudnopisy",
     "autoSave": "Autozapis",
-    "sortLines": "Sortuj wiersze"
+    "sortLines": "Sortuj wiersze",
+    "lineNumbers": "Numery wierszy"
   },
   "item": {
     "primarySidebar": "Główny pasek boczny",
@@ -36,7 +37,8 @@
     "whitespace": "Białe znaki",
     "currentLineHighlight": "Wyróżnienie bieżącego wiersza",
     "wordWrap": "Zawijanie wierszy",
-    "minimap": "Minimapa"
+    "minimap": "Minimapa",
+    "breadcrumbs": "Ścieżka nawigacji"
   },
   "autoSave": {
     "off": "Wyłączony",

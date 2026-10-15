@@ -25,7 +25,7 @@ use crate::io::{IoQueue, IoResult};
 use crate::theme::ThemeId;
 
 /// Panels that exist in this build; others are registered by their milestones.
-pub const REGISTERED_PANELS: &[PanelId] = &[PanelId::Explorer, PanelId::Output];
+pub const REGISTERED_PANELS: &[PanelId] = &[PanelId::Explorer, PanelId::Outline, PanelId::Output];
 
 /// Theme setting: a fixed theme or "auto" (follow the OS).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -169,6 +169,9 @@ pub struct AppCore {
     pub settings_ui: crate::settings_tab::SettingsUi,
     pub markdown: crate::markdown::MarkdownState,
     pub json: crate::json::JsonState,
+    pub structure: crate::structure::StructureState,
+    /// `breadcrumbs.focus`: open the last breadcrumb's dropdown next frame.
+    pub breadcrumbs_focus: bool,
     /// Zen Mode is on (with what to restore).
     pub zen: Option<crate::settings_tab::ZenState>,
     /// Show the first-run page at startup (production launches).
@@ -291,6 +294,8 @@ impl AppCore {
             settings_ui: Default::default(),
             markdown: Default::default(),
             json: Default::default(),
+            structure: Default::default(),
+            breadcrumbs_focus: false,
             zen: None,
             first_run_check: opts.first_run,
             language,
@@ -457,6 +462,11 @@ impl AppCore {
             set_scroll: self.find.scroll.get(&view).copied(),
             highlight: !doc.is_some_and(|d| d.large_file),
             diagnostics: doc.map(|d| self.json_diagnostics(d.id)).unwrap_or_default(),
+            bookmarks: doc.map(|d| d.bookmark_lines()).unwrap_or_default(),
+            fold_ranges: doc
+                .filter(|_| self.settings.bool("editor.folding", lang))
+                .and_then(|d| self.structure.docs.get(&d.id))
+                .map(|s| s.folds.clone()),
             max_width_cols: self
                 .zen
                 .as_ref()
@@ -472,6 +482,7 @@ impl AppCore {
                 show_viewport: s.bool("editor.minimap.showViewport", None),
                 show_search: s.bool("editor.minimap.showSearchMarks", None),
                 show_selection: s.bool("editor.minimap.showSelection", None),
+                show_bookmarks: s.bool("editor.minimap.showBookmarks", None),
             }),
         }
     }
@@ -522,6 +533,14 @@ impl AppCore {
         c.set_bool(
             "lineNumbersVisible",
             self.settings.str("editor.lineNumbers", None) != "off",
+        )
+        .set_bool(
+            "breadcrumbsVisible",
+            self.settings.bool("workbench.breadcrumbs.enabled", None),
+        )
+        .set_bool(
+            "lineNumbersRelative",
+            self.settings.str("editor.lineNumbers", None) == "relative",
         )
         .set_bool(
             "whitespaceVisible",

@@ -11,7 +11,14 @@
     "title": "Controle de Código"
   },
   "outline": {
-    "title": "Estrutura"
+    "title": "Estrutura",
+    "noEditor": "Nenhum editor aberto.",
+    "noSymbols": "Nenhum símbolo neste documento.",
+    "filter": "Filtrar símbolos",
+    "sortByName": "Ordenar por Nome",
+    "sortByPosition": "Ordenar por Posição",
+    "collapseAll": "Recolher Tudo",
+    "expandAll": "Expandir Tudo"
   },
   "plugins": {
     "title": "Plugins"
@@ -45,5 +52,10 @@
     "hide": "Ocultar",
     "more": "Mais Ações…",
     "close": "Fechar"
+  },
+  "breadcrumbs": {
+    "loading": "Carregando…",
+    "empty": "Nenhuma entrada",
+    "segment": "Trilha: {{name}}"
   }
 }

@@ -11,7 +11,14 @@
     "title": "Control de código fuente"
   },
   "outline": {
-    "title": "Esquema"
+    "title": "Esquema",
+    "noEditor": "No hay ningún editor abierto.",
+    "noSymbols": "No hay símbolos en este documento.",
+    "filter": "Filtrar símbolos",
+    "sortByName": "Ordenar por nombre",
+    "sortByPosition": "Ordenar por posición",
+    "collapseAll": "Contraer todo",
+    "expandAll": "Expandir todo"
   },
   "plugins": {
     "title": "Complementos"
@@ -45,5 +52,10 @@
     "hide": "Ocultar",
     "more": "Más acciones…",
     "close": "Cerrar"
+  },
+  "breadcrumbs": {
+    "loading": "Cargando…",
+    "empty": "Sin entradas",
+    "segment": "Ruta: {{name}}"
   }
 }

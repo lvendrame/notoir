@@ -22,7 +22,8 @@
     "mcp": "MCP",
     "scratchpads": "Rascunhos",
     "autoSave": "Salvamento Automático",
-    "sortLines": "Ordenar Linhas"
+    "sortLines": "Ordenar Linhas",
+    "lineNumbers": "Números de Linha"
   },
   "item": {
     "primarySidebar": "Barra Lateral Principal",
@@ -36,7 +37,8 @@
     "whitespace": "Espaços em Branco",
     "currentLineHighlight": "Realce da Linha Atual",
     "wordWrap": "Quebra de Linha",
-    "minimap": "Minimapa"
+    "minimap": "Minimapa",
+    "breadcrumbs": "Trilha de Navegação"
   },
   "autoSave": {
     "off": "Desativado",

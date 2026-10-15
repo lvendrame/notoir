@@ -86,6 +86,12 @@ pub(super) fn specs(out: &mut Specs) {
         toggle_line_numbers,
     ));
     out.push(CommandSpec::new(
+        "view.toggleRelativeLineNumbers",
+        Category::View,
+        toggle_relative_line_numbers,
+    ));
+    out.push(CommandSpec::new("editor.copyLineNumber", Category::Edit, copy_line_number).hidden());
+    out.push(CommandSpec::new(
         "view.toggleWhitespace",
         Category::View,
         toggle_whitespace,
@@ -259,6 +265,22 @@ fn toggle_setting(core: &mut AppCore, key: &str, on: &str, off: &str) -> Command
 
 fn toggle_line_numbers(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
     toggle_setting(core, "editor.lineNumbers", "on", "off")
+}
+
+fn toggle_relative_line_numbers(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    toggle_setting(core, "editor.lineNumbers", "relative", "on")
+}
+
+/// `{ line }` (0-based) → its number on the clipboard.
+fn copy_line_number(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    match inv.args.get("line").and_then(|v| v.as_u64()) {
+        Some(l) => {
+            core.effects
+                .push(crate::core::Effect::CopyText((l + 1).to_string()));
+            CommandOutcome::Done
+        }
+        None => super::bad_args(inv),
+    }
 }
 
 fn toggle_whitespace(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {

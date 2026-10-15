@@ -57,7 +57,7 @@
       "visible": "상태 표시줄"
     },
     "breadcrumbs": {
-      "enabled": "이동 경로"
+      "enabled": "탭 아래에 탐색 경로 표시"
     }
   },
   "app": {
@@ -89,8 +89,10 @@
       "opacity": "미니맵 불투명도",
       "showViewport": "미니맵 표시 영역",
       "showSearchMarks": "미니맵 검색 표시",
-      "showSelection": "미니맵 선택 표시"
-    }
+      "showSelection": "미니맵 선택 표시",
+      "showBookmarks": "미니맵에 책갈피 표시"
+    },
+    "folding": "코드 접기 사용"
   },
   "zenMode": {
     "hideTabs": "Zen 모드: 탭 숨기기",
@@ -141,5 +143,12 @@
     "tree": {
       "maxSize": "트리로 표시할 최대 문서 크기 (바이트)"
     }
+  },
+  "bookmarks": {
+    "navigateAcrossFiles": "다음/이전 책갈피가 다른 열린 파일에서 계속됨"
+  },
+  "outline": {
+    "followCursor": "커서 위치의 기호를 개요에서 강조",
+    "depth": "개요에 표시할 키 깊이 (JSON, YAML, TOML)"
   }
 }

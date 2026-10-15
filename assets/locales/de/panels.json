@@ -11,7 +11,14 @@
     "title": "Quellcodeverwaltung"
   },
   "outline": {
-    "title": "Gliederung"
+    "title": "Gliederung",
+    "noEditor": "Kein Editor geöffnet.",
+    "noSymbols": "Keine Symbole in diesem Dokument.",
+    "filter": "Symbole filtern",
+    "sortByName": "Nach Name sortieren",
+    "sortByPosition": "Nach Position sortieren",
+    "collapseAll": "Alle reduzieren",
+    "expandAll": "Alle erweitern"
   },
   "plugins": {
     "title": "Plugins"
@@ -45,5 +52,10 @@
     "hide": "Ausblenden",
     "more": "Weitere Aktionen…",
     "close": "Schließen"
+  },
+  "breadcrumbs": {
+    "loading": "Wird geladen…",
+    "empty": "Keine Einträge",
+    "segment": "Breadcrumb: {{name}}"
   }
 }

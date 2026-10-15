@@ -25,7 +25,9 @@
     "changeTabSize": "Cambiar tamaño de tabulación",
     "detectIndentation": "Detectar sangría a partir del contenido",
     "convertToSpaces": "Convertir sangría a espacios",
-    "convertToTabs": "Convertir sangría a tabulaciones"
+    "convertToTabs": "Convertir sangría a tabulaciones",
+    "symbols": "Ir al símbolo",
+    "symbolLine": "línea {{line}}"
   },
   "open": {
     "title": "Abrir archivo"

@@ -22,7 +22,8 @@
     "mcp": "MCP",
     "scratchpads": "Kladblokken",
     "autoSave": "Automatisch opslaan",
-    "sortLines": "Regels sorteren"
+    "sortLines": "Regels sorteren",
+    "lineNumbers": "Regelnummers"
   },
   "item": {
     "primarySidebar": "Primaire zijbalk",
@@ -36,7 +37,8 @@
     "whitespace": "Witruimte",
     "currentLineHighlight": "Markering huidige regel",
     "wordWrap": "Regelterugloop",
-    "minimap": "Minimap"
+    "minimap": "Minimap",
+    "breadcrumbs": "Kruimelpad"
   },
   "autoSave": {
     "off": "Uit",

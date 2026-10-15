@@ -11,7 +11,14 @@
     "title": "Kontrola źródła"
   },
   "outline": {
-    "title": "Konspekt"
+    "title": "Konspekt",
+    "noEditor": "Brak otwartego edytora.",
+    "noSymbols": "Brak symboli w tym dokumencie.",
+    "filter": "Filtruj symbole",
+    "sortByName": "Sortuj według nazwy",
+    "sortByPosition": "Sortuj według pozycji",
+    "collapseAll": "Zwiń wszystko",
+    "expandAll": "Rozwiń wszystko"
   },
   "plugins": {
     "title": "Wtyczki"
@@ -45,5 +52,10 @@
     "hide": "Ukryj",
     "more": "Więcej akcji…",
     "close": "Zamknij"
+  },
+  "breadcrumbs": {
+    "loading": "Wczytywanie…",
+    "empty": "Brak pozycji",
+    "segment": "Ścieżka: {{name}}"
   }
 }

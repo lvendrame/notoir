@@ -23,6 +23,7 @@ pub struct MinimapOptions {
     pub show_viewport: bool,
     pub show_search: bool,
     pub show_selection: bool,
+    pub show_bookmarks: bool,
 }
 
 /// Columns mapped across the minimap width.
@@ -182,6 +183,24 @@ pub(super) fn show(
                 0.0,
                 kit.color(Tok::Accent).gamma_multiply(0.8),
             );
+        }
+    }
+    // Bookmarks: accent blocks at the inner edge.
+    if mm.show_bookmarks {
+        let x = if mm.left {
+            rect.right() - 4.0
+        } else {
+            rect.left()
+        };
+        for &l in &opts.bookmarks {
+            let y = layout.line_y(l as f32);
+            if y >= rect.top() - 4.0 && y <= rect.bottom() {
+                painter.rect_filled(
+                    Rect::from_min_size(Pos2::new(x, y - 1.0), Vec2::new(4.0, 4.0)),
+                    1.0,
+                    kit.color(Tok::Accent),
+                );
+            }
         }
     }
     // Interaction.

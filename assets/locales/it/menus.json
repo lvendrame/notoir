@@ -22,7 +22,8 @@
     "mcp": "MCP",
     "scratchpads": "Appunti",
     "autoSave": "Salvataggio automatico",
-    "sortLines": "Ordina righe"
+    "sortLines": "Ordina righe",
+    "lineNumbers": "Numeri di riga"
   },
   "item": {
     "primarySidebar": "Barra laterale principale",
@@ -36,7 +37,8 @@
     "whitespace": "Spazi",
     "currentLineHighlight": "Evidenziazione riga corrente",
     "wordWrap": "A capo automatico",
-    "minimap": "Minimappa"
+    "minimap": "Minimappa",
+    "breadcrumbs": "Percorso di navigazione"
   },
   "autoSave": {
     "off": "Disattivato",

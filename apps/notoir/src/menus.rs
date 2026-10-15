@@ -255,7 +255,11 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
                         "menus:item.statusBar",
                         "statusBarVisible",
                     ),
-                    cmd("view.toggleBreadcrumbs"),
+                    toggle(
+                        "view.toggleBreadcrumbs",
+                        "menus:item.breadcrumbs",
+                        "breadcrumbsVisible",
+                    ),
                     toggle(
                         "view.toggleLineNumbers",
                         "menus:item.lineNumbers",
@@ -589,9 +593,6 @@ mod tests {
         let view = &menu_bar(Platform::Linux)[3];
         let items = visible_items(&view.items, &r);
         assert!(contains(&items, "view.toggleToolbar"));
-        assert!(
-            !contains(&items, "view.toggleBreadcrumbs"),
-            "not implemented yet"
-        );
+        assert!(contains(&items, "view.toggleBreadcrumbs"));
     }
 }

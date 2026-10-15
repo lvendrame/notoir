@@ -150,6 +150,25 @@ impl PanelLayout {
         layout
     }
 
+    /// Adds registered panels missing from a saved layout (new in this
+    /// version) to their default areas, and drops unknown ones.
+    pub fn ensure_registered(&mut self, registered: &[PanelId]) {
+        for a in [PanelArea::Primary, PanelArea::Secondary, PanelArea::Bottom] {
+            let s = self.area_mut(a);
+            s.panels.retain(|p| registered.contains(p));
+            if s.active.is_some_and(|p| !s.panels.contains(&p)) {
+                s.active = s.panels.first().copied();
+            }
+        }
+        for &id in registered {
+            if self.area_of(id).is_none() {
+                let area = self.area_mut(id.default_area());
+                area.panels.push(id);
+                area.active.get_or_insert(id);
+            }
+        }
+    }
+
     pub fn area(&self, area: PanelArea) -> &AreaState {
         match area {
             PanelArea::Primary => &self.primary,

@@ -22,7 +22,8 @@
     "mcp": "MCP",
     "scratchpads": "Scratchpads",
     "autoSave": "Auto Save",
-    "sortLines": "Sort Lines"
+    "sortLines": "Sort Lines",
+    "lineNumbers": "Line Numbers"
   },
   "item": {
     "primarySidebar": "Primary Sidebar",
@@ -36,7 +37,8 @@
     "whitespace": "Whitespace",
     "currentLineHighlight": "Current Line Highlight",
     "wordWrap": "Word Wrap",
-    "minimap": "Minimap"
+    "minimap": "Minimap",
+    "breadcrumbs": "Breadcrumbs"
   },
   "autoSave": {
     "off": "Off",

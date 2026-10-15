@@ -22,7 +22,8 @@
     "mcp": "MCP",
     "scratchpads": "Notizzettel",
     "autoSave": "Automatisch speichern",
-    "sortLines": "Zeilen sortieren"
+    "sortLines": "Zeilen sortieren",
+    "lineNumbers": "Zeilennummern"
   },
   "item": {
     "primarySidebar": "Primäre Seitenleiste",
@@ -36,7 +37,8 @@
     "whitespace": "Leerzeichen",
     "currentLineHighlight": "Aktuelle Zeile hervorheben",
     "wordWrap": "Zeilenumbruch",
-    "minimap": "Minimap"
+    "minimap": "Minimap",
+    "breadcrumbs": "Breadcrumbs"
   },
   "autoSave": {
     "off": "Aus",

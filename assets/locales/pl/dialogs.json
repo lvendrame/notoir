@@ -25,7 +25,9 @@
     "changeTabSize": "Zmień szerokość tabulacji",
     "detectIndentation": "Wykryj wcięcie z zawartości",
     "convertToSpaces": "Zamień wcięcie na spacje",
-    "convertToTabs": "Zamień wcięcie na tabulatory"
+    "convertToTabs": "Zamień wcięcie na tabulatory",
+    "symbols": "Przejdź do symbolu",
+    "symbolLine": "wiersz {{line}}"
   },
   "open": {
     "title": "Otwórz plik"

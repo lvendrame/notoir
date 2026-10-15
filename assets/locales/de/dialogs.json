@@ -25,7 +25,9 @@
     "changeTabSize": "Tabulatorbreite ändern",
     "detectIndentation": "Einrückung aus Inhalt erkennen",
     "convertToSpaces": "Einrückung in Leerzeichen umwandeln",
-    "convertToTabs": "Einrückung in Tabulatoren umwandeln"
+    "convertToTabs": "Einrückung in Tabulatoren umwandeln",
+    "symbols": "Zu Symbol wechseln",
+    "symbolLine": "Zeile {{line}}"
   },
   "open": {
     "title": "Datei öffnen"

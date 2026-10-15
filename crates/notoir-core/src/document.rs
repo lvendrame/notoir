@@ -148,9 +148,18 @@ pub struct Document {
     /// Chosen from the status bar indentation picker; wins over settings and
     /// detection.
     pub indent_override: Option<notoir_editor::edit_ops::IndentStyle>,
+    /// Bookmarks (spec 12), anchored at their line's start; sorted, one per line.
+    pub bookmarks: Vec<Bookmark>,
     /// Recent change sets by resulting revision, so caches (display maps,
     /// highlighting) can catch up incrementally.
     recent_changes: VecDeque<(u64, Arc<ChangeSet>)>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Bookmark {
+    /// Char offset of the bookmarked line's start.
+    pub pos: usize,
+    pub label: Option<String>,
 }
 
 /// Change sets kept per document for incremental cache updates.
@@ -177,6 +186,7 @@ impl Document {
             large_file: loaded.large_file,
             indentation: loaded.indentation,
             indent_override: None,
+            bookmarks: Vec::new(),
             recent_changes: VecDeque::new(),
         }
     }
@@ -240,6 +250,81 @@ impl Document {
     }
 
     /// Records that the content of history state `state` is now on disk.
+    /// Bookmarked lines (0-based), ascending.
+    pub fn bookmark_lines(&self) -> Vec<usize> {
+        let rope = self.buffer.rope();
+        self.bookmarks
+            .iter()
+            .map(|b| rope.char_to_line(b.pos.min(rope.len_chars())))
+            .collect()
+    }
+
+    /// Adds or removes the bookmark on `line`; returns whether it is now set.
+    pub fn toggle_bookmark(&mut self, line: usize) -> bool {
+        let rope = self.buffer.rope();
+        let line = line.min(rope.len_lines().saturating_sub(1));
+        let pos = rope.line_to_char(line);
+        if let Some(i) = self.bookmarks.iter().position(|b| b.pos == pos) {
+            self.bookmarks.remove(i);
+            return false;
+        }
+        self.bookmarks.push(Bookmark { pos, label: None });
+        self.bookmarks.sort_by_key(|b| b.pos);
+        true
+    }
+
+    /// Sets bookmarks from line numbers (session restore; reconciled by line).
+    pub fn set_bookmark_lines(&mut self, lines: &[usize]) {
+        let rope = self.buffer.rope();
+        let last = rope.len_lines().saturating_sub(1);
+        self.bookmarks = lines
+            .iter()
+            .map(|&l| Bookmark {
+                pos: rope.line_to_char(l.min(last)),
+                label: None,
+            })
+            .collect();
+        self.normalize_bookmarks();
+    }
+
+    /// Drops bookmarks whose whole line `changes` deletes (pure deletions;
+    /// needs the text `before`) and maps the rest through it. Call
+    /// [`Self::normalize_bookmarks`] once the buffer holds the result.
+    pub fn map_bookmarks(&mut self, before: Option<&notoir_editor::Rope>, changes: &ChangeSet) {
+        if self.bookmarks.is_empty() {
+            return;
+        }
+        if let Some(rope) = before {
+            self.bookmarks.retain(|b| {
+                let line = rope.char_to_line(b.pos.min(rope.len_chars()));
+                let end = if line + 1 < rope.len_lines() {
+                    rope.line_to_char(line + 1)
+                } else {
+                    rope.len_chars()
+                };
+                // A bookmark on the empty last line survives.
+                end <= b.pos
+                    || !changes
+                        .edits()
+                        .iter()
+                        .any(|e| e.inserted_len() == 0 && e.start <= b.pos && e.end >= end)
+            });
+        }
+        for b in &mut self.bookmarks {
+            b.pos = changes.map_pos(b.pos, notoir_editor::Assoc::Before);
+        }
+    }
+
+    /// Snaps bookmarks to their line's start, sorted, one per line.
+    pub fn normalize_bookmarks(&mut self) {
+        let rope = self.buffer.rope();
+        for b in &mut self.bookmarks {
+            b.pos = rope.line_to_char(rope.char_to_line(b.pos.min(rope.len_chars())));
+        }
+        self.bookmarks.sort_by_key(|b| b.pos);
+        self.bookmarks.dedup_by_key(|b| b.pos);
+    }
+
     pub fn mark_saved(&mut self, state: u64, content_hash: u64) {
         self.saved_state = Some(state);
         self.saved_content_hash = Some(content_hash);

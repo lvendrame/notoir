@@ -50,7 +50,10 @@
     "minimapSide": "Posizione della minimappa",
     "minimapScale": "Scala della minimappa",
     "zenMode": "Attiva/disattiva modalità Zen",
-    "exitZenMode": "Esci dalla modalità Zen"
+    "exitZenMode": "Esci dalla modalità Zen",
+    "showOutline": "Mostra struttura",
+    "toggleBreadcrumbs": "Attiva/disattiva percorso di navigazione",
+    "toggleRelativeLineNumbers": "Attiva/disattiva numeri di riga relativi"
   },
   "preferences": {
     "changeTheme": "Cambia tema…",
@@ -143,7 +146,9 @@
     "nextTab": "Scheda successiva",
     "previousTab": "Scheda precedente",
     "switchTab": "Passa alla scheda precedente",
-    "goToLine": "Vai alla riga…"
+    "goToLine": "Vai alla riga…",
+    "goToSymbol": "Vai al simbolo nell'editor…",
+    "revealRange": "Mostra intervallo"
   },
   "editor": {
     "changeLineEnding": "Cambia sequenza di fine riga…",
@@ -152,7 +157,8 @@
     "type": "Digita testo",
     "changeIndentation": "Cambia rientro",
     "changeTabSize": "Cambia dimensione tabulazione",
-    "formatDocument": "Formatta documento"
+    "formatDocument": "Formatta documento",
+    "copyLineNumber": "Copia numero di riga"
   },
   "workspace": {
     "open": "Apri area di lavoro…",
@@ -221,5 +227,30 @@
     "sortKeys": "Ordina chiavi",
     "goToParent": "Vai al padre",
     "selectRange": "Seleziona nodo"
+  },
+  "fold": {
+    "fold": "Comprimi",
+    "unfold": "Espandi",
+    "toggle": "Attiva/disattiva compressione",
+    "foldAll": "Comprimi tutto",
+    "unfoldAll": "Espandi tutto",
+    "foldAllExceptCurrent": "Comprimi tutto tranne l'attuale",
+    "foldLevel1": "Comprimi livello 1",
+    "foldLevel2": "Comprimi livello 2",
+    "foldLevel3": "Comprimi livello 3",
+    "foldLevel4": "Comprimi livello 4",
+    "foldLevel5": "Comprimi livello 5",
+    "foldLevel6": "Comprimi livello 6",
+    "foldLevel7": "Comprimi livello 7"
+  },
+  "bookmarks": {
+    "toggle": "Attiva/disattiva segnalibro",
+    "next": "Segnalibro successivo",
+    "previous": "Segnalibro precedente",
+    "clear": "Cancella segnalibri del documento",
+    "clearAll": "Cancella tutti i segnalibri"
+  },
+  "breadcrumbs": {
+    "focus": "Attiva percorso di navigazione"
   }
 }

@@ -22,7 +22,8 @@
     "mcp": "MCP",
     "scratchpads": "スクラッチパッド",
     "autoSave": "自動保存",
-    "sortLines": "行の並べ替え"
+    "sortLines": "行の並べ替え",
+    "lineNumbers": "行番号"
   },
   "item": {
     "primarySidebar": "プライマリ サイドバー",
@@ -36,7 +37,8 @@
     "whitespace": "空白文字",
     "currentLineHighlight": "現在行の強調表示",
     "wordWrap": "折り返し",
-    "minimap": "ミニマップ"
+    "minimap": "ミニマップ",
+    "breadcrumbs": "パンくずリスト"
   },
   "autoSave": {
     "off": "オフ",

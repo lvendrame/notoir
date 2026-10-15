@@ -50,7 +50,10 @@
     "minimapSide": "ミニマップの位置",
     "minimapScale": "ミニマップの倍率",
     "zenMode": "Zen モードの切り替え",
-    "exitZenMode": "Zen モードを終了"
+    "exitZenMode": "Zen モードを終了",
+    "showOutline": "アウトラインを表示",
+    "toggleBreadcrumbs": "パンくずリストの切り替え",
+    "toggleRelativeLineNumbers": "相対行番号の切り替え"
   },
   "preferences": {
     "changeTheme": "テーマの変更…",
@@ -143,7 +146,9 @@
     "nextTab": "次のタブ",
     "previousTab": "前のタブ",
     "switchTab": "前のタブに切り替え",
-    "goToLine": "行へ移動…"
+    "goToLine": "行へ移動…",
+    "goToSymbol": "エディター内のシンボルへ移動…",
+    "revealRange": "範囲を表示"
   },
   "editor": {
     "changeLineEnding": "行末のシーケンスの変更…",
@@ -152,7 +157,8 @@
     "type": "テキストを入力",
     "changeIndentation": "インデントの変更",
     "changeTabSize": "タブ サイズの変更",
-    "formatDocument": "ドキュメントのフォーマット"
+    "formatDocument": "ドキュメントのフォーマット",
+    "copyLineNumber": "行番号をコピー"
   },
   "workspace": {
     "open": "ワークスペースを開く…",
@@ -221,5 +227,30 @@
     "sortKeys": "キーを並べ替え",
     "goToParent": "親へ移動",
     "selectRange": "ノードを選択"
+  },
+  "fold": {
+    "fold": "折りたたむ",
+    "unfold": "展開する",
+    "toggle": "折りたたみの切り替え",
+    "foldAll": "すべて折りたたむ",
+    "unfoldAll": "すべて展開",
+    "foldAllExceptCurrent": "現在以外をすべて折りたたむ",
+    "foldLevel1": "レベル 1 で折りたたむ",
+    "foldLevel2": "レベル 2 で折りたたむ",
+    "foldLevel3": "レベル 3 で折りたたむ",
+    "foldLevel4": "レベル 4 で折りたたむ",
+    "foldLevel5": "レベル 5 で折りたたむ",
+    "foldLevel6": "レベル 6 で折りたたむ",
+    "foldLevel7": "レベル 7 で折りたたむ"
+  },
+  "bookmarks": {
+    "toggle": "ブックマークの切り替え",
+    "next": "次のブックマーク",
+    "previous": "前のブックマーク",
+    "clear": "ドキュメントのブックマークをクリア",
+    "clearAll": "すべてのブックマークをクリア"
+  },
+  "breadcrumbs": {
+    "focus": "パンくずリストにフォーカス"
   }
 }

@@ -25,7 +25,9 @@
     "changeTabSize": "タブ サイズの変更",
     "detectIndentation": "内容からインデントを検出",
     "convertToSpaces": "インデントをスペースに変換",
-    "convertToTabs": "インデントをタブに変換"
+    "convertToTabs": "インデントをタブに変換",
+    "symbols": "シンボルへ移動",
+    "symbolLine": "{{line}} 行"
   },
   "open": {
     "title": "ファイルを開く"
