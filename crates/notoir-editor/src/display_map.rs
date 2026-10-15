@@ -32,6 +32,9 @@ pub struct DisplayMap {
     lines: usize,
     /// Hidden (folded) buffer lines: sorted, disjoint, inclusive ranges.
     hidden: Vec<(usize, usize)>,
+    /// Blank filler rows before a line (Compare alignment): sorted by line,
+    /// one entry per line; a line equal to the line count means at the end.
+    fillers: Vec<(usize, u32)>,
 }
 
 /// Line text without its trailing newline.
@@ -61,6 +64,7 @@ impl DisplayMap {
             prefix_valid: 1,
             lines,
             hidden: Vec::new(),
+            fillers: Vec::new(),
         };
         map.ensure_prefix(lines);
         map
@@ -74,9 +78,64 @@ impl DisplayMap {
         self.lines
     }
 
-    /// Whether rows need the prefix table (wrapping or folds).
+    /// Whether rows need the prefix table (wrapping, folds or fillers).
     fn indexed(&self) -> bool {
-        self.wrap.is_some() || !self.hidden.is_empty()
+        self.wrap.is_some() || !self.hidden.is_empty() || !self.fillers.is_empty()
+    }
+
+    /// Filler rows before `line`.
+    pub fn fillers_before(&self, line: usize) -> usize {
+        self.fillers
+            .binary_search_by_key(&line, |f| f.0)
+            .map_or(0, |i| self.fillers[i].1 as usize)
+    }
+
+    /// Replaces the filler rows: (before line, rows); entries for the same
+    /// line add up.
+    pub fn set_fillers(&mut self, fillers: &[(usize, usize)]) {
+        let mut v: Vec<(usize, u32)> = Vec::with_capacity(fillers.len());
+        let mut sorted: Vec<(usize, usize)> = fillers
+            .iter()
+            .filter(|f| f.1 > 0)
+            .map(|f| (f.0.min(self.lines), f.1))
+            .collect();
+        sorted.sort_unstable();
+        for (line, rows) in sorted {
+            match v.last_mut() {
+                Some(last) if last.0 == line => last.1 += rows as u32,
+                _ => v.push((line, rows as u32)),
+            }
+        }
+        if v == self.fillers {
+            return;
+        }
+        let first = v
+            .iter()
+            .chain(self.fillers.iter())
+            .map(|f| f.0)
+            .min()
+            .unwrap_or(0);
+        let was_indexed = self.indexed();
+        self.fillers = v;
+        if !was_indexed {
+            self.prefix.truncate(1);
+            self.prefix_valid = 1;
+        } else {
+            self.prefix_valid = self.prefix_valid.min(first + 1);
+        }
+    }
+
+    /// Whether display row `row` is a filler row.
+    pub fn is_filler_row(&mut self, row: usize) -> bool {
+        if self.fillers.is_empty() {
+            return false;
+        }
+        self.ensure_prefix(self.lines);
+        let row = row as u64;
+        let line = self.prefix[..=self.lines]
+            .partition_point(|&p| p <= row)
+            .saturating_sub(1);
+        line == self.lines || row < self.prefix[line] + self.fillers_before(line) as u64
     }
 
     pub fn is_hidden(&self, line: usize) -> bool {
@@ -130,9 +189,9 @@ impl DisplayMap {
     pub fn apply(&mut self, before: &Rope, after: &Rope, changes: &ChangeSet) {
         let old_lines = self.lines;
         self.lines = after.len_lines();
-        if self.wrap.is_none() && !self.hidden.is_empty() {
-            // Hidden ranges are re-set by the owner after edits; invalidate
-            // from the first changed line.
+        if self.wrap.is_none() && self.indexed() {
+            // Hidden ranges and fillers are re-set by the owner after edits;
+            // invalidate from the first changed line.
             let first = changes
                 .edits()
                 .first()
@@ -186,7 +245,7 @@ impl DisplayMap {
             } else {
                 self.raw_rows(i)
             };
-            let next = self.prefix[i] + u64::from(rows);
+            let next = self.prefix[i] + self.fillers_before(i) as u64 + u64::from(rows);
             self.prefix.push(next);
         }
         self.prefix_valid = self.prefix.len();
@@ -197,7 +256,7 @@ impl DisplayMap {
             return self.lines;
         }
         self.ensure_prefix(self.lines);
-        self.prefix[self.lines] as usize
+        self.prefix[self.lines] as usize + self.fillers_before(self.lines)
     }
 
     /// Display rows of `line` (0 when folded away).
@@ -218,6 +277,11 @@ impl DisplayMap {
         let line = line.min(self.lines);
         self.ensure_prefix(line);
         self.prefix[line] as usize
+            + if line < self.lines {
+                self.fillers_before(line)
+            } else {
+                0
+            }
     }
 
     /// Line and sub-row of display row `row` (clamped to the last row).
@@ -240,9 +304,12 @@ impl DisplayMap {
         while line > 0 && self.is_hidden(line) {
             line -= 1;
         }
+        // Filler rows map to the first row of the line after them.
+        let first = self.prefix[line] + self.fillers_before(line) as u64;
         RowRef {
             line,
-            sub_row: row.saturating_sub(self.prefix[line]) as usize,
+            sub_row: (row.saturating_sub(first) as usize)
+                .min(self.raw_rows(line).saturating_sub(1) as usize),
         }
     }
 
@@ -337,6 +404,41 @@ mod tests {
         assert_eq!(m.row_to_line(1).line, 2);
         m.set_hidden(&[]);
         assert_eq!(m.total_rows(), 7);
+    }
+
+    #[test]
+    fn filler_rows() {
+        let rope = Rope::from_str("0\n1\n2");
+        let mut m = DisplayMap::new(&rope, None);
+        m.set_fillers(&[(1, 2), (3, 1)]);
+        assert_eq!(m.total_rows(), 6);
+        assert_eq!(m.line_to_row(0), 0);
+        assert_eq!(m.line_to_row(1), 3);
+        assert_eq!(m.line_to_row(2), 4);
+        let fill: Vec<bool> = (0..6).map(|r| m.is_filler_row(r)).collect();
+        assert_eq!(fill, [false, true, true, false, false, true]);
+        assert_eq!(
+            m.row_to_line(1),
+            RowRef {
+                line: 1,
+                sub_row: 0
+            }
+        );
+        assert_eq!(
+            m.row_to_line(5),
+            RowRef {
+                line: 2,
+                sub_row: 0
+            }
+        );
+        // With wrap, and after an edit the owner re-sets them.
+        let rope = Rope::from_str("short\nhello world foo bar\nx");
+        let mut m = DisplayMap::new(&rope, cfg(6));
+        m.set_fillers(&[(2, 1)]);
+        assert_eq!(m.total_rows(), 7);
+        assert_eq!(m.line_to_row(2), 6);
+        m.set_fillers(&[]);
+        assert_eq!(m.total_rows(), 6);
     }
 
     fn arb_edit() -> impl Strategy<Value = (String, usize, usize, String)> {

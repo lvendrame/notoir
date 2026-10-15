@@ -1,0 +1,18 @@
+{
+  "tab": "Confronto",
+  "snapshot": "Istantanea",
+  "saved": "{{name}} (salvato)",
+  "clipboard": "Appunti",
+  "identical": "Identici",
+  "filesIdentical": "I file sono identici",
+  "computing": "Confronto in corso…",
+  "tooLarge": "Troppo grande per il confronto",
+  "readOnly": "sola lettura",
+  "copyToRight": "Copia modifica a destra",
+  "copyToLeft": "Copia modifica a sinistra",
+  "revertHunk": "Annulla modifica",
+  "overview": "Panoramica delle modifiche",
+  "unavailable": "Questo confronto non è più disponibile.",
+  "changes_one": "{{count}} modifica",
+  "changes_other": "{{count}} modifiche"
+}

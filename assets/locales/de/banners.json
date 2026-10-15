@@ -7,5 +7,6 @@
   "save": "Speichern",
   "close": "Schließen",
   "keepRecovered": "Wiederhergestellte behalten",
-  "useDisk": "Version vom Datenträger verwenden"
+  "useDisk": "Version vom Datenträger verwenden",
+  "compare": "Vergleichen"
 }

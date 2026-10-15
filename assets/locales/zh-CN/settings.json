@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "超过此行数的光标跳转会记录到后退/前进"
+  },
+  "diff": {
+    "maxSize": "大于此大小的文件不进行比较(字节)",
+    "ignoreTrimWhitespace": "比较时忽略空白更改",
+    "algorithm": "行差异算法"
   }
 }

@@ -319,6 +319,12 @@ impl eframe::App for NotoirApp {
         self.core.flush_scratchpads(false);
         self.core.workspace_tick();
         self.core.search_tick();
+        self.core.compare_tick();
+        if self.core.compare_needs_repaint() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(
+                crate::compare::DEBOUNCE_MS,
+            ));
+        }
         // Markdown preview images decoded in the background become textures.
         for (path, data) in std::mem::take(&mut self.core.markdown.decoded) {
             let tex = match data {

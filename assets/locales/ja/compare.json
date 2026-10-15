@@ -1,0 +1,17 @@
+{
+  "tab": "比較",
+  "snapshot": "スナップショット",
+  "saved": "{{name}} (保存済み)",
+  "clipboard": "クリップボード",
+  "identical": "同一",
+  "filesIdentical": "ファイルは同一です",
+  "computing": "比較中…",
+  "tooLarge": "大きすぎるため比較できません",
+  "readOnly": "読み取り専用",
+  "copyToRight": "変更を右へコピー",
+  "copyToLeft": "変更を左へコピー",
+  "revertHunk": "変更を元に戻す",
+  "overview": "変更の概要",
+  "unavailable": "この比較はもう利用できません。",
+  "changes_other": "{{count}} 件の変更"
+}

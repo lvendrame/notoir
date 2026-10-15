@@ -9,6 +9,7 @@ use notoir_core::keymap::Platform;
 use crate::core::AppCore;
 
 mod app;
+mod compare;
 mod editor;
 mod file;
 mod json;
@@ -17,6 +18,7 @@ mod markdown;
 mod preferences;
 mod reliability;
 mod search;
+mod selection;
 mod settings_ui;
 mod structure;
 mod text;
@@ -36,6 +38,8 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     json::specs(&mut specs);
     structure::specs(&mut specs);
     search::specs(&mut specs);
+    compare::specs(&mut specs);
+    selection::specs(&mut specs);
     workspace::specs(&mut specs);
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);

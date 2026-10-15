@@ -6,6 +6,7 @@
 
 pub mod buffer;
 pub mod change;
+pub mod diff;
 pub mod display_map;
 pub mod edit_ops;
 pub mod encoding;
@@ -18,6 +19,7 @@ pub mod line_ending;
 pub mod line_ops;
 pub mod markdown;
 pub mod motion;
+pub mod multi_cursor;
 pub mod natural;
 pub mod outline;
 pub mod selection;

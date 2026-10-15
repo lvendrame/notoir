@@ -7,5 +7,6 @@
   "save": "Opslaan",
   "close": "Sluiten",
   "keepRecovered": "Herstelde versie behouden",
-  "useDisk": "Versie op schijf gebruiken"
+  "useDisk": "Versie op schijf gebruiken",
+  "compare": "Vergelijken"
 }

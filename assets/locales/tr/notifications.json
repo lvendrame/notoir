@@ -35,5 +35,8 @@
   "jsonSortComments": "Anahtarları sıralamak bu belgedeki yorumları kaldıracağından çalıştırılmadı.",
   "replacedInFiles": "{{count}} dosyada değiştirildi",
   "replaceFailed": "{{name}} içinde değiştirilemedi: {{error}}",
-  "undo": "Geri Al"
+  "undo": "Geri Al",
+  "compareNoSavedVersion": "Bu belgenin karşılaştırılacak kayıtlı sürümü yok.",
+  "compareNoClipboard": "Panoda karşılaştırılacak metin yok.",
+  "compareLoadFailed": "Karşılaştırılacak dosya açılamadı."
 }

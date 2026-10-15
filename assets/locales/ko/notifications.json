@@ -35,5 +35,8 @@
   "jsonSortComments": "키를 정렬하면 이 문서의 주석이 제거되므로 실행하지 않았습니다.",
   "replacedInFiles": "{{count}}개 파일에서 바꿈",
   "replaceFailed": "{{name}}에서 바꿀 수 없음: {{error}}",
-  "undo": "실행 취소"
+  "undo": "실행 취소",
+  "compareNoSavedVersion": "이 문서에는 비교할 저장된 버전이 없습니다.",
+  "compareNoClipboard": "클립보드에 비교할 텍스트가 없습니다.",
+  "compareLoadFailed": "비교할 파일을 열 수 없습니다."
 }

@@ -126,7 +126,7 @@ fn new_untitled(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
 }
 
 fn active(core: &AppCore) -> Option<notoir_core::ids::ViewId> {
-    core.workbench.active_view()
+    core.workbench.active_editor()
 }
 
 fn undo(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
@@ -195,7 +195,12 @@ fn paste(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
         .view(view)
         .map(|v| v.selection.clone())
         .unwrap_or_default();
-    if let Some(res) = edit_ops::insert(&sel, &text, EditKind::Other) {
+    // As many lines as cursors: one line each (spec 11 §Clipboard).
+    let res = match notoir_editor::multi_cursor::distribute_lines(&sel, &text) {
+        Some(lines) => edit_ops::insert_each(&sel, &lines, EditKind::Other),
+        None => edit_ops::insert(&sel, &text, EditKind::Other),
+    };
+    if let Some(res) = res {
         let _ = core
             .workbench
             .edit(view, res.changes, res.selection, res.kind, core.now_ms);

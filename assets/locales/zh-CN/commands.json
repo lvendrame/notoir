@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "打开"
+  },
+  "compare": {
+    "open": "比较文件…",
+    "with": "与…比较",
+    "select": "选择以进行比较",
+    "withSelected": "与已选项比较",
+    "currentChanges": "比较当前更改",
+    "nextChange": "下一个更改",
+    "previousChange": "上一个更改",
+    "toggleIgnoreWhitespace": "忽略空白",
+    "toggleIgnoreCase": "忽略大小写",
+    "swapSides": "交换两侧",
+    "copyChangeToRight": "将更改复制到右侧",
+    "copyChangeToLeft": "将更改复制到左侧",
+    "copyHunk": "复制更改",
+    "revealHunk": "转到更改",
+    "pick": "选择比较来源"
+  },
+  "selection": {
+    "addCursorAbove": "在上方添加光标",
+    "addCursorBelow": "在下方添加光标",
+    "selectNextOccurrence": "添加下一个匹配项",
+    "selectAllOccurrences": "选择所有匹配项",
+    "expand": "扩大选区",
+    "shrink": "缩小选区",
+    "columnMode": "列选择模式"
   }
 }

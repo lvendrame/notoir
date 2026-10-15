@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "Cursorsprongen van meer regels worden bewaard voor Terug/Vooruit"
+  },
+  "diff": {
+    "maxSize": "Grotere bestanden worden niet vergeleken (bytes)",
+    "ignoreTrimWhitespace": "Witruimtewijzigingen negeren bij vergelijken",
+    "algorithm": "Algoritme voor regelvergelijking"
   }
 }

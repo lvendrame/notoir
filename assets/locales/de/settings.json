@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "Cursorsprünge über so viele Zeilen werden für Zurück/Vorwärts gespeichert"
+  },
+  "diff": {
+    "maxSize": "Größere Dateien werden nicht verglichen (Bytes)",
+    "ignoreTrimWhitespace": "Leerraumänderungen beim Vergleichen ignorieren",
+    "algorithm": "Zeilen-Diff-Algorithmus"
   }
 }

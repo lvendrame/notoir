@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "Skoki kursora o więcej wierszy są zapisywane dla Wstecz/Dalej"
+  },
+  "diff": {
+    "maxSize": "Większe pliki nie są porównywane (bajty)",
+    "ignoreTrimWhitespace": "Ignoruj zmiany białych znaków przy porównywaniu",
+    "algorithm": "Algorytm porównywania wierszy"
   }
 }

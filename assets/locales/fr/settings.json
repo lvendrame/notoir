@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "Les sauts du curseur de plus de lignes sont enregistrés pour Précédent/Suivant"
+  },
+  "diff": {
+    "maxSize": "Les fichiers plus grands ne sont pas comparés (octets)",
+    "ignoreTrimWhitespace": "Ignorer les modifications d’espaces lors de la comparaison",
+    "algorithm": "Algorithme de diff des lignes"
   }
 }

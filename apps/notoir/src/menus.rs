@@ -200,7 +200,12 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
             cmd("selection.addCursorBelow"),
             cmd("selection.selectNextOccurrence"),
             cmd("selection.selectAllOccurrences"),
-            cmd("selection.columnMode"),
+            MenuItem::Command {
+                id: "selection.columnMode",
+                args: Value::Null,
+                label: None,
+                checked: Some("columnSelection".into()),
+            },
         ],
     });
 
@@ -363,6 +368,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
 
     let mut tools = vec![
         cmd("compare.open"),
+        cmd("compare.currentChanges"),
         cmd("editor.formatDocument"),
         SEP,
         sub(

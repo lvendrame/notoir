@@ -54,6 +54,8 @@ pub enum ReadOnly {
     LargeFile,
     /// Opened with replacement characters (spec 02 §Loading step 3).
     LossyDecode,
+    /// A read-only snapshot (saved version, clipboard) shown by Compare.
+    Snapshot,
 }
 
 /// Large-file thresholds (`files.largeFile.*`).

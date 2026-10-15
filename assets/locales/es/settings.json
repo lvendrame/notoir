@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "Los saltos del cursor de más líneas que esto se registran para Atrás/Adelante"
+  },
+  "diff": {
+    "maxSize": "Los archivos más grandes no se comparan (bytes)",
+    "ignoreTrimWhitespace": "Ignorar cambios de espacios en blanco al comparar",
+    "algorithm": "Algoritmo de diff de líneas"
   }
 }

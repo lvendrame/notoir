@@ -1,0 +1,20 @@
+{
+  "tab": "Porównanie",
+  "snapshot": "Migawka",
+  "saved": "{{name}} (zapisany)",
+  "clipboard": "Schowek",
+  "identical": "Identyczne",
+  "filesIdentical": "Pliki są identyczne",
+  "computing": "Porównywanie…",
+  "tooLarge": "Za duże do porównania",
+  "readOnly": "tylko do odczytu",
+  "copyToRight": "Kopiuj zmianę w prawo",
+  "copyToLeft": "Kopiuj zmianę w lewo",
+  "revertHunk": "Cofnij zmianę",
+  "overview": "Przegląd zmian",
+  "unavailable": "To porównanie nie jest już dostępne.",
+  "changes_one": "{{count}} zmiana",
+  "changes_few": "{{count}} zmiany",
+  "changes_many": "{{count}} zmian",
+  "changes_other": "{{count}} zmiany"
+}

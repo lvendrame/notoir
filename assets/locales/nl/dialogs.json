@@ -109,5 +109,10 @@
     "helpSymbol": "Ga naar symbool in editor",
     "helpWorkspaceSymbols": "Werkruimtesymbolen",
     "workspaceSymbolsLater": "Werkruimtesymbolen zijn nog niet beschikbaar."
+  },
+  "compare": {
+    "title": "Vergelijken",
+    "pickLeft": "Kies het eerste bestand om te vergelijken",
+    "pickRight": "Kies een bestand om te vergelijken met {{name}}"
   }
 }

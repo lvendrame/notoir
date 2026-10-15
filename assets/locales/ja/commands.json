@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "開く"
+  },
+  "compare": {
+    "open": "ファイルを比較…",
+    "with": "比較対象を選択…",
+    "select": "比較用に選択",
+    "withSelected": "選択項目と比較",
+    "currentChanges": "現在の変更を比較",
+    "nextChange": "次の変更",
+    "previousChange": "前の変更",
+    "toggleIgnoreWhitespace": "空白を無視",
+    "toggleIgnoreCase": "大文字と小文字を無視",
+    "swapSides": "左右を入れ替え",
+    "copyChangeToRight": "変更を右へコピー",
+    "copyChangeToLeft": "変更を左へコピー",
+    "copyHunk": "変更をコピー",
+    "revealHunk": "変更へ移動",
+    "pick": "比較元を選択"
+  },
+  "selection": {
+    "addCursorAbove": "上にカーソルを追加",
+    "addCursorBelow": "下にカーソルを追加",
+    "selectNextOccurrence": "次の出現箇所を追加",
+    "selectAllOccurrences": "すべての出現箇所を選択",
+    "expand": "選択範囲を拡大",
+    "shrink": "選択範囲を縮小",
+    "columnMode": "列選択モード"
   }
 }

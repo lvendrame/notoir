@@ -177,6 +177,14 @@ pub struct AppCore {
     pub structure: crate::structure::StructureState,
     pub nav: crate::navigation::NavState,
     pub search: crate::search::SearchState,
+    pub compare: crate::compare::CompareState,
+    /// Selection → Column Selection Mode.
+    pub column_mode: bool,
+    /// Expand Selection steps per view (before, after), for Shrink.
+    pub expand_history: std::collections::HashMap<
+        notoir_core::ids::ViewId,
+        Vec<(notoir_editor::Selection, notoir_editor::Selection)>,
+    >,
     /// `breadcrumbs.focus`: open the last breadcrumb's dropdown next frame.
     pub breadcrumbs_focus: bool,
     /// Zen Mode is on (with what to restore).
@@ -304,6 +312,9 @@ impl AppCore {
             structure: Default::default(),
             nav: Default::default(),
             search: Default::default(),
+            compare: Default::default(),
+            column_mode: false,
+            expand_history: Default::default(),
             breadcrumbs_focus: false,
             zen: None,
             first_run_check: opts.first_run,
@@ -493,6 +504,9 @@ impl AppCore {
                 show_selection: s.bool("editor.minimap.showSelection", None),
                 show_bookmarks: s.bool("editor.minimap.showBookmarks", None),
             }),
+            diff: None,
+            set_scroll_px: None,
+            column_mode: self.column_mode,
         }
     }
 
@@ -523,10 +537,19 @@ impl AppCore {
             .set_bool("explorerFocus", self.explorer_focused)
             .set_bool("zenMode", self.zen.is_some())
             .set_bool("editorFocus", self.editor_focused)
-            .set_bool("textInputFocus", false);
+            .set_bool("textInputFocus", false)
+            .set_bool(
+                "inDiff",
+                self.workbench
+                    .active_view()
+                    .and_then(|v| self.workbench.view(v))
+                    .is_some_and(|v| v.kind == notoir_core::view::ViewKind::Diff),
+            )
+            .set_bool("compareSelected", self.compare.selected.is_some())
+            .set_bool("columnSelection", self.column_mode);
         if let Some(view) = self
             .workbench
-            .active_view()
+            .active_editor()
             .and_then(|v| self.workbench.view(v))
         {
             let doc = self.workbench.document(view.document_id);

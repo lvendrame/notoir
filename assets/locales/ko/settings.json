@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "이보다 많은 줄의 커서 이동은 뒤로/앞으로 기록에 저장"
+  },
+  "diff": {
+    "maxSize": "이보다 큰 파일은 비교하지 않음 (바이트)",
+    "ignoreTrimWhitespace": "비교할 때 공백 변경 무시",
+    "algorithm": "줄 비교 알고리즘"
   }
 }

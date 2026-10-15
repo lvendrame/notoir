@@ -1,0 +1,17 @@
+{
+  "tab": "比较",
+  "snapshot": "快照",
+  "saved": "{{name}} (已保存)",
+  "clipboard": "剪贴板",
+  "identical": "相同",
+  "filesIdentical": "文件相同",
+  "computing": "正在比较…",
+  "tooLarge": "过大,无法比较",
+  "readOnly": "只读",
+  "copyToRight": "将更改复制到右侧",
+  "copyToLeft": "将更改复制到左侧",
+  "revertHunk": "还原更改",
+  "overview": "更改概览",
+  "unavailable": "此比较已不可用。",
+  "changes_other": "{{count}} 处更改"
+}

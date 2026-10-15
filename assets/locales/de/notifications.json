@@ -35,5 +35,8 @@
   "jsonSortComments": "Schlüssel sortieren würde die Kommentare in diesem Dokument entfernen und wurde nicht ausgeführt.",
   "replacedInFiles": "In {{count}} Dateien ersetzt",
   "replaceFailed": "Ersetzen in {{name}} fehlgeschlagen: {{error}}",
-  "undo": "Rückgängig"
+  "undo": "Rückgängig",
+  "compareNoSavedVersion": "Dieses Dokument hat keine gespeicherte Version zum Vergleichen.",
+  "compareNoClipboard": "Die Zwischenablage enthält keinen Text zum Vergleichen.",
+  "compareLoadFailed": "Die Datei zum Vergleichen konnte nicht geöffnet werden."
 }

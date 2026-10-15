@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "Aç"
+  },
+  "compare": {
+    "open": "Dosyaları Karşılaştır…",
+    "with": "Şununla Karşılaştır…",
+    "select": "Karşılaştırma İçin Seç",
+    "withSelected": "Seçilenle Karşılaştır",
+    "currentChanges": "Geçerli Değişiklikleri Karşılaştır",
+    "nextChange": "Sonraki Değişiklik",
+    "previousChange": "Önceki Değişiklik",
+    "toggleIgnoreWhitespace": "Boşlukları Yok Say",
+    "toggleIgnoreCase": "Büyük/Küçük Harfi Yok Say",
+    "swapSides": "Tarafları Değiştir",
+    "copyChangeToRight": "Değişikliği Sağa Kopyala",
+    "copyChangeToLeft": "Değişikliği Sola Kopyala",
+    "copyHunk": "Değişikliği Kopyala",
+    "revealHunk": "Değişikliğe Git",
+    "pick": "Karşılaştırma Kaynağı Seç"
+  },
+  "selection": {
+    "addCursorAbove": "Yukarıya İmleç Ekle",
+    "addCursorBelow": "Aşağıya İmleç Ekle",
+    "selectNextOccurrence": "Sonraki Eşleşmeyi Ekle",
+    "selectAllOccurrences": "Tüm Eşleşmeleri Seç",
+    "expand": "Seçimi Genişlet",
+    "shrink": "Seçimi Daralt",
+    "columnMode": "Sütun Seçim Modu"
   }
 }

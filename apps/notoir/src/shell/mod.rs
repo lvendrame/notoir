@@ -10,6 +10,7 @@ use crate::theme::{ICON, Theme, Tok};
 
 pub mod breadcrumbs;
 pub mod chrome;
+pub mod diff_view;
 pub mod empty_state;
 pub mod explorer;
 pub mod find_widget;

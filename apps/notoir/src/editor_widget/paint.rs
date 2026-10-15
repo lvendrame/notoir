@@ -28,7 +28,8 @@ struct Row {
     y: f32,
 }
 
-fn visible_rows(cache: &mut ViewCache, m: &Metrics) -> Vec<Row> {
+/// Visible text rows, and the y of visible filler rows (diff alignment).
+fn visible_rows(cache: &mut ViewCache, m: &Metrics) -> (Vec<Row>, Vec<f32>) {
     let sy = scroll_y(cache, m);
     let first = (sy / m.row_h).floor().max(0.0) as usize;
     let total = cache.map.total_rows();
@@ -37,7 +38,12 @@ fn visible_rows(cache: &mut ViewCache, m: &Metrics) -> Vec<Row> {
     let mut current_line = usize::MAX;
     let mut line_chars: Vec<char> = Vec::new();
     let mut starts: Vec<usize> = Vec::new();
+    let mut fillers = Vec::new();
     for row in first..(first + count).min(total) {
+        if cache.map.is_filler_row(row) {
+            fillers.push(m.text.top() + row as f32 * m.row_h - sy);
+            continue;
+        }
         let r = cache.map.row_to_line(row);
         if r.line != current_line {
             current_line = r.line;
@@ -59,7 +65,7 @@ fn visible_rows(cache: &mut ViewCache, m: &Metrics) -> Vec<Row> {
             y: m.text.top() + row as f32 * m.row_h - sy,
         });
     }
-    rows
+    (rows, fillers)
 }
 
 /// Theme colour of a syntax token.
@@ -115,8 +121,57 @@ pub(super) fn paint(
     let tab = opts.indent.tab_size;
     painter.rect_filled(m.rect, 0.0, kit.color(Tok::EditorBackground));
     painter.rect_filled(m.gutter, 0.0, kit.color(Tok::GutterBackground));
-    let rows = visible_rows(cache, m);
+    let (rows, filler_ys) = visible_rows(cache, m);
     let primary = sel.primary();
+    // Diff: filler rows (hatched), changed lines and intra-line changes.
+    if let Some(d) = &opts.diff {
+        let hatch = kit.color(Tok::Border);
+        for &y in &filler_ys {
+            let r = Rect::from_min_max(
+                Pos2::new(m.gutter.left(), y),
+                Pos2::new(m.rect.right(), y + m.row_h),
+            );
+            let fp = painter.with_clip_rect(r.intersect(m.rect));
+            let mut x = r.left() - m.row_h;
+            while x < r.right() {
+                fp.line_segment(
+                    [Pos2::new(x, r.bottom()), Pos2::new(x + m.row_h, r.top())],
+                    Stroke::new(1.0, hatch),
+                );
+                x += 6.0;
+            }
+        }
+        let (line_bg, text_bg) = if d.inserted {
+            (Tok::DiffInsertedLine, Tok::DiffInsertedText)
+        } else {
+            (Tok::DiffRemovedLine, Tok::DiffRemovedText)
+        };
+        let x0 = m.text.left() - cache.scroll_x;
+        for row in rows.iter().filter(|r| d.changed(r.line)) {
+            let r = Rect::from_min_size(
+                Pos2::new(m.gutter.left(), row.y),
+                Vec2::new(m.rect.right() - m.gutter.left(), m.row_h),
+            );
+            painter.rect_filled(r, 0.0, kit.color(line_bg));
+            let first = d.spans.partition_point(|s| s.0 < row.line);
+            for &(_, a, b) in d.spans[first..].iter().take_while(|s| s.0 == row.line) {
+                let off = row.start - cache.rope.line_to_char(row.line);
+                let (a, b) = (a.max(off), b.min(off + row.len));
+                if a >= b {
+                    continue;
+                }
+                let ca = col_of(&row.text, a - off, tab);
+                let cb = col_of(&row.text, b - off, tab);
+                let rect = Rect::from_min_max(
+                    Pos2::new(x0 + ca as f32 * m.char_w, row.y),
+                    Pos2::new(x0 + cb as f32 * m.char_w, row.y + m.row_h),
+                );
+                painter
+                    .with_clip_rect(m.text.intersect(m.rect))
+                    .rect_filled(rect, 0.0, kit.color(text_bg));
+            }
+        }
+    }
     let caret_line = cache
         .rope
         .char_to_line(primary.head.min(cache.rope.len_chars()));
@@ -125,7 +180,9 @@ pub(super) fn paint(
     let col_x = |col: usize| x0 + col as f32 * m.char_w;
 
     // Current line (every row of the caret's line) when nothing is selected.
-    if opts.highlight_line && sel.is_empty() {
+    // Diff panes keep their change colours on the caret's line.
+    let diff_line = opts.diff.as_ref().is_some_and(|d| d.changed(caret_line));
+    if opts.highlight_line && sel.is_empty() && !diff_line {
         for row in rows.iter().filter(|r| r.line == caret_line) {
             let r = Rect::from_min_size(
                 Pos2::new(m.gutter.right(), row.y),
@@ -389,6 +446,23 @@ pub(super) fn paint(
 
     // Gutter lanes: bookmarks (a filled bookmark shape, not colour alone).
     let gp = painter.with_clip_rect(m.gutter);
+    // Diff markers: `+` / `−` in the bookmark lane (not colour alone).
+    if let Some(d) = &opts.diff {
+        let (mark, tok) = if d.inserted {
+            ("+", Tok::DiffGutterInserted)
+        } else {
+            ("\u{2212}", Tok::DiffGutterRemoved)
+        };
+        for row in rows.iter().filter(|r| r.sub_row == 0 && d.changed(r.line)) {
+            gp.text(
+                Pos2::new(m.bookmark_lane.center().x, row.y + m.row_h / 2.0),
+                Align2::CENTER_CENTER,
+                mark,
+                m.font.clone(),
+                kit.color(tok),
+            );
+        }
+    }
     for row in rows.iter().filter(|r| r.sub_row == 0) {
         if opts.bookmarks.binary_search(&row.line).is_ok() {
             let c = Pos2::new(m.bookmark_lane.center().x, row.y + m.row_h / 2.0);

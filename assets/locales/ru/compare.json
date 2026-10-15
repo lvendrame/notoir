@@ -1,0 +1,20 @@
+{
+  "tab": "Сравнение",
+  "snapshot": "Снимок",
+  "saved": "{{name}} (сохранено)",
+  "clipboard": "Буфер обмена",
+  "identical": "Идентичны",
+  "filesIdentical": "Файлы идентичны",
+  "computing": "Сравнение…",
+  "tooLarge": "Слишком большой для сравнения",
+  "readOnly": "только чтение",
+  "copyToRight": "Копировать изменение вправо",
+  "copyToLeft": "Копировать изменение влево",
+  "revertHunk": "Отменить изменение",
+  "overview": "Обзор изменений",
+  "unavailable": "Это сравнение больше недоступно.",
+  "changes_one": "{{count}} изменение",
+  "changes_few": "{{count}} изменения",
+  "changes_many": "{{count}} изменений",
+  "changes_other": "{{count}} изменения"
+}

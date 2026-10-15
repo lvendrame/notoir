@@ -1,0 +1,18 @@
+{
+  "tab": "Karşılaştırma",
+  "snapshot": "Anlık Görüntü",
+  "saved": "{{name}} (Kaydedildi)",
+  "clipboard": "Pano",
+  "identical": "Aynı",
+  "filesIdentical": "Dosyalar aynı",
+  "computing": "Karşılaştırılıyor…",
+  "tooLarge": "Karşılaştırmak için çok büyük",
+  "readOnly": "salt okunur",
+  "copyToRight": "Değişikliği Sağa Kopyala",
+  "copyToLeft": "Değişikliği Sola Kopyala",
+  "revertHunk": "Değişikliği Geri Al",
+  "overview": "Değişikliklere genel bakış",
+  "unavailable": "Bu karşılaştırma artık kullanılamıyor.",
+  "changes_one": "{{count}} değişiklik",
+  "changes_other": "{{count}} değişiklik"
+}

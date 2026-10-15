@@ -134,7 +134,7 @@ pub(super) fn specs(out: &mut Specs) {
 }
 
 fn active(core: &AppCore) -> Option<ViewId> {
-    core.workbench.active_view()
+    core.workbench.active_editor()
 }
 
 fn line_op(
@@ -204,9 +204,9 @@ fn join(c: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
 
 /// Per-document user read-only (lock icon on the tab).
 fn toggle_read_only(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
-    if let Some(doc) = core
-        .workbench
-        .active_document()
+    if let Some(doc) = active(core)
+        .and_then(|v| core.workbench.view(v))
+        .map(|v| v.document_id)
         .and_then(|d| core.workbench.document_mut(d))
     {
         doc.read_only = match doc.read_only {

@@ -7,5 +7,6 @@
   "save": "저장",
   "close": "닫기",
   "keepRecovered": "복구된 버전 유지",
-  "useDisk": "디스크 버전 사용"
+  "useDisk": "디스크 버전 사용",
+  "compare": "비교"
 }

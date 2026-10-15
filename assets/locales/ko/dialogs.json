@@ -109,5 +109,10 @@
     "helpSymbol": "편집기에서 기호로 이동",
     "helpWorkspaceSymbols": "작업 영역 기호",
     "workspaceSymbolsLater": "작업 영역 기호는 아직 사용할 수 없습니다."
+  },
+  "compare": {
+    "title": "비교",
+    "pickLeft": "비교할 첫 번째 파일 선택",
+    "pickRight": "{{name}}과(와) 비교할 파일 선택"
   }
 }

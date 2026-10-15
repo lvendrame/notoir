@@ -53,6 +53,8 @@ pub struct Workbench {
     pub views: ViewRegistry,
     pub layout: LayoutTree,
     pub events: EventOutbox,
+    /// Diff tab → the pane that last had focus (edit commands act on it).
+    pub pane_focus: std::collections::HashMap<ViewId, ViewId>,
 }
 
 impl Default for Workbench {
@@ -71,6 +73,7 @@ impl Workbench {
             views: ViewRegistry::default(),
             layout: LayoutTree::new(first),
             events: EventOutbox::default(),
+            pane_focus: std::collections::HashMap::new(),
         }
     }
 
@@ -185,6 +188,16 @@ impl Workbench {
 
     pub fn active_view(&self) -> Option<ViewId> {
         self.layout.active().active
+    }
+
+    /// The view editing commands act on: the active tab, or for a diff tab
+    /// its focused pane (none until one was focused).
+    pub fn active_editor(&self) -> Option<ViewId> {
+        let a = self.active_view()?;
+        match self.views.get(a) {
+            Some(v) if v.kind == crate::view::ViewKind::Diff => self.pane_focus.get(&a).copied(),
+            _ => Some(a),
+        }
     }
 
     pub fn active_document(&self) -> Option<DocumentId> {
@@ -540,6 +553,46 @@ impl Workbench {
             TabPosition::Index(index)
         };
         self.add_tab(view, group, pos)
+    }
+
+    /// A view of `doc` that is not a tab (a pane of a diff tab). It keeps the
+    /// document open until [`Self::close_detached_view`].
+    pub fn open_detached_view(&mut self, doc: DocumentId) -> Result<ViewId, WorkbenchError> {
+        if !self.documents.contains_key(&doc) {
+            return Err(WorkbenchError::NoSuchDocument);
+        }
+        let id = ViewId(self.ids.fresh());
+        let mut view = EditorView::new(id, doc);
+        view.detached = true;
+        self.views.insert(view);
+        Ok(id)
+    }
+
+    /// Removes a detached view. Its document closes when no other view shows
+    /// it and it is not dirty (dirty documents stay for the caller to show).
+    pub fn close_detached_view(&mut self, view: ViewId) -> Option<DocumentId> {
+        let v = self.views.get(view).filter(|v| v.detached)?;
+        let doc = v.document_id;
+        self.views.remove(view);
+        let unused = self.views.count_of_document(doc) == 0;
+        if unused && self.documents.get(&doc).is_some_and(|d| !d.is_dirty()) {
+            self.documents.remove(&doc);
+            self.events.emit(AppEvent::DocumentClosed { doc });
+            return None;
+        }
+        unused.then_some(doc)
+    }
+
+    /// Closes a clean document that no view shows (a Compare source whose
+    /// diff never opened). Returns whether it closed.
+    pub fn discard_unused_document(&mut self, doc: DocumentId) -> bool {
+        let unused = self.views.count_of_document(doc) == 0
+            && self.documents.get(&doc).is_some_and(|d| !d.is_dirty());
+        if unused {
+            self.documents.remove(&doc);
+            self.events.emit(AppEvent::DocumentClosed { doc });
+        }
+        unused
     }
 
     /// Closes a view. The last view of a dirty document needs confirmation

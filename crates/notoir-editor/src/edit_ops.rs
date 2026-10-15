@@ -75,6 +75,20 @@ pub fn insert(sel: &Selection, text: &str, kind: EditKind) -> Option<EditResult>
     per_range(sel, kind, |r| Some(Edit::new(r.from(), r.to(), text)))
 }
 
+/// Pastes `texts[i]` over the i-th range (multi-cursor paste of as many
+/// lines as there are cursors).
+pub fn insert_each(sel: &Selection, texts: &[String], kind: EditKind) -> Option<EditResult> {
+    if texts.len() != sel.len() {
+        return None;
+    }
+    let next = std::cell::Cell::new(0);
+    per_range(sel, kind, |r| {
+        let i = next.get();
+        next.set(i + 1);
+        Some(Edit::new(r.from(), r.to(), texts[i].as_str()))
+    })
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Unit {
     Grapheme,

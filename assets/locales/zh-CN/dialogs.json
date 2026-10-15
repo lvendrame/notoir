@@ -109,5 +109,10 @@
     "helpSymbol": "转到编辑器中的符号",
     "helpWorkspaceSymbols": "工作区符号",
     "workspaceSymbolsLater": "工作区符号尚不可用。"
+  },
+  "compare": {
+    "title": "比较",
+    "pickLeft": "选择要比较的第一个文件",
+    "pickRight": "选择要与 {{name}} 比较的文件"
   }
 }

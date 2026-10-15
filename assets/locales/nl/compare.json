@@ -1,0 +1,18 @@
+{
+  "tab": "Vergelijking",
+  "snapshot": "Momentopname",
+  "saved": "{{name}} (opgeslagen)",
+  "clipboard": "Klembord",
+  "identical": "Identiek",
+  "filesIdentical": "De bestanden zijn identiek",
+  "computing": "Vergelijken…",
+  "tooLarge": "Te groot om te vergelijken",
+  "readOnly": "alleen-lezen",
+  "copyToRight": "Wijziging naar rechts kopiëren",
+  "copyToLeft": "Wijziging naar links kopiëren",
+  "revertHunk": "Wijziging terugdraaien",
+  "overview": "Overzicht van wijzigingen",
+  "unavailable": "Deze vergelijking is niet meer beschikbaar.",
+  "changes_one": "{{count}} wijziging",
+  "changes_other": "{{count}} wijzigingen"
+}

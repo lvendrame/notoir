@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "I salti del cursore oltre questo numero di righe vengono registrati per Indietro/Avanti"
+  },
+  "diff": {
+    "maxSize": "I file più grandi non vengono confrontati (byte)",
+    "ignoreTrimWhitespace": "Ignora le modifiche agli spazi durante il confronto",
+    "algorithm": "Algoritmo di diff delle righe"
   }
 }

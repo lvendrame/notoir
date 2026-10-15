@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "Cursor jumps longer than this many lines are recorded for Back/Forward"
+  },
+  "diff": {
+    "maxSize": "Files larger than this are not compared (bytes)",
+    "ignoreTrimWhitespace": "Ignore whitespace changes when comparing",
+    "algorithm": "Line diff algorithm"
   }
 }

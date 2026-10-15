@@ -35,5 +35,8 @@
   "jsonSortComments": "Ordina chiavi rimuoverebbe i commenti di questo documento, quindi non è stato eseguito.",
   "replacedInFiles": "Sostituito in {{count}} file",
   "replaceFailed": "Impossibile sostituire in {{name}}: {{error}}",
-  "undo": "Annulla"
+  "undo": "Annulla",
+  "compareNoSavedVersion": "Questo documento non ha una versione salvata da confrontare.",
+  "compareNoClipboard": "Gli appunti non contengono testo da confrontare.",
+  "compareLoadFailed": "Impossibile aprire il file da confrontare."
 }

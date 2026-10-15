@@ -35,5 +35,8 @@
   "jsonSortComments": "キーの並べ替えはこのドキュメントのコメントを削除するため、実行しませんでした。",
   "replacedInFiles": "{{count}} ファイルで置換しました",
   "replaceFailed": "{{name}} で置換できませんでした: {{error}}",
-  "undo": "元に戻す"
+  "undo": "元に戻す",
+  "compareNoSavedVersion": "このドキュメントには比較できる保存済みバージョンがありません。",
+  "compareNoClipboard": "クリップボードに比較できるテキストがありません。",
+  "compareLoadFailed": "比較するファイルを開けませんでした。"
 }

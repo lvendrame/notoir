@@ -1,0 +1,18 @@
+{
+  "tab": "Compare",
+  "snapshot": "Snapshot",
+  "saved": "{{name}} (Saved)",
+  "clipboard": "Clipboard",
+  "identical": "Identical",
+  "filesIdentical": "Files are identical",
+  "computing": "Comparing…",
+  "tooLarge": "Too large to compare",
+  "readOnly": "read-only",
+  "copyToRight": "Copy Change to Right",
+  "copyToLeft": "Copy Change to Left",
+  "revertHunk": "Revert Change",
+  "overview": "Changes overview",
+  "unavailable": "This comparison is no longer available.",
+  "changes_one": "{{count}} change",
+  "changes_other": "{{count}} changes"
+}

@@ -109,5 +109,10 @@
     "helpSymbol": "Atteindre le symbole dans l'éditeur",
     "helpWorkspaceSymbols": "Symboles de l'espace de travail",
     "workspaceSymbolsLater": "Les symboles de l'espace de travail ne sont pas encore disponibles."
+  },
+  "compare": {
+    "title": "Comparer",
+    "pickLeft": "Choisissez le premier fichier à comparer",
+    "pickRight": "Choisissez un fichier à comparer avec {{name}}"
   }
 }

@@ -1,6 +1,6 @@
 # 27 — Compare (Diff)
 
-**Status:** Not started — M17
+**Status:** Partial — sources (open documents, files, clipboard, saved version, text), diff model (Patience/Myers, intra-line word changes, ignore whitespace/case), diff tab with aligned panes, synchronized scrolling, overview ruler, change navigation, hunk copy / Revert Change, Swap Sides, live updates, entry points in Tools, toolbar, tab and Explorer menus, editor menu and the external-change / recovery banners (M17). Later: Git HEAD / revision sources (M18), inline view (Phase 6), progress for large diffs, `Compare with Selected` across windows
 
 ## Purpose
 

@@ -33,6 +33,11 @@ macro_rules! icons {
 
 icons! {
     ArrowDownAZ => "lucide/arrow-down-a-z",
+    ArrowDown => "lucide/arrow-down",
+    ArrowLeft => "lucide/arrow-left",
+    ArrowLeftRight => "lucide/arrow-left-right",
+    ArrowRight => "lucide/arrow-right",
+    ArrowUp => "lucide/arrow-up",
     Bell => "lucide/bell",
     BookOpen => "lucide/book-open",
     Bookmark => "lucide/bookmark",
@@ -90,6 +95,7 @@ icons! {
     Search => "lucide/search",
     Settings => "lucide/settings",
     ShieldAlert => "lucide/shield-alert",
+    Space => "lucide/space",
     Trash => "lucide/trash",
     TriangleAlert => "lucide/triangle-alert",
     Undo2 => "lucide/undo-2",

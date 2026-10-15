@@ -108,6 +108,33 @@ pub struct EditorOptions {
     pub bookmarks: Vec<usize>,
     /// Foldable regions; `None` when folding is off.
     pub fold_ranges: Option<std::sync::Arc<Vec<notoir_editor::folding::FoldRange>>>,
+    /// A pane of a diff tab: changed lines, intra-line changes and fillers.
+    pub diff: Option<DiffDecor>,
+    /// Scroll to these pixel offsets (vertical, horizontal) this frame
+    /// (synchronized diff panes).
+    pub set_scroll_px: Option<(f32, f32)>,
+    /// Selection → Column Selection Mode: dragging selects a box.
+    pub column_mode: bool,
+}
+
+/// Diff colouring of one side (docs/specs/27 §Diff View).
+#[derive(Clone, Debug, PartialEq)]
+pub struct DiffDecor {
+    /// Right side: inserted colours and `+`; left: removed and `−`.
+    pub inserted: bool,
+    /// Changed line ranges, sorted.
+    pub lines: std::sync::Arc<Vec<std::ops::Range<usize>>>,
+    /// Intra-line changes: (line, start char, end char), sorted by line.
+    pub spans: std::sync::Arc<Vec<(usize, usize, usize)>>,
+    /// Filler rows aligning the sides: (before line, rows).
+    pub fillers: std::sync::Arc<Vec<(usize, usize)>>,
+}
+
+impl DiffDecor {
+    pub fn changed(&self, line: usize) -> bool {
+        let i = self.lines.partition_point(|r| r.end <= line);
+        self.lines.get(i).is_some_and(|r| r.start <= line)
+    }
 }
 
 /// Per-view state that only the widget needs.
@@ -137,6 +164,10 @@ pub struct ViewCache {
     /// Syntax highlighting state for the language below (spec 26).
     highlighter: Option<notoir_editor::syntax::Highlighter>,
     highlight_lang: Option<notoir_editor::LanguageId>,
+    /// Last frame's scroll offsets, row height and text top (diff panes).
+    last_scroll: (f32, f32),
+    last_row_h: f32,
+    last_text_top: f32,
 }
 
 impl ViewCache {
@@ -168,6 +199,9 @@ impl ViewCache {
             gutter_menu_line: None,
             highlighter: None,
             highlight_lang: None,
+            last_scroll: (0.0, 0.0),
+            last_row_h: 0.0,
+            last_text_top: 0.0,
         }
     }
 
@@ -249,6 +283,39 @@ impl EditorCaches {
     /// First visible buffer line as of the last frame (tests).
     pub fn top_line(&self, view: ViewId) -> Option<usize> {
         self.views.get(&view).map(|c| c.anchor_line)
+    }
+
+    /// Scroll offsets in pixels (vertical, horizontal) as of the last frame.
+    pub fn scroll_px(&self, view: ViewId) -> Option<(f32, f32)> {
+        self.views.get(&view).map(|c| c.last_scroll)
+    }
+
+    /// Screen y of the first row of `line` (or of the fillers before it) as
+    /// of the last frame, and the row height.
+    pub fn line_y(&mut self, view: ViewId, line: usize, with_fillers: bool) -> Option<(f32, f32)> {
+        let c = self.views.get_mut(&view)?;
+        if c.last_row_h <= 0.0 {
+            return None;
+        }
+        let mut row = c.map.line_to_row(line);
+        if with_fillers {
+            row -= c.map.fillers_before(line).min(row);
+        }
+        Some((
+            c.last_text_top + row as f32 * c.last_row_h - c.last_scroll.0,
+            c.last_row_h,
+        ))
+    }
+
+    /// Display row of `line` (or of the fillers before it).
+    pub fn line_row(&mut self, view: ViewId, line: usize, with_fillers: bool) -> Option<usize> {
+        let c = self.views.get_mut(&view)?;
+        let row = c.map.line_to_row(line);
+        Some(if with_fillers {
+            row - c.map.fillers_before(line).min(row)
+        } else {
+            row
+        })
     }
 
     /// Display rows of a view as of its last frame (tests, diagnostics).
@@ -436,6 +503,13 @@ pub fn show(
         .or_insert_with(|| ViewCache::new(doc, wrap, saved_scroll, head));
     cache.sync(doc, wrap);
     apply_folds(wb, cache, view);
+    cache
+        .map
+        .set_fillers(opts.diff.as_ref().map_or(&[][..], |d| &d.fillers[..]));
+    if let Some((y, x)) = opts.set_scroll_px {
+        set_scroll_y(cache, &m, y);
+        cache.scroll_x = x.max(0.0);
+    }
     if let Some(s) = opts.set_scroll {
         let line = s.top_line.min(cache.rope.len_lines().saturating_sub(1));
         cache.anchor_line = line;
@@ -455,6 +529,7 @@ pub fn show(
         view,
         &m,
         opts.indent.tab_size,
+        opts.column_mode,
         now,
         &mut out.commands,
     );
@@ -466,6 +541,9 @@ pub fn show(
         cache.sync(d, wrap);
     }
     apply_folds(wb, cache, view);
+    cache
+        .map
+        .set_fillers(opts.diff.as_ref().map_or(&[][..], |d| &d.fillers[..]));
     scroll(ui, &response, cache, &m, opts, &mut out);
     let head = wb.view(view).map_or(0, |v| v.selection.primary().head);
     if head != cache.last_head {
@@ -558,6 +636,9 @@ pub fn show(
     }
     out.gutter_menu_line = cache.gutter_menu_line;
     out.response = Some(response.clone());
+    cache.last_scroll = (scroll_y(cache, &m), cache.scroll_x);
+    cache.last_row_h = m.row_h;
+    cache.last_text_top = m.text.top();
     // Persist the scroll anchor in the view (session restore, M8).
     if let Some(v) = wb.views.get_mut(view) {
         v.scroll.top_line = cache.anchor_line;

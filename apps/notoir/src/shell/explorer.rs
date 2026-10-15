@@ -129,6 +129,10 @@ fn context_items(core: &AppCore, row: &Row) -> Vec<MenuItem> {
             item("explorer.copyPath"),
             item("explorer.copyRelativePath"),
             MenuItem::Separator,
+            item("compare.with"),
+            item("compare.select"),
+            item("compare.withSelected"),
+            MenuItem::Separator,
             reveal,
         ],
         NodeKind::Dir => {

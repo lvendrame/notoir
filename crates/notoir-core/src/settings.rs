@@ -658,6 +658,31 @@ impl Schema {
             Scopes::NO_LANGUAGE,
             C::Editor,
         );
+        // Compare
+        def(
+            "diff.maxSize",
+            T::Int {
+                min: 1024,
+                max: 1_073_741_824,
+            },
+            V::Int(50 * 1024 * 1024),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "diff.ignoreTrimWhitespace",
+            T::Bool,
+            V::Bool(false),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "diff.algorithm",
+            T::Enum(&["patience", "myers"]),
+            s_("patience"),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
         // Zen Mode
         def(
             "zenMode.hideTabs",

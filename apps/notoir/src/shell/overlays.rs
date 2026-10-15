@@ -262,6 +262,9 @@ pub enum PickerKind {
     Symbols,
     /// Quick Open (`Mod+P`): files, with `>` `:` `@` `?` prefixes.
     QuickOpen,
+    /// Compare: a side from open documents, workspace files or the
+    /// clipboard (spec 27).
+    Compare,
 }
 
 /// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
@@ -310,6 +313,8 @@ pub struct Picker {
     /// Commands / Symbols reached from Quick Open by typing a prefix:
     /// deleting it goes back.
     pub from_quick_open: bool,
+    /// Compare: which side is being chosen.
+    compare_hint: Option<String>,
     /// Go to Symbol: where to go back to on Esc.
     pub restore: Option<(
         notoir_core::ids::ViewId,
@@ -377,7 +382,8 @@ impl Picker {
             PickerKind::Commands
             | PickerKind::Indentation
             | PickerKind::Symbols
-            | PickerKind::QuickOpen => String::new(),
+            | PickerKind::QuickOpen
+            | PickerKind::Compare => String::new(),
             PickerKind::TabSize => doc
                 .map(|d| core.indent_style(d.id).tab_size.to_string())
                 .unwrap_or_default(),
@@ -413,8 +419,17 @@ impl Picker {
             scroll_to_selected: true,
             dynamic,
             restore,
-            quick: (kind == PickerKind::QuickOpen)
+            quick: matches!(kind, PickerKind::QuickOpen | PickerKind::Compare)
                 .then(|| crate::quick_open::Source::capture(core)),
+            compare_hint: (kind == PickerKind::Compare).then(|| {
+                match core.compare.pick_left.as_ref() {
+                    Some(src) => t!(
+                        "dialogs:compare.pickRight",
+                        name = core.compare_source_name(src)
+                    ),
+                    None => t!("dialogs:compare.pickLeft"),
+                }
+            }),
             quick_rows: None,
             from_quick_open: false,
         };
@@ -494,7 +509,10 @@ impl Picker {
                     detail: l.id.as_str().to_owned(),
                 })
                 .collect(),
-            PickerKind::Commands | PickerKind::Symbols | PickerKind::QuickOpen => Vec::new(),
+            PickerKind::Commands
+            | PickerKind::Symbols
+            | PickerKind::QuickOpen
+            | PickerKind::Compare => Vec::new(),
             PickerKind::Indentation => [
                 ("spaces", "dialogs:picker.indentSpaces"),
                 ("tabs", "dialogs:picker.indentTabs"),
@@ -573,6 +591,7 @@ impl Picker {
                 ("navigate.revealRange", json!({ "start": a, "end": b }))
             }
             PickerKind::QuickOpen => ("quickOpen.open", quick_open_args(value)),
+            PickerKind::Compare => ("compare.pick", json!({ "value": value })),
         };
         CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
@@ -592,6 +611,9 @@ impl Picker {
         }
         if self.kind == PickerKind::QuickOpen {
             return self.quick_items();
+        }
+        if self.kind == PickerKind::Compare {
+            return self.compare_items();
         }
         if self.kind == PickerKind::Symbols {
             let q = self.query.trim().trim_start_matches('@').trim();
@@ -662,6 +684,31 @@ impl Picker {
                 }
             })
             .collect()
+    }
+
+    /// Compare rows: the clipboard, then Quick Open's files.
+    fn compare_items(&self) -> Vec<PickerItem> {
+        let q = self.query.trim();
+        let clip = t!("compare:clipboard");
+        let mut out = Vec::new();
+        if q.is_empty() || notoir_core::fuzzy::fuzzy_match(q, &clip).is_some() {
+            out.push(PickerItem {
+                value: "clipboard".into(),
+                label: clip,
+                detail: String::new(),
+            });
+        }
+        if let Some((_, rows)) = &self.quick_rows {
+            out.extend(rows.iter().map(|r| PickerItem {
+                value: match &r.target {
+                    crate::quick_open::Target::Path(p) => format!("p:{}", p.display()),
+                    crate::quick_open::Target::Doc(d) => format!("d:{}", d.0),
+                },
+                label: r.name.clone(),
+                detail: r.dir.clone(),
+            }));
+        }
+        out
     }
 
     /// Recomputes Quick Open rows when the query changed.
@@ -771,6 +818,7 @@ impl Picker {
             PickerKind::TabSize => t!("dialogs:picker.tabSize"),
             PickerKind::Symbols => t!("dialogs:picker.symbols"),
             PickerKind::QuickOpen => String::new(),
+            PickerKind::Compare => t!("dialogs:compare.title"),
         };
         if self.kind == PickerKind::Commands && enter {
             // Disabled rows (shown with "show all") do not run.
@@ -793,6 +841,10 @@ impl Picker {
                     let hint = match self.kind {
                         PickerKind::Commands => t!("dialogs:picker.commands"),
                         PickerKind::QuickOpen => t!("dialogs:quickOpen.hint"),
+                        PickerKind::Compare => self
+                            .compare_hint
+                            .clone()
+                            .unwrap_or_else(|| t!("dialogs:picker.filter")),
                         _ => t!("dialogs:picker.filter"),
                     };
                     let edit = ui.add(

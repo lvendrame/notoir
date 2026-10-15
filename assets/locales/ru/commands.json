@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "Открыть"
+  },
+  "compare": {
+    "open": "Сравнить файлы…",
+    "with": "Сравнить с…",
+    "select": "Выбрать для сравнения",
+    "withSelected": "Сравнить с выбранным",
+    "currentChanges": "Сравнить текущие изменения",
+    "nextChange": "Следующее изменение",
+    "previousChange": "Предыдущее изменение",
+    "toggleIgnoreWhitespace": "Игнорировать пробелы",
+    "toggleIgnoreCase": "Игнорировать регистр",
+    "swapSides": "Поменять стороны",
+    "copyChangeToRight": "Копировать изменение вправо",
+    "copyChangeToLeft": "Копировать изменение влево",
+    "copyHunk": "Копировать изменение",
+    "revealHunk": "Перейти к изменению",
+    "pick": "Выбрать источник сравнения"
+  },
+  "selection": {
+    "addCursorAbove": "Добавить курсор выше",
+    "addCursorBelow": "Добавить курсор ниже",
+    "selectNextOccurrence": "Добавить следующее вхождение",
+    "selectAllOccurrences": "Выделить все вхождения",
+    "expand": "Расширить выделение",
+    "shrink": "Сузить выделение",
+    "columnMode": "Режим выделения столбцом"
   }
 }

@@ -1,0 +1,20 @@
+{
+  "tab": "Порівняння",
+  "snapshot": "Знімок",
+  "saved": "{{name}} (збережено)",
+  "clipboard": "Буфер обміну",
+  "identical": "Ідентичні",
+  "filesIdentical": "Файли ідентичні",
+  "computing": "Порівняння…",
+  "tooLarge": "Завеликий для порівняння",
+  "readOnly": "лише читання",
+  "copyToRight": "Копіювати зміну праворуч",
+  "copyToLeft": "Копіювати зміну ліворуч",
+  "revertHunk": "Скасувати зміну",
+  "overview": "Огляд змін",
+  "unavailable": "Це порівняння більше недоступне.",
+  "changes_one": "{{count}} зміна",
+  "changes_few": "{{count}} зміни",
+  "changes_many": "{{count}} змін",
+  "changes_other": "{{count}} зміни"
+}

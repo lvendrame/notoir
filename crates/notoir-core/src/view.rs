@@ -17,6 +17,8 @@ pub enum ViewKind {
     Settings,
     /// First-run / Help → Welcome page.
     Welcome,
+    /// Compare tab (spec 27); its panes are detached views.
+    Diff,
 }
 
 /// Top visible display row plus pixel offsets.
@@ -42,6 +44,8 @@ pub struct EditorView {
     pub preview_ratio: f32,
     /// Folded regions (spec 12), anchored to the text so they survive edits.
     pub folds: Vec<Fold>,
+    /// Not a tab: a pane inside another view (the sides of a diff tab).
+    pub detached: bool,
 }
 
 /// A folded region: the header line (containing `header`) stays visible; the
@@ -67,6 +71,7 @@ impl EditorView {
             pinned: false,
             preview_ratio: 0.5,
             folds: Vec::new(),
+            detached: false,
         }
     }
 
@@ -128,16 +133,20 @@ impl ViewRegistry {
         self.views.get_mut(&id)
     }
 
+    /// Tab views (detached panes excluded).
     pub fn iter(&self) -> impl Iterator<Item = &EditorView> {
-        self.views.values()
+        self.views.values().filter(|v| !v.detached)
     }
 
+    /// Tab views of `doc`.
     pub fn of_document(&self, doc: DocumentId) -> impl Iterator<Item = &EditorView> {
-        self.views.values().filter(move |v| v.document_id == doc)
+        self.iter().filter(move |v| v.document_id == doc)
     }
 
+    /// Every view showing `doc`, detached panes included: a document stays
+    /// open while any of them does.
     pub fn count_of_document(&self, doc: DocumentId) -> usize {
-        self.of_document(doc).count()
+        self.views.values().filter(|v| v.document_id == doc).count()
     }
 
     /// Transforms the selections of every view of `doc` except `skip`, and

@@ -35,5 +35,8 @@
   "jsonSortComments": "Sort Keys would remove the comments in this document, so it was not run.",
   "replacedInFiles": "Replaced in {{count}} files",
   "replaceFailed": "Could not replace in {{name}}: {{error}}",
-  "undo": "Undo"
+  "undo": "Undo",
+  "compareNoSavedVersion": "This document has no saved version to compare with.",
+  "compareNoClipboard": "The clipboard has no text to compare.",
+  "compareLoadFailed": "Could not open the file to compare."
 }

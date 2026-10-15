@@ -70,6 +70,11 @@ impl Poster {
             (self.wake)();
         }
     }
+
+    /// Wakes the UI thread (work finished on another channel).
+    pub fn wake(&self) {
+        (self.wake)();
+    }
 }
 
 type Job = Box<dyn FnOnce() -> Option<IoResult> + Send>;

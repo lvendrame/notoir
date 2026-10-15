@@ -28,6 +28,9 @@ fn file_icon(doc: &Document) -> Icon {
         DocumentOrigin::Virtual { title } if title == crate::settings_tab::SETTINGS_TITLE => {
             return Icon::Settings;
         }
+        DocumentOrigin::Virtual { title } if title == crate::compare::DIFF_DOC_TITLE => {
+            return Icon::GitCompare;
+        }
         DocumentOrigin::Virtual { .. } => return Icon::Info,
         _ => {}
     }
@@ -119,6 +122,7 @@ fn context_items(core: &AppCore, view: ViewId) -> Vec<MenuItem> {
         MenuItem::Separator,
         cmd("compare.with"),
         cmd("compare.select"),
+        cmd("compare.withSelected"),
         MenuItem::Separator,
         cmd("view.splitLeft"),
         cmd("view.splitRight"),

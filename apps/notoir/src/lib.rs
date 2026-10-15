@@ -6,6 +6,7 @@ pub const BRAND: &str = "Notoir";
 pub mod app;
 pub mod cli;
 pub mod commands;
+pub mod compare;
 pub mod config;
 pub mod core;
 pub mod editor_widget;

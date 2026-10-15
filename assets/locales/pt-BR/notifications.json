@@ -35,5 +35,8 @@
   "jsonSortComments": "Ordenar Chaves removeria os comentários deste documento e não foi executado.",
   "replacedInFiles": "Substituído em {{count}} arquivos",
   "replaceFailed": "Não foi possível substituir em {{name}}: {{error}}",
-  "undo": "Desfazer"
+  "undo": "Desfazer",
+  "compareNoSavedVersion": "Este documento não tem versão salva para comparar.",
+  "compareNoClipboard": "A área de transferência não tem texto para comparar.",
+  "compareLoadFailed": "Não foi possível abrir o arquivo para comparar."
 }

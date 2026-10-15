@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "열기"
+  },
+  "compare": {
+    "open": "파일 비교…",
+    "with": "다음과 비교…",
+    "select": "비교할 항목으로 선택",
+    "withSelected": "선택한 항목과 비교",
+    "currentChanges": "현재 변경 내용 비교",
+    "nextChange": "다음 변경",
+    "previousChange": "이전 변경",
+    "toggleIgnoreWhitespace": "공백 무시",
+    "toggleIgnoreCase": "대/소문자 무시",
+    "swapSides": "양쪽 바꾸기",
+    "copyChangeToRight": "변경 내용을 오른쪽으로 복사",
+    "copyChangeToLeft": "변경 내용을 왼쪽으로 복사",
+    "copyHunk": "변경 내용 복사",
+    "revealHunk": "변경 내용으로 이동",
+    "pick": "비교 원본 선택"
+  },
+  "selection": {
+    "addCursorAbove": "위에 커서 추가",
+    "addCursorBelow": "아래에 커서 추가",
+    "selectNextOccurrence": "다음 항목 추가",
+    "selectAllOccurrences": "모든 항목 선택",
+    "expand": "선택 영역 확장",
+    "shrink": "선택 영역 축소",
+    "columnMode": "열 선택 모드"
   }
 }

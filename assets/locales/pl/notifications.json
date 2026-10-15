@@ -35,5 +35,8 @@
   "jsonSortComments": "Sortowanie kluczy usunęłoby komentarze z tego dokumentu, więc nie zostało wykonane.",
   "replacedInFiles": "Zamieniono w {{count}} plikach",
   "replaceFailed": "Nie można zamienić w {{name}}: {{error}}",
-  "undo": "Cofnij"
+  "undo": "Cofnij",
+  "compareNoSavedVersion": "Ten dokument nie ma zapisanej wersji do porównania.",
+  "compareNoClipboard": "Schowek nie zawiera tekstu do porównania.",
+  "compareLoadFailed": "Nie można otworzyć pliku do porównania."
 }

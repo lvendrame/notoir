@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "Відкрити"
+  },
+  "compare": {
+    "open": "Порівняти файли…",
+    "with": "Порівняти з…",
+    "select": "Вибрати для порівняння",
+    "withSelected": "Порівняти з вибраним",
+    "currentChanges": "Порівняти поточні зміни",
+    "nextChange": "Наступна зміна",
+    "previousChange": "Попередня зміна",
+    "toggleIgnoreWhitespace": "Ігнорувати пробіли",
+    "toggleIgnoreCase": "Ігнорувати регістр",
+    "swapSides": "Поміняти сторони",
+    "copyChangeToRight": "Копіювати зміну праворуч",
+    "copyChangeToLeft": "Копіювати зміну ліворуч",
+    "copyHunk": "Копіювати зміну",
+    "revealHunk": "Перейти до зміни",
+    "pick": "Вибрати джерело порівняння"
+  },
+  "selection": {
+    "addCursorAbove": "Додати курсор вище",
+    "addCursorBelow": "Додати курсор нижче",
+    "selectNextOccurrence": "Додати наступне входження",
+    "selectAllOccurrences": "Виділити всі входження",
+    "expand": "Розширити виділення",
+    "shrink": "Звузити виділення",
+    "columnMode": "Режим виділення стовпцем"
   }
 }

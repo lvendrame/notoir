@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "Open"
+  },
+  "compare": {
+    "open": "Compare Files…",
+    "with": "Compare With…",
+    "select": "Select for Compare",
+    "withSelected": "Compare with Selected",
+    "currentChanges": "Compare Current Changes",
+    "nextChange": "Next Change",
+    "previousChange": "Previous Change",
+    "toggleIgnoreWhitespace": "Ignore Whitespace",
+    "toggleIgnoreCase": "Ignore Case",
+    "swapSides": "Swap Sides",
+    "copyChangeToRight": "Copy Change to Right",
+    "copyChangeToLeft": "Copy Change to Left",
+    "copyHunk": "Copy Change",
+    "revealHunk": "Go to Change",
+    "pick": "Choose Compare Source"
+  },
+  "selection": {
+    "addCursorAbove": "Add Cursor Above",
+    "addCursorBelow": "Add Cursor Below",
+    "selectNextOccurrence": "Add Next Occurrence",
+    "selectAllOccurrences": "Select All Occurrences",
+    "expand": "Expand Selection",
+    "shrink": "Shrink Selection",
+    "columnMode": "Column Selection Mode"
   }
 }

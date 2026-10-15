@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "Abrir"
+  },
+  "compare": {
+    "open": "Comparar Archivos…",
+    "with": "Comparar Con…",
+    "select": "Seleccionar para Comparar",
+    "withSelected": "Comparar con lo Seleccionado",
+    "currentChanges": "Comparar Cambios Actuales",
+    "nextChange": "Cambio Siguiente",
+    "previousChange": "Cambio Anterior",
+    "toggleIgnoreWhitespace": "Ignorar Espacios en Blanco",
+    "toggleIgnoreCase": "Ignorar Mayúsculas y Minúsculas",
+    "swapSides": "Intercambiar Lados",
+    "copyChangeToRight": "Copiar Cambio a la Derecha",
+    "copyChangeToLeft": "Copiar Cambio a la Izquierda",
+    "copyHunk": "Copiar Cambio",
+    "revealHunk": "Ir al Cambio",
+    "pick": "Elegir Origen de Comparación"
+  },
+  "selection": {
+    "addCursorAbove": "Agregar Cursor Arriba",
+    "addCursorBelow": "Agregar Cursor Abajo",
+    "selectNextOccurrence": "Agregar Siguiente Coincidencia",
+    "selectAllOccurrences": "Seleccionar Todas las Coincidencias",
+    "expand": "Expandir Selección",
+    "shrink": "Reducir Selección",
+    "columnMode": "Modo de Selección de Columna"
   }
 }

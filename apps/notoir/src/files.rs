@@ -210,6 +210,13 @@ pub enum LoadPurpose {
         key: String,
         tab: Box<crate::session::TabData>,
     },
+    /// A Compare side (spec 27): the file itself, or the saved version of
+    /// the open document `saved_of`.
+    Compare {
+        id: u64,
+        left: bool,
+        saved_of: Option<DocumentId>,
+    },
 }
 
 #[derive(Debug)]
@@ -427,7 +434,7 @@ impl AppCore {
     fn load(&mut self, path: PathBuf, purpose: LoadPurpose) {
         let mut opts = self.load_options();
         match &purpose {
-            LoadPurpose::Restore { .. } => {}
+            LoadPurpose::Restore { .. } | LoadPurpose::Compare { .. } => {}
             LoadPurpose::Open { allow_binary, .. } => opts.allow_binary = *allow_binary,
             LoadPurpose::Reencode(doc) => {
                 opts.forced_encoding = self.workbench.document(*doc).map(|d| d.encoding.encoding);
@@ -452,6 +459,10 @@ impl AppCore {
             purpose,
             result,
         } = outcome;
+        if let LoadPurpose::Compare { id, left, saved_of } = purpose {
+            self.compare_loaded(id, left, saved_of, result);
+            return;
+        }
         if let LoadPurpose::Restore { group, key, tab } = purpose {
             match result {
                 Ok(loaded) => self.finish_restore_load(loaded, group, &key, &tab),
@@ -511,7 +522,9 @@ impl AppCore {
             LoadPurpose::Revert(doc) | LoadPurpose::Reencode(doc) => {
                 self.replace_from_disk(doc, loaded)
             }
-            LoadPurpose::Restore { .. } => unreachable!("handled above"),
+            LoadPurpose::Restore { .. } | LoadPurpose::Compare { .. } => {
+                unreachable!("handled above")
+            }
         }
     }
 
@@ -1513,6 +1526,9 @@ impl AppCore {
 
     /// Display title of a document (tabs, prompts).
     pub fn document_title(&self, doc: DocumentId) -> String {
+        if let Some(title) = self.compare_title(doc) {
+            return title;
+        }
         match self.workbench.document(doc).map(|d| &d.origin) {
             Some(DocumentOrigin::File { path, .. }) => file_name(path),
             Some(DocumentOrigin::Scratchpad { title, .. }) => title.clone(),

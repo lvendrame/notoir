@@ -7,5 +7,6 @@
   "save": "Enregistrer",
   "close": "Fermer",
   "keepRecovered": "Conserver la version récupérée",
-  "useDisk": "Utiliser la version du disque"
+  "useDisk": "Utiliser la version du disque",
+  "compare": "Comparer"
 }

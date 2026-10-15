@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "この行数を超えるカーソル移動を戻る/進むに記録"
+  },
+  "diff": {
+    "maxSize": "これより大きいファイルは比較しません (バイト)",
+    "ignoreTrimWhitespace": "比較時に空白の変更を無視",
+    "algorithm": "行差分アルゴリズム"
   }
 }

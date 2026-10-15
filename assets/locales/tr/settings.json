@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "Bundan fazla satırlık imleç atlamaları Geri/İleri için kaydedilir"
+  },
+  "diff": {
+    "maxSize": "Bundan büyük dosyalar karşılaştırılmaz (bayt)",
+    "ignoreTrimWhitespace": "Karşılaştırırken boşluk değişikliklerini yok say",
+    "algorithm": "Satır fark algoritması"
   }
 }

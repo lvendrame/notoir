@@ -109,5 +109,10 @@
     "helpSymbol": "Przejdź do symbolu w edytorze",
     "helpWorkspaceSymbols": "Symbole obszaru roboczego",
     "workspaceSymbolsLater": "Symbole obszaru roboczego nie są jeszcze dostępne."
+  },
+  "compare": {
+    "title": "Porównaj",
+    "pickLeft": "Wybierz pierwszy plik do porównania",
+    "pickRight": "Wybierz plik do porównania z {{name}}"
   }
 }

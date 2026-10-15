@@ -49,6 +49,7 @@ uuid = { version = "1.28.0", features = ["v4"] }
 xxhash-rust = { version = "0.8.19", features = ["xxh3"] }
 notify = "8.2.0"
 regex = "1.13.1"
+similar = "3.2.0"
 pulldown-cmark = { version = "0.13.4", default-features = false }
 open = "5.4.4"
 # Runtime: load the prebuilt packdump only. Build time (notoir-editor/build.rs)

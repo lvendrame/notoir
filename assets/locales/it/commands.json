@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "Apri"
+  },
+  "compare": {
+    "open": "Confronta file…",
+    "with": "Confronta con…",
+    "select": "Seleziona per il confronto",
+    "withSelected": "Confronta con selezionato",
+    "currentChanges": "Confronta modifiche correnti",
+    "nextChange": "Modifica successiva",
+    "previousChange": "Modifica precedente",
+    "toggleIgnoreWhitespace": "Ignora spazi vuoti",
+    "toggleIgnoreCase": "Ignora maiuscole/minuscole",
+    "swapSides": "Scambia lati",
+    "copyChangeToRight": "Copia modifica a destra",
+    "copyChangeToLeft": "Copia modifica a sinistra",
+    "copyHunk": "Copia modifica",
+    "revealHunk": "Vai alla modifica",
+    "pick": "Scegli origine del confronto"
+  },
+  "selection": {
+    "addCursorAbove": "Aggiungi cursore sopra",
+    "addCursorBelow": "Aggiungi cursore sotto",
+    "selectNextOccurrence": "Aggiungi occorrenza successiva",
+    "selectAllOccurrences": "Seleziona tutte le occorrenze",
+    "expand": "Espandi selezione",
+    "shrink": "Riduci selezione",
+    "columnMode": "Modalità selezione colonna"
   }
 }

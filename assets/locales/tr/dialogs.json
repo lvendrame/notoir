@@ -109,5 +109,10 @@
     "helpSymbol": "Düzenleyicide Sembole Git",
     "helpWorkspaceSymbols": "Çalışma alanı sembolleri",
     "workspaceSymbolsLater": "Çalışma alanı sembolleri henüz kullanılamıyor."
+  },
+  "compare": {
+    "title": "Karşılaştır",
+    "pickLeft": "Karşılaştırılacak ilk dosyayı seçin",
+    "pickRight": "{{name}} ile karşılaştırılacak dosyayı seçin"
   }
 }

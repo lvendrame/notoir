@@ -35,5 +35,8 @@
   "jsonSortComments": "Sleutels sorteren zou de opmerkingen in dit document verwijderen en is niet uitgevoerd.",
   "replacedInFiles": "Vervangen in {{count}} bestanden",
   "replaceFailed": "Kan niet vervangen in {{name}}: {{error}}",
-  "undo": "Ongedaan maken"
+  "undo": "Ongedaan maken",
+  "compareNoSavedVersion": "Dit document heeft geen opgeslagen versie om mee te vergelijken.",
+  "compareNoClipboard": "Het klembord bevat geen tekst om te vergelijken.",
+  "compareLoadFailed": "Kan het bestand om te vergelijken niet openen."
 }

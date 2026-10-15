@@ -7,5 +7,6 @@
   "save": "保存",
   "close": "关闭",
   "keepRecovered": "保留恢复的版本",
-  "useDisk": "使用磁盘版本"
+  "useDisk": "使用磁盘版本",
+  "compare": "比较"
 }

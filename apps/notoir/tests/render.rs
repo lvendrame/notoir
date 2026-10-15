@@ -567,3 +567,54 @@ fn search_and_quick_open_snapshot() {
         img.save(out_dir().join("quick-open.png")).unwrap();
     }
 }
+
+#[test]
+fn compare_snapshot() {
+    let d = tempfile::tempdir().unwrap();
+    let notes = d.path().join("notes.md");
+    std::fs::write(
+        &notes,
+        "# Notoir\n\nThe editor is fast.\nIt supports splits.\nGit is optional.\n\n## Compare\n\nSide by side.\nOld ending.\n",
+    )
+    .unwrap();
+    let notes = notes.canonicalize().unwrap();
+    for (theme, name) in [
+        (ThemeId::Midnight, "compare-midnight.png"),
+        (ThemeId::Paper, "compare-paper.png"),
+    ] {
+        let path = notes.clone();
+        let mut app = common::start(move |o| {
+            o.language_override = Some(Language::En);
+            o.theme_override = Some(theme);
+            o.open_paths = vec![(path, None)];
+        });
+        common::settle(&mut app);
+        {
+            let core = &mut app.harness.state_mut().core;
+            let doc = core.workbench.active_document().unwrap();
+            let len = core.workbench.document(doc).unwrap().buffer.len_chars();
+            core.workbench
+                .apply_edit(
+                    doc,
+                    None,
+                    notoir_editor::ChangeSet::replace(
+                        0,
+                        len,
+                        "# Notoir\n\nThe editor is fast.\nIt supports true splits.\nAnd duplicate views.\nGit is optional.\n\n## Compare\n\nSide by side.\n",
+                    ),
+                    notoir_editor::Selection::caret(0),
+                    notoir_editor::EditKind::Other,
+                    notoir_core::events::ChangeOrigin::Reload,
+                    0,
+                )
+                .unwrap();
+        }
+        common::run(&mut app, "compare.currentChanges", serde_json::Value::Null);
+        common::settle(&mut app);
+        app.harness.key_press(egui::Key::F7);
+        app.harness.run_steps(4);
+        if let Ok(img) = app.harness.render() {
+            img.save(out_dir().join(name)).unwrap();
+        }
+    }
+}

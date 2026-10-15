@@ -1,0 +1,18 @@
+{
+  "tab": "Vergleich",
+  "snapshot": "Momentaufnahme",
+  "saved": "{{name}} (gespeichert)",
+  "clipboard": "Zwischenablage",
+  "identical": "Identisch",
+  "filesIdentical": "Die Dateien sind identisch",
+  "computing": "Vergleiche…",
+  "tooLarge": "Zu groß zum Vergleichen",
+  "readOnly": "schreibgeschützt",
+  "copyToRight": "Änderung nach rechts kopieren",
+  "copyToLeft": "Änderung nach links kopieren",
+  "revertHunk": "Änderung zurücksetzen",
+  "overview": "Änderungsübersicht",
+  "unavailable": "Dieser Vergleich ist nicht mehr verfügbar.",
+  "changes_one": "{{count}} Änderung",
+  "changes_other": "{{count}} Änderungen"
+}

@@ -35,5 +35,8 @@
   "jsonSortComments": "排序键会删除此文档中的注释,因此未执行。",
   "replacedInFiles": "已在 {{count}} 个文件中替换",
   "replaceFailed": "无法在 {{name}} 中替换:{{error}}",
-  "undo": "撤消"
+  "undo": "撤消",
+  "compareNoSavedVersion": "此文档没有可比较的已保存版本。",
+  "compareNoClipboard": "剪贴板中没有可比较的文本。",
+  "compareLoadFailed": "无法打开要比较的文件。"
 }

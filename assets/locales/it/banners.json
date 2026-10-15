@@ -7,5 +7,6 @@
   "save": "Salva",
   "close": "Chiudi",
   "keepRecovered": "Mantieni il recuperato",
-  "useDisk": "Usa la versione su disco"
+  "useDisk": "Usa la versione su disco",
+  "compare": "Confronta"
 }

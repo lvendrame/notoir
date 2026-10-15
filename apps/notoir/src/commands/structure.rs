@@ -106,7 +106,7 @@ pub(super) fn specs(out: &mut Specs) {
 }
 
 fn with_view(core: &mut AppCore, f: impl FnOnce(&mut AppCore, ViewId)) -> CommandOutcome {
-    if let Some(v) = core.workbench.active_view() {
+    if let Some(v) = core.workbench.active_editor() {
         f(core, v);
     }
     CommandOutcome::Done

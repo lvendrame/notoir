@@ -1,0 +1,18 @@
+{
+  "tab": "Comparer",
+  "snapshot": "Instantané",
+  "saved": "{{name}} (enregistré)",
+  "clipboard": "Presse-papiers",
+  "identical": "Identiques",
+  "filesIdentical": "Les fichiers sont identiques",
+  "computing": "Comparaison…",
+  "tooLarge": "Trop volumineux pour être comparé",
+  "readOnly": "lecture seule",
+  "copyToRight": "Copier la modification à droite",
+  "copyToLeft": "Copier la modification à gauche",
+  "revertHunk": "Annuler la modification",
+  "overview": "Vue d’ensemble des modifications",
+  "unavailable": "Cette comparaison n’est plus disponible.",
+  "changes_one": "{{count}} modification",
+  "changes_other": "{{count}} modifications"
+}

@@ -277,6 +277,27 @@ impl Renderer<'_, '_> {
                     self.out.activate = Some(view);
                 }
             }
+            (Some(view), Some(notoir_core::view::ViewKind::Diff)) => {
+                let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
+                body_ui.set_clip_rect(body);
+                let o = super::diff_view::show(
+                    &mut body_ui,
+                    self.kit,
+                    self.core,
+                    self.editors,
+                    view,
+                    self.focus_request,
+                    self.context,
+                    self.actions,
+                    self.now,
+                );
+                self.out.editor_focused |= o.focused;
+                self.out.zoom_steps += o.zoom_steps;
+                self.out.cjk.merge(o.cjk);
+                if o.interacted && self.core.workbench.active_view() != Some(view) {
+                    self.out.activate = Some(view);
+                }
+            }
             (Some(view), Some(notoir_core::view::ViewKind::Welcome)) => {
                 let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
                 body_ui.set_clip_rect(body);
@@ -709,6 +730,7 @@ fn banner_bar(
                 crate::icons::Icon::RefreshCw,
                 t!("banners:changed", name = name),
                 vec![
+                    ("banners:compare", "compare.currentChanges"),
                     ("banners:reload", "file.reloadFromDisk"),
                     ("banners:keepMine", "file.keepMine"),
                 ],
@@ -725,6 +747,7 @@ fn banner_bar(
                 crate::icons::Icon::TriangleAlert,
                 t!("banners:recoveredConflict"),
                 vec![
+                    ("banners:compare", "compare.currentChanges"),
                     ("banners:keepRecovered", "file.keepMine"),
                     ("banners:useDisk", "file.useDiskVersion"),
                 ],

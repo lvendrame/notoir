@@ -159,5 +159,10 @@
   },
   "navigation": {
     "minLineDistance": "Saltos do cursor maiores que este número de linhas são registrados para Voltar/Avançar"
+  },
+  "diff": {
+    "maxSize": "Arquivos maiores que isso não são comparados (bytes)",
+    "ignoreTrimWhitespace": "Ignorar alterações de espaço em branco ao comparar",
+    "algorithm": "Algoritmo de diff de linhas"
   }
 }

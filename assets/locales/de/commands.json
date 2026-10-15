@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "Öffnen"
+  },
+  "compare": {
+    "open": "Dateien vergleichen…",
+    "with": "Vergleichen mit…",
+    "select": "Zum Vergleich auswählen",
+    "withSelected": "Mit Auswahl vergleichen",
+    "currentChanges": "Aktuelle Änderungen vergleichen",
+    "nextChange": "Nächste Änderung",
+    "previousChange": "Vorherige Änderung",
+    "toggleIgnoreWhitespace": "Leerraum ignorieren",
+    "toggleIgnoreCase": "Groß-/Kleinschreibung ignorieren",
+    "swapSides": "Seiten tauschen",
+    "copyChangeToRight": "Änderung nach rechts kopieren",
+    "copyChangeToLeft": "Änderung nach links kopieren",
+    "copyHunk": "Änderung kopieren",
+    "revealHunk": "Zur Änderung",
+    "pick": "Vergleichsquelle wählen"
+  },
+  "selection": {
+    "addCursorAbove": "Cursor oberhalb hinzufügen",
+    "addCursorBelow": "Cursor unterhalb hinzufügen",
+    "selectNextOccurrence": "Nächstes Vorkommen hinzufügen",
+    "selectAllOccurrences": "Alle Vorkommen auswählen",
+    "expand": "Auswahl erweitern",
+    "shrink": "Auswahl verkleinern",
+    "columnMode": "Spaltenauswahlmodus"
   }
 }

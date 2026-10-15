@@ -19,13 +19,24 @@ pub enum DragMode {
     Char,
     Word,
     Line,
+    /// Box selection from this (line, display column).
+    Column(usize, usize),
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct Drag {
     /// Range selected by the initial click (word/line for double/triple).
     origin: Range,
     mode: DragMode,
+    /// Alt+click: the ranges that existed before (kept beside the new one).
+    keep: Vec<Range>,
+}
+
+/// Line and display column under a point (columns past the line end count).
+fn line_col_at(cache: &mut ViewCache, m: &Metrics, p: egui::Pos2) -> (usize, usize) {
+    let line = super::line_at_y(cache, m, p.y);
+    let x = p.x - m.text.left() + cache.scroll_x;
+    (line, (x / m.char_w).round().max(0.0) as usize)
 }
 
 fn selection(wb: &Workbench, view: ViewId) -> Selection {
@@ -115,9 +126,12 @@ pub(super) fn handle(
                 let single_line = !p.is_empty()
                     && sel.ranges().len() == 1
                     && !rope.slice(p.from()..p.to()).chars().any(|c| c == '\n');
+                let per_cursor = notoir_editor::multi_cursor::distribute_lines(&sel, &text);
                 edit = if opts.markdown_lists && is_url && single_line {
                     let label: String = rope.slice(p.from()..p.to()).to_string();
                     edit_ops::insert(&sel, &format!("[{label}]({url})"), EditKind::Other)
+                } else if let Some(lines) = per_cursor {
+                    edit_ops::insert_each(&sel, &lines, EditKind::Other)
                 } else {
                     edit_ops::insert(&sel, &text, EditKind::Other)
                 };
@@ -351,6 +365,7 @@ pub(super) fn pointer(
     view: ViewId,
     m: &Metrics,
     tab: usize,
+    column_mode: bool,
     now: f64,
     commands: &mut Vec<CommandInvocation>,
 ) {
@@ -390,9 +405,14 @@ pub(super) fn pointer(
     let pos = pos_at(cache, m, pointer, tab);
     let rope = cache.rope.clone();
     let start = |mode: DragMode, r: Range, cache: &mut ViewCache, wb: &mut Workbench| {
-        cache.drag = Some(Drag { origin: r, mode });
+        cache.drag = Some(Drag {
+            origin: r,
+            mode,
+            keep: Vec::new(),
+        });
         set_selection(wb, view, Selection::single(r));
     };
+    let (alt, shift) = ui.input(|i| (i.modifiers.alt, i.modifiers.shift));
     if response.triple_clicked() {
         start(DragMode::Line, line_at(&rope, pos), cache, wb);
     } else if response.double_clicked() {
@@ -400,30 +420,56 @@ pub(super) fn pointer(
     } else if response.is_pointer_button_down_on() && cache.drag.is_none() {
         if pointer.x < m.text.left() {
             start(DragMode::Line, line_at(&rope, pos), cache, wb);
-        } else if ui.input(|i| i.modifiers.shift) {
+        } else if (alt && shift) || column_mode {
+            // Column selection (Shift+Alt drag, or column mode).
+            let (line, col) = line_col_at(cache, m, pointer);
+            start(DragMode::Column(line, col), Range::caret(pos), cache, wb);
+        } else if alt {
+            // Alt/Option+click adds a caret.
+            let before = selection(wb, view).ranges().to_vec();
+            let mut ranges = before.clone();
+            ranges.push(Range::caret(pos));
+            let n = ranges.len() - 1;
+            cache.drag = Some(Drag {
+                origin: Range::caret(pos),
+                mode: DragMode::Char,
+                keep: before,
+            });
+            set_selection(wb, view, Selection::new(ranges, n));
+        } else if shift {
             let anchor = selection(wb, view).primary().anchor;
             cache.drag = Some(Drag {
                 origin: Range::caret(anchor),
                 mode: DragMode::Char,
+                keep: Vec::new(),
             });
             set_selection(wb, view, Selection::single(Range::new(anchor, pos)));
         } else {
             start(DragMode::Char, Range::caret(pos), cache, wb);
         }
     } else if response.dragged()
-        && let Some(drag) = cache.drag
+        && let Some(drag) = cache.drag.clone()
     {
-        let target = match drag.mode {
-            DragMode::Char => Range::caret(pos),
-            DragMode::Word => word_at(&rope, pos),
-            DragMode::Line => line_at(&rope, pos),
-        };
-        let r = if target.from() < drag.origin.from() {
-            Range::new(drag.origin.to(), target.from())
+        if let DragMode::Column(line, col) = drag.mode {
+            let head = line_col_at(cache, m, pointer);
+            let sel = notoir_editor::multi_cursor::column_selection(&rope, (line, col), head, tab);
+            set_selection(wb, view, sel);
         } else {
-            Range::new(drag.origin.from(), target.to())
-        };
-        set_selection(wb, view, Selection::single(r));
+            let target = match drag.mode {
+                DragMode::Word => word_at(&rope, pos),
+                DragMode::Line => line_at(&rope, pos),
+                _ => Range::caret(pos),
+            };
+            let r = if target.from() < drag.origin.from() {
+                Range::new(drag.origin.to(), target.from())
+            } else {
+                Range::new(drag.origin.from(), target.to())
+            };
+            let mut ranges = drag.keep.clone();
+            ranges.push(r);
+            let n = ranges.len() - 1;
+            set_selection(wb, view, Selection::new(ranges, n));
+        }
         // Auto-scroll near the edges while dragging.
         let edge = if pointer.y < m.text.top() + m.row_h {
             -m.row_h

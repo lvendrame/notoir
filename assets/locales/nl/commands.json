@@ -270,5 +270,31 @@
   },
   "quickOpen": {
     "open": "Openen"
+  },
+  "compare": {
+    "open": "Bestanden vergelijken…",
+    "with": "Vergelijken met…",
+    "select": "Selecteren om te vergelijken",
+    "withSelected": "Vergelijken met selectie",
+    "currentChanges": "Huidige wijzigingen vergelijken",
+    "nextChange": "Volgende wijziging",
+    "previousChange": "Vorige wijziging",
+    "toggleIgnoreWhitespace": "Witruimte negeren",
+    "toggleIgnoreCase": "Hoofdletters negeren",
+    "swapSides": "Kanten wisselen",
+    "copyChangeToRight": "Wijziging naar rechts kopiëren",
+    "copyChangeToLeft": "Wijziging naar links kopiëren",
+    "copyHunk": "Wijziging kopiëren",
+    "revealHunk": "Naar wijziging gaan",
+    "pick": "Vergelijkingsbron kiezen"
+  },
+  "selection": {
+    "addCursorAbove": "Cursor erboven toevoegen",
+    "addCursorBelow": "Cursor eronder toevoegen",
+    "selectNextOccurrence": "Volgende overeenkomst toevoegen",
+    "selectAllOccurrences": "Alle overeenkomsten selecteren",
+    "expand": "Selectie uitbreiden",
+    "shrink": "Selectie verkleinen",
+    "columnMode": "Kolomselectiemodus"
   }
 }

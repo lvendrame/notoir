@@ -109,5 +109,10 @@
     "helpSymbol": "エディター内のシンボルへ移動",
     "helpWorkspaceSymbols": "ワークスペースのシンボル",
     "workspaceSymbolsLater": "ワークスペースのシンボルはまだ利用できません。"
+  },
+  "compare": {
+    "title": "比較",
+    "pickLeft": "比較する最初のファイルを選択",
+    "pickRight": "{{name}} と比較するファイルを選択"
   }
 }

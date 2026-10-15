@@ -35,5 +35,8 @@
   "jsonSortComments": "Ordenar claves eliminaría los comentarios de este documento, así que no se ejecutó.",
   "replacedInFiles": "Reemplazado en {{count}} archivos",
   "replaceFailed": "No se pudo reemplazar en {{name}}: {{error}}",
-  "undo": "Deshacer"
+  "undo": "Deshacer",
+  "compareNoSavedVersion": "Este documento no tiene una versión guardada con la que comparar.",
+  "compareNoClipboard": "El portapapeles no tiene texto que comparar.",
+  "compareLoadFailed": "No se pudo abrir el archivo que comparar."
 }

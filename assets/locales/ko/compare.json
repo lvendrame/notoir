@@ -1,0 +1,17 @@
+{
+  "tab": "비교",
+  "snapshot": "스냅샷",
+  "saved": "{{name}} (저장됨)",
+  "clipboard": "클립보드",
+  "identical": "동일함",
+  "filesIdentical": "파일이 동일합니다",
+  "computing": "비교 중…",
+  "tooLarge": "너무 커서 비교할 수 없음",
+  "readOnly": "읽기 전용",
+  "copyToRight": "변경 내용을 오른쪽으로 복사",
+  "copyToLeft": "변경 내용을 왼쪽으로 복사",
+  "revertHunk": "변경 내용 되돌리기",
+  "overview": "변경 내용 개요",
+  "unavailable": "이 비교는 더 이상 사용할 수 없습니다.",
+  "changes_other": "변경 {{count}}개"
+}
