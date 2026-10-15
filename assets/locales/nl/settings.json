@@ -90,7 +90,8 @@
       "showViewport": "Zichtbaar gebied in minimap",
       "showSearchMarks": "Zoekmarkeringen in minimap",
       "showSelection": "Selectiemarkeringen in minimap",
-      "showBookmarks": "Bladwijzers in de minimap tonen"
+      "showBookmarks": "Bladwijzers in de minimap tonen",
+      "showGitMarks": "Git-wijzigingen tonen in de minimap"
     },
     "folding": "Code samenvouwen inschakelen"
   },
@@ -164,5 +165,19 @@
     "maxSize": "Grotere bestanden worden niet vergeleken (bytes)",
     "ignoreTrimWhitespace": "Witruimtewijzigingen negeren bij vergelijken",
     "algorithm": "Algoritme voor regelvergelijking"
+  },
+  "git": {
+    "enabled": "Git-integratie inschakelen",
+    "autoDetect": "Git-repository’s detecteren bij openen van een werkruimte",
+    "autoFetch": "Automatisch ophalen (fetch)",
+    "pullOnOpen": "Pullen bij openen van een werkruimte",
+    "autoCommit": "Automatisch committen",
+    "confirmSync": "Bevestigen voor synchroniseren",
+    "decorateTabs": "Tabnamen kleuren naar Git-status",
+    "autoFetchPeriod": "Seconden tussen automatisch ophalen",
+    "pullMode": "Hoe pull externe wijzigingen verwerkt",
+    "gutterBase": "Wijzigingsbalken in de marge vergelijken met",
+    "path": "Pad naar git (leeg: uit PATH)",
+    "autoPush": "Automatisch pushen na commits"
   }
 }

@@ -53,6 +53,7 @@ pub enum NotificationSource {
     Settings,
     Storage,
     Recovery,
+    Git,
 }
 
 #[derive(Clone, Debug, PartialEq)]

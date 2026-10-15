@@ -23,7 +23,8 @@
     "scratchpads": "Notas rápidas",
     "autoSave": "Guardado automático",
     "sortLines": "Ordenar líneas",
-    "lineNumbers": "Números de línea"
+    "lineNumbers": "Números de línea",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Barra lateral principal",

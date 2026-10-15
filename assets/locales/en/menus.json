@@ -23,7 +23,8 @@
     "scratchpads": "Scratchpads",
     "autoSave": "Auto Save",
     "sortLines": "Sort Lines",
-    "lineNumbers": "Line Numbers"
+    "lineNumbers": "Line Numbers",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Primary Sidebar",

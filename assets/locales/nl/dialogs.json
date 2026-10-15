@@ -114,5 +114,8 @@
     "title": "Vergelijken",
     "pickLeft": "Kies het eerste bestand om te vergelijken",
     "pickRight": "Kies een bestand om te vergelijken met {{name}}"
+  },
+  "git": {
+    "history": "Bestandsgeschiedenis"
   }
 }

@@ -7,5 +7,6 @@
   "selected": "({{count}}개 선택됨)",
   "spaces": "공백: {{size}}",
   "tabSize": "탭 크기: {{size}}",
-  "plainText": "일반 텍스트"
+  "plainText": "일반 텍스트",
+  "branch": "브랜치: {{name}}"
 }

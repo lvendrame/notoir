@@ -7,5 +7,6 @@
   "selected": "(zaznaczono: {{count}})",
   "spaces": "Spacje: {{size}}",
   "tabSize": "Rozmiar tabulatora: {{size}}",
-  "plainText": "Zwykły tekst"
+  "plainText": "Zwykły tekst",
+  "branch": "Gałąź: {{name}}"
 }

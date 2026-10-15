@@ -1,6 +1,6 @@
 # 13 — Minimap
 
-**Status:** Partial — structural blocks, viewport, search and selection marks, click to centre, drag, wheel, hover line range, context menu (hide, side, scale), hidden in large-file mode and narrow views (M9). Blocks are painted directly for the visible minimap window instead of a cached texture; Git marks (M18), bookmark marks (M15), syntax colours (Phase 2)
+**Status:** Partial — structural blocks, viewport, search and selection marks, click to centre, drag, wheel, hover line range, context menu (hide, side, scale), hidden in large-file mode and narrow views (M9). Blocks are painted directly for the visible minimap window instead of a cached texture; Git marks (M18), bookmark marks (M15). Later: syntax colours (Phase 2)
 
 ## Purpose
 

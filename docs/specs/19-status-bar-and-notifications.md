@@ -1,6 +1,6 @@
 # 19 — Status Bar & Notifications
 
-**Status:** Partial — status bar shell, notifications (M3); document readouts (M4); encoding/line-ending/language pickers (M5); cursor position opens Go to Line, indentation picker (spaces/tabs, tab size, detect, convert) (M10); Git, MCP and indexing items arrive with their milestones
+**Status:** Partial — status bar shell, notifications (M3); document readouts (M4); encoding/line-ending/language pickers (M5); cursor position opens Go to Line, indentation picker (spaces/tabs, tab size, detect, convert) (M10); Git branch item (`main* ↑1 ↓2`, MERGING/REBASING; not clickable until the branch picker, M19) (M18); MCP and indexing items arrive with their milestones
 
 ## Purpose
 

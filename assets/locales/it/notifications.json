@@ -40,5 +40,9 @@
   "compareNoClipboard": "Gli appunti non contengono testo da confrontare.",
   "compareLoadFailed": "Impossibile aprire il file da confrontare.",
   "adminSaveCancelled": "{{name}} non è stato salvato: autorizzazione annullata. Le modifiche sono conservate.",
-  "adminSaveFailed": "Impossibile salvare {{name}} come amministratore"
+  "adminSaveFailed": "Impossibile salvare {{name}} come amministratore",
+  "gitNoHistory": "Nessun commit modifica {{name}}.",
+  "gitFailed": "Git non è riuscito a leggere {{name}}.",
+  "gitNotInRepo": "{{name}} non è in un repository Git.",
+  "gitNotAtRevision": "{{name}} non esiste in quella revisione."
 }

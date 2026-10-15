@@ -90,7 +90,8 @@
       "showViewport": "Zona visible en el minimapa",
       "showSearchMarks": "Marcas de búsqueda en el minimapa",
       "showSelection": "Marcas de selección en el minimapa",
-      "showBookmarks": "Mostrar marcadores en el minimapa"
+      "showBookmarks": "Mostrar marcadores en el minimapa",
+      "showGitMarks": "Mostrar cambios de Git en el minimapa"
     },
     "folding": "Activar plegado de código"
   },
@@ -164,5 +165,19 @@
     "maxSize": "Los archivos más grandes no se comparan (bytes)",
     "ignoreTrimWhitespace": "Ignorar cambios de espacios en blanco al comparar",
     "algorithm": "Algoritmo de diff de líneas"
+  },
+  "git": {
+    "enabled": "Habilitar integración con Git",
+    "autoDetect": "Detectar repositorios Git al abrir un espacio de trabajo",
+    "autoFetch": "Hacer fetch automáticamente",
+    "pullOnOpen": "Hacer pull al abrir un espacio de trabajo",
+    "autoCommit": "Hacer commit automáticamente",
+    "confirmSync": "Confirmar antes de sincronizar",
+    "decorateTabs": "Colorear nombres de pestañas según el estado de Git",
+    "autoFetchPeriod": "Segundos entre fetch automáticos",
+    "pullMode": "Cómo integra pull los cambios remotos",
+    "gutterBase": "Las barras de cambios del margen comparan con",
+    "path": "Ruta del ejecutable git (vacío: desde PATH)",
+    "autoPush": "Hacer push automáticamente tras los commits"
   }
 }

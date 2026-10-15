@@ -284,6 +284,25 @@ pub fn status_bar(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
         .frame(bar_frame(kit))
         .show(ui, |ui| {
             ui.horizontal_centered(|ui| {
+                // Git branch (spec 28): `⎇ main* ↑1 ↓2`.
+                if let Some(branch) = core.git_branch_label() {
+                    ui.add(kit.icon(
+                        ui.ctx(),
+                        Icon::GitBranch,
+                        crate::theme::ICON_SM,
+                        kit.color(Tok::TextSecondary),
+                    ));
+                    let resp = ui.label(
+                        RichText::new(&branch)
+                            .font(crate::fonts::mono(12.0))
+                            .color(kit.color(Tok::TextSecondary)),
+                    );
+                    let a11y = t!("statusbar:branch", name = branch.as_str());
+                    resp.widget_info(|| {
+                        egui::WidgetInfo::labeled(egui::WidgetType::Label, true, &a11y)
+                    });
+                    ui.add_space(8.0);
+                }
                 if let Some(first) = core.keymap.pending() {
                     let keys = first.display(core.platform);
                     ui.label(

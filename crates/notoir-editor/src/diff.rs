@@ -329,6 +329,44 @@ impl Diff {
     }
 }
 
+/// Gutter change bars (Git, spec 28) on the right side of a diff.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum LineChangeKind {
+    Added,
+    Modified,
+    /// Lines removed before `start` (a wedge between lines).
+    Deleted,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct LineChange {
+    pub kind: LineChangeKind,
+    /// Lines `start..end` of the new text (`start == end` for deletions).
+    pub start: usize,
+    pub end: usize,
+}
+
+impl Diff {
+    /// Change bars for the right (new) side.
+    pub fn line_changes(&self) -> Vec<LineChange> {
+        self.hunks
+            .iter()
+            .map(|h| {
+                let kind = match (h.left.is_empty(), h.right.is_empty()) {
+                    (true, _) => LineChangeKind::Added,
+                    (_, true) => LineChangeKind::Deleted,
+                    _ => LineChangeKind::Modified,
+                };
+                LineChange {
+                    kind,
+                    start: h.right.start,
+                    end: h.right.end,
+                }
+            })
+            .collect()
+    }
+}
+
 /// Char offset where `line` starts (the text length past the last line).
 fn line_start(rope: &Rope, line: usize) -> usize {
     if line >= rope.len_lines() {
@@ -425,6 +463,21 @@ mod tests {
             ..opts()
         };
         assert!(diff_text("ABC", "abc", &o).is_identical());
+    }
+
+    #[test]
+    fn line_changes_for_the_gutter() {
+        let d = diff_text("a\nb\nc\nd", "a\nB\nc\nnew\n", &opts());
+        let k: Vec<_> = d
+            .line_changes()
+            .iter()
+            .map(|c| (c.kind, c.start, c.end))
+            .collect();
+        assert_eq!(k[0], (LineChangeKind::Modified, 1, 2));
+        let d = diff_text("a\nb\nc", "a\nc", &opts());
+        assert_eq!(d.line_changes()[0].kind, LineChangeKind::Deleted);
+        let d = diff_text("a", "a\nb", &opts());
+        assert_eq!(d.line_changes()[0].kind, LineChangeKind::Added);
     }
 
     #[test]

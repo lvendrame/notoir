@@ -13,5 +13,15 @@
     "trailing": "Um nome não pode terminar com ponto ou espaço.",
     "tooLong": "O nome é muito longo.",
     "exists": "Já existe um arquivo ou pasta com este nome."
+  },
+  "gitStatus": "{{name}}: {{status}}",
+  "git": {
+    "modified": "Modificado",
+    "added": "Adicionado",
+    "untracked": "Não rastreado",
+    "deleted": "Excluído",
+    "conflicted": "Em conflito",
+    "renamed": "Renomeado",
+    "ignored": "Ignorado"
   }
 }

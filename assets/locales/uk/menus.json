@@ -23,7 +23,8 @@
     "scratchpads": "Чернетки",
     "autoSave": "Автозбереження",
     "sortLines": "Сортувати рядки",
-    "lineNumbers": "Номери рядків"
+    "lineNumbers": "Номери рядків",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Основна бічна панель",

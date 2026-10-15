@@ -299,5 +299,13 @@
     "expand": "Auswahl erweitern",
     "shrink": "Auswahl verkleinern",
     "columnMode": "Spaltenauswahlmodus"
+  },
+  "git": {
+    "compareWithHead": "Mit HEAD vergleichen",
+    "compareWithRevision": "Mit Revision vergleichen…",
+    "fileHistory": "Dateiverlauf",
+    "openFileAtRevision": "Datei in Revision öffnen…",
+    "refresh": "Git-Status aktualisieren",
+    "historyPick": "Revision wählen"
   }
 }

@@ -299,5 +299,13 @@
     "expand": "Rozszerz zaznaczenie",
     "shrink": "Zmniejsz zaznaczenie",
     "columnMode": "Tryb zaznaczania kolumnowego"
+  },
+  "git": {
+    "compareWithHead": "Porównaj z HEAD",
+    "compareWithRevision": "Porównaj z rewizją…",
+    "fileHistory": "Historia pliku",
+    "openFileAtRevision": "Otwórz plik w rewizji…",
+    "refresh": "Odśwież stan Git",
+    "historyPick": "Wybierz rewizję"
   }
 }

@@ -114,5 +114,8 @@
     "title": "比较",
     "pickLeft": "选择要比较的第一个文件",
     "pickRight": "选择要与 {{name}} 比较的文件"
+  },
+  "git": {
+    "history": "文件历史记录"
   }
 }

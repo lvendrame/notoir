@@ -561,6 +561,13 @@ impl Schema {
             C::Editor,
         );
         def(
+            "editor.minimap.showGitMarks",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
             "editor.minimap.showBookmarks",
             T::Bool,
             V::Bool(true),
@@ -755,6 +762,53 @@ impl Schema {
             Scopes::USER_ONLY,
             C::Workspace,
         );
+        // Git (spec 28). Nothing runs on the network unless enabled.
+        for (key, default) in [
+            ("git.enabled", true),
+            ("git.autoDetect", true),
+            ("git.autoFetch", false),
+            ("git.pullOnOpen", false),
+            ("git.autoCommit", false),
+            ("git.confirmSync", true),
+            ("git.decorateTabs", true),
+        ] {
+            def(key, T::Bool, V::Bool(default), Scopes::NO_LANGUAGE, C::Git);
+        }
+        def(
+            "git.autoFetchPeriod",
+            T::Int {
+                min: 30,
+                max: 86_400,
+            },
+            V::Int(300),
+            Scopes::NO_LANGUAGE,
+            C::Git,
+        );
+        def(
+            "git.pullMode",
+            T::Enum(&["ffOnly", "rebase", "merge"]),
+            s_("ffOnly"),
+            Scopes::NO_LANGUAGE,
+            C::Git,
+        );
+        def(
+            "git.gutterBase",
+            T::Enum(&["index", "head"]),
+            s_("index"),
+            Scopes::NO_LANGUAGE,
+            C::Git,
+        );
+        def("git.path", T::Str, s_(""), Scopes::USER_ONLY, C::Git);
+        // Restricted: a cloned repo must not push on its own.
+        s.define(SettingDef {
+            key: "git.autoPush",
+            ty: T::Bool,
+            default: V::Bool(false),
+            scopes: Scopes::NO_LANGUAGE,
+            category: C::Git,
+            restricted: true,
+            tags: &["push"],
+        });
         // MCP (restricted: a cloned repo must not start servers)
         s.define(SettingDef {
             key: "mcp.autoStart",

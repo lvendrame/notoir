@@ -23,7 +23,8 @@
     "scratchpads": "Черновики",
     "autoSave": "Автосохранение",
     "sortLines": "Сортировать строки",
-    "lineNumbers": "Номера строк"
+    "lineNumbers": "Номера строк",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Основная боковая панель",

@@ -90,7 +90,8 @@
       "showViewport": "Sichtbereich in der Minimap",
       "showSearchMarks": "Suchmarken in der Minimap",
       "showSelection": "Auswahlmarken in der Minimap",
-      "showBookmarks": "Lesezeichen in der Minimap anzeigen"
+      "showBookmarks": "Lesezeichen in der Minimap anzeigen",
+      "showGitMarks": "Git-Änderungen in der Minimap anzeigen"
     },
     "folding": "Code-Faltung aktivieren"
   },
@@ -164,5 +165,19 @@
     "maxSize": "Größere Dateien werden nicht verglichen (Bytes)",
     "ignoreTrimWhitespace": "Leerraumänderungen beim Vergleichen ignorieren",
     "algorithm": "Zeilen-Diff-Algorithmus"
+  },
+  "git": {
+    "enabled": "Git-Integration aktivieren",
+    "autoDetect": "Git-Repositorys beim Öffnen eines Arbeitsbereichs erkennen",
+    "autoFetch": "Automatisch abrufen (fetch)",
+    "pullOnOpen": "Beim Öffnen eines Arbeitsbereichs pullen",
+    "autoCommit": "Automatisch committen",
+    "confirmSync": "Vor dem Synchronisieren bestätigen",
+    "decorateTabs": "Tab-Namen nach Git-Status einfärben",
+    "autoFetchPeriod": "Sekunden zwischen automatischen Abrufen",
+    "pullMode": "Wie Pull entfernte Änderungen übernimmt",
+    "gutterBase": "Änderungsbalken im Rand vergleichen mit",
+    "path": "Pfad zur git-Programmdatei (leer: aus PATH)",
+    "autoPush": "Nach Commits automatisch pushen"
   }
 }

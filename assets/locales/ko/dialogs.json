@@ -114,5 +114,8 @@
     "title": "비교",
     "pickLeft": "비교할 첫 번째 파일 선택",
     "pickRight": "{{name}}과(와) 비교할 파일 선택"
+  },
+  "git": {
+    "history": "파일 기록"
   }
 }

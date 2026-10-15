@@ -40,5 +40,9 @@
   "compareNoClipboard": "Schowek nie zawiera tekstu do porównania.",
   "compareLoadFailed": "Nie można otworzyć pliku do porównania.",
   "adminSaveCancelled": "Nie zapisano {{name}}: anulowano autoryzację. Zmiany zostały zachowane.",
-  "adminSaveFailed": "Nie można zapisać {{name}} jako administrator"
+  "adminSaveFailed": "Nie można zapisać {{name}} jako administrator",
+  "gitNoHistory": "Żaden commit nie zmienia {{name}}.",
+  "gitFailed": "Git nie mógł odczytać {{name}}.",
+  "gitNotInRepo": "{{name}} nie jest w repozytorium Git.",
+  "gitNotAtRevision": "{{name}} nie istnieje w tej rewizji."
 }

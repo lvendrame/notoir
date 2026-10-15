@@ -320,6 +320,17 @@ impl eframe::App for NotoirApp {
         self.core.workspace_tick();
         self.core.search_tick();
         self.core.compare_tick();
+        self.core.git_tick();
+        if self.core.git_gutter_pending() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(
+                crate::git::GUTTER_DEBOUNCE_MS,
+            ));
+        }
+        if let Some(due) = self.core.git_next_due() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(
+                due.saturating_sub(now).max(1),
+            ));
+        }
         if self.core.compare_needs_repaint() {
             ctx.request_repaint_after(std::time::Duration::from_millis(
                 crate::compare::DEBOUNCE_MS,
@@ -368,6 +379,9 @@ impl eframe::App for NotoirApp {
         let focused = ctx.input(|i| i.viewport().focused.unwrap_or(true));
         if self.ui.window_focused && !focused {
             self.core.window_focus_lost();
+        }
+        if !self.ui.window_focused && focused {
+            self.core.git_refresh_soon();
         }
         self.ui.window_focused = focused;
         if ctx.input(|i| i.viewport().close_requested()) {
@@ -593,6 +607,7 @@ impl eframe::App for NotoirApp {
                     self.core.autosave_doc_changed(*doc);
                 }
                 notoir_core::AppEvent::DocumentSaved { doc } => {
+                    self.core.git_refresh_soon();
                     if self
                         .core
                         .workbench

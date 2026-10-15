@@ -114,5 +114,8 @@
     "title": "Karşılaştır",
     "pickLeft": "Karşılaştırılacak ilk dosyayı seçin",
     "pickRight": "{{name}} ile karşılaştırılacak dosyayı seçin"
+  },
+  "git": {
+    "history": "Dosya Geçmişi"
   }
 }

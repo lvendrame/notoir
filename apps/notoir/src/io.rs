@@ -50,6 +50,8 @@ pub enum IoResult {
     Search(Box<(u64, notoir_workspace::search::Batch)>),
     /// Replace in closed files finished: (changed, failed with error).
     ReplaceDone(Box<ReplaceOutcome>),
+    /// A Git operation finished.
+    Git(Box<crate::git::GitResult>),
     /// Another launch forwarded its command line (single instance).
     Instance(notoir_platform::single_instance::InstanceRequest),
 }

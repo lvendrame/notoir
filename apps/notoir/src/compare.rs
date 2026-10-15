@@ -45,6 +45,10 @@ pub enum CompareSource {
     SavedVersion(DocumentId),
     /// Internal text (recovery, MCP preview), read-only.
     Text { title: String, text: Arc<str> },
+    /// The file as committed in HEAD, read-only (spec 28).
+    GitHead(PathBuf),
+    /// The file at any commit-ish, read-only.
+    GitRevision(PathBuf, String),
 }
 
 /// What a read-only snapshot document is called.
@@ -53,6 +57,8 @@ enum SnapshotTitle {
     Saved(String),
     Clipboard,
     Text(String),
+    /// File name and revision label (`HEAD`, short SHA).
+    Revision(String, String),
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -137,6 +143,23 @@ pub struct CompareState {
     titles: HashMap<DocumentId, SnapshotTitle>,
 }
 
+fn file_label(p: &std::path::Path) -> String {
+    p.file_name().map_or_else(
+        || p.display().to_string(),
+        |n| n.to_string_lossy().into_owned(),
+    )
+}
+
+/// `HEAD` stays; full SHAs shorten to 7 chars (`<sha>~1` → `abc1234~1`).
+fn short_rev(rev: &str) -> String {
+    let hex = rev.chars().take_while(char::is_ascii_hexdigit).count();
+    if hex == 40 {
+        format!("{}{}", &rev[..7], &rev[40..])
+    } else {
+        rev.to_owned()
+    }
+}
+
 impl AppCore {
     fn diff_options(&self) -> DiffOptions {
         DiffOptions {
@@ -158,6 +181,7 @@ impl AppCore {
                 SnapshotTitle::Saved(name) => t!("compare:saved", name = name),
                 SnapshotTitle::Clipboard => t!("compare:clipboard"),
                 SnapshotTitle::Text(title) => title.clone(),
+                SnapshotTitle::Revision(name, rev) => format!("{name} ({rev})"),
             });
         }
         let s = self.compare.sessions.values().find(|s| s.doc == doc)?;
@@ -179,6 +203,8 @@ impl AppCore {
             CompareSource::Clipboard => t!("compare:clipboard"),
             CompareSource::SavedVersion(d) => t!("compare:saved", name = self.document_title(*d)),
             CompareSource::Text { title, .. } => title.clone(),
+            CompareSource::GitHead(p) => format!("{} (HEAD)", file_label(p)),
+            CompareSource::GitRevision(p, rev) => format!("{} ({})", file_label(p), short_rev(rev)),
         }
     }
 
@@ -276,12 +302,82 @@ impl AppCore {
                     }
                 }
             }
+            CompareSource::GitHead(path) => self.resolve_revision(id, left, path, "HEAD".into()),
+            CompareSource::GitRevision(path, rev) => self.resolve_revision(id, left, path, rev),
             CompareSource::Text { title, text } => Slot::Ready(self.compare_snapshot(
                 SnapshotTitle::Text(title),
                 &text,
                 LanguageId::PLAINTEXT,
             )),
         }
+    }
+
+    fn resolve_revision(&mut self, id: u64, left: bool, path: PathBuf, rev: String) -> Slot {
+        let purpose = crate::git::BlobPurpose::Compare {
+            id,
+            left,
+            path,
+            rev,
+        };
+        if self.git_read_blob(purpose) {
+            Slot::Waiting
+        } else {
+            Slot::Failed
+        }
+    }
+
+    /// A Git revision side finished loading (`None`: the read failed).
+    pub fn compare_revision_loaded(
+        &mut self,
+        id: u64,
+        left: bool,
+        path: &std::path::Path,
+        rev: &str,
+        text: Option<String>,
+    ) {
+        let slot = match text {
+            Some(text) => {
+                let language =
+                    notoir_editor::language::detect(Some(&path.to_string_lossy()), "", &[]);
+                Slot::Ready(self.compare_snapshot(
+                    SnapshotTitle::Revision(file_label(path), short_rev(rev)),
+                    &text,
+                    language,
+                ))
+            }
+            None => Slot::Failed,
+        };
+        self.set_slot(id, left, slot);
+    }
+
+    /// Open File at Revision: a read-only tab.
+    pub fn open_revision(&mut self, path: &std::path::Path, rev: &str, text: &str) {
+        let language = notoir_editor::language::detect(Some(&path.to_string_lossy()), "", &[]);
+        let doc = self.compare_snapshot(
+            SnapshotTitle::Revision(file_label(path), short_rev(rev)),
+            text,
+            language,
+        );
+        let group = self.workbench.layout.active_group;
+        if let Ok(v) = self
+            .workbench
+            .open_view(doc, group, TabPosition::AfterActive)
+        {
+            self.effects.push(Effect::FocusEditor(v));
+        }
+    }
+
+    fn set_slot(&mut self, id: u64, left: bool, slot: Slot) {
+        if let Some(p) = self.compare.pending.iter_mut().find(|p| p.id == id) {
+            if left {
+                p.left = slot;
+            } else {
+                p.right = slot;
+            }
+        } else if let Slot::Ready(doc) = slot {
+            self.drop_compare_doc(doc);
+        }
+        self.finish_pending(id);
     }
 
     /// Opens a diff tab of `left` ↔ `right` once both sides are available.
@@ -352,16 +448,7 @@ impl AppCore {
                 Slot::Failed
             }
         };
-        if let Some(p) = self.compare.pending.iter_mut().find(|p| p.id == id) {
-            if left {
-                p.left = slot;
-            } else {
-                p.right = slot;
-            }
-        } else if let Slot::Ready(doc) = slot {
-            self.drop_compare_doc(doc);
-        }
-        self.finish_pending(id);
+        self.set_slot(id, left, slot);
     }
 
     fn drop_compare_doc(&mut self, doc: DocumentId) {
@@ -508,6 +595,9 @@ impl AppCore {
     /// Per frame: closes sessions whose tab closed, collects worker results
     /// and re-diffs edited sides.
     pub fn compare_tick(&mut self) {
+        // Snapshot tabs (Open at Revision) that were closed.
+        let wb = &self.workbench;
+        self.compare.titles.retain(|d, _| wb.document(*d).is_some());
         let tabs: Vec<ViewId> = self.compare.sessions.keys().copied().collect();
         for tab in tabs {
             if self.workbench.view(tab).is_none() {

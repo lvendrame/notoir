@@ -40,5 +40,9 @@
   "compareNoClipboard": "A área de transferência não tem texto para comparar.",
   "compareLoadFailed": "Não foi possível abrir o arquivo para comparar.",
   "adminSaveCancelled": "{{name}} não foi salvo: a autorização foi cancelada. Suas alterações foram mantidas.",
-  "adminSaveFailed": "Não foi possível salvar {{name}} como administrador"
+  "adminSaveFailed": "Não foi possível salvar {{name}} como administrador",
+  "gitNoHistory": "Nenhum commit altera {{name}}.",
+  "gitFailed": "O Git não conseguiu ler {{name}}.",
+  "gitNotInRepo": "{{name}} não está em um repositório Git.",
+  "gitNotAtRevision": "{{name}} não existe nessa revisão."
 }

@@ -13,5 +13,15 @@
     "trailing": "이름은 마침표나 공백으로 끝날 수 없습니다.",
     "tooLong": "이름이 너무 깁니다.",
     "exists": "같은 이름의 파일이나 폴더가 이미 있습니다."
+  },
+  "gitStatus": "{{name}}: {{status}}",
+  "git": {
+    "modified": "수정됨",
+    "added": "추가됨",
+    "untracked": "추적 안 됨",
+    "deleted": "삭제됨",
+    "conflicted": "충돌",
+    "renamed": "이름 바뀜",
+    "ignored": "무시됨"
   }
 }

@@ -114,5 +114,8 @@
     "title": "Confronta",
     "pickLeft": "Scegli il primo file da confrontare",
     "pickRight": "Scegli un file da confrontare con {{name}}"
+  },
+  "git": {
+    "history": "Cronologia file"
   }
 }

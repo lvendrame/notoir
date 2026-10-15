@@ -13,5 +13,15 @@
     "trailing": "Ad nokta veya boşlukla bitemez.",
     "tooLong": "Ad çok uzun.",
     "exists": "Bu adda bir dosya veya klasör zaten var."
+  },
+  "gitStatus": "{{name}}: {{status}}",
+  "git": {
+    "modified": "Değiştirildi",
+    "added": "Eklendi",
+    "untracked": "İzlenmiyor",
+    "deleted": "Silindi",
+    "conflicted": "Çakışma",
+    "renamed": "Yeniden adlandırıldı",
+    "ignored": "Yok sayıldı"
   }
 }

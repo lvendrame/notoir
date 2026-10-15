@@ -95,6 +95,8 @@ pub struct StartOptions {
     pub wait_for_fonts: bool,
     /// File dialogs (native unless a test scripts them).
     pub dialogs: Option<std::sync::Arc<dyn crate::files::Dialogs>>,
+    /// Git backend (git2 unless a test replaces it).
+    pub git_backend: Option<std::sync::Arc<dyn notoir_git::GitBackend>>,
     /// Administrator authorization (native unless a test scripts it).
     pub elevation: Option<std::sync::Arc<dyn notoir_platform::elevation::Elevation>>,
     /// Files from the command line, with optional `--goto` line/column.
@@ -117,6 +119,7 @@ impl StartOptions {
             wait_for_fonts: false,
             dialogs: None,
             elevation: None,
+            git_backend: None,
             open_paths: Vec::new(),
             restore_session: false,
             first_run: false,
@@ -160,6 +163,9 @@ pub struct AppCore {
     pub fs: IoQueue,
     /// The workspace index walk (long-running, separate from listings).
     pub index_queue: IoQueue,
+    /// Git operations, one at a time (spec 28 per-repo queue).
+    pub git_queue: IoQueue,
+    pub git: crate::git::GitState,
     /// The Explorer tree had keyboard focus last frame.
     pub explorer_focused: bool,
     pub recovery: crate::recovery::RecoveryState,
@@ -298,6 +304,15 @@ impl AppCore {
                 let w = wake.clone();
                 move || w()
             }),
+            git_queue: IoQueue::start({
+                let w = wake.clone();
+                move || w()
+            }),
+            git: crate::git::GitState::new(
+                opts.git_backend
+                    .clone()
+                    .unwrap_or_else(|| std::sync::Arc::new(notoir_git::Git2Backend)),
+            ),
             index_queue: IoQueue::start(move || wake()),
             workspace: None,
             ws_generation: 0,
@@ -510,8 +525,10 @@ impl AppCore {
                 show_search: s.bool("editor.minimap.showSearchMarks", None),
                 show_selection: s.bool("editor.minimap.showSelection", None),
                 show_bookmarks: s.bool("editor.minimap.showBookmarks", None),
+                show_git: s.bool("editor.minimap.showGitMarks", None),
             }),
             diff: None,
+            git_changes: doc.and_then(|d| self.git_changes(d.id)),
             set_scroll_px: None,
             column_mode: self.column_mode,
         }
@@ -553,7 +570,8 @@ impl AppCore {
                     .is_some_and(|v| v.kind == notoir_core::view::ViewKind::Diff),
             )
             .set_bool("compareSelected", self.compare.selected.is_some())
-            .set_bool("columnSelection", self.column_mode);
+            .set_bool("columnSelection", self.column_mode)
+            .set_bool("gitRepo", self.git.repo.is_some());
         if let Some(view) = self
             .workbench
             .active_editor()
@@ -708,6 +726,7 @@ impl AppCore {
         let mut results = self.io.drain();
         results.extend(self.fs.drain());
         results.extend(self.index_queue.drain());
+        results.extend(self.git_queue.drain());
         for result in results {
             match result {
                 IoResult::FilesPicked(paths) => {
@@ -736,6 +755,7 @@ impl AppCore {
                 IoResult::FolderPicked(None) => {}
                 IoResult::Workspace(r) => self.handle_workspace(r),
                 IoResult::DocsChanged(paths) => self.check_changed_paths(&paths),
+                IoResult::Git(r) => self.handle_git(*r),
                 IoResult::DiskChecked(r) => self.handle_disk_check(*r),
                 IoResult::RecoveryWriteFailed { error } => self.recovery_write_failed(error),
                 IoResult::ConfigReloaded(files) => self.apply_config(*files),
@@ -771,6 +791,7 @@ impl AppCore {
         self.io.wait_idle(Duration::from_secs(5))
             & self.fs.wait_idle(Duration::from_secs(5))
             & self.index_queue.wait_idle(Duration::from_secs(5))
+            & self.git_queue.wait_idle(Duration::from_secs(5))
     }
 }
 

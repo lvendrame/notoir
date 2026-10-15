@@ -13,5 +13,15 @@
     "trailing": "A name cannot end with a dot or a space.",
     "tooLong": "The name is too long.",
     "exists": "A file or folder with this name already exists."
+  },
+  "gitStatus": "{{name}}: {{status}}",
+  "git": {
+    "modified": "Modified",
+    "added": "Added",
+    "untracked": "Untracked",
+    "deleted": "Deleted",
+    "conflicted": "Conflicted",
+    "renamed": "Renamed",
+    "ignored": "Ignored"
   }
 }

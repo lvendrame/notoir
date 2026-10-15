@@ -1,6 +1,6 @@
 # 28 — Git & Source Control
 
-**Status:** Not started — M18, M19
+**Status:** Partial — `notoir-git` read backend (discover, status with renames/untracked/limit, HEAD branch/detached/ahead-behind/merge-rebase state, index/HEAD/revision blobs, file log) on a serialized Git queue; detection on workspace open; status refresh debounced 500 ms after work-tree, index, HEAD and ref changes, saves and window focus; Explorer badges, tab tint, status bar branch, gutter bars against the index (or HEAD) with 300 ms debounce, minimap marks; Compare with HEAD / Revision, File History, Open File at Revision; no network Git (M18). Later: Source Control panel, stage/commit/discard, branches, network operations, clone/init, Sync Notes (M19); gutter peek with Revert/Stage Change; nested repos (`git.scanNestedRepos`)
 
 ## Purpose
 

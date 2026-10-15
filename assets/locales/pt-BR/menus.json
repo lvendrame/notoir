@@ -23,7 +23,8 @@
     "scratchpads": "Rascunhos",
     "autoSave": "Salvamento Automático",
     "sortLines": "Ordenar Linhas",
-    "lineNumbers": "Números de Linha"
+    "lineNumbers": "Números de Linha",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Barra Lateral Principal",

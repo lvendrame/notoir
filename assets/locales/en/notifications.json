@@ -40,5 +40,9 @@
   "compareNoClipboard": "The clipboard has no text to compare.",
   "compareLoadFailed": "Could not open the file to compare.",
   "adminSaveCancelled": "{{name}} was not saved: authorization was cancelled. Your changes are kept.",
-  "adminSaveFailed": "Could not save {{name}} as administrator"
+  "adminSaveFailed": "Could not save {{name}} as administrator",
+  "gitNoHistory": "No commits touch {{name}}.",
+  "gitFailed": "Git could not read {{name}}.",
+  "gitNotInRepo": "{{name}} is not in a Git repository.",
+  "gitNotAtRevision": "{{name}} does not exist at that revision."
 }

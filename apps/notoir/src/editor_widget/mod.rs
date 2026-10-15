@@ -110,6 +110,8 @@ pub struct EditorOptions {
     pub fold_ranges: Option<std::sync::Arc<Vec<notoir_editor::folding::FoldRange>>>,
     /// A pane of a diff tab: changed lines, intra-line changes and fillers.
     pub diff: Option<DiffDecor>,
+    /// Git change bars against the index / HEAD (spec 28).
+    pub git_changes: Option<std::sync::Arc<Vec<notoir_editor::diff::LineChange>>>,
     /// Scroll to these pixel offsets (vertical, horizontal) this frame
     /// (synchronized diff panes).
     pub set_scroll_px: Option<(f32, f32)>,

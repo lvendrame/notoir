@@ -450,6 +450,20 @@ pub fn contrast(a: Color32, b: Color32) -> f32 {
 }
 
 /// The theme token for a syntax class (`None` = plain text colour).
+/// Colour token of a Git status (spec 07 §Git Decorations).
+pub fn git_token(s: notoir_git::FileStatus) -> Tok {
+    use notoir_git::FileStatus as F;
+    match s {
+        F::Modified => Tok::GitModified,
+        F::Added => Tok::GitAdded,
+        F::Untracked => Tok::GitUntracked,
+        F::Deleted => Tok::GitDeleted,
+        F::Conflicted => Tok::GitConflict,
+        F::Renamed => Tok::GitRenamed,
+        F::Ignored => Tok::GitIgnored,
+    }
+}
+
 pub fn syntax_token(kind: notoir_editor::syntax::TokenKind) -> Option<Tok> {
     use notoir_editor::syntax::TokenKind as K;
     Some(match kind {

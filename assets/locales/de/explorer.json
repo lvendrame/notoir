@@ -13,5 +13,15 @@
     "trailing": "Ein Name darf nicht mit Punkt oder Leerzeichen enden.",
     "tooLong": "Der Name ist zu lang.",
     "exists": "Eine Datei oder ein Ordner mit diesem Namen existiert bereits."
+  },
+  "gitStatus": "{{name}}: {{status}}",
+  "git": {
+    "modified": "Geändert",
+    "added": "Hinzugefügt",
+    "untracked": "Nicht verfolgt",
+    "deleted": "Gelöscht",
+    "conflicted": "Konflikt",
+    "renamed": "Umbenannt",
+    "ignored": "Ignoriert"
   }
 }

@@ -299,5 +299,13 @@
     "expand": "Seçimi Genişlet",
     "shrink": "Seçimi Daralt",
     "columnMode": "Sütun Seçim Modu"
+  },
+  "git": {
+    "compareWithHead": "HEAD ile Karşılaştır",
+    "compareWithRevision": "Revizyonla Karşılaştır…",
+    "fileHistory": "Dosya Geçmişi",
+    "openFileAtRevision": "Dosyayı Revizyonda Aç…",
+    "refresh": "Git Durumunu Yenile",
+    "historyPick": "Revizyon Seç"
   }
 }

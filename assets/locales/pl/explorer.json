@@ -13,5 +13,15 @@
     "trailing": "Nazwa nie może kończyć się kropką ani spacją.",
     "tooLong": "Nazwa jest za długa.",
     "exists": "Plik lub folder o tej nazwie już istnieje."
+  },
+  "gitStatus": "{{name}}: {{status}}",
+  "git": {
+    "modified": "Zmodyfikowany",
+    "added": "Dodany",
+    "untracked": "Nieśledzony",
+    "deleted": "Usunięty",
+    "conflicted": "Konflikt",
+    "renamed": "Zmieniona nazwa",
+    "ignored": "Ignorowany"
   }
 }

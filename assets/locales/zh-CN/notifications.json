@@ -40,5 +40,9 @@
   "compareNoClipboard": "剪贴板中没有可比较的文本。",
   "compareLoadFailed": "无法打开要比较的文件。",
   "adminSaveCancelled": "未保存 {{name}}:已取消授权。您的更改已保留。",
-  "adminSaveFailed": "无法以管理员身份保存 {{name}}"
+  "adminSaveFailed": "无法以管理员身份保存 {{name}}",
+  "gitNoHistory": "没有提交修改过 {{name}}。",
+  "gitFailed": "Git 无法读取 {{name}}。",
+  "gitNotInRepo": "{{name}} 不在 Git 仓库中。",
+  "gitNotAtRevision": "{{name}} 在该修订版本中不存在。"
 }

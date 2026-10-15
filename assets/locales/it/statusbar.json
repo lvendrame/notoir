@@ -7,5 +7,6 @@
   "selected": "({{count}} selezionati)",
   "spaces": "Spazi: {{size}}",
   "tabSize": "Dimensione tabulazione: {{size}}",
-  "plainText": "Testo normale"
+  "plainText": "Testo normale",
+  "branch": "Branch: {{name}}"
 }

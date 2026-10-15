@@ -134,6 +134,21 @@ fn context_items(core: &AppCore, row: &Row) -> Vec<MenuItem> {
             item("compare.withSelected"),
             MenuItem::Separator,
             reveal,
+            MenuItem::Separator,
+            // Only for files in a Git repository.
+            if core.git_rel(&row.path).is_some() {
+                MenuItem::Submenu {
+                    label: "menus:sub.git",
+                    items: vec![
+                        item("git.compareWithHead"),
+                        item("git.fileHistory"),
+                        item("git.compareWithRevision"),
+                        item("git.openFileAtRevision"),
+                    ],
+                }
+            } else {
+                MenuItem::Separator
+            },
         ],
         NodeKind::Dir => {
             let mut v = vec![item("explorer.newFile"), item("explorer.newFolder")];
@@ -479,11 +494,55 @@ fn node_row(
         NodeKind::File => file_icon(&row.name),
     };
     let dim = row.ignored && dim_ignored;
+    let git = core.git_status_of(&row.path, row.kind == NodeKind::Dir);
     let text_color = if dim {
         kit.color(Tok::TextTertiary)
+    } else if let Some(s) = git.filter(|_| row.kind == NodeKind::File) {
+        kit.color(crate::theme::git_token(s))
     } else {
         kit.color(Tok::TextPrimary)
     };
+    // Git: a letter badge for files, a dot in the strongest child colour
+    // for folders (spec 07); colour is never the only signal.
+    let mut badge_w = 0.0;
+    if let Some(s) = git.filter(|_| !renaming_row(core, row)) {
+        let c = kit.color(crate::theme::git_token(s));
+        let bx = rect.right() - 14.0;
+        if row.kind == NodeKind::File {
+            painter.text(
+                Pos2::new(bx, cy),
+                egui::Align2::CENTER_CENTER,
+                s.letter(),
+                egui::FontId::monospace(11.5),
+                c,
+            );
+        } else {
+            painter.circle_filled(Pos2::new(bx, cy), 3.0, c);
+            // Deleted files show in their folder as a count.
+            let deleted = core
+                .git_rel(&row.path)
+                .map_or(0, |rel| core.git.status.deleted_in(&rel));
+            if deleted > 0 {
+                painter.text(
+                    Pos2::new(bx - 8.0, cy),
+                    egui::Align2::RIGHT_CENTER,
+                    format!("D{deleted}"),
+                    egui::FontId::monospace(10.5),
+                    kit.color(Tok::GitDeleted),
+                );
+                badge_w = 44.0;
+            }
+        }
+        badge_w = f32::max(badge_w, 24.0);
+        let r = Rect::from_center_size(Pos2::new(bx, cy), Vec2::splat(14.0));
+        let label = t!(
+            "explorer:gitStatus",
+            name = row.name.as_str(),
+            status = t!(git_status_key(s))
+        );
+        let b = ui.interact(r, ui.id().with(("git-badge", &row.path)), Sense::hover());
+        b.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Label, true, &label));
+    }
     let icon_color = if dim {
         kit.color(Tok::TextTertiary)
     } else {
@@ -544,7 +603,13 @@ fn node_row(
             );
         }
         let galley = ui.fonts_mut(|f| f.layout_job(job));
-        painter.galley(Pos2::new(x, cy - galley.size().y / 2.0), galley, text_color);
+        // The name stops before the Git badge.
+        let clip = Rect::from_min_max(rect.min, Pos2::new(rect.right() - badge_w, rect.bottom()));
+        painter.with_clip_rect(clip).galley(
+            Pos2::new(x, cy - galley.size().y / 2.0),
+            galley,
+            text_color,
+        );
     }
     // The row label for accessibility and tests.
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &row.name));
@@ -841,5 +906,31 @@ fn drag_and_drop(
             );
         }
         state.drag = None;
+    }
+}
+
+fn renaming_row(core: &AppCore, row: &Row) -> bool {
+    core.workspace
+        .as_ref()
+        .and_then(|w| w.edit.as_ref())
+        .is_some_and(|e| {
+            e.kind
+                == EditKind::Rename {
+                    path: row.path.clone(),
+                }
+        })
+}
+
+/// i18n key of a Git status name.
+pub fn git_status_key(s: notoir_git::FileStatus) -> &'static str {
+    use notoir_git::FileStatus as F;
+    match s {
+        F::Modified => "explorer:git.modified",
+        F::Added => "explorer:git.added",
+        F::Untracked => "explorer:git.untracked",
+        F::Deleted => "explorer:git.deleted",
+        F::Conflicted => "explorer:git.conflicted",
+        F::Renamed => "explorer:git.renamed",
+        F::Ignored => "explorer:git.ignored",
     }
 }

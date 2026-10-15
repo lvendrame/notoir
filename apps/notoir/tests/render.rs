@@ -618,3 +618,76 @@ fn compare_snapshot() {
         }
     }
 }
+
+#[test]
+fn git_snapshot() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path().join("notes");
+    std::fs::create_dir_all(root.join("docs")).unwrap();
+    let root = root.canonicalize().unwrap();
+    let r = git2::Repository::init(&root).unwrap();
+    std::fs::write(
+        root.join("README.md"),
+        "# Notes\n\nIdeas and plans.\n\n## Plans\n\n- Ship Git decorations\n- Write the guide\n- Review the backlog\n",
+    )
+    .unwrap();
+    std::fs::write(root.join("docs/guide.md"), "# Guide\n").unwrap();
+    std::fs::write(root.join("docs/old.md"), "# Old\n").unwrap();
+    let mut index = r.index().unwrap();
+    index
+        .add_all(["*"], git2::IndexAddOption::DEFAULT, None)
+        .unwrap();
+    index.write().unwrap();
+    let tree = r.find_tree(index.write_tree().unwrap()).unwrap();
+    let sig = git2::Signature::now("Tester", "t@example.com").unwrap();
+    r.commit(Some("HEAD"), &sig, &sig, "init", &tree, &[])
+        .unwrap();
+    std::fs::write(
+        root.join("README.md"),
+        "# Notes\n\nIdeas, plans and drafts.\n\n## Plans\n\n- Ship Git decorations\n- Review the backlog\n- Release 0.2\n- Celebrate\n",
+    )
+    .unwrap();
+    std::fs::write(root.join("idea.md"), "# Idea\n").unwrap();
+    std::fs::remove_file(root.join("docs/old.md")).unwrap();
+    let readme = root.join("README.md");
+    for (theme, name) in [
+        (ThemeId::Midnight, "git-midnight.png"),
+        (ThemeId::Paper, "git-paper.png"),
+    ] {
+        let (root, readme) = (root.clone(), readme.clone());
+        let mut app = common::start(move |o| {
+            o.language_override = Some(Language::En);
+            o.theme_override = Some(theme);
+            o.open_paths = vec![(root, None), (readme, None)];
+        });
+        for _ in 0..40 {
+            common::settle(&mut app);
+            let core = &app.harness.state().core;
+            let ready = core.git.status.of("idea.md").is_some()
+                && core
+                    .workbench
+                    .active_document()
+                    .and_then(|d| core.git_changes(d))
+                    .is_some();
+            if ready {
+                break;
+            }
+            std::thread::sleep(std::time::Duration::from_millis(30));
+        }
+        let docs = app
+            .harness
+            .state()
+            .core
+            .workspace
+            .as_ref()
+            .unwrap()
+            .root
+            .join("docs");
+        app.harness.state_mut().core.expand_dir(&docs);
+        common::settle(&mut app);
+        app.harness.run_steps(3);
+        if let Ok(img) = app.harness.render() {
+            img.save(out_dir().join(name)).unwrap();
+        }
+    }
+}

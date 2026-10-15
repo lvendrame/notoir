@@ -40,5 +40,9 @@
   "compareNoClipboard": "クリップボードに比較できるテキストがありません。",
   "compareLoadFailed": "比較するファイルを開けませんでした。",
   "adminSaveCancelled": "{{name}} は保存されませんでした: 認証がキャンセルされました。変更は保持されています。",
-  "adminSaveFailed": "{{name}} を管理者として保存できませんでした"
+  "adminSaveFailed": "{{name}} を管理者として保存できませんでした",
+  "gitNoHistory": "{{name}} を変更したコミットはありません。",
+  "gitFailed": "Git は {{name}} を読み取れませんでした。",
+  "gitNotInRepo": "{{name}} は Git リポジトリにありません。",
+  "gitNotAtRevision": "そのリビジョンには {{name}} が存在しません。"
 }

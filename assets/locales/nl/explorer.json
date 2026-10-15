@@ -13,5 +13,15 @@
     "trailing": "Een naam mag niet eindigen op een punt of spatie.",
     "tooLong": "De naam is te lang.",
     "exists": "Er bestaat al een bestand of map met deze naam."
+  },
+  "gitStatus": "{{name}}: {{status}}",
+  "git": {
+    "modified": "Gewijzigd",
+    "added": "Toegevoegd",
+    "untracked": "Niet gevolgd",
+    "deleted": "Verwijderd",
+    "conflicted": "Conflict",
+    "renamed": "Hernoemd",
+    "ignored": "Genegeerd"
   }
 }

@@ -446,6 +446,60 @@ pub(super) fn paint(
 
     // Gutter lanes: bookmarks (a filled bookmark shape, not colour alone).
     let gp = painter.with_clip_rect(m.gutter);
+    // Git change bars at the gutter's inner edge: added solid, modified
+    // dashed, deleted a wedge between lines (shape, not colour alone).
+    if let Some(changes) = &opts.git_changes {
+        use notoir_editor::diff::LineChangeKind as K;
+        let x1 = m.gutter.right();
+        let x0 = x1 - 3.0;
+        for row in &rows {
+            let i = changes.partition_point(|c| c.end.max(c.start + 1) <= row.line);
+            for c in changes[i..].iter().take_while(|c| c.start <= row.line) {
+                match c.kind {
+                    K::Added | K::Modified if row.line < c.end => {
+                        let tok = if c.kind == K::Added {
+                            Tok::GitAdded
+                        } else {
+                            Tok::GitModified
+                        };
+                        let r = Rect::from_min_max(
+                            Pos2::new(x0, row.y),
+                            Pos2::new(x1, row.y + m.row_h),
+                        );
+                        if c.kind == K::Added {
+                            gp.rect_filled(r, 0.0, kit.color(tok));
+                        } else {
+                            let mut y = r.top();
+                            while y < r.bottom() {
+                                gp.rect_filled(
+                                    Rect::from_min_max(
+                                        Pos2::new(x0, y),
+                                        Pos2::new(x1, (y + 3.0).min(r.bottom())),
+                                    ),
+                                    0.0,
+                                    kit.color(tok),
+                                );
+                                y += 5.0;
+                            }
+                        }
+                    }
+                    K::Deleted if row.line == c.start && row.sub_row == 0 => {
+                        let s = (m.row_h * 0.25).min(5.0);
+                        gp.add(egui::Shape::convex_polygon(
+                            vec![
+                                Pos2::new(x0 - 2.0, row.y - s),
+                                Pos2::new(x1, row.y),
+                                Pos2::new(x0 - 2.0, row.y + s),
+                            ],
+                            kit.color(Tok::GitDeleted),
+                            Stroke::NONE,
+                        ));
+                    }
+                    _ => {}
+                }
+            }
+        }
+    }
     // Diff markers: `+` / `−` in the bookmark lane (not colour alone).
     if let Some(d) = &opts.diff {
         let (mark, tok) = if d.inserted {

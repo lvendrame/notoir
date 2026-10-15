@@ -90,7 +90,8 @@
       "showViewport": "Widoczny obszar na minimapie",
       "showSearchMarks": "Znaczniki wyszukiwania na minimapie",
       "showSelection": "Znaczniki zaznaczenia na minimapie",
-      "showBookmarks": "Pokazuj zakładki na minimapie"
+      "showBookmarks": "Pokazuj zakładki na minimapie",
+      "showGitMarks": "Pokazuj zmiany Git na minimapie"
     },
     "folding": "Włącz zwijanie kodu"
   },
@@ -164,5 +165,19 @@
     "maxSize": "Większe pliki nie są porównywane (bajty)",
     "ignoreTrimWhitespace": "Ignoruj zmiany białych znaków przy porównywaniu",
     "algorithm": "Algorytm porównywania wierszy"
+  },
+  "git": {
+    "enabled": "Włącz integrację z Git",
+    "autoDetect": "Wykrywaj repozytoria Git przy otwieraniu obszaru roboczego",
+    "autoFetch": "Pobieraj (fetch) automatycznie",
+    "pullOnOpen": "Wykonuj pull przy otwieraniu obszaru roboczego",
+    "autoCommit": "Commituj automatycznie",
+    "confirmSync": "Potwierdzaj przed synchronizacją",
+    "decorateTabs": "Koloruj nazwy kart według stanu Git",
+    "autoFetchPeriod": "Sekundy między automatycznymi pobraniami",
+    "pullMode": "Jak pull scala zmiany zdalne",
+    "gutterBase": "Paski zmian na marginesie porównują z",
+    "path": "Ścieżka do programu git (puste: z PATH)",
+    "autoPush": "Wypychaj automatycznie po commitach"
   }
 }

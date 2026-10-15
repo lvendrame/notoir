@@ -13,5 +13,15 @@
     "trailing": "名称不能以句点或空格结尾。",
     "tooLong": "名称太长。",
     "exists": "已存在同名的文件或文件夹。"
+  },
+  "gitStatus": "{{name}}:{{status}}",
+  "git": {
+    "modified": "已修改",
+    "added": "已添加",
+    "untracked": "未跟踪",
+    "deleted": "已删除",
+    "conflicted": "冲突",
+    "renamed": "已重命名",
+    "ignored": "已忽略"
   }
 }

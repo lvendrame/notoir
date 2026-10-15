@@ -90,7 +90,8 @@
       "showViewport": "Minimap viewport",
       "showSearchMarks": "Minimap search marks",
       "showSelection": "Minimap selection marks",
-      "showBookmarks": "Show bookmarks in the minimap"
+      "showBookmarks": "Show bookmarks in the minimap",
+      "showGitMarks": "Show Git changes in the minimap"
     },
     "folding": "Enable code folding"
   },
@@ -164,5 +165,19 @@
     "maxSize": "Files larger than this are not compared (bytes)",
     "ignoreTrimWhitespace": "Ignore whitespace changes when comparing",
     "algorithm": "Line diff algorithm"
+  },
+  "git": {
+    "enabled": "Enable Git integration",
+    "autoDetect": "Detect Git repositories when a workspace opens",
+    "autoFetch": "Fetch automatically",
+    "pullOnOpen": "Pull when a workspace opens",
+    "autoCommit": "Commit automatically",
+    "confirmSync": "Confirm before Sync",
+    "decorateTabs": "Tint tab names by Git status",
+    "autoFetchPeriod": "Seconds between automatic fetches",
+    "pullMode": "How Pull integrates remote changes",
+    "gutterBase": "Gutter change bars compare with",
+    "path": "Path of the git executable (empty: from PATH)",
+    "autoPush": "Push automatically after commits"
   }
 }

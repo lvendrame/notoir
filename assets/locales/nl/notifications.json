@@ -40,5 +40,9 @@
   "compareNoClipboard": "Het klembord bevat geen tekst om te vergelijken.",
   "compareLoadFailed": "Kan het bestand om te vergelijken niet openen.",
   "adminSaveCancelled": "{{name}} is niet opgeslagen: autorisatie geannuleerd. Je wijzigingen blijven behouden.",
-  "adminSaveFailed": "Kan {{name}} niet opslaan als beheerder"
+  "adminSaveFailed": "Kan {{name}} niet opslaan als beheerder",
+  "gitNoHistory": "Geen commits wijzigen {{name}}.",
+  "gitFailed": "Git kon {{name}} niet lezen.",
+  "gitNotInRepo": "{{name}} staat niet in een Git-repository.",
+  "gitNotAtRevision": "{{name}} bestaat niet in die revisie."
 }

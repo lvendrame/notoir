@@ -23,7 +23,8 @@
     "scratchpads": "Kladblokken",
     "autoSave": "Automatisch opslaan",
     "sortLines": "Regels sorteren",
-    "lineNumbers": "Regelnummers"
+    "lineNumbers": "Regelnummers",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Primaire zijbalk",

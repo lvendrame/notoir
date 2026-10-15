@@ -23,7 +23,8 @@
     "scratchpads": "스크래치패드",
     "autoSave": "자동 저장",
     "sortLines": "줄 정렬",
-    "lineNumbers": "줄 번호"
+    "lineNumbers": "줄 번호",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "기본 사이드바",

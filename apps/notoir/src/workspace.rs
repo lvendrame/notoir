@@ -540,6 +540,7 @@ impl AppCore {
                 ws.index_ready = true;
             }
             WsEvent::Changed(paths) => {
+                self.git_paths_changed(&paths);
                 self.check_changed_paths(&paths);
                 self.handle_fs_changes(paths);
             }

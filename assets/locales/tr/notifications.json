@@ -40,5 +40,9 @@
   "compareNoClipboard": "Panoda karşılaştırılacak metin yok.",
   "compareLoadFailed": "Karşılaştırılacak dosya açılamadı.",
   "adminSaveCancelled": "{{name}} kaydedilmedi: yetkilendirme iptal edildi. Değişiklikleriniz korunuyor.",
-  "adminSaveFailed": "{{name}} yönetici olarak kaydedilemedi"
+  "adminSaveFailed": "{{name}} yönetici olarak kaydedilemedi",
+  "gitNoHistory": "{{name}} dosyasını değiştiren commit yok.",
+  "gitFailed": "Git {{name}} dosyasını okuyamadı.",
+  "gitNotInRepo": "{{name}} bir Git deposunda değil.",
+  "gitNotAtRevision": "{{name}} bu revizyonda yok."
 }

@@ -14,6 +14,7 @@ notoir-editor = { path = "crates/notoir-editor" }
 notoir-platform = { path = "crates/notoir-platform" }
 notoir-storage = { path = "crates/notoir-storage" }
 notoir-workspace = { path = "crates/notoir-workspace" }
+notoir-git = { path = "crates/notoir-git" }
 
 eframe = { version = "0.36.2", default-features = false, features = ["default_fonts", "glow", "wayland", "x11"] }
 egui = "0.36.2"
@@ -50,6 +51,7 @@ xxhash-rust = { version = "0.8.19", features = ["xxh3"] }
 notify = "8.2.0"
 regex = "1.13.1"
 similar = "3.2.0"
+git2 = { version = "0.21.0", default-features = false, features = ["vendored-libgit2"] }
 pulldown-cmark = { version = "0.13.4", default-features = false }
 open = "5.4.4"
 # Runtime: load the prebuilt packdump only. Build time (notoir-editor/build.rs)

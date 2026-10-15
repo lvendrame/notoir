@@ -40,5 +40,9 @@
   "compareNoClipboard": "Die Zwischenablage enthält keinen Text zum Vergleichen.",
   "compareLoadFailed": "Die Datei zum Vergleichen konnte nicht geöffnet werden.",
   "adminSaveCancelled": "{{name}} wurde nicht gespeichert: Autorisierung abgebrochen. Ihre Änderungen bleiben erhalten.",
-  "adminSaveFailed": "{{name}} konnte nicht als Administrator gespeichert werden"
+  "adminSaveFailed": "{{name}} konnte nicht als Administrator gespeichert werden",
+  "gitNoHistory": "Keine Commits ändern {{name}}.",
+  "gitFailed": "Git konnte {{name}} nicht lesen.",
+  "gitNotInRepo": "{{name}} liegt in keinem Git-Repository.",
+  "gitNotAtRevision": "{{name}} existiert in dieser Revision nicht."
 }

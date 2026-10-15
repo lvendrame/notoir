@@ -23,7 +23,8 @@
     "scratchpads": "Brudnopisy",
     "autoSave": "Autozapis",
     "sortLines": "Sortuj wiersze",
-    "lineNumbers": "Numery wierszy"
+    "lineNumbers": "Numery wierszy",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Główny pasek boczny",

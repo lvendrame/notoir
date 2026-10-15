@@ -90,7 +90,8 @@
       "showViewport": "Mini haritada görünür alan",
       "showSearchMarks": "Mini haritada arama işaretleri",
       "showSelection": "Mini haritada seçim işaretleri",
-      "showBookmarks": "Yer işaretlerini mini haritada göster"
+      "showBookmarks": "Yer işaretlerini mini haritada göster",
+      "showGitMarks": "Mini haritada Git değişikliklerini göster"
     },
     "folding": "Kod daraltmayı etkinleştir"
   },
@@ -164,5 +165,19 @@
     "maxSize": "Bundan büyük dosyalar karşılaştırılmaz (bayt)",
     "ignoreTrimWhitespace": "Karşılaştırırken boşluk değişikliklerini yok say",
     "algorithm": "Satır fark algoritması"
+  },
+  "git": {
+    "enabled": "Git entegrasyonunu etkinleştir",
+    "autoDetect": "Çalışma alanı açılınca Git depolarını algıla",
+    "autoFetch": "Otomatik fetch yap",
+    "pullOnOpen": "Çalışma alanı açılınca pull yap",
+    "autoCommit": "Otomatik commit yap",
+    "confirmSync": "Eşitlemeden önce onayla",
+    "decorateTabs": "Sekme adlarını Git durumuna göre renklendir",
+    "autoFetchPeriod": "Otomatik fetch arası saniye",
+    "pullMode": "Pull uzak değişiklikleri nasıl birleştirir",
+    "gutterBase": "Kenar değişiklik çubukları neyle karşılaştırır",
+    "path": "git yürütülebilir dosyasının yolu (boş: PATH'ten)",
+    "autoPush": "Commit sonrası otomatik push yap"
   }
 }

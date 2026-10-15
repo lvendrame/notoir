@@ -90,7 +90,8 @@
       "showViewport": "미니맵 표시 영역",
       "showSearchMarks": "미니맵 검색 표시",
       "showSelection": "미니맵 선택 표시",
-      "showBookmarks": "미니맵에 책갈피 표시"
+      "showBookmarks": "미니맵에 책갈피 표시",
+      "showGitMarks": "미니맵에 Git 변경 내용 표시"
     },
     "folding": "코드 접기 사용"
   },
@@ -164,5 +165,19 @@
     "maxSize": "이보다 큰 파일은 비교하지 않음 (바이트)",
     "ignoreTrimWhitespace": "비교할 때 공백 변경 무시",
     "algorithm": "줄 비교 알고리즘"
+  },
+  "git": {
+    "enabled": "Git 통합 사용",
+    "autoDetect": "작업 영역을 열 때 Git 저장소 감지",
+    "autoFetch": "자동으로 페치",
+    "pullOnOpen": "작업 영역을 열 때 풀",
+    "autoCommit": "자동으로 커밋",
+    "confirmSync": "동기화 전에 확인",
+    "decorateTabs": "Git 상태에 따라 탭 이름 색 지정",
+    "autoFetchPeriod": "자동 페치 간격(초)",
+    "pullMode": "풀이 원격 변경 내용을 통합하는 방식",
+    "gutterBase": "여백 변경 막대의 비교 대상",
+    "path": "git 실행 파일 경로 (비우면 PATH에서)",
+    "autoPush": "커밋 후 자동으로 푸시"
   }
 }

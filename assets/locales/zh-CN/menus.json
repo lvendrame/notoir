@@ -23,7 +23,8 @@
     "scratchpads": "草稿",
     "autoSave": "自动保存",
     "sortLines": "排列行",
-    "lineNumbers": "行号"
+    "lineNumbers": "行号",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "主侧边栏",

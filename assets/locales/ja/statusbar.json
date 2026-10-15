@@ -7,5 +7,6 @@
   "selected": "({{count}} 個選択)",
   "spaces": "スペース: {{size}}",
   "tabSize": "タブのサイズ: {{size}}",
-  "plainText": "プレーン テキスト"
+  "plainText": "プレーン テキスト",
+  "branch": "ブランチ: {{name}}"
 }

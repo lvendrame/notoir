@@ -90,7 +90,8 @@
       "showViewport": "缩略图可见区域",
       "showSearchMarks": "缩略图搜索标记",
       "showSelection": "缩略图选区标记",
-      "showBookmarks": "在缩略图中显示书签"
+      "showBookmarks": "在缩略图中显示书签",
+      "showGitMarks": "在缩略图中显示 Git 更改"
     },
     "folding": "启用代码折叠"
   },
@@ -164,5 +165,19 @@
     "maxSize": "大于此大小的文件不进行比较(字节)",
     "ignoreTrimWhitespace": "比较时忽略空白更改",
     "algorithm": "行差异算法"
+  },
+  "git": {
+    "enabled": "启用 Git 集成",
+    "autoDetect": "打开工作区时检测 Git 仓库",
+    "autoFetch": "自动获取 (fetch)",
+    "pullOnOpen": "打开工作区时拉取",
+    "autoCommit": "自动提交",
+    "confirmSync": "同步前确认",
+    "decorateTabs": "按 Git 状态为标签页名称着色",
+    "autoFetchPeriod": "自动获取的间隔秒数",
+    "pullMode": "拉取时如何合并远程更改",
+    "gutterBase": "边栏更改条的比较对象",
+    "path": "git 可执行文件路径(空:从 PATH 查找)",
+    "autoPush": "提交后自动推送"
   }
 }

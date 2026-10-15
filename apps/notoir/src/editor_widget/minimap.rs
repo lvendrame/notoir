@@ -24,6 +24,7 @@ pub struct MinimapOptions {
     pub show_search: bool,
     pub show_selection: bool,
     pub show_bookmarks: bool,
+    pub show_git: bool,
 }
 
 /// Columns mapped across the minimap width.
@@ -201,6 +202,29 @@ pub(super) fn show(
                     kit.color(Tok::Accent),
                 );
             }
+        }
+    }
+    // Git changes: bars on the left edge (spec 13).
+    if let (true, Some(changes)) = (mm.show_git, opts.git_changes.as_ref()) {
+        use notoir_editor::diff::LineChangeKind as K;
+        for c in changes.iter() {
+            let (tok, a, b) = match c.kind {
+                K::Added => (Tok::GitAdded, c.start as f32, c.end as f32),
+                K::Modified => (Tok::GitModified, c.start as f32, c.end as f32),
+                K::Deleted => (Tok::GitDeleted, c.start as f32 - 0.5, c.start as f32 + 0.5),
+            };
+            let (y0, y1) = (
+                layout.line_y(a),
+                layout.line_y(b).max(layout.line_y(a) + 2.0),
+            );
+            if y1 < rect.top() || y0 > rect.bottom() {
+                continue;
+            }
+            painter.rect_filled(
+                Rect::from_min_max(Pos2::new(rect.left(), y0), Pos2::new(rect.left() + 3.0, y1)),
+                0.0,
+                kit.color(tok),
+            );
         }
     }
     // Interaction.

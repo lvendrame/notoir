@@ -7,5 +7,6 @@
   "selected": "(выделено: {{count}})",
   "spaces": "Пробелы: {{size}}",
   "tabSize": "Размер табуляции: {{size}}",
-  "plainText": "Обычный текст"
+  "plainText": "Обычный текст",
+  "branch": "Ветка: {{name}}"
 }

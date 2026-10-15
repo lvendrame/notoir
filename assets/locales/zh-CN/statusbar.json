@@ -7,5 +7,6 @@
   "selected": "(已选择 {{count}} 个)",
   "spaces": "空格: {{size}}",
   "tabSize": "制表符大小: {{size}}",
-  "plainText": "纯文本"
+  "plainText": "纯文本",
+  "branch": "分支:{{name}}"
 }

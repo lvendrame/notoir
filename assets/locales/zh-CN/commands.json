@@ -299,5 +299,13 @@
     "expand": "扩大选区",
     "shrink": "缩小选区",
     "columnMode": "列选择模式"
+  },
+  "git": {
+    "compareWithHead": "与 HEAD 比较",
+    "compareWithRevision": "与修订版本比较…",
+    "fileHistory": "文件历史记录",
+    "openFileAtRevision": "打开修订版本中的文件…",
+    "refresh": "刷新 Git 状态",
+    "historyPick": "选择修订版本"
   }
 }

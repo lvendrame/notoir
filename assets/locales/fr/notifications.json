@@ -40,5 +40,9 @@
   "compareNoClipboard": "Le presse-papiers ne contient pas de texte à comparer.",
   "compareLoadFailed": "Impossible d’ouvrir le fichier à comparer.",
   "adminSaveCancelled": "{{name}} n’a pas été enregistré : autorisation annulée. Vos modifications sont conservées.",
-  "adminSaveFailed": "Impossible d’enregistrer {{name}} en tant qu’administrateur"
+  "adminSaveFailed": "Impossible d’enregistrer {{name}} en tant qu’administrateur",
+  "gitNoHistory": "Aucun commit ne modifie {{name}}.",
+  "gitFailed": "Git n’a pas pu lire {{name}}.",
+  "gitNotInRepo": "{{name}} n’est pas dans un dépôt Git.",
+  "gitNotAtRevision": "{{name}} n’existe pas à cette révision."
 }

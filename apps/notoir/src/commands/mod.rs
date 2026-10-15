@@ -12,6 +12,7 @@ mod app;
 mod compare;
 mod editor;
 mod file;
+mod git;
 mod json;
 mod layout;
 mod markdown;
@@ -39,6 +40,7 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     structure::specs(&mut specs);
     search::specs(&mut specs);
     compare::specs(&mut specs);
+    git::specs(&mut specs);
     selection::specs(&mut specs);
     workspace::specs(&mut specs);
     preferences::specs(&mut specs);

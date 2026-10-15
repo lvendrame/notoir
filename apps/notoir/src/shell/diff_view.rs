@@ -298,6 +298,7 @@ pub fn show(
         opts.fold_ranges = None;
         opts.max_width_cols = None;
         opts.diff = Some(dec);
+        opts.git_changes = None;
         opts.set_scroll_px = pending;
         let mut pui = ui.new_child(egui::UiBuilder::new().max_rect(r));
         pui.set_clip_rect(r);

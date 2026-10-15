@@ -7,5 +7,6 @@
   "selected": "(виділено: {{count}})",
   "spaces": "Пробіли: {{size}}",
   "tabSize": "Розмір табуляції: {{size}}",
-  "plainText": "Звичайний текст"
+  "plainText": "Звичайний текст",
+  "branch": "Гілка: {{name}}"
 }

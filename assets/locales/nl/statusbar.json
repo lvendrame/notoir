@@ -7,5 +7,6 @@
   "selected": "({{count}} geselecteerd)",
   "spaces": "Spaties: {{size}}",
   "tabSize": "Tabgrootte: {{size}}",
-  "plainText": "Platte tekst"
+  "plainText": "Platte tekst",
+  "branch": "Branch: {{name}}"
 }

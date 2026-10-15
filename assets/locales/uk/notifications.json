@@ -40,5 +40,9 @@
   "compareNoClipboard": "У буфері обміну немає тексту для порівняння.",
   "compareLoadFailed": "Не вдалося відкрити файл для порівняння.",
   "adminSaveCancelled": "{{name}} не збережено: авторизацію скасовано. Зміни залишено в редакторі.",
-  "adminSaveFailed": "Не вдалося зберегти {{name}} від імені адміністратора"
+  "adminSaveFailed": "Не вдалося зберегти {{name}} від імені адміністратора",
+  "gitNoHistory": "Жоден коміт не змінює {{name}}.",
+  "gitFailed": "Git не зміг прочитати {{name}}.",
+  "gitNotInRepo": "{{name}} не в репозиторії Git.",
+  "gitNotAtRevision": "{{name}} не існує в цій ревізії."
 }

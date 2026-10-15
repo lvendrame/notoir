@@ -265,6 +265,8 @@ pub enum PickerKind {
     /// Compare: a side from open documents, workspace files or the
     /// clipboard (spec 27).
     Compare,
+    /// File History: commits touching a file (spec 28).
+    GitHistory,
 }
 
 /// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
@@ -383,7 +385,8 @@ impl Picker {
             | PickerKind::Indentation
             | PickerKind::Symbols
             | PickerKind::QuickOpen
-            | PickerKind::Compare => String::new(),
+            | PickerKind::Compare
+            | PickerKind::GitHistory => String::new(),
             PickerKind::TabSize => doc
                 .map(|d| core.indent_style(d.id).tab_size.to_string())
                 .unwrap_or_default(),
@@ -394,10 +397,10 @@ impl Picker {
         } else {
             (Vec::new(), None)
         };
-        let dynamic = if kind == PickerKind::Symbols {
-            symbol_items(core)
-        } else {
-            Vec::new()
+        let dynamic = match kind {
+            PickerKind::Symbols => symbol_items(core),
+            PickerKind::GitHistory => history_items(core),
+            _ => Vec::new(),
         };
         let restore = (kind == PickerKind::Symbols)
             .then(|| core.workbench.active_view())
@@ -512,7 +515,8 @@ impl Picker {
             PickerKind::Commands
             | PickerKind::Symbols
             | PickerKind::QuickOpen
-            | PickerKind::Compare => Vec::new(),
+            | PickerKind::Compare
+            | PickerKind::GitHistory => Vec::new(),
             PickerKind::Indentation => [
                 ("spaces", "dialogs:picker.indentSpaces"),
                 ("tabs", "dialogs:picker.indentTabs"),
@@ -592,6 +596,7 @@ impl Picker {
             }
             PickerKind::QuickOpen => ("quickOpen.open", quick_open_args(value)),
             PickerKind::Compare => ("compare.pick", json!({ "value": value })),
+            PickerKind::GitHistory => ("git.historyPick", json!({ "rev": value })),
         };
         CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
@@ -615,7 +620,7 @@ impl Picker {
         if self.kind == PickerKind::Compare {
             return self.compare_items();
         }
-        if self.kind == PickerKind::Symbols {
+        if matches!(self.kind, PickerKind::Symbols | PickerKind::GitHistory) {
             let q = self.query.trim().trim_start_matches('@').trim();
             if q.is_empty() {
                 return self.dynamic.clone();
@@ -624,7 +629,9 @@ impl Picker {
                 .dynamic
                 .iter()
                 .filter_map(|i| {
-                    notoir_core::fuzzy::fuzzy_match(q, i.label.trim()).map(|m| (m.score, i))
+                    notoir_core::fuzzy::fuzzy_match(q, i.label.trim())
+                        .or_else(|| notoir_core::fuzzy::fuzzy_match(q, &i.detail))
+                        .map(|m| (m.score, i))
                 })
                 .collect();
             scored.sort_by_key(|s| std::cmp::Reverse(s.0));
@@ -819,6 +826,7 @@ impl Picker {
             PickerKind::Symbols => t!("dialogs:picker.symbols"),
             PickerKind::QuickOpen => String::new(),
             PickerKind::Compare => t!("dialogs:compare.title"),
+            PickerKind::GitHistory => t!("dialogs:git.history"),
         };
         if self.kind == PickerKind::Commands && enter {
             // Disabled rows (shown with "show all") do not run.
@@ -1140,5 +1148,45 @@ pub fn goto_line(ctx: &egui::Context, kit: &mut Kit, core: &mut AppCore, top_off
     }
     if area.response.clicked_elsewhere() {
         core.close_goto(true);
+    }
+}
+
+/// File History rows: summary, then short SHA · author · date.
+fn history_items(core: &AppCore) -> Vec<PickerItem> {
+    let Some(h) = &core.git.history else {
+        return Vec::new();
+    };
+    h.commits
+        .iter()
+        .map(|c| PickerItem {
+            value: c.id.clone(),
+            label: c.summary.clone(),
+            detail: format!("{} \u{b7} {} \u{b7} {}", c.short, c.author, ymd(c.time)),
+        })
+        .collect()
+}
+
+/// `YYYY-MM-DD` (UTC) of a Unix time.
+pub fn ymd(secs: i64) -> String {
+    // Days to civil date (Howard Hinnant's algorithm).
+    let z = secs.div_euclid(86_400) + 719_468;
+    let era = z.div_euclid(146_097);
+    let doe = z - era * 146_097;
+    let yoe = (doe - doe / 1_460 + doe / 36_524 - doe / 146_096) / 365;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let d = doy - (153 * mp + 2) / 5 + 1;
+    let m = if mp < 10 { mp + 3 } else { mp - 9 };
+    let y = yoe + era * 400 + i64::from(m <= 2);
+    format!("{y:04}-{m:02}-{d:02}")
+}
+
+#[cfg(test)]
+mod date_tests {
+    #[test]
+    fn civil_dates() {
+        assert_eq!(super::ymd(0), "1970-01-01");
+        assert_eq!(super::ymd(1_760_486_400), "2025-10-15");
+        assert_eq!(super::ymd(951_782_400), "2000-02-29");
     }
 }

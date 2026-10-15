@@ -40,5 +40,9 @@
   "compareNoClipboard": "El portapapeles no tiene texto que comparar.",
   "compareLoadFailed": "No se pudo abrir el archivo que comparar.",
   "adminSaveCancelled": "{{name}} no se guardó: se canceló la autorización. Se conservan sus cambios.",
-  "adminSaveFailed": "No se pudo guardar {{name}} como administrador"
+  "adminSaveFailed": "No se pudo guardar {{name}} como administrador",
+  "gitNoHistory": "Ningún commit modifica {{name}}.",
+  "gitFailed": "Git no pudo leer {{name}}.",
+  "gitNotInRepo": "{{name}} no está en un repositorio Git.",
+  "gitNotAtRevision": "{{name}} no existe en esa revisión."
 }

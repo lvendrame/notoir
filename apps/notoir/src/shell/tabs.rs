@@ -123,6 +123,8 @@ fn context_items(core: &AppCore, view: ViewId) -> Vec<MenuItem> {
         cmd("compare.with"),
         cmd("compare.select"),
         cmd("compare.withSelected"),
+        cmd("git.compareWithHead"),
+        cmd("git.fileHistory"),
         MenuItem::Separator,
         cmd("view.splitLeft"),
         cmd("view.splitRight"),
@@ -279,10 +281,16 @@ fn tab(
         return Rect::NOTHING;
     };
     let font = egui::FontId::proportional(13.0);
-    let text_color = if active {
-        kit.color(Tok::TextPrimary)
-    } else {
-        kit.color(Tok::TextSecondary)
+    // Git status tints the name (`git.decorateTabs`).
+    let git = doc
+        .path()
+        .filter(|_| core.settings.bool("git.decorateTabs", None))
+        .and_then(|p| core.git_status_of(p, false))
+        .filter(|s| *s != notoir_git::FileStatus::Ignored);
+    let text_color = match git {
+        Some(s) => kit.color(crate::theme::git_token(s)),
+        None if active => kit.color(Tok::TextPrimary),
+        None => kit.color(Tok::TextSecondary),
     };
     let galley = ui.painter().layout_no_wrap(label.clone(), font, text_color);
     let lock = doc.read_only != ReadOnly::No;

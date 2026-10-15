@@ -299,5 +299,13 @@
     "expand": "Расширить выделение",
     "shrink": "Сузить выделение",
     "columnMode": "Режим выделения столбцом"
+  },
+  "git": {
+    "compareWithHead": "Сравнить с HEAD",
+    "compareWithRevision": "Сравнить с ревизией…",
+    "fileHistory": "История файла",
+    "openFileAtRevision": "Открыть файл в ревизии…",
+    "refresh": "Обновить статус Git",
+    "historyPick": "Выбрать ревизию"
   }
 }

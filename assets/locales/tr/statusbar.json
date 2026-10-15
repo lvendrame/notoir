@@ -7,5 +7,6 @@
   "selected": "({{count}} seçili)",
   "spaces": "Boşluk: {{size}}",
   "tabSize": "Sekme Boyutu: {{size}}",
-  "plainText": "Düz Metin"
+  "plainText": "Düz Metin",
+  "branch": "Dal: {{name}}"
 }

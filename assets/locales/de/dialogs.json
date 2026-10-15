@@ -114,5 +114,8 @@
     "title": "Vergleichen",
     "pickLeft": "Erste Datei zum Vergleichen wählen",
     "pickRight": "Datei zum Vergleich mit {{name}} wählen"
+  },
+  "git": {
+    "history": "Dateiverlauf"
   }
 }

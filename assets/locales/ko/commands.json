@@ -299,5 +299,13 @@
     "expand": "선택 영역 확장",
     "shrink": "선택 영역 축소",
     "columnMode": "열 선택 모드"
+  },
+  "git": {
+    "compareWithHead": "HEAD와 비교",
+    "compareWithRevision": "리비전과 비교…",
+    "fileHistory": "파일 기록",
+    "openFileAtRevision": "리비전의 파일 열기…",
+    "refresh": "Git 상태 새로 고침",
+    "historyPick": "리비전 선택"
   }
 }

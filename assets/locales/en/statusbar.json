@@ -7,5 +7,6 @@
   "selected": "({{count}} selected)",
   "spaces": "Spaces: {{size}}",
   "tabSize": "Tab Size: {{size}}",
-  "plainText": "Plain Text"
+  "plainText": "Plain Text",
+  "branch": "Branch: {{name}}"
 }

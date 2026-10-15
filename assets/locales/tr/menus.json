@@ -23,7 +23,8 @@
     "scratchpads": "Karalamalar",
     "autoSave": "Otomatik Kaydet",
     "sortLines": "Satırları Sırala",
-    "lineNumbers": "Satır Numaraları"
+    "lineNumbers": "Satır Numaraları",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Birincil Kenar Çubuğu",

@@ -299,5 +299,13 @@
     "expand": "選択範囲を拡大",
     "shrink": "選択範囲を縮小",
     "columnMode": "列選択モード"
+  },
+  "git": {
+    "compareWithHead": "HEAD と比較",
+    "compareWithRevision": "リビジョンと比較…",
+    "fileHistory": "ファイル履歴",
+    "openFileAtRevision": "リビジョンのファイルを開く…",
+    "refresh": "Git の状態を更新",
+    "historyPick": "リビジョンを選択"
   }
 }

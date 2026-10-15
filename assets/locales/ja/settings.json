@@ -90,7 +90,8 @@
       "showViewport": "ミニマップの表示範囲",
       "showSearchMarks": "ミニマップの検索マーク",
       "showSelection": "ミニマップの選択マーク",
-      "showBookmarks": "ミニマップにブックマークを表示"
+      "showBookmarks": "ミニマップにブックマークを表示",
+      "showGitMarks": "ミニマップに Git の変更を表示"
     },
     "folding": "コードの折りたたみを有効にする"
   },
@@ -164,5 +165,19 @@
     "maxSize": "これより大きいファイルは比較しません (バイト)",
     "ignoreTrimWhitespace": "比較時に空白の変更を無視",
     "algorithm": "行差分アルゴリズム"
+  },
+  "git": {
+    "enabled": "Git 連携を有効にする",
+    "autoDetect": "ワークスペースを開いたときに Git リポジトリを検出",
+    "autoFetch": "自動でフェッチ",
+    "pullOnOpen": "ワークスペースを開いたときにプル",
+    "autoCommit": "自動でコミット",
+    "confirmSync": "同期の前に確認",
+    "decorateTabs": "Git の状態でタブ名に色を付ける",
+    "autoFetchPeriod": "自動フェッチの間隔 (秒)",
+    "pullMode": "プルでリモートの変更を取り込む方法",
+    "gutterBase": "余白の変更バーの比較対象",
+    "path": "git 実行ファイルのパス (空: PATH から)",
+    "autoPush": "コミット後に自動でプッシュ"
   }
 }

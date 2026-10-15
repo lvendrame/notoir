@@ -23,7 +23,8 @@
     "scratchpads": "Notizzettel",
     "autoSave": "Automatisch speichern",
     "sortLines": "Zeilen sortieren",
-    "lineNumbers": "Zeilennummern"
+    "lineNumbers": "Zeilennummern",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Primäre Seitenleiste",

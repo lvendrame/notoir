@@ -13,5 +13,15 @@
     "trailing": "名前の末尾にピリオドやスペースは使えません。",
     "tooLong": "名前が長すぎます。",
     "exists": "この名前のファイルまたはフォルダーは既に存在します。"
+  },
+  "gitStatus": "{{name}}: {{status}}",
+  "git": {
+    "modified": "変更",
+    "added": "追加",
+    "untracked": "未追跡",
+    "deleted": "削除",
+    "conflicted": "競合",
+    "renamed": "名前変更",
+    "ignored": "無視"
   }
 }

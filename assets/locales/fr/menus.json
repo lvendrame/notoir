@@ -23,7 +23,8 @@
     "scratchpads": "Brouillons",
     "autoSave": "Enregistrement automatique",
     "sortLines": "Trier les lignes",
-    "lineNumbers": "Numéros de ligne"
+    "lineNumbers": "Numéros de ligne",
+    "git": "Git"
   },
   "item": {
     "primarySidebar": "Barre latérale principale",
