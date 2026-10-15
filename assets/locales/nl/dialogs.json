@@ -90,5 +90,9 @@
   },
   "gotoLine": {
     "hint": "Regelnummer, regel:kolom of +/- regels (1–{{lines}})"
+  },
+  "openLink": {
+    "title": "Deze link openen met een andere toepassing?",
+    "open": "Openen"
   }
 }

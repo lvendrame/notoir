@@ -106,7 +106,20 @@ pub(super) fn handle(
             }
             Event::Paste(text) => {
                 let text = notoir_editor::line_ending::normalize(&text);
-                edit = edit_ops::insert(&sel, &text, EditKind::Other);
+                // Markdown: pasting a URL over a selection makes a link.
+                let url = text.trim();
+                let is_url = (url.starts_with("https://") || url.starts_with("http://"))
+                    && !url.contains(char::is_whitespace);
+                let p = sel.primary();
+                let single_line = !p.is_empty()
+                    && sel.ranges().len() == 1
+                    && !rope.slice(p.from()..p.to()).chars().any(|c| c == '\n');
+                edit = if opts.markdown_lists && is_url && single_line {
+                    let label: String = rope.slice(p.from()..p.to()).to_string();
+                    edit_ops::insert(&sel, &format!("[{label}]({url})"), EditKind::Other)
+                } else {
+                    edit_ops::insert(&sel, &text, EditKind::Other)
+                };
             }
             Event::Copy | Event::Cut => {
                 let source = if sel.is_empty() && opts.empty_selection_clipboard {

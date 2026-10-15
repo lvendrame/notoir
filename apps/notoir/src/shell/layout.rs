@@ -68,6 +68,7 @@ pub fn show(
     editors: &mut EditorCaches,
     drag: &mut Option<TabDrag>,
     path_drag: &mut Option<std::path::PathBuf>,
+    previews: &mut super::md_preview::Previews,
     focus_request: Option<ViewId>,
     context: &ContextSnapshot,
     actions: &mut Actions,
@@ -87,6 +88,7 @@ pub fn show(
         core,
         editors,
         drag,
+        previews,
         focus_request,
         context,
         actions,
@@ -107,6 +109,7 @@ struct Renderer<'a, 'k> {
     core: &'a mut AppCore,
     editors: &'a mut EditorCaches,
     drag: &'a mut Option<TabDrag>,
+    previews: &'a mut super::md_preview::Previews,
     focus_request: Option<ViewId>,
     context: &'a ContextSnapshot,
     actions: &'a mut Actions,
@@ -249,6 +252,7 @@ impl Renderer<'_, '_> {
             )
         };
         let body = Rect::from_min_max(Pos2::new(rect.left(), strip.bottom()), rect.max);
+        let body_full = body;
         let active = self
             .core
             .workbench
@@ -297,6 +301,127 @@ impl Renderer<'_, '_> {
                     }
                     None => body,
                 };
+                // Markdown modes: editor, preview, or both (spec 24).
+                let md_kind = kind.unwrap_or(notoir_core::view::ViewKind::Text);
+                let is_md = doc.is_some_and(|d| self.core.is_markdown(d));
+                let mode = if is_md {
+                    md_kind
+                } else {
+                    notoir_core::view::ViewKind::Text
+                };
+                let (editor_rect, preview_rect) = match mode {
+                    notoir_core::view::ViewKind::MarkdownPreview => (None, Some(body)),
+                    notoir_core::view::ViewKind::MarkdownSplit => {
+                        let ratio = self
+                            .core
+                            .workbench
+                            .view(view)
+                            .map_or(0.5, |v| v.preview_ratio)
+                            .clamp(0.2, 0.8);
+                        let orientation = self
+                            .core
+                            .settings
+                            .str("markdown.splitOrientation", None)
+                            .to_owned();
+                        let vertical = orientation == "vertical"
+                            || (orientation == "auto" && body.width() < 700.0);
+                        let (a, split, b) = if vertical {
+                            let y = body.top() + body.height() * ratio;
+                            (
+                                Rect::from_min_max(body.min, Pos2::new(body.right(), y - 2.0)),
+                                Rect::from_min_max(
+                                    Pos2::new(body.left(), y - 2.0),
+                                    Pos2::new(body.right(), y + 3.0),
+                                ),
+                                Rect::from_min_max(Pos2::new(body.left(), y + 3.0), body.max),
+                            )
+                        } else {
+                            let x = body.left() + body.width() * ratio;
+                            (
+                                Rect::from_min_max(body.min, Pos2::new(x - 2.0, body.bottom())),
+                                Rect::from_min_max(
+                                    Pos2::new(x - 2.0, body.top()),
+                                    Pos2::new(x + 3.0, body.bottom()),
+                                ),
+                                Rect::from_min_max(Pos2::new(x + 3.0, body.top()), body.max),
+                            )
+                        };
+                        let resp =
+                            child.interact(split, egui::Id::new(("md-split", view)), Sense::drag());
+                        let active = resp.hovered() || resp.dragged();
+                        if active {
+                            child.ctx().set_cursor_icon(if vertical {
+                                egui::CursorIcon::ResizeVertical
+                            } else {
+                                egui::CursorIcon::ResizeHorizontal
+                            });
+                        }
+                        let c = split.center();
+                        let line = if vertical {
+                            [Pos2::new(split.left(), c.y), Pos2::new(split.right(), c.y)]
+                        } else {
+                            [Pos2::new(c.x, split.top()), Pos2::new(c.x, split.bottom())]
+                        };
+                        child.painter().line_segment(
+                            line,
+                            Stroke::new(
+                                1.0,
+                                if active {
+                                    self.kit.color(Tok::Accent)
+                                } else {
+                                    self.kit.color(Tok::Border)
+                                },
+                            ),
+                        );
+                        if resp.dragged() {
+                            let d = resp.drag_delta();
+                            let delta = if vertical {
+                                d.y / body.height()
+                            } else {
+                                d.x / body.width()
+                            };
+                            if let Some(v) = self.core.workbench.views.get_mut(view) {
+                                v.preview_ratio = (v.preview_ratio + delta).clamp(0.2, 0.8);
+                            }
+                        }
+                        (Some(a), Some(b))
+                    }
+                    _ => (Some(body), None),
+                };
+                if let (Some(rect), Some(doc)) = (preview_rect, doc)
+                    && let Some((md, pending)) = self.core.markdown_doc(doc)
+                {
+                    {
+                        let mut pui = child.new_child(egui::UiBuilder::new().max_rect(rect));
+                        pui.set_clip_rect(rect);
+                        super::md_preview::show(
+                            &mut pui,
+                            self.kit,
+                            self.core,
+                            view,
+                            doc,
+                            &md,
+                            self.previews,
+                            self.actions,
+                        );
+                        if pending {
+                            child
+                                .ctx()
+                                .request_repaint_after(std::time::Duration::from_millis(
+                                    crate::markdown::PARSE_DEBOUNCE_MS,
+                                ));
+                        }
+                        if pui.ui_contains_pointer()
+                            && pui.input(|i| i.pointer.any_pressed())
+                            && self.core.workbench.active_view() != Some(view)
+                        {
+                            self.out.activate = Some(view);
+                        }
+                    }
+                }
+                let Some(body) = editor_rect else {
+                    return self.finish_group(group, strip, body_full, tab_rects);
+                };
                 let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
                 let out = editor_widget::show(
                     &mut body_ui,
@@ -331,6 +456,11 @@ impl Renderer<'_, '_> {
                 if out.interacted && self.core.workbench.active_view() != Some(view) {
                     self.out.activate = Some(view);
                 }
+                if mode == notoir_core::view::ViewKind::MarkdownSplit
+                    && self.core.settings.bool("markdown.preview.scrollSync", None)
+                {
+                    self.sync_scroll(view);
+                }
             }
             (None, _) => {
                 child
@@ -345,12 +475,72 @@ impl Renderer<'_, '_> {
                 );
             }
         }
+        self.finish_group(group, strip, body_full, tab_rects);
+    }
+
+    fn finish_group(&mut self, group: GroupId, strip: Rect, body: Rect, tabs: Vec<(ViewId, Rect)>) {
         self.areas.push(GroupArea {
             group,
             strip,
             body,
-            tabs: tab_rects,
+            tabs,
         });
+    }
+
+    /// Markdown split: whichever side the user scrolled drives the other
+    /// through the preview's block positions (spec 24 §Scroll Synchronization).
+    fn sync_scroll(&mut self, view: ViewId) {
+        let Some(editor_top) = self.editors.top_line(view) else {
+            return;
+        };
+        let Some(st) = self.previews.views.get_mut(&view) else {
+            return;
+        };
+        if st.blocks.is_empty() {
+            return;
+        }
+        if st.last_editor_top != Some(editor_top) {
+            // Editor moved: put the matching block (interpolated) at the top.
+            let y = match st
+                .blocks
+                .iter()
+                .find(|b| b.0 <= editor_top && editor_top <= b.1)
+            {
+                Some(&(l0, l1, y0, y1)) => {
+                    let frac = (editor_top - l0) as f32 / ((l1 - l0 + 1) as f32);
+                    y0 + frac * (y1 - y0)
+                }
+                None => st
+                    .blocks
+                    .iter()
+                    .rev()
+                    .find(|b| b.1 < editor_top)
+                    .map_or(0.0, |b| b.3),
+            };
+            st.set_offset = Some(y);
+            st.last_editor_top = Some(editor_top);
+        } else if st
+            .synced_offset
+            .is_some_and(|o| (o - st.offset).abs() > 1.0)
+        {
+            // Preview scrolled by the user: move the editor.
+            let y = st.offset;
+            let line = match st.blocks.iter().find(|b| b.2 <= y && y < b.3) {
+                Some(&(l0, l1, y0, y1)) => {
+                    l0 + (((y - y0) / (y1 - y0).max(1.0)) * (l1 - l0 + 1) as f32) as usize
+                }
+                None => st.blocks.last().map_or(0, |b| b.1),
+            };
+            self.core.find.scroll.insert(
+                view,
+                notoir_core::view::ScrollPosition {
+                    top_line: line,
+                    ..Default::default()
+                },
+            );
+            st.last_editor_top = Some(line);
+            st.synced_offset = Some(st.offset);
+        }
     }
 }
 

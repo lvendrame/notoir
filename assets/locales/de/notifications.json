@@ -29,5 +29,6 @@
   "recoveryDamaged": "Ein wiederhergestelltes Dokument war beschädigt; sein Rohinhalt wurde geöffnet.",
   "recoveryNothing": "Es gibt keine nicht gespeicherten Dokumente zum Wiederherstellen.",
   "sessionMissing": "Dateien der letzten Sitzung, die nicht mehr existieren: {{count}}.",
-  "replacedAll": "Ersetzte Vorkommen: {{count}}."
+  "replacedAll": "Ersetzte Vorkommen: {{count}}.",
+  "linkMissing": "Linkziel nicht gefunden: {{target}}"
 }

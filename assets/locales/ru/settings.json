@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "Уровень журнала"
+  },
+  "markdown": {
+    "defaultMode": "Режим Markdown по умолчанию",
+    "splitOrientation": "Ориентация разделения Markdown",
+    "preview": {
+      "maxWidth": "Ширина предпросмотра Markdown",
+      "interactiveCheckboxes": "Кликабельные флажки задач в предпросмотре",
+      "scrollSync": "Синхронизировать прокрутку редактора и предпросмотра",
+      "loadRemoteImages": "Загружать внешние изображения в предпросмотре"
+    }
   }
 }

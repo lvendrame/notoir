@@ -1,0 +1,10 @@
+{
+  "edit": "编辑",
+  "split": "拆分",
+  "preview": "预览",
+  "frontMatter": "前置元数据",
+  "remoteImage": "远程图片:{{url}}",
+  "loadRemote": "加载远程图片",
+  "remoteUnavailable": "此版本不支持加载远程图片。",
+  "imageMissing": "找不到图片:{{path}}"
+}

@@ -1,0 +1,10 @@
+{
+  "edit": "Bearbeiten",
+  "split": "Geteilt",
+  "preview": "Vorschau",
+  "frontMatter": "Front Matter",
+  "remoteImage": "Externes Bild: {{url}}",
+  "loadRemote": "Externe Bilder laden",
+  "remoteUnavailable": "Das Laden externer Bilder ist in dieser Version nicht verfügbar.",
+  "imageMissing": "Bild nicht gefunden: {{path}}"
+}

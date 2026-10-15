@@ -90,5 +90,9 @@
   },
   "gotoLine": {
     "hint": "Numer wiersza, wiersz:kolumna lub +/- wierszy (1–{{lines}})"
+  },
+  "openLink": {
+    "title": "Otworzyć ten link w innej aplikacji?",
+    "open": "Otwórz"
   }
 }

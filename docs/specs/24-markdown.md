@@ -1,6 +1,6 @@
 # 24 — Markdown
 
-**Status:** Not started — M13
+**Status:** Done — render tree with source ranges (`notoir-editor::markdown`: CommonMark + GFM tables, task lists, strikethrough, footnotes, heading attributes, front matter, slugs), Edit / Split / Preview per view (toolbar control, Mod+Shift+V, Mod+K V, `markdown.defaultMode`, draggable split with auto orientation), preview renderer (headings, inline styles, links, local images incl. SVG decoded off the UI thread, quotes, nested lists with clickable task boxes as undoable edits, tables with alignment, highlighted code blocks, rules, footnotes, collapsible front matter, escaped HTML), 100/250 ms debounced re-parse, two-way scroll sync, double-click to source, links (web/mail to the OS, relative files at `#anchor`, in-document anchors, other schemes confirmed), Mod+B / Mod+I / code / insert link, paste URL over selection (M13). Deviations: remote images show the placeholder but cannot be loaded yet (no HTTP client); no per-block layout cache; no Markdown Preview panel; parse runs on the UI thread for all sizes; editor Ctrl/Cmd+click on links later
 
 ## Purpose
 

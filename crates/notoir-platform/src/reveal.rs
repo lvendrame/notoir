@@ -32,3 +32,8 @@ pub fn reveal(path: &Path) -> std::io::Result<()> {
     }
     Ok(())
 }
+
+/// Opens a URL or file with the OS default handler (links in Markdown).
+pub fn open_external(target: &str) -> std::io::Result<()> {
+    open::that_detached(target)
+}

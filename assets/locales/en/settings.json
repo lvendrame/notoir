@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "Log level"
+  },
+  "markdown": {
+    "defaultMode": "Markdown default mode",
+    "splitOrientation": "Markdown split orientation",
+    "preview": {
+      "maxWidth": "Markdown preview width",
+      "interactiveCheckboxes": "Clickable task boxes in preview",
+      "scrollSync": "Sync editor and preview scrolling",
+      "loadRemoteImages": "Load remote images in preview"
+    }
   }
 }

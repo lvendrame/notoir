@@ -506,6 +506,52 @@ impl Schema {
             Scopes::USER_ONLY,
             C::Appearance,
         );
+        // Markdown
+        def(
+            "markdown.defaultMode",
+            T::Enum(&["edit", "split", "preview"]),
+            s_("edit"),
+            Scopes::ALL,
+            C::Editor,
+        );
+        def(
+            "markdown.splitOrientation",
+            T::Enum(&["auto", "horizontal", "vertical"]),
+            s_("auto"),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "markdown.preview.maxWidth",
+            T::Int {
+                min: 300,
+                max: 2000,
+            },
+            V::Int(760),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "markdown.preview.interactiveCheckboxes",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "markdown.preview.scrollSync",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "markdown.preview.loadRemoteImages",
+            T::Enum(&["never", "ask", "always"]),
+            s_("ask"),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
         // Zen Mode
         def(
             "zenMode.hideTabs",

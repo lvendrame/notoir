@@ -36,6 +36,8 @@ pub trait Dialogs: Send + Sync {
     fn pick_files(&self, opts: FileDialogOptions, poster: Poster);
     fn save_file(&self, opts: FileDialogOptions, doc: DocumentId, poster: Poster);
     fn pick_folder(&self, opts: FileDialogOptions, poster: Poster);
+    /// Hands a URL to the OS (links). Scripted in tests.
+    fn open_external(&self, url: &str);
     /// Moves paths to the OS trash (called on a worker thread).
     fn trash(&self, paths: &[PathBuf]) -> Result<(), String>;
 }
@@ -64,6 +66,12 @@ impl Dialogs for NativeDialogs {
     fn trash(&self, paths: &[PathBuf]) -> Result<(), String> {
         notoir_platform::trash::move_to_trash(paths)
     }
+
+    fn open_external(&self, url: &str) {
+        if let Err(e) = notoir_platform::reveal::open_external(url) {
+            tracing::warn!(error = %e, "could not open link");
+        }
+    }
 }
 
 /// Answers dialogs from a queue (tests and automation). An empty queue
@@ -77,6 +85,8 @@ pub struct ScriptedDialogs {
     pub trashed: Arc<Mutex<Vec<PathBuf>>>,
     /// Make the next trash calls fail (permanent-delete fallback).
     pub trash_fails: Arc<std::sync::atomic::AtomicBool>,
+    /// URLs handed to the OS.
+    pub opened: Arc<Mutex<Vec<String>>>,
 }
 
 impl ScriptedDialogs {
@@ -140,6 +150,13 @@ impl Dialogs for ScriptedDialogs {
         poster.post(IoResult::FolderPicked(path));
     }
 
+    fn open_external(&self, url: &str) {
+        self.opened
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .push(url.to_owned());
+    }
+
     fn trash(&self, paths: &[PathBuf]) -> Result<(), String> {
         if self.trash_fails.load(std::sync::atomic::Ordering::SeqCst) {
             return Err("trash unavailable".into());
@@ -170,6 +187,8 @@ pub struct OpenAt {
     pub restore: Option<(Selection, ScrollPosition)>,
     /// Leave keyboard focus where it is (single click in the Explorer).
     pub keep_focus: bool,
+    /// Markdown heading slug to scroll to (`b.md#setup`).
+    pub anchor: Option<String>,
 }
 
 #[derive(Clone, Debug)]
@@ -244,6 +263,8 @@ pub enum Prompt {
     Move { srcs: Vec<PathBuf>, dir: PathBuf },
     /// Recovery Discard: Discard / Cancel.
     DiscardRecovery { count: usize },
+    /// A link with an unusual scheme: Open / Cancel.
+    OpenLink { url: String },
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -525,6 +546,7 @@ impl AppCore {
             return;
         };
         self.place_caret(view, &at);
+        self.apply_markdown_default_mode(view);
         if !at.keep_focus {
             self.effects.push(Effect::FocusEditor(view));
         }
@@ -545,6 +567,34 @@ impl AppCore {
     }
 
     fn place_caret(&mut self, view: ViewId, at: &OpenAt) {
+        if let Some(anchor) = &at.anchor {
+            let Some(doc) = self
+                .workbench
+                .view(view)
+                .and_then(|v| self.workbench.document(v.document_id))
+            else {
+                return;
+            };
+            let text = doc.buffer.text();
+            let md = notoir_editor::markdown::parse(&text);
+            if let Some(h) = notoir_editor::markdown::find_heading(&md, anchor) {
+                let line = doc.buffer.rope().char_to_line(h.range.0);
+                let _ = self
+                    .workbench
+                    .set_selection(view, Selection::caret(h.range.0));
+                if let Some(v) = self.workbench.views.get_mut(view) {
+                    v.scroll.top_line = line;
+                }
+                self.find.scroll.insert(
+                    view,
+                    notoir_core::view::ScrollPosition {
+                        top_line: line,
+                        ..Default::default()
+                    },
+                );
+            }
+            return;
+        }
         if let Some((sel, scroll)) = &at.restore {
             let _ = self.workbench.set_selection(view, sel.clone());
             if let Some(v) = self.workbench.views.get_mut(view) {
@@ -994,6 +1044,7 @@ impl AppCore {
                 line_col: None,
                 restore: Some((tab.selection, tab.scroll)),
                 keep_focus: false,
+                anchor: None,
             },
         );
     }
@@ -1072,6 +1123,7 @@ impl AppCore {
             }
             (Prompt::Move { srcs, dir }, Answer::Primary) => self.transfer_into(srcs, dir, false),
             (Prompt::DiscardRecovery { .. }, Answer::Primary) => self.recovery_discard_all(),
+            (Prompt::OpenLink { url }, Answer::Primary) => self.files.dialogs.open_external(&url),
             (Prompt::ScratchpadClose { view, doc }, Answer::Primary) => {
                 self.flush_scratchpad(doc);
                 self.set_scratchpad_open(doc, false);

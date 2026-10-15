@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "Logniveau"
+  },
+  "markdown": {
+    "defaultMode": "Standaardmodus voor Markdown",
+    "splitOrientation": "Splitsrichting voor Markdown",
+    "preview": {
+      "maxWidth": "Breedte van Markdown-voorbeeld",
+      "interactiveCheckboxes": "Aanklikbare taakvakjes in voorbeeld",
+      "scrollSync": "Scrollen van editor en voorbeeld synchroniseren",
+      "loadRemoteImages": "Externe afbeeldingen laden in voorbeeld"
+    }
   }
 }

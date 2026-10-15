@@ -14,6 +14,7 @@ pub mod indent_detect;
 pub mod language;
 pub mod line_ending;
 pub mod line_ops;
+pub mod markdown;
 pub mod motion;
 pub mod natural;
 pub mod selection;

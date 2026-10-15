@@ -90,5 +90,9 @@
   },
   "gotoLine": {
     "hint": "Número de línea, línea:columna o +/- líneas (1–{{lines}})"
+  },
+  "openLink": {
+    "title": "¿Abrir este enlace con otra aplicación?",
+    "open": "Abrir"
   }
 }

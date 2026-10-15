@@ -64,34 +64,7 @@ fn visible_rows(cache: &mut ViewCache, m: &Metrics) -> Vec<Row> {
 
 /// Theme colour of a syntax token.
 fn token_color(kit: &Kit, kind: notoir_editor::syntax::TokenKind, plain: Color32) -> Color32 {
-    use notoir_editor::syntax::TokenKind as K;
-    let tok = match kind {
-        K::Plain => return plain,
-        K::Comment => Tok::SyntaxComment,
-        K::Keyword => Tok::SyntaxKeyword,
-        K::String => Tok::SyntaxString,
-        K::Number => Tok::SyntaxNumber,
-        K::Constant => Tok::SyntaxConstant,
-        K::Function => Tok::SyntaxFunction,
-        K::Type => Tok::SyntaxType,
-        K::Variable => Tok::SyntaxVariable,
-        K::Property => Tok::SyntaxProperty,
-        K::Operator => Tok::SyntaxOperator,
-        K::Punctuation => Tok::SyntaxPunctuation,
-        K::Tag => Tok::SyntaxTag,
-        K::Attribute => Tok::SyntaxAttribute,
-        K::Regex => Tok::SyntaxRegex,
-        K::Escape => Tok::SyntaxEscape,
-        K::Heading => Tok::SyntaxHeading,
-        K::Emphasis => Tok::SyntaxEmphasis,
-        K::Strong => Tok::SyntaxStrong,
-        K::Link => Tok::SyntaxLink,
-        K::Code => Tok::SyntaxCode,
-        K::Quote => Tok::SyntaxQuote,
-        K::ListMarker => Tok::SyntaxListMarker,
-        K::Invalid => Tok::SyntaxInvalid,
-    };
-    kit.color(tok)
+    crate::theme::syntax_token(kind).map_or(plain, |t| kit.color(t))
 }
 
 /// Tabs expanded for text that starts at grid column `start`.

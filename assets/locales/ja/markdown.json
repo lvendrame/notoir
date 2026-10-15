@@ -1,0 +1,10 @@
+{
+  "edit": "編集",
+  "split": "分割",
+  "preview": "プレビュー",
+  "frontMatter": "フロント マター",
+  "remoteImage": "リモート画像: {{url}}",
+  "loadRemote": "リモート画像を読み込む",
+  "remoteUnavailable": "このバージョンではリモート画像を読み込めません。",
+  "imageMissing": "画像が見つかりません: {{path}}"
+}

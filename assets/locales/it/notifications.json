@@ -29,5 +29,6 @@
   "recoveryDamaged": "Un documento recuperato era danneggiato; è stato aperto il contenuto grezzo.",
   "recoveryNothing": "Non ci sono documenti non salvati da recuperare.",
   "sessionMissing": "File dell'ultima sessione che non esistono più: {{count}}.",
-  "replacedAll": "Occorrenze sostituite: {{count}}."
+  "replacedAll": "Occorrenze sostituite: {{count}}.",
+  "linkMissing": "Destinazione del link non trovata: {{target}}"
 }

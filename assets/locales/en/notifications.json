@@ -29,5 +29,6 @@
   "recoveryDamaged": "A recovered document was damaged; its raw content was opened.",
   "recoveryNothing": "There are no unsaved documents to recover.",
   "sessionMissing": "Files from the last session no longer exist: {{count}}.",
-  "replacedAll": "Replaced {{count}} occurrences."
+  "replacedAll": "Replaced {{count}} occurrences.",
+  "linkMissing": "Link target not found: {{target}}"
 }

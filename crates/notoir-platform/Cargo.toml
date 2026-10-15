@@ -9,6 +9,7 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
+open.workspace = true
 trash.workspace = true
 directories.workspace = true
 sys-locale.workspace = true

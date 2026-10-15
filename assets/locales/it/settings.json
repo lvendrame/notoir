@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "Livello di log"
+  },
+  "markdown": {
+    "defaultMode": "Modalità predefinita di Markdown",
+    "splitOrientation": "Orientamento della divisione Markdown",
+    "preview": {
+      "maxWidth": "Larghezza dell'anteprima Markdown",
+      "interactiveCheckboxes": "Caselle attività cliccabili nell'anteprima",
+      "scrollSync": "Sincronizza lo scorrimento di editor e anteprima",
+      "loadRemoteImages": "Carica immagini remote nell'anteprima"
+    }
   }
 }

@@ -29,6 +29,7 @@ tracing-appender.workspace = true
 arboard.workspace = true
 unicode-segmentation.workspace = true
 notoir-editor.workspace = true
+image = { workspace = true, features = ["png", "jpeg", "gif", "webp"] }
 
 [dev-dependencies]
 egui_kittest = { workspace = true, features = ["wgpu", "snapshot", "eframe"] }

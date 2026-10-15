@@ -449,6 +449,37 @@ pub fn contrast(a: Color32, b: Color32) -> f32 {
     (la.max(lb) + 0.05) / (la.min(lb) + 0.05)
 }
 
+/// The theme token for a syntax class (`None` = plain text colour).
+pub fn syntax_token(kind: notoir_editor::syntax::TokenKind) -> Option<Tok> {
+    use notoir_editor::syntax::TokenKind as K;
+    Some(match kind {
+        K::Plain => return None,
+        K::Comment => Tok::SyntaxComment,
+        K::Keyword => Tok::SyntaxKeyword,
+        K::String => Tok::SyntaxString,
+        K::Number => Tok::SyntaxNumber,
+        K::Constant => Tok::SyntaxConstant,
+        K::Function => Tok::SyntaxFunction,
+        K::Type => Tok::SyntaxType,
+        K::Variable => Tok::SyntaxVariable,
+        K::Property => Tok::SyntaxProperty,
+        K::Operator => Tok::SyntaxOperator,
+        K::Punctuation => Tok::SyntaxPunctuation,
+        K::Tag => Tok::SyntaxTag,
+        K::Attribute => Tok::SyntaxAttribute,
+        K::Regex => Tok::SyntaxRegex,
+        K::Escape => Tok::SyntaxEscape,
+        K::Heading => Tok::SyntaxHeading,
+        K::Emphasis => Tok::SyntaxEmphasis,
+        K::Strong => Tok::SyntaxStrong,
+        K::Link => Tok::SyntaxLink,
+        K::Code => Tok::SyntaxCode,
+        K::Quote => Tok::SyntaxQuote,
+        K::ListMarker => Tok::SyntaxListMarker,
+        K::Invalid => Tok::SyntaxInvalid,
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

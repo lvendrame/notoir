@@ -1,0 +1,10 @@
+{
+  "edit": "Edit",
+  "split": "Split",
+  "preview": "Preview",
+  "frontMatter": "Front matter",
+  "remoteImage": "Remote image: {{url}}",
+  "loadRemote": "Load remote images",
+  "remoteUnavailable": "Loading remote images is not available in this version.",
+  "imageMissing": "Image not found: {{path}}"
+}

@@ -90,5 +90,9 @@
   },
   "gotoLine": {
     "hint": "Satır numarası, satır:sütun veya +/- satır (1–{{lines}})"
+  },
+  "openLink": {
+    "title": "Bu bağlantı başka bir uygulamayla açılsın mı?",
+    "open": "Aç"
   }
 }

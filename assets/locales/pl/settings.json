@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "Poziom logowania"
+  },
+  "markdown": {
+    "defaultMode": "Domyślny tryb Markdown",
+    "splitOrientation": "Orientacja podziału Markdown",
+    "preview": {
+      "maxWidth": "Szerokość podglądu Markdown",
+      "interactiveCheckboxes": "Klikalne pola zadań w podglądzie",
+      "scrollSync": "Synchronizuj przewijanie edytora i podglądu",
+      "loadRemoteImages": "Wczytuj zdalne obrazy w podglądzie"
+    }
   }
 }

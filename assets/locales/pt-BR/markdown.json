@@ -1,0 +1,10 @@
+{
+  "edit": "Editar",
+  "split": "Dividir",
+  "preview": "Visualizar",
+  "frontMatter": "Metadados",
+  "remoteImage": "Imagem remota: {{url}}",
+  "loadRemote": "Carregar imagens remotas",
+  "remoteUnavailable": "O carregamento de imagens remotas não está disponível nesta versão.",
+  "imageMissing": "Imagem não encontrada: {{path}}"
+}

@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "ようこそを終了"
+  },
+  "markdown": {
+    "togglePreview": "プレビューの切り替え",
+    "openPreviewToSide": "プレビューを横に開く",
+    "showEditor": "エディターを表示",
+    "showSplit": "エディターとプレビューを表示",
+    "showPreview": "プレビューを表示",
+    "toggleBold": "太字の切り替え",
+    "toggleItalic": "斜体の切り替え",
+    "toggleCode": "インライン コードの切り替え",
+    "insertLink": "リンクを挿入",
+    "toggleTask": "タスクの切り替え",
+    "openLink": "リンクを開く",
+    "revealSource": "ソースを表示"
   }
 }

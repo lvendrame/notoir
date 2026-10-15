@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "Рівень журналу"
+  },
+  "markdown": {
+    "defaultMode": "Типовий режим Markdown",
+    "splitOrientation": "Орієнтація поділу Markdown",
+    "preview": {
+      "maxWidth": "Ширина попереднього перегляду Markdown",
+      "interactiveCheckboxes": "Клікабельні прапорці завдань у перегляді",
+      "scrollSync": "Синхронізувати прокручування редактора й перегляду",
+      "loadRemoteImages": "Завантажувати зовнішні зображення в перегляді"
+    }
   }
 }

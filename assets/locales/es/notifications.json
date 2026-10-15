@@ -29,5 +29,6 @@
   "recoveryDamaged": "Un documento recuperado estaba dañado; se abrió su contenido sin procesar.",
   "recoveryNothing": "No hay documentos sin guardar que recuperar.",
   "sessionMissing": "Archivos de la última sesión que ya no existen: {{count}}.",
-  "replacedAll": "Coincidencias reemplazadas: {{count}}."
+  "replacedAll": "Coincidencias reemplazadas: {{count}}.",
+  "linkMissing": "No se encontró el destino del enlace: {{target}}"
 }

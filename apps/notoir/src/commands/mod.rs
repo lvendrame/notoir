@@ -12,6 +12,7 @@ mod app;
 mod editor;
 mod file;
 mod layout;
+mod markdown;
 mod preferences;
 mod reliability;
 mod settings_ui;
@@ -28,6 +29,7 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     reliability::specs(&mut specs);
     text::specs(&mut specs);
     settings_ui::specs(&mut specs);
+    markdown::specs(&mut specs);
     workspace::specs(&mut specs);
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);

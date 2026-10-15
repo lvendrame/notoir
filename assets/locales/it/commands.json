@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "Termina benvenuto"
+  },
+  "markdown": {
+    "togglePreview": "Attiva/disattiva anteprima",
+    "openPreviewToSide": "Apri anteprima a lato",
+    "showEditor": "Mostra editor",
+    "showSplit": "Mostra editor e anteprima",
+    "showPreview": "Mostra anteprima",
+    "toggleBold": "Attiva/disattiva grassetto",
+    "toggleItalic": "Attiva/disattiva corsivo",
+    "toggleCode": "Attiva/disattiva codice in linea",
+    "insertLink": "Inserisci link",
+    "toggleTask": "Attiva/disattiva attività",
+    "openLink": "Apri link",
+    "revealSource": "Mostra sorgente"
   }
 }

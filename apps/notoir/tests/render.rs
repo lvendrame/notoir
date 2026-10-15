@@ -369,3 +369,30 @@ fn syntax_snapshot() {
         }
     }
 }
+
+#[test]
+fn markdown_split_snapshot() {
+    let dir = tempfile::tempdir().unwrap();
+    let png = dir.path().join("logo.png");
+    image::RgbaImage::from_fn(120, 40, |x, _| image::Rgba([60 + (x as u8), 110, 220, 255]))
+        .save(&png)
+        .unwrap();
+    let p = dir.path().join("README.md");
+    std::fs::write(
+        &p,
+        "# Notoir\n\nA **fast**, *native* editor with `code`, ~~noise~~ and [links](https://notoir.dev).\n\n![logo](logo.png)\n\n## Tasks\n\n- [x] Splits\n- [ ] Markdown preview\n  - nested item\n\n> Plain files + Git + MCP.\n\n| Feature | Status |\n|:--|--:|\n| Recovery | done |\n| Preview | new |\n\n```rust\nfn main() {\n    println!(\"hi\");\n}\n```\n\n---\n\n1. one\n2. two\n",
+    )
+    .unwrap();
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = vec![(p, None)];
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "markdown.showSplit", serde_json::Value::Null);
+    common::settle(&mut app);
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("markdown-split.png")).unwrap();
+    }
+}

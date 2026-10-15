@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "日志级别"
+  },
+  "markdown": {
+    "defaultMode": "Markdown 默认模式",
+    "splitOrientation": "Markdown 拆分方向",
+    "preview": {
+      "maxWidth": "Markdown 预览宽度",
+      "interactiveCheckboxes": "预览中可点击的任务复选框",
+      "scrollSync": "同步编辑器和预览的滚动",
+      "loadRemoteImages": "在预览中加载远程图片"
+    }
   }
 }

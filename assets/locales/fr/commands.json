@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "Terminer l'accueil"
+  },
+  "markdown": {
+    "togglePreview": "Basculer l'aperçu",
+    "openPreviewToSide": "Ouvrir l'aperçu sur le côté",
+    "showEditor": "Afficher l'éditeur",
+    "showSplit": "Afficher l'éditeur et l'aperçu",
+    "showPreview": "Afficher l'aperçu",
+    "toggleBold": "Basculer le gras",
+    "toggleItalic": "Basculer l'italique",
+    "toggleCode": "Basculer le code en ligne",
+    "insertLink": "Insérer un lien",
+    "toggleTask": "Basculer la tâche",
+    "openLink": "Ouvrir le lien",
+    "revealSource": "Afficher la source"
   }
 }

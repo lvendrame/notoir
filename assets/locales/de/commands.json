@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "Willkommen abschließen"
+  },
+  "markdown": {
+    "togglePreview": "Vorschau umschalten",
+    "openPreviewToSide": "Vorschau seitlich öffnen",
+    "showEditor": "Editor anzeigen",
+    "showSplit": "Editor und Vorschau anzeigen",
+    "showPreview": "Vorschau anzeigen",
+    "toggleBold": "Fett umschalten",
+    "toggleItalic": "Kursiv umschalten",
+    "toggleCode": "Inline-Code umschalten",
+    "insertLink": "Link einfügen",
+    "toggleTask": "Aufgabe umschalten",
+    "openLink": "Link öffnen",
+    "revealSource": "Quelle anzeigen"
   }
 }

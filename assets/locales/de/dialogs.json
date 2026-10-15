@@ -90,5 +90,9 @@
   },
   "gotoLine": {
     "hint": "Zeilennummer, Zeile:Spalte oder +/- Zeilen (1–{{lines}})"
+  },
+  "openLink": {
+    "title": "Diesen Link mit einer anderen Anwendung öffnen?",
+    "open": "Öffnen"
   }
 }

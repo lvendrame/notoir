@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "完成欢迎"
+  },
+  "markdown": {
+    "togglePreview": "切换预览",
+    "openPreviewToSide": "在侧边打开预览",
+    "showEditor": "显示编辑器",
+    "showSplit": "显示编辑器和预览",
+    "showPreview": "显示预览",
+    "toggleBold": "切换粗体",
+    "toggleItalic": "切换斜体",
+    "toggleCode": "切换行内代码",
+    "insertLink": "插入链接",
+    "toggleTask": "切换任务",
+    "openLink": "打开链接",
+    "revealSource": "显示源代码"
   }
 }

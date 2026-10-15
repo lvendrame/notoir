@@ -273,6 +273,31 @@ impl eframe::App for NotoirApp {
         self.core.notifications.tick(now);
         self.core.flush_scratchpads(false);
         self.core.workspace_tick();
+        // Markdown preview images decoded in the background become textures.
+        for (path, data) in std::mem::take(&mut self.core.markdown.decoded) {
+            let tex = match data {
+                crate::markdown::ImageData::Ready {
+                    width,
+                    height,
+                    rgba,
+                } => {
+                    let img = egui::ColorImage::from_rgba_unmultiplied([width, height], &rgba);
+                    let handle = ctx.load_texture(
+                        path.display().to_string(),
+                        img,
+                        egui::TextureOptions::LINEAR,
+                    );
+                    shell::md_preview::ImageTex::Ready(
+                        handle,
+                        egui::vec2(width as f32, height as f32),
+                    )
+                }
+                crate::markdown::ImageData::Missing(why) => {
+                    shell::md_preview::ImageTex::Missing(why)
+                }
+            };
+            self.ui.previews.images.insert(path, tex);
+        }
         self.core.recovery_tick();
         self.core.autosave_tick();
         self.core.sync_doc_watches();
@@ -358,6 +383,7 @@ impl eframe::App for NotoirApp {
                         &mut self.ui.editors,
                         &mut self.ui.tab_drag,
                         &mut self.ui.explorer.drag,
+                        &mut self.ui.previews,
                         focus_request,
                         &context,
                         &mut actions,

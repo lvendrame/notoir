@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "Terminar bienvenida"
+  },
+  "markdown": {
+    "togglePreview": "Alternar vista previa",
+    "openPreviewToSide": "Abrir vista previa al lado",
+    "showEditor": "Mostrar editor",
+    "showSplit": "Mostrar editor y vista previa",
+    "showPreview": "Mostrar vista previa",
+    "toggleBold": "Alternar negrita",
+    "toggleItalic": "Alternar cursiva",
+    "toggleCode": "Alternar código en línea",
+    "insertLink": "Insertar enlace",
+    "toggleTask": "Alternar tarea",
+    "openLink": "Abrir enlace",
+    "revealSource": "Mostrar origen"
   }
 }

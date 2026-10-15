@@ -167,6 +167,7 @@ pub struct AppCore {
     /// with the context of the moment it opened).
     pub queue_with_context: Vec<(CommandInvocation, ContextSnapshot)>,
     pub settings_ui: crate::settings_tab::SettingsUi,
+    pub markdown: crate::markdown::MarkdownState,
     /// Zen Mode is on (with what to restore).
     pub zen: Option<crate::settings_tab::ZenState>,
     /// Show the first-run page at startup (production launches).
@@ -287,6 +288,7 @@ impl AppCore {
             find: Default::default(),
             queue_with_context: Vec::new(),
             settings_ui: Default::default(),
+            markdown: Default::default(),
             zen: None,
             first_run_check: opts.first_run,
             language,
@@ -665,6 +667,7 @@ impl AppCore {
                 IoResult::DiskChecked(r) => self.handle_disk_check(*r),
                 IoResult::RecoveryWriteFailed { error } => self.recovery_write_failed(error),
                 IoResult::ConfigReloaded(files) => self.apply_config(*files),
+                IoResult::ImageDecoded(img) => self.markdown.decoded.push(*img),
                 IoResult::SettingsWriteFailed { path, error } => {
                     tracing::error!(%path, %error, "settings write failed");
                     let now = self.now_ms;
@@ -840,6 +843,7 @@ impl AppCore {
                     line_col: *at,
                     restore: None,
                     keep_focus: false,
+                    anchor: None,
                 },
             );
         }

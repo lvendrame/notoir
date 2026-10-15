@@ -13,6 +13,7 @@ pub mod empty_state;
 pub mod explorer;
 pub mod find_widget;
 pub mod layout;
+pub mod md_preview;
 pub mod overlays;
 pub mod panels;
 pub mod prompts;
@@ -62,6 +63,7 @@ pub struct UiState {
     pub window_focused: bool,
     /// Last full-screen request (tests; the OS reports the real state).
     pub fullscreen_requested: Option<bool>,
+    pub previews: md_preview::Previews,
 }
 
 /// Collects invocations produced while rendering one frame.

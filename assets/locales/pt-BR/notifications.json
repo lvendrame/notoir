@@ -29,5 +29,6 @@
   "recoveryDamaged": "Um documento recuperado estava danificado; o conteúdo bruto foi aberto.",
   "recoveryNothing": "Não há documentos não salvos para recuperar.",
   "sessionMissing": "Arquivos da última sessão que não existem mais: {{count}}.",
-  "replacedAll": "Ocorrências substituídas: {{count}}."
+  "replacedAll": "Ocorrências substituídas: {{count}}.",
+  "linkMissing": "Destino do link não encontrado: {{target}}"
 }

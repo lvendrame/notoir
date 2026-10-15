@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "Protokollstufe"
+  },
+  "markdown": {
+    "defaultMode": "Markdown-Standardmodus",
+    "splitOrientation": "Ausrichtung der Markdown-Teilung",
+    "preview": {
+      "maxWidth": "Breite der Markdown-Vorschau",
+      "interactiveCheckboxes": "Anklickbare Aufgabenkästchen in der Vorschau",
+      "scrollSync": "Bildlauf von Editor und Vorschau synchronisieren",
+      "loadRemoteImages": "Externe Bilder in der Vorschau laden"
+    }
   }
 }

@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "Hoş Geldinizi Bitir"
+  },
+  "markdown": {
+    "togglePreview": "Önizlemeyi Aç/Kapat",
+    "openPreviewToSide": "Önizlemeyi Yanda Aç",
+    "showEditor": "Düzenleyiciyi Göster",
+    "showSplit": "Düzenleyiciyi ve Önizlemeyi Göster",
+    "showPreview": "Önizlemeyi Göster",
+    "toggleBold": "Kalını Aç/Kapat",
+    "toggleItalic": "İtaliği Aç/Kapat",
+    "toggleCode": "Satır İçi Kodu Aç/Kapat",
+    "insertLink": "Bağlantı Ekle",
+    "toggleTask": "Görevi Aç/Kapat",
+    "openLink": "Bağlantıyı Aç",
+    "revealSource": "Kaynağı Göster"
   }
 }

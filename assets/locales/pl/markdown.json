@@ -1,0 +1,10 @@
+{
+  "edit": "Edycja",
+  "split": "Podział",
+  "preview": "Podgląd",
+  "frontMatter": "Metadane",
+  "remoteImage": "Zdalny obraz: {{url}}",
+  "loadRemote": "Wczytaj zdalne obrazy",
+  "remoteUnavailable": "Wczytywanie zdalnych obrazów nie jest dostępne w tej wersji.",
+  "imageMissing": "Nie znaleziono obrazu: {{path}}"
+}

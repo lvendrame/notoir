@@ -1,0 +1,10 @@
+{
+  "edit": "Bewerken",
+  "split": "Gesplitst",
+  "preview": "Voorbeeld",
+  "frontMatter": "Front matter",
+  "remoteImage": "Externe afbeelding: {{url}}",
+  "loadRemote": "Externe afbeeldingen laden",
+  "remoteUnavailable": "Het laden van externe afbeeldingen is niet beschikbaar in deze versie.",
+  "imageMissing": "Afbeelding niet gevonden: {{path}}"
+}

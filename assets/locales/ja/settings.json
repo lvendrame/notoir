@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "ログ レベル"
+  },
+  "markdown": {
+    "defaultMode": "Markdown の既定モード",
+    "splitOrientation": "Markdown の分割方向",
+    "preview": {
+      "maxWidth": "Markdown プレビューの幅",
+      "interactiveCheckboxes": "プレビューでタスク ボックスをクリック可能にする",
+      "scrollSync": "エディターとプレビューのスクロールを同期",
+      "loadRemoteImages": "プレビューでリモート画像を読み込む"
+    }
   }
 }

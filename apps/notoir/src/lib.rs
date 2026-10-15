@@ -18,6 +18,7 @@ pub mod icons;
 pub mod input;
 pub mod io;
 pub mod logging;
+pub mod markdown;
 pub mod menus;
 pub mod recovery;
 pub mod session;

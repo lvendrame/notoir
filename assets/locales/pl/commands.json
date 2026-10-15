@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "Zakończ powitanie"
+  },
+  "markdown": {
+    "togglePreview": "Przełącz podgląd",
+    "openPreviewToSide": "Otwórz podgląd z boku",
+    "showEditor": "Pokaż edytor",
+    "showSplit": "Pokaż edytor i podgląd",
+    "showPreview": "Pokaż podgląd",
+    "toggleBold": "Przełącz pogrubienie",
+    "toggleItalic": "Przełącz kursywę",
+    "toggleCode": "Przełącz kod w tekście",
+    "insertLink": "Wstaw link",
+    "toggleTask": "Przełącz zadanie",
+    "openLink": "Otwórz link",
+    "revealSource": "Pokaż źródło"
   }
 }

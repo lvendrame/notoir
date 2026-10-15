@@ -1,0 +1,10 @@
+{
+  "edit": "Düzenle",
+  "split": "Böl",
+  "preview": "Önizleme",
+  "frontMatter": "Ön bilgi",
+  "remoteImage": "Uzak görüntü: {{url}}",
+  "loadRemote": "Uzak görüntüleri yükle",
+  "remoteUnavailable": "Bu sürümde uzak görüntü yükleme kullanılamaz.",
+  "imageMissing": "Görüntü bulunamadı: {{path}}"
+}

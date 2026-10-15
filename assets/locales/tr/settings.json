@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "Günlük düzeyi"
+  },
+  "markdown": {
+    "defaultMode": "Markdown varsayılan modu",
+    "splitOrientation": "Markdown bölme yönü",
+    "preview": {
+      "maxWidth": "Markdown önizleme genişliği",
+      "interactiveCheckboxes": "Önizlemede tıklanabilir görev kutuları",
+      "scrollSync": "Düzenleyici ve önizleme kaydırmasını eşitle",
+      "loadRemoteImages": "Önizlemede uzak görüntüleri yükle"
+    }
   }
 }

@@ -29,5 +29,6 @@
   "recoveryDamaged": "Een hersteld document was beschadigd; de ruwe inhoud is geopend.",
   "recoveryNothing": "Er zijn geen niet-opgeslagen documenten om te herstellen.",
   "sessionMissing": "Bestanden uit de vorige sessie die niet meer bestaan: {{count}}.",
-  "replacedAll": "Aantal vervangen: {{count}}."
+  "replacedAll": "Aantal vervangen: {{count}}.",
+  "linkMissing": "Linkdoel niet gevonden: {{target}}"
 }

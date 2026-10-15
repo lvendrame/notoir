@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "Finish Welcome"
+  },
+  "markdown": {
+    "togglePreview": "Toggle Preview",
+    "openPreviewToSide": "Open Preview to the Side",
+    "showEditor": "Show Editor",
+    "showSplit": "Show Editor and Preview",
+    "showPreview": "Show Preview",
+    "toggleBold": "Toggle Bold",
+    "toggleItalic": "Toggle Italic",
+    "toggleCode": "Toggle Inline Code",
+    "insertLink": "Insert Link",
+    "toggleTask": "Toggle Task",
+    "openLink": "Open Link",
+    "revealSource": "Reveal Source"
   }
 }

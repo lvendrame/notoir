@@ -125,5 +125,15 @@
   },
   "logging": {
     "level": "Niveau de journalisation"
+  },
+  "markdown": {
+    "defaultMode": "Mode par défaut de Markdown",
+    "splitOrientation": "Orientation du partage Markdown",
+    "preview": {
+      "maxWidth": "Largeur de l'aperçu Markdown",
+      "interactiveCheckboxes": "Cases à cocher cliquables dans l'aperçu",
+      "scrollSync": "Synchroniser le défilement de l'éditeur et de l'aperçu",
+      "loadRemoteImages": "Charger les images distantes dans l'aperçu"
+    }
   }
 }

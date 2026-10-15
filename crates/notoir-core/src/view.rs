@@ -38,6 +38,8 @@ pub struct EditorView {
     pub zoom: Option<f32>,
     pub wrap_override: Option<bool>,
     pub pinned: bool,
+    /// Editor share of a Markdown split (0.2–0.8).
+    pub preview_ratio: f32,
 }
 
 impl EditorView {
@@ -51,6 +53,7 @@ impl EditorView {
             zoom: None,
             wrap_override: None,
             pinned: false,
+            preview_ratio: 0.5,
         }
     }
 

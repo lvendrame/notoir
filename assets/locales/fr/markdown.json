@@ -1,0 +1,10 @@
+{
+  "edit": "Éditer",
+  "split": "Partager",
+  "preview": "Aperçu",
+  "frontMatter": "En-tête de métadonnées",
+  "remoteImage": "Image distante : {{url}}",
+  "loadRemote": "Charger les images distantes",
+  "remoteUnavailable": "Le chargement des images distantes n'est pas disponible dans cette version.",
+  "imageMissing": "Image introuvable : {{path}}"
+}

@@ -170,6 +170,51 @@ fn toolbar_item(
     }
 }
 
+/// `[ Edit │ Split │ Preview ]` for the active Markdown document (spec 24).
+fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Actions) {
+    let Some(view) = core
+        .workbench
+        .active_view()
+        .and_then(|v| core.workbench.view(v))
+    else {
+        return;
+    };
+    if !core.is_markdown(view.document_id) {
+        return;
+    }
+    use notoir_core::view::ViewKind;
+    ui.add_space(16.0);
+    ui.spacing_mut().item_spacing.x = 0.0;
+    for (kind, label, id) in [
+        (ViewKind::Text, "markdown:edit", "markdown.showEditor"),
+        (
+            ViewKind::MarkdownSplit,
+            "markdown:split",
+            "markdown.showSplit",
+        ),
+        (
+            ViewKind::MarkdownPreview,
+            "markdown:preview",
+            "markdown.showPreview",
+        ),
+    ] {
+        let selected = view.kind == kind;
+        let text = RichText::new(t!(label)).size(12.0).color(if selected {
+            kit.color(Tok::TextPrimary)
+        } else {
+            kit.color(Tok::TextSecondary)
+        });
+        if ui
+            .add(egui::Button::selectable(selected, text).min_size(egui::vec2(56.0, 24.0)))
+            .clicked()
+            && !selected
+        {
+            actions.push(CommandInvocation::new(id, InvocationSource::Toolbar));
+        }
+    }
+    ui.spacing_mut().item_spacing.x = 2.0;
+}
+
 pub fn toolbar(
     ui: &mut egui::Ui,
     kit: &mut Kit,
@@ -204,6 +249,7 @@ pub fn toolbar(
                         toolbar_item(ui, kit, core, context, id, *icon, actions);
                     }
                 }
+                markdown_modes(ui, kit, core, actions);
                 ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                     for (id, icon) in TOOLBAR_END {
                         toolbar_item(ui, kit, core, context, id, *icon, actions);

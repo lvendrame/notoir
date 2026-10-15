@@ -153,6 +153,15 @@ fn spec(core: &AppCore, prompt: &Prompt) -> Spec {
                 (t!("common:cancel"), Answer::Cancel, false),
             ],
         },
+        Prompt::OpenLink { url } => Spec {
+            title: t!("dialogs:openLink.title"),
+            body: url.clone(),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("dialogs:openLink.open"), Answer::Primary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
         Prompt::Move { srcs, dir } => Spec {
             title: if srcs.len() == 1 {
                 t!(

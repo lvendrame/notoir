@@ -196,5 +196,19 @@
   },
   "welcome": {
     "finish": "Welkom afronden"
+  },
+  "markdown": {
+    "togglePreview": "Voorbeeld in-/uitschakelen",
+    "openPreviewToSide": "Voorbeeld aan de zijkant openen",
+    "showEditor": "Editor tonen",
+    "showSplit": "Editor en voorbeeld tonen",
+    "showPreview": "Voorbeeld tonen",
+    "toggleBold": "Vet in-/uitschakelen",
+    "toggleItalic": "Cursief in-/uitschakelen",
+    "toggleCode": "Inline code in-/uitschakelen",
+    "insertLink": "Link invoegen",
+    "toggleTask": "Taak in-/uitschakelen",
+    "openLink": "Link openen",
+    "revealSource": "Bron tonen"
   }
 }

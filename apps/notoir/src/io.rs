@@ -44,6 +44,8 @@ pub enum IoResult {
     },
     /// Settings and keybindings files re-read after a save or external change.
     ConfigReloaded(Box<crate::config::ConfigFiles>),
+    /// A Markdown preview image decoded off the UI thread.
+    ImageDecoded(Box<(std::path::PathBuf, crate::markdown::ImageData)>),
     /// Another launch forwarded its command line (single instance).
     Instance(notoir_platform::single_instance::InstanceRequest),
 }
