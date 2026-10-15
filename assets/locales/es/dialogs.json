@@ -96,5 +96,18 @@
   "openLink": {
     "title": "¿Abrir este enlace con otra aplicación?",
     "open": "Abrir"
+  },
+  "replaceAll": {
+    "title": "¿Reemplazar {{count}} coincidencias en {{files}} archivos?",
+    "replace": "Reemplazar"
+  },
+  "quickOpen": {
+    "hint": "Buscar archivos por nombre (añada :línea para ir a una línea; ? para ayuda)",
+    "indexing": "Indexando… los resultados pueden estar incompletos.",
+    "helpCommands": "Paleta de comandos",
+    "helpLine": "Ir a la línea",
+    "helpSymbol": "Ir al símbolo en el editor",
+    "helpWorkspaceSymbols": "Símbolos del área de trabajo",
+    "workspaceSymbolsLater": "Los símbolos del área de trabajo aún no están disponibles."
   }
 }

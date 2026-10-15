@@ -96,5 +96,18 @@
   "openLink": {
     "title": "Deze link openen met een andere toepassing?",
     "open": "Openen"
+  },
+  "replaceAll": {
+    "title": "{{count}} voorkomens in {{files}} bestanden vervangen?",
+    "replace": "Vervangen"
+  },
+  "quickOpen": {
+    "hint": "Bestanden zoeken op naam (voeg :regel toe voor een regel; ? voor hulp)",
+    "indexing": "Indexeren… resultaten zijn mogelijk onvolledig.",
+    "helpCommands": "Opdrachtpalet",
+    "helpLine": "Ga naar regel",
+    "helpSymbol": "Ga naar symbool in editor",
+    "helpWorkspaceSymbols": "Werkruimtesymbolen",
+    "workspaceSymbolsLater": "Werkruimtesymbolen zijn nog niet beschikbaar."
   }
 }

@@ -366,6 +366,26 @@ impl AppCore {
         if !accept {
             let _ = self.workbench.set_selection(g.view, g.original.0);
             self.find.scroll.insert(g.view, g.original.1);
+        } else if let Some((doc, to)) = self.current_location() {
+            // Go to Line is a jump (spec 15): from where the dialog opened.
+            let rope = self
+                .workbench
+                .document(doc)
+                .map(|d| d.buffer.rope().clone());
+            if let (Some(rope), Some((_, from))) = (rope, self.current_location()) {
+                let head = g.original.0.primary().head.min(rope.len_chars());
+                let line = rope.char_to_line(head);
+                let from = notoir_core::navigation::Location {
+                    line,
+                    col: head - rope.line_to_char(line),
+                    ..from
+                };
+                let min = self.settings.int("navigation.minLineDistance", None).max(0) as usize;
+                if from.line.abs_diff(to.line) > min {
+                    self.nav.history.record(from, to.clone());
+                    self.nav.last = Some((doc, to));
+                }
+            }
         }
         self.effects.push(crate::core::Effect::FocusEditor(g.view));
     }

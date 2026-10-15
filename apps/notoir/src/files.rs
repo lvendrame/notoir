@@ -189,6 +189,10 @@ pub struct OpenAt {
     pub keep_focus: bool,
     /// Markdown heading slug to scroll to (`b.md#setup`).
     pub anchor: Option<String>,
+    /// With `line_col`: select this many chars from there (search results).
+    pub select_chars: usize,
+    /// Open in the group beside the active one (`Mod+Enter`).
+    pub side: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -265,6 +269,8 @@ pub enum Prompt {
     DiscardRecovery { count: usize },
     /// A link with an unusual scheme: Open / Cancel.
     OpenLink { url: String },
+    /// Workspace Replace All: Replace / Cancel.
+    ReplaceAll { count: usize, files: usize },
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -370,16 +376,23 @@ impl AppCore {
 
     /// Opens `path` in the active group (focusing it if already open).
     pub fn open_path(&mut self, path: &Path, at: OpenAt) {
-        let group = self.workbench.layout.active_group;
+        let group = if at.side {
+            self.workbench.side_group()
+        } else {
+            self.workbench.layout.active_group
+        };
         let (_, key) = fs_io::identity(path);
         if let Some(doc) = self.workbench.find_by_key(&key) {
             // Already open: focus a view where it is, else add one here.
-            let existing = self
-                .workbench
-                .layout
-                .groups_in_order()
-                .into_iter()
-                .find_map(|g| self.workbench.view_in_group(doc, g));
+            let existing = if at.side {
+                self.workbench.view_in_group(doc, group)
+            } else {
+                self.workbench
+                    .layout
+                    .groups_in_order()
+                    .into_iter()
+                    .find_map(|g| self.workbench.view_in_group(doc, g))
+            };
             let view = match existing {
                 Some(v) => v,
                 None => match self
@@ -619,10 +632,14 @@ impl AppCore {
                 .chars()
                 .count();
             let pos = start + col.saturating_sub(1).min(len);
-            let _ = self.workbench.set_selection(view, Selection::caret(pos));
+            let end = (pos + at.select_chars).min(rope.len_chars());
+            let _ = self
+                .workbench
+                .set_selection(view, Selection::single(notoir_editor::Range::new(pos, end)));
             if let Some(v) = self.workbench.views.get_mut(view) {
                 v.scroll.top_line = line.saturating_sub(5);
             }
+            self.find.center.push(view);
         }
     }
 
@@ -1047,6 +1064,7 @@ impl AppCore {
                 restore: Some((tab.selection, tab.scroll)),
                 keep_focus: false,
                 anchor: None,
+                ..Default::default()
             },
         );
     }
@@ -1126,6 +1144,7 @@ impl AppCore {
             (Prompt::Move { srcs, dir }, Answer::Primary) => self.transfer_into(srcs, dir, false),
             (Prompt::DiscardRecovery { .. }, Answer::Primary) => self.recovery_discard_all(),
             (Prompt::OpenLink { url }, Answer::Primary) => self.files.dialogs.open_external(&url),
+            (Prompt::ReplaceAll { .. }, Answer::Primary) => self.replace_results(None),
             (Prompt::ScratchpadClose { view, doc }, Answer::Primary) => {
                 self.flush_scratchpad(doc);
                 self.set_scratchpad_open(doc, false);

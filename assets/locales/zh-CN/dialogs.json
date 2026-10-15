@@ -96,5 +96,18 @@
   "openLink": {
     "title": "要用其他应用程序打开此链接吗?",
     "open": "打开"
+  },
+  "replaceAll": {
+    "title": "要替换 {{files}} 个文件中的 {{count}} 处匹配吗?",
+    "replace": "替换"
+  },
+  "quickOpen": {
+    "hint": "按名称搜索文件(添加 :行号 跳转到行;? 查看帮助)",
+    "indexing": "正在建立索引… 结果可能不完整。",
+    "helpCommands": "命令面板",
+    "helpLine": "转到行",
+    "helpSymbol": "转到编辑器中的符号",
+    "helpWorkspaceSymbols": "工作区符号",
+    "workspaceSymbolsLater": "工作区符号尚不可用。"
   }
 }

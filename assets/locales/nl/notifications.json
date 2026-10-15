@@ -32,5 +32,8 @@
   "replacedAll": "Aantal vervangen: {{count}}.",
   "linkMissing": "Linkdoel niet gevonden: {{target}}",
   "jsonInvalid": "Ongeldige JSON op regel {{line}}, kolom {{column}}: {{message}}",
-  "jsonSortComments": "Sleutels sorteren zou de opmerkingen in dit document verwijderen en is niet uitgevoerd."
+  "jsonSortComments": "Sleutels sorteren zou de opmerkingen in dit document verwijderen en is niet uitgevoerd.",
+  "replacedInFiles": "Vervangen in {{count}} bestanden",
+  "replaceFailed": "Kan niet vervangen in {{name}}: {{error}}",
+  "undo": "Ongedaan maken"
 }

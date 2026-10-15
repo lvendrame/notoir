@@ -150,6 +150,8 @@ fn context_items(core: &AppCore, row: &Row) -> Vec<MenuItem> {
                 ]);
             }
             v.extend([
+                item("explorer.findInFolder"),
+                MenuItem::Separator,
                 item("explorer.copyPath"),
                 item("explorer.copyRelativePath"),
                 reveal,

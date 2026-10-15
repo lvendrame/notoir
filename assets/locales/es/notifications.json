@@ -32,5 +32,8 @@
   "replacedAll": "Coincidencias reemplazadas: {{count}}.",
   "linkMissing": "No se encontró el destino del enlace: {{target}}",
   "jsonInvalid": "JSON no válido en la línea {{line}}, columna {{column}}: {{message}}",
-  "jsonSortComments": "Ordenar claves eliminaría los comentarios de este documento, así que no se ejecutó."
+  "jsonSortComments": "Ordenar claves eliminaría los comentarios de este documento, así que no se ejecutó.",
+  "replacedInFiles": "Reemplazado en {{count}} archivos",
+  "replaceFailed": "No se pudo reemplazar en {{name}}: {{error}}",
+  "undo": "Deshacer"
 }

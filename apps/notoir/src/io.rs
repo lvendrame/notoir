@@ -46,9 +46,16 @@ pub enum IoResult {
     ConfigReloaded(Box<crate::config::ConfigFiles>),
     /// A Markdown preview image decoded off the UI thread.
     ImageDecoded(Box<(std::path::PathBuf, crate::markdown::ImageData)>),
+    /// A workspace search batch (generation, batch).
+    Search(Box<(u64, notoir_workspace::search::Batch)>),
+    /// Replace in closed files finished: (changed, failed with error).
+    ReplaceDone(Box<ReplaceOutcome>),
     /// Another launch forwarded its command line (single instance).
     Instance(notoir_platform::single_instance::InstanceRequest),
 }
+
+/// Replace in closed files: changed names, and failures with their error.
+pub type ReplaceOutcome = (Vec<String>, Vec<(String, String)>);
 
 /// Posts messages to the UI thread from any thread and wakes it.
 #[derive(Clone)]

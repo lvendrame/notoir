@@ -497,3 +497,73 @@ fn outline_folding_bookmarks_snapshot() {
             .unwrap();
     }
 }
+
+#[test]
+fn search_and_quick_open_snapshot() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path().join("notes");
+    let w = |rel: &str, text: &str| {
+        let p = root.join(rel);
+        std::fs::create_dir_all(p.parent().unwrap()).unwrap();
+        std::fs::write(p, text).unwrap();
+    };
+    w(
+        "README.md",
+        "# Notoir\n\nMCP integration for agents.\nSee docs/mcp.md for the MCP server.\n",
+    );
+    w(
+        "docs/mcp.md",
+        "# MCP\n\nNotoir exposes an MCP server over stdio.\n\n## Permissions\n\nEvery MCP tool asks first.\n",
+    );
+    w(
+        "docs/architecture.md",
+        "# Architecture\n\nThe MCP bridge lives in notoir-mcp.\n",
+    );
+    w("docs/roadmap.md", "# Roadmap\n");
+    let root = root.canonicalize().unwrap();
+    let readme = root.join("README.md");
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = vec![(root, None), (readme, None)];
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "search.workspace", serde_json::Value::Null);
+    {
+        let core = &mut app.harness.state_mut().core;
+        core.search.query = "MCP".into();
+        core.start_search();
+    }
+    for _ in 0..100 {
+        common::settle(&mut app);
+        if app.harness.state().core.search.done {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(20));
+    }
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("search-panel.png")).unwrap();
+    }
+    for _ in 0..100 {
+        common::settle(&mut app);
+        if app
+            .harness
+            .state()
+            .core
+            .workspace
+            .as_ref()
+            .is_some_and(|w| w.index_ready)
+        {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(20));
+    }
+    common::run(&mut app, "navigate.quickOpen", serde_json::Value::Null);
+    app.harness.run_steps(2);
+    app.harness.event(egui::Event::Text("arch".into()));
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("quick-open.png")).unwrap();
+    }
+}

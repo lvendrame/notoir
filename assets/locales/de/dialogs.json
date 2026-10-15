@@ -96,5 +96,18 @@
   "openLink": {
     "title": "Diesen Link mit einer anderen Anwendung öffnen?",
     "open": "Öffnen"
+  },
+  "replaceAll": {
+    "title": "{{count}} Vorkommen in {{files}} Dateien ersetzen?",
+    "replace": "Ersetzen"
+  },
+  "quickOpen": {
+    "hint": "Dateien nach Namen suchen (:Zeile anhängen für eine Zeile; ? für Hilfe)",
+    "indexing": "Indizierung… Ergebnisse sind evtl. unvollständig.",
+    "helpCommands": "Befehlspalette",
+    "helpLine": "Gehe zu Zeile",
+    "helpSymbol": "Gehe zu Symbol im Editor",
+    "helpWorkspaceSymbols": "Arbeitsbereichssymbole",
+    "workspaceSymbolsLater": "Arbeitsbereichssymbole sind noch nicht verfügbar."
   }
 }

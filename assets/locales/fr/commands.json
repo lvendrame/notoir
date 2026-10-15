@@ -148,7 +148,10 @@
     "switchTab": "Basculer vers l'onglet précédent",
     "goToLine": "Aller à la ligne…",
     "goToSymbol": "Atteindre le symbole dans l'éditeur…",
-    "revealRange": "Afficher la plage"
+    "revealRange": "Afficher la plage",
+    "quickOpen": "Ouverture rapide…",
+    "back": "Précédent",
+    "forward": "Suivant"
   },
   "editor": {
     "changeLineEnding": "Changer la séquence de fin de ligne…",
@@ -190,7 +193,8 @@
     "focusFilter": "Filtrer les fichiers dans l'explorateur",
     "undo": "Annuler l'opération de l'explorateur",
     "revealActive": "Afficher le fichier actif dans l'explorateur",
-    "drop": "Déposer des fichiers"
+    "drop": "Déposer des fichiers",
+    "findInFolder": "Rechercher dans le dossier…"
   },
   "recovery": {
     "show": "Récupérer les documents non enregistrés…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "Activer le fil d'Ariane"
+  },
+  "search": {
+    "workspace": "Rechercher dans l'espace de travail",
+    "replaceAll": "Tout remplacer dans l'espace de travail",
+    "next": "Résultat de recherche suivant",
+    "previous": "Résultat de recherche précédent",
+    "openResult": "Ouvrir le résultat de recherche",
+    "dismiss": "Ignorer le résultat de recherche",
+    "replaceOne": "Remplacer",
+    "undoReplace": "Annuler le remplacement",
+    "copyPath": "Copier le chemin"
+  },
+  "quickOpen": {
+    "open": "Ouvrir"
   }
 }

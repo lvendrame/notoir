@@ -32,5 +32,8 @@
   "replacedAll": "已替换 {{count}} 处。",
   "linkMissing": "找不到链接目标:{{target}}",
   "jsonInvalid": "第 {{line}} 行第 {{column}} 列的 JSON 无效:{{message}}",
-  "jsonSortComments": "排序键会删除此文档中的注释,因此未执行。"
+  "jsonSortComments": "排序键会删除此文档中的注释,因此未执行。",
+  "replacedInFiles": "已在 {{count}} 个文件中替换",
+  "replaceFailed": "无法在 {{name}} 中替换:{{error}}",
+  "undo": "撤消"
 }

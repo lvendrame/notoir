@@ -12,6 +12,7 @@ pub mod fuzzy;
 pub mod ids;
 pub mod keymap;
 pub mod layout;
+pub mod navigation;
 pub mod notifications;
 pub mod panels;
 pub mod settings;

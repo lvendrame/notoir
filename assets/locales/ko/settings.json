@@ -150,5 +150,14 @@
   "outline": {
     "followCursor": "커서 위치의 기호를 개요에서 강조",
     "depth": "개요에 표시할 키 깊이 (JSON, YAML, TOML)"
+  },
+  "search": {
+    "maxResults": "작업 영역 검색 최대 결과 수",
+    "maxFileSize": "이보다 큰 파일은 검색에서 건너뜀 (바이트)",
+    "exclude": "작업 영역 검색에서 제외할 glob",
+    "quickOpenMaxFiles": "빠른 열기에 표시할 최대 파일 수"
+  },
+  "navigation": {
+    "minLineDistance": "이보다 많은 줄의 커서 이동은 뒤로/앞으로 기록에 저장"
   }
 }

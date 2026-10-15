@@ -96,5 +96,18 @@
   "openLink": {
     "title": "이 링크를 다른 앱으로 열까요?",
     "open": "열기"
+  },
+  "replaceAll": {
+    "title": "{{files}}개 파일의 {{count}}개 항목을 바꾸시겠습니까?",
+    "replace": "바꾸기"
+  },
+  "quickOpen": {
+    "hint": "이름으로 파일 검색 (:줄 번호로 이동, ?는 도움말)",
+    "indexing": "인덱싱 중… 결과가 불완전할 수 있습니다.",
+    "helpCommands": "명령 팔레트",
+    "helpLine": "줄로 이동",
+    "helpSymbol": "편집기에서 기호로 이동",
+    "helpWorkspaceSymbols": "작업 영역 기호",
+    "workspaceSymbolsLater": "작업 영역 기호는 아직 사용할 수 없습니다."
   }
 }

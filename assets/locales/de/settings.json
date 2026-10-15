@@ -150,5 +150,14 @@
   "outline": {
     "followCursor": "Symbol am Cursor in der Gliederung hervorheben",
     "depth": "Schlüsseltiefe in der Gliederung (JSON, YAML, TOML)"
+  },
+  "search": {
+    "maxResults": "Maximale Anzahl Suchergebnisse im Arbeitsbereich",
+    "maxFileSize": "Größere Dateien überspringt die Suche (Bytes)",
+    "exclude": "Von der Suche ausgeschlossene Globs",
+    "quickOpenMaxFiles": "Maximale Anzahl Dateien in „Schnell öffnen“"
+  },
+  "navigation": {
+    "minLineDistance": "Cursorsprünge über so viele Zeilen werden für Zurück/Vorwärts gespeichert"
   }
 }

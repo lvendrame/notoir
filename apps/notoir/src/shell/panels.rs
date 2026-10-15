@@ -260,6 +260,7 @@ fn area_contents(
     match active {
         PanelId::Explorer => super::explorer::show(ui, kit, core, context, uis.explorer, actions),
         PanelId::Outline => super::outline::show(ui, kit, core, uis.outline, actions),
+        PanelId::Search => super::search_panel::show(ui, kit, core, actions),
         PanelId::Output => output(ui, kit, core),
         _ => {}
     }

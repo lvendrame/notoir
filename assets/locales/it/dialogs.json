@@ -96,5 +96,18 @@
   "openLink": {
     "title": "Aprire questo link con un'altra applicazione?",
     "open": "Apri"
+  },
+  "replaceAll": {
+    "title": "Sostituire {{count}} occorrenze in {{files}} file?",
+    "replace": "Sostituisci"
+  },
+  "quickOpen": {
+    "hint": "Cerca file per nome (aggiungi :riga per andare a una riga; ? per aiuto)",
+    "indexing": "Indicizzazione… i risultati potrebbero essere incompleti.",
+    "helpCommands": "Riquadro comandi",
+    "helpLine": "Vai alla riga",
+    "helpSymbol": "Vai al simbolo nell'editor",
+    "helpWorkspaceSymbols": "Simboli dell'area di lavoro",
+    "workspaceSymbolsLater": "I simboli dell'area di lavoro non sono ancora disponibili."
   }
 }

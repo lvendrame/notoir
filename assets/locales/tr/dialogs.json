@@ -96,5 +96,18 @@
   "openLink": {
     "title": "Bu bağlantı başka bir uygulamayla açılsın mı?",
     "open": "Aç"
+  },
+  "replaceAll": {
+    "title": "{{files}} dosyadaki {{count}} eşleşme değiştirilsin mi?",
+    "replace": "Değiştir"
+  },
+  "quickOpen": {
+    "hint": "Dosyaları ada göre ara (satıra gitmek için :satır ekleyin; yardım için ?)",
+    "indexing": "Dizine ekleniyor… sonuçlar eksik olabilir.",
+    "helpCommands": "Komut Paleti",
+    "helpLine": "Satıra Git",
+    "helpSymbol": "Düzenleyicide Sembole Git",
+    "helpWorkspaceSymbols": "Çalışma alanı sembolleri",
+    "workspaceSymbolsLater": "Çalışma alanı sembolleri henüz kullanılamıyor."
   }
 }

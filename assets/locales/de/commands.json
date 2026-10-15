@@ -148,7 +148,10 @@
     "switchTab": "Zum vorherigen Tab wechseln",
     "goToLine": "Gehe zu Zeile…",
     "goToSymbol": "Zu Symbol im Editor wechseln…",
-    "revealRange": "Bereich anzeigen"
+    "revealRange": "Bereich anzeigen",
+    "quickOpen": "Schnell öffnen…",
+    "back": "Zurück",
+    "forward": "Vorwärts"
   },
   "editor": {
     "changeLineEnding": "Zeilenendesequenz ändern…",
@@ -190,7 +193,8 @@
     "focusFilter": "Dateien im Explorer filtern",
     "undo": "Explorer-Vorgang rückgängig machen",
     "revealActive": "Aktive Datei im Explorer anzeigen",
-    "drop": "Dateien ablegen"
+    "drop": "Dateien ablegen",
+    "findInFolder": "In Ordner suchen…"
   },
   "recovery": {
     "show": "Nicht gespeicherte Dokumente wiederherstellen…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "Breadcrumbs fokussieren"
+  },
+  "search": {
+    "workspace": "Im Arbeitsbereich suchen",
+    "replaceAll": "Alle im Arbeitsbereich ersetzen",
+    "next": "Nächstes Suchergebnis",
+    "previous": "Vorheriges Suchergebnis",
+    "openResult": "Suchergebnis öffnen",
+    "dismiss": "Suchergebnis verwerfen",
+    "replaceOne": "Ersetzen",
+    "undoReplace": "Ersetzen rückgängig machen",
+    "copyPath": "Pfad kopieren"
+  },
+  "quickOpen": {
+    "open": "Öffnen"
   }
 }

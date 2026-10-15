@@ -5,7 +5,26 @@
     "noFolderHint": "Dosyalarına buradan göz atmak için bir klasör açın."
   },
   "search": {
-    "title": "Ara"
+    "title": "Ara",
+    "query": "Ara",
+    "matchCase": "Büyük/Küçük Harf Eşleştir",
+    "wholeWord": "Tam Sözcük",
+    "regex": "Normal İfade Kullan",
+    "replace": "Değiştir",
+    "replaceAll": "Tümünü Değiştir",
+    "include": "dahil edilecek dosyalar",
+    "excludeFiles": "hariç tutulacak dosyalar",
+    "searching": "Aranıyor… şimdiye kadar {{count}} sonuç",
+    "noResults": "Sonuç yok",
+    "summary": "{{files}} dosyada {{count}} sonuç",
+    "truncated": "Sonuçlar kırpıldı: tümünü görmek için aramayı daraltın.",
+    "fileRow": "{{path}}, {{count}} sonuç",
+    "open": "Aç",
+    "openToSide": "Yanda Aç",
+    "copyPath": "Yolu Kopyala",
+    "replaceInFile": "Dosyada Değiştir",
+    "dismiss": "Kapat",
+    "replaceOne": "Değiştir"
   },
   "sourceControl": {
     "title": "Kaynak Denetimi"

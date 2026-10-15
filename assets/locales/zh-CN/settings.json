@@ -150,5 +150,14 @@
   "outline": {
     "followCursor": "在大纲中突出显示光标处的符号",
     "depth": "大纲中显示的键深度 (JSON、YAML、TOML)"
+  },
+  "search": {
+    "maxResults": "工作区搜索的最大结果数",
+    "maxFileSize": "搜索会跳过大于此大小的文件(字节)",
+    "exclude": "从工作区搜索中排除的 glob",
+    "quickOpenMaxFiles": "快速打开列出的最大文件数"
+  },
+  "navigation": {
+    "minLineDistance": "超过此行数的光标跳转会记录到后退/前进"
   }
 }

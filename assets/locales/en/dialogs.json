@@ -96,5 +96,18 @@
   "openLink": {
     "title": "Open this link with another application?",
     "open": "Open"
+  },
+  "replaceAll": {
+    "title": "Replace {{count}} occurrences across {{files}} files?",
+    "replace": "Replace"
+  },
+  "quickOpen": {
+    "hint": "Search files by name (append :line to go to a line; ? for help)",
+    "indexing": "Indexing… results may be incomplete.",
+    "helpCommands": "Command Palette",
+    "helpLine": "Go to Line",
+    "helpSymbol": "Go to Symbol in Editor",
+    "helpWorkspaceSymbols": "Workspace symbols",
+    "workspaceSymbolsLater": "Workspace symbols are not available yet."
   }
 }

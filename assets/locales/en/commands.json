@@ -148,7 +148,10 @@
     "switchTab": "Switch to Previous Tab",
     "goToLine": "Go to Line…",
     "goToSymbol": "Go to Symbol in Editor…",
-    "revealRange": "Reveal Range"
+    "revealRange": "Reveal Range",
+    "quickOpen": "Quick Open…",
+    "back": "Go Back",
+    "forward": "Go Forward"
   },
   "editor": {
     "changeLineEnding": "Change End of Line Sequence…",
@@ -190,7 +193,8 @@
     "focusFilter": "Filter Files in Explorer",
     "undo": "Undo Explorer Operation",
     "revealActive": "Reveal Active File in Explorer",
-    "drop": "Drop Files"
+    "drop": "Drop Files",
+    "findInFolder": "Find in Folder…"
   },
   "recovery": {
     "show": "Recover Unsaved Documents…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "Focus Breadcrumbs"
+  },
+  "search": {
+    "workspace": "Search in Workspace",
+    "replaceAll": "Replace All in Workspace",
+    "next": "Next Search Result",
+    "previous": "Previous Search Result",
+    "openResult": "Open Search Result",
+    "dismiss": "Dismiss Search Result",
+    "replaceOne": "Replace",
+    "undoReplace": "Undo Replace",
+    "copyPath": "Copy Path"
+  },
+  "quickOpen": {
+    "open": "Open"
   }
 }

@@ -5,7 +5,26 @@
     "noFolderHint": "Open een map om de bestanden hier te bekijken."
   },
   "search": {
-    "title": "Zoeken"
+    "title": "Zoeken",
+    "query": "Zoeken",
+    "matchCase": "Hoofdlettergevoelig",
+    "wholeWord": "Heel woord",
+    "regex": "Reguliere expressie gebruiken",
+    "replace": "Vervangen",
+    "replaceAll": "Alles vervangen",
+    "include": "bestanden om op te nemen",
+    "excludeFiles": "bestanden om uit te sluiten",
+    "searching": "Zoeken… tot nu toe {{count}} resultaten",
+    "noResults": "Geen resultaten",
+    "summary": "{{count}} resultaten in {{files}} bestanden",
+    "truncated": "Resultaten afgekapt: verfijn de zoekopdracht om alles te zien.",
+    "fileRow": "{{path}}, {{count}} resultaten",
+    "open": "Openen",
+    "openToSide": "Openen aan de zijkant",
+    "copyPath": "Pad kopiëren",
+    "replaceInFile": "Vervangen in bestand",
+    "dismiss": "Negeren",
+    "replaceOne": "Vervangen"
   },
   "sourceControl": {
     "title": "Broncodebeheer"

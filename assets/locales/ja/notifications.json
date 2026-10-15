@@ -32,5 +32,8 @@
   "replacedAll": "{{count}} 件を置換しました。",
   "linkMissing": "リンク先が見つかりません: {{target}}",
   "jsonInvalid": "{{line}} 行 {{column}} 列の JSON が無効です: {{message}}",
-  "jsonSortComments": "キーの並べ替えはこのドキュメントのコメントを削除するため、実行しませんでした。"
+  "jsonSortComments": "キーの並べ替えはこのドキュメントのコメントを削除するため、実行しませんでした。",
+  "replacedInFiles": "{{count}} ファイルで置換しました",
+  "replaceFailed": "{{name}} で置換できませんでした: {{error}}",
+  "undo": "元に戻す"
 }

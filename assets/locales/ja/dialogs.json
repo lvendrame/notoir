@@ -96,5 +96,18 @@
   "openLink": {
     "title": "このリンクを別のアプリケーションで開きますか?",
     "open": "開く"
+  },
+  "replaceAll": {
+    "title": "{{files}} ファイルの {{count}} 件を置換しますか?",
+    "replace": "置換"
+  },
+  "quickOpen": {
+    "hint": "名前でファイルを検索 (:行 で行へ移動、? でヘルプ)",
+    "indexing": "インデックス作成中… 結果は不完全な場合があります。",
+    "helpCommands": "コマンド パレット",
+    "helpLine": "行へ移動",
+    "helpSymbol": "エディター内のシンボルへ移動",
+    "helpWorkspaceSymbols": "ワークスペースのシンボル",
+    "workspaceSymbolsLater": "ワークスペースのシンボルはまだ利用できません。"
   }
 }

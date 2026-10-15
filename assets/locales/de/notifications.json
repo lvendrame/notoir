@@ -32,5 +32,8 @@
   "replacedAll": "Ersetzte Vorkommen: {{count}}.",
   "linkMissing": "Linkziel nicht gefunden: {{target}}",
   "jsonInvalid": "Ungültiges JSON in Zeile {{line}}, Spalte {{column}}: {{message}}",
-  "jsonSortComments": "Schlüssel sortieren würde die Kommentare in diesem Dokument entfernen und wurde nicht ausgeführt."
+  "jsonSortComments": "Schlüssel sortieren würde die Kommentare in diesem Dokument entfernen und wurde nicht ausgeführt.",
+  "replacedInFiles": "In {{count}} Dateien ersetzt",
+  "replaceFailed": "Ersetzen in {{name}} fehlgeschlagen: {{error}}",
+  "undo": "Rückgängig"
 }

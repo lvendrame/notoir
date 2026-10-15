@@ -150,5 +150,14 @@
   "outline": {
     "followCursor": "Symbool bij de cursor markeren in het overzicht",
     "depth": "Sleuteldiepte in het overzicht (JSON, YAML, TOML)"
+  },
+  "search": {
+    "maxResults": "Maximaal aantal zoekresultaten",
+    "maxFileSize": "Grotere bestanden worden overgeslagen bij zoeken (bytes)",
+    "exclude": "Globs uitgesloten van zoeken",
+    "quickOpenMaxFiles": "Maximaal aantal bestanden in Snel openen"
+  },
+  "navigation": {
+    "minLineDistance": "Cursorsprongen van meer regels worden bewaard voor Terug/Vooruit"
   }
 }

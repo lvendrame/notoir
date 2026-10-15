@@ -5,7 +5,26 @@
     "noFolderHint": "フォルダーを開くと、ここでファイルを参照できます。"
   },
   "search": {
-    "title": "検索"
+    "title": "検索",
+    "query": "検索",
+    "matchCase": "大文字と小文字を区別",
+    "wholeWord": "単語単位",
+    "regex": "正規表現を使用",
+    "replace": "置換",
+    "replaceAll": "すべて置換",
+    "include": "含めるファイル",
+    "excludeFiles": "除外するファイル",
+    "searching": "検索中… これまでに {{count}} 件",
+    "noResults": "結果なし",
+    "summary": "{{files}} ファイルで {{count}} 件",
+    "truncated": "結果が多すぎるため省略されました。検索を絞り込んでください。",
+    "fileRow": "{{path}}、{{count}} 件",
+    "open": "開く",
+    "openToSide": "横に開く",
+    "copyPath": "パスをコピー",
+    "replaceInFile": "ファイル内で置換",
+    "dismiss": "閉じる",
+    "replaceOne": "置換"
   },
   "sourceControl": {
     "title": "ソース管理"

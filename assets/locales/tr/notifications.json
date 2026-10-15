@@ -32,5 +32,8 @@
   "replacedAll": "Değiştirilen eşleşme: {{count}}.",
   "linkMissing": "Bağlantı hedefi bulunamadı: {{target}}",
   "jsonInvalid": "{{line}}. satır, {{column}}. sütunda geçersiz JSON: {{message}}",
-  "jsonSortComments": "Anahtarları sıralamak bu belgedeki yorumları kaldıracağından çalıştırılmadı."
+  "jsonSortComments": "Anahtarları sıralamak bu belgedeki yorumları kaldıracağından çalıştırılmadı.",
+  "replacedInFiles": "{{count}} dosyada değiştirildi",
+  "replaceFailed": "{{name}} içinde değiştirilemedi: {{error}}",
+  "undo": "Geri Al"
 }

@@ -148,7 +148,10 @@
     "switchTab": "前のタブに切り替え",
     "goToLine": "行へ移動…",
     "goToSymbol": "エディター内のシンボルへ移動…",
-    "revealRange": "範囲を表示"
+    "revealRange": "範囲を表示",
+    "quickOpen": "クイックオープン…",
+    "back": "戻る",
+    "forward": "進む"
   },
   "editor": {
     "changeLineEnding": "行末のシーケンスの変更…",
@@ -190,7 +193,8 @@
     "focusFilter": "エクスプローラーでファイルを絞り込む",
     "undo": "エクスプローラーの操作を元に戻す",
     "revealActive": "アクティブなファイルをエクスプローラーで表示",
-    "drop": "ファイルをドロップ"
+    "drop": "ファイルをドロップ",
+    "findInFolder": "フォルダー内を検索…"
   },
   "recovery": {
     "show": "未保存のドキュメントを復元…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "パンくずリストにフォーカス"
+  },
+  "search": {
+    "workspace": "ワークスペース内を検索",
+    "replaceAll": "ワークスペース内ですべて置換",
+    "next": "次の検索結果",
+    "previous": "前の検索結果",
+    "openResult": "検索結果を開く",
+    "dismiss": "検索結果を閉じる",
+    "replaceOne": "置換",
+    "undoReplace": "置換を元に戻す",
+    "copyPath": "パスをコピー"
+  },
+  "quickOpen": {
+    "open": "開く"
   }
 }

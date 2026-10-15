@@ -32,5 +32,8 @@
   "replacedAll": "Replaced {{count}} occurrences.",
   "linkMissing": "Link target not found: {{target}}",
   "jsonInvalid": "Invalid JSON at line {{line}}, column {{column}}: {{message}}",
-  "jsonSortComments": "Sort Keys would remove the comments in this document, so it was not run."
+  "jsonSortComments": "Sort Keys would remove the comments in this document, so it was not run.",
+  "replacedInFiles": "Replaced in {{count}} files",
+  "replaceFailed": "Could not replace in {{name}}: {{error}}",
+  "undo": "Undo"
 }

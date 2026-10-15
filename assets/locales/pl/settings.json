@@ -150,5 +150,14 @@
   "outline": {
     "followCursor": "Wyróżniaj symbol przy kursorze w konspekcie",
     "depth": "Głębokość kluczy w konspekcie (JSON, YAML, TOML)"
+  },
+  "search": {
+    "maxResults": "Maksymalna liczba wyników wyszukiwania",
+    "maxFileSize": "Większe pliki są pomijane przez wyszukiwanie (bajty)",
+    "exclude": "Globy wykluczone z wyszukiwania",
+    "quickOpenMaxFiles": "Maksymalna liczba plików w szybkim otwieraniu"
+  },
+  "navigation": {
+    "minLineDistance": "Skoki kursora o więcej wierszy są zapisywane dla Wstecz/Dalej"
   }
 }

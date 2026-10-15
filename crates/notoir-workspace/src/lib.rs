@@ -5,4 +5,5 @@
 pub mod fs_io;
 pub mod fs_ops;
 pub mod listing;
+pub mod search;
 pub mod watcher;

@@ -595,6 +595,51 @@ impl Schema {
             Scopes::NO_LANGUAGE,
             C::Appearance,
         );
+        // Search, Quick Open, navigation
+        def(
+            "search.maxResults",
+            T::Int {
+                min: 100,
+                max: 1_000_000,
+            },
+            V::Int(20_000),
+            Scopes::NO_LANGUAGE,
+            C::General,
+        );
+        def(
+            "search.maxFileSize",
+            T::Int {
+                min: 1024,
+                max: 1_073_741_824,
+            },
+            V::Int(5 * 1024 * 1024),
+            Scopes::NO_LANGUAGE,
+            C::General,
+        );
+        def(
+            "search.exclude",
+            T::StrList,
+            V::List(vec!["**/node_modules".into(), "**/target".into()]),
+            Scopes::NO_LANGUAGE,
+            C::General,
+        );
+        def(
+            "search.quickOpenMaxFiles",
+            T::Int {
+                min: 1000,
+                max: 1_000_000,
+            },
+            V::Int(200_000),
+            Scopes::NO_LANGUAGE,
+            C::General,
+        );
+        def(
+            "navigation.minLineDistance",
+            T::Int { min: 0, max: 1000 },
+            V::Int(10),
+            Scopes::NO_LANGUAGE,
+            C::General,
+        );
         // JSON
         def(
             "json.syncSelection",

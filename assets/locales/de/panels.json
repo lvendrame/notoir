@@ -5,7 +5,26 @@
     "noFolderHint": "Öffnen Sie einen Ordner, um seine Dateien hier zu durchsuchen."
   },
   "search": {
-    "title": "Suchen"
+    "title": "Suchen",
+    "query": "Suchen",
+    "matchCase": "Groß-/Kleinschreibung beachten",
+    "wholeWord": "Nur ganzes Wort",
+    "regex": "Regulären Ausdruck verwenden",
+    "replace": "Ersetzen",
+    "replaceAll": "Alle ersetzen",
+    "include": "einzuschließende Dateien",
+    "excludeFiles": "auszuschließende Dateien",
+    "searching": "Suche läuft… bisher {{count}} Ergebnisse",
+    "noResults": "Keine Ergebnisse",
+    "summary": "{{count}} Ergebnisse in {{files}} Dateien",
+    "truncated": "Ergebnisse gekürzt: Suche verfeinern, um alles zu sehen.",
+    "fileRow": "{{path}}, {{count}} Ergebnisse",
+    "open": "Öffnen",
+    "openToSide": "Seitlich öffnen",
+    "copyPath": "Pfad kopieren",
+    "replaceInFile": "In Datei ersetzen",
+    "dismiss": "Verwerfen",
+    "replaceOne": "Ersetzen"
   },
   "sourceControl": {
     "title": "Quellcodeverwaltung"

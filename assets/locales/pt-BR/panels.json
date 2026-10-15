@@ -5,7 +5,26 @@
     "noFolderHint": "Abra uma pasta para navegar pelos arquivos aqui."
   },
   "search": {
-    "title": "Pesquisar"
+    "title": "Pesquisar",
+    "query": "Pesquisar",
+    "matchCase": "Diferenciar Maiúsculas",
+    "wholeWord": "Palavra Inteira",
+    "regex": "Usar Expressão Regular",
+    "replace": "Substituir",
+    "replaceAll": "Substituir Tudo",
+    "include": "arquivos a incluir",
+    "excludeFiles": "arquivos a excluir",
+    "searching": "Pesquisando… {{count}} resultados até agora",
+    "noResults": "Nenhum resultado",
+    "summary": "{{count}} resultados em {{files}} arquivos",
+    "truncated": "Resultados truncados: refine a pesquisa para ver tudo.",
+    "fileRow": "{{path}}, {{count}} resultados",
+    "open": "Abrir",
+    "openToSide": "Abrir ao Lado",
+    "copyPath": "Copiar Caminho",
+    "replaceInFile": "Substituir no Arquivo",
+    "dismiss": "Descartar",
+    "replaceOne": "Substituir"
   },
   "sourceControl": {
     "title": "Controle de Código"

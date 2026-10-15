@@ -148,7 +148,10 @@
     "switchTab": "Przełącz na poprzednią kartę",
     "goToLine": "Przejdź do wiersza…",
     "goToSymbol": "Przejdź do symbolu w edytorze…",
-    "revealRange": "Pokaż zakres"
+    "revealRange": "Pokaż zakres",
+    "quickOpen": "Szybkie otwieranie…",
+    "back": "Wstecz",
+    "forward": "Dalej"
   },
   "editor": {
     "changeLineEnding": "Zmień sekwencję końca wiersza…",
@@ -190,7 +193,8 @@
     "focusFilter": "Filtruj pliki w eksploratorze",
     "undo": "Cofnij operację eksploratora",
     "revealActive": "Pokaż aktywny plik w eksploratorze",
-    "drop": "Upuść pliki"
+    "drop": "Upuść pliki",
+    "findInFolder": "Znajdź w folderze…"
   },
   "recovery": {
     "show": "Odzyskaj niezapisane dokumenty…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "Aktywuj ścieżkę nawigacji"
+  },
+  "search": {
+    "workspace": "Szukaj w obszarze roboczym",
+    "replaceAll": "Zamień wszystko w obszarze roboczym",
+    "next": "Następny wynik wyszukiwania",
+    "previous": "Poprzedni wynik wyszukiwania",
+    "openResult": "Otwórz wynik wyszukiwania",
+    "dismiss": "Odrzuć wynik wyszukiwania",
+    "replaceOne": "Zamień",
+    "undoReplace": "Cofnij zamianę",
+    "copyPath": "Kopiuj ścieżkę"
+  },
+  "quickOpen": {
+    "open": "Otwórz"
   }
 }

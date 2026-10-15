@@ -148,7 +148,10 @@
     "switchTab": "Önceki Sekmeye Geç",
     "goToLine": "Satıra Git…",
     "goToSymbol": "Düzenleyicide Sembole Git…",
-    "revealRange": "Aralığı Göster"
+    "revealRange": "Aralığı Göster",
+    "quickOpen": "Hızlı Aç…",
+    "back": "Geri",
+    "forward": "İleri"
   },
   "editor": {
     "changeLineEnding": "Satır Sonu Dizisini Değiştir…",
@@ -190,7 +193,8 @@
     "focusFilter": "Gezginde Dosyaları Filtrele",
     "undo": "Gezgin İşlemini Geri Al",
     "revealActive": "Etkin Dosyayı Gezginde Göster",
-    "drop": "Dosyaları Bırak"
+    "drop": "Dosyaları Bırak",
+    "findInFolder": "Klasörde Bul…"
   },
   "recovery": {
     "show": "Kaydedilmemiş Belgeleri Kurtar…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "İçerik Haritasına Odaklan"
+  },
+  "search": {
+    "workspace": "Çalışma Alanında Ara",
+    "replaceAll": "Çalışma Alanında Tümünü Değiştir",
+    "next": "Sonraki Arama Sonucu",
+    "previous": "Önceki Arama Sonucu",
+    "openResult": "Arama Sonucunu Aç",
+    "dismiss": "Arama Sonucunu Kapat",
+    "replaceOne": "Değiştir",
+    "undoReplace": "Değiştirmeyi Geri Al",
+    "copyPath": "Yolu Kopyala"
+  },
+  "quickOpen": {
+    "open": "Aç"
   }
 }

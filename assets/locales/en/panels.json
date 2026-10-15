@@ -5,7 +5,26 @@
     "noFolderHint": "Open a folder to browse its files here."
   },
   "search": {
-    "title": "Search"
+    "title": "Search",
+    "query": "Search",
+    "matchCase": "Match Case",
+    "wholeWord": "Match Whole Word",
+    "regex": "Use Regular Expression",
+    "replace": "Replace",
+    "replaceAll": "Replace All",
+    "include": "files to include",
+    "excludeFiles": "files to exclude",
+    "searching": "Searching… {{count}} results so far",
+    "noResults": "No results",
+    "summary": "{{count}} results in {{files}} files",
+    "truncated": "Results truncated: refine the search to see everything.",
+    "fileRow": "{{path}}, {{count}} results",
+    "open": "Open",
+    "openToSide": "Open to the Side",
+    "copyPath": "Copy Path",
+    "replaceInFile": "Replace in File",
+    "dismiss": "Dismiss",
+    "replaceOne": "Replace"
   },
   "sourceControl": {
     "title": "Source Control"

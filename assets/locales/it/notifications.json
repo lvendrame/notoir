@@ -32,5 +32,8 @@
   "replacedAll": "Occorrenze sostituite: {{count}}.",
   "linkMissing": "Destinazione del link non trovata: {{target}}",
   "jsonInvalid": "JSON non valido alla riga {{line}}, colonna {{column}}: {{message}}",
-  "jsonSortComments": "Ordina chiavi rimuoverebbe i commenti di questo documento, quindi non è stato eseguito."
+  "jsonSortComments": "Ordina chiavi rimuoverebbe i commenti di questo documento, quindi non è stato eseguito.",
+  "replacedInFiles": "Sostituito in {{count}} file",
+  "replaceFailed": "Impossibile sostituire in {{name}}: {{error}}",
+  "undo": "Annulla"
 }

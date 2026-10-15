@@ -96,5 +96,18 @@
   "openLink": {
     "title": "Ouvrir ce lien avec une autre application ?",
     "open": "Ouvrir"
+  },
+  "replaceAll": {
+    "title": "Remplacer {{count}} occurrences dans {{files}} fichiers ?",
+    "replace": "Remplacer"
+  },
+  "quickOpen": {
+    "hint": "Rechercher des fichiers par nom (ajoutez :ligne pour aller à une ligne ; ? pour l'aide)",
+    "indexing": "Indexation… les résultats peuvent être incomplets.",
+    "helpCommands": "Palette de commandes",
+    "helpLine": "Atteindre la ligne",
+    "helpSymbol": "Atteindre le symbole dans l'éditeur",
+    "helpWorkspaceSymbols": "Symboles de l'espace de travail",
+    "workspaceSymbolsLater": "Les symboles de l'espace de travail ne sont pas encore disponibles."
   }
 }

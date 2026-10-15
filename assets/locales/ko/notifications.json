@@ -32,5 +32,8 @@
   "replacedAll": "{{count}}개를 바꿨습니다.",
   "linkMissing": "링크 대상을 찾을 수 없음: {{target}}",
   "jsonInvalid": "{{line}}줄 {{column}}열의 JSON이 잘못됨: {{message}}",
-  "jsonSortComments": "키를 정렬하면 이 문서의 주석이 제거되므로 실행하지 않았습니다."
+  "jsonSortComments": "키를 정렬하면 이 문서의 주석이 제거되므로 실행하지 않았습니다.",
+  "replacedInFiles": "{{count}}개 파일에서 바꿈",
+  "replaceFailed": "{{name}}에서 바꿀 수 없음: {{error}}",
+  "undo": "실행 취소"
 }

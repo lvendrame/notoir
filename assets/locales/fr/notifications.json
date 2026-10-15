@@ -32,5 +32,8 @@
   "replacedAll": "Occurrences remplacées : {{count}}.",
   "linkMissing": "Cible du lien introuvable : {{target}}",
   "jsonInvalid": "JSON non valide à la ligne {{line}}, colonne {{column}} : {{message}}",
-  "jsonSortComments": "Trier les clés supprimerait les commentaires de ce document ; l'opération n'a pas été effectuée."
+  "jsonSortComments": "Trier les clés supprimerait les commentaires de ce document ; l'opération n'a pas été effectuée.",
+  "replacedInFiles": "Remplacé dans {{count}} fichiers",
+  "replaceFailed": "Impossible de remplacer dans {{name}} : {{error}}",
+  "undo": "Annuler"
 }

@@ -153,6 +153,15 @@ fn spec(core: &AppCore, prompt: &Prompt) -> Spec {
                 (t!("common:cancel"), Answer::Cancel, false),
             ],
         },
+        Prompt::ReplaceAll { count, files } => Spec {
+            title: t!("dialogs:replaceAll.title", count = *count, files = *files),
+            body: String::new(),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("dialogs:replaceAll.replace"), Answer::Primary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
         Prompt::OpenLink { url } => Spec {
             title: t!("dialogs:openLink.title"),
             body: url.clone(),

@@ -21,6 +21,7 @@ pub mod overlays;
 pub mod panels;
 pub mod prompts;
 pub mod recovery_ui;
+pub mod search_panel;
 pub mod settings_ui;
 pub mod tabs;
 pub mod welcome;

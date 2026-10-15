@@ -25,7 +25,12 @@ use crate::io::{IoQueue, IoResult};
 use crate::theme::ThemeId;
 
 /// Panels that exist in this build; others are registered by their milestones.
-pub const REGISTERED_PANELS: &[PanelId] = &[PanelId::Explorer, PanelId::Outline, PanelId::Output];
+pub const REGISTERED_PANELS: &[PanelId] = &[
+    PanelId::Explorer,
+    PanelId::Search,
+    PanelId::Outline,
+    PanelId::Output,
+];
 
 /// Theme setting: a fixed theme or "auto" (follow the OS).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -170,6 +175,8 @@ pub struct AppCore {
     pub markdown: crate::markdown::MarkdownState,
     pub json: crate::json::JsonState,
     pub structure: crate::structure::StructureState,
+    pub nav: crate::navigation::NavState,
+    pub search: crate::search::SearchState,
     /// `breadcrumbs.focus`: open the last breadcrumb's dropdown next frame.
     pub breadcrumbs_focus: bool,
     /// Zen Mode is on (with what to restore).
@@ -295,6 +302,8 @@ impl AppCore {
             markdown: Default::default(),
             json: Default::default(),
             structure: Default::default(),
+            nav: Default::default(),
+            search: Default::default(),
             breadcrumbs_focus: false,
             zen: None,
             first_run_check: opts.first_run,
@@ -599,10 +608,12 @@ impl AppCore {
                 },
             };
             let ctx = own.as_ref().unwrap_or(ctx);
+            let before = self.current_location();
             let outcome = match self.commands.resolve(&inv, ctx) {
                 Ok(handler) => handler(self, &inv),
                 Err(outcome) => outcome,
             };
+            self.nav_after_command(before);
             match outcome {
                 CommandOutcome::Rejected(err) => {
                     let now = self.now_ms;
@@ -690,6 +701,14 @@ impl AppCore {
                 IoResult::RecoveryWriteFailed { error } => self.recovery_write_failed(error),
                 IoResult::ConfigReloaded(files) => self.apply_config(*files),
                 IoResult::ImageDecoded(img) => self.markdown.decoded.push(*img),
+                IoResult::Search(b) => {
+                    let (generation, batch) = *b;
+                    self.handle_search(generation, batch);
+                }
+                IoResult::ReplaceDone(r) => {
+                    let (done, failed) = *r;
+                    self.replace_finished(done, failed);
+                }
                 IoResult::SettingsWriteFailed { path, error } => {
                     tracing::error!(%path, %error, "settings write failed");
                     let now = self.now_ms;
@@ -866,6 +885,7 @@ impl AppCore {
                     restore: None,
                     keep_focus: false,
                     anchor: None,
+                    ..Default::default()
                 },
             );
         }

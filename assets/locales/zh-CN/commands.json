@@ -148,7 +148,10 @@
     "switchTab": "切换到上一个标签页",
     "goToLine": "转到行…",
     "goToSymbol": "转到编辑器中的符号…",
-    "revealRange": "显示范围"
+    "revealRange": "显示范围",
+    "quickOpen": "快速打开…",
+    "back": "后退",
+    "forward": "前进"
   },
   "editor": {
     "changeLineEnding": "更改行尾序列…",
@@ -190,7 +193,8 @@
     "focusFilter": "在资源管理器中筛选文件",
     "undo": "撤销资源管理器操作",
     "revealActive": "在资源管理器中显示活动文件",
-    "drop": "放置文件"
+    "drop": "放置文件",
+    "findInFolder": "在文件夹中查找…"
   },
   "recovery": {
     "show": "恢复未保存的文档…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "聚焦导航路径"
+  },
+  "search": {
+    "workspace": "在工作区中搜索",
+    "replaceAll": "在工作区中全部替换",
+    "next": "下一个搜索结果",
+    "previous": "上一个搜索结果",
+    "openResult": "打开搜索结果",
+    "dismiss": "忽略搜索结果",
+    "replaceOne": "替换",
+    "undoReplace": "撤消替换",
+    "copyPath": "复制路径"
+  },
+  "quickOpen": {
+    "open": "打开"
   }
 }

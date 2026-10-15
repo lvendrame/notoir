@@ -96,5 +96,18 @@
   "openLink": {
     "title": "Abrir este link com outro aplicativo?",
     "open": "Abrir"
+  },
+  "replaceAll": {
+    "title": "Substituir {{count}} ocorrências em {{files}} arquivos?",
+    "replace": "Substituir"
+  },
+  "quickOpen": {
+    "hint": "Pesquisar arquivos por nome (acrescente :linha para ir a uma linha; ? para ajuda)",
+    "indexing": "Indexando… os resultados podem estar incompletos.",
+    "helpCommands": "Paleta de Comandos",
+    "helpLine": "Ir para a Linha",
+    "helpSymbol": "Ir para Símbolo no Editor",
+    "helpWorkspaceSymbols": "Símbolos do espaço de trabalho",
+    "workspaceSymbolsLater": "Símbolos do espaço de trabalho ainda não estão disponíveis."
   }
 }

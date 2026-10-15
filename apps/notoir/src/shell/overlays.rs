@@ -260,6 +260,8 @@ pub enum PickerKind {
     TabSize,
     /// Go to Symbol in the active document (`@`).
     Symbols,
+    /// Quick Open (`Mod+P`): files, with `>` `:` `@` `?` prefixes.
+    QuickOpen,
 }
 
 /// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
@@ -302,6 +304,12 @@ pub struct Picker {
     scroll_to_selected: bool,
     /// Rows computed when the picker opened (symbols).
     dynamic: Vec<PickerItem>,
+    /// Quick Open: what it lists, and the rows for the current query.
+    quick: Option<crate::quick_open::Source>,
+    quick_rows: Option<(String, Vec<crate::quick_open::Row>)>,
+    /// Commands / Symbols reached from Quick Open by typing a prefix:
+    /// deleting it goes back.
+    pub from_quick_open: bool,
     /// Go to Symbol: where to go back to on Esc.
     pub restore: Option<(
         notoir_core::ids::ViewId,
@@ -335,6 +343,10 @@ pub enum PickerEvent {
     Preview(String),
     Accept(String),
     Cancel,
+    /// Quick Open prefix: switch to another provider with this query.
+    Switch(PickerKind, String),
+    /// Quick Open `:`: Go to Line with this text.
+    GotoLine(String),
 }
 
 impl Picker {
@@ -362,7 +374,10 @@ impl Picker {
             PickerKind::LanguageMode => doc
                 .map(|d| d.language.as_str().to_owned())
                 .unwrap_or_default(),
-            PickerKind::Commands | PickerKind::Indentation | PickerKind::Symbols => String::new(),
+            PickerKind::Commands
+            | PickerKind::Indentation
+            | PickerKind::Symbols
+            | PickerKind::QuickOpen => String::new(),
             PickerKind::TabSize => doc
                 .map(|d| core.indent_style(d.id).tab_size.to_string())
                 .unwrap_or_default(),
@@ -398,6 +413,10 @@ impl Picker {
             scroll_to_selected: true,
             dynamic,
             restore,
+            quick: (kind == PickerKind::QuickOpen)
+                .then(|| crate::quick_open::Source::capture(core)),
+            quick_rows: None,
+            from_quick_open: false,
         };
         if kind == PickerKind::Commands {
             picker.selected = 0;
@@ -475,7 +494,7 @@ impl Picker {
                     detail: l.id.as_str().to_owned(),
                 })
                 .collect(),
-            PickerKind::Commands | PickerKind::Symbols => Vec::new(),
+            PickerKind::Commands | PickerKind::Symbols | PickerKind::QuickOpen => Vec::new(),
             PickerKind::Indentation => [
                 ("spaces", "dialogs:picker.indentSpaces"),
                 ("tabs", "dialogs:picker.indentTabs"),
@@ -505,7 +524,7 @@ impl Picker {
     /// best fuzzy match on the translated or English label.
     fn command_rows(&self) -> Vec<&CommandEntry> {
         let visible = self.commands.iter().filter(|c| self.show_all || c.enabled);
-        let q = self.query.trim();
+        let q = self.query.trim().trim_start_matches('>').trim();
         if q.is_empty() {
             let mut recent: Vec<&CommandEntry> =
                 visible.clone().filter(|c| c.recent.is_some()).collect();
@@ -553,6 +572,7 @@ impl Picker {
                 let (a, b) = parse_range(value).unwrap_or((0, 0));
                 ("navigate.revealRange", json!({ "start": a, "end": b }))
             }
+            PickerKind::QuickOpen => ("quickOpen.open", quick_open_args(value)),
         };
         CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
@@ -569,6 +589,9 @@ impl Picker {
                     detail: c.shortcut.clone(),
                 })
                 .collect();
+        }
+        if self.kind == PickerKind::QuickOpen {
+            return self.quick_items();
         }
         if self.kind == PickerKind::Symbols {
             let q = self.query.trim().trim_start_matches('@').trim();
@@ -596,6 +619,89 @@ impl Picker {
             .collect()
     }
 
+    /// Quick Open rows (or the `?` help, `#` placeholder) for the query.
+    fn quick_items(&self) -> Vec<PickerItem> {
+        let q = self.query.trim_start();
+        if q.starts_with('?') {
+            return [
+                (">", "dialogs:quickOpen.helpCommands"),
+                (":", "dialogs:quickOpen.helpLine"),
+                ("@", "dialogs:quickOpen.helpSymbol"),
+                ("#", "dialogs:quickOpen.helpWorkspaceSymbols"),
+            ]
+            .into_iter()
+            .map(|(p, k)| PickerItem {
+                value: format!("?{p}"),
+                label: t!(k),
+                detail: p.to_owned(),
+            })
+            .collect();
+        }
+        if q.starts_with('#') {
+            return vec![PickerItem {
+                value: "#".into(),
+                label: t!("dialogs:quickOpen.workspaceSymbolsLater"),
+                detail: String::new(),
+            }];
+        }
+        let (_, line) = crate::quick_open::split_line_suffix(q);
+        let Some((_, rows)) = &self.quick_rows else {
+            return Vec::new();
+        };
+        rows.iter()
+            .map(|r| {
+                let target = match &r.target {
+                    crate::quick_open::Target::Path(p) => format!("p:{}", p.display()),
+                    crate::quick_open::Target::Doc(d) => format!("d:{}", d.0),
+                };
+                let suffix = line.map_or(String::new(), |(l, c)| format!("\n{l}\n{c}"));
+                PickerItem {
+                    value: format!("{target}{suffix}"),
+                    label: r.name.clone(),
+                    detail: r.dir.clone(),
+                }
+            })
+            .collect()
+    }
+
+    /// Recomputes Quick Open rows when the query changed.
+    fn refresh_quick(&mut self) {
+        let Some(src) = &self.quick else { return };
+        let (q, _) = crate::quick_open::split_line_suffix(self.query.trim());
+        if self.quick_rows.as_ref().is_some_and(|(k, _)| k == q) {
+            return;
+        }
+        let rows = src.rows(q);
+        self.quick_rows = Some((q.to_owned(), rows));
+    }
+
+    /// Prefixes typed into Quick Open switch providers; deleting the prefix
+    /// in a provider reached from Quick Open goes back.
+    fn prefix_switch(&self) -> Option<PickerEvent> {
+        let q = self.query.as_str();
+        match self.kind {
+            PickerKind::QuickOpen => match q.chars().next() {
+                Some('>') => Some(PickerEvent::Switch(PickerKind::Commands, q.to_owned())),
+                Some('@') => Some(PickerEvent::Switch(PickerKind::Symbols, q.to_owned())),
+                Some(':') => Some(PickerEvent::GotoLine(q[1..].to_owned())),
+                _ => None,
+            },
+            PickerKind::Commands if self.from_quick_open && !q.starts_with('>') => {
+                Some(PickerEvent::Switch(PickerKind::QuickOpen, q.to_owned()))
+            }
+            PickerKind::Symbols if self.from_quick_open && !q.starts_with('@') => {
+                Some(PickerEvent::Switch(PickerKind::QuickOpen, q.to_owned()))
+            }
+            _ => None,
+        }
+    }
+
+    pub fn set_query(&mut self, q: String) {
+        self.query = q;
+        self.selected = 0;
+        self.scroll_to_selected = true;
+    }
+
     pub fn show(
         &mut self,
         ctx: &egui::Context,
@@ -603,6 +709,15 @@ impl Picker {
         top_offset: f32,
     ) -> Option<PickerEvent> {
         let mut event = None;
+        self.refresh_quick();
+        let side = ctx.input_mut(|i| i.consume_key(egui::Modifiers::COMMAND, Key::Enter));
+        if side && self.kind == PickerKind::QuickOpen {
+            return self
+                .items()
+                .get(self.selected)
+                .filter(|i| i.value.starts_with("p:") || i.value.starts_with("d:"))
+                .map(|i| PickerEvent::Accept(format!("{}\nside", i.value)));
+        }
         let items_before = self.items();
         let (down, up, enter, esc, toggle_all) = ctx.input_mut(|i| {
             (
@@ -631,9 +746,17 @@ impl Picker {
             return Some(PickerEvent::Cancel);
         }
         if enter && self.kind != PickerKind::Commands {
-            return items_before
-                .get(self.selected)
-                .map(|i| PickerEvent::Accept(i.value.clone()));
+            let value = items_before.get(self.selected).map(|i| i.value.clone());
+            return match value {
+                // `?` help rows insert their prefix; `#` does nothing yet.
+                Some(v) if self.kind == PickerKind::QuickOpen && v.starts_with('?') => {
+                    self.set_query(v[1..].to_owned());
+                    self.prefix_switch()
+                }
+                Some(v) if self.kind == PickerKind::QuickOpen && v == "#" => None,
+                Some(v) => Some(PickerEvent::Accept(v)),
+                None => None,
+            };
         }
 
         let title = match self.kind {
@@ -647,6 +770,7 @@ impl Picker {
             PickerKind::Indentation => t!("dialogs:picker.indentation"),
             PickerKind::TabSize => t!("dialogs:picker.tabSize"),
             PickerKind::Symbols => t!("dialogs:picker.symbols"),
+            PickerKind::QuickOpen => String::new(),
         };
         if self.kind == PickerKind::Commands && enter {
             // Disabled rows (shown with "show all") do not run.
@@ -666,10 +790,10 @@ impl Picker {
                     if !title.is_empty() {
                         section_label(ui, kit, &title);
                     }
-                    let hint = if self.kind == PickerKind::Commands {
-                        t!("dialogs:picker.commands")
-                    } else {
-                        t!("dialogs:picker.filter")
+                    let hint = match self.kind {
+                        PickerKind::Commands => t!("dialogs:picker.commands"),
+                        PickerKind::QuickOpen => t!("dialogs:quickOpen.hint"),
+                        _ => t!("dialogs:picker.filter"),
                     };
                     let edit = ui.add(
                         egui::TextEdit::singleline(&mut self.query)
@@ -683,6 +807,17 @@ impl Picker {
                     if edit.changed() {
                         self.selected = 0;
                         self.scroll_to_selected = true;
+                        if let Some(e) = self.prefix_switch() {
+                            event = Some(e);
+                        }
+                        self.refresh_quick();
+                    }
+                    if self.quick.as_ref().is_some_and(|q| q.indexing) {
+                        ui.label(
+                            RichText::new(t!("dialogs:quickOpen.indexing"))
+                                .size(11.0)
+                                .color(kit.color(Tok::TextTertiary)),
+                        );
                     }
                     ui.add_space(4.0);
                     let items = self.items();
@@ -724,17 +859,40 @@ impl Picker {
                                 } else {
                                     kit.color(Tok::TextDisabled)
                                 };
+                                // Quick Open: matched characters of the name in bold.
+                                let marks = self
+                                    .quick_rows
+                                    .as_ref()
+                                    .filter(|_| self.kind == PickerKind::QuickOpen)
+                                    .and_then(|(_, r)| r.get(i))
+                                    .map(|r| r.name_marks.clone())
+                                    .unwrap_or_default();
+                                let label: egui::WidgetText = if marks.is_empty() {
+                                    RichText::new(&item.label).size(13.0).color(color).into()
+                                } else {
+                                    let mut job = egui::text::LayoutJob::default();
+                                    for (ci, ch) in item.label.chars().enumerate() {
+                                        let font = if marks.contains(&ci) {
+                                            fonts::extrabold(13.0)
+                                        } else {
+                                            egui::FontId::proportional(13.0)
+                                        };
+                                        job.append(
+                                            &ch.to_string(),
+                                            0.0,
+                                            egui::TextFormat::simple(font, color),
+                                        );
+                                    }
+                                    job.into()
+                                };
                                 let resp = ui.add(
-                                    egui::Button::selectable(
-                                        selected,
-                                        RichText::new(&item.label).size(13.0).color(color),
-                                    )
-                                    .right_text(
-                                        RichText::new(&item.detail)
-                                            .font(fonts::mono(12.0))
-                                            .color(kit.color(Tok::TextTertiary)),
-                                    )
-                                    .min_size(egui::vec2(width, 26.0)),
+                                    egui::Button::selectable(selected, label)
+                                        .right_text(
+                                            RichText::new(&item.detail)
+                                                .font(fonts::mono(12.0))
+                                                .color(kit.color(Tok::TextTertiary)),
+                                        )
+                                        .min_size(egui::vec2(width, 26.0)),
                                 );
                                 if selected && scroll_to {
                                     resp.scroll_to_me(None);
@@ -755,6 +913,17 @@ impl Picker {
                     if let Some(v) = clicked {
                         event = Some(PickerEvent::Accept(v));
                     }
+                    if self.kind == PickerKind::QuickOpen
+                        && let Some(PickerEvent::Accept(v)) = &event
+                        && (v.starts_with('?') || v == "#")
+                    {
+                        let v = v.clone();
+                        event = None;
+                        if let Some(p) = v.strip_prefix('?') {
+                            self.set_query(p.to_owned());
+                            event = self.prefix_switch();
+                        }
+                    }
                 });
             });
         if event.is_none() && area.response.clicked_elsewhere() {
@@ -771,6 +940,29 @@ impl Picker {
         }
         event
     }
+}
+
+/// Quick Open row value → `quickOpen.open` args.
+fn quick_open_args(value: &str) -> serde_json::Value {
+    let mut parts = value.split('\n');
+    let target = parts.next().unwrap_or("");
+    let line = parts.next().and_then(|l| l.parse::<u64>().ok());
+    let col = parts.next().and_then(|c| c.parse::<u64>().ok());
+    let side = value.ends_with("\nside");
+    let mut args = serde_json::json!({ "side": side });
+    if let Some(p) = target.strip_prefix("p:") {
+        args["path"] = p.into();
+    } else if let Some(d) = target
+        .strip_prefix("d:")
+        .and_then(|d| d.parse::<u64>().ok())
+    {
+        args["doc"] = d.into();
+    }
+    if let Some(l) = line {
+        args["line"] = l.into();
+        args["col"] = col.unwrap_or(1).into();
+    }
+    args
 }
 
 /// `"start:end"` of a symbol row.

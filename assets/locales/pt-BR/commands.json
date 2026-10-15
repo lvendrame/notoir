@@ -148,7 +148,10 @@
     "switchTab": "Alternar para a Aba Anterior",
     "goToLine": "Ir para a Linha…",
     "goToSymbol": "Ir para Símbolo no Editor…",
-    "revealRange": "Revelar Intervalo"
+    "revealRange": "Revelar Intervalo",
+    "quickOpen": "Abertura Rápida…",
+    "back": "Voltar",
+    "forward": "Avançar"
   },
   "editor": {
     "changeLineEnding": "Alterar Sequência de Fim de Linha…",
@@ -190,7 +193,8 @@
     "focusFilter": "Filtrar Arquivos no Explorador",
     "undo": "Desfazer Operação do Explorador",
     "revealActive": "Revelar Arquivo Ativo no Explorador",
-    "drop": "Soltar Arquivos"
+    "drop": "Soltar Arquivos",
+    "findInFolder": "Localizar na Pasta…"
   },
   "recovery": {
     "show": "Recuperar Documentos Não Salvos…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "Focar Trilha de Navegação"
+  },
+  "search": {
+    "workspace": "Pesquisar no Espaço de Trabalho",
+    "replaceAll": "Substituir Tudo no Espaço de Trabalho",
+    "next": "Próximo Resultado da Pesquisa",
+    "previous": "Resultado Anterior da Pesquisa",
+    "openResult": "Abrir Resultado da Pesquisa",
+    "dismiss": "Descartar Resultado da Pesquisa",
+    "replaceOne": "Substituir",
+    "undoReplace": "Desfazer Substituição",
+    "copyPath": "Copiar Caminho"
+  },
+  "quickOpen": {
+    "open": "Abrir"
   }
 }

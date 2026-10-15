@@ -250,6 +250,26 @@ impl NotoirApp {
                     _ => self.core.enqueue(inv),
                 }
             }
+            PickerEvent::Switch(to, query) => {
+                if to == crate::shell::overlays::PickerKind::Symbols
+                    && let Some(d) = self.core.workbench.active_document()
+                {
+                    self.core.structure(d);
+                }
+                let mut p = Picker::new(to, &self.core);
+                p.from_quick_open = to != crate::shell::overlays::PickerKind::QuickOpen;
+                p.set_query(query);
+                self.ui.picker = Some(p);
+            }
+            PickerEvent::GotoLine(text) => {
+                self.ui.picker = None;
+                if let Some(v) = self.core.workbench.active_view() {
+                    self.core.open_goto_line(v);
+                    if !text.trim().is_empty() {
+                        self.core.goto_preview(text);
+                    }
+                }
+            }
             PickerEvent::Cancel => {
                 if let Some((v, sel, scroll)) =
                     self.ui.picker.as_mut().and_then(|p| p.restore.take())
@@ -298,6 +318,7 @@ impl eframe::App for NotoirApp {
         self.core.notifications.tick(now);
         self.core.flush_scratchpads(false);
         self.core.workspace_tick();
+        self.core.search_tick();
         // Markdown preview images decoded in the background become textures.
         for (path, data) in std::mem::take(&mut self.core.markdown.decoded) {
             let tex = match data {
@@ -492,11 +513,31 @@ impl eframe::App for NotoirApp {
             shell::overlays::goto_line(&ctx, &mut kit, &mut self.core, top_offset);
         }
 
+        // Mouse back/forward buttons (spec 15).
+        let (x1, x2) = ctx.input(|i| {
+            (
+                i.pointer.button_pressed(egui::PointerButton::Extra1),
+                i.pointer.button_pressed(egui::PointerButton::Extra2),
+            )
+        });
+        if x1 {
+            actions.push(CommandInvocation::new(
+                "navigate.back",
+                InvocationSource::Internal,
+            ));
+        }
+        if x2 {
+            actions.push(CommandInvocation::new(
+                "navigate.forward",
+                InvocationSource::Internal,
+            ));
+        }
         for inv in actions.0 {
             self.core.enqueue(inv);
         }
         self.core.run_queued(&context);
         self.apply_effects(&ctx, centre_was_open);
+        self.core.nav_track();
         // Typing on the empty state starts a Scratchpad (spec 17).
         if self.core.workbench.active_view().is_none()
             && !ctx.egui_wants_keyboard_input()
@@ -584,6 +625,9 @@ impl eframe::App for NotoirApp {
             ctx.request_repaint_after(std::time::Duration::from_millis(
                 due.saturating_sub(now) + 1,
             ));
+        }
+        if let Some(due) = self.core.search_next_due() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(due.saturating_sub(now)));
         }
         if let Some(expiry) = self.core.notifications.next_expiry() {
             ctx.request_repaint_after(std::time::Duration::from_millis(expiry.saturating_sub(now)));

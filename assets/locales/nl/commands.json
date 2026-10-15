@@ -148,7 +148,10 @@
     "switchTab": "Naar vorig tabblad schakelen",
     "goToLine": "Ga naar regel…",
     "goToSymbol": "Naar symbool in editor…",
-    "revealRange": "Bereik tonen"
+    "revealRange": "Bereik tonen",
+    "quickOpen": "Snel openen…",
+    "back": "Terug",
+    "forward": "Vooruit"
   },
   "editor": {
     "changeLineEnding": "Regeleindereeks wijzigen…",
@@ -190,7 +193,8 @@
     "focusFilter": "Bestanden filteren in verkenner",
     "undo": "Verkennerbewerking ongedaan maken",
     "revealActive": "Actief bestand tonen in verkenner",
-    "drop": "Bestanden neerzetten"
+    "drop": "Bestanden neerzetten",
+    "findInFolder": "Zoeken in map…"
   },
   "recovery": {
     "show": "Niet-opgeslagen documenten herstellen…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "Focus op kruimelpad"
+  },
+  "search": {
+    "workspace": "Zoeken in werkruimte",
+    "replaceAll": "Alles vervangen in werkruimte",
+    "next": "Volgend zoekresultaat",
+    "previous": "Vorig zoekresultaat",
+    "openResult": "Zoekresultaat openen",
+    "dismiss": "Zoekresultaat negeren",
+    "replaceOne": "Vervangen",
+    "undoReplace": "Vervangen ongedaan maken",
+    "copyPath": "Pad kopiëren"
+  },
+  "quickOpen": {
+    "open": "Openen"
   }
 }

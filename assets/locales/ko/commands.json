@@ -148,7 +148,10 @@
     "switchTab": "이전 탭으로 전환",
     "goToLine": "줄로 이동…",
     "goToSymbol": "편집기에서 기호로 이동…",
-    "revealRange": "범위 표시"
+    "revealRange": "범위 표시",
+    "quickOpen": "빠른 열기…",
+    "back": "뒤로",
+    "forward": "앞으로"
   },
   "editor": {
     "changeLineEnding": "줄 끝 시퀀스 변경…",
@@ -190,7 +193,8 @@
     "focusFilter": "탐색기에서 파일 필터링",
     "undo": "탐색기 작업 실행 취소",
     "revealActive": "탐색기에서 활성 파일 표시",
-    "drop": "파일 놓기"
+    "drop": "파일 놓기",
+    "findInFolder": "폴더에서 찾기…"
   },
   "recovery": {
     "show": "저장되지 않은 문서 복구…",
@@ -252,5 +256,19 @@
   },
   "breadcrumbs": {
     "focus": "탐색 경로에 포커스"
+  },
+  "search": {
+    "workspace": "작업 영역에서 검색",
+    "replaceAll": "작업 영역에서 모두 바꾸기",
+    "next": "다음 검색 결과",
+    "previous": "이전 검색 결과",
+    "openResult": "검색 결과 열기",
+    "dismiss": "검색 결과 닫기",
+    "replaceOne": "바꾸기",
+    "undoReplace": "바꾸기 실행 취소",
+    "copyPath": "경로 복사"
+  },
+  "quickOpen": {
+    "open": "열기"
   }
 }

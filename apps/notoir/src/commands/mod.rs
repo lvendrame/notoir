@@ -16,6 +16,7 @@ mod layout;
 mod markdown;
 mod preferences;
 mod reliability;
+mod search;
 mod settings_ui;
 mod structure;
 mod text;
@@ -34,6 +35,7 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     markdown::specs(&mut specs);
     json::specs(&mut specs);
     structure::specs(&mut specs);
+    search::specs(&mut specs);
     workspace::specs(&mut specs);
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);

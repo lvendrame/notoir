@@ -150,5 +150,14 @@
   "outline": {
     "followCursor": "Evidenzia il simbolo al cursore nella struttura",
     "depth": "Profondità delle chiavi nella struttura (JSON, YAML, TOML)"
+  },
+  "search": {
+    "maxResults": "Numero massimo di risultati di ricerca",
+    "maxFileSize": "La ricerca salta i file più grandi di questo valore (byte)",
+    "exclude": "Glob esclusi dalla ricerca",
+    "quickOpenMaxFiles": "Numero massimo di file elencati dall'apertura rapida"
+  },
+  "navigation": {
+    "minLineDistance": "I salti del cursore oltre questo numero di righe vengono registrati per Indietro/Avanti"
   }
 }

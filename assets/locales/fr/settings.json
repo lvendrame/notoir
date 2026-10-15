@@ -150,5 +150,14 @@
   "outline": {
     "followCursor": "Mettre en évidence le symbole du curseur dans la structure",
     "depth": "Profondeur des clés dans la structure (JSON, YAML, TOML)"
+  },
+  "search": {
+    "maxResults": "Nombre maximal de résultats de recherche",
+    "maxFileSize": "Les fichiers plus grands sont ignorés par la recherche (octets)",
+    "exclude": "Globs exclus de la recherche",
+    "quickOpenMaxFiles": "Nombre maximal de fichiers listés par l'ouverture rapide"
+  },
+  "navigation": {
+    "minLineDistance": "Les sauts du curseur de plus de lignes sont enregistrés pour Précédent/Suivant"
   }
 }

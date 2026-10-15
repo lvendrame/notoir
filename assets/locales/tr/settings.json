@@ -150,5 +150,14 @@
   "outline": {
     "followCursor": "İmleçteki sembolü ana hatta vurgula",
     "depth": "Ana hatta gösterilen anahtar derinliği (JSON, YAML, TOML)"
+  },
+  "search": {
+    "maxResults": "En fazla çalışma alanı arama sonucu",
+    "maxFileSize": "Bundan büyük dosyalar aramada atlanır (bayt)",
+    "exclude": "Aramadan hariç tutulan globlar",
+    "quickOpenMaxFiles": "Hızlı Aç'ın listelediği en fazla dosya"
+  },
+  "navigation": {
+    "minLineDistance": "Bundan fazla satırlık imleç atlamaları Geri/İleri için kaydedilir"
   }
 }

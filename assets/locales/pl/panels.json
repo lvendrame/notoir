@@ -5,7 +5,26 @@
     "noFolderHint": "Otwórz folder, aby przeglądać tu jego pliki."
   },
   "search": {
-    "title": "Szukaj"
+    "title": "Szukaj",
+    "query": "Szukaj",
+    "matchCase": "Uwzględniaj wielkość liter",
+    "wholeWord": "Całe słowo",
+    "regex": "Użyj wyrażenia regularnego",
+    "replace": "Zamień",
+    "replaceAll": "Zamień wszystko",
+    "include": "pliki do uwzględnienia",
+    "excludeFiles": "pliki do wykluczenia",
+    "searching": "Wyszukiwanie… dotąd {{count}} wyników",
+    "noResults": "Brak wyników",
+    "summary": "{{count}} wyników w {{files}} plikach",
+    "truncated": "Wyniki obcięte: zawęź wyszukiwanie, aby zobaczyć wszystko.",
+    "fileRow": "{{path}}, {{count}} wyników",
+    "open": "Otwórz",
+    "openToSide": "Otwórz z boku",
+    "copyPath": "Kopiuj ścieżkę",
+    "replaceInFile": "Zamień w pliku",
+    "dismiss": "Odrzuć",
+    "replaceOne": "Zamień"
   },
   "sourceControl": {
     "title": "Kontrola źródła"
