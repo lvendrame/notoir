@@ -1,0 +1,17 @@
+{
+  "filterHint": "Dosyaları filtrele…",
+  "sortOrder": "Sıralama",
+  "sort": {
+    "default": "Önce Klasörler",
+    "mixed": "Karışık",
+    "modified": "Son Değişiklik"
+  },
+  "nameError": {
+    "empty": "Bir ad gerekli.",
+    "invalidChar": "Ad izin verilmeyen bir karakter içeriyor.",
+    "reserved": "Bu ad işletim sistemi tarafından ayrılmış.",
+    "trailing": "Ad nokta veya boşlukla bitemez.",
+    "tooLong": "Ad çok uzun.",
+    "exists": "Bu adda bir dosya veya klasör zaten var."
+  }
+}

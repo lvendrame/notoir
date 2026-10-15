@@ -6,7 +6,7 @@ use notoir_core::notifications::Severity;
 use notoir_core::panels::{PanelArea, PanelId, Side};
 use serde_json::json;
 
-use super::{Actions, Kit, icon_button, section_label};
+use super::{Actions, Kit, icon_button, icon_button_sized, section_label};
 use crate::core::{AppCore, panel_key};
 use crate::icons::Icon;
 use crate::t;
@@ -41,8 +41,16 @@ fn side_panel(id: &'static str, side: Side) -> egui::Panel {
 }
 
 /// Renders every visible area around the editor; call before the central panel.
-pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Actions) -> PanelSizes {
-    let layout = &core.panels;
+pub fn show(
+    ui: &mut egui::Ui,
+    kit: &mut Kit,
+    core: &mut AppCore,
+    context: &notoir_core::when::ContextSnapshot,
+    explorer_ui: &mut super::explorer::ExplorerUi,
+    actions: &mut Actions,
+) -> PanelSizes {
+    let layout = core.panels.clone();
+    let layout = &layout;
     let mut sizes = PanelSizes::default();
 
     if layout.activity_bar_visible && !layout.primary.panels.is_empty() {
@@ -91,7 +99,9 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
             .default_size(state.size)
             .min_size(area.min_size())
             .frame(panel_frame(kit))
-            .show(ui, |ui| area_contents(ui, kit, core, area, active, actions));
+            .show(ui, |ui| {
+                area_contents(ui, kit, core, context, explorer_ui, area, active, actions)
+            });
         let width = resp.response.rect.width();
         if (width - state.size).abs() > 0.5 {
             match area {
@@ -109,7 +119,16 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
             .min_size(PanelArea::Bottom.min_size())
             .frame(panel_frame(kit))
             .show(ui, |ui| {
-                area_contents(ui, kit, core, PanelArea::Bottom, active, actions)
+                area_contents(
+                    ui,
+                    kit,
+                    core,
+                    context,
+                    explorer_ui,
+                    PanelArea::Bottom,
+                    active,
+                    actions,
+                )
             });
         let height = resp.response.rect.height();
         if (height - bottom.size).abs() > 0.5 {
@@ -125,15 +144,19 @@ fn panel_frame(kit: &Kit) -> Frame {
         .inner_margin(Margin::symmetric(10, 6))
 }
 
+#[allow(clippy::too_many_arguments)]
 fn area_contents(
     ui: &mut egui::Ui,
     kit: &mut Kit,
-    core: &AppCore,
+    core: &mut AppCore,
+    context: &notoir_core::when::ContextSnapshot,
+    explorer_ui: &mut super::explorer::ExplorerUi,
     area: PanelArea,
     active: PanelId,
     actions: &mut Actions,
 ) {
-    let state = core.panels.area(area);
+    let state = core.panels.area(area).clone();
+    let panel_hovered = ui.rect_contains_pointer(ui.max_rect());
     ui.horizontal(|ui| {
         ui.set_min_height(28.0);
         if area == PanelArea::Bottom || state.panels.len() > 1 && area == PanelArea::Secondary {
@@ -158,22 +181,45 @@ fn area_contents(
             section_label(ui, kit, &t!(active.title_key()));
         }
         ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-            if icon_button(ui, kit, Icon::X, &t!("panels:menu.close"), false, true).clicked() {
+            ui.spacing_mut().item_spacing.x = 2.0;
+            if icon_button_sized(
+                ui,
+                kit,
+                Icon::X,
+                &t!("panels:menu.close"),
+                false,
+                true,
+                24.0,
+            )
+            .clicked()
+            {
                 actions.push(
                     CommandInvocation::new("view.togglePanel", InvocationSource::Internal)
                         .with_args(json!({ "panel": panel_key(active) })),
                 );
             }
-            let more = icon_button(
+            let more = icon_button_sized(
                 ui,
                 kit,
                 Icon::Ellipsis,
                 &t!("panels:menu.more"),
                 false,
                 true,
+                24.0,
             );
+            if active == PanelId::Explorer && panel_hovered {
+                super::explorer::toolbar(ui, kit, core, actions);
+            }
             egui::Popup::menu(&more).show(|ui| {
                 ui.set_min_width(200.0);
+                if active == PanelId::Explorer {
+                    let items = crate::menus::visible_items(
+                        &super::explorer::more_menu_items(),
+                        &core.commands,
+                    );
+                    super::chrome::menu_items(ui, kit, core, context, &items, actions);
+                    ui.separator();
+                }
                 for (target, key) in [
                     (PanelArea::Primary, "panels:menu.moveToPrimary"),
                     (PanelArea::Secondary, "panels:menu.moveToSecondary"),
@@ -206,26 +252,10 @@ fn area_contents(
     });
     ui.add_space(4.0);
     match active {
-        PanelId::Explorer => explorer_placeholder(ui, kit),
+        PanelId::Explorer => super::explorer::show(ui, kit, core, context, explorer_ui, actions),
         PanelId::Output => output(ui, kit, core),
         _ => {}
     }
-}
-
-/// Explorer without a workspace (the tree arrives in M7).
-fn explorer_placeholder(ui: &mut egui::Ui, kit: &Kit) {
-    ui.add_space(8.0);
-    ui.label(
-        RichText::new(t!("panels:explorer.noFolder"))
-            .size(13.0)
-            .color(kit.color(Tok::TextSecondary)),
-    );
-    ui.add_space(4.0);
-    ui.label(
-        RichText::new(t!("panels:explorer.noFolderHint"))
-            .size(12.0)
-            .color(kit.color(Tok::TextTertiary)),
-    );
 }
 
 /// Output (Notoir channel): this session's notifications, newest last.

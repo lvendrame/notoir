@@ -88,7 +88,8 @@
     "openScratchpad": "Open Scratchpad",
     "removeRecent": "Remove from Recently Opened",
     "pinRecent": "Pin Recent Item",
-    "clearRecent": "Clear Recently Opened"
+    "clearRecent": "Clear Recently Opened",
+    "copyRelativePath": "Copy Relative Path"
   },
   "edit": {
     "undo": "Undo",
@@ -107,5 +108,37 @@
     "changeLineEnding": "Change End of Line Sequence…",
     "changeEncoding": "Change File Encoding…",
     "changeLanguageMode": "Change Language Mode…"
+  },
+  "workspace": {
+    "open": "Open Workspace…",
+    "close": "Close Workspace",
+    "openRecent": "Open Recent Workspace",
+    "removeRecent": "Remove from Recent",
+    "pinRecent": "Pin Recent Workspace",
+    "trust": "Trust Workspace",
+    "trustLater": "Not Now"
+  },
+  "explorer": {
+    "newFile": "New File…",
+    "newFolder": "New Folder…",
+    "rename": "Rename…",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "copy": "Copy",
+    "paste": "Paste",
+    "copyPath": "Copy Path",
+    "copyRelativePath": "Copy Relative Path",
+    "reveal": "Reveal in File Manager",
+    "open": "Open",
+    "openToSide": "Open to the Side",
+    "refresh": "Refresh Explorer",
+    "collapseAll": "Collapse All",
+    "toggleHidden": "Show Hidden Files",
+    "toggleGitIgnored": "Show Git-Ignored Files",
+    "sortOrder": "Explorer Sort Order",
+    "focusFilter": "Filter Files in Explorer",
+    "undo": "Undo Explorer Operation",
+    "revealActive": "Reveal Active File in Explorer",
+    "drop": "Drop Files"
   }
 }

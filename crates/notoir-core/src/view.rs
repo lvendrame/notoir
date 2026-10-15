@@ -85,6 +85,10 @@ impl ViewRegistry {
         self.views.get_mut(&id)
     }
 
+    pub fn iter(&self) -> impl Iterator<Item = &EditorView> {
+        self.views.values()
+    }
+
     pub fn of_document(&self, doc: DocumentId) -> impl Iterator<Item = &EditorView> {
         self.views.values().filter(move |v| v.document_id == doc)
     }

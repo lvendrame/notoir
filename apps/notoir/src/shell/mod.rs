@@ -10,6 +10,7 @@ use crate::theme::{ICON, Theme, Tok};
 
 pub mod chrome;
 pub mod empty_state;
+pub mod explorer;
 pub mod layout;
 pub mod overlays;
 pub mod panels;
@@ -50,6 +51,10 @@ pub struct UiState {
     /// Editor that should take keyboard focus next frame.
     pub focus_editor: Option<notoir_core::ids::ViewId>,
     pub tab_drag: Option<layout::TabDrag>,
+    pub explorer: explorer::ExplorerUi,
+    /// Active document last frame (Explorer auto-reveal).
+    pub last_active_doc: Option<notoir_core::ids::DocumentId>,
+    pub window_title: String,
 }
 
 /// Collects invocations produced while rendering one frame.

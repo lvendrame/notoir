@@ -156,3 +156,49 @@ fn split_layout_snapshot() {
         img.save(out_dir().join("splits.png")).unwrap();
     }
 }
+
+#[test]
+fn explorer_snapshot() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path().join("my-notes");
+    for (name, text) in [
+        ("README.md", "# My notes\n\nIdeas and journal.\n"),
+        ("journal/2026-10-14.md", "# Tuesday\n\n- shipped splits\n"),
+        ("journal/2026-10-15.md", "# Wednesday\n"),
+        ("ideas/editor.md", "x"),
+        ("config.json", "{}\n"),
+        ("build/out.txt", "x"),
+        (".gitignore", "build/\n"),
+        ("todo.txt", "milk\n"),
+    ] {
+        let p = root.join(name);
+        std::fs::create_dir_all(p.parent().unwrap()).unwrap();
+        std::fs::write(&p, text).unwrap();
+    }
+    let root = root.canonicalize().unwrap();
+    let open = root.join("journal/2026-10-14.md");
+    let r = root.clone();
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = vec![(r, None), (open, None)];
+    });
+    common::settle(&mut app);
+    common::run(
+        &mut app,
+        "explorer.newFile",
+        serde_json::json!({ "path": root.join("ideas").to_string_lossy() }),
+    );
+    common::settle(&mut app);
+    app.harness.event(egui::Event::Text("plan.md".into()));
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("explorer.png")).unwrap();
+    }
+    app.harness.key_press(egui::Key::Escape);
+    app.harness.hover_at(egui::pos2(160.0, 500.0));
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("explorer-hover.png")).unwrap();
+    }
+}

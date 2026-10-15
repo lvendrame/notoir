@@ -88,7 +88,8 @@
     "openScratchpad": "Ouvrir un brouillon",
     "removeRecent": "Retirer des éléments récents",
     "pinRecent": "Épingler l'élément récent",
-    "clearRecent": "Effacer les éléments récents"
+    "clearRecent": "Effacer les éléments récents",
+    "copyRelativePath": "Copier le chemin relatif"
   },
   "edit": {
     "undo": "Annuler",
@@ -107,5 +108,37 @@
     "changeLineEnding": "Changer la séquence de fin de ligne…",
     "changeEncoding": "Changer l'encodage du fichier…",
     "changeLanguageMode": "Changer le mode de langage…"
+  },
+  "workspace": {
+    "open": "Ouvrir un espace de travail…",
+    "close": "Fermer l'espace de travail",
+    "openRecent": "Ouvrir un espace de travail récent",
+    "removeRecent": "Retirer des récents",
+    "pinRecent": "Épingler l'espace de travail récent",
+    "trust": "Faire confiance à l'espace de travail",
+    "trustLater": "Plus tard"
+  },
+  "explorer": {
+    "newFile": "Nouveau fichier…",
+    "newFolder": "Nouveau dossier…",
+    "rename": "Renommer…",
+    "duplicate": "Dupliquer",
+    "delete": "Supprimer",
+    "copy": "Copier",
+    "paste": "Coller",
+    "copyPath": "Copier le chemin",
+    "copyRelativePath": "Copier le chemin relatif",
+    "reveal": "Afficher dans le gestionnaire de fichiers",
+    "open": "Ouvrir",
+    "openToSide": "Ouvrir sur le côté",
+    "refresh": "Actualiser l'explorateur",
+    "collapseAll": "Tout réduire",
+    "toggleHidden": "Afficher les fichiers masqués",
+    "toggleGitIgnored": "Afficher les fichiers ignorés par Git",
+    "sortOrder": "Tri de l'explorateur",
+    "focusFilter": "Filtrer les fichiers dans l'explorateur",
+    "undo": "Annuler l'opération de l'explorateur",
+    "revealActive": "Afficher le fichier actif dans l'explorateur",
+    "drop": "Déposer des fichiers"
   }
 }

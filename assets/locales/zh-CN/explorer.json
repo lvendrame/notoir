@@ -1,0 +1,17 @@
+{
+  "filterHint": "筛选文件…",
+  "sortOrder": "排序方式",
+  "sort": {
+    "default": "文件夹优先",
+    "mixed": "混合",
+    "modified": "最近修改"
+  },
+  "nameError": {
+    "empty": "需要名称。",
+    "invalidChar": "名称包含不允许的字符。",
+    "reserved": "此名称被操作系统保留。",
+    "trailing": "名称不能以句点或空格结尾。",
+    "tooLong": "名称太长。",
+    "exists": "已存在同名的文件或文件夹。"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "filterHint": "Filter files…",
+  "sortOrder": "Sort Order",
+  "sort": {
+    "default": "Folders First",
+    "mixed": "Mixed",
+    "modified": "Last Modified"
+  },
+  "nameError": {
+    "empty": "A name is required.",
+    "invalidChar": "The name contains a character that is not allowed.",
+    "reserved": "This name is reserved by the operating system.",
+    "trailing": "A name cannot end with a dot or a space.",
+    "tooLong": "The name is too long.",
+    "exists": "A file or folder with this name already exists."
+  }
+}

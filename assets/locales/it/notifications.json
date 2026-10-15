@@ -19,5 +19,9 @@
   "saveFailed": "Impossibile salvare «{{name}}».",
   "scratchUnavailable": "Gli appunti non sono disponibili perché non è stato possibile aprire i dati di Notoir.",
   "scratchWriteFailed": "Non è stato possibile scrivere un appunto sul disco.",
-  "workspaceNotYet": "L'apertura di cartelle come aree di lavoro non è ancora disponibile."
+  "fileOpFailed": "Operazione sul file non riuscita.",
+  "notNow": "Non ora",
+  "trustWorkspace": "Considera attendibile",
+  "workspaceMissing": "La cartella «{{path}}» non esiste più.",
+  "workspaceTrust": "Quest'area di lavoro contiene impostazioni che riguardano plugin, MCP o Git. Vengono ignorate finché non la consideri attendibile."
 }

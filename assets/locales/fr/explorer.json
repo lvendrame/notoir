@@ -1,0 +1,17 @@
+{
+  "filterHint": "Filtrer les fichiers…",
+  "sortOrder": "Ordre de tri",
+  "sort": {
+    "default": "Dossiers d'abord",
+    "mixed": "Mélangé",
+    "modified": "Dernière modification"
+  },
+  "nameError": {
+    "empty": "Un nom est requis.",
+    "invalidChar": "Le nom contient un caractère non autorisé.",
+    "reserved": "Ce nom est réservé par le système d'exploitation.",
+    "trailing": "Un nom ne peut pas se terminer par un point ou une espace.",
+    "tooLong": "Le nom est trop long.",
+    "exists": "Un fichier ou dossier portant ce nom existe déjà."
+  }
+}

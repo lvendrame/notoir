@@ -39,6 +39,7 @@ pub enum MenuItem {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DynamicMenu {
+    RecentWorkspaces,
     RecentFiles,
     KeptScratchpads,
 }
@@ -96,10 +97,12 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         cmd("file.newWindow"),
         SEP,
         cmd("file.open"),
-        cmd("file.openWorkspace"),
+        cmd("workspace.open"),
         sub(
             "menus:sub.openRecent",
             vec![
+                MenuItem::Dynamic(DynamicMenu::RecentWorkspaces),
+                SEP,
                 MenuItem::Dynamic(DynamicMenu::RecentFiles),
                 SEP,
                 sub(
@@ -120,7 +123,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         cmd("file.close"),
         cmd("file.closeOthers"),
         cmd("file.closeAll"),
-        cmd("file.closeWorkspace"),
+        cmd("workspace.close"),
         SEP,
         cmd("file.properties"),
     ];
@@ -421,6 +424,24 @@ pub fn expand(items: &[MenuItem], core: &AppCore) -> Vec<MenuItem> {
                         id: "file.openRecent",
                         args: json!({ "path": r.path }),
                         text: r.path.clone(),
+                    });
+                }
+            }
+            MenuItem::Dynamic(DynamicMenu::RecentWorkspaces) => {
+                for r in core
+                    .recent_workspaces()
+                    .iter()
+                    .take(crate::files::RECENT_SHOWN)
+                {
+                    let name = r.display_name.clone().unwrap_or_else(|| {
+                        std::path::Path::new(&r.path)
+                            .file_name()
+                            .map_or_else(|| r.path.clone(), |n| n.to_string_lossy().into_owned())
+                    });
+                    out.push(MenuItem::Entry {
+                        id: "workspace.openRecent",
+                        args: json!({ "path": r.path }),
+                        text: name,
                     });
                 }
             }

@@ -50,5 +50,27 @@
     "title": "“{{name}}” parece ser um arquivo binário.",
     "body": "Abri-lo somente leitura mesmo assim?",
     "openAnyway": "Abrir Mesmo Assim"
+  },
+  "openWorkspace": "Abrir Workspace",
+  "workspace": {
+    "title": "Abrir “{{name}}”?",
+    "body": "Esta janela já tem um workspace aberto.",
+    "thisWindow": "Abrir Nesta Janela",
+    "newWindow": "Nova Janela"
+  },
+  "delete": {
+    "title": "Mover “{{name}}” para a Lixeira?",
+    "titleMany": "Mover {{count}} itens para a Lixeira?",
+    "body": "Você pode restaurar itens da Lixeira.",
+    "confirm": "Mover para a Lixeira",
+    "permanentTitle": "Excluir “{{name}}” permanentemente?",
+    "permanentTitleMany": "Excluir {{count}} itens permanentemente?",
+    "permanentBody": "A Lixeira não está disponível. Esta ação não pode ser desfeita.",
+    "permanentConfirm": "Excluir Permanentemente"
+  },
+  "move": {
+    "title": "Mover “{{name}}” para “{{folder}}”?",
+    "titleMany": "Mover {{count}} itens para “{{folder}}”?",
+    "confirm": "Mover"
   }
 }

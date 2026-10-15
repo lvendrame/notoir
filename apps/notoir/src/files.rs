@@ -35,6 +35,9 @@ use crate::t;
 pub trait Dialogs: Send + Sync {
     fn pick_files(&self, opts: FileDialogOptions, poster: Poster);
     fn save_file(&self, opts: FileDialogOptions, doc: DocumentId, poster: Poster);
+    fn pick_folder(&self, opts: FileDialogOptions, poster: Poster);
+    /// Moves paths to the OS trash (called on a worker thread).
+    fn trash(&self, paths: &[PathBuf]) -> Result<(), String>;
 }
 
 pub struct NativeDialogs;
@@ -51,6 +54,16 @@ impl Dialogs for NativeDialogs {
             poster.post(IoResult::SaveAsPicked { doc, path })
         });
     }
+
+    fn pick_folder(&self, opts: FileDialogOptions, poster: Poster) {
+        notoir_platform::dialogs::pick_folder(opts, move |path| {
+            poster.post(IoResult::FolderPicked(path))
+        });
+    }
+
+    fn trash(&self, paths: &[PathBuf]) -> Result<(), String> {
+        notoir_platform::trash::move_to_trash(paths)
+    }
 }
 
 /// Answers dialogs from a queue (tests and automation). An empty queue
@@ -59,6 +72,11 @@ impl Dialogs for NativeDialogs {
 pub struct ScriptedDialogs {
     opens: Arc<Mutex<VecDeque<Vec<PathBuf>>>>,
     saves: Arc<Mutex<VecDeque<Option<PathBuf>>>>,
+    folders: Arc<Mutex<VecDeque<Option<PathBuf>>>>,
+    /// Paths "moved to the trash" (deleted from disk, recorded here).
+    pub trashed: Arc<Mutex<Vec<PathBuf>>>,
+    /// Make the next trash calls fail (permanent-delete fallback).
+    pub trash_fails: Arc<std::sync::atomic::AtomicBool>,
 }
 
 impl ScriptedDialogs {
@@ -74,6 +92,20 @@ impl ScriptedDialogs {
             .lock()
             .unwrap_or_else(|e| e.into_inner())
             .push_back(path);
+    }
+
+    pub fn answer_folder(&self, path: Option<PathBuf>) {
+        self.folders
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .push_back(path);
+    }
+
+    pub fn trashed(&self) -> Vec<PathBuf> {
+        self.trashed
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .clone()
     }
 }
 
@@ -97,6 +129,35 @@ impl Dialogs for ScriptedDialogs {
             .flatten();
         poster.post(IoResult::SaveAsPicked { doc, path });
     }
+
+    fn pick_folder(&self, _: FileDialogOptions, poster: Poster) {
+        let path = self
+            .folders
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .pop_front()
+            .flatten();
+        poster.post(IoResult::FolderPicked(path));
+    }
+
+    fn trash(&self, paths: &[PathBuf]) -> Result<(), String> {
+        if self.trash_fails.load(std::sync::atomic::Ordering::SeqCst) {
+            return Err("trash unavailable".into());
+        }
+        for p in paths {
+            let r = if p.is_dir() {
+                std::fs::remove_dir_all(p)
+            } else {
+                std::fs::remove_file(p)
+            };
+            r.map_err(|e| e.to_string())?;
+            self.trashed
+                .lock()
+                .unwrap_or_else(|e| e.into_inner())
+                .push(p.clone());
+        }
+        Ok(())
+    }
 }
 
 // ── requests and outcomes ────────────────────────────────────────────────
@@ -107,6 +168,8 @@ pub struct OpenAt {
     /// 1-based line and column.
     pub line_col: Option<(usize, usize)>,
     pub restore: Option<(Selection, ScrollPosition)>,
+    /// Leave keyboard focus where it is (single click in the Explorer).
+    pub keep_focus: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -145,6 +208,11 @@ pub struct SaveOutcome {
 pub enum Then {
     CloseViews(Vec<ViewId>),
     Quit,
+    /// Close Workspace (then optionally open another one).
+    CloseWorkspace {
+        views: Vec<ViewId>,
+        next: Option<PathBuf>,
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -159,6 +227,15 @@ pub enum Prompt {
     Revert { doc: DocumentId },
     /// Binary-looking file: Open Anyway (read-only) / Cancel.
     Binary { path: PathBuf, group: GroupId },
+    /// A workspace is open: Open in This Window / New Window / Cancel.
+    WorkspaceReplace { path: PathBuf },
+    /// Explorer delete: Move to Trash (or Delete Permanently) / Cancel.
+    Delete {
+        paths: Vec<PathBuf>,
+        permanent: bool,
+    },
+    /// Explorer drag and drop: Move / Cancel.
+    Move { srcs: Vec<PathBuf>, dir: PathBuf },
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -200,6 +277,7 @@ pub struct FileState {
     pub pending: Vec<Pending>,
     pub closed_tabs: Vec<ClosedTab>,
     pub recent_files: Vec<RecentEntry>,
+    pub recent_workspaces: Vec<RecentEntry>,
     pub scratchpads: ScratchpadStore,
     /// Scratchpad documents with unwritten edits → due time.
     pub scratch_due: Vec<(DocumentId, u64)>,
@@ -215,6 +293,7 @@ impl FileState {
             pending: Vec::new(),
             closed_tabs: Vec::new(),
             recent_files: Vec::new(),
+            recent_workspaces: Vec::new(),
             scratchpads: ScratchpadStore::new(scratch_dir),
             scratch_due: Vec::new(),
             quit_confirmed: false,
@@ -284,7 +363,9 @@ impl AppCore {
             };
             let _ = self.workbench.activate_view(view);
             self.place_caret(view, &at);
-            self.effects.push(Effect::FocusEditor(view));
+            if !at.keep_focus {
+                self.effects.push(Effect::FocusEditor(view));
+            }
             return;
         }
         self.load(
@@ -396,7 +477,9 @@ impl AppCore {
             return;
         };
         self.place_caret(view, &at);
-        self.effects.push(Effect::FocusEditor(view));
+        if !at.keep_focus {
+            self.effects.push(Effect::FocusEditor(view));
+        }
         self.record_recent_file(&loaded.path);
         if read_only == notoir_core::document::ReadOnly::LossyDecode {
             self.notify(Notification::new(
@@ -759,6 +842,7 @@ impl AppCore {
                 self.files.quit_confirmed = true;
                 self.effects.push(Effect::Quit);
             }
+            Then::CloseWorkspace { views, next } => self.finish_close_workspace(views, next),
         }
     }
 
@@ -857,6 +941,7 @@ impl AppCore {
             OpenAt {
                 line_col: None,
                 restore: Some((tab.selection, tab.scroll)),
+                keep_focus: false,
             },
         );
     }
@@ -916,9 +1001,20 @@ impl AppCore {
                         self.close_view_now(*v);
                     }
                 } else {
+                    // Discarding: views of dirty documents close without saving.
                     self.run_then(then);
                 }
             }
+            (Prompt::WorkspaceReplace { path }, Answer::Primary) => {
+                self.close_workspace(Some(path))
+            }
+            (Prompt::WorkspaceReplace { path }, Answer::Secondary) => {
+                self.open_workspace_in_new_window(&path)
+            }
+            (Prompt::Delete { paths, permanent }, Answer::Primary) => {
+                self.delete_paths(paths, permanent)
+            }
+            (Prompt::Move { srcs, dir }, Answer::Primary) => self.transfer_into(srcs, dir, false),
             (Prompt::ScratchpadClose { view, doc }, Answer::Primary) => {
                 self.flush_scratchpad(doc);
                 self.set_scratchpad_open(doc, false);

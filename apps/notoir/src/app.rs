@@ -242,6 +242,7 @@ impl eframe::App for NotoirApp {
         }
         self.core.notifications.tick(now);
         self.core.flush_scratchpads(false);
+        self.core.workspace_tick();
         if ctx.input(|i| i.viewport().close_requested()) {
             if self.core.request_quit() {
                 self.core.flush_scratchpads(true);
@@ -277,7 +278,14 @@ impl eframe::App for NotoirApp {
                 chrome::status_bar(ui, &mut kit, &self.core, &mut actions);
                 bottom_offset += chrome::STATUS_BAR_HEIGHT;
             }
-            let sizes = panels::show(ui, &mut kit, &self.core, &mut actions);
+            let sizes = panels::show(
+                ui,
+                &mut kit,
+                &mut self.core,
+                &context,
+                &mut self.ui.explorer,
+                &mut actions,
+            );
             let editor_fill = kit.color(Tok::BgEditor);
             let focus_request = self.ui.focus_editor.take();
             let mut layout_out = shell::layout::LayoutOutput::default();
@@ -290,6 +298,7 @@ impl eframe::App for NotoirApp {
                         &mut self.core,
                         &mut self.ui.editors,
                         &mut self.ui.tab_drag,
+                        &mut self.ui.explorer.drag,
                         focus_request,
                         &context,
                         &mut actions,
@@ -386,6 +395,23 @@ impl eframe::App for NotoirApp {
         if let Some(answer) = prompt_answer {
             self.core.answer_prompt(answer);
         }
+        // A finished drag that nothing took.
+        if self.ui.explorer.drag.is_some() && !ctx.input(|i| i.pointer.primary_down()) {
+            self.ui.explorer.drag = None;
+        }
+        let active_doc = self.core.workbench.active_document();
+        if active_doc != self.ui.last_active_doc {
+            self.ui.last_active_doc = active_doc;
+            self.core.auto_reveal(active_doc);
+        }
+        let title = match self.core.workspace_name() {
+            Some(name) => format!("{name} — Notoir"),
+            None => "Notoir".to_owned(),
+        };
+        if title != self.ui.window_title {
+            ctx.send_viewport_cmd(egui::ViewportCommand::Title(title.clone()));
+            self.ui.window_title = title;
+        }
         for event in self.core.workbench.events.drain() {
             if let notoir_core::AppEvent::DocumentChanged { doc, .. } = &event {
                 self.core.scratchpad_changed(*doc);
@@ -393,6 +419,11 @@ impl eframe::App for NotoirApp {
             tracing::trace!(?event, "event");
         }
         if let Some(due) = self.core.next_scratch_due() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(
+                due.saturating_sub(now) + 1,
+            ));
+        }
+        if let Some(due) = self.core.workspace_next_due() {
             ctx.request_repaint_after(std::time::Duration::from_millis(
                 due.saturating_sub(now) + 1,
             ));

@@ -88,7 +88,8 @@
     "openScratchpad": "スクラッチパッドを開く",
     "removeRecent": "最近使用した項目から削除",
     "pinRecent": "最近使用した項目をピン留め",
-    "clearRecent": "最近開いた項目をクリア"
+    "clearRecent": "最近開いた項目をクリア",
+    "copyRelativePath": "相対パスのコピー"
   },
   "edit": {
     "undo": "元に戻す",
@@ -107,5 +108,37 @@
     "changeLineEnding": "行末のシーケンスの変更…",
     "changeEncoding": "ファイルのエンコードの変更…",
     "changeLanguageMode": "言語モードの変更…"
+  },
+  "workspace": {
+    "open": "ワークスペースを開く…",
+    "close": "ワークスペースを閉じる",
+    "openRecent": "最近使用したワークスペースを開く",
+    "removeRecent": "最近使用した項目から削除",
+    "pinRecent": "最近使用したワークスペースをピン留め",
+    "trust": "ワークスペースを信頼",
+    "trustLater": "後で"
+  },
+  "explorer": {
+    "newFile": "新しいファイル…",
+    "newFolder": "新しいフォルダー…",
+    "rename": "名前の変更…",
+    "duplicate": "複製",
+    "delete": "削除",
+    "copy": "コピー",
+    "paste": "貼り付け",
+    "copyPath": "パスのコピー",
+    "copyRelativePath": "相対パスのコピー",
+    "reveal": "ファイル マネージャーで表示",
+    "open": "開く",
+    "openToSide": "横に並べて開く",
+    "refresh": "エクスプローラーを更新",
+    "collapseAll": "すべて折りたたむ",
+    "toggleHidden": "隠しファイルを表示",
+    "toggleGitIgnored": "Git で無視されたファイルを表示",
+    "sortOrder": "エクスプローラーの並べ替え",
+    "focusFilter": "エクスプローラーでファイルを絞り込む",
+    "undo": "エクスプローラーの操作を元に戻す",
+    "revealActive": "アクティブなファイルをエクスプローラーで表示",
+    "drop": "ファイルをドロップ"
   }
 }

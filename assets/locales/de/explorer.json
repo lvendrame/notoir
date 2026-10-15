@@ -1,0 +1,17 @@
+{
+  "filterHint": "Dateien filtern…",
+  "sortOrder": "Sortierung",
+  "sort": {
+    "default": "Ordner zuerst",
+    "mixed": "Gemischt",
+    "modified": "Zuletzt geändert"
+  },
+  "nameError": {
+    "empty": "Ein Name ist erforderlich.",
+    "invalidChar": "Der Name enthält ein unzulässiges Zeichen.",
+    "reserved": "Dieser Name ist vom Betriebssystem reserviert.",
+    "trailing": "Ein Name darf nicht mit Punkt oder Leerzeichen enden.",
+    "tooLong": "Der Name ist zu lang.",
+    "exists": "Eine Datei oder ein Ordner mit diesem Namen existiert bereits."
+  }
+}

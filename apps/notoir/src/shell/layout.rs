@@ -66,6 +66,7 @@ pub fn show(
     core: &mut AppCore,
     editors: &mut EditorCaches,
     drag: &mut Option<TabDrag>,
+    path_drag: &mut Option<std::path::PathBuf>,
     focus_request: Option<ViewId>,
     context: &ContextSnapshot,
     actions: &mut Actions,
@@ -95,6 +96,7 @@ pub fn show(
     };
     r.node(ui, &root, rect, &mut Vec::new());
     handle_drag(ui, kit, drag, &areas, actions);
+    handle_path_drag(ui, kit, path_drag, &areas, core);
     handle_file_drop(ui, &areas, core);
     out
 }
@@ -418,7 +420,51 @@ fn handle_drag(
     actions.push(CommandInvocation::new(id, InvocationSource::Internal).with_args(args));
 }
 
-/// Files dropped from the OS open in the group under the pointer.
+/// An Explorer entry dragged onto the editor area: files open in the group
+/// (or dock into a new split on an edge).
+fn handle_path_drag(
+    ui: &egui::Ui,
+    kit: &mut Kit,
+    drag: &mut Option<std::path::PathBuf>,
+    areas: &[GroupArea],
+    core: &mut AppCore,
+) {
+    let Some(path) = drag.clone() else { return };
+    let (pos, down) = ui.input(|i| (i.pointer.latest_pos(), i.pointer.primary_down()));
+    let target = pos.and_then(|p| target_at(areas, p));
+    if down {
+        if let Some(rect) = target.and_then(|t| preview_rect(areas, t)) {
+            let painter = ui.ctx().layer_painter(egui::LayerId::new(
+                egui::Order::Foreground,
+                egui::Id::new("dock-preview"),
+            ));
+            painter.rect_filled(rect, 2.0, kit.color(Tok::AccentSoft));
+            painter.rect_stroke(
+                rect,
+                2.0,
+                Stroke::new(1.0, kit.color(Tok::Accent)),
+                egui::StrokeKind::Inside,
+            );
+        }
+        return;
+    }
+    let Some(target) = target else { return };
+    *drag = None;
+    if path.is_dir() {
+        return;
+    }
+    let group = match target {
+        DropTarget::Strip { group, .. } | DropTarget::Center(group) => Some(group),
+        DropTarget::Edge { group, dir } => core.workbench.new_group_split(group, dir),
+    };
+    if let Some(g) = group {
+        core.workbench.layout.active_group = g;
+    }
+    core.open_path(&path, crate::files::OpenAt::default());
+}
+
+/// Files dropped from the OS open in the group under the pointer; a folder
+/// opens as the workspace.
 fn handle_file_drop(ui: &egui::Ui, areas: &[GroupArea], core: &mut AppCore) {
     let (files, pos) = ui.input(|i| (i.raw.dropped_files.clone(), i.pointer.latest_pos()));
     if files.is_empty() {
@@ -433,7 +479,11 @@ fn handle_file_drop(ui: &egui::Ui, areas: &[GroupArea], core: &mut AppCore) {
     }
     for f in files {
         let path = f.path().to_path_buf();
-        core.open_path(&path, crate::files::OpenAt::default());
+        if path.is_dir() {
+            core.open_workspace(&path);
+        } else {
+            core.open_path(&path, crate::files::OpenAt::default());
+        }
     }
 }
 

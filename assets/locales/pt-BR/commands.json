@@ -88,7 +88,8 @@
     "openScratchpad": "Abrir Rascunho",
     "removeRecent": "Remover dos Abertos Recentemente",
     "pinRecent": "Fixar Item Recente",
-    "clearRecent": "Limpar Abertos Recentemente"
+    "clearRecent": "Limpar Abertos Recentemente",
+    "copyRelativePath": "Copiar Caminho Relativo"
   },
   "edit": {
     "undo": "Desfazer",
@@ -107,5 +108,37 @@
     "changeLineEnding": "Alterar Sequência de Fim de Linha…",
     "changeEncoding": "Alterar Codificação do Arquivo…",
     "changeLanguageMode": "Alterar Modo de Linguagem…"
+  },
+  "workspace": {
+    "open": "Abrir Workspace…",
+    "close": "Fechar Workspace",
+    "openRecent": "Abrir Workspace Recente",
+    "removeRecent": "Remover dos Recentes",
+    "pinRecent": "Fixar Workspace Recente",
+    "trust": "Confiar no Workspace",
+    "trustLater": "Agora Não"
+  },
+  "explorer": {
+    "newFile": "Novo Arquivo…",
+    "newFolder": "Nova Pasta…",
+    "rename": "Renomear…",
+    "duplicate": "Duplicar",
+    "delete": "Excluir",
+    "copy": "Copiar",
+    "paste": "Colar",
+    "copyPath": "Copiar Caminho",
+    "copyRelativePath": "Copiar Caminho Relativo",
+    "reveal": "Mostrar no Gerenciador de Arquivos",
+    "open": "Abrir",
+    "openToSide": "Abrir ao Lado",
+    "refresh": "Atualizar Explorador",
+    "collapseAll": "Recolher Tudo",
+    "toggleHidden": "Mostrar Arquivos Ocultos",
+    "toggleGitIgnored": "Mostrar Arquivos Ignorados pelo Git",
+    "sortOrder": "Ordenação do Explorador",
+    "focusFilter": "Filtrar Arquivos no Explorador",
+    "undo": "Desfazer Operação do Explorador",
+    "revealActive": "Revelar Arquivo Ativo no Explorador",
+    "drop": "Soltar Arquivos"
   }
 }

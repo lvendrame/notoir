@@ -50,5 +50,27 @@
     "title": "«{{name}}» sembra un file binario.",
     "body": "Aprirlo comunque in sola lettura?",
     "openAnyway": "Apri comunque"
+  },
+  "openWorkspace": "Apri area di lavoro",
+  "workspace": {
+    "title": "Aprire «{{name}}»?",
+    "body": "In questa finestra è già aperta un'area di lavoro.",
+    "thisWindow": "Apri in questa finestra",
+    "newWindow": "Nuova finestra"
+  },
+  "delete": {
+    "title": "Spostare «{{name}}» nel cestino?",
+    "titleMany": "Spostare {{count}} elementi nel cestino?",
+    "body": "Puoi ripristinare gli elementi dal cestino.",
+    "confirm": "Sposta nel cestino",
+    "permanentTitle": "Eliminare definitivamente «{{name}}»?",
+    "permanentTitleMany": "Eliminare definitivamente {{count}} elementi?",
+    "permanentBody": "Il cestino non è disponibile. L'operazione non può essere annullata.",
+    "permanentConfirm": "Elimina definitivamente"
+  },
+  "move": {
+    "title": "Spostare «{{name}}» in «{{folder}}»?",
+    "titleMany": "Spostare {{count}} elementi in «{{folder}}»?",
+    "confirm": "Sposta"
   }
 }

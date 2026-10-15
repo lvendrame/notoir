@@ -19,5 +19,9 @@
   "saveFailed": "“{{name}}” kaydedilemedi.",
   "scratchUnavailable": "Notoir verileri açılamadığı için karalamalar kullanılamıyor.",
   "scratchWriteFailed": "Bir karalama diske yazılamadı.",
-  "workspaceNotYet": "Klasörleri çalışma alanı olarak açmak henüz kullanılamıyor."
+  "fileOpFailed": "Dosya işlemi başarısız oldu.",
+  "notNow": "Şimdi Değil",
+  "trustWorkspace": "Çalışma Alanına Güven",
+  "workspaceMissing": "“{{path}}” klasörü artık yok.",
+  "workspaceTrust": "Bu çalışma alanında eklentileri, MCP'yi veya Git'i etkileyen ayarlar var. Çalışma alanına güvenene kadar yok sayılırlar."
 }

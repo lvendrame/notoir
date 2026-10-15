@@ -1,0 +1,17 @@
+{
+  "filterHint": "Bestanden filteren…",
+  "sortOrder": "Sortering",
+  "sort": {
+    "default": "Mappen eerst",
+    "mixed": "Gemengd",
+    "modified": "Laatst gewijzigd"
+  },
+  "nameError": {
+    "empty": "Een naam is verplicht.",
+    "invalidChar": "De naam bevat een niet-toegestaan teken.",
+    "reserved": "Deze naam is gereserveerd door het besturingssysteem.",
+    "trailing": "Een naam mag niet eindigen op een punt of spatie.",
+    "tooLong": "De naam is te lang.",
+    "exists": "Er bestaat al een bestand of map met deze naam."
+  }
+}

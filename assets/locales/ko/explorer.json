@@ -1,0 +1,17 @@
+{
+  "filterHint": "파일 필터…",
+  "sortOrder": "정렬 순서",
+  "sort": {
+    "default": "폴더 우선",
+    "mixed": "혼합",
+    "modified": "마지막 수정"
+  },
+  "nameError": {
+    "empty": "이름이 필요합니다.",
+    "invalidChar": "이름에 허용되지 않는 문자가 있습니다.",
+    "reserved": "운영 체제에서 예약된 이름입니다.",
+    "trailing": "이름은 마침표나 공백으로 끝날 수 없습니다.",
+    "tooLong": "이름이 너무 깁니다.",
+    "exists": "같은 이름의 파일이나 폴더가 이미 있습니다."
+  }
+}

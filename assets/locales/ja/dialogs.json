@@ -50,5 +50,27 @@
     "title": "“{{name}}” はバイナリ ファイルのようです。",
     "body": "読み取り専用で開きますか?",
     "openAnyway": "開く"
+  },
+  "openWorkspace": "ワークスペースを開く",
+  "workspace": {
+    "title": "「{{name}}」を開きますか?",
+    "body": "このウィンドウでは既にワークスペースが開いています。",
+    "thisWindow": "このウィンドウで開く",
+    "newWindow": "新しいウィンドウ"
+  },
+  "delete": {
+    "title": "「{{name}}」をゴミ箱に移動しますか?",
+    "titleMany": "{{count}} 個の項目をゴミ箱に移動しますか?",
+    "body": "項目はゴミ箱から復元できます。",
+    "confirm": "ゴミ箱に移動",
+    "permanentTitle": "「{{name}}」を完全に削除しますか?",
+    "permanentTitleMany": "{{count}} 個の項目を完全に削除しますか?",
+    "permanentBody": "ゴミ箱を利用できません。この操作は元に戻せません。",
+    "permanentConfirm": "完全に削除"
+  },
+  "move": {
+    "title": "「{{name}}」を「{{folder}}」に移動しますか?",
+    "titleMany": "{{count}} 個の項目を「{{folder}}」に移動しますか?",
+    "confirm": "移動"
   }
 }

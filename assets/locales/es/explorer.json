@@ -1,0 +1,17 @@
+{
+  "filterHint": "Filtrar archivos…",
+  "sortOrder": "Orden",
+  "sort": {
+    "default": "Carpetas primero",
+    "mixed": "Mixto",
+    "modified": "Última modificación"
+  },
+  "nameError": {
+    "empty": "Se requiere un nombre.",
+    "invalidChar": "El nombre contiene un carácter no permitido.",
+    "reserved": "El sistema operativo reserva este nombre.",
+    "trailing": "Un nombre no puede terminar en punto o espacio.",
+    "tooLong": "El nombre es demasiado largo.",
+    "exists": "Ya existe un archivo o carpeta con este nombre."
+  }
+}

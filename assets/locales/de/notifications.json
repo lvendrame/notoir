@@ -19,5 +19,9 @@
   "saveFailed": "„{{name}}“ konnte nicht gespeichert werden.",
   "scratchUnavailable": "Notizzettel sind nicht verfügbar, weil die Notoir-Daten nicht geöffnet werden konnten.",
   "scratchWriteFailed": "Ein Notizzettel konnte nicht auf den Datenträger geschrieben werden.",
-  "workspaceNotYet": "Ordner können noch nicht als Arbeitsbereiche geöffnet werden."
+  "fileOpFailed": "Der Dateivorgang ist fehlgeschlagen.",
+  "notNow": "Nicht jetzt",
+  "trustWorkspace": "Arbeitsbereich vertrauen",
+  "workspaceMissing": "Der Ordner „{{path}}“ existiert nicht mehr.",
+  "workspaceTrust": "Dieser Arbeitsbereich enthält Einstellungen für Plugins, MCP oder Git. Sie werden ignoriert, bis du dem Arbeitsbereich vertraust."
 }

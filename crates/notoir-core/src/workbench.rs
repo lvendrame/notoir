@@ -4,6 +4,7 @@
 //! §Mutation Model, 02, 03.
 
 use std::collections::BTreeMap;
+use std::path::Path;
 use std::sync::Arc;
 
 use notoir_editor::{ChangeError, ChangeSet, EditKind, EditRequest, Selection};
@@ -132,6 +133,51 @@ impl Workbench {
     }
 
     // ── views & tabs ─────────────────────────────────────────────────────
+
+    /// A file or folder was renamed/moved on disk by Notoir: documents at or
+    /// below `old` follow it (buffers and dirty state untouched). `key` builds
+    /// the identity key of a new path.
+    pub fn rename_paths(
+        &mut self,
+        old: &Path,
+        new: &Path,
+        key: impl Fn(&Path) -> PathKey,
+    ) -> Vec<DocumentId> {
+        let mut changed = Vec::new();
+        for doc in self.documents.values_mut() {
+            if let DocumentOrigin::File { path, key: k } = &mut doc.origin
+                && let Ok(rest) = path.strip_prefix(old)
+            {
+                let np = if rest.as_os_str().is_empty() {
+                    new.to_path_buf()
+                } else {
+                    new.join(rest)
+                };
+                *k = key(&np);
+                *path = np;
+                changed.push(doc.id);
+            }
+        }
+        for &doc in &changed {
+            self.events.emit(AppEvent::DocumentPathChanged { doc });
+        }
+        changed
+    }
+
+    /// Files at or below `path` were deleted by Notoir: their documents keep
+    /// their buffers and become dirty "deleted on disk" documents.
+    pub fn mark_deleted(&mut self, path: &Path) -> Vec<DocumentId> {
+        let mut changed = Vec::new();
+        for doc in self.documents.values_mut() {
+            if let DocumentOrigin::File { path: p, .. } = &doc.origin
+                && p.starts_with(path)
+            {
+                doc.disk_state = crate::document::DiskState::DeletedExternally;
+                changed.push(doc.id);
+            }
+        }
+        changed
+    }
 
     pub fn view(&self, id: ViewId) -> Option<&EditorView> {
         self.views.get(id)
@@ -360,6 +406,30 @@ impl Workbench {
         self.activate_view(view)?;
         self.events.emit(AppEvent::LayoutChanged);
         Ok(new)
+    }
+
+    /// "Open to the Side": the next group, or a new empty group to the
+    /// right when there is only one.
+    pub fn side_group(&mut self) -> GroupId {
+        let active = self.layout.active_group;
+        let next = self.layout.neighbor(active, true);
+        if next != active {
+            return next;
+        }
+        let new = GroupId(self.ids.fresh());
+        self.layout.split(active, Direction::Right, new);
+        self.events.emit(AppEvent::LayoutChanged);
+        new
+    }
+
+    /// A new empty group next to `target` (file drops on a group edge).
+    pub fn new_group_split(&mut self, target: GroupId, dir: Direction) -> Option<GroupId> {
+        let new = GroupId(self.ids.fresh());
+        if !self.layout.split(target, dir, new) {
+            return None;
+        }
+        self.events.emit(AppEvent::LayoutChanged);
+        Some(new)
     }
 
     /// Alt/Option-drop on a group edge: a copy of the view in a new group.
@@ -871,6 +941,41 @@ mod tests {
         assert_eq!(wb.layout.group(top).unwrap().tabs, vec![a]);
         assert_eq!(wb.layout.group(bottom).unwrap().tabs, vec![b]);
         wb.layout.check().unwrap();
+    }
+
+    #[test]
+    fn renamed_folder_moves_open_documents() {
+        let mut wb = Workbench::new();
+        let (doc, _) = open(&mut wb, "a/n.md", "x");
+        let (other, _) = open(&mut wb, "ab.md", "y");
+        let changed = wb.rename_paths(Path::new("/w/a"), Path::new("/w/b"), |p| {
+            PathKey::new(p, false)
+        });
+        assert_eq!(changed, vec![doc]);
+        let DocumentOrigin::File { path, key } = &wb.document(doc).unwrap().origin else {
+            panic!()
+        };
+        assert_eq!(path, Path::new("/w/b/n.md"));
+        assert_eq!(*key, PathKey::new(Path::new("/w/b/n.md"), false));
+        assert_eq!(
+            wb.find_by_key(&PathKey::new(Path::new("/w/b/n.md"), false)),
+            Some(doc)
+        );
+        let DocumentOrigin::File { path, .. } = &wb.document(other).unwrap().origin else {
+            panic!()
+        };
+        assert_eq!(path, Path::new("/w/ab.md"));
+    }
+
+    #[test]
+    fn deleted_file_keeps_buffer_and_is_dirty() {
+        let mut wb = Workbench::new();
+        let (doc, _) = open(&mut wb, "old.md", "keep me");
+        assert!(!wb.document(doc).unwrap().is_dirty());
+        wb.mark_deleted(Path::new("/w/old.md"));
+        let d = wb.document(doc).unwrap();
+        assert!(d.is_dirty());
+        assert_eq!(d.buffer.text(), "keep me");
     }
 
     #[test]

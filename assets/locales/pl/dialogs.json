@@ -50,5 +50,27 @@
     "title": "Plik „{{name}}” wygląda na plik binarny.",
     "body": "Otworzyć go mimo to tylko do odczytu?",
     "openAnyway": "Otwórz mimo to"
+  },
+  "openWorkspace": "Otwórz obszar roboczy",
+  "workspace": {
+    "title": "Otworzyć „{{name}}”?",
+    "body": "W tym oknie jest już otwarty obszar roboczy.",
+    "thisWindow": "Otwórz w tym oknie",
+    "newWindow": "Nowe okno"
+  },
+  "delete": {
+    "title": "Przenieść „{{name}}” do kosza?",
+    "titleMany": "Przenieść elementy do kosza (liczba: {{count}})?",
+    "body": "Elementy można przywrócić z kosza.",
+    "confirm": "Przenieś do kosza",
+    "permanentTitle": "Trwale usunąć „{{name}}”?",
+    "permanentTitleMany": "Trwale usunąć elementy (liczba: {{count}})?",
+    "permanentBody": "Kosz jest niedostępny. Tej operacji nie można cofnąć.",
+    "permanentConfirm": "Usuń trwale"
+  },
+  "move": {
+    "title": "Przenieść „{{name}}” do „{{folder}}”?",
+    "titleMany": "Przenieść elementy (liczba: {{count}}) do „{{folder}}”?",
+    "confirm": "Przenieś"
   }
 }

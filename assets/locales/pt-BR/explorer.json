@@ -1,0 +1,17 @@
+{
+  "filterHint": "Filtrar arquivos…",
+  "sortOrder": "Ordenação",
+  "sort": {
+    "default": "Pastas Primeiro",
+    "mixed": "Misturado",
+    "modified": "Última Modificação"
+  },
+  "nameError": {
+    "empty": "Um nome é obrigatório.",
+    "invalidChar": "O nome contém um caractere não permitido.",
+    "reserved": "Este nome é reservado pelo sistema operacional.",
+    "trailing": "Um nome não pode terminar com ponto ou espaço.",
+    "tooLong": "O nome é muito longo.",
+    "exists": "Já existe um arquivo ou pasta com este nome."
+  }
+}

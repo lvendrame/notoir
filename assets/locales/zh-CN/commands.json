@@ -88,7 +88,8 @@
     "openScratchpad": "打开草稿",
     "removeRecent": "从最近打开中移除",
     "pinRecent": "固定最近项目",
-    "clearRecent": "清除最近打开"
+    "clearRecent": "清除最近打开",
+    "copyRelativePath": "复制相对路径"
   },
   "edit": {
     "undo": "撤销",
@@ -107,5 +108,37 @@
     "changeLineEnding": "更改行尾序列…",
     "changeEncoding": "更改文件编码…",
     "changeLanguageMode": "更改语言模式…"
+  },
+  "workspace": {
+    "open": "打开工作区…",
+    "close": "关闭工作区",
+    "openRecent": "打开最近的工作区",
+    "removeRecent": "从最近列表中移除",
+    "pinRecent": "固定最近的工作区",
+    "trust": "信任工作区",
+    "trustLater": "暂不"
+  },
+  "explorer": {
+    "newFile": "新建文件…",
+    "newFolder": "新建文件夹…",
+    "rename": "重命名…",
+    "duplicate": "创建副本",
+    "delete": "删除",
+    "copy": "复制",
+    "paste": "粘贴",
+    "copyPath": "复制路径",
+    "copyRelativePath": "复制相对路径",
+    "reveal": "在文件管理器中显示",
+    "open": "打开",
+    "openToSide": "在侧边打开",
+    "refresh": "刷新资源管理器",
+    "collapseAll": "全部折叠",
+    "toggleHidden": "显示隐藏文件",
+    "toggleGitIgnored": "显示被 Git 忽略的文件",
+    "sortOrder": "资源管理器排序",
+    "focusFilter": "在资源管理器中筛选文件",
+    "undo": "撤销资源管理器操作",
+    "revealActive": "在资源管理器中显示活动文件",
+    "drop": "放置文件"
   }
 }

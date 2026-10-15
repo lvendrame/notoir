@@ -50,5 +50,27 @@
     "title": "“{{name}}”似乎是二进制文件。",
     "body": "仍以只读方式打开？",
     "openAnyway": "仍要打开"
+  },
+  "openWorkspace": "打开工作区",
+  "workspace": {
+    "title": "打开“{{name}}”?",
+    "body": "此窗口已打开一个工作区。",
+    "thisWindow": "在此窗口中打开",
+    "newWindow": "新窗口"
+  },
+  "delete": {
+    "title": "将“{{name}}”移到废纸篓?",
+    "titleMany": "将 {{count}} 个项目移到废纸篓?",
+    "body": "可以从废纸篓中恢复项目。",
+    "confirm": "移到废纸篓",
+    "permanentTitle": "永久删除“{{name}}”?",
+    "permanentTitleMany": "永久删除 {{count}} 个项目?",
+    "permanentBody": "废纸篓不可用。此操作无法撤销。",
+    "permanentConfirm": "永久删除"
+  },
+  "move": {
+    "title": "将“{{name}}”移到“{{folder}}”?",
+    "titleMany": "将 {{count}} 个项目移到“{{folder}}”?",
+    "confirm": "移动"
   }
 }

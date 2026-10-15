@@ -19,5 +19,9 @@
   "saveFailed": "No se pudo guardar «{{name}}».",
   "scratchUnavailable": "Las notas rápidas no están disponibles porque no se pudieron abrir los datos de Notoir.",
   "scratchWriteFailed": "No se pudo escribir una nota rápida en el disco.",
-  "workspaceNotYet": "Todavía no se pueden abrir carpetas como espacios de trabajo."
+  "fileOpFailed": "La operación de archivo falló.",
+  "notNow": "Ahora no",
+  "trustWorkspace": "Confiar en el espacio de trabajo",
+  "workspaceMissing": "La carpeta «{{path}}» ya no existe.",
+  "workspaceTrust": "Este espacio de trabajo tiene ajustes que afectan a plugins, MCP o Git. Se ignoran hasta que confíes en él."
 }

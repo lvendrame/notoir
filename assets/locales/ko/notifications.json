@@ -19,5 +19,9 @@
   "saveFailed": "“{{name}}”을(를) 저장할 수 없습니다.",
   "scratchUnavailable": "Notoir 데이터를 열 수 없어 스크래치패드를 사용할 수 없습니다.",
   "scratchWriteFailed": "스크래치패드를 디스크에 쓸 수 없습니다.",
-  "workspaceNotYet": "폴더를 작업 공간으로 여는 기능은 아직 제공되지 않습니다."
+  "fileOpFailed": "파일 작업에 실패했습니다.",
+  "notNow": "나중에",
+  "trustWorkspace": "작업 영역 신뢰",
+  "workspaceMissing": "“{{path}}” 폴더가 더 이상 없습니다.",
+  "workspaceTrust": "이 작업 영역에는 플러그인, MCP 또는 Git에 영향을 주는 설정이 있습니다. 작업 영역을 신뢰할 때까지 무시됩니다."
 }

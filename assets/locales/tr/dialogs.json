@@ -50,5 +50,27 @@
     "title": "“{{name}}” ikili bir dosya gibi görünüyor.",
     "body": "Yine de salt okunur açılsın mı?",
     "openAnyway": "Yine de Aç"
+  },
+  "openWorkspace": "Çalışma Alanı Aç",
+  "workspace": {
+    "title": "“{{name}}” açılsın mı?",
+    "body": "Bu pencerede zaten bir çalışma alanı açık.",
+    "thisWindow": "Bu Pencerede Aç",
+    "newWindow": "Yeni Pencere"
+  },
+  "delete": {
+    "title": "“{{name}}” çöp kutusuna taşınsın mı?",
+    "titleMany": "{{count}} öğe çöp kutusuna taşınsın mı?",
+    "body": "Öğeleri çöp kutusundan geri yükleyebilirsiniz.",
+    "confirm": "Çöp Kutusuna Taşı",
+    "permanentTitle": "“{{name}}” kalıcı olarak silinsin mi?",
+    "permanentTitleMany": "{{count}} öğe kalıcı olarak silinsin mi?",
+    "permanentBody": "Çöp kutusu kullanılamıyor. Bu işlem geri alınamaz.",
+    "permanentConfirm": "Kalıcı Olarak Sil"
+  },
+  "move": {
+    "title": "“{{name}}”, “{{folder}}” içine taşınsın mı?",
+    "titleMany": "{{count}} öğe “{{folder}}” içine taşınsın mı?",
+    "confirm": "Taşı"
   }
 }

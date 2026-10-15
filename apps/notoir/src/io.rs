@@ -31,6 +31,10 @@ pub enum IoResult {
     ScratchpadWriteFailed {
         error: String,
     },
+    /// Open Workspace dialog answer.
+    FolderPicked(Option<std::path::PathBuf>),
+    /// Workspace listing, index, watcher and file-operation results.
+    Workspace(crate::workspace::WsResult),
     /// Another launch forwarded its command line (single instance).
     Instance(notoir_platform::single_instance::InstanceRequest),
 }

@@ -135,10 +135,21 @@ pub struct AppCore {
     pub files: crate::files::FileState,
     /// Panels as they were before Maximize Editor Group (restored exactly).
     pub maximize_saved: Option<PanelLayout>,
+    /// The open workspace (one per window).
+    pub workspace: Option<crate::workspace::Workspace>,
+    /// Bumped per opened workspace; stale background results are dropped.
+    pub ws_generation: u64,
+    /// Workspace listings and file operations (ordered).
+    pub fs: IoQueue,
+    /// The workspace index walk (long-running, separate from listings).
+    pub index_queue: IoQueue,
+    /// The Explorer tree had keyboard focus last frame.
+    pub explorer_focused: bool,
 }
 
 impl AppCore {
     pub fn new(opts: &StartOptions, wake: impl Fn() + Send + Sync + 'static) -> Self {
+        let wake: Arc<dyn Fn() + Send + Sync> = Arc::new(wake);
         let paths = opts.paths.clone();
         if let Err(e) = paths.ensure_dirs() {
             tracing::error!(error = %e, "could not create app directories");
@@ -229,7 +240,18 @@ impl AppCore {
             panels: PanelLayout::new(REGISTERED_PANELS),
             notifications,
             state_db,
-            io: IoQueue::start(wake),
+            io: IoQueue::start({
+                let w = wake.clone();
+                move || w()
+            }),
+            fs: IoQueue::start({
+                let w = wake.clone();
+                move || w()
+            }),
+            index_queue: IoQueue::start(move || wake()),
+            workspace: None,
+            ws_generation: 0,
+            explorer_focused: false,
             language,
             theme_choice,
             theme_override: opts.theme_override,
@@ -406,7 +428,8 @@ impl AppCore {
             .set_bool("toolbarVisible", self.toolbar_visible())
             .set_bool("statusBarVisible", self.status_bar_visible())
             .set_bool("fullScreen", fullscreen)
-            .set_bool("hasWorkspace", false)
+            .set_bool("hasWorkspace", self.workspace.is_some())
+            .set_bool("explorerFocus", self.explorer_focused)
             .set_bool("editorFocus", self.editor_focused)
             .set_bool("textInputFocus", false);
         if let Some(view) = self
@@ -436,6 +459,18 @@ impl AppCore {
             "currentLineHighlight",
             self.settings.str("editor.highlightCurrentLine", None) != "none",
         );
+        let sort = self.settings.str("explorer.sortOrder", None).to_owned();
+        c.set_bool(
+            "explorerShowHidden",
+            self.settings.bool("explorer.showHidden", None),
+        )
+        .set_bool(
+            "explorerShowGitIgnored",
+            self.settings.bool("explorer.showGitIgnored", None),
+        );
+        for v in ["default", "mixed", "modified"] {
+            c.set_bool(format!("explorerSort.{v}"), sort == v);
+        }
         for &p in REGISTERED_PANELS {
             c.set_bool(
                 format!("panel.{}.visible", panel_key(p)),
@@ -486,8 +521,7 @@ impl AppCore {
                 self.user_settings.values.remove(key);
             }
         }
-        let newer =
-            ResolvedSettings::new(self.schema.clone(), self.user_settings.clone(), None, false);
+        let newer = self.resolve_settings();
         let changed = self.settings.changed_keys(&newer);
         self.settings = newer;
         if !changed.is_empty() {
@@ -509,7 +543,10 @@ impl AppCore {
 
     /// Handles IO results (UI thread).
     pub fn pump_io(&mut self) {
-        for result in self.io.drain() {
+        let mut results = self.io.drain();
+        results.extend(self.fs.drain());
+        results.extend(self.index_queue.drain());
+        for result in results {
             match result {
                 IoResult::FilesPicked(paths) => {
                     for p in paths {
@@ -533,6 +570,9 @@ impl AppCore {
                     );
                 }
                 IoResult::Instance(req) => self.handle_instance_request(req),
+                IoResult::FolderPicked(Some(path)) => self.open_workspace(&path),
+                IoResult::FolderPicked(None) => {}
+                IoResult::Workspace(r) => self.handle_workspace(r),
                 IoResult::SettingsWriteFailed { path, error } => {
                     tracing::error!(%path, %error, "settings write failed");
                     let now = self.now_ms;
@@ -554,6 +594,8 @@ impl AppCore {
     /// Tests/shutdown: wait for background writes.
     pub fn flush_io(&self) -> bool {
         self.io.wait_idle(Duration::from_secs(5))
+            & self.fs.wait_idle(Duration::from_secs(5))
+            & self.index_queue.wait_idle(Duration::from_secs(5))
     }
 }
 
@@ -654,32 +696,34 @@ impl AppCore {
     /// command-line files.
     pub fn startup(&mut self, open_paths: &[(std::path::PathBuf, Option<(usize, usize)>)]) {
         self.load_recent();
+        self.load_recent_workspaces();
         self.restore_scratchpads();
-        for (path, at) in open_paths {
-            self.open_cli_path(path, *at);
-        }
+        self.open_cli_paths(open_paths);
     }
 
-    fn open_cli_path(&mut self, path: &std::path::Path, at: Option<(usize, usize)>) {
-        if path.is_dir() {
-            // Workspaces arrive in M7.
-            let now = self.now_ms;
-            self.notifications.notify(
-                Notification::new(
-                    Severity::Info,
-                    Translatable::new("notifications:workspaceNotYet"),
-                ),
-                now,
+    /// Command-line paths: files open as tabs; the first folder becomes this
+    /// window's workspace and further folders open their own windows.
+    fn open_cli_paths(&mut self, paths: &[(std::path::PathBuf, Option<(usize, usize)>)]) {
+        let mut folder_used = false;
+        for (path, at) in paths {
+            if path.is_dir() {
+                if folder_used {
+                    self.open_workspace_in_new_window(path);
+                } else {
+                    folder_used = true;
+                    self.open_workspace(path);
+                }
+                continue;
+            }
+            self.open_path(
+                path,
+                crate::files::OpenAt {
+                    line_col: *at,
+                    restore: None,
+                    keep_focus: false,
+                },
             );
-            return;
         }
-        self.open_path(
-            path,
-            crate::files::OpenAt {
-                line_col: at,
-                restore: None,
-            },
-        );
     }
 
     /// Command line forwarded by a second launch.
@@ -687,9 +731,8 @@ impl AppCore {
         &mut self,
         req: notoir_platform::single_instance::InstanceRequest,
     ) {
-        for (path, at) in crate::cli::paths(&req.args, &req.cwd) {
-            self.open_cli_path(&path, at);
-        }
+        let paths = crate::cli::paths(&req.args, &req.cwd);
+        self.open_cli_paths(&paths);
         self.effects.push(Effect::FocusWindow);
     }
 }

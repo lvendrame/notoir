@@ -486,6 +486,34 @@ impl Schema {
             Scopes::NO_LANGUAGE,
             C::Workspace,
         );
+        def(
+            "explorer.dimGitIgnored",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Workspace,
+        );
+        def(
+            "explorer.sortOrder",
+            T::Enum(&["default", "mixed", "modified"]),
+            s_("default"),
+            Scopes::NO_LANGUAGE,
+            C::Workspace,
+        );
+        def(
+            "explorer.autoReveal",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Workspace,
+        );
+        def(
+            "explorer.confirmDragAndDrop",
+            T::Bool,
+            V::Bool(true),
+            Scopes::USER_ONLY,
+            C::Workspace,
+        );
         // MCP (restricted: a cloned repo must not start servers)
         s.define(SettingDef {
             key: "mcp.autoStart",
@@ -676,6 +704,13 @@ impl ResolvedSettings {
             return Some(v);
         }
         Some(&def.default)
+    }
+
+    pub fn str_list(&self, key: &str, language: Option<&str>) -> Vec<String> {
+        match self.get(key, language) {
+            Some(SettingValue::List(v)) => v.clone(),
+            _ => Vec::new(),
+        }
     }
 
     pub fn bool(&self, key: &str, language: Option<&str>) -> bool {

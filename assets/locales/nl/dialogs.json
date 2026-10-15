@@ -50,5 +50,27 @@
     "title": "‘{{name}}’ lijkt een binair bestand te zijn.",
     "body": "Toch alleen-lezen openen?",
     "openAnyway": "Toch openen"
+  },
+  "openWorkspace": "Werkruimte openen",
+  "workspace": {
+    "title": "“{{name}}” openen?",
+    "body": "Dit venster heeft al een werkruimte geopend.",
+    "thisWindow": "Openen in dit venster",
+    "newWindow": "Nieuw venster"
+  },
+  "delete": {
+    "title": "“{{name}}” naar de prullenbak verplaatsen?",
+    "titleMany": "{{count}} items naar de prullenbak verplaatsen?",
+    "body": "Je kunt items herstellen uit de prullenbak.",
+    "confirm": "Naar prullenbak",
+    "permanentTitle": "“{{name}}” definitief verwijderen?",
+    "permanentTitleMany": "{{count}} items definitief verwijderen?",
+    "permanentBody": "De prullenbak is niet beschikbaar. Dit kan niet ongedaan worden gemaakt.",
+    "permanentConfirm": "Definitief verwijderen"
+  },
+  "move": {
+    "title": "“{{name}}” naar “{{folder}}” verplaatsen?",
+    "titleMany": "{{count}} items naar “{{folder}}” verplaatsen?",
+    "confirm": "Verplaatsen"
   }
 }

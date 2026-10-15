@@ -24,7 +24,12 @@ use crate::theme::{ICON_SM, Tok};
 pub const TAB_STRIP_HEIGHT: f32 = 34.0;
 
 fn file_icon(doc: &Document) -> Icon {
-    match doc.language.as_str() {
+    language_icon(doc.language.as_str())
+}
+
+/// File icon for a language id (tabs, Explorer).
+pub fn language_icon(language: &str) -> Icon {
+    match language {
         "markdown" | "plaintext" | "log" => Icon::FileText,
         "json" | "jsonc" | "jsonl" => Icon::FileJson,
         "shellscript" | "powershell" => Icon::FileTerminal,

@@ -87,6 +87,7 @@ fn open_a_single_file_without_workspace() {
     type_text(&mut app, "!");
     assert_eq!(active_text(&app), "!milk");
     assert!(app.harness.query_by_label("No folder opened").is_some());
+    assert!(app.harness.query_by_label("Open Workspace…").is_some());
 }
 
 // spec 04: "Dirty indicator"

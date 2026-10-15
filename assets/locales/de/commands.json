@@ -88,7 +88,8 @@
     "openScratchpad": "Notizzettel öffnen",
     "removeRecent": "Aus zuletzt geöffneten entfernen",
     "pinRecent": "Zuletzt verwendetes Element anheften",
-    "clearRecent": "Zuletzt geöffnete löschen"
+    "clearRecent": "Zuletzt geöffnete löschen",
+    "copyRelativePath": "Relativen Pfad kopieren"
   },
   "edit": {
     "undo": "Rückgängig",
@@ -107,5 +108,37 @@
     "changeLineEnding": "Zeilenendesequenz ändern…",
     "changeEncoding": "Dateicodierung ändern…",
     "changeLanguageMode": "Sprachmodus ändern…"
+  },
+  "workspace": {
+    "open": "Arbeitsbereich öffnen…",
+    "close": "Arbeitsbereich schließen",
+    "openRecent": "Zuletzt verwendeten Arbeitsbereich öffnen",
+    "removeRecent": "Aus „Zuletzt verwendet“ entfernen",
+    "pinRecent": "Zuletzt verwendeten Arbeitsbereich anheften",
+    "trust": "Arbeitsbereich vertrauen",
+    "trustLater": "Nicht jetzt"
+  },
+  "explorer": {
+    "newFile": "Neue Datei…",
+    "newFolder": "Neuer Ordner…",
+    "rename": "Umbenennen…",
+    "duplicate": "Duplizieren",
+    "delete": "Löschen",
+    "copy": "Kopieren",
+    "paste": "Einfügen",
+    "copyPath": "Pfad kopieren",
+    "copyRelativePath": "Relativen Pfad kopieren",
+    "reveal": "Im Dateimanager anzeigen",
+    "open": "Öffnen",
+    "openToSide": "Seitlich öffnen",
+    "refresh": "Explorer aktualisieren",
+    "collapseAll": "Alle reduzieren",
+    "toggleHidden": "Versteckte Dateien anzeigen",
+    "toggleGitIgnored": "Von Git ignorierte Dateien anzeigen",
+    "sortOrder": "Sortierung im Explorer",
+    "focusFilter": "Dateien im Explorer filtern",
+    "undo": "Explorer-Vorgang rückgängig machen",
+    "revealActive": "Aktive Datei im Explorer anzeigen",
+    "drop": "Dateien ablegen"
   }
 }

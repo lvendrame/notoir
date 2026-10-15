@@ -19,5 +19,9 @@
   "saveFailed": "Impossible d'enregistrer « {{name}} ».",
   "scratchUnavailable": "Les brouillons ne sont pas disponibles car les données de Notoir n'ont pas pu être ouvertes.",
   "scratchWriteFailed": "Un brouillon n'a pas pu être écrit sur le disque.",
-  "workspaceNotYet": "L'ouverture de dossiers comme espaces de travail n'est pas encore disponible."
+  "fileOpFailed": "L'opération sur le fichier a échoué.",
+  "notNow": "Plus tard",
+  "trustWorkspace": "Faire confiance à l'espace de travail",
+  "workspaceMissing": "Le dossier « {{path}} » n'existe plus.",
+  "workspaceTrust": "Cet espace de travail contient des paramètres qui concernent les plugins, MCP ou Git. Ils sont ignorés tant que vous ne lui faites pas confiance."
 }

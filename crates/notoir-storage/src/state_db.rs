@@ -13,7 +13,10 @@ use std::time::Duration;
 use rusqlite::{Connection, OptionalExtension, params};
 
 /// Embedded migrations; index + 1 = resulting schema version.
-const MIGRATIONS: &[&str] = &[include_str!("../migrations/0001_initial.sql")];
+const MIGRATIONS: &[&str] = &[
+    include_str!("../migrations/0001_initial.sql"),
+    include_str!("../migrations/0002_workspace_trust.sql"),
+];
 pub const SCHEMA_VERSION: u32 = MIGRATIONS.len() as u32;
 /// Unpinned recent entries kept per kind.
 pub const RECENT_LIMIT: usize = 50;
@@ -401,6 +404,39 @@ impl StateDb {
         })
     }
 
+    // ── workspace trust ──────────────────────────────────────────────────
+
+    pub fn set_workspace_trusted(
+        &self,
+        workspace_key: &str,
+        trusted: bool,
+        now_ms: i64,
+    ) -> Result<(), StorageError> {
+        self.write(|c| {
+            if trusted {
+                c.execute(
+                    "INSERT OR REPLACE INTO workspace_trust (workspace_key, trusted_at) VALUES (?1, ?2)",
+                    params![workspace_key, now_ms],
+                )
+            } else {
+                c.execute("DELETE FROM workspace_trust WHERE workspace_key = ?1", [workspace_key])
+            }
+            .map(drop)
+        })
+    }
+
+    pub fn is_workspace_trusted(&self, workspace_key: &str) -> Result<bool, StorageError> {
+        Ok(self
+            .conn
+            .query_row(
+                "SELECT 1 FROM workspace_trust WHERE workspace_key = ?1",
+                [workspace_key],
+                |_| Ok(()),
+            )
+            .optional()?
+            .is_some())
+    }
+
     pub fn is_notice_dismissed(&self, key: &str) -> Result<bool, StorageError> {
         Ok(self
             .conn
@@ -505,8 +541,6 @@ mod tests {
     }
 
     #[test]
-    // The range is empty until schema v2 exists; the test then covers every step.
-    #[allow(clippy::reversed_empty_ranges)]
     fn migration_from_every_previous_version_keeps_data() {
         // Each historical version is created by applying its migration prefix.
         for from in 1..SCHEMA_VERSION {
@@ -530,6 +564,16 @@ mod tests {
             assert!(path.with_extension(format!("db.bak-v{from}")).exists());
             assert_eq!(db.recent(RecentKind::File).unwrap()[0].path, "/keep.md");
         }
+    }
+
+    #[test]
+    fn workspace_trust_round_trip() {
+        let db = StateDb::open_in_memory().unwrap();
+        assert!(!db.is_workspace_trusted("/ws").unwrap());
+        db.set_workspace_trusted("/ws", true, 1).unwrap();
+        assert!(db.is_workspace_trusted("/ws").unwrap());
+        db.set_workspace_trusted("/ws", false, 2).unwrap();
+        assert!(!db.is_workspace_trusted("/ws").unwrap());
     }
 
     // spec 08: "Pinned workspaces stay on top"

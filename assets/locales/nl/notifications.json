@@ -19,5 +19,9 @@
   "saveFailed": "‘{{name}}’ kan niet worden opgeslagen.",
   "scratchUnavailable": "Kladblokken zijn niet beschikbaar omdat de gegevens van Notoir niet konden worden geopend.",
   "scratchWriteFailed": "Een kladblok kon niet naar de schijf worden geschreven.",
-  "workspaceNotYet": "Mappen openen als werkruimte is nog niet beschikbaar."
+  "fileOpFailed": "De bestandsbewerking is mislukt.",
+  "notNow": "Niet nu",
+  "trustWorkspace": "Werkruimte vertrouwen",
+  "workspaceMissing": "De map “{{path}}” bestaat niet meer.",
+  "workspaceTrust": "Deze werkruimte heeft instellingen voor plug-ins, MCP of Git. Ze worden genegeerd totdat je de werkruimte vertrouwt."
 }

@@ -1,6 +1,6 @@
 # 07 — Workspace & Explorer
 
-**Status:** Not started — M7
+**Status:** Partial — workspace open/close/replace prompt, `.notoir/settings.toml` with trust, lazy Explorer tree (sorting, hidden/ignored/excluded, filter over the background index, keyboard, auto-reveal), file operations (new, rename incl. case-only, duplicate, delete to trash with permanent fallback, copy/paste, drag move/copy, OS drops, undo), file watching of the tree (M7). Restoring tabs/layout/expanded folders per workspace (M8), Git decorations (M18), Compare items (M17), Find in Folder (M11), Open Editors section and multi-selection later
 
 ## Purpose
 

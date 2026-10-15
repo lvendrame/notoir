@@ -1,6 +1,6 @@
 # 08 — Opening Files, Scratchpads & Recent
 
-**Status:** Partial — Open File, New File, Scratchpads (create, persist, keep, Save As), recent files with pins, Open Recent, New Window, CLI and single-instance forwarding (M2, M5); workspaces and recent workspaces (M7)
+**Status:** Partial — Open File, New File, Scratchpads (create, persist, keep, Save As), recent files with pins, Open Recent, New Window, CLI and single-instance forwarding (M2, M5); Open Workspace, folder drops and CLI folders, recent workspaces with pins (M7); Quick Open recent (M9), OS recent-documents integration (M11)
 
 ## Purpose
 

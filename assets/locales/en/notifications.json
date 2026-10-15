@@ -19,5 +19,9 @@
   "saveFailed": "Could not save “{{name}}”.",
   "scratchUnavailable": "Scratchpads are unavailable because Notoir's data could not be opened.",
   "scratchWriteFailed": "A Scratchpad could not be written to disk.",
-  "workspaceNotYet": "Opening folders as workspaces is not available yet."
+  "fileOpFailed": "The file operation failed.",
+  "notNow": "Not Now",
+  "trustWorkspace": "Trust Workspace",
+  "workspaceMissing": "The folder “{{path}}” no longer exists.",
+  "workspaceTrust": "This workspace has settings that affect plugins, MCP or Git. They are ignored until you trust the workspace."
 }

@@ -18,3 +18,4 @@ pub mod logging;
 pub mod menus;
 pub mod shell;
 pub mod theme;
+pub mod workspace;

@@ -50,5 +50,27 @@
     "title": "„{{name}}“ scheint eine Binärdatei zu sein.",
     "body": "Trotzdem schreibgeschützt öffnen?",
     "openAnyway": "Trotzdem öffnen"
+  },
+  "openWorkspace": "Arbeitsbereich öffnen",
+  "workspace": {
+    "title": "„{{name}}“ öffnen?",
+    "body": "In diesem Fenster ist bereits ein Arbeitsbereich geöffnet.",
+    "thisWindow": "In diesem Fenster öffnen",
+    "newWindow": "Neues Fenster"
+  },
+  "delete": {
+    "title": "„{{name}}“ in den Papierkorb verschieben?",
+    "titleMany": "{{count}} Elemente in den Papierkorb verschieben?",
+    "body": "Elemente lassen sich aus dem Papierkorb wiederherstellen.",
+    "confirm": "In den Papierkorb",
+    "permanentTitle": "„{{name}}“ endgültig löschen?",
+    "permanentTitleMany": "{{count}} Elemente endgültig löschen?",
+    "permanentBody": "Der Papierkorb ist nicht verfügbar. Dies kann nicht rückgängig gemacht werden.",
+    "permanentConfirm": "Endgültig löschen"
+  },
+  "move": {
+    "title": "„{{name}}“ nach „{{folder}}“ verschieben?",
+    "titleMany": "{{count}} Elemente nach „{{folder}}“ verschieben?",
+    "confirm": "Verschieben"
   }
 }

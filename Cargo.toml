@@ -47,6 +47,10 @@ rusqlite = { version = "0.40.2", features = ["bundled"] }
 toml_edit = "0.25.17"
 uuid = { version = "1.28.0", features = ["v4"] }
 xxhash-rust = { version = "0.8.19", features = ["xxh3"] }
+notify = "8.2.0"
+ignore = "0.4.33"
+globset = "0.4.20"
+trash = "5.2.9"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

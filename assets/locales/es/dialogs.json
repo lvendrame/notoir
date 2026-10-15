@@ -50,5 +50,27 @@
     "title": "«{{name}}» parece ser un archivo binario.",
     "body": "¿Abrirlo de todos modos en modo de solo lectura?",
     "openAnyway": "Abrir de todos modos"
+  },
+  "openWorkspace": "Abrir espacio de trabajo",
+  "workspace": {
+    "title": "¿Abrir «{{name}}»?",
+    "body": "Esta ventana ya tiene un espacio de trabajo abierto.",
+    "thisWindow": "Abrir en esta ventana",
+    "newWindow": "Nueva ventana"
+  },
+  "delete": {
+    "title": "¿Mover «{{name}}» a la papelera?",
+    "titleMany": "¿Mover {{count}} elementos a la papelera?",
+    "body": "Puedes restaurar elementos desde la papelera.",
+    "confirm": "Mover a la papelera",
+    "permanentTitle": "¿Eliminar «{{name}}» de forma permanente?",
+    "permanentTitleMany": "¿Eliminar {{count}} elementos de forma permanente?",
+    "permanentBody": "La papelera no está disponible. Esta acción no se puede deshacer.",
+    "permanentConfirm": "Eliminar permanentemente"
+  },
+  "move": {
+    "title": "¿Mover «{{name}}» a «{{folder}}»?",
+    "titleMany": "¿Mover {{count}} elementos a «{{folder}}»?",
+    "confirm": "Mover"
   }
 }

@@ -50,5 +50,27 @@
     "title": "“{{name}}” appears to be a binary file.",
     "body": "Open it read-only anyway?",
     "openAnyway": "Open Anyway"
+  },
+  "openWorkspace": "Open Workspace",
+  "workspace": {
+    "title": "Open “{{name}}”?",
+    "body": "This window already has a workspace open.",
+    "thisWindow": "Open in This Window",
+    "newWindow": "New Window"
+  },
+  "delete": {
+    "title": "Move “{{name}}” to the Trash?",
+    "titleMany": "Move {{count}} items to the Trash?",
+    "body": "You can restore items from the Trash.",
+    "confirm": "Move to Trash",
+    "permanentTitle": "Permanently delete “{{name}}”?",
+    "permanentTitleMany": "Permanently delete {{count}} items?",
+    "permanentBody": "The Trash is not available. This cannot be undone.",
+    "permanentConfirm": "Delete Permanently"
+  },
+  "move": {
+    "title": "Move “{{name}}” into “{{folder}}”?",
+    "titleMany": "Move {{count}} items into “{{folder}}”?",
+    "confirm": "Move"
   }
 }

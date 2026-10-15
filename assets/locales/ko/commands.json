@@ -88,7 +88,8 @@
     "openScratchpad": "스크래치패드 열기",
     "removeRecent": "최근에 연 항목에서 제거",
     "pinRecent": "최근 항목 고정",
-    "clearRecent": "최근에 연 항목 지우기"
+    "clearRecent": "최근에 연 항목 지우기",
+    "copyRelativePath": "상대 경로 복사"
   },
   "edit": {
     "undo": "실행 취소",
@@ -107,5 +108,37 @@
     "changeLineEnding": "줄 끝 시퀀스 변경…",
     "changeEncoding": "파일 인코딩 변경…",
     "changeLanguageMode": "언어 모드 변경…"
+  },
+  "workspace": {
+    "open": "작업 영역 열기…",
+    "close": "작업 영역 닫기",
+    "openRecent": "최근 작업 영역 열기",
+    "removeRecent": "최근 항목에서 제거",
+    "pinRecent": "최근 작업 영역 고정",
+    "trust": "작업 영역 신뢰",
+    "trustLater": "나중에"
+  },
+  "explorer": {
+    "newFile": "새 파일…",
+    "newFolder": "새 폴더…",
+    "rename": "이름 바꾸기…",
+    "duplicate": "복제",
+    "delete": "삭제",
+    "copy": "복사",
+    "paste": "붙여넣기",
+    "copyPath": "경로 복사",
+    "copyRelativePath": "상대 경로 복사",
+    "reveal": "파일 관리자에서 표시",
+    "open": "열기",
+    "openToSide": "측면에서 열기",
+    "refresh": "탐색기 새로 고침",
+    "collapseAll": "모두 축소",
+    "toggleHidden": "숨김 파일 표시",
+    "toggleGitIgnored": "Git에서 무시한 파일 표시",
+    "sortOrder": "탐색기 정렬",
+    "focusFilter": "탐색기에서 파일 필터링",
+    "undo": "탐색기 작업 실행 취소",
+    "revealActive": "탐색기에서 활성 파일 표시",
+    "drop": "파일 놓기"
   }
 }

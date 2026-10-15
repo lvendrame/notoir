@@ -14,6 +14,7 @@ mod file;
 mod layout;
 mod preferences;
 mod view;
+mod workspace;
 
 pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform) {
     let mut specs = Vec::new();
@@ -21,6 +22,7 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     editor::specs(&mut specs);
     file::specs(&mut specs);
     layout::specs(&mut specs);
+    workspace::specs(&mut specs);
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);
     for spec in specs {

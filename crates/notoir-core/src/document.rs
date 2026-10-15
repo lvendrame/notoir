@@ -24,6 +24,10 @@ impl PathKey {
             s
         })
     }
+
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]

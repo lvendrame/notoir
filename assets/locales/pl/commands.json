@@ -88,7 +88,8 @@
     "openScratchpad": "Otwórz brudnopis",
     "removeRecent": "Usuń z ostatnio otwartych",
     "pinRecent": "Przypnij ostatni element",
-    "clearRecent": "Wyczyść ostatnio otwarte"
+    "clearRecent": "Wyczyść ostatnio otwarte",
+    "copyRelativePath": "Kopiuj ścieżkę względną"
   },
   "edit": {
     "undo": "Cofnij",
@@ -107,5 +108,37 @@
     "changeLineEnding": "Zmień sekwencję końca wiersza…",
     "changeEncoding": "Zmień kodowanie pliku…",
     "changeLanguageMode": "Zmień tryb języka…"
+  },
+  "workspace": {
+    "open": "Otwórz obszar roboczy…",
+    "close": "Zamknij obszar roboczy",
+    "openRecent": "Otwórz ostatni obszar roboczy",
+    "removeRecent": "Usuń z ostatnich",
+    "pinRecent": "Przypnij ostatni obszar roboczy",
+    "trust": "Ufaj obszarowi roboczemu",
+    "trustLater": "Nie teraz"
+  },
+  "explorer": {
+    "newFile": "Nowy plik…",
+    "newFolder": "Nowy folder…",
+    "rename": "Zmień nazwę…",
+    "duplicate": "Duplikuj",
+    "delete": "Usuń",
+    "copy": "Kopiuj",
+    "paste": "Wklej",
+    "copyPath": "Kopiuj ścieżkę",
+    "copyRelativePath": "Kopiuj ścieżkę względną",
+    "reveal": "Pokaż w menedżerze plików",
+    "open": "Otwórz",
+    "openToSide": "Otwórz z boku",
+    "refresh": "Odśwież eksplorator",
+    "collapseAll": "Zwiń wszystko",
+    "toggleHidden": "Pokaż ukryte pliki",
+    "toggleGitIgnored": "Pokaż pliki ignorowane przez Git",
+    "sortOrder": "Sortowanie eksploratora",
+    "focusFilter": "Filtruj pliki w eksploratorze",
+    "undo": "Cofnij operację eksploratora",
+    "revealActive": "Pokaż aktywny plik w eksploratorze",
+    "drop": "Upuść pliki"
   }
 }

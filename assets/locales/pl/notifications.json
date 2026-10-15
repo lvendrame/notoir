@@ -19,5 +19,9 @@
   "saveFailed": "Nie można zapisać „{{name}}”.",
   "scratchUnavailable": "Brudnopisy są niedostępne, ponieważ nie można otworzyć danych Notoir.",
   "scratchWriteFailed": "Nie udało się zapisać brudnopisu na dysku.",
-  "workspaceNotYet": "Otwieranie folderów jako obszarów roboczych nie jest jeszcze dostępne."
+  "fileOpFailed": "Operacja na pliku nie powiodła się.",
+  "notNow": "Nie teraz",
+  "trustWorkspace": "Ufaj obszarowi roboczemu",
+  "workspaceMissing": "Folder „{{path}}” już nie istnieje.",
+  "workspaceTrust": "Ten obszar roboczy ma ustawienia dotyczące wtyczek, MCP lub Git. Są ignorowane, dopóki nie zaufasz obszarowi roboczemu."
 }

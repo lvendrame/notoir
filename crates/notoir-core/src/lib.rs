@@ -7,6 +7,8 @@
 pub mod command;
 pub mod document;
 pub mod events;
+pub mod explorer;
+pub mod fuzzy;
 pub mod ids;
 pub mod keymap;
 pub mod layout;

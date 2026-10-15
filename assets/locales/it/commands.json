@@ -88,7 +88,8 @@
     "openScratchpad": "Apri appunto",
     "removeRecent": "Rimuovi dagli elementi recenti",
     "pinRecent": "Fissa elemento recente",
-    "clearRecent": "Cancella elementi recenti"
+    "clearRecent": "Cancella elementi recenti",
+    "copyRelativePath": "Copia percorso relativo"
   },
   "edit": {
     "undo": "Annulla",
@@ -107,5 +108,37 @@
     "changeLineEnding": "Cambia sequenza di fine riga…",
     "changeEncoding": "Cambia codifica del file…",
     "changeLanguageMode": "Cambia modalità linguaggio…"
+  },
+  "workspace": {
+    "open": "Apri area di lavoro…",
+    "close": "Chiudi area di lavoro",
+    "openRecent": "Apri area di lavoro recente",
+    "removeRecent": "Rimuovi dai recenti",
+    "pinRecent": "Fissa area di lavoro recente",
+    "trust": "Considera attendibile l'area di lavoro",
+    "trustLater": "Non ora"
+  },
+  "explorer": {
+    "newFile": "Nuovo file…",
+    "newFolder": "Nuova cartella…",
+    "rename": "Rinomina…",
+    "duplicate": "Duplica",
+    "delete": "Elimina",
+    "copy": "Copia",
+    "paste": "Incolla",
+    "copyPath": "Copia percorso",
+    "copyRelativePath": "Copia percorso relativo",
+    "reveal": "Mostra nel file manager",
+    "open": "Apri",
+    "openToSide": "Apri a lato",
+    "refresh": "Aggiorna esplora risorse",
+    "collapseAll": "Comprimi tutto",
+    "toggleHidden": "Mostra file nascosti",
+    "toggleGitIgnored": "Mostra file ignorati da Git",
+    "sortOrder": "Ordinamento esplora risorse",
+    "focusFilter": "Filtra file in esplora risorse",
+    "undo": "Annulla operazione di esplora risorse",
+    "revealActive": "Mostra file attivo in esplora risorse",
+    "drop": "Rilascia file"
   }
 }

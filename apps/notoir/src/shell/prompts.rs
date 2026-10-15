@@ -17,6 +17,12 @@ struct Spec {
     buttons: Vec<(String, Answer, bool)>,
 }
 
+fn file_name(path: &std::path::Path) -> String {
+    path.file_name()
+        .map(|n| n.to_string_lossy().into_owned())
+        .unwrap_or_else(|| path.display().to_string())
+}
+
 fn spec(core: &AppCore, prompt: &Prompt) -> Spec {
     let title_of = |d| core.document_title(d);
     match prompt {
@@ -70,17 +76,92 @@ fn spec(core: &AppCore, prompt: &Prompt) -> Spec {
             ],
         },
         Prompt::Binary { path, .. } => Spec {
-            title: t!(
-                "dialogs:binary.title",
-                name = path
-                    .file_name()
-                    .map(|n| n.to_string_lossy().into_owned())
-                    .unwrap_or_default()
-            ),
+            title: t!("dialogs:binary.title", name = file_name(path)),
             body: t!("dialogs:binary.body"),
             list: Vec::new(),
             buttons: vec![
                 (t!("dialogs:binary.openAnyway"), Answer::Primary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
+        Prompt::WorkspaceReplace { path } => {
+            let this = (t!("dialogs:workspace.thisWindow"), Answer::Primary, false);
+            let new = (t!("dialogs:workspace.newWindow"), Answer::Secondary, false);
+            // Unsaved work in this window: the safe default is a new window.
+            let dirty = core.workbench.documents.values().any(|d| d.is_dirty());
+            let mut buttons = if dirty {
+                vec![new, this]
+            } else {
+                vec![this, new]
+            };
+            buttons.push((t!("common:cancel"), Answer::Cancel, false));
+            Spec {
+                title: t!("dialogs:workspace.title", name = file_name(path)),
+                body: t!("dialogs:workspace.body"),
+                list: Vec::new(),
+                buttons,
+            }
+        }
+        Prompt::Delete { paths, permanent } => {
+            let name = if paths.len() == 1 {
+                file_name(&paths[0])
+            } else {
+                String::new()
+            };
+            let (title, body, confirm) = match (paths.len() == 1, permanent) {
+                (true, false) => (
+                    t!("dialogs:delete.title", name = name),
+                    t!("dialogs:delete.body"),
+                    t!("dialogs:delete.confirm"),
+                ),
+                (false, false) => (
+                    t!("dialogs:delete.titleMany", count = paths.len()),
+                    t!("dialogs:delete.body"),
+                    t!("dialogs:delete.confirm"),
+                ),
+                (true, true) => (
+                    t!("dialogs:delete.permanentTitle", name = name),
+                    t!("dialogs:delete.permanentBody"),
+                    t!("dialogs:delete.permanentConfirm"),
+                ),
+                (false, true) => (
+                    t!("dialogs:delete.permanentTitleMany", count = paths.len()),
+                    t!("dialogs:delete.permanentBody"),
+                    t!("dialogs:delete.permanentConfirm"),
+                ),
+            };
+            Spec {
+                title,
+                body,
+                list: if paths.len() > 1 {
+                    paths.iter().map(|p| file_name(p)).collect()
+                } else {
+                    Vec::new()
+                },
+                buttons: vec![
+                    (confirm, Answer::Primary, true),
+                    (t!("common:cancel"), Answer::Cancel, false),
+                ],
+            }
+        }
+        Prompt::Move { srcs, dir } => Spec {
+            title: if srcs.len() == 1 {
+                t!(
+                    "dialogs:move.title",
+                    name = file_name(&srcs[0]),
+                    folder = file_name(dir)
+                )
+            } else {
+                t!(
+                    "dialogs:move.titleMany",
+                    count = srcs.len(),
+                    folder = file_name(dir)
+                )
+            },
+            body: String::new(),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("dialogs:move.confirm"), Answer::Primary, false),
                 (t!("common:cancel"), Answer::Cancel, false),
             ],
         },
@@ -112,11 +193,13 @@ pub fn show(ctx: &egui::Context, kit: &mut Kit, core: &AppCore) -> Option<Answer
                 .color(kit.color(Tok::TextPrimary)),
         );
         ui.add_space(6.0);
-        ui.label(
-            RichText::new(&spec.body)
-                .size(13.0)
-                .color(kit.color(Tok::TextSecondary)),
-        );
+        if !spec.body.is_empty() {
+            ui.label(
+                RichText::new(&spec.body)
+                    .size(13.0)
+                    .color(kit.color(Tok::TextSecondary)),
+            );
+        }
         for item in &spec.list {
             ui.label(
                 RichText::new(format!("• {item}"))

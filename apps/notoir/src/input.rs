@@ -39,7 +39,9 @@ pub fn keystroke(key: egui::Key, mods: egui::Modifiers, platform: Platform) -> O
 /// and text-editing keys reach the field.
 pub fn dispatch_keys(ctx: &egui::Context, core: &mut AppCore, context: &ContextSnapshot) {
     // Other text fields (picker filter…) keep their keys; the editor does not.
-    if ctx.egui_wants_keyboard_input() && !core.editor_focused {
+    // The Explorer tree takes focus too but leaves its shortcuts to the keymap.
+    let explorer_tree = ctx.memory(|m| m.has_focus(crate::shell::explorer::tree_id()));
+    if ctx.egui_wants_keyboard_input() && !core.editor_focused && !explorer_tree {
         core.keymap.cancel_pending();
         return;
     }

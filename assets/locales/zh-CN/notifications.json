@@ -19,5 +19,9 @@
   "saveFailed": "无法保存“{{name}}”。",
   "scratchUnavailable": "无法打开 Notoir 的数据，草稿不可用。",
   "scratchWriteFailed": "无法将草稿写入磁盘。",
-  "workspaceNotYet": "暂不支持将文件夹作为工作区打开。"
+  "fileOpFailed": "文件操作失败。",
+  "notNow": "暂不",
+  "trustWorkspace": "信任工作区",
+  "workspaceMissing": "文件夹“{{path}}”已不存在。",
+  "workspaceTrust": "此工作区包含影响插件、MCP 或 Git 的设置。在你信任此工作区之前,这些设置将被忽略。"
 }

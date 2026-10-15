@@ -88,7 +88,8 @@
     "openScratchpad": "Karalama Aç",
     "removeRecent": "Son Açılanlardan Kaldır",
     "pinRecent": "Son Öğeyi Sabitle",
-    "clearRecent": "Son Açılanları Temizle"
+    "clearRecent": "Son Açılanları Temizle",
+    "copyRelativePath": "Göreli Yolu Kopyala"
   },
   "edit": {
     "undo": "Geri Al",
@@ -107,5 +108,37 @@
     "changeLineEnding": "Satır Sonu Dizisini Değiştir…",
     "changeEncoding": "Dosya Kodlamasını Değiştir…",
     "changeLanguageMode": "Dil Modunu Değiştir…"
+  },
+  "workspace": {
+    "open": "Çalışma Alanı Aç…",
+    "close": "Çalışma Alanını Kapat",
+    "openRecent": "Son Çalışma Alanını Aç",
+    "removeRecent": "Son Kullanılanlardan Kaldır",
+    "pinRecent": "Son Çalışma Alanını Sabitle",
+    "trust": "Çalışma Alanına Güven",
+    "trustLater": "Şimdi Değil"
+  },
+  "explorer": {
+    "newFile": "Yeni Dosya…",
+    "newFolder": "Yeni Klasör…",
+    "rename": "Yeniden Adlandır…",
+    "duplicate": "Çoğalt",
+    "delete": "Sil",
+    "copy": "Kopyala",
+    "paste": "Yapıştır",
+    "copyPath": "Yolu Kopyala",
+    "copyRelativePath": "Göreli Yolu Kopyala",
+    "reveal": "Dosya Yöneticisinde Göster",
+    "open": "Aç",
+    "openToSide": "Yanda Aç",
+    "refresh": "Gezgini Yenile",
+    "collapseAll": "Tümünü Daralt",
+    "toggleHidden": "Gizli Dosyaları Göster",
+    "toggleGitIgnored": "Git Tarafından Yok Sayılan Dosyaları Göster",
+    "sortOrder": "Gezgin Sıralaması",
+    "focusFilter": "Gezginde Dosyaları Filtrele",
+    "undo": "Gezgin İşlemini Geri Al",
+    "revealActive": "Etkin Dosyayı Gezginde Göster",
+    "drop": "Dosyaları Bırak"
   }
 }

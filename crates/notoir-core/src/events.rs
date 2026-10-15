@@ -40,6 +40,12 @@ pub enum AppEvent {
     DocumentClosed {
         doc: DocumentId,
     },
+    /// The document's file was renamed or moved (Explorer).
+    DocumentPathChanged {
+        doc: DocumentId,
+    },
+    WorkspaceOpened,
+    WorkspaceClosed,
     ActiveDocumentChanged {
         doc: Option<DocumentId>,
         view: Option<ViewId>,

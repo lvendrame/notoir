@@ -1,0 +1,17 @@
+{
+  "filterHint": "Filtruj pliki…",
+  "sortOrder": "Kolejność sortowania",
+  "sort": {
+    "default": "Najpierw foldery",
+    "mixed": "Mieszane",
+    "modified": "Ostatnia modyfikacja"
+  },
+  "nameError": {
+    "empty": "Nazwa jest wymagana.",
+    "invalidChar": "Nazwa zawiera niedozwolony znak.",
+    "reserved": "Ta nazwa jest zarezerwowana przez system operacyjny.",
+    "trailing": "Nazwa nie może kończyć się kropką ani spacją.",
+    "tooLong": "Nazwa jest za długa.",
+    "exists": "Plik lub folder o tej nazwie już istnieje."
+  }
+}

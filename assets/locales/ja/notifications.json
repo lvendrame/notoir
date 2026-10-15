@@ -19,5 +19,9 @@
   "saveFailed": "“{{name}}” を保存できませんでした。",
   "scratchUnavailable": "Notoir のデータを開けなかったため、スクラッチパッドを使用できません。",
   "scratchWriteFailed": "スクラッチパッドをディスクに書き込めませんでした。",
-  "workspaceNotYet": "フォルダーをワークスペースとして開く機能はまだ利用できません。"
+  "fileOpFailed": "ファイル操作に失敗しました。",
+  "notNow": "後で",
+  "trustWorkspace": "ワークスペースを信頼",
+  "workspaceMissing": "フォルダー「{{path}}」は存在しません。",
+  "workspaceTrust": "このワークスペースには、プラグイン、MCP、Git に影響する設定があります。ワークスペースを信頼するまで無視されます。"
 }

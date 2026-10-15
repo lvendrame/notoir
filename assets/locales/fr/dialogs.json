@@ -50,5 +50,27 @@
     "title": "« {{name}} » semble être un fichier binaire.",
     "body": "L'ouvrir quand même en lecture seule ?",
     "openAnyway": "Ouvrir quand même"
+  },
+  "openWorkspace": "Ouvrir un espace de travail",
+  "workspace": {
+    "title": "Ouvrir « {{name}} » ?",
+    "body": "Cette fenêtre a déjà un espace de travail ouvert.",
+    "thisWindow": "Ouvrir dans cette fenêtre",
+    "newWindow": "Nouvelle fenêtre"
+  },
+  "delete": {
+    "title": "Placer « {{name}} » dans la corbeille ?",
+    "titleMany": "Placer {{count}} éléments dans la corbeille ?",
+    "body": "Vous pouvez restaurer les éléments depuis la corbeille.",
+    "confirm": "Placer dans la corbeille",
+    "permanentTitle": "Supprimer « {{name}} » définitivement ?",
+    "permanentTitleMany": "Supprimer {{count}} éléments définitivement ?",
+    "permanentBody": "La corbeille n'est pas disponible. Cette action est irréversible.",
+    "permanentConfirm": "Supprimer définitivement"
+  },
+  "move": {
+    "title": "Déplacer « {{name}} » dans « {{folder}} » ?",
+    "titleMany": "Déplacer {{count}} éléments dans « {{folder}} » ?",
+    "confirm": "Déplacer"
   }
 }

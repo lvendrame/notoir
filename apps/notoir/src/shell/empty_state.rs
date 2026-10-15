@@ -64,7 +64,7 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
                 (
                     Icon::Folder,
                     "welcome:openWorkspace",
-                    "file.openWorkspace",
+                    "workspace.open",
                     "Mod+K Mod+O",
                 ),
             ];
@@ -125,7 +125,15 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
             ui.add_space(24.0);
             super::section_label(ui, kit, &t!("welcome:recent"));
             ui.add_space(4.0);
-            let recent = &core.files.recent_files;
+            // Workspaces first, then files; pinned first within each.
+            let recent: Vec<(bool, &notoir_storage::state_db::RecentEntry)> = core
+                .files
+                .recent_workspaces
+                .iter()
+                .map(|r| (true, r))
+                .chain(core.files.recent_files.iter().map(|r| (false, r)))
+                .take(RECENT_ON_EMPTY)
+                .collect();
             if recent.is_empty() {
                 ui.label(
                     RichText::new(t!("welcome:noRecent"))
@@ -133,7 +141,16 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
                         .color(secondary),
                 );
             }
-            for r in recent.iter().take(RECENT_ON_EMPTY) {
+            for (is_workspace, r) in recent {
+                let (open_id, pin_id, remove_id) = if is_workspace {
+                    (
+                        "workspace.openRecent",
+                        "workspace.pinRecent",
+                        "workspace.removeRecent",
+                    )
+                } else {
+                    ("file.openRecent", "file.pinRecent", "file.removeRecent")
+                };
                 let path = std::path::Path::new(&r.path);
                 let name = path
                     .file_name()
@@ -151,8 +168,15 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
                     );
                 }
                 let mut x = rect.left() + 6.0;
-                if r.pinned {
-                    kit.icon(ui.ctx(), Icon::Pin, ICON_SM, tertiary).paint_at(
+                let lead = if r.pinned {
+                    Some(Icon::Pin)
+                } else if is_workspace {
+                    Some(Icon::Folder)
+                } else {
+                    None
+                };
+                if let Some(lead) = lead {
+                    kit.icon(ui.ctx(), lead, ICON_SM, tertiary).paint_at(
                         ui,
                         egui::Rect::from_center_size(
                             egui::pos2(x + ICON_SM / 2.0, rect.center().y),
@@ -185,7 +209,7 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
                 let args = json!({ "path": r.path });
                 if resp.clicked() {
                     actions.push(
-                        CommandInvocation::new("file.openRecent", InvocationSource::Internal)
+                        CommandInvocation::new(open_id, InvocationSource::Internal)
                             .with_args(args.clone()),
                     );
                 }
@@ -197,18 +221,15 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
                     };
                     if ui.button(label).clicked() {
                         actions.push(
-                            CommandInvocation::new("file.pinRecent", InvocationSource::ContextMenu)
+                            CommandInvocation::new(pin_id, InvocationSource::ContextMenu)
                                 .with_args(json!({ "path": r.path, "pinned": pinned })),
                         );
                         ui.close();
                     }
                     if ui.button(t!("welcome:removeRecent")).clicked() {
                         actions.push(
-                            CommandInvocation::new(
-                                "file.removeRecent",
-                                InvocationSource::ContextMenu,
-                            )
-                            .with_args(args),
+                            CommandInvocation::new(remove_id, InvocationSource::ContextMenu)
+                                .with_args(args),
                         );
                         ui.close();
                     }

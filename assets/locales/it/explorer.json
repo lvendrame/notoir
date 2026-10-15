@@ -1,0 +1,17 @@
+{
+  "filterHint": "Filtra file…",
+  "sortOrder": "Ordinamento",
+  "sort": {
+    "default": "Prima le cartelle",
+    "mixed": "Misto",
+    "modified": "Ultima modifica"
+  },
+  "nameError": {
+    "empty": "È necessario un nome.",
+    "invalidChar": "Il nome contiene un carattere non consentito.",
+    "reserved": "Questo nome è riservato dal sistema operativo.",
+    "trailing": "Un nome non può terminare con un punto o uno spazio.",
+    "tooLong": "Il nome è troppo lungo.",
+    "exists": "Esiste già un file o una cartella con questo nome."
+  }
+}

@@ -19,5 +19,9 @@
   "saveFailed": "Não foi possível salvar “{{name}}”.",
   "scratchUnavailable": "Os rascunhos não estão disponíveis porque não foi possível abrir os dados do Notoir.",
   "scratchWriteFailed": "Não foi possível gravar um rascunho no disco.",
-  "workspaceNotYet": "Abrir pastas como espaços de trabalho ainda não está disponível."
+  "fileOpFailed": "A operação de arquivo falhou.",
+  "notNow": "Agora Não",
+  "trustWorkspace": "Confiar no Workspace",
+  "workspaceMissing": "A pasta “{{path}}” não existe mais.",
+  "workspaceTrust": "Este workspace tem configurações que afetam plugins, MCP ou Git. Elas são ignoradas até você confiar no workspace."
 }

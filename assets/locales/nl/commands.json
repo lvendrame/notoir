@@ -88,7 +88,8 @@
     "openScratchpad": "Kladblok openen",
     "removeRecent": "Verwijderen uit recent geopend",
     "pinRecent": "Recent item vastmaken",
-    "clearRecent": "Recent geopend wissen"
+    "clearRecent": "Recent geopend wissen",
+    "copyRelativePath": "Relatief pad kopiëren"
   },
   "edit": {
     "undo": "Ongedaan maken",
@@ -107,5 +108,37 @@
     "changeLineEnding": "Regeleindereeks wijzigen…",
     "changeEncoding": "Bestandscodering wijzigen…",
     "changeLanguageMode": "Taalmodus wijzigen…"
+  },
+  "workspace": {
+    "open": "Werkruimte openen…",
+    "close": "Werkruimte sluiten",
+    "openRecent": "Recente werkruimte openen",
+    "removeRecent": "Verwijderen uit recent",
+    "pinRecent": "Recente werkruimte vastmaken",
+    "trust": "Werkruimte vertrouwen",
+    "trustLater": "Niet nu"
+  },
+  "explorer": {
+    "newFile": "Nieuw bestand…",
+    "newFolder": "Nieuwe map…",
+    "rename": "Naam wijzigen…",
+    "duplicate": "Dupliceren",
+    "delete": "Verwijderen",
+    "copy": "Kopiëren",
+    "paste": "Plakken",
+    "copyPath": "Pad kopiëren",
+    "copyRelativePath": "Relatief pad kopiëren",
+    "reveal": "Tonen in bestandsbeheer",
+    "open": "Openen",
+    "openToSide": "Openen aan de zijkant",
+    "refresh": "Verkenner vernieuwen",
+    "collapseAll": "Alles samenvouwen",
+    "toggleHidden": "Verborgen bestanden tonen",
+    "toggleGitIgnored": "Door Git genegeerde bestanden tonen",
+    "sortOrder": "Sortering verkenner",
+    "focusFilter": "Bestanden filteren in verkenner",
+    "undo": "Verkennerbewerking ongedaan maken",
+    "revealActive": "Actief bestand tonen in verkenner",
+    "drop": "Bestanden neerzetten"
   }
 }

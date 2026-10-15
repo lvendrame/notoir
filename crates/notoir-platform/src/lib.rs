@@ -6,6 +6,7 @@ pub mod paths;
 pub mod reveal;
 pub mod single_instance;
 pub mod system_fonts;
+pub mod trash;
 
 pub use paths::{AppPaths, PathsError};
 
