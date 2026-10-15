@@ -179,7 +179,8 @@
     "gutterBase": "Kenar değişiklik çubukları neyle karşılaştırır",
     "path": "git yürütülebilir dosyasının yolu (boş: PATH'ten)",
     "autoPush": "Commit sonrası otomatik push yap",
-    "smartCommit": "Hiçbir şey hazırlanmamışken Commit"
+    "smartCommit": "Hiçbir şey hazırlanmamışken Commit",
+    "scanNestedRepos": "Çalışma alanının alt klasörlerindeki depoları algıla"
   },
   "notes": {
     "sync": {

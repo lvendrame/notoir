@@ -78,7 +78,9 @@
     "revealInExplorer": "Mostrar en el Explorador",
     "sync": "Sincronizar cambios",
     "publish": "Publicar rama",
-    "truncated": "Demasiados cambios; la lista está truncada."
+    "truncated": "Demasiados cambios; la lista está truncada.",
+    "repository": "Repositorio",
+    "repositoryValue": "Repositorio: {{name}}"
   },
   "discard": {
     "title": "¿Descartar los cambios de {{name}}?",
@@ -131,5 +133,10 @@
     "createFrom": "Crear rama desde…",
     "current": "actual",
     "remote": "remota"
+  },
+  "peek": {
+    "title": "Cambio {{n}} de {{total}}",
+    "close": "Cerrar",
+    "added": "Líneas añadidas; la base no tiene nada aquí."
   }
 }

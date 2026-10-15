@@ -336,6 +336,11 @@
     "cancel": "Git-Vorgang abbrechen",
     "syncNotes": "Notizen synchronisieren",
     "clone": "Repository klonen…",
-    "init": "Repository initialisieren"
+    "init": "Repository initialisieren",
+    "revertChange": "Änderung zurücksetzen",
+    "stageChange": "Änderung stagen",
+    "peekChange": "Änderung anzeigen",
+    "closePeek": "Änderung schließen",
+    "selectRepository": "Repository auswählen"
   }
 }

@@ -78,7 +78,9 @@
     "revealInExplorer": "Mostra in Esplora",
     "sync": "Sincronizza modifiche",
     "publish": "Pubblica branch",
-    "truncated": "Troppe modifiche; l’elenco è troncato."
+    "truncated": "Troppe modifiche; l’elenco è troncato.",
+    "repository": "Repository",
+    "repositoryValue": "Repository: {{name}}"
   },
   "discard": {
     "title": "Annullare le modifiche a {{name}}?",
@@ -131,5 +133,10 @@
     "createFrom": "Crea branch da…",
     "current": "attuale",
     "remote": "remoto"
+  },
+  "peek": {
+    "title": "Modifica {{n}} di {{total}}",
+    "close": "Chiudi",
+    "added": "Righe aggiunte; la base qui non contiene nulla."
   }
 }

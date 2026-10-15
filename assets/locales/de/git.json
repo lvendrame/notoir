@@ -78,7 +78,9 @@
     "revealInExplorer": "Im Explorer anzeigen",
     "sync": "Änderungen synchronisieren",
     "publish": "Branch veröffentlichen",
-    "truncated": "Zu viele Änderungen; die Liste ist gekürzt."
+    "truncated": "Zu viele Änderungen; die Liste ist gekürzt.",
+    "repository": "Repository",
+    "repositoryValue": "Repository: {{name}}"
   },
   "discard": {
     "title": "Änderungen an {{name}} verwerfen?",
@@ -131,5 +133,10 @@
     "createFrom": "Branch erstellen aus…",
     "current": "aktuell",
     "remote": "Remote"
+  },
+  "peek": {
+    "title": "Änderung {{n}} von {{total}}",
+    "close": "Schließen",
+    "added": "Hinzugefügte Zeilen; die Basis enthält hier nichts."
   }
 }

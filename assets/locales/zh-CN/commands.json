@@ -336,6 +336,11 @@
     "cancel": "取消 Git 操作",
     "syncNotes": "同步笔记",
     "clone": "克隆存储库…",
-    "init": "初始化存储库"
+    "init": "初始化存储库",
+    "revertChange": "还原更改",
+    "stageChange": "暂存更改",
+    "peekChange": "显示更改",
+    "closePeek": "关闭更改",
+    "selectRepository": "选择存储库"
   }
 }

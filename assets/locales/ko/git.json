@@ -78,7 +78,9 @@
     "revealInExplorer": "탐색기에서 표시",
     "sync": "변경 내용 동기화",
     "publish": "브랜치 게시",
-    "truncated": "변경 내용이 너무 많아 목록이 잘렸습니다."
+    "truncated": "변경 내용이 너무 많아 목록이 잘렸습니다.",
+    "repository": "리포지토리",
+    "repositoryValue": "리포지토리: {{name}}"
   },
   "discard": {
     "title": "{{name}}의 변경 내용을 취소할까요?",
@@ -131,5 +133,10 @@
     "createFrom": "다음에서 브랜치 만들기…",
     "current": "현재",
     "remote": "원격"
+  },
+  "peek": {
+    "title": "변경 {{n}}/{{total}}",
+    "close": "닫기",
+    "added": "추가된 줄입니다. 기준 버전에는 내용이 없습니다."
   }
 }

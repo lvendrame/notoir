@@ -161,6 +161,8 @@ pub struct ViewCache {
     gutter_rect: Rect,
     /// `⋯` chips of folded regions drawn last frame (click unfolds).
     fold_chips: Vec<(Rect, usize)>,
+    /// Git change bars of this frame (clicking one opens the peek).
+    git_changes: Option<std::sync::Arc<Vec<notoir_editor::diff::LineChange>>>,
     /// Line right-clicked in the gutter (its context menu acts on it).
     gutter_menu_line: Option<usize>,
     /// Syntax highlighting state for the language below (spec 26).
@@ -198,6 +200,7 @@ impl ViewCache {
             minimap_rect: None,
             gutter_rect: Rect::NOTHING,
             fold_chips: Vec::new(),
+            git_changes: None,
             gutter_menu_line: None,
             highlighter: None,
             highlight_lang: None,
@@ -519,6 +522,7 @@ pub fn show(
         cache.scroll_x = s.horizontal;
     }
 
+    cache.git_changes = opts.git_changes.clone();
     // Input.
     if focused {
         keys::handle(ui, wb, cache, view, opts, &m, now, &mut out);

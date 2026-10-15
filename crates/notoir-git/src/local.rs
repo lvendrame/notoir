@@ -317,6 +317,36 @@ impl GitBackend for Git2Backend {
         Ok(())
     }
 
+    fn stage_content(&self, repo: &RepoInfo, rel: &str, content: &[u8]) -> Result<(), GitError> {
+        let r = open(repo)?;
+        let mut index = r.index()?;
+        let id = r.blob(content)?;
+        let entry = match index.get_path(Path::new(rel), 0) {
+            Some(mut e) => {
+                e.id = id;
+                e.file_size = content.len() as u32;
+                e
+            }
+            None => git2::IndexEntry {
+                ctime: git2::IndexTime::new(0, 0),
+                mtime: git2::IndexTime::new(0, 0),
+                dev: 0,
+                ino: 0,
+                mode: 0o100_644,
+                uid: 0,
+                gid: 0,
+                file_size: content.len() as u32,
+                id,
+                flags: 0,
+                flags_extended: 0,
+                path: rel.as_bytes().to_vec(),
+            },
+        };
+        index.add(&entry)?;
+        index.write()?;
+        Ok(())
+    }
+
     fn stage_all(&self, repo: &RepoInfo) -> Result<(), GitError> {
         let r = open(repo)?;
         let mut index = r.index()?;
@@ -707,6 +737,26 @@ mod tests {
         assert_eq!(s.staged.get("docs/b.md"), Some(&FileStatus::Deleted));
         assert_eq!(s.staged.get("new.md"), Some(&FileStatus::Added));
         assert!(s.unstaged.is_empty());
+    }
+
+    #[test]
+    fn stage_content_changes_only_the_index() {
+        let (_d, repo) = fixture();
+        std::fs::write(repo.workdir.join("a.md"), "ONE\ntwo\nTHREE\n").unwrap();
+        Git2Backend
+            .stage_content(&repo, "a.md", b"ONE\ntwo\n")
+            .unwrap();
+        let idx = Git2Backend
+            .read_base(&repo, "a.md", DiffBase::Index)
+            .unwrap();
+        assert_eq!(idx.as_deref(), Some(&b"ONE\ntwo\n"[..]));
+        assert_eq!(
+            std::fs::read_to_string(repo.workdir.join("a.md")).unwrap(),
+            "ONE\ntwo\nTHREE\n"
+        );
+        let s = Git2Backend.status(&repo, StatusOpts::default()).unwrap();
+        assert_eq!(s.staged.get("a.md"), Some(&FileStatus::Modified));
+        assert_eq!(s.unstaged.get("a.md"), Some(&FileStatus::Modified));
     }
 
     #[test]

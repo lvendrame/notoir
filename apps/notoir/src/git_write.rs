@@ -42,6 +42,12 @@ pub enum LocalOp {
     Stage(Vec<String>),
     StageAll,
     Unstage(Vec<String>),
+    /// Stage Change from the gutter peek: the file's whole new index
+    /// content (`\n` line endings; the index's own are kept).
+    StageContent {
+        rel: String,
+        text: String,
+    },
     /// Tracked files are restored from the index; untracked ones go to the
     /// trash.
     Discard {
@@ -178,6 +184,17 @@ fn run_local(
         LocalOp::Stage(p) => none(backend.stage(repo, p)),
         LocalOp::StageAll => none(backend.stage_all(repo)),
         LocalOp::Unstage(p) => none(backend.unstage(repo, p)),
+        LocalOp::StageContent { rel, text } => {
+            let crlf = backend
+                .read_base(repo, rel, notoir_git::DiffBase::Index)?
+                .is_some_and(|b| b.windows(2).any(|w| w == b"\r\n"));
+            let bytes = if crlf {
+                text.replace('\n', "\r\n")
+            } else {
+                text.clone()
+            };
+            none(backend.stage_content(repo, rel, bytes.as_bytes()))
+        }
         LocalOp::Discard { tracked, untracked } => {
             backend.discard(repo, tracked)?;
             if !untracked.is_empty() {
@@ -439,12 +456,14 @@ impl AppCore {
         self.check_changed_paths(&paths);
     }
 
-    fn retry_invocation(op: &LocalOp) -> CommandInvocation {
+    fn retry_invocation(op: &LocalOp) -> Option<CommandInvocation> {
         let inv = |id: &str, args: serde_json::Value| {
             CommandInvocation::new(id.to_owned(), InvocationSource::Internal).with_args(args)
         };
-        match op {
+        Some(match op {
             LocalOp::Stage(p) => inv("git.stage", json!({ "paths": p })),
+            // The peek is gone; the user opens it again.
+            LocalOp::StageContent { .. } => return None,
             LocalOp::StageAll => inv("git.stageAll", json!({})),
             LocalOp::Unstage(p) => inv("git.unstage", json!({ "paths": p })),
             LocalOp::Discard { tracked, untracked } => {
@@ -459,7 +478,7 @@ impl AppCore {
                 inv("git.createBranch", json!({ "name": name, "from": from }))
             }
             LocalOp::Init(_) => inv("git.init", json!({})),
-        }
+        })
     }
 
     pub(crate) fn git_op_done(
@@ -544,8 +563,8 @@ impl AppCore {
         if matches!(e, GitError::Git(_)) {
             n.detail = Some(detail);
         }
-        if let (Some(op), GitError::Locked) = (op, e) {
-            n = n.action("common:retry", Self::retry_invocation(op));
+        if let (Some(retry), GitError::Locked) = (op.and_then(Self::retry_invocation), e) {
+            n = n.action("common:retry", retry);
         }
         let now = self.now_ms;
         self.notifications.notify(n, now);

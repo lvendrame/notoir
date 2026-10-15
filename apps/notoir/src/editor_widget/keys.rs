@@ -354,8 +354,11 @@ fn line_at(rope: &notoir_editor::Rope, pos: usize) -> Range {
     Range::new(start, end)
 }
 
-/// Click, Shift-click, drag, double-click (word), triple-click (line) and
-/// gutter click (line).
+/// Clickable width of the Git change bars at the gutter's inner edge.
+const GIT_LANE_W: f32 = 6.0;
+
+/// Click, Shift-click, drag, double-click (word), triple-click (line),
+/// gutter click (line) and Git change bar click (peek).
 #[allow(clippy::too_many_arguments)]
 pub(super) fn pointer(
     ui: &egui::Ui,
@@ -383,6 +386,23 @@ pub(super) fn pointer(
     });
     if !primary {
         return;
+    }
+    // A Git change bar (inner edge of the gutter) opens the peek.
+    if m.gutter.contains(pointer) && pointer.x >= m.gutter.right() - GIT_LANE_W {
+        let line = super::line_at_y(cache, m, pointer.y);
+        let on_change = cache.git_changes.as_ref().is_some_and(|c| {
+            c.iter()
+                .any(|c| (c.start..c.end.max(c.start + 1)).contains(&line))
+        });
+        if on_change {
+            if response.clicked() {
+                commands.push(
+                    CommandInvocation::new("git.peekChange", InvocationSource::Internal)
+                        .with_args(serde_json::json!({ "line": line })),
+                );
+            }
+            return;
+        }
     }
     // Bookmark lane, fold controls and `⋯` chips act on click only.
     let lane_cmd = if m.bookmark_lane.contains(pointer) {

@@ -291,6 +291,9 @@ pub trait GitBackend: Send + Sync {
     ) -> Result<Vec<CommitSummary>, GitError>;
     /// Adds work-tree paths to the index (deleted files are removed).
     fn stage(&self, repo: &RepoInfo, paths: &[String]) -> Result<(), GitError>;
+    /// Replaces the index content of `rel` (Stage Change from the gutter
+    /// peek); the work tree is untouched.
+    fn stage_content(&self, repo: &RepoInfo, rel: &str, content: &[u8]) -> Result<(), GitError>;
     /// Every change, respecting `.gitignore`.
     fn stage_all(&self, repo: &RepoInfo) -> Result<(), GitError>;
     /// Resets paths in the index to HEAD.

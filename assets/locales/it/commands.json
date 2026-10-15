@@ -336,6 +336,11 @@
     "cancel": "Annulla operazione Git",
     "syncNotes": "Sincronizza note",
     "clone": "Clona repository…",
-    "init": "Inizializza repository"
+    "init": "Inizializza repository",
+    "revertChange": "Ripristina modifica",
+    "stageChange": "Aggiungi modifica allo stage",
+    "peekChange": "Mostra modifica",
+    "closePeek": "Chiudi modifica",
+    "selectRepository": "Seleziona repository"
   }
 }

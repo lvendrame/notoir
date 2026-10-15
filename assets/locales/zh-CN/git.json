@@ -78,7 +78,9 @@
     "revealInExplorer": "在资源管理器中显示",
     "sync": "同步更改",
     "publish": "发布分支",
-    "truncated": "更改太多；列表已截断。"
+    "truncated": "更改太多；列表已截断。",
+    "repository": "存储库",
+    "repositoryValue": "存储库: {{name}}"
   },
   "discard": {
     "title": "放弃 {{name}} 中的更改?",
@@ -131,5 +133,10 @@
     "createFrom": "从…创建分支",
     "current": "当前",
     "remote": "远程"
+  },
+  "peek": {
+    "title": "第 {{n}} 处更改，共 {{total}} 处",
+    "close": "关闭",
+    "added": "新增的行；基准版本中此处没有内容。"
   }
 }

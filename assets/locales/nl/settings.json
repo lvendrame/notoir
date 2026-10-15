@@ -179,7 +179,8 @@
     "gutterBase": "Wijzigingsbalken in de marge vergelijken met",
     "path": "Pad naar git (leeg: uit PATH)",
     "autoPush": "Automatisch pushen na commits",
-    "smartCommit": "Als er niets gestaged is, bij Commit"
+    "smartCommit": "Als er niets gestaged is, bij Commit",
+    "scanNestedRepos": "Repository’s in submappen van de werkruimte detecteren"
   },
   "notes": {
     "sync": {

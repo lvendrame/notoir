@@ -47,6 +47,44 @@ pub(super) fn specs(out: &mut Specs) {
     }));
     out.push(CommandSpec::new("git.historyPick", Category::Git, history_pick).hidden());
 
+    // Gutter peek
+    out.push(CommandSpec::new("git.peekChange", Category::Git, peek_change).hidden());
+    out.push(
+        CommandSpec::new(
+            "git.revertChange",
+            Category::Git,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.git_revert_change();
+                CommandOutcome::Done
+            },
+        )
+        .when("gitPeek")
+        .expect("valid"),
+    );
+    out.push(
+        CommandSpec::new(
+            "git.stageChange",
+            Category::Git,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.git_stage_change();
+                CommandOutcome::Done
+            },
+        )
+        .when("gitPeek && gitPeekStageable && !gitBusy")
+        .expect("valid"),
+    );
+    out.push(
+        CommandSpec::new(
+            "git.closePeek",
+            Category::Git,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.git.peek = None;
+                CommandOutcome::Done
+            },
+        )
+        .hidden(),
+    );
+
     // Source Control
     out.push(
         CommandSpec::new(
@@ -56,6 +94,7 @@ pub(super) fn specs(out: &mut Specs) {
         )
         .icon("git-branch"),
     );
+    out.push(CommandSpec::new("git.selectRepository", Category::Git, select_repository).hidden());
     out.push(CommandSpec::new(
         "git.showOutput",
         Category::Git,
@@ -319,6 +358,40 @@ fn branch_pick(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
         }
     }
     CommandOutcome::Done
+}
+
+/// `{ "line", "view"? }`: a gutter bar was clicked (toggles the peek).
+fn peek_change(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    let Some(line) = inv.args.get("line").and_then(|v| v.as_u64()) else {
+        return bad_args(inv);
+    };
+    let view = match inv.args.get("view").and_then(|v| v.as_u64()) {
+        Some(id) => Some(ViewId(id)),
+        None => core.workbench.active_editor(),
+    };
+    let Some(view) = view else {
+        return bad_args(inv);
+    };
+    let line = line as usize;
+    let same = core
+        .git
+        .peek
+        .as_ref()
+        .is_some_and(|p| p.view == view && (p.buf.contains(&line) || p.buf.start == line));
+    if same {
+        core.git.peek = None;
+    } else {
+        core.git_peek(view, line);
+    }
+    CommandOutcome::Done
+}
+
+/// `{ "path": work tree }`: Source Control switches to that repository.
+fn select_repository(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    match arg(inv, "path") {
+        Some(p) if core.git_select_repository(std::path::Path::new(p)) => CommandOutcome::Done,
+        _ => bad_args(inv),
+    }
 }
 
 /// `{ "branch" }`.

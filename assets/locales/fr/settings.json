@@ -179,7 +179,8 @@
     "gutterBase": "Les barres de modification de la marge comparent avec",
     "path": "Chemin de l’exécutable git (vide : depuis PATH)",
     "autoPush": "Pousser automatiquement après les commits",
-    "smartCommit": "Si rien n’est indexé, Valider"
+    "smartCommit": "Si rien n’est indexé, Valider",
+    "scanNestedRepos": "Détecter les dépôts dans les sous-dossiers de l’espace de travail"
   },
   "notes": {
     "sync": {

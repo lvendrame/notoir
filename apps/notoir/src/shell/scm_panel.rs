@@ -139,6 +139,10 @@ pub fn show(
         );
         ui.add_space(6.0);
     }
+    if core.git.repos.len() > 1 {
+        repository_row(ui, kit, core, actions);
+        ui.add_space(4.0);
+    }
     message_box(ui, kit, core, actions);
     ui.add_space(6.0);
     commit_button(ui, kit, core, actions);
@@ -181,6 +185,48 @@ pub fn show(
             }
         });
     sync_button(ui, kit, core, actions);
+}
+
+/// Several repositories (`git.scanNestedRepos`): which one Source Control
+/// works on.
+fn repository_row(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Actions) {
+    let name = |r: &notoir_git::RepoInfo| {
+        r.workdir.file_name().map_or_else(
+            || r.workdir.display().to_string(),
+            |n| n.to_string_lossy().into_owned(),
+        )
+    };
+    let current = core.git.repo.as_ref().map(name).unwrap_or_default();
+    ui.horizontal(|ui| {
+        ui.label(
+            RichText::new(t!("git:scm.repository"))
+                .size(12.0)
+                .color(kit.color(Tok::TextTertiary)),
+        );
+        let label = t!("git:scm.repositoryValue", name = current.as_str());
+        let chevron = kit.icon(
+            ui.ctx(),
+            Icon::ChevronDown,
+            crate::theme::ICON_SM,
+            kit.color(Tok::TextSecondary),
+        );
+        let resp = ui.add(
+            egui::Button::image_and_text(chevron, RichText::new(&current).size(12.0)).frame(false),
+        );
+        resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &label));
+        egui::Popup::menu(&resp).show(|ui| {
+            ui.set_min_width(180.0);
+            for r in &core.git.repos {
+                let selected = core.git.repo.as_ref() == Some(r);
+                if ui.selectable_label(selected, name(r)).clicked() {
+                    actions.push(inv(
+                        "git.selectRepository",
+                        json!({ "path": r.workdir.to_string_lossy() }),
+                    ));
+                }
+            }
+        });
+    });
 }
 
 /// The commit message: Mod+Enter commits; a ruler marks 72 columns.

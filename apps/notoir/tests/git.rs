@@ -389,3 +389,241 @@ fn my_documents_repository_is_detected() {
     assert!(label.starts_with(&branch(&r)), "{label}");
     assert_eq!(app.harness.state().core.git.network_runs, 0);
 }
+
+// ── gutter peek ─────────────────────────────────────────────────────────
+
+/// Clicks the Git change bar of `line` in the active editor.
+fn click_bar(app: &mut common::TestApp, line: usize) {
+    use egui::{Event, Modifiers, PointerButton, Pos2};
+    let v = app.harness.state().core.workbench.active_view().unwrap();
+    let (y, h) = app
+        .harness
+        .state_mut()
+        .ui
+        .editors
+        .line_y(v, line, false)
+        .unwrap();
+    let (_, gutter) = app.harness.state().ui.editors.geometry(v).unwrap();
+    let p = Pos2::new(gutter.right() - 2.0, y + h / 2.0);
+    let hs = &mut app.harness;
+    hs.hover_at(p);
+    hs.run_steps(1);
+    for pressed in [true, false] {
+        hs.event(Event::PointerButton {
+            pos: p,
+            button: PointerButton::Primary,
+            pressed,
+            modifiers: Modifiers::NONE,
+        });
+        hs.run_steps(1);
+    }
+    hs.run_steps(2);
+}
+
+fn index_text(r: &git2::Repository, rel: &str) -> String {
+    let mut index = r.index().unwrap();
+    index.read(true).unwrap();
+    let e = index.get_path(Path::new(rel), 0).unwrap();
+    String::from_utf8(r.find_blob(e.id).unwrap().content().to_vec()).unwrap()
+}
+
+#[test]
+fn gutter_peek_shows_the_original_and_reverts() {
+    let (_d, root, r) = repo();
+    std::fs::write(root.join("README.md"), "# Notes\n\nFIRST\nsecond\n").unwrap();
+    let readme = root.join("README.md");
+    let mut app = open(&root, vec![readme.clone()]);
+    assert!(wait_for(&mut app, |a| !changes(a).is_empty()));
+    click_bar(&mut app, 2);
+    assert!(app.harness.state().core.git.peek.is_some());
+    assert!(app.harness.query_by_label("Change 1 of 1").is_some());
+    assert!(
+        app.harness.query_by_label("- first").is_some(),
+        "the original line"
+    );
+    app.harness.get_by_label("Revert Change").click();
+    app.harness.run_steps(3);
+    let core = &app.harness.state().core;
+    let doc = core.workbench.active_document().unwrap();
+    let d = core.workbench.document(doc).unwrap();
+    assert_eq!(d.buffer.text(), "# Notes\n\nfirst\nsecond\n");
+    assert!(d.is_dirty(), "an undoable edit, not a write");
+    assert!(core.git.peek.is_none());
+    assert_eq!(
+        std::fs::read_to_string(&readme).unwrap(),
+        "# Notes\n\nFIRST\nsecond\n"
+    );
+    assert_eq!(index_text(&r, "README.md"), "# Notes\n\nfirst\nsecond\n");
+    common::run(&mut app, "edit.undo", Value::Null);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .document(doc)
+            .unwrap()
+            .buffer
+            .text(),
+        "# Notes\n\nFIRST\nsecond\n"
+    );
+}
+
+#[test]
+fn stage_change_stages_only_that_change() {
+    let (_d, root, r) = repo();
+    std::fs::write(root.join("README.md"), "# NOTES\n\nfirst\nsecond\nthird\n").unwrap();
+    let mut app = open(&root, vec![root.join("README.md")]);
+    assert!(wait_for(&mut app, |a| changes(a).len() == 2));
+    // Clicking a bar again closes the peek; Escape closes it too.
+    click_bar(&mut app, 0);
+    assert!(app.harness.state().core.git.peek.is_some());
+    click_bar(&mut app, 0);
+    assert!(app.harness.state().core.git.peek.is_none());
+    click_bar(&mut app, 4);
+    assert!(app.harness.query_by_label("Change 2 of 2").is_some());
+    assert!(
+        app.harness
+            .query_by_label("Added lines; the base has nothing here.")
+            .is_some()
+    );
+    app.harness.get_by_label("Stage Change").click();
+    assert!(wait_for(&mut app, |_| index_text(&r, "README.md")
+        == "# Notes\n\nfirst\nsecond\nthird\n"));
+    assert_eq!(
+        std::fs::read_to_string(root.join("README.md")).unwrap(),
+        "# NOTES\n\nfirst\nsecond\nthird\n",
+        "the file is untouched"
+    );
+    // Only the heading change remains against the index.
+    assert!(wait_for(&mut app, |a| changes(a)
+        == [(LineChangeKind::Modified, 0, 1)]));
+    click_bar(&mut app, 0);
+    assert!(app.harness.state().core.git.peek.is_some());
+    app.harness.key_press(egui::Key::Escape);
+    app.harness.run_steps(2);
+    assert!(app.harness.state().core.git.peek.is_none());
+}
+
+// ── nested repositories ─────────────────────────────────────────────────
+
+#[test]
+fn nested_repositories_are_detected_and_selectable() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path().canonicalize().unwrap();
+    let mut repos = Vec::new();
+    for name in ["alpha", "beta"] {
+        let dir = root.join(name);
+        std::fs::create_dir(&dir).unwrap();
+        let r = git2::Repository::init(&dir).unwrap();
+        std::fs::write(dir.join("n.md"), "x\n").unwrap();
+        commit_all(&r, "init");
+        std::fs::write(dir.join("n.md"), "y\n").unwrap();
+        repos.push(r);
+    }
+    let mut app = common::start(|_| {});
+    common::settle(&mut app);
+    app.harness.state_mut().core.set_user_setting(
+        "git.scanNestedRepos",
+        Some(notoir_core::settings::SettingValue::Bool(true)),
+    );
+    common::run(
+        &mut app,
+        "workspace.open",
+        json!({ "path": root.to_string_lossy() }),
+    );
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .repos
+        .len()
+        == 2));
+    let alpha = root.join("alpha");
+    let beta = root.join("beta");
+    assert!(wait_for(&mut app, |a| {
+        let core = &a.harness.state().core;
+        core.git_status_of(&alpha.join("n.md"), false) == Some(FileStatus::Modified)
+            && core.git_status_of(&beta.join("n.md"), false) == Some(FileStatus::Modified)
+    }));
+    assert_eq!(
+        app.harness.state().core.git.repo.as_ref().unwrap().workdir,
+        alpha
+    );
+    common::run(&mut app, "git.showSourceControl", Value::Null);
+    assert!(app.harness.query_by_label("Repository: alpha").is_some());
+    common::run(
+        &mut app,
+        "git.selectRepository",
+        json!({ "path": beta.to_string_lossy() }),
+    );
+    assert!(app.harness.query_by_label("Repository: beta").is_some());
+    common::run(&mut app, "git.stageAll", Value::Null);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .status
+        .staged
+        .contains_key("n.md")));
+    assert!(
+        repos[1]
+            .index()
+            .unwrap()
+            .get_path(Path::new("n.md"), 0)
+            .is_some()
+    );
+    let alpha_status = repos[0].statuses(None).unwrap();
+    assert_eq!(
+        alpha_status.get(0).unwrap().status(),
+        git2::Status::WT_MODIFIED,
+        "the other repository is untouched"
+    );
+}
+
+#[test]
+fn nested_repositories_are_off_by_default() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path().canonicalize().unwrap();
+    let dir = root.join("alpha");
+    std::fs::create_dir(&dir).unwrap();
+    let r = git2::Repository::init(&dir).unwrap();
+    std::fs::write(dir.join("n.md"), "x\n").unwrap();
+    commit_all(&r, "init");
+    let mut app = open(&root, vec![]);
+    for _ in 0..5 {
+        common::settle(&mut app);
+    }
+    assert!(app.harness.state().core.git.repos.is_empty());
+}
+
+#[test]
+fn newer_status_runs_supersede_older_ones() {
+    let (_d, root, _r) = repo();
+    let mut app = open(&root, vec![]);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .repo
+        .is_some()));
+    for i in 0..5 {
+        std::fs::write(root.join(format!("f{i}.md")), "x\n").unwrap();
+        app.harness.state_mut().core.git_start_status();
+    }
+    assert!(wait_for(&mut app, |a| !a
+        .harness
+        .state()
+        .core
+        .git_status_pending()));
+    let core = &app.harness.state().core;
+    for i in 0..5 {
+        assert_eq!(
+            core.git.status.of(&format!("f{i}.md")),
+            Some(FileStatus::Untracked),
+            "the latest run wins"
+        );
+    }
+}

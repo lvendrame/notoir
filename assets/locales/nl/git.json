@@ -78,7 +78,9 @@
     "revealInExplorer": "Weergeven in Verkenner",
     "sync": "Wijzigingen synchroniseren",
     "publish": "Branch publiceren",
-    "truncated": "Te veel wijzigingen; de lijst is ingekort."
+    "truncated": "Te veel wijzigingen; de lijst is ingekort.",
+    "repository": "Repository",
+    "repositoryValue": "Repository: {{name}}"
   },
   "discard": {
     "title": "Wijzigingen in {{name}} verwerpen?",
@@ -131,5 +133,10 @@
     "createFrom": "Branch maken vanaf…",
     "current": "huidig",
     "remote": "remote"
+  },
+  "peek": {
+    "title": "Wijziging {{n}} van {{total}}",
+    "close": "Sluiten",
+    "added": "Toegevoegde regels; de basis bevat hier niets."
   }
 }

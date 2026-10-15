@@ -336,6 +336,11 @@
     "cancel": "Git-bewerking annuleren",
     "syncNotes": "Notities synchroniseren",
     "clone": "Repository klonen…",
-    "init": "Repository initialiseren"
+    "init": "Repository initialiseren",
+    "revertChange": "Wijziging terugdraaien",
+    "stageChange": "Wijziging stagen",
+    "peekChange": "Wijziging tonen",
+    "closePeek": "Wijziging sluiten",
+    "selectRepository": "Repository kiezen"
   }
 }

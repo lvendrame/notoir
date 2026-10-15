@@ -78,7 +78,9 @@
     "revealInExplorer": "Gezginde Göster",
     "sync": "Değişiklikleri Eşitle",
     "publish": "Dalı Yayımla",
-    "truncated": "Çok fazla değişiklik var; liste kısaltıldı."
+    "truncated": "Çok fazla değişiklik var; liste kısaltıldı.",
+    "repository": "Depo",
+    "repositoryValue": "Depo: {{name}}"
   },
   "discard": {
     "title": "{{name}} içindeki değişiklikler atılsın mı?",
@@ -131,5 +133,10 @@
     "createFrom": "Şuradan Dal Oluştur…",
     "current": "geçerli",
     "remote": "uzak"
+  },
+  "peek": {
+    "title": "Değişiklik {{n}} / {{total}}",
+    "close": "Kapat",
+    "added": "Eklenen satırlar; temelde burada bir şey yok."
   }
 }

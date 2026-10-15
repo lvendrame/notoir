@@ -78,7 +78,9 @@
     "revealInExplorer": "エクスプローラーで表示",
     "sync": "変更を同期",
     "publish": "ブランチを公開",
-    "truncated": "変更が多すぎるため、一覧は省略されています。"
+    "truncated": "変更が多すぎるため、一覧は省略されています。",
+    "repository": "リポジトリ",
+    "repositoryValue": "リポジトリ: {{name}}"
   },
   "discard": {
     "title": "{{name}} の変更を破棄しますか?",
@@ -131,5 +133,10 @@
     "createFrom": "ブランチの作成元を指定…",
     "current": "現在",
     "remote": "リモート"
+  },
+  "peek": {
+    "title": "変更 {{n}} / {{total}}",
+    "close": "閉じる",
+    "added": "追加された行です。ベースには何もありません。"
   }
 }

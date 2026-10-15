@@ -179,7 +179,8 @@
     "gutterBase": "Änderungsbalken im Rand vergleichen mit",
     "path": "Pfad zur git-Programmdatei (leer: aus PATH)",
     "autoPush": "Nach Commits automatisch pushen",
-    "smartCommit": "Wenn nichts gestaged ist, beim Commit"
+    "smartCommit": "Wenn nichts gestaged ist, beim Commit",
+    "scanNestedRepos": "Repositorys in Unterordnern des Arbeitsbereichs erkennen"
   },
   "notes": {
     "sync": {

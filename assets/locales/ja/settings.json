@@ -179,7 +179,8 @@
     "gutterBase": "余白の変更バーの比較対象",
     "path": "git 実行ファイルのパス (空: PATH から)",
     "autoPush": "コミット後に自動でプッシュ",
-    "smartCommit": "ステージされた変更がないときのコミット"
+    "smartCommit": "ステージされた変更がないときのコミット",
+    "scanNestedRepos": "ワークスペースのサブフォルダーにあるリポジトリを検出"
   },
   "notes": {
     "sync": {

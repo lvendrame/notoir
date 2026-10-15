@@ -78,7 +78,9 @@
     "revealInExplorer": "Pokaż w Eksploratorze",
     "sync": "Synchronizuj zmiany",
     "publish": "Opublikuj gałąź",
-    "truncated": "Zbyt wiele zmian; lista jest obcięta."
+    "truncated": "Zbyt wiele zmian; lista jest obcięta.",
+    "repository": "Repozytorium",
+    "repositoryValue": "Repozytorium: {{name}}"
   },
   "discard": {
     "title": "Odrzucić zmiany w {{name}}?",
@@ -131,5 +133,10 @@
     "createFrom": "Utwórz gałąź z…",
     "current": "bieżąca",
     "remote": "zdalna"
+  },
+  "peek": {
+    "title": "Zmiana {{n}} z {{total}}",
+    "close": "Zamknij",
+    "added": "Dodane wiersze; w wersji bazowej nic tu nie ma."
   }
 }

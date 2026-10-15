@@ -78,7 +78,9 @@
     "revealInExplorer": "Afficher dans l’explorateur",
     "sync": "Synchroniser les modifications",
     "publish": "Publier la branche",
-    "truncated": "Trop de modifications ; la liste est tronquée."
+    "truncated": "Trop de modifications ; la liste est tronquée.",
+    "repository": "Dépôt",
+    "repositoryValue": "Dépôt : {{name}}"
   },
   "discard": {
     "title": "Annuler les modifications de {{name}} ?",
@@ -131,5 +133,10 @@
     "createFrom": "Créer une branche à partir de…",
     "current": "actuelle",
     "remote": "distante"
+  },
+  "peek": {
+    "title": "Modification {{n}} sur {{total}}",
+    "close": "Fermer",
+    "added": "Lignes ajoutées ; la base ne contient rien ici."
   }
 }

@@ -179,7 +179,8 @@
     "gutterBase": "Paski zmian na marginesie porównują z",
     "path": "Ścieżka do programu git (puste: z PATH)",
     "autoPush": "Wypychaj automatycznie po commitach",
-    "smartCommit": "Gdy nic nie ma w poczekalni, przy zatwierdzaniu"
+    "smartCommit": "Gdy nic nie ma w poczekalni, przy zatwierdzaniu",
+    "scanNestedRepos": "Wykrywaj repozytoria w podfolderach obszaru roboczego"
   },
   "notes": {
     "sync": {

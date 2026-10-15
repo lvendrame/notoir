@@ -78,7 +78,9 @@
     "revealInExplorer": "Reveal in Explorer",
     "sync": "Sync Changes",
     "publish": "Publish Branch",
-    "truncated": "Too many changes; the list is truncated."
+    "truncated": "Too many changes; the list is truncated.",
+    "repository": "Repository",
+    "repositoryValue": "Repository: {{name}}"
   },
   "discard": {
     "title": "Discard changes in {{name}}?",
@@ -131,5 +133,10 @@
     "createFrom": "Create Branch From…",
     "current": "current",
     "remote": "remote"
+  },
+  "peek": {
+    "title": "Change {{n}} of {{total}}",
+    "close": "Close",
+    "added": "Added lines; the base has nothing here."
   }
 }

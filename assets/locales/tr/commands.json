@@ -336,6 +336,11 @@
     "cancel": "Git İşlemini İptal Et",
     "syncNotes": "Notları Eşitle",
     "clone": "Depoyu Klonla…",
-    "init": "Depo Başlat"
+    "init": "Depo Başlat",
+    "revertChange": "Değişikliği Geri Al",
+    "stageChange": "Değişikliği Hazırla",
+    "peekChange": "Değişikliği Göster",
+    "closePeek": "Değişikliği Kapat",
+    "selectRepository": "Depo Seç"
   }
 }

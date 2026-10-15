@@ -179,7 +179,8 @@
     "gutterBase": "Las barras de cambios del margen comparan con",
     "path": "Ruta del ejecutable git (vacío: desde PATH)",
     "autoPush": "Hacer push automáticamente tras los commits",
-    "smartCommit": "Si no hay nada preparado, al confirmar"
+    "smartCommit": "Si no hay nada preparado, al confirmar",
+    "scanNestedRepos": "Detectar repositorios en las subcarpetas del espacio de trabajo"
   },
   "notes": {
     "sync": {

@@ -336,6 +336,11 @@
     "cancel": "Git 작업 취소",
     "syncNotes": "노트 동기화",
     "clone": "리포지토리 복제…",
-    "init": "리포지토리 초기화"
+    "init": "리포지토리 초기화",
+    "revertChange": "변경 내용 되돌리기",
+    "stageChange": "변경 내용 스테이징",
+    "peekChange": "변경 내용 표시",
+    "closePeek": "변경 내용 닫기",
+    "selectRepository": "리포지토리 선택"
   }
 }

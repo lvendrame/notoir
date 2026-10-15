@@ -179,7 +179,8 @@
     "gutterBase": "Le barre delle modifiche nel margine confrontano con",
     "path": "Percorso dell’eseguibile git (vuoto: da PATH)",
     "autoPush": "Esegui push automaticamente dopo i commit",
-    "smartCommit": "Se non c’è nulla nello stage, Commit"
+    "smartCommit": "Se non c’è nulla nello stage, Commit",
+    "scanNestedRepos": "Rileva i repository nelle sottocartelle dell’area di lavoro"
   },
   "notes": {
     "sync": {

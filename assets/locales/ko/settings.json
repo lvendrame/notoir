@@ -179,7 +179,8 @@
     "gutterBase": "여백 변경 막대의 비교 대상",
     "path": "git 실행 파일 경로 (비우면 PATH에서)",
     "autoPush": "커밋 후 자동으로 푸시",
-    "smartCommit": "스테이징된 항목이 없을 때 커밋"
+    "smartCommit": "스테이징된 항목이 없을 때 커밋",
+    "scanNestedRepos": "작업 영역 하위 폴더의 리포지토리 감지"
   },
   "notes": {
     "sync": {

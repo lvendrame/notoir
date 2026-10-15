@@ -78,7 +78,9 @@
     "revealInExplorer": "Revelar no Explorador",
     "sync": "Sincronizar Alterações",
     "publish": "Publicar Branch",
-    "truncated": "Alterações demais; a lista foi truncada."
+    "truncated": "Alterações demais; a lista foi truncada.",
+    "repository": "Repositório",
+    "repositoryValue": "Repositório: {{name}}"
   },
   "discard": {
     "title": "Descartar as alterações em {{name}}?",
@@ -131,5 +133,10 @@
     "createFrom": "Criar Branch a Partir de…",
     "current": "atual",
     "remote": "remota"
+  },
+  "peek": {
+    "title": "Alteração {{n}} de {{total}}",
+    "close": "Fechar",
+    "added": "Linhas adicionadas; a base não tem nada aqui."
   }
 }

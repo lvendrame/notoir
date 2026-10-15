@@ -179,7 +179,8 @@
     "gutterBase": "边栏更改条的比较对象",
     "path": "git 可执行文件路径(空:从 PATH 查找)",
     "autoPush": "提交后自动推送",
-    "smartCommit": "没有暂存的更改时提交"
+    "smartCommit": "没有暂存的更改时提交",
+    "scanNestedRepos": "检测工作区子文件夹中的存储库"
   },
   "notes": {
     "sync": {

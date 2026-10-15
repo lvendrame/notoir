@@ -179,7 +179,8 @@
     "gutterBase": "Gutter change bars compare with",
     "path": "Path of the git executable (empty: from PATH)",
     "autoPush": "Push automatically after commits",
-    "smartCommit": "When nothing is staged, Commit"
+    "smartCommit": "When nothing is staged, Commit",
+    "scanNestedRepos": "Detect repositories in the workspace's subfolders"
   },
   "notes": {
     "sync": {

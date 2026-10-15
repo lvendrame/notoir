@@ -14,6 +14,7 @@ pub mod diff_view;
 pub mod empty_state;
 pub mod explorer;
 pub mod find_widget;
+pub mod git_peek;
 pub mod json_tree;
 pub mod layout;
 pub mod md_preview;

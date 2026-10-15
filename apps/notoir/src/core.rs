@@ -583,6 +583,11 @@ impl AppCore {
             .set_bool("gitRepo", self.git.repo.is_some())
             .set_bool("gitBusy", self.git_busy())
             .set_bool("gitNetwork", self.git.net.is_some())
+            .set_bool("gitPeek", self.git.peek.is_some())
+            .set_bool(
+                "gitPeekStageable",
+                self.git.peek.as_ref().is_some_and(|p| p.stageable),
+            )
             .set_bool(
                 "notesSync",
                 self.settings.bool("notes.sync.enabled", None)

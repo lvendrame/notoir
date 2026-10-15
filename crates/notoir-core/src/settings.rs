@@ -771,6 +771,7 @@ impl Schema {
             ("git.autoCommit", false),
             ("git.confirmSync", true),
             ("git.decorateTabs", true),
+            ("git.scanNestedRepos", false),
         ] {
             def(key, T::Bool, V::Bool(default), Scopes::NO_LANGUAGE, C::Git);
         }

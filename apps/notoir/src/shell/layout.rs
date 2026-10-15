@@ -538,6 +538,15 @@ impl Renderer<'_, '_> {
                     });
                 }
                 super::find_widget::show(&mut child, self.kit, self.core, view, body, self.actions);
+                super::git_peek::show(
+                    &mut child,
+                    self.kit,
+                    self.core,
+                    self.editors,
+                    view,
+                    body,
+                    self.actions,
+                );
                 if out.interacted && self.core.workbench.active_view() != Some(view) {
                     self.out.activate = Some(view);
                 }

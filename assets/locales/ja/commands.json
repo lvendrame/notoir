@@ -336,6 +336,11 @@
     "cancel": "Git の操作をキャンセル",
     "syncNotes": "ノートを同期",
     "clone": "リポジトリをクローン…",
-    "init": "リポジトリを初期化"
+    "init": "リポジトリを初期化",
+    "revertChange": "変更を元に戻す",
+    "stageChange": "変更をステージ",
+    "peekChange": "変更を表示",
+    "closePeek": "変更を閉じる",
+    "selectRepository": "リポジトリを選択"
   }
 }
