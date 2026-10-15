@@ -84,8 +84,11 @@ fn match_from(
     let mut prev_pos: Option<usize> = None;
     for &p in &positions {
         score += 1;
-        if prev_pos.is_some_and(|q| q + 1 == p) {
-            score += 5;
+        match prev_pos {
+            Some(q) if q + 1 == p => score += 8,
+            // Gaps between matched characters cost a little.
+            Some(q) => score -= ((p - q - 1) as i32).min(5),
+            None => {}
         }
         if is_boundary(p.checked_sub(1).map(|i| chars[i]), chars[p]) {
             score += 8;
@@ -120,6 +123,17 @@ mod tests {
     fn positions_for_highlight() {
         let m = fuzzy_match("read", "docs/README.md").unwrap();
         assert_eq!(m.positions, vec![5, 6, 7, 8]);
+    }
+
+    #[test]
+    fn consecutive_runs_beat_scattered_word_starts() {
+        let a = fuzzy_match("tog", "View: Toggle Line Numbers")
+            .unwrap()
+            .score;
+        let b = fuzzy_match("tog", "View: Move Tab to Next Group")
+            .unwrap()
+            .score;
+        assert!(a > b, "{a} vs {b}");
     }
 
     #[test]

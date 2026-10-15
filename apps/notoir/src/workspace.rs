@@ -189,7 +189,7 @@ impl AppCore {
         )
     }
 
-    fn apply_resolved_settings(&mut self) {
+    pub(crate) fn apply_resolved_settings(&mut self) {
         let newer = self.resolve_settings();
         let changed = self.settings.changed_keys(&newer);
         self.settings = newer;

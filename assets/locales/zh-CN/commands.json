@@ -45,11 +45,16 @@
     "splitDown": "向下拆分",
     "singleEditor": "单一编辑器",
     "moveTab": "移动标签页",
-    "dockTab": "停靠标签页"
+    "dockTab": "停靠标签页",
+    "toggleMinimap": "切换缩略图",
+    "minimapSide": "缩略图位置",
+    "minimapScale": "缩略图比例"
   },
   "preferences": {
     "changeTheme": "更改主题…",
-    "changeLanguage": "更改显示语言…"
+    "changeLanguage": "更改显示语言…",
+    "openKeybindingsFile": "打开键盘快捷方式文件",
+    "openSettingsFile": "打开用户设置文件"
   },
   "help": {
     "about": "关于 Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "聚焦到上一个编辑器组",
     "focusGroup": "聚焦到编辑器组",
     "moveTabToNextGroup": "将标签页移到下一个组",
-    "moveTabToPreviousGroup": "将标签页移到上一个组"
+    "moveTabToPreviousGroup": "将标签页移到上一个组",
+    "commandPalette": "显示所有命令"
   },
   "file": {
     "newUntitled": "新建文件",
@@ -101,12 +107,38 @@
     "cut": "剪切",
     "copy": "复制",
     "paste": "粘贴",
-    "selectAll": "全选"
+    "selectAll": "全选",
+    "duplicateLine": "复制行",
+    "deleteLine": "删除行",
+    "moveLineUp": "向上移动行",
+    "moveLineDown": "向下移动行",
+    "sortLines": "按升序排列行",
+    "sortLinesDescending": "按降序排列行",
+    "trimTrailingWhitespace": "删除行尾空白",
+    "transformToUppercase": "转换为大写",
+    "transformToLowercase": "转换为小写",
+    "transformToTitleCase": "转换为词首大写",
+    "insertLineAfter": "在下方插入行",
+    "insertLineBefore": "在上方插入行",
+    "joinLines": "合并行",
+    "toggleReadOnly": "切换只读",
+    "find": "查找",
+    "replace": "替换",
+    "findNext": "查找下一个",
+    "findPrevious": "查找上一个",
+    "toggleFindCaseSensitive": "切换区分大小写",
+    "toggleFindWholeWord": "切换全字匹配",
+    "toggleFindRegex": "切换正则表达式",
+    "toggleFindInSelection": "切换在选定内容中查找",
+    "replaceOne": "替换",
+    "replaceAll": "全部替换",
+    "closeFind": "关闭查找"
   },
   "navigate": {
     "nextTab": "下一个标签页",
     "previousTab": "上一个标签页",
-    "switchTab": "切换到上一个标签页"
+    "switchTab": "切换到上一个标签页",
+    "goToLine": "转到行…"
   },
   "editor": {
     "changeLineEnding": "更改行尾序列…",

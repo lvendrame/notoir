@@ -21,7 +21,8 @@
     "branches": "Dallar",
     "mcp": "MCP",
     "scratchpads": "Karalamalar",
-    "autoSave": "Otomatik Kaydet"
+    "autoSave": "Otomatik Kaydet",
+    "sortLines": "Satırları Sırala"
   },
   "item": {
     "primarySidebar": "Birincil Kenar Çubuğu",
@@ -34,7 +35,8 @@
     "lineNumbers": "Satır Numaraları",
     "whitespace": "Boşluklar",
     "currentLineHighlight": "Geçerli Satır Vurgusu",
-    "wordWrap": "Sözcük Kaydırma"
+    "wordWrap": "Sözcük Kaydırma",
+    "minimap": "Mini Harita"
   },
   "autoSave": {
     "off": "Kapalı",

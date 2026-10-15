@@ -157,6 +157,10 @@ pub struct AppCore {
     pub saving: std::collections::HashSet<notoir_core::ids::DocumentId>,
     pub autosave_due: std::collections::HashMap<notoir_core::ids::DocumentId, u64>,
     pub doc_watch: crate::external::DocWatch,
+    pub find: crate::find::FindState,
+    /// Commands run with a captured context (the Command Palette runs them
+    /// with the context of the moment it opened).
+    pub queue_with_context: Vec<(CommandInvocation, ContextSnapshot)>,
 }
 
 impl AppCore {
@@ -270,6 +274,8 @@ impl AppCore {
             saving: Default::default(),
             autosave_due: Default::default(),
             doc_watch: Default::default(),
+            find: Default::default(),
+            queue_with_context: Vec::new(),
             language,
             theme_choice,
             theme_override: opts.theme_override,
@@ -420,6 +426,20 @@ impl AppCore {
             markdown_lists: lang == Some("markdown"),
             empty_selection_clipboard: s.bool("editor.emptySelectionClipboard", lang),
             padding: 8.0,
+            find_matches: self.find_highlights(view).0,
+            find_current: self.find_highlights(view).1,
+            center: self.find.center.contains(&view),
+            set_scroll: self.find.scroll.get(&view).copied(),
+            minimap: (s.bool("editor.minimap.enabled", lang) && !doc.is_some_and(|d| d.large_file))
+                .then(|| crate::editor_widget::minimap::MinimapOptions {
+                    left: s.str("editor.minimap.side", None) == "left",
+                    width: s.int("editor.minimap.width", None) as f32,
+                    line_h: s.int("editor.minimap.scale", None).clamp(1, 3) as f32,
+                    opacity: s.float("editor.minimap.opacity", None) as f32,
+                    show_viewport: s.bool("editor.minimap.showViewport", None),
+                    show_search: s.bool("editor.minimap.showSearchMarks", None),
+                    show_selection: s.bool("editor.minimap.showSelection", None),
+                }),
         }
     }
 
@@ -486,6 +506,10 @@ impl AppCore {
             "explorerShowGitIgnored",
             self.settings.bool("explorer.showGitIgnored", None),
         );
+        c.set_bool(
+            "minimapVisible",
+            self.settings.bool("editor.minimap.enabled", None),
+        );
         let auto = self.settings.str("files.autoSave", None).to_owned();
         for m in ["off", "afterDelay", "onFocusChange", "onWindowFocusLoss"] {
             c.set_bool(format!("autoSave.{m}"), auto == m);
@@ -508,7 +532,20 @@ impl AppCore {
 
     /// Runs every queued command (UI thread, end of frame).
     pub fn run_queued(&mut self, ctx: &ContextSnapshot) {
-        while let Some(inv) = self.queue.pop() {
+        let mut pending: std::collections::VecDeque<(CommandInvocation, Option<ContextSnapshot>)> =
+            std::mem::take(&mut self.queue_with_context)
+                .into_iter()
+                .map(|(inv, c)| (inv, Some(c)))
+                .collect();
+        loop {
+            let (inv, own) = match pending.pop_front() {
+                Some(j) => j,
+                None => match self.queue.pop() {
+                    Some(inv) => (inv, None),
+                    None => break,
+                },
+            };
+            let ctx = own.as_ref().unwrap_or(ctx);
             let outcome = match self.commands.resolve(&inv, ctx) {
                 Ok(handler) => handler(self, &inv),
                 Err(outcome) => outcome,
@@ -598,6 +635,7 @@ impl AppCore {
                 IoResult::DocsChanged(paths) => self.check_changed_paths(&paths),
                 IoResult::DiskChecked(r) => self.handle_disk_check(*r),
                 IoResult::RecoveryWriteFailed { error } => self.recovery_write_failed(error),
+                IoResult::ConfigReloaded(files) => self.apply_config(*files),
                 IoResult::SettingsWriteFailed { path, error } => {
                     tracing::error!(%path, %error, "settings write failed");
                     let now = self.now_ms;
@@ -678,7 +716,7 @@ fn load_keybindings(
     }
 }
 
-fn build_keymap(
+pub(crate) fn build_keymap(
     commands: &CommandRegistry<AppCore>,
     user: &[UserBinding],
     platform: Platform,

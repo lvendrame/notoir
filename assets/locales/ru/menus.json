@@ -21,7 +21,8 @@
     "branches": "Ветви",
     "mcp": "MCP",
     "scratchpads": "Черновики",
-    "autoSave": "Автосохранение"
+    "autoSave": "Автосохранение",
+    "sortLines": "Сортировать строки"
   },
   "item": {
     "primarySidebar": "Основная боковая панель",
@@ -34,7 +35,8 @@
     "lineNumbers": "Номера строк",
     "whitespace": "Пробелы",
     "currentLineHighlight": "Выделение текущей строки",
-    "wordWrap": "Перенос строк"
+    "wordWrap": "Перенос строк",
+    "minimap": "Мини-карта"
   },
   "autoSave": {
     "off": "Выключено",

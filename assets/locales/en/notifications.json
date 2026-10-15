@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "Could not write recovery data for unsaved documents.",
   "recoveryDamaged": "A recovered document was damaged; its raw content was opened.",
   "recoveryNothing": "There are no unsaved documents to recover.",
-  "sessionMissing": "Files from the last session no longer exist: {{count}}."
+  "sessionMissing": "Files from the last session no longer exist: {{count}}.",
+  "replacedAll": "Replaced {{count}} occurrences."
 }

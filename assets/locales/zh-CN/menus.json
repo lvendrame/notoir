@@ -21,7 +21,8 @@
     "branches": "分支",
     "mcp": "MCP",
     "scratchpads": "草稿",
-    "autoSave": "自动保存"
+    "autoSave": "自动保存",
+    "sortLines": "排列行"
   },
   "item": {
     "primarySidebar": "主侧边栏",
@@ -34,7 +35,8 @@
     "lineNumbers": "行号",
     "whitespace": "空白字符",
     "currentLineHighlight": "当前行突出显示",
-    "wordWrap": "自动换行"
+    "wordWrap": "自动换行",
+    "minimap": "缩略图"
   },
   "autoSave": {
     "off": "关闭",

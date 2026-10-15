@@ -15,7 +15,9 @@
     "encoding": "인코딩 선택",
     "languageMode": "언어 모드 선택",
     "reopenWithEncoding": "인코딩으로 다시 열기",
-    "saveWithEncoding": "인코딩으로 저장"
+    "saveWithEncoding": "인코딩으로 저장",
+    "commands": "명령 입력",
+    "recentlyUsed": "최근에 사용함"
   },
   "open": {
     "title": "파일 열기"
@@ -77,5 +79,8 @@
     "discardTitle": "저장되지 않은 문서 {{count}}개를 영구적으로 버릴까요?",
     "discardBody": "삭제되기 전까지 7일 동안 Notoir 데이터 폴더에 보관됩니다.",
     "discard": "버리기"
+  },
+  "gotoLine": {
+    "hint": "줄 번호, 줄:열 또는 +/- 줄 수 (1–{{lines}})"
   }
 }

@@ -207,10 +207,31 @@ impl NotoirApp {
                 }
             }
             PickerEvent::Accept(value) => {
-                self.ui.picker = None;
-                self.core.enqueue(Picker::accept(kind, &value));
+                let picker = self.ui.picker.take();
+                let inv = Picker::accept(kind, &value);
+                match picker.and_then(|p| p.context) {
+                    Some(ctx) if kind == crate::shell::overlays::PickerKind::Commands => {
+                        if let Some(db) = self.core.state_db.as_ref() {
+                            let now = std::time::SystemTime::now()
+                                .duration_since(std::time::UNIX_EPOCH)
+                                .map_or(0, |d| d.as_millis() as i64);
+                            let _ = db.touch_palette(&value, now);
+                        }
+                        // Focus returns to the editor the palette came from.
+                        if let Some(v) = self.core.workbench.active_view() {
+                            self.ui.focus_editor = Some(v);
+                        }
+                        self.core.queue_with_context.push((inv, ctx));
+                    }
+                    _ => self.core.enqueue(inv),
+                }
             }
             PickerEvent::Cancel => {
+                if kind == crate::shell::overlays::PickerKind::Commands
+                    && let Some(v) = self.core.workbench.active_view()
+                {
+                    self.ui.focus_editor = Some(v);
+                }
                 self.ui.picker = None;
                 let id = self.core.theme(system_dark(ctx));
                 self.set_theme(ctx, id);
@@ -276,7 +297,10 @@ impl eframe::App for NotoirApp {
 
         let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
         let context = self.core.context(fullscreen);
-        if !(self.ui.about_open || self.ui.picker.is_some() || !self.core.files.prompts.is_empty())
+        if !(self.ui.about_open
+            || self.ui.picker.is_some()
+            || self.core.find.goto.is_some()
+            || !self.core.files.prompts.is_empty())
         {
             input::dispatch_keys(&ctx, &mut self.core, &context);
         }
@@ -333,6 +357,9 @@ impl eframe::App for NotoirApp {
             if let Some(view) = layout_out.activate {
                 let _ = self.core.workbench.activate_view(view);
             }
+            // One-frame scroll requests were consumed by the editors.
+            self.core.find.center.clear();
+            self.core.find.scroll.clear();
             for (path, index, delta, min) in layout_out.resizes {
                 self.core.workbench.layout.resize(&path, index, delta, min);
             }
@@ -389,6 +416,13 @@ impl eframe::App for NotoirApp {
             }
         }
         self.handle_picker(&ctx, top_offset);
+        {
+            let mut kit = Kit {
+                theme: &self.theme,
+                icons: &mut self.icons,
+            };
+            shell::overlays::goto_line(&ctx, &mut kit, &mut self.core, top_offset);
+        }
 
         for inv in actions.0 {
             self.core.enqueue(inv);
@@ -444,6 +478,15 @@ impl eframe::App for NotoirApp {
                     self.core.autosave_doc_changed(*doc);
                 }
                 notoir_core::AppEvent::DocumentSaved { doc } => {
+                    if self
+                        .core
+                        .workbench
+                        .document(*doc)
+                        .and_then(|d| d.path())
+                        .is_some_and(|p| self.core.is_config_file(p))
+                    {
+                        self.core.reload_config();
+                    }
                     self.core.recovery_doc_changed(*doc);
                     self.core.autosave_due.remove(doc);
                 }

@@ -1,0 +1,8 @@
+{
+  "minimapLines": "{{from}}–{{to}}줄",
+  "minimapHide": "미니맵 숨기기",
+  "minimapPosition": "위치",
+  "minimapLeft": "왼쪽",
+  "minimapRight": "오른쪽",
+  "minimapScale": "배율"
+}

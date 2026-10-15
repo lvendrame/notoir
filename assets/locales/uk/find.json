@@ -1,0 +1,17 @@
+{
+  "hint": "Знайти",
+  "replaceHint": "Замінити",
+  "caseSensitive": "Враховувати регістр (Alt+C)",
+  "wholeWord": "Слово цілком (Alt+W)",
+  "regex": "Регулярний вираз (Alt+R)",
+  "inSelection": "Шукати у виділенні",
+  "toggleReplace": "Показати або сховати заміну",
+  "close": "Закрити (Esc)",
+  "next": "Наступний збіг (Enter)",
+  "previous": "Попередній збіг (Shift+Enter)",
+  "wrapped": "Пошук почато спочатку",
+  "noResults": "Немає результатів",
+  "count": "{{current}} з {{total}}",
+  "replace": "Замінити",
+  "replaceAll": "Замінити все"
+}

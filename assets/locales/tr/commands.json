@@ -45,11 +45,16 @@
     "splitDown": "Aşağı Böl",
     "singleEditor": "Tek Düzenleyici",
     "moveTab": "Sekmeyi Taşı",
-    "dockTab": "Sekmeyi Yerleştir"
+    "dockTab": "Sekmeyi Yerleştir",
+    "toggleMinimap": "Mini Haritayı Aç/Kapat",
+    "minimapSide": "Mini Harita Konumu",
+    "minimapScale": "Mini Harita Ölçeği"
   },
   "preferences": {
     "changeTheme": "Temayı Değiştir…",
-    "changeLanguage": "Görüntüleme Dilini Değiştir…"
+    "changeLanguage": "Görüntüleme Dilini Değiştir…",
+    "openKeybindingsFile": "Klavye Kısayolları Dosyasını Aç",
+    "openSettingsFile": "Kullanıcı Ayarları Dosyasını Aç"
   },
   "help": {
     "about": "Notoir Hakkında"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Önceki Düzenleyici Grubuna Odaklan",
     "focusGroup": "Düzenleyici Grubuna Odaklan",
     "moveTabToNextGroup": "Sekmeyi Sonraki Gruba Taşı",
-    "moveTabToPreviousGroup": "Sekmeyi Önceki Gruba Taşı"
+    "moveTabToPreviousGroup": "Sekmeyi Önceki Gruba Taşı",
+    "commandPalette": "Tüm Komutları Göster"
   },
   "file": {
     "newUntitled": "Yeni Dosya",
@@ -101,12 +107,38 @@
     "cut": "Kes",
     "copy": "Kopyala",
     "paste": "Yapıştır",
-    "selectAll": "Tümünü Seç"
+    "selectAll": "Tümünü Seç",
+    "duplicateLine": "Satırı Çoğalt",
+    "deleteLine": "Satırı Sil",
+    "moveLineUp": "Satırı Yukarı Taşı",
+    "moveLineDown": "Satırı Aşağı Taşı",
+    "sortLines": "Satırları Artan Sırala",
+    "sortLinesDescending": "Satırları Azalan Sırala",
+    "trimTrailingWhitespace": "Sondaki Boşlukları Kırp",
+    "transformToUppercase": "Büyük Harfe Dönüştür",
+    "transformToLowercase": "Küçük Harfe Dönüştür",
+    "transformToTitleCase": "Baş Harfleri Büyüt",
+    "insertLineAfter": "Alta Satır Ekle",
+    "insertLineBefore": "Üste Satır Ekle",
+    "joinLines": "Satırları Birleştir",
+    "toggleReadOnly": "Salt Okunuru Aç/Kapat",
+    "find": "Bul",
+    "replace": "Değiştir",
+    "findNext": "Sonrakini Bul",
+    "findPrevious": "Öncekini Bul",
+    "toggleFindCaseSensitive": "Büyük/Küçük Harf Duyarlılığını Aç/Kapat",
+    "toggleFindWholeWord": "Tam Sözcüğü Aç/Kapat",
+    "toggleFindRegex": "Normal İfadeyi Aç/Kapat",
+    "toggleFindInSelection": "Seçimde Bulu Aç/Kapat",
+    "replaceOne": "Değiştir",
+    "replaceAll": "Tümünü Değiştir",
+    "closeFind": "Bulmayı Kapat"
   },
   "navigate": {
     "nextTab": "Sonraki Sekme",
     "previousTab": "Önceki Sekme",
-    "switchTab": "Önceki Sekmeye Geç"
+    "switchTab": "Önceki Sekmeye Geç",
+    "goToLine": "Satıra Git…"
   },
   "editor": {
     "changeLineEnding": "Satır Sonu Dizisini Değiştir…",

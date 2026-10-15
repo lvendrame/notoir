@@ -15,7 +15,9 @@
     "encoding": "Select Encoding",
     "languageMode": "Select Language Mode",
     "reopenWithEncoding": "Reopen with Encoding",
-    "saveWithEncoding": "Save with Encoding"
+    "saveWithEncoding": "Save with Encoding",
+    "commands": "Type a command",
+    "recentlyUsed": "Recently used"
   },
   "open": {
     "title": "Open File"
@@ -77,5 +79,8 @@
     "discardTitle": "Permanently discard {{count}} unsaved documents?",
     "discardBody": "They are kept in Notoir's data folder for 7 days before they are deleted.",
     "discard": "Discard"
+  },
+  "gotoLine": {
+    "hint": "Line number, line:column, or +/- lines (1–{{lines}})"
   }
 }

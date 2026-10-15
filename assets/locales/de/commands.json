@@ -45,11 +45,16 @@
     "splitDown": "Unten teilen",
     "singleEditor": "Einzelner Editor",
     "moveTab": "Tab verschieben",
-    "dockTab": "Tab andocken"
+    "dockTab": "Tab andocken",
+    "toggleMinimap": "Minimap umschalten",
+    "minimapSide": "Position der Minimap",
+    "minimapScale": "Größe der Minimap"
   },
   "preferences": {
     "changeTheme": "Design ändern…",
-    "changeLanguage": "Anzeigesprache ändern…"
+    "changeLanguage": "Anzeigesprache ändern…",
+    "openKeybindingsFile": "Tastenkürzel-Datei öffnen",
+    "openSettingsFile": "Benutzereinstellungsdatei öffnen"
   },
   "help": {
     "about": "Über Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Vorherige Editorgruppe fokussieren",
     "focusGroup": "Editorgruppe fokussieren",
     "moveTabToNextGroup": "Tab in nächste Gruppe verschieben",
-    "moveTabToPreviousGroup": "Tab in vorherige Gruppe verschieben"
+    "moveTabToPreviousGroup": "Tab in vorherige Gruppe verschieben",
+    "commandPalette": "Alle Befehle anzeigen"
   },
   "file": {
     "newUntitled": "Neue Datei",
@@ -101,12 +107,38 @@
     "cut": "Ausschneiden",
     "copy": "Kopieren",
     "paste": "Einfügen",
-    "selectAll": "Alles auswählen"
+    "selectAll": "Alles auswählen",
+    "duplicateLine": "Zeile duplizieren",
+    "deleteLine": "Zeile löschen",
+    "moveLineUp": "Zeile nach oben verschieben",
+    "moveLineDown": "Zeile nach unten verschieben",
+    "sortLines": "Zeilen aufsteigend sortieren",
+    "sortLinesDescending": "Zeilen absteigend sortieren",
+    "trimTrailingWhitespace": "Nachgestellte Leerzeichen entfernen",
+    "transformToUppercase": "In Großbuchstaben umwandeln",
+    "transformToLowercase": "In Kleinbuchstaben umwandeln",
+    "transformToTitleCase": "In Titelschreibweise umwandeln",
+    "insertLineAfter": "Zeile darunter einfügen",
+    "insertLineBefore": "Zeile darüber einfügen",
+    "joinLines": "Zeilen verbinden",
+    "toggleReadOnly": "Schreibschutz umschalten",
+    "find": "Suchen",
+    "replace": "Ersetzen",
+    "findNext": "Weitersuchen",
+    "findPrevious": "Rückwärts suchen",
+    "toggleFindCaseSensitive": "Groß-/Kleinschreibung umschalten",
+    "toggleFindWholeWord": "Ganzes Wort umschalten",
+    "toggleFindRegex": "Regulären Ausdruck umschalten",
+    "toggleFindInSelection": "In Auswahl suchen umschalten",
+    "replaceOne": "Ersetzen",
+    "replaceAll": "Alle ersetzen",
+    "closeFind": "Suche schließen"
   },
   "navigate": {
     "nextTab": "Nächster Tab",
     "previousTab": "Vorheriger Tab",
-    "switchTab": "Zum vorherigen Tab wechseln"
+    "switchTab": "Zum vorherigen Tab wechseln",
+    "goToLine": "Gehe zu Zeile…"
   },
   "editor": {
     "changeLineEnding": "Zeilenendesequenz ändern…",

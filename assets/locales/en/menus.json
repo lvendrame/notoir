@@ -21,7 +21,8 @@
     "branches": "Branches",
     "mcp": "MCP",
     "scratchpads": "Scratchpads",
-    "autoSave": "Auto Save"
+    "autoSave": "Auto Save",
+    "sortLines": "Sort Lines"
   },
   "item": {
     "primarySidebar": "Primary Sidebar",
@@ -34,7 +35,8 @@
     "lineNumbers": "Line Numbers",
     "whitespace": "Whitespace",
     "currentLineHighlight": "Current Line Highlight",
-    "wordWrap": "Word Wrap"
+    "wordWrap": "Word Wrap",
+    "minimap": "Minimap"
   },
   "autoSave": {
     "off": "Off",

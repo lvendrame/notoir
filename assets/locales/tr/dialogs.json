@@ -15,7 +15,9 @@
     "encoding": "Kodlama Seçin",
     "languageMode": "Dil Modunu Seçin",
     "reopenWithEncoding": "Kodlamayla Yeniden Aç",
-    "saveWithEncoding": "Kodlamayla Kaydet"
+    "saveWithEncoding": "Kodlamayla Kaydet",
+    "commands": "Bir komut yazın",
+    "recentlyUsed": "Son kullanılanlar"
   },
   "open": {
     "title": "Dosya Aç"
@@ -77,5 +79,8 @@
     "discardTitle": "{{count}} kaydedilmemiş belge kalıcı olarak atılsın mı?",
     "discardBody": "Silinmeden önce 7 gün boyunca Notoir'in veri klasöründe tutulurlar.",
     "discard": "At"
+  },
+  "gotoLine": {
+    "hint": "Satır numarası, satır:sütun veya +/- satır (1–{{lines}})"
   }
 }

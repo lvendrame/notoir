@@ -1,6 +1,6 @@
 # 11 — Text Editing
 
-**Status:** Partial — transactions, undo coalescing, selections (M1); editor widget: typing, grapheme/word editing, Enter with indent and Markdown lists, Tab indent/outdent, clipboard, select all, mouse selection, IME, read-only (M4); line operations and find/replace (M9), multi-cursor UI (M17)
+**Status:** Partial — transactions, undo coalescing, selections (M1); editor widget: typing, grapheme/word editing, Enter with indent and Markdown lists, Tab indent/outdent, clipboard, select all, mouse selection, IME, read-only (M4); line operations (duplicate, delete, move, sort, trim, case, insert line, join, toggle read-only), find/replace widget (case, whole word, regex with captures, find in selection, wrap hint, Replace All as one step), Go to Line, editor context menu (M9). Later: multi-cursor UI (M17), toggle comment and case-preserving replace (Phase 2), Paste as Plain Text, worker-thread search for documents over 5 MiB
 
 ## Purpose
 

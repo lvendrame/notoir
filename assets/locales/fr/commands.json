@@ -45,11 +45,16 @@
     "splitDown": "Fractionner en bas",
     "singleEditor": "Éditeur unique",
     "moveTab": "Déplacer l'onglet",
-    "dockTab": "Ancrer l'onglet"
+    "dockTab": "Ancrer l'onglet",
+    "toggleMinimap": "Afficher/masquer la minimap",
+    "minimapSide": "Position de la minimap",
+    "minimapScale": "Échelle de la minimap"
   },
   "preferences": {
     "changeTheme": "Changer de thème…",
-    "changeLanguage": "Changer la langue d'affichage…"
+    "changeLanguage": "Changer la langue d'affichage…",
+    "openKeybindingsFile": "Ouvrir le fichier des raccourcis clavier",
+    "openSettingsFile": "Ouvrir le fichier des paramètres utilisateur"
   },
   "help": {
     "about": "À propos de Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Groupe d'éditeurs précédent",
     "focusGroup": "Activer le groupe d'éditeurs",
     "moveTabToNextGroup": "Déplacer l'onglet vers le groupe suivant",
-    "moveTabToPreviousGroup": "Déplacer l'onglet vers le groupe précédent"
+    "moveTabToPreviousGroup": "Déplacer l'onglet vers le groupe précédent",
+    "commandPalette": "Afficher toutes les commandes"
   },
   "file": {
     "newUntitled": "Nouveau fichier",
@@ -101,12 +107,38 @@
     "cut": "Couper",
     "copy": "Copier",
     "paste": "Coller",
-    "selectAll": "Tout sélectionner"
+    "selectAll": "Tout sélectionner",
+    "duplicateLine": "Dupliquer la ligne",
+    "deleteLine": "Supprimer la ligne",
+    "moveLineUp": "Déplacer la ligne vers le haut",
+    "moveLineDown": "Déplacer la ligne vers le bas",
+    "sortLines": "Trier les lignes par ordre croissant",
+    "sortLinesDescending": "Trier les lignes par ordre décroissant",
+    "trimTrailingWhitespace": "Supprimer les espaces de fin",
+    "transformToUppercase": "Transformer en majuscules",
+    "transformToLowercase": "Transformer en minuscules",
+    "transformToTitleCase": "Transformer en casse de titre",
+    "insertLineAfter": "Insérer une ligne en dessous",
+    "insertLineBefore": "Insérer une ligne au-dessus",
+    "joinLines": "Joindre les lignes",
+    "toggleReadOnly": "Activer/désactiver la lecture seule",
+    "find": "Rechercher",
+    "replace": "Remplacer",
+    "findNext": "Rechercher le suivant",
+    "findPrevious": "Rechercher le précédent",
+    "toggleFindCaseSensitive": "Respecter la casse",
+    "toggleFindWholeWord": "Mot entier",
+    "toggleFindRegex": "Expression régulière",
+    "toggleFindInSelection": "Rechercher dans la sélection",
+    "replaceOne": "Remplacer",
+    "replaceAll": "Tout remplacer",
+    "closeFind": "Fermer la recherche"
   },
   "navigate": {
     "nextTab": "Onglet suivant",
     "previousTab": "Onglet précédent",
-    "switchTab": "Basculer vers l'onglet précédent"
+    "switchTab": "Basculer vers l'onglet précédent",
+    "goToLine": "Aller à la ligne…"
   },
   "editor": {
     "changeLineEnding": "Changer la séquence de fin de ligne…",

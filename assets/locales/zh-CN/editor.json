@@ -1,0 +1,8 @@
+{
+  "minimapLines": "第 {{from}}–{{to}} 行",
+  "minimapHide": "隐藏缩略图",
+  "minimapPosition": "位置",
+  "minimapLeft": "左侧",
+  "minimapRight": "右侧",
+  "minimapScale": "比例"
+}

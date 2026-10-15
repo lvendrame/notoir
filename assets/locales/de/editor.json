@@ -1,0 +1,8 @@
+{
+  "minimapLines": "Zeilen {{from}}–{{to}}",
+  "minimapHide": "Minimap ausblenden",
+  "minimapPosition": "Position",
+  "minimapLeft": "Links",
+  "minimapRight": "Rechts",
+  "minimapScale": "Größe"
+}

@@ -21,7 +21,8 @@
     "branches": "ブランチ",
     "mcp": "MCP",
     "scratchpads": "スクラッチパッド",
-    "autoSave": "自動保存"
+    "autoSave": "自動保存",
+    "sortLines": "行の並べ替え"
   },
   "item": {
     "primarySidebar": "プライマリ サイドバー",
@@ -34,7 +35,8 @@
     "lineNumbers": "行番号",
     "whitespace": "空白文字",
     "currentLineHighlight": "現在行の強調表示",
-    "wordWrap": "折り返し"
+    "wordWrap": "折り返し",
+    "minimap": "ミニマップ"
   },
   "autoSave": {
     "off": "オフ",

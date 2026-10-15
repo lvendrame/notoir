@@ -21,7 +21,8 @@
     "branches": "Ramas",
     "mcp": "MCP",
     "scratchpads": "Notas rápidas",
-    "autoSave": "Guardado automático"
+    "autoSave": "Guardado automático",
+    "sortLines": "Ordenar líneas"
   },
   "item": {
     "primarySidebar": "Barra lateral principal",
@@ -34,7 +35,8 @@
     "lineNumbers": "Números de línea",
     "whitespace": "Espacios en blanco",
     "currentLineHighlight": "Resaltado de línea actual",
-    "wordWrap": "Ajuste de línea"
+    "wordWrap": "Ajuste de línea",
+    "minimap": "Minimapa"
   },
   "autoSave": {
     "off": "Desactivado",

@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "Nie udało się zapisać danych odzyskiwania niezapisanych dokumentów.",
   "recoveryDamaged": "Odzyskany dokument był uszkodzony; otwarto jego surową treść.",
   "recoveryNothing": "Brak niezapisanych dokumentów do odzyskania.",
-  "sessionMissing": "Pliki z ostatniej sesji, które już nie istnieją: {{count}}."
+  "sessionMissing": "Pliki z ostatniej sesji, które już nie istnieją: {{count}}.",
+  "replacedAll": "Zamienione wystąpienia: {{count}}."
 }

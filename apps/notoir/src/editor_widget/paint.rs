@@ -121,8 +121,35 @@ pub(super) fn paint(
     };
     let text_color = kit.color(Tok::EditorForeground);
     let ws_color = kit.color(Tok::EditorWhitespace);
+    let matches = &opts.find_matches;
     for row in &rows {
         let row_end = row.start + row.len;
+        // Find matches (the current one stronger).
+        if !matches.is_empty() {
+            let first = matches.partition_point(|m| m.1 <= row.start);
+            for (i, &(ma, mb)) in matches.iter().enumerate().skip(first) {
+                if ma > row_end {
+                    break;
+                }
+                let (a, b) = (ma.max(row.start), mb.min(row_end));
+                if a >= b && !(a == b && mb > row_end) {
+                    continue;
+                }
+                let ca = col_of(&row.text, a - row.start, tab);
+                let cb = col_of(&row.text, b - row.start, tab);
+                let color = if opts.find_current == Some(i) {
+                    kit.color(Tok::EditorFindMatchCurrent)
+                } else {
+                    kit.color(Tok::EditorFindMatch)
+                };
+                let extra = if mb > row_end { m.char_w * 0.6 } else { 0.0 };
+                let rect = Rect::from_min_max(
+                    Pos2::new(col_x(ca), row.y),
+                    Pos2::new(col_x(cb) + extra, row.y + m.row_h),
+                );
+                text_painter.rect_filled(rect, 2.0, color);
+            }
+        }
         // Selections.
         for r in sel.ranges().iter().filter(|r| !r.is_empty()) {
             let (a, b) = (r.from().max(row.start), r.to().min(row_end));

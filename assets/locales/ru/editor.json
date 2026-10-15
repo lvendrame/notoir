@@ -1,0 +1,8 @@
+{
+  "minimapLines": "Строки {{from}}–{{to}}",
+  "minimapHide": "Скрыть мини-карту",
+  "minimapPosition": "Положение",
+  "minimapLeft": "Слева",
+  "minimapRight": "Справа",
+  "minimapScale": "Масштаб"
+}

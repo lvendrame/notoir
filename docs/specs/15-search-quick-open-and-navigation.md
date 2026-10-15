@@ -1,6 +1,6 @@
 # 15 — Workspace Search, Quick Open & Navigation
 
-**Status:** Not started — Go to Line (M9), search, Quick Open, navigation (M16)
+**Status:** Partial — Go to Line with preview and Esc restore (M9); workspace search, Quick Open, navigation history (M16)
 
 ## Purpose
 

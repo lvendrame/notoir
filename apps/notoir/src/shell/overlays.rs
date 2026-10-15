@@ -252,6 +252,8 @@ pub enum PickerKind {
         reopen: bool,
     },
     LanguageMode,
+    /// The Command Palette (spec 16).
+    Commands,
 }
 
 /// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
@@ -285,7 +287,33 @@ pub struct Picker {
     pub query: String,
     pub selected: usize,
     focus_requested: bool,
+    /// Command Palette rows (empty for other pickers).
+    commands: Vec<CommandEntry>,
+    /// Also list commands that are disabled right now (dimmed).
+    show_all: bool,
+    /// Context when the palette opened; commands run with it.
+    pub context: Option<notoir_core::when::ContextSnapshot>,
+    scroll_to_selected: bool,
 }
+
+/// One Command Palette row.
+#[derive(Clone, Debug)]
+pub struct CommandEntry {
+    pub id: String,
+    /// "Category: Title" in the UI language.
+    pub label: String,
+    /// The same in English (matched too).
+    pub english: String,
+    pub shortcut: String,
+    pub enabled: bool,
+    /// Position in the recently used list.
+    pub recent: Option<usize>,
+}
+
+/// Recently used commands shown first in the palette.
+pub const PALETTE_RECENT: usize = 10;
+/// Rows visible before the list scrolls.
+const PALETTE_ROWS: f32 = 12.0;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum PickerEvent {
@@ -320,17 +348,32 @@ impl Picker {
             PickerKind::LanguageMode => doc
                 .map(|d| d.language.as_str().to_owned())
                 .unwrap_or_default(),
+            PickerKind::Commands => String::new(),
+        };
+        let (commands, context) = if kind == PickerKind::Commands {
+            let ctx = core.context(false);
+            (command_entries(core, &ctx), Some(ctx))
+        } else {
+            (Vec::new(), None)
         };
         let selected = Self::all_items(kind)
             .iter()
             .position(|i| i.value == current)
             .unwrap_or(0);
-        Self {
+        let mut picker = Self {
             kind,
             query: String::new(),
             selected,
             focus_requested: false,
+            commands,
+            show_all: false,
+            context,
+            scroll_to_selected: true,
+        };
+        if kind == PickerKind::Commands {
+            picker.selected = 0;
         }
+        picker
     }
 
     fn all_items(kind: PickerKind) -> Vec<PickerItem> {
@@ -403,7 +446,34 @@ impl Picker {
                     detail: l.id.as_str().to_owned(),
                 })
                 .collect(),
+            PickerKind::Commands => Vec::new(),
         }
+    }
+
+    /// Palette rows for the query: recently used first when empty, else
+    /// best fuzzy match on the translated or English label.
+    fn command_rows(&self) -> Vec<&CommandEntry> {
+        let visible = self.commands.iter().filter(|c| self.show_all || c.enabled);
+        let q = self.query.trim();
+        if q.is_empty() {
+            let mut recent: Vec<&CommandEntry> =
+                visible.clone().filter(|c| c.recent.is_some()).collect();
+            recent.sort_by_key(|c| c.recent);
+            let mut rest: Vec<&CommandEntry> = visible.filter(|c| c.recent.is_none()).collect();
+            rest.sort_by_key(|c| c.label.to_lowercase());
+            recent.extend(rest);
+            return recent;
+        }
+        let mut scored: Vec<(i32, &CommandEntry)> = visible
+            .filter_map(|c| {
+                let a = notoir_core::fuzzy::fuzzy_match(q, &c.label).map(|m| m.score);
+                let b = notoir_core::fuzzy::fuzzy_match(q, &c.english).map(|m| m.score);
+                a.max(b)
+                    .map(|s| (s + if c.recent.is_some() { 2 } else { 0 }, c))
+            })
+            .collect();
+        scored.sort_by(|a, b| b.0.cmp(&a.0).then_with(|| a.1.label.cmp(&b.1.label)));
+        scored.into_iter().map(|(_, c)| c).collect()
     }
 
     /// The command an accepted value runs.
@@ -420,12 +490,26 @@ impl Picker {
                 json!({ "action": if reopen { "reopen" } else { "save" }, "encoding": value }),
             ),
             PickerKind::LanguageMode => ("editor.changeLanguageMode", json!({ "language": value })),
+            PickerKind::Commands => {
+                return CommandInvocation::new(value.to_owned(), InvocationSource::Palette);
+            }
         };
         CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
 
     /// Items matching the query (case-insensitive, label or detail).
     pub fn items(&self) -> Vec<PickerItem> {
+        if self.kind == PickerKind::Commands {
+            return self
+                .command_rows()
+                .into_iter()
+                .map(|c| PickerItem {
+                    value: c.id.clone(),
+                    label: c.label.clone(),
+                    detail: c.shortcut.clone(),
+                })
+                .collect();
+        }
         let q = self.query.to_lowercase();
         Self::all_items(self.kind)
             .into_iter()
@@ -445,14 +529,22 @@ impl Picker {
     ) -> Option<PickerEvent> {
         let mut event = None;
         let items_before = self.items();
-        let (down, up, enter, esc) = ctx.input_mut(|i| {
+        let (down, up, enter, esc, toggle_all) = ctx.input_mut(|i| {
             (
                 i.consume_key(egui::Modifiers::NONE, Key::ArrowDown),
                 i.consume_key(egui::Modifiers::NONE, Key::ArrowUp),
                 i.consume_key(egui::Modifiers::NONE, Key::Enter),
                 i.consume_key(egui::Modifiers::NONE, Key::Escape),
+                i.consume_key(egui::Modifiers::COMMAND | egui::Modifiers::SHIFT, Key::P),
             )
         });
+        if toggle_all && self.kind == PickerKind::Commands {
+            self.show_all = !self.show_all;
+            self.selected = 0;
+        }
+        if down || up {
+            self.scroll_to_selected = true;
+        }
         let before = self.selected;
         if down && !items_before.is_empty() {
             self.selected = (self.selected + 1) % items_before.len();
@@ -463,7 +555,7 @@ impl Picker {
         if esc {
             return Some(PickerEvent::Cancel);
         }
-        if enter {
+        if enter && self.kind != PickerKind::Commands {
             return items_before
                 .get(self.selected)
                 .map(|i| PickerEvent::Accept(i.value.clone()));
@@ -476,7 +568,16 @@ impl Picker {
             PickerKind::EncodingAction => t!("dialogs:picker.encodingAction"),
             PickerKind::Encoding { .. } => t!("dialogs:picker.encoding"),
             PickerKind::LanguageMode => t!("dialogs:picker.languageMode"),
+            PickerKind::Commands => String::new(),
         };
+        if self.kind == PickerKind::Commands && enter {
+            // Disabled rows (shown with "show all") do not run.
+            let rows = self.command_rows();
+            return rows
+                .get(self.selected)
+                .filter(|c| c.enabled)
+                .map(|c| PickerEvent::Accept(c.id.clone()));
+        }
         let width = 560.0_f32.min(ctx.content_rect().width() - 32.0);
         let area = egui::Area::new(egui::Id::new("picker"))
             .anchor(Align2::CENTER_TOP, [0.0, top_offset + 8.0])
@@ -484,10 +585,17 @@ impl Picker {
             .show(ctx, |ui| {
                 overlay_frame(kit).show(ui, |ui| {
                     ui.set_width(width);
-                    section_label(ui, kit, &title);
+                    if !title.is_empty() {
+                        section_label(ui, kit, &title);
+                    }
+                    let hint = if self.kind == PickerKind::Commands {
+                        t!("dialogs:picker.commands")
+                    } else {
+                        t!("dialogs:picker.filter")
+                    };
                     let edit = ui.add(
                         egui::TextEdit::singleline(&mut self.query)
-                            .hint_text(t!("dialogs:picker.filter"))
+                            .hint_text(hint)
                             .desired_width(f32::INFINITY),
                     );
                     if !self.focus_requested {
@@ -496,6 +604,7 @@ impl Picker {
                     }
                     if edit.changed() {
                         self.selected = 0;
+                        self.scroll_to_selected = true;
                     }
                     ui.add_space(4.0);
                     let items = self.items();
@@ -506,26 +615,67 @@ impl Picker {
                                 .color(kit.color(Tok::TextTertiary)),
                         );
                     }
-                    for (i, item) in items.iter().enumerate() {
-                        let selected = i == self.selected;
-                        let resp = ui.add(
-                            egui::Button::selectable(
-                                selected,
-                                RichText::new(&item.label).size(13.0),
-                            )
-                            .right_text(
-                                RichText::new(&item.detail)
-                                    .size(12.0)
-                                    .color(kit.color(Tok::TextTertiary)),
-                            )
-                            .min_size(egui::vec2(width, 26.0)),
-                        );
-                        if resp.hovered() && ui.input(|i| i.pointer.delta() != egui::Vec2::ZERO) {
-                            self.selected = i;
-                        }
-                        if resp.clicked() {
-                            event = Some(PickerEvent::Accept(item.value.clone()));
-                        }
+                    let palette = self.kind == PickerKind::Commands;
+                    let rows: Vec<(bool, bool)> = if palette {
+                        self.command_rows()
+                            .iter()
+                            .map(|c| (c.enabled, c.recent.is_some()))
+                            .collect()
+                    } else {
+                        vec![(true, false); items.len()]
+                    };
+                    let show_recent = palette && self.query.trim().is_empty();
+                    let scroll_to = std::mem::take(&mut self.scroll_to_selected);
+                    let mut hovered = None;
+                    let mut clicked = None;
+                    egui::ScrollArea::vertical()
+                        .max_height(PALETTE_ROWS * 26.0)
+                        .auto_shrink([false, true])
+                        .show(ui, |ui| {
+                            for (i, item) in items.iter().enumerate() {
+                                let (enabled, recent) = rows[i];
+                                if show_recent && i == 0 && recent {
+                                    section_label(ui, kit, &t!("dialogs:picker.recentlyUsed"));
+                                }
+                                if show_recent && i > 0 && rows[i - 1].1 && !recent {
+                                    ui.separator();
+                                }
+                                let selected = i == self.selected;
+                                let color = if enabled {
+                                    kit.color(Tok::TextPrimary)
+                                } else {
+                                    kit.color(Tok::TextDisabled)
+                                };
+                                let resp = ui.add(
+                                    egui::Button::selectable(
+                                        selected,
+                                        RichText::new(&item.label).size(13.0).color(color),
+                                    )
+                                    .right_text(
+                                        RichText::new(&item.detail)
+                                            .font(fonts::mono(12.0))
+                                            .color(kit.color(Tok::TextTertiary)),
+                                    )
+                                    .min_size(egui::vec2(width, 26.0)),
+                                );
+                                if selected && scroll_to {
+                                    resp.scroll_to_me(None);
+                                }
+                                if resp.hovered()
+                                    && ui.input(|i| i.pointer.delta() != egui::Vec2::ZERO)
+                                {
+                                    hovered = Some(i);
+                                }
+                                if resp.clicked() && enabled {
+                                    clicked = Some(item.value.clone());
+                                }
+                            }
+                        });
+                    if let Some(i) = hovered {
+                        self.selected = i;
+                    }
+                    if let Some(v) = clicked {
+                        event = Some(PickerEvent::Accept(v));
                     }
                 });
             });
@@ -539,5 +689,98 @@ impl Picker {
                 .map(|i| PickerEvent::Preview(i.value.clone()));
         }
         event
+    }
+}
+
+/// Palette rows: commands listed in the palette, enabled per the captured
+/// context, with shortcuts and recent use.
+fn command_entries(core: &AppCore, ctx: &notoir_core::when::ContextSnapshot) -> Vec<CommandEntry> {
+    let recent: Vec<String> = core
+        .state_db
+        .as_ref()
+        .and_then(|db| db.palette_recent(PALETTE_RECENT).ok())
+        .unwrap_or_default();
+    core.commands
+        .iter()
+        .filter(|c| c.palette)
+        .map(|c| {
+            let label = format!("{}: {}", t!(c.category.title_key()), t!(&c.title_key));
+            let english = format!(
+                "{}: {}",
+                i18n::t_in(Language::En, c.category.title_key()),
+                i18n::t_in(Language::En, &c.title_key)
+            );
+            let shortcut = core
+                .keymap
+                .chords_for(&c.id)
+                .first()
+                .map(|k| k.display(core.platform))
+                .unwrap_or_default();
+            CommandEntry {
+                id: c.id.as_str().to_owned(),
+                label,
+                english,
+                shortcut,
+                enabled: c.enablement.eval(ctx),
+                recent: recent.iter().position(|r| r == c.id.as_str()),
+            }
+        })
+        .collect()
+}
+
+/// Go to Line input (spec 11 §Go to Line): previews while typing, Enter
+/// keeps, Esc restores.
+pub fn goto_line(ctx: &egui::Context, kit: &mut Kit, core: &mut AppCore, top_offset: f32) {
+    let Some(g) = core.find.goto.clone() else {
+        return;
+    };
+    let lines = core
+        .workbench
+        .view(g.view)
+        .and_then(|v| core.workbench.document(v.document_id))
+        .map_or(1, |d| d.buffer.rope().len_lines());
+    let (enter, esc) = ctx.input_mut(|i| {
+        (
+            i.consume_key(egui::Modifiers::NONE, Key::Enter),
+            i.consume_key(egui::Modifiers::NONE, Key::Escape),
+        )
+    });
+    if esc {
+        core.close_goto(false);
+        return;
+    }
+    if enter {
+        core.close_goto(true);
+        return;
+    }
+    let mut text = g.text.clone();
+    let width = 420.0_f32.min(ctx.content_rect().width() - 32.0);
+    let area = egui::Area::new(egui::Id::new("goto-line"))
+        .anchor(Align2::CENTER_TOP, [0.0, top_offset + 8.0])
+        .order(egui::Order::Foreground)
+        .show(ctx, |ui| {
+            overlay_frame(kit).show(ui, |ui| {
+                ui.set_width(width);
+                let resp = ui.add(
+                    egui::TextEdit::singleline(&mut text)
+                        .id(egui::Id::new("goto-line-input"))
+                        .hint_text(t!("dialogs:gotoLine.hint", lines = lines))
+                        .desired_width(f32::INFINITY),
+                );
+                if g.focus {
+                    resp.request_focus();
+                }
+            });
+        });
+    if g.focus
+        && let Some(x) = core.find.goto.as_mut()
+    {
+        x.focus = false;
+    }
+    if text != g.text {
+        core.goto_preview(text);
+    }
+    if area.response.clicked_elsewhere() {
+        core.close_goto(true);
     }
 }

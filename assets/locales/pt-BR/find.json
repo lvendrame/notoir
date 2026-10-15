@@ -1,0 +1,17 @@
+{
+  "hint": "Localizar",
+  "replaceHint": "Substituir",
+  "caseSensitive": "Diferenciar Maiúsculas (Alt+C)",
+  "wholeWord": "Palavra Inteira (Alt+W)",
+  "regex": "Usar Expressão Regular (Alt+R)",
+  "inSelection": "Localizar na Seleção",
+  "toggleReplace": "Alternar Substituir",
+  "close": "Fechar (Esc)",
+  "next": "Próxima Ocorrência (Enter)",
+  "previous": "Ocorrência Anterior (Shift+Enter)",
+  "wrapped": "A busca recomeçou",
+  "noResults": "Nenhum resultado",
+  "count": "{{current}} de {{total}}",
+  "replace": "Substituir",
+  "replaceAll": "Substituir Tudo"
+}

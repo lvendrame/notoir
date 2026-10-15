@@ -1,0 +1,17 @@
+{
+  "hint": "Rechercher",
+  "replaceHint": "Remplacer",
+  "caseSensitive": "Respecter la casse (Alt+C)",
+  "wholeWord": "Mot entier (Alt+W)",
+  "regex": "Expression régulière (Alt+R)",
+  "inSelection": "Rechercher dans la sélection",
+  "toggleReplace": "Afficher/masquer le remplacement",
+  "close": "Fermer (Échap)",
+  "next": "Occurrence suivante (Entrée)",
+  "previous": "Occurrence précédente (Maj+Entrée)",
+  "wrapped": "La recherche a repris au début",
+  "noResults": "Aucun résultat",
+  "count": "{{current}} sur {{total}}",
+  "replace": "Remplacer",
+  "replaceAll": "Tout remplacer"
+}

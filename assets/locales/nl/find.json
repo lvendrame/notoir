@@ -1,0 +1,17 @@
+{
+  "hint": "Zoeken",
+  "replaceHint": "Vervangen",
+  "caseSensitive": "Hoofdlettergevoelig (Alt+C)",
+  "wholeWord": "Heel woord (Alt+W)",
+  "regex": "Reguliere expressie (Alt+R)",
+  "inSelection": "Zoeken in selectie",
+  "toggleReplace": "Vervangen tonen/verbergen",
+  "close": "Sluiten (Esc)",
+  "next": "Volgende (Enter)",
+  "previous": "Vorige (Shift+Enter)",
+  "wrapped": "Zoeken is opnieuw begonnen",
+  "noResults": "Geen resultaten",
+  "count": "{{current}} van {{total}}",
+  "replace": "Vervangen",
+  "replaceAll": "Alles vervangen"
+}

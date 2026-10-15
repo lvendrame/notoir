@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "Kaydedilmemiş belgelerin kurtarma verileri yazılamadı.",
   "recoveryDamaged": "Kurtarılan bir belge hasarlıydı; ham içeriği açıldı.",
   "recoveryNothing": "Kurtarılacak kaydedilmemiş belge yok.",
-  "sessionMissing": "Son oturumdaki artık bulunmayan dosyalar: {{count}}."
+  "sessionMissing": "Son oturumdaki artık bulunmayan dosyalar: {{count}}.",
+  "replacedAll": "Değiştirilen eşleşme: {{count}}."
 }

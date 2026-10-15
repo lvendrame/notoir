@@ -45,11 +45,16 @@
     "splitDown": "下に分割",
     "singleEditor": "単一エディター",
     "moveTab": "タブを移動",
-    "dockTab": "タブをドッキング"
+    "dockTab": "タブをドッキング",
+    "toggleMinimap": "ミニマップの切り替え",
+    "minimapSide": "ミニマップの位置",
+    "minimapScale": "ミニマップの倍率"
   },
   "preferences": {
     "changeTheme": "テーマの変更…",
-    "changeLanguage": "表示言語の変更…"
+    "changeLanguage": "表示言語の変更…",
+    "openKeybindingsFile": "キーボード ショートカット ファイルを開く",
+    "openSettingsFile": "ユーザー設定ファイルを開く"
   },
   "help": {
     "about": "Notoir について"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "前のエディター グループにフォーカス",
     "focusGroup": "エディター グループにフォーカス",
     "moveTabToNextGroup": "タブを次のグループに移動",
-    "moveTabToPreviousGroup": "タブを前のグループに移動"
+    "moveTabToPreviousGroup": "タブを前のグループに移動",
+    "commandPalette": "すべてのコマンドを表示"
   },
   "file": {
     "newUntitled": "新しいファイル",
@@ -101,12 +107,38 @@
     "cut": "切り取り",
     "copy": "コピー",
     "paste": "貼り付け",
-    "selectAll": "すべて選択"
+    "selectAll": "すべて選択",
+    "duplicateLine": "行を複製",
+    "deleteLine": "行を削除",
+    "moveLineUp": "行を上へ移動",
+    "moveLineDown": "行を下へ移動",
+    "sortLines": "行を昇順に並べ替え",
+    "sortLinesDescending": "行を降順に並べ替え",
+    "trimTrailingWhitespace": "末尾の空白を削除",
+    "transformToUppercase": "大文字に変換",
+    "transformToLowercase": "小文字に変換",
+    "transformToTitleCase": "先頭を大文字に変換",
+    "insertLineAfter": "下に行を挿入",
+    "insertLineBefore": "上に行を挿入",
+    "joinLines": "行を結合",
+    "toggleReadOnly": "読み取り専用の切り替え",
+    "find": "検索",
+    "replace": "置換",
+    "findNext": "次を検索",
+    "findPrevious": "前を検索",
+    "toggleFindCaseSensitive": "大文字と小文字の区別を切り替え",
+    "toggleFindWholeWord": "単語単位の切り替え",
+    "toggleFindRegex": "正規表現の切り替え",
+    "toggleFindInSelection": "選択範囲内検索の切り替え",
+    "replaceOne": "置換",
+    "replaceAll": "すべて置換",
+    "closeFind": "検索を閉じる"
   },
   "navigate": {
     "nextTab": "次のタブ",
     "previousTab": "前のタブ",
-    "switchTab": "前のタブに切り替え"
+    "switchTab": "前のタブに切り替え",
+    "goToLine": "行へ移動…"
   },
   "editor": {
     "changeLineEnding": "行末のシーケンスの変更…",

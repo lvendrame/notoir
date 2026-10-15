@@ -21,7 +21,8 @@
     "branches": "Branch",
     "mcp": "MCP",
     "scratchpads": "Appunti",
-    "autoSave": "Salvataggio automatico"
+    "autoSave": "Salvataggio automatico",
+    "sortLines": "Ordina righe"
   },
   "item": {
     "primarySidebar": "Barra laterale principale",
@@ -34,7 +35,8 @@
     "lineNumbers": "Numeri di riga",
     "whitespace": "Spazi",
     "currentLineHighlight": "Evidenziazione riga corrente",
-    "wordWrap": "A capo automatico"
+    "wordWrap": "A capo automatico",
+    "minimap": "Minimappa"
   },
   "autoSave": {
     "off": "Disattivato",

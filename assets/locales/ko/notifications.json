@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "저장되지 않은 문서의 복구 데이터를 쓰지 못했습니다.",
   "recoveryDamaged": "복구된 문서가 손상되어 원본 콘텐츠를 열었습니다.",
   "recoveryNothing": "복구할 저장되지 않은 문서가 없습니다.",
-  "sessionMissing": "지난 세션에서 더 이상 존재하지 않는 파일: {{count}}."
+  "sessionMissing": "지난 세션에서 더 이상 존재하지 않는 파일: {{count}}.",
+  "replacedAll": "{{count}}개를 바꿨습니다."
 }

@@ -19,6 +19,7 @@ use notoir_editor::{Rope, Selection};
 use crate::shell::Kit;
 
 mod keys;
+pub mod minimap;
 mod paint;
 
 /// Zoom steps in percent (spec 14).
@@ -72,7 +73,7 @@ pub enum CursorStyle {
 }
 
 /// Effective settings for one view this frame.
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct EditorOptions {
     pub font_size: f32,
     pub line_height: f32,
@@ -88,6 +89,15 @@ pub struct EditorOptions {
     pub markdown_lists: bool,
     pub empty_selection_clipboard: bool,
     pub padding: f32,
+    /// Find matches to highlight (char ranges) and the current one.
+    pub find_matches: std::sync::Arc<Vec<(usize, usize)>>,
+    pub find_current: Option<usize>,
+    /// Centre the caret this frame (Go to Line, find next).
+    pub center: bool,
+    /// Scroll to this position this frame (Go to Line cancel).
+    pub set_scroll: Option<notoir_core::view::ScrollPosition>,
+    /// `None` when hidden (setting, large file).
+    pub minimap: Option<minimap::MinimapOptions>,
 }
 
 /// Per-view state that only the widget needs.
@@ -105,10 +115,20 @@ pub struct ViewCache {
     blink_epoch: f64,
     drag: Option<keys::Drag>,
     reveal: bool,
+    /// Primary caret last frame: a change from outside the widget (commands,
+    /// find) scrolls it into view.
+    last_head: usize,
+    minimap_rect: Option<Rect>,
+    gutter_rect: Rect,
 }
 
 impl ViewCache {
-    fn new(doc: &Document, wrap: Option<WrapConfig>) -> Self {
+    fn new(
+        doc: &Document,
+        wrap: Option<WrapConfig>,
+        scroll: notoir_core::view::ScrollPosition,
+        head: usize,
+    ) -> Self {
         let rope = doc.buffer.rope().clone();
         Self {
             revision: doc.revision,
@@ -116,12 +136,17 @@ impl ViewCache {
             rope,
             desired_col: None,
             preedit: None,
-            anchor_line: 0,
-            anchor_px: 0.0,
-            scroll_x: 0.0,
+            anchor_line: scroll
+                .top_line
+                .min(doc.buffer.rope().len_lines().saturating_sub(1)),
+            anchor_px: scroll.pixel_offset,
+            scroll_x: scroll.horizontal,
             blink_epoch: 0.0,
             drag: None,
             reveal: false,
+            last_head: head,
+            minimap_rect: None,
+            gutter_rect: Rect::NOTHING,
         }
     }
 
@@ -161,6 +186,18 @@ impl EditorCaches {
         self.views.retain(|v, _| alive(*v));
     }
 
+    /// Where the minimap and gutter were drawn last frame (tests).
+    pub fn geometry(&self, view: ViewId) -> Option<(Option<Rect>, Rect)> {
+        self.views
+            .get(&view)
+            .map(|c| (c.minimap_rect, c.gutter_rect))
+    }
+
+    /// First visible buffer line as of the last frame (tests).
+    pub fn top_line(&self, view: ViewId) -> Option<usize> {
+        self.views.get(&view).map(|c| c.anchor_line)
+    }
+
     /// Display rows of a view as of its last frame (tests, diagnostics).
     pub fn total_rows(&mut self, view: ViewId) -> Option<usize> {
         self.views.get_mut(&view).map(|c| c.map.total_rows())
@@ -177,6 +214,10 @@ pub struct EditorOutput {
     pub interacted: bool,
     /// CJK scripts in the visible text (fonts are loaded on demand).
     pub cjk: crate::fonts::CjkUse,
+    /// Commands from the editor's own menus (minimap).
+    pub commands: Vec<notoir_core::command::CommandInvocation>,
+    /// The editor's response (the context menu is added by the caller).
+    pub response: Option<egui::Response>,
 }
 
 /// Geometry of the editor for one frame.
@@ -253,10 +294,33 @@ pub fn show(
         LineNumbers::Off => char_w,
         _ => (gutter_digits(lines) as f32 + 2.0) * char_w,
     };
-    let gutter = Rect::from_min_size(rect.min, Vec2::new(gutter_w, rect.height()));
+    // Minimap (hidden in narrow views).
+    let mini = opts.minimap.filter(|_| rect.width() >= 400.0);
+    let mini_rect = mini.map(|mm| {
+        if mm.left {
+            Rect::from_min_size(rect.min, Vec2::new(mm.width, rect.height()))
+        } else {
+            Rect::from_min_max(
+                Pos2::new(rect.right() - SCROLLBAR_W - mm.width, rect.top()),
+                Pos2::new(rect.right() - SCROLLBAR_W, rect.bottom()),
+            )
+        }
+    });
+    let left = match (mini, mini_rect) {
+        (Some(mm), Some(r)) if mm.left => r.right(),
+        _ => rect.left(),
+    };
+    let right = match (mini, mini_rect) {
+        (Some(mm), Some(r)) if !mm.left => r.left(),
+        _ => rect.right() - SCROLLBAR_W,
+    };
+    let gutter = Rect::from_min_size(
+        Pos2::new(left, rect.top()),
+        Vec2::new(gutter_w, rect.height()),
+    );
     let text = Rect::from_min_max(
         Pos2::new(gutter.right() + opts.padding, rect.top()),
-        Pos2::new(rect.right() - SCROLLBAR_W, rect.bottom()),
+        Pos2::new(right, rect.bottom()),
     );
     let m = Metrics {
         rect,
@@ -279,11 +343,21 @@ pub fn show(
         }),
     };
 
+    let (saved_scroll, head) = wb
+        .view(view)
+        .map(|v| (v.scroll, v.selection.primary().head))
+        .unwrap_or_default();
     let cache = caches
         .views
         .entry(view)
-        .or_insert_with(|| ViewCache::new(doc, wrap));
+        .or_insert_with(|| ViewCache::new(doc, wrap, saved_scroll, head));
     cache.sync(doc, wrap);
+    if let Some(s) = opts.set_scroll {
+        let line = s.top_line.min(cache.rope.len_lines().saturating_sub(1));
+        cache.anchor_line = line;
+        cache.anchor_px = s.pixel_offset;
+        cache.scroll_x = s.horizontal;
+    }
 
     // Input.
     if focused {
@@ -307,6 +381,22 @@ pub fn show(
         cache.sync(d, wrap);
     }
     scroll(ui, &response, cache, &m, opts, &mut out);
+    let head = wb.view(view).map_or(0, |v| v.selection.primary().head);
+    if head != cache.last_head {
+        cache.reveal = true;
+        cache.last_head = head;
+    }
+    if opts.center {
+        let row = cache
+            .map
+            .row_of_char(&cache.rope, head.min(cache.rope.len_chars())) as f32;
+        set_scroll_y(
+            cache,
+            &m,
+            row * m.row_h - m.text.height() / 2.0 + m.row_h / 2.0,
+        );
+        cache.reveal = false;
+    }
     if cache.reveal {
         reveal_caret(wb, cache, view, &m, opts.indent.tab_size, wrap.is_some());
         cache.reveal = false;
@@ -318,6 +408,22 @@ pub fn show(
         .unwrap_or_default();
     out.cjk = paint::paint(ui, kit, cache, &selection, &m, opts, focused, now);
     paint::scrollbar(ui, kit, id, cache, &m);
+    cache.minimap_rect = mini_rect.filter(|_| mini.is_some());
+    cache.gutter_rect = m.gutter;
+    if let (Some(mm), Some(r)) = (mini, mini_rect) {
+        minimap::show(
+            ui,
+            kit,
+            id,
+            r,
+            cache,
+            &m,
+            opts,
+            &mm,
+            &selection,
+            &mut out.commands,
+        );
+    }
     if focused {
         ime_output(ui, cache, &selection, &m, opts.indent.tab_size);
         let blink_phase = (now - cache.blink_epoch).rem_euclid(1.0);
@@ -332,6 +438,7 @@ pub fn show(
         }
     }
     accessibility(&response, cache, &m);
+    out.response = Some(response.clone());
     // Persist the scroll anchor in the view (session restore, M8).
     if let Some(v) = wb.views.get_mut(view) {
         v.scroll.top_line = cache.anchor_line;

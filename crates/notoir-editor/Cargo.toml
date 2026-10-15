@@ -15,6 +15,7 @@ chardetng.workspace = true
 thiserror.workspace = true
 unicode-segmentation.workspace = true
 unicode-width.workspace = true
+regex.workspace = true
 
 [dev-dependencies]
 proptest.workspace = true

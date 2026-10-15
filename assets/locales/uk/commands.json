@@ -45,11 +45,16 @@
     "splitDown": "Розділити вниз",
     "singleEditor": "Один редактор",
     "moveTab": "Перемістити вкладку",
-    "dockTab": "Закріпити вкладку"
+    "dockTab": "Закріпити вкладку",
+    "toggleMinimap": "Перемкнути мінікарту",
+    "minimapSide": "Розташування мінікарти",
+    "minimapScale": "Масштаб мінікарти"
   },
   "preferences": {
     "changeTheme": "Змінити тему…",
-    "changeLanguage": "Змінити мову інтерфейсу…"
+    "changeLanguage": "Змінити мову інтерфейсу…",
+    "openKeybindingsFile": "Відкрити файл сполучень клавіш",
+    "openSettingsFile": "Відкрити файл налаштувань користувача"
   },
   "help": {
     "about": "Про Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Перейти до попередньої групи редакторів",
     "focusGroup": "Перейти до групи редакторів",
     "moveTabToNextGroup": "Перемістити вкладку до наступної групи",
-    "moveTabToPreviousGroup": "Перемістити вкладку до попередньої групи"
+    "moveTabToPreviousGroup": "Перемістити вкладку до попередньої групи",
+    "commandPalette": "Показати всі команди"
   },
   "file": {
     "newUntitled": "Новий файл",
@@ -101,12 +107,38 @@
     "cut": "Вирізати",
     "copy": "Копіювати",
     "paste": "Вставити",
-    "selectAll": "Виділити все"
+    "selectAll": "Виділити все",
+    "duplicateLine": "Дублювати рядок",
+    "deleteLine": "Видалити рядок",
+    "moveLineUp": "Перемістити рядок вгору",
+    "moveLineDown": "Перемістити рядок вниз",
+    "sortLines": "Сортувати рядки за зростанням",
+    "sortLinesDescending": "Сортувати рядки за спаданням",
+    "trimTrailingWhitespace": "Видалити пробіли в кінці рядків",
+    "transformToUppercase": "Перетворити на великі літери",
+    "transformToLowercase": "Перетворити на малі літери",
+    "transformToTitleCase": "Кожне слово з великої",
+    "insertLineAfter": "Вставити рядок нижче",
+    "insertLineBefore": "Вставити рядок вище",
+    "joinLines": "Об'єднати рядки",
+    "toggleReadOnly": "Перемкнути «лише читання»",
+    "find": "Знайти",
+    "replace": "Замінити",
+    "findNext": "Знайти наступне",
+    "findPrevious": "Знайти попереднє",
+    "toggleFindCaseSensitive": "Перемкнути врахування регістру",
+    "toggleFindWholeWord": "Перемкнути слово цілком",
+    "toggleFindRegex": "Перемкнути регулярний вираз",
+    "toggleFindInSelection": "Перемкнути пошук у виділенні",
+    "replaceOne": "Замінити",
+    "replaceAll": "Замінити все",
+    "closeFind": "Закрити пошук"
   },
   "navigate": {
     "nextTab": "Наступна вкладка",
     "previousTab": "Попередня вкладка",
-    "switchTab": "Перейти до попередньої вкладки"
+    "switchTab": "Перейти до попередньої вкладки",
+    "goToLine": "Перейти до рядка…"
   },
   "editor": {
     "changeLineEnding": "Змінити послідовність кінця рядка…",

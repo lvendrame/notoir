@@ -1,0 +1,17 @@
+{
+  "hint": "Znajdź",
+  "replaceHint": "Zamień",
+  "caseSensitive": "Uwzględniaj wielkość liter (Alt+C)",
+  "wholeWord": "Całe słowo (Alt+W)",
+  "regex": "Wyrażenie regularne (Alt+R)",
+  "inSelection": "Szukaj w zaznaczeniu",
+  "toggleReplace": "Pokaż/ukryj zamianę",
+  "close": "Zamknij (Esc)",
+  "next": "Następne wystąpienie (Enter)",
+  "previous": "Poprzednie wystąpienie (Shift+Enter)",
+  "wrapped": "Wyszukiwanie zaczęło się od początku",
+  "noResults": "Brak wyników",
+  "count": "{{current}} z {{total}}",
+  "replace": "Zamień",
+  "replaceAll": "Zamień wszystko"
+}

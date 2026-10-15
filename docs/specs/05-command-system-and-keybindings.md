@@ -1,6 +1,6 @@
 # 05 — Command System & Keybindings
 
-**Status:** Partial — command registry, when-expressions, keymap (M1); keyboard dispatch, menu/toolbar wiring (M3); Command Palette (M9), shortcuts editor (M10)
+**Status:** Partial — command registry, when-expressions, keymap (M1); keyboard dispatch, menu/toolbar wiring (M3); Command Palette, keybindings.toml applied on save or external change, Preferences: Open Keyboard Shortcuts File (M9); shortcuts editor (M10), plugin keybindings (M22)
 
 ## Purpose
 

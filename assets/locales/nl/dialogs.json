@@ -15,7 +15,9 @@
     "encoding": "Codering selecteren",
     "languageMode": "Taalmodus selecteren",
     "reopenWithEncoding": "Opnieuw openen met codering",
-    "saveWithEncoding": "Opslaan met codering"
+    "saveWithEncoding": "Opslaan met codering",
+    "commands": "Typ een opdracht",
+    "recentlyUsed": "Recent gebruikt"
   },
   "open": {
     "title": "Bestand openen"
@@ -77,5 +79,8 @@
     "discardTitle": "{{count}} niet-opgeslagen documenten definitief verwijderen?",
     "discardBody": "Ze blijven 7 dagen in de gegevensmap van Notoir voordat ze worden verwijderd.",
     "discard": "Verwijderen"
+  },
+  "gotoLine": {
+    "hint": "Regelnummer, regel:kolom of +/- regels (1–{{lines}})"
   }
 }

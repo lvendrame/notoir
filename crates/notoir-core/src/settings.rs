@@ -349,6 +349,41 @@ impl Schema {
             Scopes::NO_LANGUAGE,
             C::Editor,
         );
+        def(
+            "editor.minimap.scale",
+            T::Int { min: 1, max: 3 },
+            V::Int(2),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "editor.minimap.opacity",
+            T::Float { min: 0.2, max: 1.0 },
+            V::Float(0.6),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "editor.minimap.showViewport",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "editor.minimap.showSearchMarks",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
+        def(
+            "editor.minimap.showSelection",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::Editor,
+        );
         // Appearance
         def(
             "workbench.theme",

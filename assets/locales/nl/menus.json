@@ -21,7 +21,8 @@
     "branches": "Branches",
     "mcp": "MCP",
     "scratchpads": "Kladblokken",
-    "autoSave": "Automatisch opslaan"
+    "autoSave": "Automatisch opslaan",
+    "sortLines": "Regels sorteren"
   },
   "item": {
     "primarySidebar": "Primaire zijbalk",
@@ -34,7 +35,8 @@
     "lineNumbers": "Regelnummers",
     "whitespace": "Witruimte",
     "currentLineHighlight": "Markering huidige regel",
-    "wordWrap": "Regelterugloop"
+    "wordWrap": "Regelterugloop",
+    "minimap": "Minimap"
   },
   "autoSave": {
     "off": "Uit",

@@ -253,3 +253,43 @@ fn recovery_prompt_and_banner_snapshot() {
         img.save(out_dir().join("banner-recovered.png")).unwrap();
     }
 }
+
+#[test]
+fn find_minimap_and_palette_snapshot() {
+    let dir = tempfile::tempdir().unwrap();
+    let body: String = (1..=400)
+        .map(|i| match i % 7 {
+            0 => format!("## Section {i}\n"),
+            1 => "\n".to_owned(),
+            2 => format!("- item {i}: review the notes and the draft\n"),
+            3 => format!("    nested detail for note {i}\n"),
+            _ => format!("Paragraph {i} mentions the draft and a few other words.\n"),
+        })
+        .collect();
+    let p = dir.path().join("notes.md");
+    std::fs::write(&p, body).unwrap();
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = vec![(p, None)];
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "edit.replace", serde_json::Value::Null);
+    app.harness.event(egui::Event::Text("draft".into()));
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("find-minimap.png")).unwrap();
+    }
+    app.harness.key_press(egui::Key::Escape);
+    app.harness.run_steps(2);
+    common::run(
+        &mut app,
+        "workbench.commandPalette",
+        serde_json::Value::Null,
+    );
+    app.harness.event(egui::Event::Text("tog".into()));
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("palette.png")).unwrap();
+    }
+}

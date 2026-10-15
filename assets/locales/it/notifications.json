@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "Impossibile scrivere i dati di recupero dei documenti non salvati.",
   "recoveryDamaged": "Un documento recuperato era danneggiato; è stato aperto il contenuto grezzo.",
   "recoveryNothing": "Non ci sono documenti non salvati da recuperare.",
-  "sessionMissing": "File dell'ultima sessione che non esistono più: {{count}}."
+  "sessionMissing": "File dell'ultima sessione che non esistono più: {{count}}.",
+  "replacedAll": "Occorrenze sostituite: {{count}}."
 }

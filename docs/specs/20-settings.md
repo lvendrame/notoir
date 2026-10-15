@@ -1,6 +1,6 @@
 # 20 — Settings
 
-**Status:** Partial — schema, scope resolution, settings files (M1, M2); Settings tab and keyboard editor (M10)
+**Status:** Partial — schema, scope resolution, settings files (M1, M2); user settings file applied on save or external change, Open User Settings File (M9); Settings tab and keyboard editor (M10)
 
 ## Purpose
 

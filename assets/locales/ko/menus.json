@@ -21,7 +21,8 @@
     "branches": "분기",
     "mcp": "MCP",
     "scratchpads": "스크래치패드",
-    "autoSave": "자동 저장"
+    "autoSave": "자동 저장",
+    "sortLines": "줄 정렬"
   },
   "item": {
     "primarySidebar": "기본 사이드바",
@@ -34,7 +35,8 @@
     "lineNumbers": "줄 번호",
     "whitespace": "공백 문자",
     "currentLineHighlight": "현재 줄 강조 표시",
-    "wordWrap": "자동 줄 바꿈"
+    "wordWrap": "자동 줄 바꿈",
+    "minimap": "미니맵"
   },
   "autoSave": {
     "off": "끄기",

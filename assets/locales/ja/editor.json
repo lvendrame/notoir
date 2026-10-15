@@ -1,0 +1,8 @@
+{
+  "minimapLines": "{{from}}–{{to}} 行",
+  "minimapHide": "ミニマップを非表示",
+  "minimapPosition": "位置",
+  "minimapLeft": "左",
+  "minimapRight": "右",
+  "minimapScale": "倍率"
+}

@@ -45,11 +45,16 @@
     "splitDown": "Podziel w dół",
     "singleEditor": "Pojedynczy edytor",
     "moveTab": "Przenieś kartę",
-    "dockTab": "Zadokuj kartę"
+    "dockTab": "Zadokuj kartę",
+    "toggleMinimap": "Przełącz minimapę",
+    "minimapSide": "Położenie minimapy",
+    "minimapScale": "Skala minimapy"
   },
   "preferences": {
     "changeTheme": "Zmień motyw…",
-    "changeLanguage": "Zmień język interfejsu…"
+    "changeLanguage": "Zmień język interfejsu…",
+    "openKeybindingsFile": "Otwórz plik skrótów klawiszowych",
+    "openSettingsFile": "Otwórz plik ustawień użytkownika"
   },
   "help": {
     "about": "O programie Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Przejdź do poprzedniej grupy edytorów",
     "focusGroup": "Przejdź do grupy edytorów",
     "moveTabToNextGroup": "Przenieś kartę do następnej grupy",
-    "moveTabToPreviousGroup": "Przenieś kartę do poprzedniej grupy"
+    "moveTabToPreviousGroup": "Przenieś kartę do poprzedniej grupy",
+    "commandPalette": "Pokaż wszystkie polecenia"
   },
   "file": {
     "newUntitled": "Nowy plik",
@@ -101,12 +107,38 @@
     "cut": "Wytnij",
     "copy": "Kopiuj",
     "paste": "Wklej",
-    "selectAll": "Zaznacz wszystko"
+    "selectAll": "Zaznacz wszystko",
+    "duplicateLine": "Duplikuj wiersz",
+    "deleteLine": "Usuń wiersz",
+    "moveLineUp": "Przenieś wiersz w górę",
+    "moveLineDown": "Przenieś wiersz w dół",
+    "sortLines": "Sortuj wiersze rosnąco",
+    "sortLinesDescending": "Sortuj wiersze malejąco",
+    "trimTrailingWhitespace": "Usuń końcowe białe znaki",
+    "transformToUppercase": "Zamień na wielkie litery",
+    "transformToLowercase": "Zamień na małe litery",
+    "transformToTitleCase": "Zamień na format tytułu",
+    "insertLineAfter": "Wstaw wiersz poniżej",
+    "insertLineBefore": "Wstaw wiersz powyżej",
+    "joinLines": "Połącz wiersze",
+    "toggleReadOnly": "Przełącz tylko do odczytu",
+    "find": "Znajdź",
+    "replace": "Zamień",
+    "findNext": "Znajdź następny",
+    "findPrevious": "Znajdź poprzedni",
+    "toggleFindCaseSensitive": "Przełącz uwzględnianie wielkości liter",
+    "toggleFindWholeWord": "Przełącz całe słowo",
+    "toggleFindRegex": "Przełącz wyrażenie regularne",
+    "toggleFindInSelection": "Przełącz szukanie w zaznaczeniu",
+    "replaceOne": "Zamień",
+    "replaceAll": "Zamień wszystko",
+    "closeFind": "Zamknij wyszukiwanie"
   },
   "navigate": {
     "nextTab": "Następna karta",
     "previousTab": "Poprzednia karta",
-    "switchTab": "Przełącz na poprzednią kartę"
+    "switchTab": "Przełącz na poprzednią kartę",
+    "goToLine": "Przejdź do wiersza…"
   },
   "editor": {
     "changeLineEnding": "Zmień sekwencję końca wiersza…",

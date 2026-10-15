@@ -21,7 +21,8 @@
     "branches": "Гілки",
     "mcp": "MCP",
     "scratchpads": "Чернетки",
-    "autoSave": "Автозбереження"
+    "autoSave": "Автозбереження",
+    "sortLines": "Сортувати рядки"
   },
   "item": {
     "primarySidebar": "Основна бічна панель",
@@ -34,7 +35,8 @@
     "lineNumbers": "Номери рядків",
     "whitespace": "Пробіли",
     "currentLineHighlight": "Виділення поточного рядка",
-    "wordWrap": "Перенесення рядків"
+    "wordWrap": "Перенесення рядків",
+    "minimap": "Мінікарта"
   },
   "autoSave": {
     "off": "Вимкнено",

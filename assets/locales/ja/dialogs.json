@@ -15,7 +15,9 @@
     "encoding": "エンコードを選択",
     "languageMode": "言語モードを選択",
     "reopenWithEncoding": "エンコード付きで再度開く",
-    "saveWithEncoding": "エンコード付きで保存"
+    "saveWithEncoding": "エンコード付きで保存",
+    "commands": "コマンドを入力",
+    "recentlyUsed": "最近使用したもの"
   },
   "open": {
     "title": "ファイルを開く"
@@ -77,5 +79,8 @@
     "discardTitle": "{{count}} 件の未保存ドキュメントを完全に破棄しますか?",
     "discardBody": "削除されるまで 7 日間 Notoir のデータ フォルダーに保管されます。",
     "discard": "破棄"
+  },
+  "gotoLine": {
+    "hint": "行番号、行:列、または +/- 行数 (1–{{lines}})"
   }
 }

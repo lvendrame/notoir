@@ -45,11 +45,16 @@
     "splitDown": "Разделить вниз",
     "singleEditor": "Один редактор",
     "moveTab": "Переместить вкладку",
-    "dockTab": "Закрепить вкладку"
+    "dockTab": "Закрепить вкладку",
+    "toggleMinimap": "Переключить мини-карту",
+    "minimapSide": "Положение мини-карты",
+    "minimapScale": "Масштаб мини-карты"
   },
   "preferences": {
     "changeTheme": "Сменить тему…",
-    "changeLanguage": "Сменить язык интерфейса…"
+    "changeLanguage": "Сменить язык интерфейса…",
+    "openKeybindingsFile": "Открыть файл сочетаний клавиш",
+    "openSettingsFile": "Открыть файл пользовательских настроек"
   },
   "help": {
     "about": "О программе Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Перейти к предыдущей группе редакторов",
     "focusGroup": "Перейти к группе редакторов",
     "moveTabToNextGroup": "Переместить вкладку в следующую группу",
-    "moveTabToPreviousGroup": "Переместить вкладку в предыдущую группу"
+    "moveTabToPreviousGroup": "Переместить вкладку в предыдущую группу",
+    "commandPalette": "Показать все команды"
   },
   "file": {
     "newUntitled": "Новый файл",
@@ -101,12 +107,38 @@
     "cut": "Вырезать",
     "copy": "Копировать",
     "paste": "Вставить",
-    "selectAll": "Выделить всё"
+    "selectAll": "Выделить всё",
+    "duplicateLine": "Дублировать строку",
+    "deleteLine": "Удалить строку",
+    "moveLineUp": "Переместить строку вверх",
+    "moveLineDown": "Переместить строку вниз",
+    "sortLines": "Сортировать строки по возрастанию",
+    "sortLinesDescending": "Сортировать строки по убыванию",
+    "trimTrailingWhitespace": "Удалить пробелы в конце строк",
+    "transformToUppercase": "Преобразовать в верхний регистр",
+    "transformToLowercase": "Преобразовать в нижний регистр",
+    "transformToTitleCase": "Каждое слово с заглавной",
+    "insertLineAfter": "Вставить строку ниже",
+    "insertLineBefore": "Вставить строку выше",
+    "joinLines": "Объединить строки",
+    "toggleReadOnly": "Переключить «только чтение»",
+    "find": "Найти",
+    "replace": "Заменить",
+    "findNext": "Найти далее",
+    "findPrevious": "Найти ранее",
+    "toggleFindCaseSensitive": "Переключить учёт регистра",
+    "toggleFindWholeWord": "Переключить слово целиком",
+    "toggleFindRegex": "Переключить регулярное выражение",
+    "toggleFindInSelection": "Переключить поиск в выделении",
+    "replaceOne": "Заменить",
+    "replaceAll": "Заменить все",
+    "closeFind": "Закрыть поиск"
   },
   "navigate": {
     "nextTab": "Следующая вкладка",
     "previousTab": "Предыдущая вкладка",
-    "switchTab": "Переключиться на предыдущую вкладку"
+    "switchTab": "Переключиться на предыдущую вкладку",
+    "goToLine": "Перейти к строке…"
   },
   "editor": {
     "changeLineEnding": "Изменить последовательность конца строки…",

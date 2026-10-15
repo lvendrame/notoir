@@ -45,11 +45,16 @@
     "splitDown": "Dividi in basso",
     "singleEditor": "Editor singolo",
     "moveTab": "Sposta scheda",
-    "dockTab": "Ancora scheda"
+    "dockTab": "Ancora scheda",
+    "toggleMinimap": "Mostra/nascondi minimappa",
+    "minimapSide": "Posizione della minimappa",
+    "minimapScale": "Scala della minimappa"
   },
   "preferences": {
     "changeTheme": "Cambia tema…",
-    "changeLanguage": "Cambia lingua di visualizzazione…"
+    "changeLanguage": "Cambia lingua di visualizzazione…",
+    "openKeybindingsFile": "Apri file delle scorciatoie da tastiera",
+    "openSettingsFile": "Apri file delle impostazioni utente"
   },
   "help": {
     "about": "Informazioni su Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Attiva gruppo di editor precedente",
     "focusGroup": "Attiva gruppo di editor",
     "moveTabToNextGroup": "Sposta scheda nel gruppo successivo",
-    "moveTabToPreviousGroup": "Sposta scheda nel gruppo precedente"
+    "moveTabToPreviousGroup": "Sposta scheda nel gruppo precedente",
+    "commandPalette": "Mostra tutti i comandi"
   },
   "file": {
     "newUntitled": "Nuovo file",
@@ -101,12 +107,38 @@
     "cut": "Taglia",
     "copy": "Copia",
     "paste": "Incolla",
-    "selectAll": "Seleziona tutto"
+    "selectAll": "Seleziona tutto",
+    "duplicateLine": "Duplica riga",
+    "deleteLine": "Elimina riga",
+    "moveLineUp": "Sposta riga in su",
+    "moveLineDown": "Sposta riga in giù",
+    "sortLines": "Ordina righe in ordine crescente",
+    "sortLinesDescending": "Ordina righe in ordine decrescente",
+    "trimTrailingWhitespace": "Elimina spazi finali",
+    "transformToUppercase": "Trasforma in maiuscolo",
+    "transformToLowercase": "Trasforma in minuscolo",
+    "transformToTitleCase": "Trasforma in maiuscole iniziali",
+    "insertLineAfter": "Inserisci riga sotto",
+    "insertLineBefore": "Inserisci riga sopra",
+    "joinLines": "Unisci righe",
+    "toggleReadOnly": "Attiva/disattiva sola lettura",
+    "find": "Trova",
+    "replace": "Sostituisci",
+    "findNext": "Trova successivo",
+    "findPrevious": "Trova precedente",
+    "toggleFindCaseSensitive": "Maiuscole/minuscole",
+    "toggleFindWholeWord": "Parola intera",
+    "toggleFindRegex": "Espressione regolare",
+    "toggleFindInSelection": "Trova nella selezione",
+    "replaceOne": "Sostituisci",
+    "replaceAll": "Sostituisci tutto",
+    "closeFind": "Chiudi ricerca"
   },
   "navigate": {
     "nextTab": "Scheda successiva",
     "previousTab": "Scheda precedente",
-    "switchTab": "Passa alla scheda precedente"
+    "switchTab": "Passa alla scheda precedente",
+    "goToLine": "Vai alla riga…"
   },
   "editor": {
     "changeLineEnding": "Cambia sequenza di fine riga…",

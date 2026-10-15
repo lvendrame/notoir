@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "Kan herstelgegevens voor niet-opgeslagen documenten niet schrijven.",
   "recoveryDamaged": "Een hersteld document was beschadigd; de ruwe inhoud is geopend.",
   "recoveryNothing": "Er zijn geen niet-opgeslagen documenten om te herstellen.",
-  "sessionMissing": "Bestanden uit de vorige sessie die niet meer bestaan: {{count}}."
+  "sessionMissing": "Bestanden uit de vorige sessie die niet meer bestaan: {{count}}.",
+  "replacedAll": "Aantal vervangen: {{count}}."
 }

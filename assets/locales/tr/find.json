@@ -1,0 +1,17 @@
+{
+  "hint": "Bul",
+  "replaceHint": "Değiştir",
+  "caseSensitive": "Büyük/Küçük Harf Duyarlı (Alt+C)",
+  "wholeWord": "Tam Sözcük (Alt+W)",
+  "regex": "Normal İfade (Alt+R)",
+  "inSelection": "Seçimde Bul",
+  "toggleReplace": "Değiştirmeyi Aç/Kapat",
+  "close": "Kapat (Esc)",
+  "next": "Sonraki Eşleşme (Enter)",
+  "previous": "Önceki Eşleşme (Shift+Enter)",
+  "wrapped": "Arama başa döndü",
+  "noResults": "Sonuç yok",
+  "count": "{{current}} / {{total}}",
+  "replace": "Değiştir",
+  "replaceAll": "Tümünü Değiştir"
+}

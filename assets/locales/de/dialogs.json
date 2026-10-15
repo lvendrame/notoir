@@ -15,7 +15,9 @@
     "encoding": "Codierung auswählen",
     "languageMode": "Sprachmodus auswählen",
     "reopenWithEncoding": "Mit Codierung erneut öffnen",
-    "saveWithEncoding": "Mit Codierung speichern"
+    "saveWithEncoding": "Mit Codierung speichern",
+    "commands": "Befehl eingeben",
+    "recentlyUsed": "Zuletzt verwendet"
   },
   "open": {
     "title": "Datei öffnen"
@@ -77,5 +79,8 @@
     "discardTitle": "{{count}} nicht gespeicherte Dokumente endgültig verwerfen?",
     "discardBody": "Sie bleiben 7 Tage im Datenordner von Notoir, bevor sie gelöscht werden.",
     "discard": "Verwerfen"
+  },
+  "gotoLine": {
+    "hint": "Zeilennummer, Zeile:Spalte oder +/- Zeilen (1–{{lines}})"
   }
 }

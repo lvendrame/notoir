@@ -45,11 +45,16 @@
     "splitDown": "Onder splitsen",
     "singleEditor": "Eén editor",
     "moveTab": "Tabblad verplaatsen",
-    "dockTab": "Tabblad koppelen"
+    "dockTab": "Tabblad koppelen",
+    "toggleMinimap": "Minimap in-/uitschakelen",
+    "minimapSide": "Positie van minimap",
+    "minimapScale": "Schaal van minimap"
   },
   "preferences": {
     "changeTheme": "Thema wijzigen…",
-    "changeLanguage": "Weergavetaal wijzigen…"
+    "changeLanguage": "Weergavetaal wijzigen…",
+    "openKeybindingsFile": "Bestand met sneltoetsen openen",
+    "openSettingsFile": "Bestand met gebruikersinstellingen openen"
   },
   "help": {
     "about": "Over Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Focus op vorige editorgroep",
     "focusGroup": "Focus op editorgroep",
     "moveTabToNextGroup": "Tabblad naar volgende groep verplaatsen",
-    "moveTabToPreviousGroup": "Tabblad naar vorige groep verplaatsen"
+    "moveTabToPreviousGroup": "Tabblad naar vorige groep verplaatsen",
+    "commandPalette": "Alle opdrachten weergeven"
   },
   "file": {
     "newUntitled": "Nieuw bestand",
@@ -101,12 +107,38 @@
     "cut": "Knippen",
     "copy": "Kopiëren",
     "paste": "Plakken",
-    "selectAll": "Alles selecteren"
+    "selectAll": "Alles selecteren",
+    "duplicateLine": "Regel dupliceren",
+    "deleteLine": "Regel verwijderen",
+    "moveLineUp": "Regel omhoog verplaatsen",
+    "moveLineDown": "Regel omlaag verplaatsen",
+    "sortLines": "Regels oplopend sorteren",
+    "sortLinesDescending": "Regels aflopend sorteren",
+    "trimTrailingWhitespace": "Witruimte aan regeleinde verwijderen",
+    "transformToUppercase": "Omzetten naar hoofdletters",
+    "transformToLowercase": "Omzetten naar kleine letters",
+    "transformToTitleCase": "Omzetten naar titelnotatie",
+    "insertLineAfter": "Regel eronder invoegen",
+    "insertLineBefore": "Regel erboven invoegen",
+    "joinLines": "Regels samenvoegen",
+    "toggleReadOnly": "Alleen-lezen in-/uitschakelen",
+    "find": "Zoeken",
+    "replace": "Vervangen",
+    "findNext": "Volgende zoeken",
+    "findPrevious": "Vorige zoeken",
+    "toggleFindCaseSensitive": "Hoofdlettergevoelig in-/uitschakelen",
+    "toggleFindWholeWord": "Heel woord in-/uitschakelen",
+    "toggleFindRegex": "Reguliere expressie in-/uitschakelen",
+    "toggleFindInSelection": "Zoeken in selectie in-/uitschakelen",
+    "replaceOne": "Vervangen",
+    "replaceAll": "Alles vervangen",
+    "closeFind": "Zoeken sluiten"
   },
   "navigate": {
     "nextTab": "Volgend tabblad",
     "previousTab": "Vorig tabblad",
-    "switchTab": "Naar vorig tabblad schakelen"
+    "switchTab": "Naar vorig tabblad schakelen",
+    "goToLine": "Ga naar regel…"
   },
   "editor": {
     "changeLineEnding": "Regeleindereeks wijzigen…",

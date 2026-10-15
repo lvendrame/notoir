@@ -1,0 +1,17 @@
+{
+  "hint": "Найти",
+  "replaceHint": "Заменить",
+  "caseSensitive": "Учитывать регистр (Alt+C)",
+  "wholeWord": "Слово целиком (Alt+W)",
+  "regex": "Регулярное выражение (Alt+R)",
+  "inSelection": "Искать в выделении",
+  "toggleReplace": "Показать или скрыть замену",
+  "close": "Закрыть (Esc)",
+  "next": "Следующее совпадение (Enter)",
+  "previous": "Предыдущее совпадение (Shift+Enter)",
+  "wrapped": "Поиск начат сначала",
+  "noResults": "Нет результатов",
+  "count": "{{current}} из {{total}}",
+  "replace": "Заменить",
+  "replaceAll": "Заменить все"
+}

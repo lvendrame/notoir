@@ -13,6 +13,7 @@ use super::{Actions, Kit, empty_state, tabs};
 use crate::core::AppCore;
 use crate::editor_widget::{self, EditorCaches};
 use crate::fonts::CjkUse;
+use crate::menus;
 use crate::t;
 use crate::theme::Tok;
 
@@ -284,6 +285,23 @@ impl Renderer<'_, '_> {
                 self.out.editor_focused |= out.focused;
                 self.out.zoom_steps += out.zoom_steps;
                 self.out.cjk.merge(out.cjk);
+                self.actions.0.extend(out.commands);
+                if let Some(resp) = &out.response {
+                    resp.context_menu(|ui| {
+                        ui.set_min_width(220.0);
+                        let items =
+                            menus::visible_items(&editor_context_items(), &self.core.commands);
+                        super::chrome::menu_items(
+                            ui,
+                            self.kit,
+                            self.core,
+                            self.context,
+                            &items,
+                            self.actions,
+                        );
+                    });
+                }
+                super::find_widget::show(&mut child, self.kit, self.core, view, body, self.actions);
                 if out.interacted && self.core.workbench.active_view() != Some(view) {
                     self.out.activate = Some(view);
                 }
@@ -311,6 +329,48 @@ impl Renderer<'_, '_> {
 }
 
 const BANNER_H: f32 = 34.0;
+
+/// The editor's right-click menu (spec 11 §Editor Context Menu); items whose
+/// commands do not exist yet are left out.
+fn editor_context_items() -> Vec<menus::MenuItem> {
+    use menus::MenuItem;
+    let cmd = |id: &'static str| MenuItem::Command {
+        id,
+        args: serde_json::Value::Null,
+        label: None,
+        checked: None,
+    };
+    vec![
+        cmd("edit.cut"),
+        cmd("edit.copy"),
+        cmd("edit.paste"),
+        cmd("edit.pastePlain"),
+        MenuItem::Separator,
+        cmd("edit.selectAll"),
+        MenuItem::Separator,
+        cmd("edit.find"),
+        cmd("edit.replace"),
+        MenuItem::Separator,
+        cmd("navigate.goToLine"),
+        cmd("bookmarks.toggle"),
+        MenuItem::Separator,
+        MenuItem::Submenu {
+            label: "menus:sub.convertCase",
+            items: vec![
+                cmd("edit.transformToUppercase"),
+                cmd("edit.transformToLowercase"),
+                cmd("edit.transformToTitleCase"),
+            ],
+        },
+        MenuItem::Submenu {
+            label: "menus:sub.sortLines",
+            items: vec![cmd("edit.sortLines"), cmd("edit.sortLinesDescending")],
+        },
+        MenuItem::Separator,
+        cmd("editor.formatDocument"),
+        cmd("compare.currentChanges"),
+    ]
+}
 
 /// The bar above an editor whose file changed or vanished on disk, or whose
 /// recovered text conflicts with the disk (docs/specs/09, 10).

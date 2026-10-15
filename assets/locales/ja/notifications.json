@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "未保存ドキュメントの復元データを書き込めませんでした。",
   "recoveryDamaged": "復元したドキュメントが破損していたため、生のコンテンツを開きました。",
   "recoveryNothing": "復元する未保存ドキュメントはありません。",
-  "sessionMissing": "前回のセッションで存在しなくなったファイル: {{count}}。"
+  "sessionMissing": "前回のセッションで存在しなくなったファイル: {{count}}。",
+  "replacedAll": "{{count}} 件を置換しました。"
 }

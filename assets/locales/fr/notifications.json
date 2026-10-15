@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "Impossible d'écrire les données de récupération des documents non enregistrés.",
   "recoveryDamaged": "Un document récupéré était endommagé ; son contenu brut a été ouvert.",
   "recoveryNothing": "Aucun document non enregistré à récupérer.",
-  "sessionMissing": "Fichiers de la dernière session qui n'existent plus : {{count}}."
+  "sessionMissing": "Fichiers de la dernière session qui n'existent plus : {{count}}.",
+  "replacedAll": "Occurrences remplacées : {{count}}."
 }

@@ -15,7 +15,9 @@
     "encoding": "选择编码",
     "languageMode": "选择语言模式",
     "reopenWithEncoding": "通过编码重新打开",
-    "saveWithEncoding": "通过编码保存"
+    "saveWithEncoding": "通过编码保存",
+    "commands": "输入命令",
+    "recentlyUsed": "最近使用"
   },
   "open": {
     "title": "打开文件"
@@ -77,5 +79,8 @@
     "discardTitle": "永久放弃 {{count}} 个未保存的文档?",
     "discardBody": "它们会在 Notoir 的数据文件夹中保留 7 天,然后被删除。",
     "discard": "放弃"
+  },
+  "gotoLine": {
+    "hint": "行号、行:列,或 +/- 行数 (1–{{lines}})"
   }
 }

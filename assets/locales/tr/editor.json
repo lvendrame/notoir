@@ -1,0 +1,8 @@
+{
+  "minimapLines": "Satır {{from}}–{{to}}",
+  "minimapHide": "Mini Haritayı Gizle",
+  "minimapPosition": "Konum",
+  "minimapLeft": "Sol",
+  "minimapRight": "Sağ",
+  "minimapScale": "Ölçek"
+}

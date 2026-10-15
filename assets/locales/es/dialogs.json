@@ -15,7 +15,9 @@
     "encoding": "Seleccionar codificación",
     "languageMode": "Seleccionar modo de lenguaje",
     "reopenWithEncoding": "Reabrir con codificación",
-    "saveWithEncoding": "Guardar con codificación"
+    "saveWithEncoding": "Guardar con codificación",
+    "commands": "Escribe un comando",
+    "recentlyUsed": "Usados recientemente"
   },
   "open": {
     "title": "Abrir archivo"
@@ -77,5 +79,8 @@
     "discardTitle": "¿Descartar de forma permanente {{count}} documentos sin guardar?",
     "discardBody": "Se conservan 7 días en la carpeta de datos de Notoir antes de eliminarse.",
     "discard": "Descartar"
+  },
+  "gotoLine": {
+    "hint": "Número de línea, línea:columna o +/- líneas (1–{{lines}})"
   }
 }

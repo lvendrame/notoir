@@ -1,0 +1,17 @@
+{
+  "hint": "Suchen",
+  "replaceHint": "Ersetzen",
+  "caseSensitive": "Groß-/Kleinschreibung (Alt+C)",
+  "wholeWord": "Ganzes Wort (Alt+W)",
+  "regex": "Regulärer Ausdruck (Alt+R)",
+  "inSelection": "In Auswahl suchen",
+  "toggleReplace": "Ersetzen umschalten",
+  "close": "Schließen (Esc)",
+  "next": "Nächster Treffer (Eingabe)",
+  "previous": "Vorheriger Treffer (Umschalt+Eingabe)",
+  "wrapped": "Suche am Anfang fortgesetzt",
+  "noResults": "Keine Ergebnisse",
+  "count": "{{current}} von {{total}}",
+  "replace": "Ersetzen",
+  "replaceAll": "Alle ersetzen"
+}

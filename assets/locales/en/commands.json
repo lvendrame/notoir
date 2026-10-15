@@ -45,11 +45,16 @@
     "splitDown": "Split Down",
     "singleEditor": "Single Editor",
     "moveTab": "Move Tab",
-    "dockTab": "Dock Tab"
+    "dockTab": "Dock Tab",
+    "toggleMinimap": "Toggle Minimap",
+    "minimapSide": "Minimap Position",
+    "minimapScale": "Minimap Scale"
   },
   "preferences": {
     "changeTheme": "Change Theme…",
-    "changeLanguage": "Change Display Language…"
+    "changeLanguage": "Change Display Language…",
+    "openKeybindingsFile": "Open Keyboard Shortcuts File",
+    "openSettingsFile": "Open User Settings File"
   },
   "help": {
     "about": "About Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Focus Previous Editor Group",
     "focusGroup": "Focus Editor Group",
     "moveTabToNextGroup": "Move Tab to Next Group",
-    "moveTabToPreviousGroup": "Move Tab to Previous Group"
+    "moveTabToPreviousGroup": "Move Tab to Previous Group",
+    "commandPalette": "Show All Commands"
   },
   "file": {
     "newUntitled": "New File",
@@ -101,12 +107,38 @@
     "cut": "Cut",
     "copy": "Copy",
     "paste": "Paste",
-    "selectAll": "Select All"
+    "selectAll": "Select All",
+    "duplicateLine": "Duplicate Line",
+    "deleteLine": "Delete Line",
+    "moveLineUp": "Move Line Up",
+    "moveLineDown": "Move Line Down",
+    "sortLines": "Sort Lines Ascending",
+    "sortLinesDescending": "Sort Lines Descending",
+    "trimTrailingWhitespace": "Trim Trailing Whitespace",
+    "transformToUppercase": "Transform to Uppercase",
+    "transformToLowercase": "Transform to Lowercase",
+    "transformToTitleCase": "Transform to Title Case",
+    "insertLineAfter": "Insert Line Below",
+    "insertLineBefore": "Insert Line Above",
+    "joinLines": "Join Lines",
+    "toggleReadOnly": "Toggle Read-Only",
+    "find": "Find",
+    "replace": "Replace",
+    "findNext": "Find Next",
+    "findPrevious": "Find Previous",
+    "toggleFindCaseSensitive": "Toggle Match Case",
+    "toggleFindWholeWord": "Toggle Match Whole Word",
+    "toggleFindRegex": "Toggle Regular Expression",
+    "toggleFindInSelection": "Toggle Find in Selection",
+    "replaceOne": "Replace",
+    "replaceAll": "Replace All",
+    "closeFind": "Close Find"
   },
   "navigate": {
     "nextTab": "Next Tab",
     "previousTab": "Previous Tab",
-    "switchTab": "Switch to Previous Tab"
+    "switchTab": "Switch to Previous Tab",
+    "goToLine": "Go to Line…"
   },
   "editor": {
     "changeLineEnding": "Change End of Line Sequence…",

@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "Wiederherstellungsdaten für nicht gespeicherte Dokumente konnten nicht geschrieben werden.",
   "recoveryDamaged": "Ein wiederhergestelltes Dokument war beschädigt; sein Rohinhalt wurde geöffnet.",
   "recoveryNothing": "Es gibt keine nicht gespeicherten Dokumente zum Wiederherstellen.",
-  "sessionMissing": "Dateien der letzten Sitzung, die nicht mehr existieren: {{count}}."
+  "sessionMissing": "Dateien der letzten Sitzung, die nicht mehr existieren: {{count}}.",
+  "replacedAll": "Ersetzte Vorkommen: {{count}}."
 }

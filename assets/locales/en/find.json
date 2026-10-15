@@ -1,0 +1,17 @@
+{
+  "hint": "Find",
+  "replaceHint": "Replace",
+  "caseSensitive": "Match Case (Alt+C)",
+  "wholeWord": "Match Whole Word (Alt+W)",
+  "regex": "Use Regular Expression (Alt+R)",
+  "inSelection": "Find in Selection",
+  "toggleReplace": "Toggle Replace",
+  "close": "Close (Esc)",
+  "next": "Next Match (Enter)",
+  "previous": "Previous Match (Shift+Enter)",
+  "wrapped": "Search wrapped",
+  "noResults": "No results",
+  "count": "{{current}} of {{total}}",
+  "replace": "Replace",
+  "replaceAll": "Replace All"
+}

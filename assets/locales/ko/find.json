@@ -1,0 +1,17 @@
+{
+  "hint": "찾기",
+  "replaceHint": "바꾸기",
+  "caseSensitive": "대/소문자 구분 (Alt+C)",
+  "wholeWord": "단어 단위 (Alt+W)",
+  "regex": "정규식 사용 (Alt+R)",
+  "inSelection": "선택 영역에서 찾기",
+  "toggleReplace": "바꾸기 전환",
+  "close": "닫기 (Esc)",
+  "next": "다음 일치 (Enter)",
+  "previous": "이전 일치 (Shift+Enter)",
+  "wrapped": "처음부터 다시 검색했습니다",
+  "noResults": "결과 없음",
+  "count": "{{current}}/{{total}}",
+  "replace": "바꾸기",
+  "replaceAll": "모두 바꾸기"
+}

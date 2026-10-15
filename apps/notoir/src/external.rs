@@ -64,6 +64,7 @@ impl AppCore {
             .filter_map(|d| d.path())
             .filter(|p| root.as_ref().is_none_or(|r| !p.starts_with(r)))
             .filter_map(|p| p.parent().map(Path::to_path_buf))
+            .chain(std::iter::once(self.paths.config.clone()))
             .collect();
         if wanted == self.doc_watch.dirs || self.doc_watch.failed {
             return;
@@ -93,6 +94,9 @@ impl AppCore {
 
     /// Paths changed on disk (from any watcher): re-check open documents.
     pub fn check_changed_paths(&mut self, paths: &[PathBuf]) {
+        if paths.iter().any(|p| self.is_config_file(p)) {
+            self.reload_config();
+        }
         let changed: HashSet<&Path> = paths.iter().map(PathBuf::as_path).collect();
         let docs: Vec<(DocumentId, PathBuf)> = self
             .workbench

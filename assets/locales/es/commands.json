@@ -45,11 +45,16 @@
     "splitDown": "Dividir abajo",
     "singleEditor": "Editor único",
     "moveTab": "Mover pestaña",
-    "dockTab": "Acoplar pestaña"
+    "dockTab": "Acoplar pestaña",
+    "toggleMinimap": "Alternar minimapa",
+    "minimapSide": "Posición del minimapa",
+    "minimapScale": "Escala del minimapa"
   },
   "preferences": {
     "changeTheme": "Cambiar tema…",
-    "changeLanguage": "Cambiar idioma de la interfaz…"
+    "changeLanguage": "Cambiar idioma de la interfaz…",
+    "openKeybindingsFile": "Abrir archivo de atajos de teclado",
+    "openSettingsFile": "Abrir archivo de ajustes de usuario"
   },
   "help": {
     "about": "Acerca de Notoir"
@@ -66,7 +71,8 @@
     "focusPreviousGroup": "Enfocar el grupo de editores anterior",
     "focusGroup": "Enfocar grupo de editores",
     "moveTabToNextGroup": "Mover pestaña al siguiente grupo",
-    "moveTabToPreviousGroup": "Mover pestaña al grupo anterior"
+    "moveTabToPreviousGroup": "Mover pestaña al grupo anterior",
+    "commandPalette": "Mostrar todos los comandos"
   },
   "file": {
     "newUntitled": "Nuevo archivo",
@@ -101,12 +107,38 @@
     "cut": "Cortar",
     "copy": "Copiar",
     "paste": "Pegar",
-    "selectAll": "Seleccionar todo"
+    "selectAll": "Seleccionar todo",
+    "duplicateLine": "Duplicar línea",
+    "deleteLine": "Eliminar línea",
+    "moveLineUp": "Mover línea arriba",
+    "moveLineDown": "Mover línea abajo",
+    "sortLines": "Ordenar líneas de forma ascendente",
+    "sortLinesDescending": "Ordenar líneas de forma descendente",
+    "trimTrailingWhitespace": "Recortar espacios finales",
+    "transformToUppercase": "Transformar a mayúsculas",
+    "transformToLowercase": "Transformar a minúsculas",
+    "transformToTitleCase": "Transformar a tipo título",
+    "insertLineAfter": "Insertar línea debajo",
+    "insertLineBefore": "Insertar línea encima",
+    "joinLines": "Unir líneas",
+    "toggleReadOnly": "Alternar solo lectura",
+    "find": "Buscar",
+    "replace": "Reemplazar",
+    "findNext": "Buscar siguiente",
+    "findPrevious": "Buscar anterior",
+    "toggleFindCaseSensitive": "Alternar coincidir mayúsculas",
+    "toggleFindWholeWord": "Alternar palabra completa",
+    "toggleFindRegex": "Alternar expresión regular",
+    "toggleFindInSelection": "Alternar buscar en la selección",
+    "replaceOne": "Reemplazar",
+    "replaceAll": "Reemplazar todo",
+    "closeFind": "Cerrar búsqueda"
   },
   "navigate": {
     "nextTab": "Pestaña siguiente",
     "previousTab": "Pestaña anterior",
-    "switchTab": "Cambiar a la pestaña anterior"
+    "switchTab": "Cambiar a la pestaña anterior",
+    "goToLine": "Ir a la línea…"
   },
   "editor": {
     "changeLineEnding": "Cambiar secuencia de fin de línea…",

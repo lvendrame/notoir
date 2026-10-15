@@ -1,0 +1,8 @@
+{
+  "minimapLines": "Líneas {{from}}–{{to}}",
+  "minimapHide": "Ocultar minimapa",
+  "minimapPosition": "Posición",
+  "minimapLeft": "Izquierda",
+  "minimapRight": "Derecha",
+  "minimapScale": "Escala"
+}

@@ -180,7 +180,12 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
                 ],
             ),
             SEP,
-            cmd("edit.toggleReadOnly"),
+            MenuItem::Command {
+                id: "edit.toggleReadOnly",
+                args: Value::Null,
+                label: None,
+                checked: Some("readOnly".into()),
+            },
         ],
     });
 
@@ -256,7 +261,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
                         "menus:item.lineNumbers",
                         "lineNumbersVisible",
                     ),
-                    cmd("view.toggleMinimap"),
+                    toggle("view.toggleMinimap", "menus:item.minimap", "minimapVisible"),
                     toggle(
                         "view.toggleWhitespace",
                         "menus:item.whitespace",

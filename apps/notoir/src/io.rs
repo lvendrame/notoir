@@ -42,6 +42,8 @@ pub enum IoResult {
     RecoveryWriteFailed {
         error: String,
     },
+    /// Settings and keybindings files re-read after a save or external change.
+    ConfigReloaded(Box<crate::config::ConfigFiles>),
     /// Another launch forwarded its command line (single instance).
     Instance(notoir_platform::single_instance::InstanceRequest),
 }

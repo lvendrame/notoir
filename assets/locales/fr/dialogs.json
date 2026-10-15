@@ -15,7 +15,9 @@
     "encoding": "Choisir l'encodage",
     "languageMode": "Choisir le mode de langage",
     "reopenWithEncoding": "Rouvrir avec l'encodage",
-    "saveWithEncoding": "Enregistrer avec l'encodage"
+    "saveWithEncoding": "Enregistrer avec l'encodage",
+    "commands": "Tapez une commande",
+    "recentlyUsed": "Utilisées récemment"
   },
   "open": {
     "title": "Ouvrir un fichier"
@@ -77,5 +79,8 @@
     "discardTitle": "Ignorer définitivement {{count}} documents non enregistrés ?",
     "discardBody": "Ils sont conservés 7 jours dans le dossier de données de Notoir avant d'être supprimés.",
     "discard": "Ignorer"
+  },
+  "gotoLine": {
+    "hint": "Numéro de ligne, ligne:colonne ou +/- lignes (1–{{lines}})"
   }
 }

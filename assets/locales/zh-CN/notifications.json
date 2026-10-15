@@ -28,5 +28,6 @@
   "recoveryWriteFailed": "无法写入未保存文档的恢复数据。",
   "recoveryDamaged": "恢复的文档已损坏;已打开其原始内容。",
   "recoveryNothing": "没有可恢复的未保存文档。",
-  "sessionMissing": "上次会话中已不存在的文件:{{count}}。"
+  "sessionMissing": "上次会话中已不存在的文件:{{count}}。",
+  "replacedAll": "已替换 {{count}} 处。"
 }

@@ -11,6 +11,7 @@ use crate::theme::{ICON, Theme, Tok};
 pub mod chrome;
 pub mod empty_state;
 pub mod explorer;
+pub mod find_widget;
 pub mod layout;
 pub mod overlays;
 pub mod panels;
