@@ -66,3 +66,11 @@ opt-level = 2
 lto = "thin"
 codegen-units = 1
 strip = "symbols"
+
+# Release artifacts (scripts/package.sh): like `release`, with debug info
+# split next to the binary (.dSYM / .pdb / .dwp) and archived separately for
+# crash analysis.
+[profile.dist]
+inherits = "release"
+debug = "line-tables-only"
+split-debuginfo = "packed"

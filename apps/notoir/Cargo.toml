@@ -34,3 +34,48 @@ notoir-editor.workspace = true
 egui_kittest = { workspace = true, features = ["wgpu", "snapshot", "eframe"] }
 image.workspace = true
 tempfile.workspace = true
+
+# `scripts/package.sh` (cargo-packager 0.11): .app/.dmg (universal), .msi and
+# NSIS, .deb and AppImage. The bundle identifier must never change after the
+# first release (spec 31).
+[package.metadata.packager]
+product-name = "Notoir"
+identifier = "dev.notoir.Notoir"
+description = "A fast native text editor and workspace"
+long-description = "Notoir is a cross-platform text editor and workspace with true splits, scratchpads, crash recovery and a command palette."
+category = "DeveloperTool"
+publisher = "Notoir"
+homepage = "https://notoir.dev"
+copyright = "Copyright © Notoir contributors"
+out-dir = "../../target/packages"
+binaries = [{ path = "notoir", main = true }]
+icons = [
+    "../../assets/app-icon/png/32x32.png",
+    "../../assets/app-icon/png/128x128.png",
+    "../../assets/app-icon/png/256x256.png",
+    "../../assets/app-icon/png/512x512.png",
+    "../../assets/app-icon/Notoir.icns",
+    "../../assets/app-icon/Notoir.ico",
+]
+file-associations = [
+    { extensions = ["txt", "text", "log"], mime-type = "text/plain", description = "Text document", role = "editor" },
+    { extensions = ["md", "markdown"], mime-type = "text/markdown", description = "Markdown document", role = "editor" },
+    { extensions = ["json", "jsonc"], mime-type = "application/json", description = "JSON document", role = "editor" },
+    { extensions = ["toml"], mime-type = "application/toml", description = "TOML document", role = "editor" },
+    { extensions = ["yaml", "yml"], mime-type = "application/yaml", description = "YAML document", role = "editor" },
+    { extensions = ["csv"], mime-type = "text/csv", description = "CSV document", role = "editor" },
+]
+
+[package.metadata.packager.macos]
+minimum-system-version = "11.0"
+
+[package.metadata.packager.deb]
+depends = ["libgtk-3-0", "libxkbcommon0", "libfontconfig1"]
+section = "editors"
+priority = "optional"
+
+[package.metadata.packager.wix]
+languages = ["en-US"]
+
+[package.metadata.packager.nsis]
+installer-mode = "currentUser"

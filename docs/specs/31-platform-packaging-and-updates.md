@@ -1,6 +1,6 @@
 # 31 — Platform Abstraction, Packaging & Updates
 
-**Status:** Partial — app paths, system fonts (M0); async file dialogs, reveal in file manager, single instance (M5); folder picker, move to trash (M7); packaging (M11), updates (M26)
+**Status:** Partial — app paths, system fonts (M0); async file dialogs, reveal in file manager, single instance (M5); folder picker, move to trash (M7); packaging: cargo-packager config (identifier, icons, document types), `dist` profile with split debug info, `scripts/package.sh` (universal macOS .app/.dmg, .msi + NSIS, .deb + AppImage, checksums, debug-symbol archives, optional signing/notarization/GPG), tag-triggered release workflow (M11). macOS packaging verified locally; Windows and Linux formats are exercised by the release workflow. Finder "Open With" (Apple Events) not handled yet; updates (M26)
 
 ## Purpose
 
