@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    # Nightly reliability suite (docs/specs/33).
+    - cron: "0 3 * * *"
 
 env:
   CARGO_TERM_COLOR: always
@@ -44,3 +47,27 @@ jobs:
           sudo apt-get install -y libxkbcommon-dev libgtk-3-dev libwayland-dev libfontconfig1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
       - run: cargo clippy --workspace --all-targets -- -D warnings
       - run: cargo test --workspace
+
+  crash-suite:
+    name: crash suite (${{ matrix.os }})
+    if: github.event_name == 'schedule'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Linux system libraries and virtual display
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libxkbcommon-dev libgtk-3-dev libwayland-dev libfontconfig1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
+      - name: Crash suite
+        if: runner.os == 'Linux'
+        run: xvfb-run -a cargo test -p notoir --test crash -- --ignored --test-threads=1
+      - name: Crash suite
+        if: runner.os != 'Linux'
+        run: cargo test -p notoir --test crash -- --ignored --test-threads=1

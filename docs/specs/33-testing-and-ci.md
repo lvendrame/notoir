@@ -1,6 +1,6 @@
 # 33 — Testing & CI
 
-**Status:** Partial — CI workflow, kittest and render snapshots (M0); crash suite (M8), performance budgets (M4)
+**Status:** Partial — CI workflow, kittest and render snapshots (M0); crash suite (`apps/notoir/tests/crash.rs`, real binary + `kill -9`, nightly job) and in-process crash simulation (M8); performance budgets not measured yet; crash during save, disk full and workspace disappearing cases still to add
 
 ## Purpose
 

@@ -74,15 +74,24 @@ pub fn run(app: &mut TestApp, id: &'static str, args: serde_json::Value) {
 
 /// Stops the app (keeping its home) so another can start on the same data.
 pub fn restart(app: TestApp, configure: impl FnOnce(&mut StartOptions)) -> TestApp {
+    restart_with(app, || {}, configure)
+}
+
+/// Like [`restart`], running `between` while no app is running.
+pub fn restart_with(
+    app: TestApp,
+    between: impl FnOnce(),
+    configure: impl FnOnce(&mut StartOptions),
+) -> TestApp {
     let mut app = app;
-    app.harness.state_mut().core.flush_scratchpads(true);
-    app.harness.state().core.flush_io();
+    app.harness.state_mut().core.shutdown();
     let TestApp {
         harness,
         home,
         _serial,
     } = app;
     drop(harness);
+    between();
     drop(_serial);
     start_in(home, configure)
 }
@@ -94,4 +103,18 @@ pub fn settle(app: &mut TestApp) {
         app.harness.state().core.flush_io();
         app.harness.run_steps(2);
     }
+}
+
+/// Simulates a crash: the process state is dropped without any exit
+/// handling (background writes already queued still finish).
+pub fn crash(app: TestApp, configure: impl FnOnce(&mut StartOptions)) -> TestApp {
+    app.harness.state().core.flush_io();
+    let TestApp {
+        harness,
+        home,
+        _serial,
+    } = app;
+    drop(harness);
+    drop(_serial);
+    start_in(home, configure)
 }

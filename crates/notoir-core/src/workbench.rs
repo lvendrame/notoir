@@ -408,6 +408,41 @@ impl Workbench {
         Ok(new)
     }
 
+    /// Session restore: replaces the layout with `shape` (fresh groups) and
+    /// moves every existing tab into the first group. Returns the new groups in
+    /// layout order, or `None` (layout unchanged) for an invalid shape.
+    pub fn rebuild_layout(&mut self, shape: &crate::layout::LayoutShape) -> Option<Vec<GroupId>> {
+        let n = shape.group_count();
+        let groups: Vec<GroupId> = (0..n).map(|_| GroupId(self.ids.fresh())).collect();
+        let mut tree = LayoutTree::from_shape(shape, &groups)?;
+        let existing: Vec<ViewId> = self
+            .layout
+            .groups_in_order()
+            .into_iter()
+            .flat_map(|g| {
+                self.layout
+                    .group(g)
+                    .map(|g| g.tabs.clone())
+                    .unwrap_or_default()
+            })
+            .collect();
+        let active = self.active_view();
+        if let Some(first) = tree.group_mut(groups[0]) {
+            for v in existing {
+                let i = first.tabs.len();
+                first.insert(v, i);
+            }
+            if let Some(a) = active.filter(|a| first.contains(*a)) {
+                first.activate(a);
+            } else if let Some(&v) = first.tabs.first() {
+                first.activate(v);
+            }
+        }
+        self.layout = tree;
+        self.events.emit(AppEvent::LayoutChanged);
+        Some(groups)
+    }
+
     /// "Open to the Side": the next group, or a new empty group to the
     /// right when there is only one.
     pub fn side_group(&mut self) -> GroupId {
@@ -549,7 +584,8 @@ impl Workbench {
         Ok(CloseOutcome::Closed)
     }
 
-    fn remove_group_if_empty(&mut self, group: GroupId) {
+    /// Removes `group` when it has no tabs (unless it is the only group).
+    pub fn remove_group_if_empty(&mut self, group: GroupId) {
         if self.layout.group(group).is_some_and(|g| g.tabs.is_empty())
             && self.layout.remove_group(group)
         {
@@ -941,6 +977,33 @@ mod tests {
         assert_eq!(wb.layout.group(top).unwrap().tabs, vec![a]);
         assert_eq!(wb.layout.group(bottom).unwrap().tabs, vec![b]);
         wb.layout.check().unwrap();
+    }
+
+    #[test]
+    fn layout_shape_round_trip_moves_existing_tabs() {
+        let mut wb = Workbench::new();
+        let (_, a) = open(&mut wb, "a.md", "");
+        wb.split_active(Direction::Right);
+        wb.split_active(Direction::Down);
+        let shape = wb.layout.shape();
+        assert!(shape.is_valid());
+        let json = serde_json::to_string(&shape).unwrap();
+        let back: crate::layout::LayoutShape = serde_json::from_str(&json).unwrap();
+        let mut fresh = Workbench::new();
+        let (_, x) = open(&mut fresh, "x.md", "");
+        let groups = fresh.rebuild_layout(&back).unwrap();
+        assert_eq!(groups.len(), 3);
+        assert_eq!(fresh.layout.shape(), shape);
+        assert_eq!(fresh.layout.group(groups[0]).unwrap().tabs, vec![x]);
+        fresh.layout.check().unwrap();
+        let _ = a;
+        // Invalid shapes leave the layout alone.
+        let bad = crate::layout::LayoutShape::Split {
+            vertical: false,
+            children: vec![(crate::layout::LayoutShape::Group(1), 1.0)],
+        };
+        assert!(fresh.rebuild_layout(&bad).is_none());
+        assert_eq!(fresh.layout.groups.len(), 3);
     }
 
     #[test]

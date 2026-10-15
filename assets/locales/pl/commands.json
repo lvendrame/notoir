@@ -89,7 +89,11 @@
     "removeRecent": "Usuń z ostatnio otwartych",
     "pinRecent": "Przypnij ostatni element",
     "clearRecent": "Wyczyść ostatnio otwarte",
-    "copyRelativePath": "Kopiuj ścieżkę względną"
+    "copyRelativePath": "Kopiuj ścieżkę względną",
+    "reloadFromDisk": "Wczytaj ponownie z dysku",
+    "keepMine": "Zachowaj moją wersję",
+    "useDiskVersion": "Użyj wersji z dysku",
+    "autoSave": "Przełącz autozapis"
   },
   "edit": {
     "undo": "Cofnij",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "Zmień sekwencję końca wiersza…",
     "changeEncoding": "Zmień kodowanie pliku…",
-    "changeLanguageMode": "Zmień tryb języka…"
+    "changeLanguageMode": "Zmień tryb języka…",
+    "type": "Wpisz tekst"
   },
   "workspace": {
     "open": "Otwórz obszar roboczy…",
@@ -140,5 +145,14 @@
     "undo": "Cofnij operację eksploratora",
     "revealActive": "Pokaż aktywny plik w eksploratorze",
     "drop": "Upuść pliki"
+  },
+  "recovery": {
+    "show": "Odzyskaj niezapisane dokumenty…",
+    "restoreAll": "Przywróć wszystkie niezapisane dokumenty",
+    "review": "Przejrzyj niezapisane dokumenty",
+    "discard": "Odrzuć niezapisane dokumenty",
+    "restoreEntry": "Przywróć niezapisany dokument",
+    "discardEntry": "Odrzuć niezapisany dokument",
+    "flush": "Zapisz migawki odzyskiwania"
   }
 }

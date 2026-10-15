@@ -1,0 +1,11 @@
+{
+  "changed": "«{{name}}» è stato modificato fuori da Notoir.",
+  "deleted": "«{{name}}» è stato eliminato dal disco.",
+  "recoveredConflict": "Questo file è cambiato sul disco dopo le modifiche non salvate.",
+  "reload": "Ricarica",
+  "keepMine": "Mantieni la mia versione",
+  "save": "Salva",
+  "close": "Chiudi",
+  "keepRecovered": "Mantieni il recuperato",
+  "useDisk": "Usa la versione su disco"
+}

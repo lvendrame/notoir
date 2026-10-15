@@ -72,5 +72,10 @@
     "title": "“{{name}}”을(를) “{{folder}}”(으)로 이동할까요?",
     "titleMany": "항목 {{count}}개를 “{{folder}}”(으)로 이동할까요?",
     "confirm": "이동"
+  },
+  "recovery": {
+    "discardTitle": "저장되지 않은 문서 {{count}}개를 영구적으로 버릴까요?",
+    "discardBody": "삭제되기 전까지 7일 동안 Notoir 데이터 폴더에 보관됩니다.",
+    "discard": "버리기"
   }
 }

@@ -1,0 +1,11 @@
+{
+  "title": "Notoir encontró documentos sin guardar de tu sesión anterior.",
+  "damaged": "Dañado — contenido sin procesar",
+  "lines": "Líneas: {{count}}",
+  "restoreOne": "Restaurar",
+  "discardOne": "Descartar",
+  "discard": "Descartar",
+  "review": "Revisar…",
+  "hideReview": "Ocultar revisión",
+  "restoreAll": "Restaurar todo"
+}

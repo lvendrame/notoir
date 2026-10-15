@@ -26,6 +26,8 @@ pub const THEME_ENV: &str = "NOTOIR_THEME";
 /// What `main` hands the app: command-line files and forwarded launches.
 pub struct Launch {
     pub open_paths: Vec<(std::path::PathBuf, Option<(usize, usize)>)>,
+    /// No paths and not `--new-window`: restore the last session.
+    pub restore_session: bool,
     pub instance_rx:
         Option<std::sync::mpsc::Receiver<notoir_platform::single_instance::InstanceRequest>>,
 }
@@ -58,6 +60,7 @@ impl NotoirApp {
             .expect("app directories");
         let mut opts = StartOptions::new(paths);
         opts.open_paths = launch.open_paths;
+        opts.restore_session = launch.restore_session;
         opts.os_locale = notoir_platform::os_locale();
         opts.language_override = std::env::var(LANG_ENV)
             .ok()
@@ -75,7 +78,7 @@ impl NotoirApp {
     pub fn with_options(ctx: &egui::Context, opts: StartOptions) -> Self {
         let repaint = ctx.clone();
         let mut core = AppCore::new(&opts, move || repaint.request_repaint());
-        core.startup(&opts.open_paths);
+        core.startup(&opts.open_paths, opts.restore_session);
         let theme_id = core.theme(system_dark(ctx));
         let mut app = Self {
             core,
@@ -243,10 +246,29 @@ impl eframe::App for NotoirApp {
         self.core.notifications.tick(now);
         self.core.flush_scratchpads(false);
         self.core.workspace_tick();
+        self.core.recovery_tick();
+        self.core.autosave_tick();
+        self.core.sync_doc_watches();
+        self.core.session.geometry = ctx.input(|i| {
+            let v = i.viewport();
+            v.outer_rect.map(|r| crate::session::WindowGeometry {
+                x: r.left(),
+                y: r.top(),
+                width: v.inner_rect.map_or(r.width(), |r| r.width()),
+                height: v.inner_rect.map_or(r.height(), |r| r.height()),
+                maximized: v.maximized.unwrap_or(false),
+                fullscreen: v.fullscreen.unwrap_or(false),
+            })
+        });
+        self.core.write_session(true);
+        let focused = ctx.input(|i| i.viewport().focused.unwrap_or(true));
+        if self.ui.window_focused && !focused {
+            self.core.window_focus_lost();
+        }
+        self.ui.window_focused = focused;
         if ctx.input(|i| i.viewport().close_requested()) {
             if self.core.request_quit() {
-                self.core.flush_scratchpads(true);
-                self.core.flush_io();
+                self.core.shutdown();
             } else {
                 ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
             }
@@ -345,6 +367,7 @@ impl eframe::App for NotoirApp {
                 bottom_offset,
                 &mut actions,
             );
+            shell::recovery_ui::show(&ctx, &mut kit, &self.core, top_offset, &mut actions);
             overlays::about(&ctx, &mut kit, &mut self.ui);
             if let Some(answer) = shell::prompts::show(&ctx, &mut kit, &self.core) {
                 prompt_answer = Some(answer);
@@ -401,7 +424,8 @@ impl eframe::App for NotoirApp {
         }
         let active_doc = self.core.workbench.active_document();
         if active_doc != self.ui.last_active_doc {
-            self.ui.last_active_doc = active_doc;
+            let previous = std::mem::replace(&mut self.ui.last_active_doc, active_doc);
+            self.core.autosave_focus_change(previous);
             self.core.auto_reveal(active_doc);
         }
         let title = match self.core.workspace_name() {
@@ -413,12 +437,34 @@ impl eframe::App for NotoirApp {
             self.ui.window_title = title;
         }
         for event in self.core.workbench.events.drain() {
-            if let notoir_core::AppEvent::DocumentChanged { doc, .. } = &event {
-                self.core.scratchpad_changed(*doc);
+            match &event {
+                notoir_core::AppEvent::DocumentChanged { doc, .. } => {
+                    self.core.scratchpad_changed(*doc);
+                    self.core.recovery_doc_changed(*doc);
+                    self.core.autosave_doc_changed(*doc);
+                }
+                notoir_core::AppEvent::DocumentSaved { doc } => {
+                    self.core.recovery_doc_changed(*doc);
+                    self.core.autosave_due.remove(doc);
+                }
+                notoir_core::AppEvent::DocumentClosed { doc } => {
+                    self.core.recovery_forget(*doc);
+                    self.core.banners.remove(doc);
+                    self.core.autosave_due.remove(doc);
+                }
+                _ => {}
             }
             tracing::trace!(?event, "event");
         }
         if let Some(due) = self.core.next_scratch_due() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(
+                due.saturating_sub(now) + 1,
+            ));
+        }
+        for due in [self.core.recovery_next_due(), self.core.autosave_next_due()]
+            .into_iter()
+            .flatten()
+        {
             ctx.request_repaint_after(std::time::Duration::from_millis(
                 due.saturating_sub(now) + 1,
             ));

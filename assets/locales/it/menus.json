@@ -20,7 +20,8 @@
     "layout": "Layout dell'editor",
     "branches": "Branch",
     "mcp": "MCP",
-    "scratchpads": "Appunti"
+    "scratchpads": "Appunti",
+    "autoSave": "Salvataggio automatico"
   },
   "item": {
     "primarySidebar": "Barra laterale principale",
@@ -34,5 +35,11 @@
     "whitespace": "Spazi",
     "currentLineHighlight": "Evidenziazione riga corrente",
     "wordWrap": "A capo automatico"
+  },
+  "autoSave": {
+    "off": "Disattivato",
+    "afterDelay": "Dopo un ritardo",
+    "onFocusChange": "Al cambio di focus",
+    "onWindowFocusLoss": "Quando la finestra perde il focus"
   }
 }

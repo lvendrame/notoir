@@ -20,7 +20,8 @@
     "layout": "编辑器布局",
     "branches": "分支",
     "mcp": "MCP",
-    "scratchpads": "草稿"
+    "scratchpads": "草稿",
+    "autoSave": "自动保存"
   },
   "item": {
     "primarySidebar": "主侧边栏",
@@ -34,5 +35,11 @@
     "whitespace": "空白字符",
     "currentLineHighlight": "当前行突出显示",
     "wordWrap": "自动换行"
+  },
+  "autoSave": {
+    "off": "关闭",
+    "afterDelay": "延迟后",
+    "onFocusChange": "焦点改变时",
+    "onWindowFocusLoss": "窗口失去焦点时"
   }
 }

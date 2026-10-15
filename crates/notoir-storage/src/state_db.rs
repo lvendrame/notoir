@@ -540,6 +540,7 @@ mod tests {
         assert_eq!(recent.len(), 1, "reads work, writes are skipped");
     }
 
+    // spec 23: "Migration from every previous schema version"
     #[test]
     fn migration_from_every_previous_version_keeps_data() {
         // Each historical version is created by applying its migration prefix.

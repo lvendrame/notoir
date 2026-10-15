@@ -1,0 +1,11 @@
+{
+  "changed": "「{{name}}」は Notoir の外部で変更されました。",
+  "deleted": "「{{name}}」はディスクから削除されました。",
+  "recoveredConflict": "未保存の編集の後で、このファイルはディスク上で変更されました。",
+  "reload": "再読み込み",
+  "keepMine": "自分のバージョンを保持",
+  "save": "保存",
+  "close": "閉じる",
+  "keepRecovered": "復元したものを保持",
+  "useDisk": "ディスクのバージョンを使用"
+}

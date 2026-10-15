@@ -1,0 +1,11 @@
+{
+  "title": "前回のセッションの未保存ドキュメントが見つかりました。",
+  "damaged": "破損 — 生のコンテンツ",
+  "lines": "行数: {{count}}",
+  "restoreOne": "復元",
+  "discardOne": "破棄",
+  "discard": "破棄",
+  "review": "確認…",
+  "hideReview": "確認を隠す",
+  "restoreAll": "すべて復元"
+}

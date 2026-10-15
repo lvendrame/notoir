@@ -72,5 +72,10 @@
     "title": "Mover “{{name}}” para “{{folder}}”?",
     "titleMany": "Mover {{count}} itens para “{{folder}}”?",
     "confirm": "Mover"
+  },
+  "recovery": {
+    "discardTitle": "Descartar permanentemente {{count}} documentos não salvos?",
+    "discardBody": "Eles ficam na pasta de dados do Notoir por 7 dias antes de serem excluídos.",
+    "discard": "Descartar"
   }
 }

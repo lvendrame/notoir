@@ -20,7 +20,8 @@
     "layout": "Editorindeling",
     "branches": "Branches",
     "mcp": "MCP",
-    "scratchpads": "Kladblokken"
+    "scratchpads": "Kladblokken",
+    "autoSave": "Automatisch opslaan"
   },
   "item": {
     "primarySidebar": "Primaire zijbalk",
@@ -34,5 +35,11 @@
     "whitespace": "Witruimte",
     "currentLineHighlight": "Markering huidige regel",
     "wordWrap": "Regelterugloop"
+  },
+  "autoSave": {
+    "off": "Uit",
+    "afterDelay": "Na vertraging",
+    "onFocusChange": "Bij focuswissel",
+    "onWindowFocusLoss": "Als het venster de focus verliest"
   }
 }

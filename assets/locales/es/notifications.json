@@ -23,5 +23,10 @@
   "notNow": "Ahora no",
   "trustWorkspace": "Confiar en el espacio de trabajo",
   "workspaceMissing": "La carpeta «{{path}}» ya no existe.",
-  "workspaceTrust": "Este espacio de trabajo tiene ajustes que afectan a plugins, MCP o Git. Se ignoran hasta que confíes en él."
+  "workspaceTrust": "Este espacio de trabajo tiene ajustes que afectan a plugins, MCP o Git. Se ignoran hasta que confíes en él.",
+  "recoveryUnavailable": "No se pueden proteger los cambios sin guardar: el almacén de recuperación no está disponible.",
+  "recoveryWriteFailed": "No se pudieron escribir los datos de recuperación de los documentos sin guardar.",
+  "recoveryDamaged": "Un documento recuperado estaba dañado; se abrió su contenido sin procesar.",
+  "recoveryNothing": "No hay documentos sin guardar que recuperar.",
+  "sessionMissing": "Archivos de la última sesión que ya no existen: {{count}}."
 }

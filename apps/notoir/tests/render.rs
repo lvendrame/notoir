@@ -202,3 +202,54 @@ fn explorer_snapshot() {
         img.save(out_dir().join("explorer-hover.png")).unwrap();
     }
 }
+
+#[test]
+fn recovery_prompt_and_banner_snapshot() {
+    let dir = tempfile::tempdir().unwrap();
+    let a = dir.path().join("meeting-notes.md");
+    std::fs::write(&a, "# Meeting\n\n- agenda\n").unwrap();
+    let a = a.canonicalize().unwrap();
+    let theme = |o: &mut notoir::core::StartOptions| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+    };
+    let path = a.clone();
+    let mut app = common::start(move |o| {
+        theme(o);
+        o.open_paths = vec![(path, None)];
+    });
+    common::settle(&mut app);
+    app.harness
+        .event(egui::Event::Text("Decisions: ship M8\n".into()));
+    common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
+    app.harness
+        .event(egui::Event::Text("todo: call Ana\nbuy milk\n".into()));
+    common::run(&mut app, "recovery.flush", serde_json::Value::Null);
+    let mut app = common::crash(app, theme);
+    std::fs::write(&a, "# Meeting\n\nchanged elsewhere\n").unwrap();
+    common::settle(&mut app);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("recovery-prompt.png")).unwrap();
+    }
+    common::run(&mut app, "recovery.restoreAll", serde_json::Value::Null);
+    common::settle(&mut app);
+    let view = {
+        let core = &app.harness.state().core;
+        let doc = core
+            .workbench
+            .documents
+            .values()
+            .find(|d| d.path().is_some())
+            .unwrap()
+            .id;
+        core.workbench.views.of_document(doc).next().unwrap().id
+    };
+    common::run(
+        &mut app,
+        "view.activate",
+        serde_json::json!({ "view": view.0 }),
+    );
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("banner-recovered.png")).unwrap();
+    }
+}

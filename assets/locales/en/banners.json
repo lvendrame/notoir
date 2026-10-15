@@ -1,0 +1,11 @@
+{
+  "changed": "“{{name}}” was changed outside Notoir.",
+  "deleted": "“{{name}}” was deleted on disk.",
+  "recoveredConflict": "This file changed on disk after your unsaved edits.",
+  "reload": "Reload",
+  "keepMine": "Keep My Version",
+  "save": "Save",
+  "close": "Close",
+  "keepRecovered": "Keep Recovered",
+  "useDisk": "Use Disk Version"
+}

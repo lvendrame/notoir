@@ -72,5 +72,10 @@
     "title": "Spostare «{{name}}» in «{{folder}}»?",
     "titleMany": "Spostare {{count}} elementi in «{{folder}}»?",
     "confirm": "Sposta"
+  },
+  "recovery": {
+    "discardTitle": "Scartare definitivamente {{count}} documenti non salvati?",
+    "discardBody": "Vengono conservati per 7 giorni nella cartella dati di Notoir prima di essere eliminati.",
+    "discard": "Scarta"
   }
 }

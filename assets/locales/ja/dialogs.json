@@ -72,5 +72,10 @@
     "title": "「{{name}}」を「{{folder}}」に移動しますか?",
     "titleMany": "{{count}} 個の項目を「{{folder}}」に移動しますか?",
     "confirm": "移動"
+  },
+  "recovery": {
+    "discardTitle": "{{count}} 件の未保存ドキュメントを完全に破棄しますか?",
+    "discardBody": "削除されるまで 7 日間 Notoir のデータ フォルダーに保管されます。",
+    "discard": "破棄"
   }
 }

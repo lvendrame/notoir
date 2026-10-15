@@ -1,0 +1,11 @@
+{
+  "title": "Notoir önceki oturumunuzdan kaydedilmemiş belgeler buldu.",
+  "damaged": "Hasarlı — ham içerik",
+  "lines": "Satır: {{count}}",
+  "restoreOne": "Geri Yükle",
+  "discardOne": "At",
+  "discard": "At",
+  "review": "İncele…",
+  "hideReview": "İncelemeyi Gizle",
+  "restoreAll": "Tümünü Geri Yükle"
+}

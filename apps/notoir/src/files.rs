@@ -181,6 +181,12 @@ pub enum LoadPurpose {
     },
     Revert(DocumentId),
     Reencode(DocumentId),
+    /// Session restore: a saved tab (spec 23).
+    Restore {
+        group: GroupId,
+        key: String,
+        tab: Box<crate::session::TabData>,
+    },
 }
 
 #[derive(Debug)]
@@ -236,6 +242,8 @@ pub enum Prompt {
     },
     /// Explorer drag and drop: Move / Cancel.
     Move { srcs: Vec<PathBuf>, dir: PathBuf },
+    /// Recovery Discard: Discard / Cancel.
+    DiscardRecovery { count: usize },
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -378,9 +386,14 @@ impl AppCore {
         );
     }
 
+    pub(crate) fn load_for(&mut self, path: PathBuf, purpose: LoadPurpose) {
+        self.load(path, purpose);
+    }
+
     fn load(&mut self, path: PathBuf, purpose: LoadPurpose) {
         let mut opts = self.load_options();
         match &purpose {
+            LoadPurpose::Restore { .. } => {}
             LoadPurpose::Open { allow_binary, .. } => opts.allow_binary = *allow_binary,
             LoadPurpose::Reencode(doc) => {
                 opts.forced_encoding = self.workbench.document(*doc).map(|d| d.encoding.encoding);
@@ -405,6 +418,16 @@ impl AppCore {
             purpose,
             result,
         } = outcome;
+        if let LoadPurpose::Restore { group, key, tab } = purpose {
+            match result {
+                Ok(loaded) => self.finish_restore_load(loaded, group, &key, &tab),
+                Err(e) => {
+                    tracing::info!(path = %path.display(), error = %e, "session file not restored");
+                    self.restore_slot_done(Some(path.display().to_string()));
+                }
+            }
+            return;
+        }
         let loaded = match result {
             Ok(l) => l,
             Err(LoadError::Binary) => {
@@ -454,7 +477,32 @@ impl AppCore {
             LoadPurpose::Revert(doc) | LoadPurpose::Reencode(doc) => {
                 self.replace_from_disk(doc, loaded)
             }
+            LoadPurpose::Restore { .. } => unreachable!("handled above"),
         }
+    }
+
+    fn finish_restore_load(
+        &mut self,
+        loaded: Loaded,
+        group: GroupId,
+        key: &str,
+        tab: &crate::session::TabData,
+    ) {
+        let origin = DocumentOrigin::File {
+            path: loaded.path.clone(),
+            key: loaded.key.clone(),
+        };
+        let doc = self.workbench.open_document(origin, loaded.text);
+        let group = if self.workbench.layout.group(group).is_some() {
+            group
+        } else {
+            self.workbench.layout.active_group
+        };
+        self.place_restored(doc, group, key, tab);
+    }
+
+    pub(crate) fn replace_with_disk(&mut self, doc: DocumentId, loaded: Loaded) {
+        self.replace_from_disk(doc, loaded);
     }
 
     fn finish_open(&mut self, loaded: Loaded, group: GroupId, at: OpenAt) {
@@ -564,6 +612,7 @@ impl AppCore {
                 d.mark_saved(state, hash);
             }
         }
+        self.banners.remove(&doc);
     }
 
     // ── saving ───────────────────────────────────────────────────────────
@@ -664,6 +713,7 @@ impl AppCore {
         let encoding = d.encoding;
         let line_ending = d.line_ending;
         let atomic = self.settings.bool("files.atomicSave", None);
+        self.saving.insert(doc);
         self.io.submit(move || {
             let req = SaveRequest {
                 path: path.clone(),
@@ -747,11 +797,13 @@ impl AppCore {
             encoding,
             result,
         } = outcome;
+        self.saving.remove(&doc);
         if self.workbench.document(doc).is_none() {
             return;
         }
         match result {
             Ok(saved) => {
+                self.banners.remove(&doc);
                 if save_as {
                     let (canonical, key) = fs_io::identity(&path);
                     let scratch = match &self.workbench.document(doc).map(|d| d.origin.clone()) {
@@ -952,6 +1004,10 @@ impl AppCore {
         if self.files.quit_confirmed {
             return true;
         }
+        // Hot exit: unsaved work stays in the recovery store (spec 09).
+        if self.settings.bool("app.hotExit", None) && self.recovery.session.is_some() {
+            return true;
+        }
         let dirty: Vec<DocumentId> = self
             .workbench
             .documents
@@ -1015,6 +1071,7 @@ impl AppCore {
                 self.delete_paths(paths, permanent)
             }
             (Prompt::Move { srcs, dir }, Answer::Primary) => self.transfer_into(srcs, dir, false),
+            (Prompt::DiscardRecovery { .. }, Answer::Primary) => self.recovery_discard_all(),
             (Prompt::ScratchpadClose { view, doc }, Answer::Primary) => {
                 self.flush_scratchpad(doc);
                 self.set_scratchpad_open(doc, false);

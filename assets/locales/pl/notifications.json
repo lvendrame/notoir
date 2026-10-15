@@ -23,5 +23,10 @@
   "notNow": "Nie teraz",
   "trustWorkspace": "Ufaj obszarowi roboczemu",
   "workspaceMissing": "Folder „{{path}}” już nie istnieje.",
-  "workspaceTrust": "Ten obszar roboczy ma ustawienia dotyczące wtyczek, MCP lub Git. Są ignorowane, dopóki nie zaufasz obszarowi roboczemu."
+  "workspaceTrust": "Ten obszar roboczy ma ustawienia dotyczące wtyczek, MCP lub Git. Są ignorowane, dopóki nie zaufasz obszarowi roboczemu.",
+  "recoveryUnavailable": "Nie można chronić niezapisanych zmian: magazyn odzyskiwania jest niedostępny.",
+  "recoveryWriteFailed": "Nie udało się zapisać danych odzyskiwania niezapisanych dokumentów.",
+  "recoveryDamaged": "Odzyskany dokument był uszkodzony; otwarto jego surową treść.",
+  "recoveryNothing": "Brak niezapisanych dokumentów do odzyskania.",
+  "sessionMissing": "Pliki z ostatniej sesji, które już nie istnieją: {{count}}."
 }

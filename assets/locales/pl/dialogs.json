@@ -72,5 +72,10 @@
     "title": "Przenieść „{{name}}” do „{{folder}}”?",
     "titleMany": "Przenieść elementy (liczba: {{count}}) do „{{folder}}”?",
     "confirm": "Przenieś"
+  },
+  "recovery": {
+    "discardTitle": "Trwale odrzucić niezapisane dokumenty (liczba: {{count}})?",
+    "discardBody": "Są przechowywane przez 7 dni w folderze danych Notoir, zanim zostaną usunięte.",
+    "discard": "Odrzuć"
   }
 }

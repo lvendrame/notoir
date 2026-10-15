@@ -1,6 +1,6 @@
 # 09 — Save, Autosave & Recovery
 
-**Status:** Partial — atomic writes and recovery store (M2); save pipeline with conflict check, Save As, Save All, Revert, unsaved-changes prompts (M5); autosave, recovery prompt and hot exit (M8)
+**Status:** Done — atomic writes and recovery store (M2); save pipeline, prompts (M5); recovery snapshots (1.5 s debounce, 10 s max, focus loss, quit), recovery prompt with Restore All / Review / Discard (7-day retention), damaged entries opened as raw content, conflicting snapshots with Keep Recovered / Use Disk Version, hot exit, autosave modes, Help → Recover Unsaved Documents (M8). Deferred: Compare buttons (M17), per-entry Save As in Review, `recovery.maxSizeMb` warning, suspend/resume detection, backup-before-in-place fallback for hard-linked files
 
 ## Purpose
 

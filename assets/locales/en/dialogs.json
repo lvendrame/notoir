@@ -72,5 +72,10 @@
     "title": "Move “{{name}}” into “{{folder}}”?",
     "titleMany": "Move {{count}} items into “{{folder}}”?",
     "confirm": "Move"
+  },
+  "recovery": {
+    "discardTitle": "Permanently discard {{count}} unsaved documents?",
+    "discardBody": "They are kept in Notoir's data folder for 7 days before they are deleted.",
+    "discard": "Discard"
   }
 }

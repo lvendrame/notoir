@@ -251,6 +251,25 @@ impl Renderer<'_, '_> {
         match active {
             Some(view) => {
                 let opts = self.core.editor_options(view);
+                let doc = self.core.workbench.view(view).map(|v| v.document_id);
+                let banner = doc.and_then(|d| self.core.banners.get(&d).copied().map(|b| (d, b)));
+                let body = match banner {
+                    Some((doc, b)) => {
+                        let bar = Rect::from_min_size(body.min, Vec2::new(body.width(), BANNER_H));
+                        banner_bar(
+                            &mut child,
+                            self.kit,
+                            self.core,
+                            bar,
+                            doc,
+                            view,
+                            b,
+                            self.actions,
+                        );
+                        Rect::from_min_max(Pos2::new(body.left(), bar.bottom()), body.max)
+                    }
+                    None => body,
+                };
                 let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
                 let out = editor_widget::show(
                     &mut body_ui,
@@ -289,6 +308,84 @@ impl Renderer<'_, '_> {
             tabs: tab_rects,
         });
     }
+}
+
+const BANNER_H: f32 = 34.0;
+
+/// The bar above an editor whose file changed or vanished on disk, or whose
+/// recovered text conflicts with the disk (docs/specs/09, 10).
+#[allow(clippy::too_many_arguments)]
+fn banner_bar(
+    ui: &mut egui::Ui,
+    kit: &mut Kit,
+    core: &AppCore,
+    rect: Rect,
+    doc: notoir_core::ids::DocumentId,
+    view: ViewId,
+    banner: crate::recovery::Banner,
+    actions: &mut Actions,
+) {
+    use crate::recovery::BannerKind;
+    let name = core.document_title(doc);
+    ui.painter()
+        .rect_filled(rect, 0.0, kit.color(Tok::BgPanelRaised));
+    ui.painter().line_segment(
+        [rect.left_bottom(), rect.right_bottom()],
+        Stroke::new(1.0, kit.color(Tok::Border)),
+    );
+    let (icon, message, buttons): (crate::icons::Icon, String, Vec<(&str, &'static str)>) =
+        match banner.kind {
+            BannerKind::Changed => (
+                crate::icons::Icon::RefreshCw,
+                t!("banners:changed", name = name),
+                vec![
+                    ("banners:reload", "file.reloadFromDisk"),
+                    ("banners:keepMine", "file.keepMine"),
+                ],
+            ),
+            BannerKind::Deleted => (
+                crate::icons::Icon::FileX,
+                t!("banners:deleted", name = name),
+                vec![
+                    ("banners:save", "file.save"),
+                    ("banners:close", "file.close"),
+                ],
+            ),
+            BannerKind::RecoveredConflict => (
+                crate::icons::Icon::TriangleAlert,
+                t!("banners:recoveredConflict"),
+                vec![
+                    ("banners:keepRecovered", "file.keepMine"),
+                    ("banners:useDisk", "file.useDiskVersion"),
+                ],
+            ),
+        };
+    let mut bar = ui.new_child(
+        egui::UiBuilder::new()
+            .max_rect(rect.shrink2(Vec2::new(10.0, 4.0)))
+            .layout(egui::Layout::left_to_right(egui::Align::Center)),
+    );
+    bar.add(kit.icon(
+        bar.ctx(),
+        icon,
+        crate::theme::ICON_SM,
+        kit.color(Tok::Warning),
+    ));
+    bar.label(
+        egui::RichText::new(message)
+            .size(13.0)
+            .color(kit.color(Tok::TextPrimary)),
+    );
+    bar.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+        for (label, id) in buttons.into_iter().rev() {
+            if ui.button(t!(label)).clicked() {
+                actions.push(
+                    CommandInvocation::new(id, InvocationSource::Internal)
+                        .with_args(json!({ "doc": doc.0, "view": view.0 })),
+                );
+            }
+        }
+    });
 }
 
 /// Where a drop at `p` would land.

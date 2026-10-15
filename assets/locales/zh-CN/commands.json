@@ -89,7 +89,11 @@
     "removeRecent": "从最近打开中移除",
     "pinRecent": "固定最近项目",
     "clearRecent": "清除最近打开",
-    "copyRelativePath": "复制相对路径"
+    "copyRelativePath": "复制相对路径",
+    "reloadFromDisk": "从磁盘重新加载",
+    "keepMine": "保留我的版本",
+    "useDiskVersion": "使用磁盘版本",
+    "autoSave": "切换自动保存"
   },
   "edit": {
     "undo": "撤销",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "更改行尾序列…",
     "changeEncoding": "更改文件编码…",
-    "changeLanguageMode": "更改语言模式…"
+    "changeLanguageMode": "更改语言模式…",
+    "type": "输入文本"
   },
   "workspace": {
     "open": "打开工作区…",
@@ -140,5 +145,14 @@
     "undo": "撤销资源管理器操作",
     "revealActive": "在资源管理器中显示活动文件",
     "drop": "放置文件"
+  },
+  "recovery": {
+    "show": "恢复未保存的文档…",
+    "restoreAll": "恢复所有未保存的文档",
+    "review": "查看未保存的文档",
+    "discard": "放弃未保存的文档",
+    "restoreEntry": "恢复未保存的文档",
+    "discardEntry": "放弃未保存的文档",
+    "flush": "写入恢复快照"
   }
 }

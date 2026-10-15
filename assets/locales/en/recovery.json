@@ -1,0 +1,11 @@
+{
+  "title": "Notoir detected unsaved documents from your previous session.",
+  "damaged": "Damaged — raw content",
+  "lines": "Lines: {{count}}",
+  "restoreOne": "Restore",
+  "discardOne": "Discard",
+  "discard": "Discard",
+  "review": "Review…",
+  "hideReview": "Hide Review",
+  "restoreAll": "Restore All"
+}

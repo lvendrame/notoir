@@ -23,5 +23,10 @@
   "notNow": "後で",
   "trustWorkspace": "ワークスペースを信頼",
   "workspaceMissing": "フォルダー「{{path}}」は存在しません。",
-  "workspaceTrust": "このワークスペースには、プラグイン、MCP、Git に影響する設定があります。ワークスペースを信頼するまで無視されます。"
+  "workspaceTrust": "このワークスペースには、プラグイン、MCP、Git に影響する設定があります。ワークスペースを信頼するまで無視されます。",
+  "recoveryUnavailable": "未保存の変更を保護できません: 復元用ストアを利用できません。",
+  "recoveryWriteFailed": "未保存ドキュメントの復元データを書き込めませんでした。",
+  "recoveryDamaged": "復元したドキュメントが破損していたため、生のコンテンツを開きました。",
+  "recoveryNothing": "復元する未保存ドキュメントはありません。",
+  "sessionMissing": "前回のセッションで存在しなくなったファイル: {{count}}。"
 }

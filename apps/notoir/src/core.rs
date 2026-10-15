@@ -90,6 +90,9 @@ pub struct StartOptions {
     pub dialogs: Option<std::sync::Arc<dyn crate::files::Dialogs>>,
     /// Files from the command line, with optional `--goto` line/column.
     pub open_paths: Vec<(std::path::PathBuf, Option<(usize, usize)>)>,
+    /// Restore the last session (`workbench.startup = restoreSession`, no
+    /// command-line paths, not `--new-window`).
+    pub restore_session: bool,
 }
 
 impl StartOptions {
@@ -103,6 +106,7 @@ impl StartOptions {
             wait_for_fonts: false,
             dialogs: None,
             open_paths: Vec::new(),
+            restore_session: false,
         }
     }
 }
@@ -145,6 +149,14 @@ pub struct AppCore {
     pub index_queue: IoQueue,
     /// The Explorer tree had keyboard focus last frame.
     pub explorer_focused: bool,
+    pub recovery: crate::recovery::RecoveryState,
+    pub session: crate::session::SessionState,
+    /// Banners above editors (external changes, recovered conflicts).
+    pub banners: std::collections::HashMap<notoir_core::ids::DocumentId, crate::recovery::Banner>,
+    /// Documents with a save in flight (watcher events are ignored for them).
+    pub saving: std::collections::HashSet<notoir_core::ids::DocumentId>,
+    pub autosave_due: std::collections::HashMap<notoir_core::ids::DocumentId, u64>,
+    pub doc_watch: crate::external::DocWatch,
 }
 
 impl AppCore {
@@ -252,6 +264,12 @@ impl AppCore {
             workspace: None,
             ws_generation: 0,
             explorer_focused: false,
+            recovery: crate::recovery::RecoveryState::new(opts.paths.recovery.clone()),
+            session: crate::session::SessionState::default(),
+            banners: Default::default(),
+            saving: Default::default(),
+            autosave_due: Default::default(),
+            doc_watch: Default::default(),
             language,
             theme_choice,
             theme_override: opts.theme_override,
@@ -468,6 +486,10 @@ impl AppCore {
             "explorerShowGitIgnored",
             self.settings.bool("explorer.showGitIgnored", None),
         );
+        let auto = self.settings.str("files.autoSave", None).to_owned();
+        for m in ["off", "afterDelay", "onFocusChange", "onWindowFocusLoss"] {
+            c.set_bool(format!("autoSave.{m}"), auto == m);
+        }
         for v in ["default", "mixed", "modified"] {
             c.set_bool(format!("explorerSort.{v}"), sort == v);
         }
@@ -573,6 +595,9 @@ impl AppCore {
                 IoResult::FolderPicked(Some(path)) => self.open_workspace(&path),
                 IoResult::FolderPicked(None) => {}
                 IoResult::Workspace(r) => self.handle_workspace(r),
+                IoResult::DocsChanged(paths) => self.check_changed_paths(&paths),
+                IoResult::DiskChecked(r) => self.handle_disk_check(*r),
+                IoResult::RecoveryWriteFailed { error } => self.recovery_write_failed(error),
                 IoResult::SettingsWriteFailed { path, error } => {
                     tracing::error!(%path, %error, "settings write failed");
                     let now = self.now_ms;
@@ -694,11 +719,35 @@ fn build_keymap(
 impl AppCore {
     /// After construction: reopen Scratchpads, load recent files, open the
     /// command-line files.
-    pub fn startup(&mut self, open_paths: &[(std::path::PathBuf, Option<(usize, usize)>)]) {
+    pub fn startup(
+        &mut self,
+        open_paths: &[(std::path::PathBuf, Option<(usize, usize)>)],
+        restore_session: bool,
+    ) {
         self.load_recent();
         self.load_recent_workspaces();
+        self.recovery_start();
         self.restore_scratchpads();
-        self.open_cli_paths(open_paths);
+        let restore = restore_session
+            && open_paths.is_empty()
+            && self.settings.str("workbench.startup", None) == "restoreSession";
+        if restore {
+            self.restore_last_session();
+        } else {
+            self.open_cli_paths(open_paths);
+        }
+        if self.workspace.is_none() {
+            self.restore_hot_exit();
+        }
+    }
+
+    /// Exit: Scratchpads, session and recovery are written before the
+    /// process ends.
+    pub fn shutdown(&mut self) {
+        self.flush_scratchpads(true);
+        self.write_session(false);
+        self.recovery_shutdown();
+        self.flush_io();
     }
 
     /// Command-line paths: files open as tabs; the first folder becomes this
@@ -733,6 +782,16 @@ impl AppCore {
     ) {
         let paths = crate::cli::paths(&req.args, &req.cwd);
         self.open_cli_paths(&paths);
+        if std::env::var("NOTOIR_TEST_COMMANDS").as_deref() == Ok("1") {
+            for (id, args) in crate::cli::commands(&req.args, &req.cwd) {
+                let args = serde_json::from_str(&args).unwrap_or(serde_json::Value::Null);
+                tracing::info!(command = %id, "test channel command");
+                self.enqueue(
+                    CommandInvocation::new(id, notoir_core::command::InvocationSource::Internal)
+                        .with_args(args),
+                );
+            }
+        }
         self.effects.push(Effect::FocusWindow);
     }
 }

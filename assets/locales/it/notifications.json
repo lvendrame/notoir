@@ -23,5 +23,10 @@
   "notNow": "Non ora",
   "trustWorkspace": "Considera attendibile",
   "workspaceMissing": "La cartella «{{path}}» non esiste più.",
-  "workspaceTrust": "Quest'area di lavoro contiene impostazioni che riguardano plugin, MCP o Git. Vengono ignorate finché non la consideri attendibile."
+  "workspaceTrust": "Quest'area di lavoro contiene impostazioni che riguardano plugin, MCP o Git. Vengono ignorate finché non la consideri attendibile.",
+  "recoveryUnavailable": "Le modifiche non salvate non possono essere protette: l'archivio di recupero non è disponibile.",
+  "recoveryWriteFailed": "Impossibile scrivere i dati di recupero dei documenti non salvati.",
+  "recoveryDamaged": "Un documento recuperato era danneggiato; è stato aperto il contenuto grezzo.",
+  "recoveryNothing": "Non ci sono documenti non salvati da recuperare.",
+  "sessionMissing": "File dell'ultima sessione che non esistono più: {{count}}."
 }

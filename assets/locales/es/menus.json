@@ -20,7 +20,8 @@
     "layout": "Diseño del editor",
     "branches": "Ramas",
     "mcp": "MCP",
-    "scratchpads": "Notas rápidas"
+    "scratchpads": "Notas rápidas",
+    "autoSave": "Guardado automático"
   },
   "item": {
     "primarySidebar": "Barra lateral principal",
@@ -34,5 +35,11 @@
     "whitespace": "Espacios en blanco",
     "currentLineHighlight": "Resaltado de línea actual",
     "wordWrap": "Ajuste de línea"
+  },
+  "autoSave": {
+    "off": "Desactivado",
+    "afterDelay": "Tras un retraso",
+    "onFocusChange": "Al cambiar el foco",
+    "onWindowFocusLoss": "Al perder el foco la ventana"
   }
 }

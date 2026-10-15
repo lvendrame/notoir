@@ -117,6 +117,57 @@ pub struct LayoutTree {
     pub maximized: Option<GroupId>,
 }
 
+/// The layout tree with groups replaced by their index in layout order, for
+/// session persistence (spec 23).
+#[derive(Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum LayoutShape {
+    Group(usize),
+    Split {
+        vertical: bool,
+        children: Vec<(LayoutShape, f32)>,
+    },
+}
+
+impl LayoutShape {
+    /// Group indices used, in order.
+    fn indices(&self, out: &mut Vec<usize>) {
+        match self {
+            LayoutShape::Group(i) => out.push(*i),
+            LayoutShape::Split { children, .. } => {
+                for (c, _) in children {
+                    c.indices(out);
+                }
+            }
+        }
+    }
+
+    /// Valid when it uses each index `0..n` exactly once in layout order and
+    /// every split has at least two children.
+    pub fn is_valid(&self) -> bool {
+        fn splits_ok(s: &LayoutShape) -> bool {
+            match s {
+                LayoutShape::Group(_) => true,
+                LayoutShape::Split { children, .. } => {
+                    children.len() >= 2
+                        && children
+                            .iter()
+                            .all(|(c, f)| f.is_finite() && *f > 0.0 && splits_ok(c))
+                }
+            }
+        }
+        let mut v = Vec::new();
+        self.indices(&mut v);
+        v.iter().enumerate().all(|(i, g)| i == *g) && splits_ok(self)
+    }
+
+    pub fn group_count(&self) -> usize {
+        let mut v = Vec::new();
+        self.indices(&mut v);
+        v.len()
+    }
+}
+
 /// Index path from the root to a node.
 type Path = Vec<usize>;
 
@@ -152,6 +203,57 @@ impl LayoutTree {
     }
 
     /// Groups in depth-first (visual reading) order.
+    /// The tree as a [`LayoutShape`] (group indices in layout order).
+    pub fn shape(&self) -> LayoutShape {
+        let order = self.groups_in_order();
+        fn conv(n: &LayoutNode, order: &[GroupId]) -> LayoutShape {
+            match n {
+                LayoutNode::Group(g) => {
+                    LayoutShape::Group(order.iter().position(|x| x == g).unwrap_or(0))
+                }
+                LayoutNode::Split { axis, children } => LayoutShape::Split {
+                    vertical: *axis == Axis::Vertical,
+                    children: children.iter().map(|(c, f)| (conv(c, order), *f)).collect(),
+                },
+            }
+        }
+        conv(&self.root, &order)
+    }
+
+    /// A tree with the given shape over `groups` (index → id). Fractions are
+    /// normalized.
+    pub fn from_shape(shape: &LayoutShape, groups: &[GroupId]) -> Option<LayoutTree> {
+        if !shape.is_valid() || shape.group_count() != groups.len() || groups.is_empty() {
+            return None;
+        }
+        fn conv(s: &LayoutShape, groups: &[GroupId]) -> LayoutNode {
+            match s {
+                LayoutShape::Group(i) => LayoutNode::Group(groups[*i]),
+                LayoutShape::Split { vertical, children } => {
+                    let total: f32 = children.iter().map(|(_, f)| *f).sum();
+                    LayoutNode::Split {
+                        axis: if *vertical {
+                            Axis::Vertical
+                        } else {
+                            Axis::Horizontal
+                        },
+                        children: children
+                            .iter()
+                            .map(|(c, f)| (conv(c, groups), f / total))
+                            .collect(),
+                    }
+                }
+            }
+        }
+        let mut tree = LayoutTree::new(groups[0]);
+        for g in &groups[1..] {
+            tree.groups.insert(*g, EditorGroup::new(*g));
+        }
+        tree.root = conv(shape, groups);
+        tree.check().ok()?;
+        Some(tree)
+    }
+
     pub fn groups_in_order(&self) -> Vec<GroupId> {
         fn walk(n: &LayoutNode, out: &mut Vec<GroupId>) {
             match n {

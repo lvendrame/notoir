@@ -1,0 +1,11 @@
+{
+  "title": "이전 세션에서 저장되지 않은 문서를 찾았습니다.",
+  "damaged": "손상됨 — 원본 콘텐츠",
+  "lines": "줄: {{count}}",
+  "restoreOne": "복원",
+  "discardOne": "버리기",
+  "discard": "버리기",
+  "review": "검토…",
+  "hideReview": "검토 숨기기",
+  "restoreAll": "모두 복원"
+}

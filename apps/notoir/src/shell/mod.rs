@@ -15,6 +15,7 @@ pub mod layout;
 pub mod overlays;
 pub mod panels;
 pub mod prompts;
+pub mod recovery_ui;
 pub mod tabs;
 
 /// Theme + icon cache passed to every rendering function.
@@ -55,6 +56,7 @@ pub struct UiState {
     /// Active document last frame (Explorer auto-reveal).
     pub last_active_doc: Option<notoir_core::ids::DocumentId>,
     pub window_title: String,
+    pub window_focused: bool,
 }
 
 /// Collects invocations produced while rendering one frame.

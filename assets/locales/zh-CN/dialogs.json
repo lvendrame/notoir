@@ -72,5 +72,10 @@
     "title": "将“{{name}}”移到“{{folder}}”?",
     "titleMany": "将 {{count}} 个项目移到“{{folder}}”?",
     "confirm": "移动"
+  },
+  "recovery": {
+    "discardTitle": "永久放弃 {{count}} 个未保存的文档?",
+    "discardBody": "它们会在 Notoir 的数据文件夹中保留 7 天,然后被删除。",
+    "discard": "放弃"
   }
 }

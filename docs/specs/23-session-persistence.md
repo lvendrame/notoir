@@ -1,6 +1,6 @@
 # 23 — Session & State Persistence
 
-**Status:** Partial — SQLite state store and migrations (M2); session save/restore (M8)
+**Status:** Partial — SQLite state store and migrations (M2); per-workspace and no-workspace sessions (layout tree, tabs with selections/scroll/pin/wrap/zoom, panels, Explorer expanded folders, zoom) written from the IO thread every 2 s/focus loss/exit, restore on launch and on opening a workspace, missing files in one notice, window geometry (M8). Later: lazy loading of inactive tabs (all restored tabs load in the background now), search panel state (M11), bookmarks (M15), navigation history
 
 ## Purpose
 

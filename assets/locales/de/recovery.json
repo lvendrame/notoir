@@ -1,0 +1,11 @@
+{
+  "title": "Notoir hat nicht gespeicherte Dokumente aus deiner letzten Sitzung gefunden.",
+  "damaged": "Beschädigt – Rohinhalt",
+  "lines": "Zeilen: {{count}}",
+  "restoreOne": "Wiederherstellen",
+  "discardOne": "Verwerfen",
+  "discard": "Verwerfen",
+  "review": "Prüfen…",
+  "hideReview": "Prüfung ausblenden",
+  "restoreAll": "Alle wiederherstellen"
+}

@@ -89,7 +89,11 @@
     "removeRecent": "Retirer des éléments récents",
     "pinRecent": "Épingler l'élément récent",
     "clearRecent": "Effacer les éléments récents",
-    "copyRelativePath": "Copier le chemin relatif"
+    "copyRelativePath": "Copier le chemin relatif",
+    "reloadFromDisk": "Recharger depuis le disque",
+    "keepMine": "Conserver ma version",
+    "useDiskVersion": "Utiliser la version du disque",
+    "autoSave": "Activer/désactiver l'enregistrement automatique"
   },
   "edit": {
     "undo": "Annuler",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "Changer la séquence de fin de ligne…",
     "changeEncoding": "Changer l'encodage du fichier…",
-    "changeLanguageMode": "Changer le mode de langage…"
+    "changeLanguageMode": "Changer le mode de langage…",
+    "type": "Saisir du texte"
   },
   "workspace": {
     "open": "Ouvrir un espace de travail…",
@@ -140,5 +145,14 @@
     "undo": "Annuler l'opération de l'explorateur",
     "revealActive": "Afficher le fichier actif dans l'explorateur",
     "drop": "Déposer des fichiers"
+  },
+  "recovery": {
+    "show": "Récupérer les documents non enregistrés…",
+    "restoreAll": "Restaurer tous les documents non enregistrés",
+    "review": "Examiner les documents non enregistrés",
+    "discard": "Ignorer les documents non enregistrés",
+    "restoreEntry": "Restaurer le document non enregistré",
+    "discardEntry": "Ignorer le document non enregistré",
+    "flush": "Écrire les instantanés de récupération"
   }
 }

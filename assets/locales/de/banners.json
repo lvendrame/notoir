@@ -1,0 +1,11 @@
+{
+  "changed": "„{{name}}“ wurde außerhalb von Notoir geändert.",
+  "deleted": "„{{name}}“ wurde auf dem Datenträger gelöscht.",
+  "recoveredConflict": "Diese Datei hat sich nach deinen nicht gespeicherten Änderungen auf dem Datenträger geändert.",
+  "reload": "Neu laden",
+  "keepMine": "Meine Version behalten",
+  "save": "Speichern",
+  "close": "Schließen",
+  "keepRecovered": "Wiederhergestellte behalten",
+  "useDisk": "Version vom Datenträger verwenden"
+}

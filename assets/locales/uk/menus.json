@@ -20,7 +20,8 @@
     "layout": "Макет редактора",
     "branches": "Гілки",
     "mcp": "MCP",
-    "scratchpads": "Чернетки"
+    "scratchpads": "Чернетки",
+    "autoSave": "Автозбереження"
   },
   "item": {
     "primarySidebar": "Основна бічна панель",
@@ -34,5 +35,11 @@
     "whitespace": "Пробіли",
     "currentLineHighlight": "Виділення поточного рядка",
     "wordWrap": "Перенесення рядків"
+  },
+  "autoSave": {
+    "off": "Вимкнено",
+    "afterDelay": "Після затримки",
+    "onFocusChange": "Під час зміни фокуса",
+    "onWindowFocusLoss": "Коли вікно втрачає фокус"
   }
 }

@@ -23,5 +23,10 @@
   "notNow": "Not Now",
   "trustWorkspace": "Trust Workspace",
   "workspaceMissing": "The folder “{{path}}” no longer exists.",
-  "workspaceTrust": "This workspace has settings that affect plugins, MCP or Git. They are ignored until you trust the workspace."
+  "workspaceTrust": "This workspace has settings that affect plugins, MCP or Git. They are ignored until you trust the workspace.",
+  "recoveryUnavailable": "Unsaved changes cannot be protected: the recovery store is unavailable.",
+  "recoveryWriteFailed": "Could not write recovery data for unsaved documents.",
+  "recoveryDamaged": "A recovered document was damaged; its raw content was opened.",
+  "recoveryNothing": "There are no unsaved documents to recover.",
+  "sessionMissing": "Files from the last session no longer exist: {{count}}."
 }

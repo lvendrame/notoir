@@ -35,6 +35,13 @@ pub enum IoResult {
     FolderPicked(Option<std::path::PathBuf>),
     /// Workspace listing, index, watcher and file-operation results.
     Workspace(crate::workspace::WsResult),
+    /// Paths changed in folders of open files outside the workspace.
+    DocsChanged(Vec<std::path::PathBuf>),
+    /// An open file was re-read after a change on disk.
+    DiskChecked(Box<crate::external::DiskCheckResult>),
+    RecoveryWriteFailed {
+        error: String,
+    },
     /// Another launch forwarded its command line (single instance).
     Instance(notoir_platform::single_instance::InstanceRequest),
 }

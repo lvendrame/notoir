@@ -1,0 +1,11 @@
+{
+  "title": "Notoir heeft niet-opgeslagen documenten uit je vorige sessie gevonden.",
+  "damaged": "Beschadigd — ruwe inhoud",
+  "lines": "Regels: {{count}}",
+  "restoreOne": "Herstellen",
+  "discardOne": "Verwijderen",
+  "discard": "Verwijderen",
+  "review": "Bekijken…",
+  "hideReview": "Overzicht verbergen",
+  "restoreAll": "Alles herstellen"
+}

@@ -23,5 +23,10 @@
   "notNow": "Şimdi Değil",
   "trustWorkspace": "Çalışma Alanına Güven",
   "workspaceMissing": "“{{path}}” klasörü artık yok.",
-  "workspaceTrust": "Bu çalışma alanında eklentileri, MCP'yi veya Git'i etkileyen ayarlar var. Çalışma alanına güvenene kadar yok sayılırlar."
+  "workspaceTrust": "Bu çalışma alanında eklentileri, MCP'yi veya Git'i etkileyen ayarlar var. Çalışma alanına güvenene kadar yok sayılırlar.",
+  "recoveryUnavailable": "Kaydedilmemiş değişiklikler korunamıyor: kurtarma deposu kullanılamıyor.",
+  "recoveryWriteFailed": "Kaydedilmemiş belgelerin kurtarma verileri yazılamadı.",
+  "recoveryDamaged": "Kurtarılan bir belge hasarlıydı; ham içeriği açıldı.",
+  "recoveryNothing": "Kurtarılacak kaydedilmemiş belge yok.",
+  "sessionMissing": "Son oturumdaki artık bulunmayan dosyalar: {{count}}."
 }

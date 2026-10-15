@@ -1,0 +1,11 @@
+{
+  "changed": "Plik „{{name}}” został zmieniony poza Notoir.",
+  "deleted": "Plik „{{name}}” został usunięty z dysku.",
+  "recoveredConflict": "Ten plik zmienił się na dysku po twoich niezapisanych zmianach.",
+  "reload": "Wczytaj ponownie",
+  "keepMine": "Zachowaj moją wersję",
+  "save": "Zapisz",
+  "close": "Zamknij",
+  "keepRecovered": "Zachowaj odzyskaną",
+  "useDisk": "Użyj wersji z dysku"
+}

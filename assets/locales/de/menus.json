@@ -20,7 +20,8 @@
     "layout": "Editor-Layout",
     "branches": "Branches",
     "mcp": "MCP",
-    "scratchpads": "Notizzettel"
+    "scratchpads": "Notizzettel",
+    "autoSave": "Automatisch speichern"
   },
   "item": {
     "primarySidebar": "Primäre Seitenleiste",
@@ -34,5 +35,11 @@
     "whitespace": "Leerzeichen",
     "currentLineHighlight": "Aktuelle Zeile hervorheben",
     "wordWrap": "Zeilenumbruch"
+  },
+  "autoSave": {
+    "off": "Aus",
+    "afterDelay": "Nach Verzögerung",
+    "onFocusChange": "Bei Fokuswechsel",
+    "onWindowFocusLoss": "Wenn das Fenster den Fokus verliert"
   }
 }

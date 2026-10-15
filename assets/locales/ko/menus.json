@@ -20,7 +20,8 @@
     "layout": "편집기 레이아웃",
     "branches": "분기",
     "mcp": "MCP",
-    "scratchpads": "스크래치패드"
+    "scratchpads": "스크래치패드",
+    "autoSave": "자동 저장"
   },
   "item": {
     "primarySidebar": "기본 사이드바",
@@ -34,5 +35,11 @@
     "whitespace": "공백 문자",
     "currentLineHighlight": "현재 줄 강조 표시",
     "wordWrap": "자동 줄 바꿈"
+  },
+  "autoSave": {
+    "off": "끄기",
+    "afterDelay": "지연 후",
+    "onFocusChange": "포커스 변경 시",
+    "onWindowFocusLoss": "창이 포커스를 잃을 때"
   }
 }

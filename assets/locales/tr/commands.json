@@ -89,7 +89,11 @@
     "removeRecent": "Son Açılanlardan Kaldır",
     "pinRecent": "Son Öğeyi Sabitle",
     "clearRecent": "Son Açılanları Temizle",
-    "copyRelativePath": "Göreli Yolu Kopyala"
+    "copyRelativePath": "Göreli Yolu Kopyala",
+    "reloadFromDisk": "Diskten Yeniden Yükle",
+    "keepMine": "Benim Sürümümü Koru",
+    "useDiskVersion": "Diskteki Sürümü Kullan",
+    "autoSave": "Otomatik Kaydetmeyi Aç/Kapat"
   },
   "edit": {
     "undo": "Geri Al",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "Satır Sonu Dizisini Değiştir…",
     "changeEncoding": "Dosya Kodlamasını Değiştir…",
-    "changeLanguageMode": "Dil Modunu Değiştir…"
+    "changeLanguageMode": "Dil Modunu Değiştir…",
+    "type": "Metin Yaz"
   },
   "workspace": {
     "open": "Çalışma Alanı Aç…",
@@ -140,5 +145,14 @@
     "undo": "Gezgin İşlemini Geri Al",
     "revealActive": "Etkin Dosyayı Gezginde Göster",
     "drop": "Dosyaları Bırak"
+  },
+  "recovery": {
+    "show": "Kaydedilmemiş Belgeleri Kurtar…",
+    "restoreAll": "Tüm Kaydedilmemiş Belgeleri Geri Yükle",
+    "review": "Kaydedilmemiş Belgeleri İncele",
+    "discard": "Kaydedilmemiş Belgeleri At",
+    "restoreEntry": "Kaydedilmemiş Belgeyi Geri Yükle",
+    "discardEntry": "Kaydedilmemiş Belgeyi At",
+    "flush": "Kurtarma Anlık Görüntülerini Yaz"
   }
 }

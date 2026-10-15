@@ -23,5 +23,10 @@
   "notNow": "暂不",
   "trustWorkspace": "信任工作区",
   "workspaceMissing": "文件夹“{{path}}”已不存在。",
-  "workspaceTrust": "此工作区包含影响插件、MCP 或 Git 的设置。在你信任此工作区之前,这些设置将被忽略。"
+  "workspaceTrust": "此工作区包含影响插件、MCP 或 Git 的设置。在你信任此工作区之前,这些设置将被忽略。",
+  "recoveryUnavailable": "无法保护未保存的更改:恢复存储不可用。",
+  "recoveryWriteFailed": "无法写入未保存文档的恢复数据。",
+  "recoveryDamaged": "恢复的文档已损坏;已打开其原始内容。",
+  "recoveryNothing": "没有可恢复的未保存文档。",
+  "sessionMissing": "上次会话中已不存在的文件:{{count}}。"
 }

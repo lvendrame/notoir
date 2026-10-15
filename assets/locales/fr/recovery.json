@@ -1,0 +1,11 @@
+{
+  "title": "Notoir a trouvé des documents non enregistrés de votre session précédente.",
+  "damaged": "Endommagé — contenu brut",
+  "lines": "Lignes : {{count}}",
+  "restoreOne": "Restaurer",
+  "discardOne": "Ignorer",
+  "discard": "Ignorer",
+  "review": "Examiner…",
+  "hideReview": "Masquer l'examen",
+  "restoreAll": "Tout restaurer"
+}

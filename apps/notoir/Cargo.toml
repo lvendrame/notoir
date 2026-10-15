@@ -15,6 +15,7 @@ notoir-platform.workspace = true
 notoir-storage.workspace = true
 notoir-workspace.workspace = true
 encoding_rs.workspace = true
+uuid.workspace = true
 eframe.workspace = true
 egui.workspace = true
 resvg.workspace = true

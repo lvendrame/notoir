@@ -20,7 +20,8 @@
     "layout": "Düzenleyici Düzeni",
     "branches": "Dallar",
     "mcp": "MCP",
-    "scratchpads": "Karalamalar"
+    "scratchpads": "Karalamalar",
+    "autoSave": "Otomatik Kaydet"
   },
   "item": {
     "primarySidebar": "Birincil Kenar Çubuğu",
@@ -34,5 +35,11 @@
     "whitespace": "Boşluklar",
     "currentLineHighlight": "Geçerli Satır Vurgusu",
     "wordWrap": "Sözcük Kaydırma"
+  },
+  "autoSave": {
+    "off": "Kapalı",
+    "afterDelay": "Gecikmeden Sonra",
+    "onFocusChange": "Odak Değişince",
+    "onWindowFocusLoss": "Pencere Odağı Kaybedince"
   }
 }

@@ -451,8 +451,12 @@ fn line_endings_change_from_status_bar() {
 }
 
 #[test]
-fn quitting_with_unsaved_changes_prompts() {
+fn quitting_with_unsaved_changes_prompts_without_hot_exit() {
     let mut app = common::start(|_| {});
+    app.harness.state_mut().core.set_user_setting(
+        "app.hotExit",
+        Some(notoir_core::settings::SettingValue::Bool(false)),
+    );
     common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
     type_text(&mut app, "draft");
     assert!(!app.harness.state_mut().core.request_quit());

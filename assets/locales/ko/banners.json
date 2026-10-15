@@ -1,0 +1,11 @@
+{
+  "changed": "“{{name}}”이(가) Notoir 외부에서 변경되었습니다.",
+  "deleted": "“{{name}}”이(가) 디스크에서 삭제되었습니다.",
+  "recoveredConflict": "저장되지 않은 편집 이후 이 파일이 디스크에서 변경되었습니다.",
+  "reload": "다시 로드",
+  "keepMine": "내 버전 유지",
+  "save": "저장",
+  "close": "닫기",
+  "keepRecovered": "복구된 버전 유지",
+  "useDisk": "디스크 버전 사용"
+}

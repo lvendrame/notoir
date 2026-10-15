@@ -20,7 +20,8 @@
     "layout": "Układ edytora",
     "branches": "Gałęzie",
     "mcp": "MCP",
-    "scratchpads": "Brudnopisy"
+    "scratchpads": "Brudnopisy",
+    "autoSave": "Autozapis"
   },
   "item": {
     "primarySidebar": "Główny pasek boczny",
@@ -34,5 +35,11 @@
     "whitespace": "Białe znaki",
     "currentLineHighlight": "Wyróżnienie bieżącego wiersza",
     "wordWrap": "Zawijanie wierszy"
+  },
+  "autoSave": {
+    "off": "Wyłączony",
+    "afterDelay": "Po opóźnieniu",
+    "onFocusChange": "Przy zmianie fokusu",
+    "onWindowFocusLoss": "Gdy okno traci fokus"
   }
 }

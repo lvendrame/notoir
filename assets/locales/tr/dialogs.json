@@ -72,5 +72,10 @@
     "title": "“{{name}}”, “{{folder}}” içine taşınsın mı?",
     "titleMany": "{{count}} öğe “{{folder}}” içine taşınsın mı?",
     "confirm": "Taşı"
+  },
+  "recovery": {
+    "discardTitle": "{{count}} kaydedilmemiş belge kalıcı olarak atılsın mı?",
+    "discardBody": "Silinmeden önce 7 gün boyunca Notoir'in veri klasöründe tutulurlar.",
+    "discard": "At"
   }
 }

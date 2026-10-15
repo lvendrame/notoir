@@ -1,0 +1,11 @@
+{
+  "changed": "“{{name}}” is buiten Notoir gewijzigd.",
+  "deleted": "“{{name}}” is van schijf verwijderd.",
+  "recoveredConflict": "Dit bestand is op schijf gewijzigd na je niet-opgeslagen bewerkingen.",
+  "reload": "Opnieuw laden",
+  "keepMine": "Mijn versie behouden",
+  "save": "Opslaan",
+  "close": "Sluiten",
+  "keepRecovered": "Herstelde versie behouden",
+  "useDisk": "Versie op schijf gebruiken"
+}

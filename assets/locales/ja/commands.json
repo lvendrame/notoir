@@ -89,7 +89,11 @@
     "removeRecent": "最近使用した項目から削除",
     "pinRecent": "最近使用した項目をピン留め",
     "clearRecent": "最近開いた項目をクリア",
-    "copyRelativePath": "相対パスのコピー"
+    "copyRelativePath": "相対パスのコピー",
+    "reloadFromDisk": "ディスクから再読み込み",
+    "keepMine": "自分のバージョンを保持",
+    "useDiskVersion": "ディスクのバージョンを使用",
+    "autoSave": "自動保存の切り替え"
   },
   "edit": {
     "undo": "元に戻す",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "行末のシーケンスの変更…",
     "changeEncoding": "ファイルのエンコードの変更…",
-    "changeLanguageMode": "言語モードの変更…"
+    "changeLanguageMode": "言語モードの変更…",
+    "type": "テキストを入力"
   },
   "workspace": {
     "open": "ワークスペースを開く…",
@@ -140,5 +145,14 @@
     "undo": "エクスプローラーの操作を元に戻す",
     "revealActive": "アクティブなファイルをエクスプローラーで表示",
     "drop": "ファイルをドロップ"
+  },
+  "recovery": {
+    "show": "未保存のドキュメントを復元…",
+    "restoreAll": "未保存のドキュメントをすべて復元",
+    "review": "未保存のドキュメントを確認",
+    "discard": "未保存のドキュメントを破棄",
+    "restoreEntry": "未保存のドキュメントを復元",
+    "discardEntry": "未保存のドキュメントを破棄",
+    "flush": "復元用スナップショットを書き込む"
   }
 }

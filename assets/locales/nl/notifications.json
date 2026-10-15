@@ -23,5 +23,10 @@
   "notNow": "Niet nu",
   "trustWorkspace": "Werkruimte vertrouwen",
   "workspaceMissing": "De map “{{path}}” bestaat niet meer.",
-  "workspaceTrust": "Deze werkruimte heeft instellingen voor plug-ins, MCP of Git. Ze worden genegeerd totdat je de werkruimte vertrouwt."
+  "workspaceTrust": "Deze werkruimte heeft instellingen voor plug-ins, MCP of Git. Ze worden genegeerd totdat je de werkruimte vertrouwt.",
+  "recoveryUnavailable": "Niet-opgeslagen wijzigingen kunnen niet worden beschermd: de herstelopslag is niet beschikbaar.",
+  "recoveryWriteFailed": "Kan herstelgegevens voor niet-opgeslagen documenten niet schrijven.",
+  "recoveryDamaged": "Een hersteld document was beschadigd; de ruwe inhoud is geopend.",
+  "recoveryNothing": "Er zijn geen niet-opgeslagen documenten om te herstellen.",
+  "sessionMissing": "Bestanden uit de vorige sessie die niet meer bestaan: {{count}}."
 }

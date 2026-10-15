@@ -72,5 +72,10 @@
     "title": "„{{name}}“ nach „{{folder}}“ verschieben?",
     "titleMany": "{{count}} Elemente nach „{{folder}}“ verschieben?",
     "confirm": "Verschieben"
+  },
+  "recovery": {
+    "discardTitle": "{{count}} nicht gespeicherte Dokumente endgültig verwerfen?",
+    "discardBody": "Sie bleiben 7 Tage im Datenordner von Notoir, bevor sie gelöscht werden.",
+    "discard": "Verwerfen"
   }
 }

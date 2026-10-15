@@ -1,0 +1,11 @@
+{
+  "changed": "“{{name}}”已在 Notoir 之外被修改。",
+  "deleted": "“{{name}}”已从磁盘删除。",
+  "recoveredConflict": "在你未保存的编辑之后,此文件在磁盘上发生了变化。",
+  "reload": "重新加载",
+  "keepMine": "保留我的版本",
+  "save": "保存",
+  "close": "关闭",
+  "keepRecovered": "保留恢复的版本",
+  "useDisk": "使用磁盘版本"
+}

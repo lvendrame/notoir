@@ -89,7 +89,11 @@
     "removeRecent": "Remove from Recently Opened",
     "pinRecent": "Pin Recent Item",
     "clearRecent": "Clear Recently Opened",
-    "copyRelativePath": "Copy Relative Path"
+    "copyRelativePath": "Copy Relative Path",
+    "reloadFromDisk": "Reload from Disk",
+    "keepMine": "Keep My Version",
+    "useDiskVersion": "Use Disk Version",
+    "autoSave": "Toggle Auto Save"
   },
   "edit": {
     "undo": "Undo",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "Change End of Line Sequence…",
     "changeEncoding": "Change File Encoding…",
-    "changeLanguageMode": "Change Language Mode…"
+    "changeLanguageMode": "Change Language Mode…",
+    "type": "Type Text"
   },
   "workspace": {
     "open": "Open Workspace…",
@@ -140,5 +145,14 @@
     "undo": "Undo Explorer Operation",
     "revealActive": "Reveal Active File in Explorer",
     "drop": "Drop Files"
+  },
+  "recovery": {
+    "show": "Recover Unsaved Documents…",
+    "restoreAll": "Restore All Unsaved Documents",
+    "review": "Review Unsaved Documents",
+    "discard": "Discard Unsaved Documents",
+    "restoreEntry": "Restore Unsaved Document",
+    "discardEntry": "Discard Unsaved Document",
+    "flush": "Write Recovery Snapshots"
   }
 }

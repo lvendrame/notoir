@@ -89,7 +89,11 @@
     "removeRecent": "Quitar de abiertos recientemente",
     "pinRecent": "Fijar elemento reciente",
     "clearRecent": "Borrar abiertos recientemente",
-    "copyRelativePath": "Copiar ruta relativa"
+    "copyRelativePath": "Copiar ruta relativa",
+    "reloadFromDisk": "Recargar desde el disco",
+    "keepMine": "Conservar mi versión",
+    "useDiskVersion": "Usar la versión del disco",
+    "autoSave": "Alternar guardado automático"
   },
   "edit": {
     "undo": "Deshacer",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "Cambiar secuencia de fin de línea…",
     "changeEncoding": "Cambiar codificación del archivo…",
-    "changeLanguageMode": "Cambiar modo de lenguaje…"
+    "changeLanguageMode": "Cambiar modo de lenguaje…",
+    "type": "Escribir texto"
   },
   "workspace": {
     "open": "Abrir espacio de trabajo…",
@@ -140,5 +145,14 @@
     "undo": "Deshacer operación del explorador",
     "revealActive": "Mostrar archivo activo en el explorador",
     "drop": "Soltar archivos"
+  },
+  "recovery": {
+    "show": "Recuperar documentos sin guardar…",
+    "restoreAll": "Restaurar todos los documentos sin guardar",
+    "review": "Revisar documentos sin guardar",
+    "discard": "Descartar documentos sin guardar",
+    "restoreEntry": "Restaurar documento sin guardar",
+    "discardEntry": "Descartar documento sin guardar",
+    "flush": "Escribir instantáneas de recuperación"
   }
 }

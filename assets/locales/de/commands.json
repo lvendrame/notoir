@@ -89,7 +89,11 @@
     "removeRecent": "Aus zuletzt geöffneten entfernen",
     "pinRecent": "Zuletzt verwendetes Element anheften",
     "clearRecent": "Zuletzt geöffnete löschen",
-    "copyRelativePath": "Relativen Pfad kopieren"
+    "copyRelativePath": "Relativen Pfad kopieren",
+    "reloadFromDisk": "Vom Datenträger neu laden",
+    "keepMine": "Meine Version behalten",
+    "useDiskVersion": "Version vom Datenträger verwenden",
+    "autoSave": "Automatisches Speichern umschalten"
   },
   "edit": {
     "undo": "Rückgängig",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "Zeilenendesequenz ändern…",
     "changeEncoding": "Dateicodierung ändern…",
-    "changeLanguageMode": "Sprachmodus ändern…"
+    "changeLanguageMode": "Sprachmodus ändern…",
+    "type": "Text eingeben"
   },
   "workspace": {
     "open": "Arbeitsbereich öffnen…",
@@ -140,5 +145,14 @@
     "undo": "Explorer-Vorgang rückgängig machen",
     "revealActive": "Aktive Datei im Explorer anzeigen",
     "drop": "Dateien ablegen"
+  },
+  "recovery": {
+    "show": "Nicht gespeicherte Dokumente wiederherstellen…",
+    "restoreAll": "Alle nicht gespeicherten Dokumente wiederherstellen",
+    "review": "Nicht gespeicherte Dokumente prüfen",
+    "discard": "Nicht gespeicherte Dokumente verwerfen",
+    "restoreEntry": "Nicht gespeichertes Dokument wiederherstellen",
+    "discardEntry": "Nicht gespeichertes Dokument verwerfen",
+    "flush": "Wiederherstellungsdaten schreiben"
   }
 }

@@ -1,0 +1,11 @@
+{
+  "title": "Notoir wykrył niezapisane dokumenty z poprzedniej sesji.",
+  "damaged": "Uszkodzony — surowa treść",
+  "lines": "Wiersze: {{count}}",
+  "restoreOne": "Przywróć",
+  "discardOne": "Odrzuć",
+  "discard": "Odrzuć",
+  "review": "Przejrzyj…",
+  "hideReview": "Ukryj przegląd",
+  "restoreAll": "Przywróć wszystko"
+}

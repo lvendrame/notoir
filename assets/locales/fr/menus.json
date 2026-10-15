@@ -20,7 +20,8 @@
     "layout": "Disposition de l'éditeur",
     "branches": "Branches",
     "mcp": "MCP",
-    "scratchpads": "Brouillons"
+    "scratchpads": "Brouillons",
+    "autoSave": "Enregistrement automatique"
   },
   "item": {
     "primarySidebar": "Barre latérale principale",
@@ -34,5 +35,11 @@
     "whitespace": "Espaces",
     "currentLineHighlight": "Surbrillance de la ligne active",
     "wordWrap": "Retour à la ligne"
+  },
+  "autoSave": {
+    "off": "Désactivé",
+    "afterDelay": "Après un délai",
+    "onFocusChange": "Au changement de focus",
+    "onWindowFocusLoss": "À la perte de focus de la fenêtre"
   }
 }

@@ -72,5 +72,10 @@
     "title": "“{{name}}” naar “{{folder}}” verplaatsen?",
     "titleMany": "{{count}} items naar “{{folder}}” verplaatsen?",
     "confirm": "Verplaatsen"
+  },
+  "recovery": {
+    "discardTitle": "{{count}} niet-opgeslagen documenten definitief verwijderen?",
+    "discardBody": "Ze blijven 7 dagen in de gegevensmap van Notoir voordat ze worden verwijderd.",
+    "discard": "Verwijderen"
   }
 }

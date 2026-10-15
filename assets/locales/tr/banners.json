@@ -1,0 +1,11 @@
+{
+  "changed": "“{{name}}” Notoir dışında değiştirildi.",
+  "deleted": "“{{name}}” diskten silindi.",
+  "recoveredConflict": "Bu dosya, kaydedilmemiş düzenlemelerinizden sonra diskte değişti.",
+  "reload": "Yeniden Yükle",
+  "keepMine": "Benim Sürümümü Koru",
+  "save": "Kaydet",
+  "close": "Kapat",
+  "keepRecovered": "Kurtarılanı Koru",
+  "useDisk": "Diskteki Sürümü Kullan"
+}

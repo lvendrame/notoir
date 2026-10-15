@@ -30,7 +30,16 @@ pub fn socket_name() -> String {
     let user = std::env::var("USER")
         .or_else(|_| std::env::var("USERNAME"))
         .unwrap_or_default();
-    format!("{}-{}.sock", crate::paths::BUNDLE_ID, user)
+    // A relocated home (tests, portable setups) gets its own instance.
+    match std::env::var(crate::paths::HOME_ENV) {
+        Ok(home) if !home.is_empty() => {
+            use std::hash::{Hash, Hasher};
+            let mut h = std::collections::hash_map::DefaultHasher::new();
+            home.hash(&mut h);
+            format!("{}-{}-{:x}.sock", crate::paths::BUNDLE_ID, user, h.finish())
+        }
+        _ => format!("{}-{}.sock", crate::paths::BUNDLE_ID, user),
+    }
 }
 
 fn encode(req: &InstanceRequest) -> String {

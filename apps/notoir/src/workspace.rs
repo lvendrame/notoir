@@ -117,6 +117,8 @@ pub struct Workspace {
     pub pending_reveal: Option<PathBuf>,
     /// Scroll the selected row into view next frame.
     pub scroll_to_selected: bool,
+    /// Folders to expand once their parent is listed (session restore).
+    pub pending_expand: std::collections::HashSet<PathBuf>,
 }
 
 impl Drop for Workspace {
@@ -307,6 +309,7 @@ impl AppCore {
             last_op: None,
             pending_reveal: None,
             scroll_to_selected: false,
+            pending_expand: Default::default(),
         });
         self.request_listing(&root);
         self.start_index();
@@ -325,6 +328,13 @@ impl AppCore {
         self.record_recent_workspace(&root);
         self.panels.show(PanelId::Explorer);
         self.workbench.events.emit(AppEvent::WorkspaceOpened);
+        // Unsaved work kept at the last exit, then the saved tabs and layout.
+        self.restore_hot_exit();
+        let key = self.session_key();
+        if let Some(data) = self.load_session_data(&key) {
+            self.apply_session(data);
+        }
+        self.session.last_written = None;
         if let Some(path) = self.active_file_path() {
             self.reveal_in_explorer(&path, false);
         }
@@ -340,6 +350,8 @@ impl AppCore {
             return;
         };
         let root = ws.root.clone();
+        // Remember this workspace's tabs before they close.
+        self.write_session(false);
         let mut views = Vec::new();
         let mut dirty: Vec<DocumentId> = Vec::new();
         for (view, doc) in self.workbench.views.iter().map(|v| (v.id, v.document_id)) {
@@ -372,6 +384,12 @@ impl AppCore {
         }
         if self.workspace.take().is_some() {
             tracing::info!("workspace closed");
+            if let Some(session) = self.recovery.session.clone() {
+                let _ = session
+                    .lock()
+                    .unwrap_or_else(|e| e.into_inner())
+                    .set_workspace(None, now_epoch_ms());
+            }
             self.workbench.events.emit(AppEvent::WorkspaceClosed);
             self.apply_resolved_settings();
         }
@@ -507,6 +525,8 @@ impl AppCore {
                         ws.tree.listing_failed(&dir);
                     }
                 }
+                self.expand_pending_children(&dir);
+                let ws = self.workspace.as_mut().expect("checked");
                 if let Some(p) = ws.pending_reveal.clone() {
                     self.reveal_in_explorer(&p, true);
                 }
@@ -519,7 +539,10 @@ impl AppCore {
                 ws.index = Arc::new(entries);
                 ws.index_ready = true;
             }
-            WsEvent::Changed(paths) => self.handle_fs_changes(paths),
+            WsEvent::Changed(paths) => {
+                self.check_changed_paths(&paths);
+                self.handle_fs_changes(paths);
+            }
             WsEvent::SettingsLoaded(layer) => {
                 let restricted: Vec<String> = layer
                     .as_ref()
@@ -628,6 +651,29 @@ impl AppCore {
         ws.tree.selected = Some(dir.to_path_buf());
         if ws.tree.toggle(dir) {
             self.request_listing(dir);
+        }
+    }
+
+    /// Session restore: expands saved folders among `dir`'s children.
+    pub fn expand_pending_children(&mut self, dir: &Path) {
+        let Some(ws) = self.workspace.as_mut() else {
+            return;
+        };
+        if ws.pending_expand.is_empty() {
+            return;
+        }
+        let kids: Vec<PathBuf> = match ws.tree.node(dir).map(|n| &n.children) {
+            Some(notoir_core::explorer::Children::Loaded(k)) => k.clone(),
+            _ => return,
+        };
+        let mut listings = Vec::new();
+        for k in kids {
+            if ws.pending_expand.remove(&k) && ws.tree.expand(&k) {
+                listings.push(k);
+            }
+        }
+        for k in listings {
+            self.request_listing(&k);
         }
     }
 

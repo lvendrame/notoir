@@ -20,7 +20,8 @@
     "layout": "Макет редактора",
     "branches": "Ветви",
     "mcp": "MCP",
-    "scratchpads": "Черновики"
+    "scratchpads": "Черновики",
+    "autoSave": "Автосохранение"
   },
   "item": {
     "primarySidebar": "Основная боковая панель",
@@ -34,5 +35,11 @@
     "whitespace": "Пробелы",
     "currentLineHighlight": "Выделение текущей строки",
     "wordWrap": "Перенос строк"
+  },
+  "autoSave": {
+    "off": "Выключено",
+    "afterDelay": "После задержки",
+    "onFocusChange": "При смене фокуса",
+    "onWindowFocusLoss": "При потере фокуса окном"
   }
 }

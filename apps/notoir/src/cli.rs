@@ -9,6 +9,9 @@ pub struct Cli {
     pub new_window: bool,
     /// Files/folders to open with an optional 1-based line/column.
     pub paths: Vec<(PathBuf, Option<(usize, usize)>)>,
+    /// `--command <id> [--args <json>]`: run in the running instance when it
+    /// was started with `NOTOIR_TEST_COMMANDS=1` (crash suite, automation).
+    pub commands: Vec<(String, String)>,
 }
 
 /// Splits `file:line[:col]`; plain paths (even with ':' in them) stay whole.
@@ -41,11 +44,26 @@ pub fn parse(args: &[String], cwd: &Path) -> Cli {
                     cli.paths.push((cwd.join(file), at));
                 }
             }
+            "--command" => {
+                if let Some(id) = it.next() {
+                    cli.commands.push((id.clone(), "{}".into()));
+                }
+            }
+            "--args" => {
+                if let (Some(json), Some(last)) = (it.next(), cli.commands.last_mut()) {
+                    last.1 = json.clone();
+                }
+            }
             a if a.starts_with('-') => tracing::warn!(arg = a, "unknown argument"),
             a => cli.paths.push((cwd.join(a), None)),
         }
     }
     cli
+}
+
+/// Test-channel commands of a forwarded command line.
+pub fn commands(args: &[String], cwd: &Path) -> Vec<(String, String)> {
+    parse(args, cwd).commands
 }
 
 pub fn paths(args: &[String], cwd: &Path) -> Vec<(PathBuf, Option<(usize, usize)>)> {

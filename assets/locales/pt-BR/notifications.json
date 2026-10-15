@@ -23,5 +23,10 @@
   "notNow": "Agora Não",
   "trustWorkspace": "Confiar no Workspace",
   "workspaceMissing": "A pasta “{{path}}” não existe mais.",
-  "workspaceTrust": "Este workspace tem configurações que afetam plugins, MCP ou Git. Elas são ignoradas até você confiar no workspace."
+  "workspaceTrust": "Este workspace tem configurações que afetam plugins, MCP ou Git. Elas são ignoradas até você confiar no workspace.",
+  "recoveryUnavailable": "As alterações não salvas não podem ser protegidas: o armazenamento de recuperação está indisponível.",
+  "recoveryWriteFailed": "Não foi possível gravar os dados de recuperação dos documentos não salvos.",
+  "recoveryDamaged": "Um documento recuperado estava danificado; o conteúdo bruto foi aberto.",
+  "recoveryNothing": "Não há documentos não salvos para recuperar.",
+  "sessionMissing": "Arquivos da última sessão que não existem mais: {{count}}."
 }

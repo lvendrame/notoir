@@ -23,5 +23,10 @@
   "notNow": "Plus tard",
   "trustWorkspace": "Faire confiance à l'espace de travail",
   "workspaceMissing": "Le dossier « {{path}} » n'existe plus.",
-  "workspaceTrust": "Cet espace de travail contient des paramètres qui concernent les plugins, MCP ou Git. Ils sont ignorés tant que vous ne lui faites pas confiance."
+  "workspaceTrust": "Cet espace de travail contient des paramètres qui concernent les plugins, MCP ou Git. Ils sont ignorés tant que vous ne lui faites pas confiance.",
+  "recoveryUnavailable": "Les modifications non enregistrées ne peuvent pas être protégées : le stockage de récupération est indisponible.",
+  "recoveryWriteFailed": "Impossible d'écrire les données de récupération des documents non enregistrés.",
+  "recoveryDamaged": "Un document récupéré était endommagé ; son contenu brut a été ouvert.",
+  "recoveryNothing": "Aucun document non enregistré à récupérer.",
+  "sessionMissing": "Fichiers de la dernière session qui n'existent plus : {{count}}."
 }

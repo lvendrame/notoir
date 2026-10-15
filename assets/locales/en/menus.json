@@ -20,7 +20,8 @@
     "layout": "Editor Layout",
     "branches": "Branches",
     "mcp": "MCP",
-    "scratchpads": "Scratchpads"
+    "scratchpads": "Scratchpads",
+    "autoSave": "Auto Save"
   },
   "item": {
     "primarySidebar": "Primary Sidebar",
@@ -34,5 +35,11 @@
     "whitespace": "Whitespace",
     "currentLineHighlight": "Current Line Highlight",
     "wordWrap": "Word Wrap"
+  },
+  "autoSave": {
+    "off": "Off",
+    "afterDelay": "After Delay",
+    "onFocusChange": "On Focus Change",
+    "onWindowFocusLoss": "On Window Focus Loss"
   }
 }

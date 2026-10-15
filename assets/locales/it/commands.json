@@ -89,7 +89,11 @@
     "removeRecent": "Rimuovi dagli elementi recenti",
     "pinRecent": "Fissa elemento recente",
     "clearRecent": "Cancella elementi recenti",
-    "copyRelativePath": "Copia percorso relativo"
+    "copyRelativePath": "Copia percorso relativo",
+    "reloadFromDisk": "Ricarica dal disco",
+    "keepMine": "Mantieni la mia versione",
+    "useDiskVersion": "Usa la versione su disco",
+    "autoSave": "Attiva/disattiva salvataggio automatico"
   },
   "edit": {
     "undo": "Annulla",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "Cambia sequenza di fine riga…",
     "changeEncoding": "Cambia codifica del file…",
-    "changeLanguageMode": "Cambia modalità linguaggio…"
+    "changeLanguageMode": "Cambia modalità linguaggio…",
+    "type": "Digita testo"
   },
   "workspace": {
     "open": "Apri area di lavoro…",
@@ -140,5 +145,14 @@
     "undo": "Annulla operazione di esplora risorse",
     "revealActive": "Mostra file attivo in esplora risorse",
     "drop": "Rilascia file"
+  },
+  "recovery": {
+    "show": "Recupera documenti non salvati…",
+    "restoreAll": "Ripristina tutti i documenti non salvati",
+    "review": "Esamina documenti non salvati",
+    "discard": "Scarta documenti non salvati",
+    "restoreEntry": "Ripristina documento non salvato",
+    "discardEntry": "Scarta documento non salvato",
+    "flush": "Scrivi snapshot di recupero"
   }
 }

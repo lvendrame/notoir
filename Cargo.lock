@@ -2278,6 +2278,7 @@ dependencies = [
  "tracing-appender",
  "tracing-subscriber",
  "unicode-segmentation",
+ "uuid",
 ]
 
 [[package]]

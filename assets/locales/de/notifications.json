@@ -23,5 +23,10 @@
   "notNow": "Nicht jetzt",
   "trustWorkspace": "Arbeitsbereich vertrauen",
   "workspaceMissing": "Der Ordner „{{path}}“ existiert nicht mehr.",
-  "workspaceTrust": "Dieser Arbeitsbereich enthält Einstellungen für Plugins, MCP oder Git. Sie werden ignoriert, bis du dem Arbeitsbereich vertraust."
+  "workspaceTrust": "Dieser Arbeitsbereich enthält Einstellungen für Plugins, MCP oder Git. Sie werden ignoriert, bis du dem Arbeitsbereich vertraust.",
+  "recoveryUnavailable": "Nicht gespeicherte Änderungen können nicht geschützt werden: Der Wiederherstellungsspeicher ist nicht verfügbar.",
+  "recoveryWriteFailed": "Wiederherstellungsdaten für nicht gespeicherte Dokumente konnten nicht geschrieben werden.",
+  "recoveryDamaged": "Ein wiederhergestelltes Dokument war beschädigt; sein Rohinhalt wurde geöffnet.",
+  "recoveryNothing": "Es gibt keine nicht gespeicherten Dokumente zum Wiederherstellen.",
+  "sessionMissing": "Dateien der letzten Sitzung, die nicht mehr existieren: {{count}}."
 }

@@ -144,6 +144,15 @@ fn spec(core: &AppCore, prompt: &Prompt) -> Spec {
                 ],
             }
         }
+        Prompt::DiscardRecovery { count } => Spec {
+            title: t!("dialogs:recovery.discardTitle", count = count),
+            body: t!("dialogs:recovery.discardBody"),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("dialogs:recovery.discard"), Answer::Primary, true),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
         Prompt::Move { srcs, dir } => Spec {
             title: if srcs.len() == 1 {
                 t!(

@@ -89,7 +89,11 @@
     "removeRecent": "최근에 연 항목에서 제거",
     "pinRecent": "최근 항목 고정",
     "clearRecent": "최근에 연 항목 지우기",
-    "copyRelativePath": "상대 경로 복사"
+    "copyRelativePath": "상대 경로 복사",
+    "reloadFromDisk": "디스크에서 다시 로드",
+    "keepMine": "내 버전 유지",
+    "useDiskVersion": "디스크 버전 사용",
+    "autoSave": "자동 저장 전환"
   },
   "edit": {
     "undo": "실행 취소",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "줄 끝 시퀀스 변경…",
     "changeEncoding": "파일 인코딩 변경…",
-    "changeLanguageMode": "언어 모드 변경…"
+    "changeLanguageMode": "언어 모드 변경…",
+    "type": "텍스트 입력"
   },
   "workspace": {
     "open": "작업 영역 열기…",
@@ -140,5 +145,14 @@
     "undo": "탐색기 작업 실행 취소",
     "revealActive": "탐색기에서 활성 파일 표시",
     "drop": "파일 놓기"
+  },
+  "recovery": {
+    "show": "저장되지 않은 문서 복구…",
+    "restoreAll": "저장되지 않은 문서 모두 복원",
+    "review": "저장되지 않은 문서 검토",
+    "discard": "저장되지 않은 문서 버리기",
+    "restoreEntry": "저장되지 않은 문서 복원",
+    "discardEntry": "저장되지 않은 문서 버리기",
+    "flush": "복구 스냅샷 쓰기"
   }
 }

@@ -117,7 +117,18 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         cmd("file.save"),
         cmd("file.saveAs"),
         cmd("file.saveAll"),
-        cmd("file.autoSave"),
+        sub(
+            "menus:sub.autoSave",
+            ["off", "afterDelay", "onFocusChange", "onWindowFocusLoss"]
+                .into_iter()
+                .map(|mode| MenuItem::Command {
+                    id: "file.autoSave",
+                    args: json!({ "mode": mode }),
+                    label: Some(format!("menus:autoSave.{mode}")),
+                    checked: Some(format!("autoSave.{mode}")),
+                })
+                .collect(),
+        ),
         cmd("file.revert"),
         SEP,
         cmd("file.close"),
@@ -393,7 +404,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         SEP,
         cmd("help.reportIssue"),
         cmd("help.viewLogs"),
-        cmd("help.recoverUnsaved"),
+        cmd("recovery.show"),
         SEP,
         cmd("app.checkForUpdates"),
     ];

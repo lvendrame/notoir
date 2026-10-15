@@ -72,5 +72,10 @@
     "title": "Déplacer « {{name}} » dans « {{folder}} » ?",
     "titleMany": "Déplacer {{count}} éléments dans « {{folder}} » ?",
     "confirm": "Déplacer"
+  },
+  "recovery": {
+    "discardTitle": "Ignorer définitivement {{count}} documents non enregistrés ?",
+    "discardBody": "Ils sont conservés 7 jours dans le dossier de données de Notoir avant d'être supprimés.",
+    "discard": "Ignorer"
   }
 }

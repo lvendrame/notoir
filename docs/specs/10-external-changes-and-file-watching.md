@@ -1,6 +1,6 @@
 # 10 — External Changes & File Watching
 
-**Status:** Not started — M8
+**Status:** Partial — workspace watcher plus parent-folder watches for outside files, change classification by content hash (own saves and touches ignored, delete re-checked after 500 ms), automatic undoable reload of clean files, banner with Reload / Keep My Version for dirty files, deleted banner with Save / Close, files reappearing, read-only transitions (M8). Read-only files stay locked for editing like at load time (Save offers Save As). Later: Compare (M17), MCP attribution (M20), `files.watcherExclude`, polling fallback and inotify-limit fallback, workspace-folder-disappeared state
 
 ## Purpose
 

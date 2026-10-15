@@ -24,9 +24,31 @@ impl WorkspaceWatcher {
         root: &Path,
         on_change: impl Fn(Vec<PathBuf>) + Send + 'static,
     ) -> notify::Result<WorkspaceWatcher> {
+        let mut w = Self::new(on_change)?;
+        w.watch(root, true)?;
+        Ok(w)
+    }
+
+    /// Adds a path (a folder, recursively or not).
+    pub fn watch(&mut self, path: &Path, recursive: bool) -> notify::Result<()> {
+        let mode = if recursive {
+            RecursiveMode::Recursive
+        } else {
+            RecursiveMode::NonRecursive
+        };
+        self._watcher.watch(path, mode)
+    }
+
+    pub fn unwatch(&mut self, path: &Path) -> notify::Result<()> {
+        self._watcher.unwatch(path)
+    }
+
+    /// A watcher with nothing watched yet.
+    pub fn new(
+        on_change: impl Fn(Vec<PathBuf>) + Send + 'static,
+    ) -> notify::Result<WorkspaceWatcher> {
         let (tx, rx) = channel::<notify::Result<notify::Event>>();
-        let mut watcher = notify::recommended_watcher(tx)?;
-        watcher.watch(root, RecursiveMode::Recursive)?;
+        let watcher = notify::recommended_watcher(tx)?;
         std::thread::Builder::new()
             .name("notoir-watch".into())
             .spawn(move || {

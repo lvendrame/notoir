@@ -1,0 +1,11 @@
+{
+  "title": "Notoir 发现了上次会话中未保存的文档。",
+  "damaged": "已损坏 — 原始内容",
+  "lines": "行数:{{count}}",
+  "restoreOne": "恢复",
+  "discardOne": "放弃",
+  "discard": "放弃",
+  "review": "查看…",
+  "hideReview": "隐藏查看",
+  "restoreAll": "全部恢复"
+}

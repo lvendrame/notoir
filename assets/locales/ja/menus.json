@@ -20,7 +20,8 @@
     "layout": "エディターのレイアウト",
     "branches": "ブランチ",
     "mcp": "MCP",
-    "scratchpads": "スクラッチパッド"
+    "scratchpads": "スクラッチパッド",
+    "autoSave": "自動保存"
   },
   "item": {
     "primarySidebar": "プライマリ サイドバー",
@@ -34,5 +35,11 @@
     "whitespace": "空白文字",
     "currentLineHighlight": "現在行の強調表示",
     "wordWrap": "折り返し"
+  },
+  "autoSave": {
+    "off": "オフ",
+    "afterDelay": "遅延後",
+    "onFocusChange": "フォーカス変更時",
+    "onWindowFocusLoss": "ウィンドウのフォーカス喪失時"
   }
 }

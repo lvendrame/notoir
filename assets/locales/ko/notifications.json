@@ -23,5 +23,10 @@
   "notNow": "나중에",
   "trustWorkspace": "작업 영역 신뢰",
   "workspaceMissing": "“{{path}}” 폴더가 더 이상 없습니다.",
-  "workspaceTrust": "이 작업 영역에는 플러그인, MCP 또는 Git에 영향을 주는 설정이 있습니다. 작업 영역을 신뢰할 때까지 무시됩니다."
+  "workspaceTrust": "이 작업 영역에는 플러그인, MCP 또는 Git에 영향을 주는 설정이 있습니다. 작업 영역을 신뢰할 때까지 무시됩니다.",
+  "recoveryUnavailable": "저장되지 않은 변경 사항을 보호할 수 없습니다: 복구 저장소를 사용할 수 없습니다.",
+  "recoveryWriteFailed": "저장되지 않은 문서의 복구 데이터를 쓰지 못했습니다.",
+  "recoveryDamaged": "복구된 문서가 손상되어 원본 콘텐츠를 열었습니다.",
+  "recoveryNothing": "복구할 저장되지 않은 문서가 없습니다.",
+  "sessionMissing": "지난 세션에서 더 이상 존재하지 않는 파일: {{count}}."
 }

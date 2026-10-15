@@ -3,7 +3,7 @@
 use std::sync::mpsc::channel;
 use std::sync::{Arc, OnceLock};
 
-use notoir::{app, cli, icons, logging};
+use notoir::{app, cli, icons, logging, session};
 use notoir_platform::AppPaths;
 use notoir_platform::single_instance::{self, Claim, InstanceRequest};
 
@@ -56,16 +56,30 @@ fn main() -> eframe::Result {
         paths = ?paths.as_ref().ok(),
         "starting Notoir"
     );
+    let mut viewport = egui::ViewportBuilder::default()
+        .with_title("Notoir")
+        .with_app_id(notoir_platform::paths::BUNDLE_ID)
+        .with_inner_size([1280.0, 800.0])
+        .with_min_inner_size([640.0, 400.0])
+        .with_icon(icons::app_icon());
+    // The last window's geometry (spec 23); new windows cascade from it.
+    if let Some(g) = paths
+        .as_ref()
+        .ok()
+        .and_then(|p| session::load_geometry(&p.data))
+    {
+        let offset = if cli.new_window { 24.0 } else { 0.0 };
+        viewport = viewport
+            .with_inner_size([g.width.max(640.0), g.height.max(400.0)])
+            .with_position([g.x + offset, g.y + offset])
+            .with_maximized(g.maximized);
+    }
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default()
-            .with_title("Notoir")
-            .with_app_id(notoir_platform::paths::BUNDLE_ID)
-            .with_inner_size([1280.0, 800.0])
-            .with_min_inner_size([640.0, 400.0])
-            .with_icon(icons::app_icon()),
+        viewport,
         ..Default::default()
     };
     let launch = app::Launch {
+        restore_session: cli.paths.is_empty() && !cli.new_window,
         open_paths: cli.paths,
         instance_rx,
     };

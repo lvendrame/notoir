@@ -89,7 +89,11 @@
     "removeRecent": "Verwijderen uit recent geopend",
     "pinRecent": "Recent item vastmaken",
     "clearRecent": "Recent geopend wissen",
-    "copyRelativePath": "Relatief pad kopiëren"
+    "copyRelativePath": "Relatief pad kopiëren",
+    "reloadFromDisk": "Opnieuw laden van schijf",
+    "keepMine": "Mijn versie behouden",
+    "useDiskVersion": "Versie op schijf gebruiken",
+    "autoSave": "Automatisch opslaan in-/uitschakelen"
   },
   "edit": {
     "undo": "Ongedaan maken",
@@ -107,7 +111,8 @@
   "editor": {
     "changeLineEnding": "Regeleindereeks wijzigen…",
     "changeEncoding": "Bestandscodering wijzigen…",
-    "changeLanguageMode": "Taalmodus wijzigen…"
+    "changeLanguageMode": "Taalmodus wijzigen…",
+    "type": "Tekst typen"
   },
   "workspace": {
     "open": "Werkruimte openen…",
@@ -140,5 +145,14 @@
     "undo": "Verkennerbewerking ongedaan maken",
     "revealActive": "Actief bestand tonen in verkenner",
     "drop": "Bestanden neerzetten"
+  },
+  "recovery": {
+    "show": "Niet-opgeslagen documenten herstellen…",
+    "restoreAll": "Alle niet-opgeslagen documenten herstellen",
+    "review": "Niet-opgeslagen documenten bekijken",
+    "discard": "Niet-opgeslagen documenten verwijderen",
+    "restoreEntry": "Niet-opgeslagen document herstellen",
+    "discardEntry": "Niet-opgeslagen document verwijderen",
+    "flush": "Herstelsnapshots schrijven"
   }
 }
