@@ -153,6 +153,44 @@ impl Keystroke {
         Ok(Self { mods, key })
     }
 
+    /// The `keybindings.toml` spelling (`Mod+Shift+S`, platform-neutral where
+    /// the platform's main modifier is used).
+    pub fn to_config(&self, platform: Platform) -> String {
+        let mut parts: Vec<&str> = Vec::new();
+        let (main, other) = if platform == Platform::Mac {
+            (self.mods.cmd, self.mods.ctrl)
+        } else {
+            (self.mods.ctrl, self.mods.cmd)
+        };
+        if main {
+            parts.push("Mod");
+        }
+        if other {
+            parts.push(if platform == Platform::Mac {
+                "Ctrl"
+            } else {
+                "Cmd"
+            });
+        }
+        if self.mods.alt {
+            parts.push("Alt");
+        }
+        if self.mods.shift {
+            parts.push("Shift");
+        }
+        let key = if self.key == "+" {
+            "+".to_owned()
+        } else {
+            self.key.clone()
+        };
+        let mut s = parts.join("+");
+        if !s.is_empty() {
+            s.push('+');
+        }
+        s.push_str(&key);
+        s
+    }
+
     /// `=` and `+` are the same physical key for zoom-style bindings.
     fn matches(&self, other: &Keystroke) -> bool {
         let canon = |k: &str| {
@@ -228,6 +266,19 @@ impl KeyChord {
             1 | 2 => Ok(Self(strokes)),
             _ => Err(KeyParseError::TooLong(s.to_owned())),
         }
+    }
+
+    /// From recorded keystrokes (1 or 2).
+    pub fn from_strokes(strokes: Vec<Keystroke>) -> Option<Self> {
+        (1..=2).contains(&strokes.len()).then_some(Self(strokes))
+    }
+
+    pub fn to_config(&self, platform: Platform) -> String {
+        self.0
+            .iter()
+            .map(|k| k.to_config(platform))
+            .collect::<Vec<_>>()
+            .join(" ")
     }
 
     pub fn strokes(&self) -> &[Keystroke] {
@@ -454,6 +505,11 @@ impl Keymap {
             .find(|b| b.chord.matches(strokes) && b.when.eval(ctx))
     }
 
+    /// Every binding, highest priority first (shortcuts editor).
+    pub fn bindings(&self) -> &[KeyBinding] {
+        &self.bindings
+    }
+
     /// Chords bound to `command`, highest priority first (menu/palette display).
     pub fn chords_for(&self, command: &CommandId) -> Vec<&KeyChord> {
         self.bindings
@@ -513,6 +569,20 @@ mod tests {
     }
 
     // spec 05: "Platform modifiers"
+    #[test]
+    fn config_spelling_round_trips() {
+        for p in [Platform::Mac, Platform::Windows, Platform::Linux] {
+            for src in ["Mod+Shift+S", "Alt+Up", "Mod+K Z", "Ctrl+G", "F3", "Mod++"] {
+                let c = KeyChord::parse(src, p).unwrap();
+                assert_eq!(
+                    KeyChord::parse(&c.to_config(p), p).unwrap(),
+                    c,
+                    "{src} on {p:?}"
+                );
+            }
+        }
+    }
+
     #[test]
     fn mod_maps_per_platform() {
         assert!(ks("Mod+S", Platform::Mac).mods.cmd);

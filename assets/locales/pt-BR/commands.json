@@ -48,20 +48,25 @@
     "dockTab": "Encaixar Aba",
     "toggleMinimap": "Alternar Minimapa",
     "minimapSide": "Posição do Minimapa",
-    "minimapScale": "Escala do Minimapa"
+    "minimapScale": "Escala do Minimapa",
+    "zenMode": "Alternar Modo Zen",
+    "exitZenMode": "Sair do Modo Zen"
   },
   "preferences": {
     "changeTheme": "Alterar Tema…",
     "changeLanguage": "Alterar Idioma de Exibição…",
     "openKeybindingsFile": "Abrir Arquivo de Atalhos de Teclado",
-    "openSettingsFile": "Abrir Arquivo de Configurações do Usuário"
+    "openSettingsFile": "Abrir Arquivo de Configurações do Usuário",
+    "keyboardShortcuts": "Atalhos de Teclado"
   },
   "help": {
-    "about": "Sobre o Notoir"
+    "about": "Sobre o Notoir",
+    "welcome": "Boas-vindas"
   },
   "app": {
     "quit": "Sair",
-    "quitMac": "Encerrar o Notoir"
+    "quitMac": "Encerrar o Notoir",
+    "settings": "Abrir Configurações"
   },
   "workbench": {
     "showNotifications": "Mostrar Notificações",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Alterar Sequência de Fim de Linha…",
     "changeEncoding": "Alterar Codificação do Arquivo…",
     "changeLanguageMode": "Alterar Modo de Linguagem…",
-    "type": "Digitar Texto"
+    "type": "Digitar Texto",
+    "changeIndentation": "Alterar Indentação",
+    "changeTabSize": "Alterar Tamanho da Tabulação"
   },
   "workspace": {
     "open": "Abrir Workspace…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Restaurar Documento Não Salvo",
     "discardEntry": "Descartar Documento Não Salvo",
     "flush": "Gravar Instantâneos de Recuperação"
+  },
+  "welcome": {
+    "finish": "Concluir Boas-vindas"
   }
 }

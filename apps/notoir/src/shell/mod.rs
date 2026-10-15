@@ -17,7 +17,9 @@ pub mod overlays;
 pub mod panels;
 pub mod prompts;
 pub mod recovery_ui;
+pub mod settings_ui;
 pub mod tabs;
+pub mod welcome;
 
 /// Theme + icon cache passed to every rendering function.
 pub struct Kit<'a> {
@@ -58,6 +60,8 @@ pub struct UiState {
     pub last_active_doc: Option<notoir_core::ids::DocumentId>,
     pub window_title: String,
     pub window_focused: bool,
+    /// Last full-screen request (tests; the OS reports the real state).
+    pub fullscreen_requested: Option<bool>,
 }
 
 /// Collects invocations produced while rendering one frame.

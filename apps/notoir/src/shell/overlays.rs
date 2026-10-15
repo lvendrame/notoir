@@ -254,6 +254,10 @@ pub enum PickerKind {
     LanguageMode,
     /// The Command Palette (spec 16).
     Commands,
+    /// Status bar indentation item: spaces/tabs, tab size, detect, convert.
+    Indentation,
+    /// Second step of Indentation: 1–8.
+    TabSize,
 }
 
 /// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
@@ -348,7 +352,10 @@ impl Picker {
             PickerKind::LanguageMode => doc
                 .map(|d| d.language.as_str().to_owned())
                 .unwrap_or_default(),
-            PickerKind::Commands => String::new(),
+            PickerKind::Commands | PickerKind::Indentation => String::new(),
+            PickerKind::TabSize => doc
+                .map(|d| core.indent_style(d.id).tab_size.to_string())
+                .unwrap_or_default(),
         };
         let (commands, context) = if kind == PickerKind::Commands {
             let ctx = core.context(false);
@@ -447,6 +454,28 @@ impl Picker {
                 })
                 .collect(),
             PickerKind::Commands => Vec::new(),
+            PickerKind::Indentation => [
+                ("spaces", "dialogs:picker.indentSpaces"),
+                ("tabs", "dialogs:picker.indentTabs"),
+                ("tabSize", "dialogs:picker.changeTabSize"),
+                ("detect", "dialogs:picker.detectIndentation"),
+                ("toSpaces", "dialogs:picker.convertToSpaces"),
+                ("toTabs", "dialogs:picker.convertToTabs"),
+            ]
+            .into_iter()
+            .map(|(v, k)| PickerItem {
+                value: v.to_owned(),
+                label: t!(k),
+                detail: String::new(),
+            })
+            .collect(),
+            PickerKind::TabSize => (1..=8)
+                .map(|n| PickerItem {
+                    value: n.to_string(),
+                    label: n.to_string(),
+                    detail: String::new(),
+                })
+                .collect(),
         }
     }
 
@@ -493,6 +522,11 @@ impl Picker {
             PickerKind::Commands => {
                 return CommandInvocation::new(value.to_owned(), InvocationSource::Palette);
             }
+            PickerKind::Indentation => ("editor.changeIndentation", json!({ "action": value })),
+            PickerKind::TabSize => (
+                "editor.changeTabSize",
+                json!({ "size": value.parse::<u64>().unwrap_or(4) }),
+            ),
         };
         CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
@@ -569,6 +603,8 @@ impl Picker {
             PickerKind::Encoding { .. } => t!("dialogs:picker.encoding"),
             PickerKind::LanguageMode => t!("dialogs:picker.languageMode"),
             PickerKind::Commands => String::new(),
+            PickerKind::Indentation => t!("dialogs:picker.indentation"),
+            PickerKind::TabSize => t!("dialogs:picker.tabSize"),
         };
         if self.kind == PickerKind::Commands && enter {
             // Disabled rows (shown with "show all") do not run.

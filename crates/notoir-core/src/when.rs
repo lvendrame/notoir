@@ -69,6 +69,43 @@ enum Expr {
     Or(Box<Expr>, Box<Expr>),
 }
 
+impl std::fmt::Display for Operand {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Operand::Key(k) => f.write_str(k),
+            Operand::Lit(Value::Bool(b)) => write!(f, "{b}"),
+            Operand::Lit(Value::Str(s)) => write!(f, "'{s}'"),
+            Operand::Lit(Value::Num(n)) => write!(f, "{n}"),
+        }
+    }
+}
+
+impl std::fmt::Display for Expr {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let wrap = |e: &Expr| match e {
+            Expr::And(..) | Expr::Or(..) => format!("({e})"),
+            _ => e.to_string(),
+        };
+        match self {
+            Expr::Truthy(o) => write!(f, "{o}"),
+            Expr::Eq(a, b) => write!(f, "{a} == {b}"),
+            Expr::Ne(a, b) => write!(f, "{a} != {b}"),
+            Expr::Not(e) => write!(f, "!{}", wrap(e)),
+            Expr::And(a, b) => write!(f, "{} && {}", wrap(a), wrap(b)),
+            Expr::Or(a, b) => write!(f, "{} || {}", wrap(a), wrap(b)),
+        }
+    }
+}
+
+impl std::fmt::Display for When {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match &self.0 {
+            Some(e) => write!(f, "{e}"),
+            None => Ok(()),
+        }
+    }
+}
+
 /// A parsed context expression; the empty expression is always true.
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct When(Option<Expr>);

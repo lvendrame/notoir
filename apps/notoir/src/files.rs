@@ -1444,7 +1444,8 @@ impl AppCore {
             Some(DocumentOrigin::File { path, .. }) => file_name(path),
             Some(DocumentOrigin::Scratchpad { title, .. }) => title.clone(),
             Some(DocumentOrigin::Untitled { n }) => t!("tabs:untitled", n = n),
-            Some(DocumentOrigin::Virtual { title }) => title.clone(),
+            // Virtual titles are i18n keys (Settings, Welcome).
+            Some(DocumentOrigin::Virtual { title }) => t!(title),
             None => String::new(),
         }
     }

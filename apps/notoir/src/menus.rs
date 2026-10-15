@@ -589,6 +589,9 @@ mod tests {
         let view = &menu_bar(Platform::Linux)[3];
         let items = visible_items(&view.items, &r);
         assert!(contains(&items, "view.toggleToolbar"));
-        assert!(!contains(&items, "view.zenMode"));
+        assert!(
+            !contains(&items, "view.toggleBreadcrumbs"),
+            "not implemented yet"
+        );
     }
 }

@@ -48,20 +48,25 @@
     "dockTab": "Acoplar pestaña",
     "toggleMinimap": "Alternar minimapa",
     "minimapSide": "Posición del minimapa",
-    "minimapScale": "Escala del minimapa"
+    "minimapScale": "Escala del minimapa",
+    "zenMode": "Alternar modo Zen",
+    "exitZenMode": "Salir del modo Zen"
   },
   "preferences": {
     "changeTheme": "Cambiar tema…",
     "changeLanguage": "Cambiar idioma de la interfaz…",
     "openKeybindingsFile": "Abrir archivo de atajos de teclado",
-    "openSettingsFile": "Abrir archivo de ajustes de usuario"
+    "openSettingsFile": "Abrir archivo de ajustes de usuario",
+    "keyboardShortcuts": "Atajos de teclado"
   },
   "help": {
-    "about": "Acerca de Notoir"
+    "about": "Acerca de Notoir",
+    "welcome": "Bienvenida"
   },
   "app": {
     "quit": "Salir",
-    "quitMac": "Salir de Notoir"
+    "quitMac": "Salir de Notoir",
+    "settings": "Abrir configuración"
   },
   "workbench": {
     "showNotifications": "Mostrar notificaciones",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Cambiar secuencia de fin de línea…",
     "changeEncoding": "Cambiar codificación del archivo…",
     "changeLanguageMode": "Cambiar modo de lenguaje…",
-    "type": "Escribir texto"
+    "type": "Escribir texto",
+    "changeIndentation": "Cambiar sangría",
+    "changeTabSize": "Cambiar tamaño de tabulación"
   },
   "workspace": {
     "open": "Abrir espacio de trabajo…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Restaurar documento sin guardar",
     "discardEntry": "Descartar documento sin guardar",
     "flush": "Escribir instantáneas de recuperación"
+  },
+  "welcome": {
+    "finish": "Terminar bienvenida"
   }
 }

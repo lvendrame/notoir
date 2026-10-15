@@ -48,20 +48,25 @@
     "dockTab": "Zadokuj kartę",
     "toggleMinimap": "Przełącz minimapę",
     "minimapSide": "Położenie minimapy",
-    "minimapScale": "Skala minimapy"
+    "minimapScale": "Skala minimapy",
+    "zenMode": "Przełącz tryb Zen",
+    "exitZenMode": "Wyjdź z trybu Zen"
   },
   "preferences": {
     "changeTheme": "Zmień motyw…",
     "changeLanguage": "Zmień język interfejsu…",
     "openKeybindingsFile": "Otwórz plik skrótów klawiszowych",
-    "openSettingsFile": "Otwórz plik ustawień użytkownika"
+    "openSettingsFile": "Otwórz plik ustawień użytkownika",
+    "keyboardShortcuts": "Skróty klawiszowe"
   },
   "help": {
-    "about": "O programie Notoir"
+    "about": "O programie Notoir",
+    "welcome": "Powitanie"
   },
   "app": {
     "quit": "Zakończ",
-    "quitMac": "Zakończ Notoir"
+    "quitMac": "Zakończ Notoir",
+    "settings": "Otwórz ustawienia"
   },
   "workbench": {
     "showNotifications": "Pokaż powiadomienia",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Zmień sekwencję końca wiersza…",
     "changeEncoding": "Zmień kodowanie pliku…",
     "changeLanguageMode": "Zmień tryb języka…",
-    "type": "Wpisz tekst"
+    "type": "Wpisz tekst",
+    "changeIndentation": "Zmień wcięcie",
+    "changeTabSize": "Zmień szerokość tabulacji"
   },
   "workspace": {
     "open": "Otwórz obszar roboczy…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Przywróć niezapisany dokument",
     "discardEntry": "Odrzuć niezapisany dokument",
     "flush": "Zapisz migawki odzyskiwania"
+  },
+  "welcome": {
+    "finish": "Zakończ powitanie"
   }
 }

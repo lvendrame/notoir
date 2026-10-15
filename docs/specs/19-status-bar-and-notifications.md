@@ -1,6 +1,6 @@
 # 19 — Status Bar & Notifications
 
-**Status:** Partial — status bar shell, notifications (M3); document readouts (M4); encoding/line-ending/language pickers from the status bar (M5); Go to Line and indentation pickers (M9, M10)
+**Status:** Partial — status bar shell, notifications (M3); document readouts (M4); encoding/line-ending/language pickers (M5); cursor position opens Go to Line, indentation picker (spaces/tabs, tab size, detect, convert) (M10); Git, MCP and indexing items arrive with their milestones
 
 ## Purpose
 

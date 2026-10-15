@@ -48,20 +48,25 @@
     "dockTab": "Ancrer l'onglet",
     "toggleMinimap": "Afficher/masquer la minimap",
     "minimapSide": "Position de la minimap",
-    "minimapScale": "Échelle de la minimap"
+    "minimapScale": "Échelle de la minimap",
+    "zenMode": "Activer/désactiver le mode Zen",
+    "exitZenMode": "Quitter le mode Zen"
   },
   "preferences": {
     "changeTheme": "Changer de thème…",
     "changeLanguage": "Changer la langue d'affichage…",
     "openKeybindingsFile": "Ouvrir le fichier des raccourcis clavier",
-    "openSettingsFile": "Ouvrir le fichier des paramètres utilisateur"
+    "openSettingsFile": "Ouvrir le fichier des paramètres utilisateur",
+    "keyboardShortcuts": "Raccourcis clavier"
   },
   "help": {
-    "about": "À propos de Notoir"
+    "about": "À propos de Notoir",
+    "welcome": "Bienvenue"
   },
   "app": {
     "quit": "Quitter",
-    "quitMac": "Quitter Notoir"
+    "quitMac": "Quitter Notoir",
+    "settings": "Ouvrir les paramètres"
   },
   "workbench": {
     "showNotifications": "Afficher les notifications",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Changer la séquence de fin de ligne…",
     "changeEncoding": "Changer l'encodage du fichier…",
     "changeLanguageMode": "Changer le mode de langage…",
-    "type": "Saisir du texte"
+    "type": "Saisir du texte",
+    "changeIndentation": "Modifier l'indentation",
+    "changeTabSize": "Modifier la taille de tabulation"
   },
   "workspace": {
     "open": "Ouvrir un espace de travail…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Restaurer le document non enregistré",
     "discardEntry": "Ignorer le document non enregistré",
     "flush": "Écrire les instantanés de récupération"
+  },
+  "welcome": {
+    "finish": "Terminer l'accueil"
   }
 }

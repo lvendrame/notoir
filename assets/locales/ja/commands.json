@@ -48,20 +48,25 @@
     "dockTab": "タブをドッキング",
     "toggleMinimap": "ミニマップの切り替え",
     "minimapSide": "ミニマップの位置",
-    "minimapScale": "ミニマップの倍率"
+    "minimapScale": "ミニマップの倍率",
+    "zenMode": "Zen モードの切り替え",
+    "exitZenMode": "Zen モードを終了"
   },
   "preferences": {
     "changeTheme": "テーマの変更…",
     "changeLanguage": "表示言語の変更…",
     "openKeybindingsFile": "キーボード ショートカット ファイルを開く",
-    "openSettingsFile": "ユーザー設定ファイルを開く"
+    "openSettingsFile": "ユーザー設定ファイルを開く",
+    "keyboardShortcuts": "キーボード ショートカット"
   },
   "help": {
-    "about": "Notoir について"
+    "about": "Notoir について",
+    "welcome": "ようこそ"
   },
   "app": {
     "quit": "終了",
-    "quitMac": "Notoir を終了"
+    "quitMac": "Notoir を終了",
+    "settings": "設定を開く"
   },
   "workbench": {
     "showNotifications": "通知を表示",
@@ -144,7 +149,9 @@
     "changeLineEnding": "行末のシーケンスの変更…",
     "changeEncoding": "ファイルのエンコードの変更…",
     "changeLanguageMode": "言語モードの変更…",
-    "type": "テキストを入力"
+    "type": "テキストを入力",
+    "changeIndentation": "インデントの変更",
+    "changeTabSize": "タブ サイズの変更"
   },
   "workspace": {
     "open": "ワークスペースを開く…",
@@ -186,5 +193,8 @@
     "restoreEntry": "未保存のドキュメントを復元",
     "discardEntry": "未保存のドキュメントを破棄",
     "flush": "復元用スナップショットを書き込む"
+  },
+  "welcome": {
+    "finish": "ようこそを終了"
   }
 }

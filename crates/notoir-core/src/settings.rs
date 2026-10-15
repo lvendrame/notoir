@@ -506,6 +506,35 @@ impl Schema {
             Scopes::USER_ONLY,
             C::Appearance,
         );
+        // Zen Mode
+        def(
+            "zenMode.hideTabs",
+            T::Bool,
+            V::Bool(true),
+            Scopes::USER_ONLY,
+            C::Appearance,
+        );
+        def(
+            "zenMode.hideLineNumbers",
+            T::Bool,
+            V::Bool(true),
+            Scopes::USER_ONLY,
+            C::Appearance,
+        );
+        def(
+            "zenMode.fullScreen",
+            T::Bool,
+            V::Bool(true),
+            Scopes::USER_ONLY,
+            C::Appearance,
+        );
+        def(
+            "zenMode.maxWidth",
+            T::Int { min: 40, max: 400 },
+            V::Int(80),
+            Scopes::USER_ONLY,
+            C::Appearance,
+        );
         // Workspace
         def(
             "explorer.showHidden",

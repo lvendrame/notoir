@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "Genel",
+    "editor": "Düzenleyici",
+    "appearance": "Görünüm",
+    "files": "Dosyalar",
+    "workspace": "Çalışma Alanı",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Eklentiler",
+    "keyboard": "Klavye",
+    "advanced": "Gelişmiş"
+  },
+  "ui": {
+    "search": "Ayarlarda ara",
+    "openFile": "settings.toml dosyasını aç",
+    "user": "Kullanıcı",
+    "workspace": "Çalışma Alanı",
+    "modifiedUser": "Kullanıcıda değiştirildi",
+    "modifiedWorkspace": "Çalışma alanında değiştirildi",
+    "overriddenWorkspace": "Çalışma alanında geçersiz kılındı",
+    "restricted": "Güvenilen bir çalışma alanı gerekir",
+    "reset": "Ayarı Sıfırla",
+    "copyId": "Ayar Kimliğini Kopyala",
+    "copyToml": "Ayarı TOML Olarak Kopyala",
+    "noResults": "Ayar bulunamadı.",
+    "unknown": "Bilinmeyen ayarlar",
+    "languageAuto": "Otomatik (sistem dili)",
+    "more": "Diğer Eylemler"
+  },
+  "kb": {
+    "search": "Kısayollarda ara",
+    "command": "Komut",
+    "keybinding": "Kısayol",
+    "when": "Koşul",
+    "source": "Kaynak",
+    "default": "Varsayılan",
+    "plugin": "Eklenti",
+    "user": "Kullanıcı",
+    "change": "Değiştir",
+    "changeHint": "Yeni kısayola basın (Enter tek tuşlu kısayolu tamamlar, Esc iptal eder)",
+    "remove": "Kaldır"
+  },
+  "language": "Dil",
+  "workbench": {
+    "startup": "Başlangıçta",
+    "theme": "Tema",
+    "uiScale": "Arayüz ölçeği",
+    "tabs": {
+      "density": "Sekme yoğunluğu",
+      "closeAllKeepsPinned": "Tümünü Kapat sabitlenmiş sekmeleri korur"
+    },
+    "toolbar": {
+      "visible": "Araç çubuğu"
+    },
+    "statusBar": {
+      "visible": "Durum çubuğu"
+    },
+    "breadcrumbs": {
+      "enabled": "İçerik haritası"
+    }
+  },
+  "app": {
+    "hotExit": "Çıkışta kaydedilmemiş değişiklikleri koru"
+  },
+  "editor": {
+    "fontFamily": "Yazı tipi ailesi",
+    "fontSize": "Yazı tipi boyutu",
+    "lineHeight": "Satır yüksekliği",
+    "tabSize": "Sekme boyutu",
+    "insertSpaces": "Boşluk ekle",
+    "detectIndentation": "Girintiyi algıla",
+    "wordWrap": "Satır kaydırma",
+    "wordWrapColumn": "Kaydırma sütunu",
+    "lineNumbers": "Satır numaraları",
+    "renderWhitespace": "Boşlukları göster",
+    "highlightCurrentLine": "Geçerli satırı vurgula",
+    "cursorStyle": "İmleç stili",
+    "cursorBlinking": "İmleç yanıp sönmesi",
+    "zoomScope": "Yakınlaştırma kapsamı",
+    "undoLimit": "Geri alma sınırı",
+    "emptySelectionClipboard": "Seçim olmadan satırı kopyala",
+    "rulers": "Cetveller",
+    "minimap": {
+      "enabled": "Mini harita",
+      "side": "Mini harita tarafı",
+      "width": "Mini harita genişliği",
+      "scale": "Mini harita ölçeği",
+      "opacity": "Mini harita opaklığı",
+      "showViewport": "Mini haritada görünür alan",
+      "showSearchMarks": "Mini haritada arama işaretleri",
+      "showSelection": "Mini haritada seçim işaretleri"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Zen Modu: sekmeleri gizle",
+    "hideLineNumbers": "Zen Modu: satır numaralarını gizle",
+    "fullScreen": "Zen Modu: tam ekran",
+    "maxWidth": "Zen Modu: sütun genişliği"
+  },
+  "files": {
+    "autoSave": "Otomatik kaydet",
+    "autoSaveDelay": "Otomatik kaydetme gecikmesi (ms)",
+    "encoding": "Varsayılan kodlama",
+    "eol": "Varsayılan satır sonu",
+    "atomicSave": "Atomik kaydetme",
+    "trimTrailingWhitespaceOnSave": "Kaydederken sondaki boşlukları kırp",
+    "insertFinalNewline": "Sona yeni satır ekle",
+    "reloadCleanOnExternalChange": "Diskte değişen temiz dosyaları yeniden yükle",
+    "exclude": "Hariç tutulan dosyalar"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Scratchpad dili"
+  },
+  "explorer": {
+    "showHidden": "Gizli dosyaları göster",
+    "showGitIgnored": "Git tarafından yok sayılan dosyaları göster",
+    "dimGitIgnored": "Git tarafından yok sayılan dosyaları soluklaştır",
+    "sortOrder": "Sıralama düzeni",
+    "autoReveal": "Etkin dosyayı göster",
+    "confirmDragAndDrop": "Sürükle ve bırakmayı onayla"
+  },
+  "mcp": {
+    "autoStart": "MCP sunucusunu otomatik başlat"
+  },
+  "logging": {
+    "level": "Günlük düzeyi"
+  }
+}

@@ -48,20 +48,25 @@
     "dockTab": "탭 도킹",
     "toggleMinimap": "미니맵 전환",
     "minimapSide": "미니맵 위치",
-    "minimapScale": "미니맵 배율"
+    "minimapScale": "미니맵 배율",
+    "zenMode": "Zen 모드 전환",
+    "exitZenMode": "Zen 모드 종료"
   },
   "preferences": {
     "changeTheme": "테마 변경…",
     "changeLanguage": "표시 언어 변경…",
     "openKeybindingsFile": "키보드 바로 가기 파일 열기",
-    "openSettingsFile": "사용자 설정 파일 열기"
+    "openSettingsFile": "사용자 설정 파일 열기",
+    "keyboardShortcuts": "키보드 바로 가기"
   },
   "help": {
-    "about": "Notoir 정보"
+    "about": "Notoir 정보",
+    "welcome": "시작"
   },
   "app": {
     "quit": "끝내기",
-    "quitMac": "Notoir 종료"
+    "quitMac": "Notoir 종료",
+    "settings": "설정 열기"
   },
   "workbench": {
     "showNotifications": "알림 표시",
@@ -144,7 +149,9 @@
     "changeLineEnding": "줄 끝 시퀀스 변경…",
     "changeEncoding": "파일 인코딩 변경…",
     "changeLanguageMode": "언어 모드 변경…",
-    "type": "텍스트 입력"
+    "type": "텍스트 입력",
+    "changeIndentation": "들여쓰기 변경",
+    "changeTabSize": "탭 크기 변경"
   },
   "workspace": {
     "open": "작업 영역 열기…",
@@ -186,5 +193,8 @@
     "restoreEntry": "저장되지 않은 문서 복원",
     "discardEntry": "저장되지 않은 문서 버리기",
     "flush": "복구 스냅샷 쓰기"
+  },
+  "welcome": {
+    "finish": "시작 완료"
   }
 }

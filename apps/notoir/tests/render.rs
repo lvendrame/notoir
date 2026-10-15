@@ -293,3 +293,55 @@ fn find_minimap_and_palette_snapshot() {
         img.save(out_dir().join("palette.png")).unwrap();
     }
 }
+
+#[test]
+fn settings_welcome_zen_snapshot() {
+    let theme = |o: &mut notoir::core::StartOptions| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+    };
+    let mut app = common::start(move |o| {
+        theme(o);
+        o.first_run = true;
+    });
+    common::settle(&mut app);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("welcome.png")).unwrap();
+    }
+    common::run(&mut app, "welcome.finish", serde_json::Value::Null);
+    common::run(
+        &mut app,
+        "app.settings",
+        serde_json::json!({ "category": "editor" }),
+    );
+    app.harness.state_mut().core.set_user_setting(
+        "editor.fontSize",
+        Some(notoir_core::settings::SettingValue::Int(15)),
+    );
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("settings.png")).unwrap();
+    }
+    common::run(
+        &mut app,
+        "preferences.keyboardShortcuts",
+        serde_json::Value::Null,
+    );
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("shortcuts.png")).unwrap();
+    }
+    let dir = tempfile::tempdir().unwrap();
+    let p = dir.path().join("essay.md");
+    let text: String = (0..30).map(|i| format!("Paragraph {i}. Writing without distractions keeps the focus on the words and nothing else.\n\n")).collect();
+    std::fs::write(&p, text).unwrap();
+    app.harness
+        .state_mut()
+        .core
+        .open_path(&p, Default::default());
+    common::settle(&mut app);
+    common::run(&mut app, "view.zenMode", serde_json::Value::Null);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("zen.png")).unwrap();
+    }
+}

@@ -98,6 +98,8 @@ pub struct EditorOptions {
     pub set_scroll: Option<notoir_core::view::ScrollPosition>,
     /// `None` when hidden (setting, large file).
     pub minimap: Option<minimap::MinimapOptions>,
+    /// Zen Mode: centre a column this many characters wide.
+    pub max_width_cols: Option<usize>,
 }
 
 /// Per-view state that only the widget needs.
@@ -293,6 +295,15 @@ pub fn show(
     let gutter_w = match opts.line_numbers {
         LineNumbers::Off => char_w,
         _ => (gutter_digits(lines) as f32 + 2.0) * char_w,
+    };
+    // Zen Mode: a centred column.
+    let rect = match opts.max_width_cols {
+        Some(cols) => {
+            let w = (cols as f32 * char_w + gutter_w + opts.padding * 2.0 + SCROLLBAR_W)
+                .min(rect.width());
+            Rect::from_center_size(rect.center(), Vec2::new(w, rect.height()))
+        }
+        None => rect,
     };
     // Minimap (hidden in narrow views).
     let mini = opts.minimap.filter(|_| rect.width() >= 400.0);

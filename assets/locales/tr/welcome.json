@@ -8,5 +8,17 @@
   "commandPalette": "Komut Paleti",
   "pin": "Sabitle",
   "unpin": "Sabitlemeyi Kaldır",
-  "removeRecent": "Listeden Kaldır"
+  "removeRecent": "Listeden Kaldır",
+  "title": "Notoir'e Hoş Geldiniz",
+  "skip": "Atla",
+  "languageLabel": "Dil",
+  "appearance": "Görünüm",
+  "git": "Git",
+  "mcp": "MCP",
+  "plugins": "Eklentiler",
+  "configure": "Yapılandır",
+  "learnMore": "Daha Fazla Bilgi",
+  "explore": "Keşfet",
+  "comingLater": "Sonraki bir sürümde kullanılabilir",
+  "start": "Yazmaya başla"
 }

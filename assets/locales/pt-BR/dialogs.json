@@ -17,7 +17,15 @@
     "reopenWithEncoding": "Reabrir com Codificação",
     "saveWithEncoding": "Salvar com Codificação",
     "commands": "Digite um comando",
-    "recentlyUsed": "Usados recentemente"
+    "recentlyUsed": "Usados recentemente",
+    "indentation": "Indentação",
+    "tabSize": "Tamanho da tabulação",
+    "indentSpaces": "Indentar com Espaços",
+    "indentTabs": "Indentar com Tabulações",
+    "changeTabSize": "Alterar Tamanho da Tabulação",
+    "detectIndentation": "Detectar Indentação pelo Conteúdo",
+    "convertToSpaces": "Converter Indentação em Espaços",
+    "convertToTabs": "Converter Indentação em Tabulações"
   },
   "open": {
     "title": "Abrir Arquivo"

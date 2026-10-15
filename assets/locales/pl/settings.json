@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "Ogólne",
+    "editor": "Edytor",
+    "appearance": "Wygląd",
+    "files": "Pliki",
+    "workspace": "Obszar roboczy",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Wtyczki",
+    "keyboard": "Klawiatura",
+    "advanced": "Zaawansowane"
+  },
+  "ui": {
+    "search": "Szukaj w ustawieniach",
+    "openFile": "Otwórz settings.toml",
+    "user": "Użytkownik",
+    "workspace": "Obszar roboczy",
+    "modifiedUser": "Zmienione w Użytkowniku",
+    "modifiedWorkspace": "Zmienione w obszarze roboczym",
+    "overriddenWorkspace": "Nadpisane w obszarze roboczym",
+    "restricted": "Wymaga zaufanego obszaru roboczego",
+    "reset": "Przywróć ustawienie",
+    "copyId": "Kopiuj identyfikator ustawienia",
+    "copyToml": "Kopiuj ustawienie jako TOML",
+    "noResults": "Nie znaleziono ustawień.",
+    "unknown": "Nieznane ustawienia",
+    "languageAuto": "Automatycznie (język systemu)",
+    "more": "Więcej działań"
+  },
+  "kb": {
+    "search": "Szukaj skrótów",
+    "command": "Polecenie",
+    "keybinding": "Skrót",
+    "when": "Kiedy",
+    "source": "Źródło",
+    "default": "Domyślny",
+    "plugin": "Wtyczka",
+    "user": "Użytkownik",
+    "change": "Zmień",
+    "changeHint": "Naciśnij nowy skrót (Enter kończy skrót jednoklawiszowy, Esc anuluje)",
+    "remove": "Usuń"
+  },
+  "language": "Język",
+  "workbench": {
+    "startup": "Przy uruchomieniu",
+    "theme": "Motyw",
+    "uiScale": "Skala interfejsu",
+    "tabs": {
+      "density": "Gęstość kart",
+      "closeAllKeepsPinned": "Zamknij wszystkie zachowuje przypięte karty"
+    },
+    "toolbar": {
+      "visible": "Pasek narzędzi"
+    },
+    "statusBar": {
+      "visible": "Pasek stanu"
+    },
+    "breadcrumbs": {
+      "enabled": "Ścieżka nawigacji"
+    }
+  },
+  "app": {
+    "hotExit": "Zachowaj niezapisane zmiany przy zamykaniu"
+  },
+  "editor": {
+    "fontFamily": "Rodzina czcionek",
+    "fontSize": "Rozmiar czcionki",
+    "lineHeight": "Wysokość wiersza",
+    "tabSize": "Szerokość tabulacji",
+    "insertSpaces": "Wstawiaj spacje",
+    "detectIndentation": "Wykrywaj wcięcie",
+    "wordWrap": "Zawijanie wierszy",
+    "wordWrapColumn": "Kolumna zawijania",
+    "lineNumbers": "Numery wierszy",
+    "renderWhitespace": "Pokazuj białe znaki",
+    "highlightCurrentLine": "Wyróżniaj bieżący wiersz",
+    "cursorStyle": "Styl kursora",
+    "cursorBlinking": "Miganie kursora",
+    "zoomScope": "Zakres powiększenia",
+    "undoLimit": "Limit cofania",
+    "emptySelectionClipboard": "Kopiuj wiersz bez zaznaczenia",
+    "rulers": "Linijki",
+    "minimap": {
+      "enabled": "Minimapa",
+      "side": "Strona minimapy",
+      "width": "Szerokość minimapy",
+      "scale": "Skala minimapy",
+      "opacity": "Krycie minimapy",
+      "showViewport": "Widoczny obszar na minimapie",
+      "showSearchMarks": "Znaczniki wyszukiwania na minimapie",
+      "showSelection": "Znaczniki zaznaczenia na minimapie"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Tryb Zen: ukryj karty",
+    "hideLineNumbers": "Tryb Zen: ukryj numery wierszy",
+    "fullScreen": "Tryb Zen: pełny ekran",
+    "maxWidth": "Tryb Zen: szerokość kolumny"
+  },
+  "files": {
+    "autoSave": "Autozapis",
+    "autoSaveDelay": "Opóźnienie autozapisu (ms)",
+    "encoding": "Domyślne kodowanie",
+    "eol": "Domyślny koniec wiersza",
+    "atomicSave": "Zapis atomowy",
+    "trimTrailingWhitespaceOnSave": "Usuwaj końcowe białe znaki przy zapisie",
+    "insertFinalNewline": "Wstawiaj końcowy znak nowego wiersza",
+    "reloadCleanOnExternalChange": "Wczytuj ponownie niezmienione pliki zmienione na dysku",
+    "exclude": "Wykluczone pliki"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Język Scratchpadów"
+  },
+  "explorer": {
+    "showHidden": "Pokazuj ukryte pliki",
+    "showGitIgnored": "Pokazuj pliki ignorowane przez Git",
+    "dimGitIgnored": "Przyciemniaj pliki ignorowane przez Git",
+    "sortOrder": "Kolejność sortowania",
+    "autoReveal": "Pokazuj aktywny plik",
+    "confirmDragAndDrop": "Potwierdzaj przeciąganie i upuszczanie"
+  },
+  "mcp": {
+    "autoStart": "Uruchamiaj serwer MCP automatycznie"
+  },
+  "logging": {
+    "level": "Poziom logowania"
+  }
+}

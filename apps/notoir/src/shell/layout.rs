@@ -232,16 +232,22 @@ impl Renderer<'_, '_> {
             return;
         }
         let mut tab_rects = Vec::new();
-        let strip = tabs::strip(
-            &mut child,
-            self.kit,
-            self.core,
-            group,
-            self.context,
-            self.actions,
-            self.drag,
-            &mut tab_rects,
-        );
+        let hide_tabs =
+            self.core.zen.is_some() && self.core.settings.bool("zenMode.hideTabs", None);
+        let strip = if hide_tabs {
+            Rect::from_min_size(rect.min, Vec2::new(rect.width(), 0.0))
+        } else {
+            tabs::strip(
+                &mut child,
+                self.kit,
+                self.core,
+                group,
+                self.context,
+                self.actions,
+                self.drag,
+                &mut tab_rects,
+            )
+        };
         let body = Rect::from_min_max(Pos2::new(rect.left(), strip.bottom()), rect.max);
         let active = self
             .core
@@ -249,8 +255,28 @@ impl Renderer<'_, '_> {
             .layout
             .group(group)
             .and_then(|g| g.active);
-        match active {
-            Some(view) => {
+        let kind = active
+            .and_then(|v| self.core.workbench.view(v))
+            .map(|v| v.kind);
+        match (active, kind) {
+            (Some(view), Some(notoir_core::view::ViewKind::Settings)) => {
+                let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
+                body_ui.set_clip_rect(body);
+                super::settings_ui::show(&mut body_ui, self.kit, self.core, self.actions);
+                if body_ui.ui_contains_pointer()
+                    && body_ui.input(|i| i.pointer.any_pressed())
+                    && self.core.workbench.active_view() != Some(view)
+                {
+                    self.out.activate = Some(view);
+                }
+            }
+            (Some(view), Some(notoir_core::view::ViewKind::Welcome)) => {
+                let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
+                body_ui.set_clip_rect(body);
+                super::welcome::show(&mut body_ui, self.kit, self.core, self.actions);
+                let _ = view;
+            }
+            (Some(view), _) => {
                 let opts = self.core.editor_options(view);
                 let doc = self.core.workbench.view(view).map(|v| v.document_id);
                 let banner = doc.and_then(|d| self.core.banners.get(&d).copied().map(|b| (d, b)));
@@ -306,7 +332,7 @@ impl Renderer<'_, '_> {
                     self.out.activate = Some(view);
                 }
             }
-            None => {
+            (None, _) => {
                 child
                     .painter()
                     .rect_filled(body, 0.0, self.kit.color(Tok::BgEditor));

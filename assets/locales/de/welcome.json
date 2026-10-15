@@ -8,5 +8,17 @@
   "commandPalette": "Befehlspalette",
   "pin": "Anheften",
   "unpin": "Lösen",
-  "removeRecent": "Aus der Liste entfernen"
+  "removeRecent": "Aus der Liste entfernen",
+  "title": "Willkommen bei Notoir",
+  "skip": "Überspringen",
+  "languageLabel": "Sprache",
+  "appearance": "Darstellung",
+  "git": "Git",
+  "mcp": "MCP",
+  "plugins": "Plugins",
+  "configure": "Konfigurieren",
+  "learnMore": "Mehr erfahren",
+  "explore": "Entdecken",
+  "comingLater": "In einer späteren Version verfügbar",
+  "start": "Losschreiben"
 }

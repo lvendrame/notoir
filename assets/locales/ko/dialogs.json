@@ -17,7 +17,15 @@
     "reopenWithEncoding": "인코딩으로 다시 열기",
     "saveWithEncoding": "인코딩으로 저장",
     "commands": "명령 입력",
-    "recentlyUsed": "최근에 사용함"
+    "recentlyUsed": "최근에 사용함",
+    "indentation": "들여쓰기",
+    "tabSize": "탭 크기",
+    "indentSpaces": "공백으로 들여쓰기",
+    "indentTabs": "탭으로 들여쓰기",
+    "changeTabSize": "탭 크기 변경",
+    "detectIndentation": "내용에서 들여쓰기 감지",
+    "convertToSpaces": "들여쓰기를 공백으로 변환",
+    "convertToTabs": "들여쓰기를 탭으로 변환"
   },
   "open": {
     "title": "파일 열기"

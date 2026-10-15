@@ -17,7 +17,15 @@
     "reopenWithEncoding": "Otwórz ponownie z kodowaniem",
     "saveWithEncoding": "Zapisz z kodowaniem",
     "commands": "Wpisz polecenie",
-    "recentlyUsed": "Ostatnio używane"
+    "recentlyUsed": "Ostatnio używane",
+    "indentation": "Wcięcie",
+    "tabSize": "Szerokość tabulacji",
+    "indentSpaces": "Wcinaj spacjami",
+    "indentTabs": "Wcinaj tabulatorami",
+    "changeTabSize": "Zmień szerokość tabulacji",
+    "detectIndentation": "Wykryj wcięcie z zawartości",
+    "convertToSpaces": "Zamień wcięcie na spacje",
+    "convertToTabs": "Zamień wcięcie na tabulatory"
   },
   "open": {
     "title": "Otwórz plik"

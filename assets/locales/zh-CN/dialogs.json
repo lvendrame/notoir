@@ -17,7 +17,15 @@
     "reopenWithEncoding": "通过编码重新打开",
     "saveWithEncoding": "通过编码保存",
     "commands": "输入命令",
-    "recentlyUsed": "最近使用"
+    "recentlyUsed": "最近使用",
+    "indentation": "缩进",
+    "tabSize": "制表符大小",
+    "indentSpaces": "使用空格缩进",
+    "indentTabs": "使用制表符缩进",
+    "changeTabSize": "更改制表符大小",
+    "detectIndentation": "根据内容检测缩进",
+    "convertToSpaces": "将缩进转换为空格",
+    "convertToTabs": "将缩进转换为制表符"
   },
   "open": {
     "title": "打开文件"

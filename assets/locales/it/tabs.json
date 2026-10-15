@@ -5,5 +5,7 @@
   "pin": "Fissa scheda",
   "unpin": "Sblocca scheda",
   "showAll": "Mostra tutte le schede",
-  "dropHere": "Trascina qui un file"
+  "dropHere": "Trascina qui un file",
+  "settings": "Impostazioni",
+  "welcome": "Benvenuto"
 }

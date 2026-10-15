@@ -72,6 +72,8 @@ pub enum Effect {
     /// Put keyboard focus in this view's editor.
     FocusEditor(notoir_core::ids::ViewId),
     CopyText(String),
+    /// Enter (true) or leave full screen (Zen Mode).
+    SetFullScreen(bool),
 }
 
 /// How the app starts (resolved by `main`, or by tests).
@@ -93,6 +95,8 @@ pub struct StartOptions {
     /// Restore the last session (`workbench.startup = restoreSession`, no
     /// command-line paths, not `--new-window`).
     pub restore_session: bool,
+    /// Show the first-run page when no settings file exists.
+    pub first_run: bool,
 }
 
 impl StartOptions {
@@ -107,6 +111,7 @@ impl StartOptions {
             dialogs: None,
             open_paths: Vec::new(),
             restore_session: false,
+            first_run: false,
         }
     }
 }
@@ -161,6 +166,11 @@ pub struct AppCore {
     /// Commands run with a captured context (the Command Palette runs them
     /// with the context of the moment it opened).
     pub queue_with_context: Vec<(CommandInvocation, ContextSnapshot)>,
+    pub settings_ui: crate::settings_tab::SettingsUi,
+    /// Zen Mode is on (with what to restore).
+    pub zen: Option<crate::settings_tab::ZenState>,
+    /// Show the first-run page at startup (production launches).
+    pub first_run_check: bool,
 }
 
 impl AppCore {
@@ -276,6 +286,9 @@ impl AppCore {
             doc_watch: Default::default(),
             find: Default::default(),
             queue_with_context: Vec::new(),
+            settings_ui: Default::default(),
+            zen: None,
+            first_run_check: opts.first_run,
             language,
             theme_choice,
             theme_override: opts.theme_override,
@@ -318,6 +331,8 @@ impl AppCore {
 
     /// Leaves maximized mode (when a panel or another group is requested).
     pub fn exit_maximize(&mut self) {
+        // Showing a panel or another group also ends Zen Mode.
+        self.exit_zen();
         if let Some(g) = self.workbench.layout.maximized {
             self.workbench.toggle_maximize(g);
         }
@@ -359,6 +374,9 @@ impl AppCore {
         doc: notoir_core::ids::DocumentId,
     ) -> notoir_editor::edit_ops::IndentStyle {
         let d = self.workbench.document(doc);
+        if let Some(style) = d.and_then(|d| d.indent_override) {
+            return style;
+        }
         let lang = d.map(|d| d.language.as_str());
         if self.settings.bool("editor.detectIndentation", lang)
             && let Some(style) = d.and_then(|d| d.indentation)
@@ -404,6 +422,9 @@ impl AppCore {
             ),
             wrap,
             line_numbers: match s.str("editor.lineNumbers", lang) {
+                _ if self.zen.is_some() && s.bool("zenMode.hideLineNumbers", None) => {
+                    LineNumbers::Off
+                }
                 "off" => LineNumbers::Off,
                 "relative" => LineNumbers::Relative,
                 _ => LineNumbers::On,
@@ -430,16 +451,22 @@ impl AppCore {
             find_current: self.find_highlights(view).1,
             center: self.find.center.contains(&view),
             set_scroll: self.find.scroll.get(&view).copied(),
-            minimap: (s.bool("editor.minimap.enabled", lang) && !doc.is_some_and(|d| d.large_file))
-                .then(|| crate::editor_widget::minimap::MinimapOptions {
-                    left: s.str("editor.minimap.side", None) == "left",
-                    width: s.int("editor.minimap.width", None) as f32,
-                    line_h: s.int("editor.minimap.scale", None).clamp(1, 3) as f32,
-                    opacity: s.float("editor.minimap.opacity", None) as f32,
-                    show_viewport: s.bool("editor.minimap.showViewport", None),
-                    show_search: s.bool("editor.minimap.showSearchMarks", None),
-                    show_selection: s.bool("editor.minimap.showSelection", None),
-                }),
+            max_width_cols: self
+                .zen
+                .as_ref()
+                .map(|_| s.int("zenMode.maxWidth", None).max(20) as usize),
+            minimap: (s.bool("editor.minimap.enabled", lang)
+                && self.zen.is_none()
+                && !doc.is_some_and(|d| d.large_file))
+            .then(|| crate::editor_widget::minimap::MinimapOptions {
+                left: s.str("editor.minimap.side", None) == "left",
+                width: s.int("editor.minimap.width", None) as f32,
+                line_h: s.int("editor.minimap.scale", None).clamp(1, 3) as f32,
+                opacity: s.float("editor.minimap.opacity", None) as f32,
+                show_viewport: s.bool("editor.minimap.showViewport", None),
+                show_search: s.bool("editor.minimap.showSearchMarks", None),
+                show_selection: s.bool("editor.minimap.showSelection", None),
+            }),
         }
     }
 
@@ -468,6 +495,7 @@ impl AppCore {
             .set_bool("fullScreen", fullscreen)
             .set_bool("hasWorkspace", self.workspace.is_some())
             .set_bool("explorerFocus", self.explorer_focused)
+            .set_bool("zenMode", self.zen.is_some())
             .set_bool("editorFocus", self.editor_focused)
             .set_bool("textInputFocus", false);
         if let Some(view) = self
@@ -776,6 +804,9 @@ impl AppCore {
         }
         if self.workspace.is_none() {
             self.restore_hot_exit();
+        }
+        if self.first_run_check {
+            self.maybe_first_run();
         }
     }
 

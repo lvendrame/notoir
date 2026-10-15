@@ -17,7 +17,15 @@
     "reopenWithEncoding": "Riapri con codifica",
     "saveWithEncoding": "Salva con codifica",
     "commands": "Digita un comando",
-    "recentlyUsed": "Usati di recente"
+    "recentlyUsed": "Usati di recente",
+    "indentation": "Rientro",
+    "tabSize": "Dimensione tabulazione",
+    "indentSpaces": "Rientra con spazi",
+    "indentTabs": "Rientra con tabulazioni",
+    "changeTabSize": "Cambia dimensione tabulazione",
+    "detectIndentation": "Rileva il rientro dal contenuto",
+    "convertToSpaces": "Converti il rientro in spazi",
+    "convertToTabs": "Converti il rientro in tabulazioni"
   },
   "open": {
     "title": "Apri file"

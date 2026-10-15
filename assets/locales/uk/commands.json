@@ -48,20 +48,25 @@
     "dockTab": "Закріпити вкладку",
     "toggleMinimap": "Перемкнути мінікарту",
     "minimapSide": "Розташування мінікарти",
-    "minimapScale": "Масштаб мінікарти"
+    "minimapScale": "Масштаб мінікарти",
+    "zenMode": "Перемкнути режим Zen",
+    "exitZenMode": "Вийти з режиму Zen"
   },
   "preferences": {
     "changeTheme": "Змінити тему…",
     "changeLanguage": "Змінити мову інтерфейсу…",
     "openKeybindingsFile": "Відкрити файл сполучень клавіш",
-    "openSettingsFile": "Відкрити файл налаштувань користувача"
+    "openSettingsFile": "Відкрити файл налаштувань користувача",
+    "keyboardShortcuts": "Сполучення клавіш"
   },
   "help": {
-    "about": "Про Notoir"
+    "about": "Про Notoir",
+    "welcome": "Привітання"
   },
   "app": {
     "quit": "Вихід",
-    "quitMac": "Завершити Notoir"
+    "quitMac": "Завершити Notoir",
+    "settings": "Відкрити налаштування"
   },
   "workbench": {
     "showNotifications": "Показати сповіщення",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Змінити послідовність кінця рядка…",
     "changeEncoding": "Змінити кодування файлу…",
     "changeLanguageMode": "Змінити режим мови…",
-    "type": "Ввести текст"
+    "type": "Ввести текст",
+    "changeIndentation": "Змінити відступи",
+    "changeTabSize": "Змінити розмір табуляції"
   },
   "workspace": {
     "open": "Відкрити робочу область…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Відновити незбережений документ",
     "discardEntry": "Відкинути незбережений документ",
     "flush": "Записати знімки відновлення"
+  },
+  "welcome": {
+    "finish": "Завершити привітання"
   }
 }

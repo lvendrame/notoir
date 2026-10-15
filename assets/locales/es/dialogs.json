@@ -17,7 +17,15 @@
     "reopenWithEncoding": "Reabrir con codificación",
     "saveWithEncoding": "Guardar con codificación",
     "commands": "Escribe un comando",
-    "recentlyUsed": "Usados recientemente"
+    "recentlyUsed": "Usados recientemente",
+    "indentation": "Sangría",
+    "tabSize": "Tamaño de tabulación",
+    "indentSpaces": "Sangrar con espacios",
+    "indentTabs": "Sangrar con tabulaciones",
+    "changeTabSize": "Cambiar tamaño de tabulación",
+    "detectIndentation": "Detectar sangría a partir del contenido",
+    "convertToSpaces": "Convertir sangría a espacios",
+    "convertToTabs": "Convertir sangría a tabulaciones"
   },
   "open": {
     "title": "Abrir archivo"

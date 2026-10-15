@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "Algemeen",
+    "editor": "Editor",
+    "appearance": "Weergave",
+    "files": "Bestanden",
+    "workspace": "Werkruimte",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Plug-ins",
+    "keyboard": "Toetsenbord",
+    "advanced": "Geavanceerd"
+  },
+  "ui": {
+    "search": "Instellingen doorzoeken",
+    "openFile": "settings.toml openen",
+    "user": "Gebruiker",
+    "workspace": "Werkruimte",
+    "modifiedUser": "Gewijzigd in Gebruiker",
+    "modifiedWorkspace": "Gewijzigd in werkruimte",
+    "overriddenWorkspace": "Overschreven in werkruimte",
+    "restricted": "Vereist een vertrouwde werkruimte",
+    "reset": "Instelling herstellen",
+    "copyId": "Instellings-ID kopiëren",
+    "copyToml": "Instelling kopiëren als TOML",
+    "noResults": "Geen instellingen gevonden.",
+    "unknown": "Onbekende instellingen",
+    "languageAuto": "Automatisch (systeemtaal)",
+    "more": "Meer acties"
+  },
+  "kb": {
+    "search": "Sneltoetsen zoeken",
+    "command": "Opdracht",
+    "keybinding": "Sneltoets",
+    "when": "Wanneer",
+    "source": "Bron",
+    "default": "Standaard",
+    "plugin": "Plug-in",
+    "user": "Gebruiker",
+    "change": "Wijzigen",
+    "changeHint": "Druk op de nieuwe sneltoets (Enter rondt een sneltoets van één toets af, Esc annuleert)",
+    "remove": "Verwijderen"
+  },
+  "language": "Taal",
+  "workbench": {
+    "startup": "Bij opstarten",
+    "theme": "Thema",
+    "uiScale": "UI-schaal",
+    "tabs": {
+      "density": "Tabdichtheid",
+      "closeAllKeepsPinned": "Alles sluiten behoudt vastgemaakte tabbladen"
+    },
+    "toolbar": {
+      "visible": "Werkbalk"
+    },
+    "statusBar": {
+      "visible": "Statusbalk"
+    },
+    "breadcrumbs": {
+      "enabled": "Kruimelpad"
+    }
+  },
+  "app": {
+    "hotExit": "Niet-opgeslagen wijzigingen bewaren bij afsluiten"
+  },
+  "editor": {
+    "fontFamily": "Lettertypefamilie",
+    "fontSize": "Lettergrootte",
+    "lineHeight": "Regelhoogte",
+    "tabSize": "Tabgrootte",
+    "insertSpaces": "Spaties invoegen",
+    "detectIndentation": "Inspringing detecteren",
+    "wordWrap": "Regelterugloop",
+    "wordWrapColumn": "Terugloopkolom",
+    "lineNumbers": "Regelnummers",
+    "renderWhitespace": "Witruimte tonen",
+    "highlightCurrentLine": "Huidige regel markeren",
+    "cursorStyle": "Cursorstijl",
+    "cursorBlinking": "Cursor knippert",
+    "zoomScope": "Zoombereik",
+    "undoLimit": "Limiet voor ongedaan maken",
+    "emptySelectionClipboard": "Regel kopiëren zonder selectie",
+    "rulers": "Linialen",
+    "minimap": {
+      "enabled": "Minimap",
+      "side": "Zijde van minimap",
+      "width": "Breedte van minimap",
+      "scale": "Schaal van minimap",
+      "opacity": "Dekking van minimap",
+      "showViewport": "Zichtbaar gebied in minimap",
+      "showSearchMarks": "Zoekmarkeringen in minimap",
+      "showSelection": "Selectiemarkeringen in minimap"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Zen-modus: tabbladen verbergen",
+    "hideLineNumbers": "Zen-modus: regelnummers verbergen",
+    "fullScreen": "Zen-modus: volledig scherm",
+    "maxWidth": "Zen-modus: kolombreedte"
+  },
+  "files": {
+    "autoSave": "Automatisch opslaan",
+    "autoSaveDelay": "Vertraging automatisch opslaan (ms)",
+    "encoding": "Standaardcodering",
+    "eol": "Standaard regeleinde",
+    "atomicSave": "Atomair opslaan",
+    "trimTrailingWhitespaceOnSave": "Witruimte aan regeleinde verwijderen bij opslaan",
+    "insertFinalNewline": "Afsluitende nieuwe regel invoegen",
+    "reloadCleanOnExternalChange": "Ongewijzigde bestanden herladen bij wijziging op schijf",
+    "exclude": "Uitgesloten bestanden"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Taal van Scratchpads"
+  },
+  "explorer": {
+    "showHidden": "Verborgen bestanden tonen",
+    "showGitIgnored": "Door Git genegeerde bestanden tonen",
+    "dimGitIgnored": "Door Git genegeerde bestanden dimmen",
+    "sortOrder": "Sorteervolgorde",
+    "autoReveal": "Actief bestand tonen",
+    "confirmDragAndDrop": "Slepen en neerzetten bevestigen"
+  },
+  "mcp": {
+    "autoStart": "MCP-server automatisch starten"
+  },
+  "logging": {
+    "level": "Logniveau"
+  }
+}

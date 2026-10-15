@@ -8,5 +8,17 @@
   "commandPalette": "Opdrachtpalet",
   "pin": "Vastmaken",
   "unpin": "Losmaken",
-  "removeRecent": "Uit de lijst verwijderen"
+  "removeRecent": "Uit de lijst verwijderen",
+  "title": "Welkom bij Notoir",
+  "skip": "Overslaan",
+  "languageLabel": "Taal",
+  "appearance": "Weergave",
+  "git": "Git",
+  "mcp": "MCP",
+  "plugins": "Plug-ins",
+  "configure": "Configureren",
+  "learnMore": "Meer informatie",
+  "explore": "Verkennen",
+  "comingLater": "Beschikbaar in een latere versie",
+  "start": "Beginnen met schrijven"
 }

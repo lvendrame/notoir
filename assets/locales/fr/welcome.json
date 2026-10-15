@@ -8,5 +8,17 @@
   "commandPalette": "Palette de commandes",
   "pin": "Épingler",
   "unpin": "Détacher",
-  "removeRecent": "Retirer de la liste"
+  "removeRecent": "Retirer de la liste",
+  "title": "Bienvenue dans Notoir",
+  "skip": "Passer",
+  "languageLabel": "Langue",
+  "appearance": "Apparence",
+  "git": "Git",
+  "mcp": "MCP",
+  "plugins": "Plugins",
+  "configure": "Configurer",
+  "learnMore": "En savoir plus",
+  "explore": "Explorer",
+  "comingLater": "Disponible dans une version ultérieure",
+  "start": "Commencer à écrire"
 }

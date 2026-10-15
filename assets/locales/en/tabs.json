@@ -5,5 +5,7 @@
   "pin": "Pin Tab",
   "unpin": "Unpin Tab",
   "showAll": "Show All Tabs",
-  "dropHere": "Drop a file here"
+  "dropHere": "Drop a file here",
+  "settings": "Settings",
+  "welcome": "Welcome"
 }

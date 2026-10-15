@@ -1,6 +1,6 @@
 # 20 — Settings
 
-**Status:** Partial — schema, scope resolution, settings files (M1, M2); user settings file applied on save or external change, Open User Settings File (M9); Settings tab and keyboard editor (M10)
+**Status:** Done — schema, scope resolution, settings files (M1, M2); files applied live (M9); Settings tab (search in UI language and English with `@modified`, User/Workspace scope, categories, controls per type, modified/overridden/restricted markers, per-row Reset / Copy ID / Copy as TOML, unknown settings, Open settings.toml), Keyboard Shortcuts editor (search, chord recording, removal, conflict warnings, writes keybindings.toml) (M10). Later: descriptions per setting, font picker, colour swatches, `@lang:` / `@plugin:` filters and Apply to Language…
 
 ## Purpose
 

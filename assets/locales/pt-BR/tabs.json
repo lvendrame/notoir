@@ -5,5 +5,7 @@
   "pin": "Fixar Aba",
   "unpin": "Desafixar Aba",
   "showAll": "Mostrar Todas as Abas",
-  "dropHere": "Solte um arquivo aqui"
+  "dropHere": "Solte um arquivo aqui",
+  "settings": "Configurações",
+  "welcome": "Boas-vindas"
 }

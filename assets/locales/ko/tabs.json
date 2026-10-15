@@ -5,5 +5,7 @@
   "pin": "탭 고정",
   "unpin": "탭 고정 해제",
   "showAll": "모든 탭 표시",
-  "dropHere": "여기에 파일을 놓으세요"
+  "dropHere": "여기에 파일을 놓으세요",
+  "settings": "설정",
+  "welcome": "시작"
 }

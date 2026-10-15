@@ -8,5 +8,17 @@
   "commandPalette": "Command Palette",
   "pin": "Pin",
   "unpin": "Unpin",
-  "removeRecent": "Remove from List"
+  "removeRecent": "Remove from List",
+  "title": "Welcome to Notoir",
+  "skip": "Skip",
+  "languageLabel": "Language",
+  "appearance": "Appearance",
+  "git": "Git",
+  "mcp": "MCP",
+  "plugins": "Plugins",
+  "configure": "Configure",
+  "learnMore": "Learn More",
+  "explore": "Explore",
+  "comingLater": "Available in a later version",
+  "start": "Start writing"
 }

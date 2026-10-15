@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "常规",
+    "editor": "编辑器",
+    "appearance": "外观",
+    "files": "文件",
+    "workspace": "工作区",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "插件",
+    "keyboard": "键盘",
+    "advanced": "高级"
+  },
+  "ui": {
+    "search": "搜索设置",
+    "openFile": "打开 settings.toml",
+    "user": "用户",
+    "workspace": "工作区",
+    "modifiedUser": "已在用户设置中修改",
+    "modifiedWorkspace": "已在工作区中修改",
+    "overriddenWorkspace": "已在工作区中覆盖",
+    "restricted": "需要受信任的工作区",
+    "reset": "重置设置",
+    "copyId": "复制设置 ID",
+    "copyToml": "将设置复制为 TOML",
+    "noResults": "未找到设置。",
+    "unknown": "未知设置",
+    "languageAuto": "自动(系统语言)",
+    "more": "更多操作"
+  },
+  "kb": {
+    "search": "搜索快捷方式",
+    "command": "命令",
+    "keybinding": "键绑定",
+    "when": "条件",
+    "source": "来源",
+    "default": "默认",
+    "plugin": "插件",
+    "user": "用户",
+    "change": "更改",
+    "changeHint": "按下新的快捷键(Enter 完成单键快捷键,Esc 取消)",
+    "remove": "删除"
+  },
+  "language": "语言",
+  "workbench": {
+    "startup": "启动时",
+    "theme": "主题",
+    "uiScale": "界面缩放",
+    "tabs": {
+      "density": "标签页密度",
+      "closeAllKeepsPinned": "全部关闭时保留固定的标签页"
+    },
+    "toolbar": {
+      "visible": "工具栏"
+    },
+    "statusBar": {
+      "visible": "状态栏"
+    },
+    "breadcrumbs": {
+      "enabled": "导航路径"
+    }
+  },
+  "app": {
+    "hotExit": "退出时保留未保存的更改"
+  },
+  "editor": {
+    "fontFamily": "字体系列",
+    "fontSize": "字号",
+    "lineHeight": "行高",
+    "tabSize": "制表符大小",
+    "insertSpaces": "插入空格",
+    "detectIndentation": "检测缩进",
+    "wordWrap": "自动换行",
+    "wordWrapColumn": "换行列",
+    "lineNumbers": "行号",
+    "renderWhitespace": "显示空白字符",
+    "highlightCurrentLine": "突出显示当前行",
+    "cursorStyle": "光标样式",
+    "cursorBlinking": "光标闪烁",
+    "zoomScope": "缩放范围",
+    "undoLimit": "撤销上限",
+    "emptySelectionClipboard": "无选区时复制整行",
+    "rulers": "标尺",
+    "minimap": {
+      "enabled": "缩略图",
+      "side": "缩略图位置",
+      "width": "缩略图宽度",
+      "scale": "缩略图比例",
+      "opacity": "缩略图不透明度",
+      "showViewport": "缩略图可见区域",
+      "showSearchMarks": "缩略图搜索标记",
+      "showSelection": "缩略图选区标记"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "禅模式:隐藏标签页",
+    "hideLineNumbers": "禅模式:隐藏行号",
+    "fullScreen": "禅模式:全屏",
+    "maxWidth": "禅模式:列宽"
+  },
+  "files": {
+    "autoSave": "自动保存",
+    "autoSaveDelay": "自动保存延迟(毫秒)",
+    "encoding": "默认编码",
+    "eol": "默认行尾",
+    "atomicSave": "原子保存",
+    "trimTrailingWhitespaceOnSave": "保存时删除行尾空白",
+    "insertFinalNewline": "插入末尾换行符",
+    "reloadCleanOnExternalChange": "重新加载在磁盘上更改的未修改文件",
+    "exclude": "排除的文件"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Scratchpad 语言"
+  },
+  "explorer": {
+    "showHidden": "显示隐藏文件",
+    "showGitIgnored": "显示被 Git 忽略的文件",
+    "dimGitIgnored": "淡化被 Git 忽略的文件",
+    "sortOrder": "排序方式",
+    "autoReveal": "显示活动文件",
+    "confirmDragAndDrop": "确认拖放"
+  },
+  "mcp": {
+    "autoStart": "自动启动 MCP 服务器"
+  },
+  "logging": {
+    "level": "日志级别"
+  }
+}

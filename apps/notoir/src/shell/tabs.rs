@@ -24,6 +24,13 @@ use crate::theme::{ICON_SM, Tok};
 pub const TAB_STRIP_HEIGHT: f32 = 34.0;
 
 fn file_icon(doc: &Document) -> Icon {
+    match &doc.origin {
+        DocumentOrigin::Virtual { title } if title == crate::settings_tab::SETTINGS_TITLE => {
+            return Icon::Settings;
+        }
+        DocumentOrigin::Virtual { .. } => return Icon::Info,
+        _ => {}
+    }
     language_icon(doc.language.as_str())
 }
 

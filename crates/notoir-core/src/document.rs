@@ -145,6 +145,9 @@ pub struct Document {
     pub read_only: ReadOnly,
     pub large_file: bool,
     pub indentation: Option<notoir_editor::edit_ops::IndentStyle>,
+    /// Chosen from the status bar indentation picker; wins over settings and
+    /// detection.
+    pub indent_override: Option<notoir_editor::edit_ops::IndentStyle>,
     /// Recent change sets by resulting revision, so caches (display maps,
     /// highlighting) can catch up incrementally.
     recent_changes: VecDeque<(u64, Arc<ChangeSet>)>,
@@ -173,6 +176,7 @@ impl Document {
             read_only: loaded.read_only,
             large_file: loaded.large_file,
             indentation: loaded.indentation,
+            indent_override: None,
             recent_changes: VecDeque::new(),
         }
     }

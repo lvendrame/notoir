@@ -1,6 +1,6 @@
 # 14 — View Options & Zen Mode
 
-**Status:** Partial — global and per-view zoom, word wrap toggle, whitespace and current-line rendering (M4); Zen Mode (M10)
+**Status:** Done — global and per-view zoom, word wrap toggle, whitespace and current-line rendering (M4); Zen Mode (hides chrome, panels, other groups, tabs and line numbers per settings, full screen, centred column, Esc Esc / Mod+K Z restore) (M10). The menu bar reappears while Alt is held instead of on hover; success toasts are not quieter yet
 
 ## Purpose
 

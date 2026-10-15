@@ -8,5 +8,17 @@
   "commandPalette": "Палитра команд",
   "pin": "Закрепить",
   "unpin": "Открепить",
-  "removeRecent": "Удалить из списка"
+  "removeRecent": "Удалить из списка",
+  "title": "Добро пожаловать в Notoir",
+  "skip": "Пропустить",
+  "languageLabel": "Язык",
+  "appearance": "Оформление",
+  "git": "Git",
+  "mcp": "MCP",
+  "plugins": "Плагины",
+  "configure": "Настроить",
+  "learnMore": "Подробнее",
+  "explore": "Обзор",
+  "comingLater": "Будет доступно в следующих версиях",
+  "start": "Начать писать"
 }

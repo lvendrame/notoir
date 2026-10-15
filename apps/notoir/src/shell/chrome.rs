@@ -289,6 +289,10 @@ pub fn document_items(core: &AppCore) -> Vec<StatusItem> {
     let Some(doc) = wb.document(view.document_id) else {
         return Vec::new();
     };
+    // Settings / Welcome tabs have no text readouts.
+    if matches!(doc.origin, notoir_core::DocumentOrigin::Virtual { .. }) {
+        return Vec::new();
+    }
     let indent_style = core.indent_style(doc.id);
     let tab = indent_style.tab_size;
     let rope = doc.buffer.rope();
@@ -325,12 +329,12 @@ pub fn document_items(core: &AppCore) -> Vec<StatusItem> {
         StatusItem {
             text: position,
             mono: true,
-            command: None,
+            command: Some("navigate.goToLine"),
         },
         StatusItem {
             text: indent,
             mono: false,
-            command: None,
+            command: Some("editor.changeIndentation"),
         },
         StatusItem {
             text: doc.encoding.label(),

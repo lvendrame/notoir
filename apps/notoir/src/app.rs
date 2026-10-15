@@ -36,7 +36,8 @@ pub struct NotoirApp {
     pub core: AppCore,
     pub ui: UiState,
     theme_id: ThemeId,
-    theme: Theme,
+    /// The theme being drawn (tests check what the UI shows).
+    pub theme: Theme,
     icons: IconCache,
     started: Instant,
     /// System CJK scripts included in the last font install.
@@ -61,6 +62,7 @@ impl NotoirApp {
         let mut opts = StartOptions::new(paths);
         opts.open_paths = launch.open_paths;
         opts.restore_session = launch.restore_session;
+        opts.first_run = true;
         opts.os_locale = notoir_platform::os_locale();
         opts.language_override = std::env::var(LANG_ENV)
             .ok()
@@ -171,6 +173,10 @@ impl NotoirApp {
                 Effect::ToggleFullScreen => {
                     let full = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
                     ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(!full));
+                }
+                Effect::SetFullScreen(on) => {
+                    ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(on));
+                    self.ui.fullscreen_requested = Some(on);
                 }
                 Effect::Quit => ctx.send_viewport_cmd(egui::ViewportCommand::Close),
                 Effect::OpenPicker(kind) => self.ui.picker = Some(Picker::new(kind, &self.core)),
@@ -300,6 +306,7 @@ impl eframe::App for NotoirApp {
         if !(self.ui.about_open
             || self.ui.picker.is_some()
             || self.core.find.goto.is_some()
+            || self.core.settings_ui.recording.is_some()
             || !self.core.files.prompts.is_empty())
         {
             input::dispatch_keys(&ctx, &mut self.core, &context);
@@ -315,12 +322,18 @@ impl eframe::App for NotoirApp {
                 theme: &self.theme,
                 icons: &mut self.icons,
             };
-            chrome::menu_bar(ui, &mut kit, &self.core, &context, &mut actions);
-            if self.core.toolbar_visible() {
+            let zen = self.core.zen.is_some();
+            // Zen Mode: the menu bar shows only while Alt is held (Win/Linux).
+            if !zen || ctx.input(|i| i.modifiers.alt) {
+                chrome::menu_bar(ui, &mut kit, &self.core, &context, &mut actions);
+            } else {
+                top_offset = 0.0;
+            }
+            if self.core.toolbar_visible() && !zen {
                 chrome::toolbar(ui, &mut kit, &self.core, &context, &mut actions);
                 top_offset += chrome::TOOLBAR_HEIGHT;
             }
-            if self.core.status_bar_visible() {
+            if self.core.status_bar_visible() && !zen {
                 chrome::status_bar(ui, &mut kit, &self.core, &mut actions);
                 bottom_offset += chrome::STATUS_BAR_HEIGHT;
             }

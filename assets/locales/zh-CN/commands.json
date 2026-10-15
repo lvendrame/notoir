@@ -48,20 +48,25 @@
     "dockTab": "停靠标签页",
     "toggleMinimap": "切换缩略图",
     "minimapSide": "缩略图位置",
-    "minimapScale": "缩略图比例"
+    "minimapScale": "缩略图比例",
+    "zenMode": "切换禅模式",
+    "exitZenMode": "退出禅模式"
   },
   "preferences": {
     "changeTheme": "更改主题…",
     "changeLanguage": "更改显示语言…",
     "openKeybindingsFile": "打开键盘快捷方式文件",
-    "openSettingsFile": "打开用户设置文件"
+    "openSettingsFile": "打开用户设置文件",
+    "keyboardShortcuts": "键盘快捷方式"
   },
   "help": {
-    "about": "关于 Notoir"
+    "about": "关于 Notoir",
+    "welcome": "欢迎"
   },
   "app": {
     "quit": "退出",
-    "quitMac": "退出 Notoir"
+    "quitMac": "退出 Notoir",
+    "settings": "打开设置"
   },
   "workbench": {
     "showNotifications": "显示通知",
@@ -144,7 +149,9 @@
     "changeLineEnding": "更改行尾序列…",
     "changeEncoding": "更改文件编码…",
     "changeLanguageMode": "更改语言模式…",
-    "type": "输入文本"
+    "type": "输入文本",
+    "changeIndentation": "更改缩进",
+    "changeTabSize": "更改制表符大小"
   },
   "workspace": {
     "open": "打开工作区…",
@@ -186,5 +193,8 @@
     "restoreEntry": "恢复未保存的文档",
     "discardEntry": "放弃未保存的文档",
     "flush": "写入恢复快照"
+  },
+  "welcome": {
+    "finish": "完成欢迎"
   }
 }

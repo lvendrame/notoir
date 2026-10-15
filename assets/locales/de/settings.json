@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "Allgemein",
+    "editor": "Editor",
+    "appearance": "Darstellung",
+    "files": "Dateien",
+    "workspace": "Arbeitsbereich",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Plugins",
+    "keyboard": "Tastatur",
+    "advanced": "Erweitert"
+  },
+  "ui": {
+    "search": "Einstellungen durchsuchen",
+    "openFile": "settings.toml öffnen",
+    "user": "Benutzer",
+    "workspace": "Arbeitsbereich",
+    "modifiedUser": "Im Benutzer geändert",
+    "modifiedWorkspace": "Im Arbeitsbereich geändert",
+    "overriddenWorkspace": "Im Arbeitsbereich überschrieben",
+    "restricted": "Erfordert einen vertrauenswürdigen Arbeitsbereich",
+    "reset": "Einstellung zurücksetzen",
+    "copyId": "Einstellungs-ID kopieren",
+    "copyToml": "Einstellung als TOML kopieren",
+    "noResults": "Keine Einstellungen gefunden.",
+    "unknown": "Unbekannte Einstellungen",
+    "languageAuto": "Automatisch (Systemsprache)",
+    "more": "Weitere Aktionen"
+  },
+  "kb": {
+    "search": "Tastenkürzel durchsuchen",
+    "command": "Befehl",
+    "keybinding": "Tastenkürzel",
+    "when": "Wann",
+    "source": "Quelle",
+    "default": "Standard",
+    "plugin": "Plugin",
+    "user": "Benutzer",
+    "change": "Ändern",
+    "changeHint": "Neues Tastenkürzel drücken (Eingabe schließt ein Ein-Tasten-Kürzel ab, Esc bricht ab)",
+    "remove": "Entfernen"
+  },
+  "language": "Sprache",
+  "workbench": {
+    "startup": "Beim Start",
+    "theme": "Design",
+    "uiScale": "UI-Skalierung",
+    "tabs": {
+      "density": "Tab-Dichte",
+      "closeAllKeepsPinned": "Alle schließen behält angeheftete Tabs"
+    },
+    "toolbar": {
+      "visible": "Symbolleiste"
+    },
+    "statusBar": {
+      "visible": "Statusleiste"
+    },
+    "breadcrumbs": {
+      "enabled": "Brotkrumen"
+    }
+  },
+  "app": {
+    "hotExit": "Ungespeicherte Änderungen beim Beenden behalten"
+  },
+  "editor": {
+    "fontFamily": "Schriftfamilie",
+    "fontSize": "Schriftgröße",
+    "lineHeight": "Zeilenhöhe",
+    "tabSize": "Tabulatorbreite",
+    "insertSpaces": "Leerzeichen einfügen",
+    "detectIndentation": "Einrückung erkennen",
+    "wordWrap": "Zeilenumbruch",
+    "wordWrapColumn": "Umbruchspalte",
+    "lineNumbers": "Zeilennummern",
+    "renderWhitespace": "Leerraum anzeigen",
+    "highlightCurrentLine": "Aktuelle Zeile hervorheben",
+    "cursorStyle": "Cursorstil",
+    "cursorBlinking": "Cursor blinkt",
+    "zoomScope": "Zoombereich",
+    "undoLimit": "Rückgängig-Grenze",
+    "emptySelectionClipboard": "Zeile ohne Auswahl kopieren",
+    "rulers": "Lineale",
+    "minimap": {
+      "enabled": "Minimap",
+      "side": "Seite der Minimap",
+      "width": "Breite der Minimap",
+      "scale": "Größe der Minimap",
+      "opacity": "Deckkraft der Minimap",
+      "showViewport": "Sichtbereich in der Minimap",
+      "showSearchMarks": "Suchmarken in der Minimap",
+      "showSelection": "Auswahlmarken in der Minimap"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Zen-Modus: Tabs ausblenden",
+    "hideLineNumbers": "Zen-Modus: Zeilennummern ausblenden",
+    "fullScreen": "Zen-Modus: Vollbild",
+    "maxWidth": "Zen-Modus: Spaltenbreite"
+  },
+  "files": {
+    "autoSave": "Automatisch speichern",
+    "autoSaveDelay": "Verzögerung für automatisches Speichern (ms)",
+    "encoding": "Standardkodierung",
+    "eol": "Standard-Zeilenende",
+    "atomicSave": "Atomares Speichern",
+    "trimTrailingWhitespaceOnSave": "Nachgestellte Leerzeichen beim Speichern entfernen",
+    "insertFinalNewline": "Abschließende Leerzeile einfügen",
+    "reloadCleanOnExternalChange": "Unveränderte Dateien bei Änderung auf dem Datenträger neu laden",
+    "exclude": "Ausgeschlossene Dateien"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Sprache der Scratchpads"
+  },
+  "explorer": {
+    "showHidden": "Versteckte Dateien anzeigen",
+    "showGitIgnored": "Von Git ignorierte Dateien anzeigen",
+    "dimGitIgnored": "Von Git ignorierte Dateien abblenden",
+    "sortOrder": "Sortierung",
+    "autoReveal": "Aktive Datei anzeigen",
+    "confirmDragAndDrop": "Ziehen und Ablegen bestätigen"
+  },
+  "mcp": {
+    "autoStart": "MCP-Server automatisch starten"
+  },
+  "logging": {
+    "level": "Protokollstufe"
+  }
+}

@@ -8,5 +8,17 @@
   "commandPalette": "命令面板",
   "pin": "固定",
   "unpin": "取消固定",
-  "removeRecent": "从列表中移除"
+  "removeRecent": "从列表中移除",
+  "title": "欢迎使用 Notoir",
+  "skip": "跳过",
+  "languageLabel": "语言",
+  "appearance": "外观",
+  "git": "Git",
+  "mcp": "MCP",
+  "plugins": "插件",
+  "configure": "配置",
+  "learnMore": "了解更多",
+  "explore": "浏览",
+  "comingLater": "将在以后的版本中提供",
+  "start": "开始写作"
 }

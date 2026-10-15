@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "Generale",
+    "editor": "Editor",
+    "appearance": "Aspetto",
+    "files": "File",
+    "workspace": "Area di lavoro",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Plugin",
+    "keyboard": "Tastiera",
+    "advanced": "Avanzate"
+  },
+  "ui": {
+    "search": "Cerca nelle impostazioni",
+    "openFile": "Apri settings.toml",
+    "user": "Utente",
+    "workspace": "Area di lavoro",
+    "modifiedUser": "Modificata in Utente",
+    "modifiedWorkspace": "Modificata nell'area di lavoro",
+    "overriddenWorkspace": "Sostituita nell'area di lavoro",
+    "restricted": "Richiede un'area di lavoro attendibile",
+    "reset": "Reimposta",
+    "copyId": "Copia ID impostazione",
+    "copyToml": "Copia impostazione come TOML",
+    "noResults": "Nessuna impostazione trovata.",
+    "unknown": "Impostazioni sconosciute",
+    "languageAuto": "Automatica (lingua del sistema)",
+    "more": "Altre azioni"
+  },
+  "kb": {
+    "search": "Cerca scorciatoie",
+    "command": "Comando",
+    "keybinding": "Scorciatoia",
+    "when": "Quando",
+    "source": "Origine",
+    "default": "Predefinita",
+    "plugin": "Plugin",
+    "user": "Utente",
+    "change": "Modifica",
+    "changeHint": "Premi la nuova scorciatoia (Invio completa una scorciatoia a un tasto, Esc annulla)",
+    "remove": "Rimuovi"
+  },
+  "language": "Lingua",
+  "workbench": {
+    "startup": "All'avvio",
+    "theme": "Tema",
+    "uiScale": "Scala dell'interfaccia",
+    "tabs": {
+      "density": "Densità delle schede",
+      "closeAllKeepsPinned": "Chiudi tutto mantiene le schede fissate"
+    },
+    "toolbar": {
+      "visible": "Barra degli strumenti"
+    },
+    "statusBar": {
+      "visible": "Barra di stato"
+    },
+    "breadcrumbs": {
+      "enabled": "Percorso di navigazione"
+    }
+  },
+  "app": {
+    "hotExit": "Mantieni le modifiche non salvate all'uscita"
+  },
+  "editor": {
+    "fontFamily": "Famiglia di caratteri",
+    "fontSize": "Dimensione carattere",
+    "lineHeight": "Altezza riga",
+    "tabSize": "Dimensione tabulazione",
+    "insertSpaces": "Inserisci spazi",
+    "detectIndentation": "Rileva rientro",
+    "wordWrap": "A capo automatico",
+    "wordWrapColumn": "Colonna di a capo",
+    "lineNumbers": "Numeri di riga",
+    "renderWhitespace": "Mostra spazi",
+    "highlightCurrentLine": "Evidenzia riga corrente",
+    "cursorStyle": "Stile del cursore",
+    "cursorBlinking": "Lampeggio del cursore",
+    "zoomScope": "Ambito dello zoom",
+    "undoLimit": "Limite di annullamento",
+    "emptySelectionClipboard": "Copia riga senza selezione",
+    "rulers": "Righelli",
+    "minimap": {
+      "enabled": "Minimappa",
+      "side": "Lato della minimappa",
+      "width": "Larghezza della minimappa",
+      "scale": "Scala della minimappa",
+      "opacity": "Opacità della minimappa",
+      "showViewport": "Area visibile nella minimappa",
+      "showSearchMarks": "Segni di ricerca nella minimappa",
+      "showSelection": "Segni di selezione nella minimappa"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Modalità Zen: nascondi schede",
+    "hideLineNumbers": "Modalità Zen: nascondi numeri di riga",
+    "fullScreen": "Modalità Zen: schermo intero",
+    "maxWidth": "Modalità Zen: larghezza colonna"
+  },
+  "files": {
+    "autoSave": "Salvataggio automatico",
+    "autoSaveDelay": "Ritardo salvataggio automatico (ms)",
+    "encoding": "Codifica predefinita",
+    "eol": "Fine riga predefinito",
+    "atomicSave": "Salvataggio atomico",
+    "trimTrailingWhitespaceOnSave": "Elimina spazi finali al salvataggio",
+    "insertFinalNewline": "Inserisci a capo finale",
+    "reloadCleanOnExternalChange": "Ricarica file non modificati cambiati sul disco",
+    "exclude": "File esclusi"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Linguaggio degli Scratchpad"
+  },
+  "explorer": {
+    "showHidden": "Mostra file nascosti",
+    "showGitIgnored": "Mostra file ignorati da Git",
+    "dimGitIgnored": "Attenua file ignorati da Git",
+    "sortOrder": "Ordinamento",
+    "autoReveal": "Mostra il file attivo",
+    "confirmDragAndDrop": "Conferma trascinamento"
+  },
+  "mcp": {
+    "autoStart": "Avvia automaticamente il server MCP"
+  },
+  "logging": {
+    "level": "Livello di log"
+  }
+}

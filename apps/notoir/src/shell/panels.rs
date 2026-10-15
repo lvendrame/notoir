@@ -53,7 +53,7 @@ pub fn show(
     let layout = &layout;
     let mut sizes = PanelSizes::default();
 
-    if layout.activity_bar_visible && !layout.primary.panels.is_empty() {
+    if layout.activity_bar_visible && !layout.primary.panels.is_empty() && core.zen.is_none() {
         side_panel("activity-bar", layout.primary_side)
             .exact_size(ACTIVITY_BAR_WIDTH)
             .resizable(false)

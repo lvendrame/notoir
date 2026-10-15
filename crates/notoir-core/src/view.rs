@@ -15,6 +15,8 @@ pub enum ViewKind {
     JsonTree,
     JsonSplit,
     Settings,
+    /// First-run / Help → Welcome page.
+    Welcome,
 }
 
 /// Top visible display row plus pixel offsets.

@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "Загальні",
+    "editor": "Редактор",
+    "appearance": "Вигляд",
+    "files": "Файли",
+    "workspace": "Робоча область",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Плагіни",
+    "keyboard": "Клавіатура",
+    "advanced": "Додатково"
+  },
+  "ui": {
+    "search": "Пошук налаштувань",
+    "openFile": "Відкрити settings.toml",
+    "user": "Користувач",
+    "workspace": "Робоча область",
+    "modifiedUser": "Змінено в налаштуваннях користувача",
+    "modifiedWorkspace": "Змінено в робочій області",
+    "overriddenWorkspace": "Перевизначено в робочій області",
+    "restricted": "Потрібна довірена робоча область",
+    "reset": "Скинути налаштування",
+    "copyId": "Копіювати ID налаштування",
+    "copyToml": "Копіювати налаштування як TOML",
+    "noResults": "Налаштувань не знайдено.",
+    "unknown": "Невідомі налаштування",
+    "languageAuto": "Автоматично (мова системи)",
+    "more": "Інші дії"
+  },
+  "kb": {
+    "search": "Пошук сполучень",
+    "command": "Команда",
+    "keybinding": "Сполучення клавіш",
+    "when": "Коли",
+    "source": "Джерело",
+    "default": "Типове",
+    "plugin": "Плагін",
+    "user": "Користувач",
+    "change": "Змінити",
+    "changeHint": "Натисніть нове сполучення (Enter завершує сполучення з однієї клавіші, Esc скасовує)",
+    "remove": "Видалити"
+  },
+  "language": "Мова",
+  "workbench": {
+    "startup": "Під час запуску",
+    "theme": "Тема",
+    "uiScale": "Масштаб інтерфейсу",
+    "tabs": {
+      "density": "Щільність вкладок",
+      "closeAllKeepsPinned": "«Закрити все» зберігає закріплені вкладки"
+    },
+    "toolbar": {
+      "visible": "Панель інструментів"
+    },
+    "statusBar": {
+      "visible": "Рядок стану"
+    },
+    "breadcrumbs": {
+      "enabled": "Навігаційний ланцюжок"
+    }
+  },
+  "app": {
+    "hotExit": "Зберігати незбережені зміни під час виходу"
+  },
+  "editor": {
+    "fontFamily": "Сімейство шрифтів",
+    "fontSize": "Розмір шрифту",
+    "lineHeight": "Висота рядка",
+    "tabSize": "Розмір табуляції",
+    "insertSpaces": "Вставляти пробіли",
+    "detectIndentation": "Визначати відступи",
+    "wordWrap": "Перенесення рядків",
+    "wordWrapColumn": "Стовпець перенесення",
+    "lineNumbers": "Номери рядків",
+    "renderWhitespace": "Показувати пробіли",
+    "highlightCurrentLine": "Виділяти поточний рядок",
+    "cursorStyle": "Стиль курсора",
+    "cursorBlinking": "Блимання курсора",
+    "zoomScope": "Область масштабу",
+    "undoLimit": "Межа скасування",
+    "emptySelectionClipboard": "Копіювати рядок без виділення",
+    "rulers": "Лінійки",
+    "minimap": {
+      "enabled": "Мінікарта",
+      "side": "Бік мінікарти",
+      "width": "Ширина мінікарти",
+      "scale": "Масштаб мінікарти",
+      "opacity": "Непрозорість мінікарти",
+      "showViewport": "Видима область на мінікарті",
+      "showSearchMarks": "Мітки пошуку на мінікарті",
+      "showSelection": "Мітки виділення на мінікарті"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Режим Zen: сховати вкладки",
+    "hideLineNumbers": "Режим Zen: сховати номери рядків",
+    "fullScreen": "Режим Zen: повний екран",
+    "maxWidth": "Режим Zen: ширина колонки"
+  },
+  "files": {
+    "autoSave": "Автозбереження",
+    "autoSaveDelay": "Затримка автозбереження (мс)",
+    "encoding": "Типове кодування",
+    "eol": "Типовий кінець рядка",
+    "atomicSave": "Атомарне збереження",
+    "trimTrailingWhitespaceOnSave": "Видаляти пробіли в кінці рядків під час збереження",
+    "insertFinalNewline": "Додавати перехід рядка в кінці",
+    "reloadCleanOnExternalChange": "Перезавантажувати незмінені файли при зміні на диску",
+    "exclude": "Виключені файли"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Мова чернеток"
+  },
+  "explorer": {
+    "showHidden": "Показувати приховані файли",
+    "showGitIgnored": "Показувати файли, ігноровані Git",
+    "dimGitIgnored": "Приглушувати файли, ігноровані Git",
+    "sortOrder": "Порядок сортування",
+    "autoReveal": "Показувати активний файл",
+    "confirmDragAndDrop": "Підтверджувати перетягування"
+  },
+  "mcp": {
+    "autoStart": "Запускати сервер MCP автоматично"
+  },
+  "logging": {
+    "level": "Рівень журналу"
+  }
+}

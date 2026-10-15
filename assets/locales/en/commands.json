@@ -48,20 +48,25 @@
     "dockTab": "Dock Tab",
     "toggleMinimap": "Toggle Minimap",
     "minimapSide": "Minimap Position",
-    "minimapScale": "Minimap Scale"
+    "minimapScale": "Minimap Scale",
+    "zenMode": "Toggle Zen Mode",
+    "exitZenMode": "Exit Zen Mode"
   },
   "preferences": {
     "changeTheme": "Change Theme…",
     "changeLanguage": "Change Display Language…",
     "openKeybindingsFile": "Open Keyboard Shortcuts File",
-    "openSettingsFile": "Open User Settings File"
+    "openSettingsFile": "Open User Settings File",
+    "keyboardShortcuts": "Keyboard Shortcuts"
   },
   "help": {
-    "about": "About Notoir"
+    "about": "About Notoir",
+    "welcome": "Welcome"
   },
   "app": {
     "quit": "Exit",
-    "quitMac": "Quit Notoir"
+    "quitMac": "Quit Notoir",
+    "settings": "Open Settings"
   },
   "workbench": {
     "showNotifications": "Show Notifications",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Change End of Line Sequence…",
     "changeEncoding": "Change File Encoding…",
     "changeLanguageMode": "Change Language Mode…",
-    "type": "Type Text"
+    "type": "Type Text",
+    "changeIndentation": "Change Indentation",
+    "changeTabSize": "Change Tab Size"
   },
   "workspace": {
     "open": "Open Workspace…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Restore Unsaved Document",
     "discardEntry": "Discard Unsaved Document",
     "flush": "Write Recovery Snapshots"
+  },
+  "welcome": {
+    "finish": "Finish Welcome"
   }
 }

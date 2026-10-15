@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "Général",
+    "editor": "Éditeur",
+    "appearance": "Apparence",
+    "files": "Fichiers",
+    "workspace": "Espace de travail",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Plugins",
+    "keyboard": "Clavier",
+    "advanced": "Avancé"
+  },
+  "ui": {
+    "search": "Rechercher dans les paramètres",
+    "openFile": "Ouvrir settings.toml",
+    "user": "Utilisateur",
+    "workspace": "Espace de travail",
+    "modifiedUser": "Modifié dans Utilisateur",
+    "modifiedWorkspace": "Modifié dans l'espace de travail",
+    "overriddenWorkspace": "Remplacé dans l'espace de travail",
+    "restricted": "Nécessite un espace de travail approuvé",
+    "reset": "Réinitialiser le paramètre",
+    "copyId": "Copier l'ID du paramètre",
+    "copyToml": "Copier le paramètre en TOML",
+    "noResults": "Aucun paramètre trouvé.",
+    "unknown": "Paramètres inconnus",
+    "languageAuto": "Automatique (langue du système)",
+    "more": "Plus d'actions"
+  },
+  "kb": {
+    "search": "Rechercher des raccourcis",
+    "command": "Commande",
+    "keybinding": "Raccourci",
+    "when": "Quand",
+    "source": "Source",
+    "default": "Par défaut",
+    "plugin": "Plugin",
+    "user": "Utilisateur",
+    "change": "Modifier",
+    "changeHint": "Appuyez sur le nouveau raccourci (Entrée termine un raccourci d'une touche, Échap annule)",
+    "remove": "Supprimer"
+  },
+  "language": "Langue",
+  "workbench": {
+    "startup": "Au démarrage",
+    "theme": "Thème",
+    "uiScale": "Échelle de l'interface",
+    "tabs": {
+      "density": "Densité des onglets",
+      "closeAllKeepsPinned": "Tout fermer conserve les onglets épinglés"
+    },
+    "toolbar": {
+      "visible": "Barre d'outils"
+    },
+    "statusBar": {
+      "visible": "Barre d'état"
+    },
+    "breadcrumbs": {
+      "enabled": "Fil d'Ariane"
+    }
+  },
+  "app": {
+    "hotExit": "Conserver les modifications non enregistrées à la sortie"
+  },
+  "editor": {
+    "fontFamily": "Famille de police",
+    "fontSize": "Taille de police",
+    "lineHeight": "Hauteur de ligne",
+    "tabSize": "Taille de tabulation",
+    "insertSpaces": "Insérer des espaces",
+    "detectIndentation": "Détecter l'indentation",
+    "wordWrap": "Retour à la ligne",
+    "wordWrapColumn": "Colonne de retour à la ligne",
+    "lineNumbers": "Numéros de ligne",
+    "renderWhitespace": "Afficher les espaces",
+    "highlightCurrentLine": "Surligner la ligne courante",
+    "cursorStyle": "Style du curseur",
+    "cursorBlinking": "Clignotement du curseur",
+    "zoomScope": "Portée du zoom",
+    "undoLimit": "Limite d'annulation",
+    "emptySelectionClipboard": "Copier la ligne sans sélection",
+    "rulers": "Règles",
+    "minimap": {
+      "enabled": "Minimap",
+      "side": "Côté de la minimap",
+      "width": "Largeur de la minimap",
+      "scale": "Échelle de la minimap",
+      "opacity": "Opacité de la minimap",
+      "showViewport": "Zone visible de la minimap",
+      "showSearchMarks": "Repères de recherche dans la minimap",
+      "showSelection": "Repères de sélection dans la minimap"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Mode Zen : masquer les onglets",
+    "hideLineNumbers": "Mode Zen : masquer les numéros de ligne",
+    "fullScreen": "Mode Zen : plein écran",
+    "maxWidth": "Mode Zen : largeur de colonne"
+  },
+  "files": {
+    "autoSave": "Enregistrement automatique",
+    "autoSaveDelay": "Délai d'enregistrement automatique (ms)",
+    "encoding": "Encodage par défaut",
+    "eol": "Fin de ligne par défaut",
+    "atomicSave": "Enregistrement atomique",
+    "trimTrailingWhitespaceOnSave": "Supprimer les espaces de fin à l'enregistrement",
+    "insertFinalNewline": "Insérer une nouvelle ligne finale",
+    "reloadCleanOnExternalChange": "Recharger les fichiers non modifiés changés sur le disque",
+    "exclude": "Fichiers exclus"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Langage des Scratchpads"
+  },
+  "explorer": {
+    "showHidden": "Afficher les fichiers masqués",
+    "showGitIgnored": "Afficher les fichiers ignorés par Git",
+    "dimGitIgnored": "Atténuer les fichiers ignorés par Git",
+    "sortOrder": "Ordre de tri",
+    "autoReveal": "Afficher le fichier actif",
+    "confirmDragAndDrop": "Confirmer le glisser-déposer"
+  },
+  "mcp": {
+    "autoStart": "Démarrer le serveur MCP automatiquement"
+  },
+  "logging": {
+    "level": "Niveau de journalisation"
+  }
+}

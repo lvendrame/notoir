@@ -421,6 +421,61 @@ pub fn join_lines(rope: &Rope, sel: &Selection) -> Option<EditResult> {
     })
 }
 
+/// Convert Indentation: rewrites leading whitespace of the selected lines
+/// (the whole document without a selection) as spaces or tabs.
+pub fn convert_indentation(
+    rope: &Rope,
+    sel: &Selection,
+    style: crate::edit_ops::IndentStyle,
+) -> Option<EditResult> {
+    let blocks = if sel.is_empty() {
+        vec![(0, rope.len_lines().saturating_sub(1))]
+    } else {
+        line_blocks(rope, sel)
+    };
+    let tab = style.tab_size.max(1);
+    let mut edits = Vec::new();
+    for &(a, b) in &blocks {
+        for l in a..=b {
+            let text = line_text(rope, l);
+            let lead: String = text
+                .chars()
+                .take_while(|c| *c == ' ' || *c == '\t')
+                .collect();
+            if lead.is_empty() {
+                continue;
+            }
+            let mut cols = 0;
+            for c in lead.chars() {
+                cols = if c == '\t' {
+                    (cols / tab + 1) * tab
+                } else {
+                    cols + 1
+                };
+            }
+            let new = if style.insert_spaces {
+                " ".repeat(cols)
+            } else {
+                format!("{}{}", "\t".repeat(cols / tab), " ".repeat(cols % tab))
+            };
+            if new != lead {
+                let start = rope.line_to_char(l);
+                edits.push(Edit::new(start, start + lead.chars().count(), new));
+            }
+        }
+    }
+    if edits.is_empty() {
+        return None;
+    }
+    let changes = ChangeSet::new(edits).ok()?;
+    let selection = sel.map(&changes);
+    Some(EditResult {
+        changes,
+        selection,
+        kind: EditKind::Other,
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -531,6 +586,29 @@ mod tests {
         let above = insert_line(&ind, &Selection::caret(3), false).unwrap();
         assert_eq!(apply(&ind, &above), "  \n  x");
         assert_eq!(above.selection.primary().head, 2);
+        let mixed = Rope::from_str("\tx\n  \ty\n    z");
+        let four = crate::edit_ops::IndentStyle {
+            tab_size: 4,
+            insert_spaces: true,
+        };
+        assert_eq!(
+            apply(
+                &mixed,
+                &convert_indentation(&mixed, &Selection::caret(0), four).unwrap()
+            ),
+            "    x\n    y\n    z"
+        );
+        let tabs = crate::edit_ops::IndentStyle {
+            insert_spaces: false,
+            ..four
+        };
+        assert_eq!(
+            apply(
+                &mixed,
+                &convert_indentation(&mixed, &Selection::caret(0), tabs).unwrap()
+            ),
+            "\tx\n\ty\n\tz"
+        );
         let j = Rope::from_str("a \n   b\nc");
         assert_eq!(
             apply(&j, &join_lines(&j, &Selection::caret(0)).unwrap()),

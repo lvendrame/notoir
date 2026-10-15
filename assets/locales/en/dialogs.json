@@ -17,7 +17,15 @@
     "reopenWithEncoding": "Reopen with Encoding",
     "saveWithEncoding": "Save with Encoding",
     "commands": "Type a command",
-    "recentlyUsed": "Recently used"
+    "recentlyUsed": "Recently used",
+    "indentation": "Indentation",
+    "tabSize": "Tab size",
+    "indentSpaces": "Indent Using Spaces",
+    "indentTabs": "Indent Using Tabs",
+    "changeTabSize": "Change Tab Size",
+    "detectIndentation": "Detect Indentation from Content",
+    "convertToSpaces": "Convert Indentation to Spaces",
+    "convertToTabs": "Convert Indentation to Tabs"
   },
   "open": {
     "title": "Open File"

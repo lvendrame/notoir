@@ -17,7 +17,15 @@
     "reopenWithEncoding": "Kodlamayla Yeniden Aç",
     "saveWithEncoding": "Kodlamayla Kaydet",
     "commands": "Bir komut yazın",
-    "recentlyUsed": "Son kullanılanlar"
+    "recentlyUsed": "Son kullanılanlar",
+    "indentation": "Girinti",
+    "tabSize": "Sekme boyutu",
+    "indentSpaces": "Boşluklarla Girintile",
+    "indentTabs": "Sekmelerle Girintile",
+    "changeTabSize": "Sekme Boyutunu Değiştir",
+    "detectIndentation": "Girintiyi İçerikten Algıla",
+    "convertToSpaces": "Girintiyi Boşluğa Dönüştür",
+    "convertToTabs": "Girintiyi Sekmeye Dönüştür"
   },
   "open": {
     "title": "Dosya Aç"

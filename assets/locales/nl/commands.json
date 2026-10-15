@@ -48,20 +48,25 @@
     "dockTab": "Tabblad koppelen",
     "toggleMinimap": "Minimap in-/uitschakelen",
     "minimapSide": "Positie van minimap",
-    "minimapScale": "Schaal van minimap"
+    "minimapScale": "Schaal van minimap",
+    "zenMode": "Zen-modus in-/uitschakelen",
+    "exitZenMode": "Zen-modus verlaten"
   },
   "preferences": {
     "changeTheme": "Thema wijzigen…",
     "changeLanguage": "Weergavetaal wijzigen…",
     "openKeybindingsFile": "Bestand met sneltoetsen openen",
-    "openSettingsFile": "Bestand met gebruikersinstellingen openen"
+    "openSettingsFile": "Bestand met gebruikersinstellingen openen",
+    "keyboardShortcuts": "Sneltoetsen"
   },
   "help": {
-    "about": "Over Notoir"
+    "about": "Over Notoir",
+    "welcome": "Welkom"
   },
   "app": {
     "quit": "Afsluiten",
-    "quitMac": "Notoir afsluiten"
+    "quitMac": "Notoir afsluiten",
+    "settings": "Instellingen openen"
   },
   "workbench": {
     "showNotifications": "Meldingen tonen",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Regeleindereeks wijzigen…",
     "changeEncoding": "Bestandscodering wijzigen…",
     "changeLanguageMode": "Taalmodus wijzigen…",
-    "type": "Tekst typen"
+    "type": "Tekst typen",
+    "changeIndentation": "Inspringing wijzigen",
+    "changeTabSize": "Tabgrootte wijzigen"
   },
   "workspace": {
     "open": "Werkruimte openen…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Niet-opgeslagen document herstellen",
     "discardEntry": "Niet-opgeslagen document verwijderen",
     "flush": "Herstelsnapshots schrijven"
+  },
+  "welcome": {
+    "finish": "Welkom afronden"
   }
 }

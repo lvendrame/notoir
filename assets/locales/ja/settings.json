@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "全般",
+    "editor": "エディター",
+    "appearance": "外観",
+    "files": "ファイル",
+    "workspace": "ワークスペース",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "プラグイン",
+    "keyboard": "キーボード",
+    "advanced": "詳細"
+  },
+  "ui": {
+    "search": "設定を検索",
+    "openFile": "settings.toml を開く",
+    "user": "ユーザー",
+    "workspace": "ワークスペース",
+    "modifiedUser": "ユーザーで変更済み",
+    "modifiedWorkspace": "ワークスペースで変更済み",
+    "overriddenWorkspace": "ワークスペースで上書きされています",
+    "restricted": "信頼されたワークスペースが必要です",
+    "reset": "設定をリセット",
+    "copyId": "設定 ID をコピー",
+    "copyToml": "設定を TOML としてコピー",
+    "noResults": "設定が見つかりません。",
+    "unknown": "不明な設定",
+    "languageAuto": "自動 (システムの言語)",
+    "more": "その他の操作"
+  },
+  "kb": {
+    "search": "ショートカットを検索",
+    "command": "コマンド",
+    "keybinding": "キー バインド",
+    "when": "条件",
+    "source": "ソース",
+    "default": "既定",
+    "plugin": "プラグイン",
+    "user": "ユーザー",
+    "change": "変更",
+    "changeHint": "新しいショートカットを押してください (Enter で 1 キーのショートカットを確定、Esc でキャンセル)",
+    "remove": "削除"
+  },
+  "language": "言語",
+  "workbench": {
+    "startup": "起動時",
+    "theme": "テーマ",
+    "uiScale": "UI の倍率",
+    "tabs": {
+      "density": "タブの密度",
+      "closeAllKeepsPinned": "すべて閉じるでピン留めタブを残す"
+    },
+    "toolbar": {
+      "visible": "ツール バー"
+    },
+    "statusBar": {
+      "visible": "ステータス バー"
+    },
+    "breadcrumbs": {
+      "enabled": "階層リンク"
+    }
+  },
+  "app": {
+    "hotExit": "終了時に未保存の変更を保持"
+  },
+  "editor": {
+    "fontFamily": "フォント ファミリ",
+    "fontSize": "フォント サイズ",
+    "lineHeight": "行の高さ",
+    "tabSize": "タブ サイズ",
+    "insertSpaces": "スペースを挿入",
+    "detectIndentation": "インデントを検出",
+    "wordWrap": "折り返し",
+    "wordWrapColumn": "折り返し列",
+    "lineNumbers": "行番号",
+    "renderWhitespace": "空白文字の表示",
+    "highlightCurrentLine": "現在の行を強調表示",
+    "cursorStyle": "カーソルのスタイル",
+    "cursorBlinking": "カーソルの点滅",
+    "zoomScope": "ズームの範囲",
+    "undoLimit": "元に戻す回数の上限",
+    "emptySelectionClipboard": "選択なしで行をコピー",
+    "rulers": "ルーラー",
+    "minimap": {
+      "enabled": "ミニマップ",
+      "side": "ミニマップの位置",
+      "width": "ミニマップの幅",
+      "scale": "ミニマップの倍率",
+      "opacity": "ミニマップの不透明度",
+      "showViewport": "ミニマップの表示範囲",
+      "showSearchMarks": "ミニマップの検索マーク",
+      "showSelection": "ミニマップの選択マーク"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Zen モード: タブを非表示",
+    "hideLineNumbers": "Zen モード: 行番号を非表示",
+    "fullScreen": "Zen モード: 全画面表示",
+    "maxWidth": "Zen モード: 列の幅"
+  },
+  "files": {
+    "autoSave": "自動保存",
+    "autoSaveDelay": "自動保存の遅延 (ms)",
+    "encoding": "既定のエンコード",
+    "eol": "既定の改行コード",
+    "atomicSave": "アトミック保存",
+    "trimTrailingWhitespaceOnSave": "保存時に末尾の空白を削除",
+    "insertFinalNewline": "最終行に改行を挿入",
+    "reloadCleanOnExternalChange": "ディスク上で変更された未編集ファイルを再読み込み",
+    "exclude": "除外するファイル"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Scratchpad の言語"
+  },
+  "explorer": {
+    "showHidden": "隠しファイルを表示",
+    "showGitIgnored": "Git で無視されたファイルを表示",
+    "dimGitIgnored": "Git で無視されたファイルを淡色表示",
+    "sortOrder": "並べ替え順",
+    "autoReveal": "アクティブなファイルを表示",
+    "confirmDragAndDrop": "ドラッグ アンド ドロップを確認"
+  },
+  "mcp": {
+    "autoStart": "MCP サーバーを自動的に起動"
+  },
+  "logging": {
+    "level": "ログ レベル"
+  }
+}

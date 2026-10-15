@@ -17,7 +17,15 @@
     "reopenWithEncoding": "Открыть заново в кодировке",
     "saveWithEncoding": "Сохранить в кодировке",
     "commands": "Введите команду",
-    "recentlyUsed": "Недавно использованные"
+    "recentlyUsed": "Недавно использованные",
+    "indentation": "Отступы",
+    "tabSize": "Размер табуляции",
+    "indentSpaces": "Отступ пробелами",
+    "indentTabs": "Отступ табуляцией",
+    "changeTabSize": "Изменить размер табуляции",
+    "detectIndentation": "Определить отступы по содержимому",
+    "convertToSpaces": "Преобразовать отступы в пробелы",
+    "convertToTabs": "Преобразовать отступы в табуляцию"
   },
   "open": {
     "title": "Открыть файл"

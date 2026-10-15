@@ -17,7 +17,15 @@
     "reopenWithEncoding": "エンコード付きで再度開く",
     "saveWithEncoding": "エンコード付きで保存",
     "commands": "コマンドを入力",
-    "recentlyUsed": "最近使用したもの"
+    "recentlyUsed": "最近使用したもの",
+    "indentation": "インデント",
+    "tabSize": "タブ サイズ",
+    "indentSpaces": "スペースでインデント",
+    "indentTabs": "タブでインデント",
+    "changeTabSize": "タブ サイズの変更",
+    "detectIndentation": "内容からインデントを検出",
+    "convertToSpaces": "インデントをスペースに変換",
+    "convertToTabs": "インデントをタブに変換"
   },
   "open": {
     "title": "ファイルを開く"

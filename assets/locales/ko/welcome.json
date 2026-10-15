@@ -8,5 +8,17 @@
   "commandPalette": "명령 팔레트",
   "pin": "고정",
   "unpin": "고정 해제",
-  "removeRecent": "목록에서 제거"
+  "removeRecent": "목록에서 제거",
+  "title": "Notoir에 오신 것을 환영합니다",
+  "skip": "건너뛰기",
+  "languageLabel": "언어",
+  "appearance": "모양",
+  "git": "Git",
+  "mcp": "MCP",
+  "plugins": "플러그인",
+  "configure": "구성",
+  "learnMore": "자세히 알아보기",
+  "explore": "둘러보기",
+  "comingLater": "이후 버전에서 제공",
+  "start": "쓰기 시작"
 }

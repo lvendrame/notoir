@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "Общие",
+    "editor": "Редактор",
+    "appearance": "Оформление",
+    "files": "Файлы",
+    "workspace": "Рабочая область",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Плагины",
+    "keyboard": "Клавиатура",
+    "advanced": "Дополнительно"
+  },
+  "ui": {
+    "search": "Поиск параметров",
+    "openFile": "Открыть settings.toml",
+    "user": "Пользователь",
+    "workspace": "Рабочая область",
+    "modifiedUser": "Изменено в параметрах пользователя",
+    "modifiedWorkspace": "Изменено в рабочей области",
+    "overriddenWorkspace": "Переопределено в рабочей области",
+    "restricted": "Нужна доверенная рабочая область",
+    "reset": "Сбросить параметр",
+    "copyId": "Копировать ID параметра",
+    "copyToml": "Копировать параметр как TOML",
+    "noResults": "Параметры не найдены.",
+    "unknown": "Неизвестные параметры",
+    "languageAuto": "Автоматически (язык системы)",
+    "more": "Другие действия"
+  },
+  "kb": {
+    "search": "Поиск сочетаний",
+    "command": "Команда",
+    "keybinding": "Сочетание клавиш",
+    "when": "Когда",
+    "source": "Источник",
+    "default": "По умолчанию",
+    "plugin": "Плагин",
+    "user": "Пользователь",
+    "change": "Изменить",
+    "changeHint": "Нажмите новое сочетание (Enter завершает сочетание из одной клавиши, Esc отменяет)",
+    "remove": "Удалить"
+  },
+  "language": "Язык",
+  "workbench": {
+    "startup": "При запуске",
+    "theme": "Тема",
+    "uiScale": "Масштаб интерфейса",
+    "tabs": {
+      "density": "Плотность вкладок",
+      "closeAllKeepsPinned": "«Закрыть все» сохраняет закреплённые вкладки"
+    },
+    "toolbar": {
+      "visible": "Панель инструментов"
+    },
+    "statusBar": {
+      "visible": "Строка состояния"
+    },
+    "breadcrumbs": {
+      "enabled": "Навигационная цепочка"
+    }
+  },
+  "app": {
+    "hotExit": "Сохранять несохранённые изменения при выходе"
+  },
+  "editor": {
+    "fontFamily": "Семейство шрифтов",
+    "fontSize": "Размер шрифта",
+    "lineHeight": "Высота строки",
+    "tabSize": "Размер табуляции",
+    "insertSpaces": "Вставлять пробелы",
+    "detectIndentation": "Определять отступы",
+    "wordWrap": "Перенос строк",
+    "wordWrapColumn": "Столбец переноса",
+    "lineNumbers": "Номера строк",
+    "renderWhitespace": "Показывать пробелы",
+    "highlightCurrentLine": "Выделять текущую строку",
+    "cursorStyle": "Стиль курсора",
+    "cursorBlinking": "Мигание курсора",
+    "zoomScope": "Область масштаба",
+    "undoLimit": "Предел отмены",
+    "emptySelectionClipboard": "Копировать строку без выделения",
+    "rulers": "Линейки",
+    "minimap": {
+      "enabled": "Мини-карта",
+      "side": "Сторона мини-карты",
+      "width": "Ширина мини-карты",
+      "scale": "Масштаб мини-карты",
+      "opacity": "Непрозрачность мини-карты",
+      "showViewport": "Видимая область на мини-карте",
+      "showSearchMarks": "Метки поиска на мини-карте",
+      "showSelection": "Метки выделения на мини-карте"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Режим Zen: скрыть вкладки",
+    "hideLineNumbers": "Режим Zen: скрыть номера строк",
+    "fullScreen": "Режим Zen: полный экран",
+    "maxWidth": "Режим Zen: ширина колонки"
+  },
+  "files": {
+    "autoSave": "Автосохранение",
+    "autoSaveDelay": "Задержка автосохранения (мс)",
+    "encoding": "Кодировка по умолчанию",
+    "eol": "Конец строки по умолчанию",
+    "atomicSave": "Атомарное сохранение",
+    "trimTrailingWhitespaceOnSave": "Удалять пробелы в конце строк при сохранении",
+    "insertFinalNewline": "Добавлять перевод строки в конце",
+    "reloadCleanOnExternalChange": "Перезагружать неизменённые файлы при изменении на диске",
+    "exclude": "Исключённые файлы"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Язык черновиков"
+  },
+  "explorer": {
+    "showHidden": "Показывать скрытые файлы",
+    "showGitIgnored": "Показывать файлы, игнорируемые Git",
+    "dimGitIgnored": "Приглушать файлы, игнорируемые Git",
+    "sortOrder": "Порядок сортировки",
+    "autoReveal": "Показывать активный файл",
+    "confirmDragAndDrop": "Подтверждать перетаскивание"
+  },
+  "mcp": {
+    "autoStart": "Запускать сервер MCP автоматически"
+  },
+  "logging": {
+    "level": "Уровень журнала"
+  }
+}

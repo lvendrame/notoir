@@ -5,5 +5,7 @@
   "pin": "Épingler l'onglet",
   "unpin": "Détacher l'onglet",
   "showAll": "Afficher tous les onglets",
-  "dropHere": "Déposez un fichier ici"
+  "dropHere": "Déposez un fichier ici",
+  "settings": "Paramètres",
+  "welcome": "Bienvenue"
 }

@@ -8,5 +8,17 @@
   "commandPalette": "コマンドパレット",
   "pin": "ピン留め",
   "unpin": "ピン留めを外す",
-  "removeRecent": "一覧から削除"
+  "removeRecent": "一覧から削除",
+  "title": "Notoir へようこそ",
+  "skip": "スキップ",
+  "languageLabel": "言語",
+  "appearance": "外観",
+  "git": "Git",
+  "mcp": "MCP",
+  "plugins": "プラグイン",
+  "configure": "構成",
+  "learnMore": "詳細",
+  "explore": "参照",
+  "comingLater": "今後のバージョンで利用可能",
+  "start": "書き始める"
 }

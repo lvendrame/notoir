@@ -48,20 +48,25 @@
     "dockTab": "Tab andocken",
     "toggleMinimap": "Minimap umschalten",
     "minimapSide": "Position der Minimap",
-    "minimapScale": "Größe der Minimap"
+    "minimapScale": "Größe der Minimap",
+    "zenMode": "Zen-Modus umschalten",
+    "exitZenMode": "Zen-Modus beenden"
   },
   "preferences": {
     "changeTheme": "Design ändern…",
     "changeLanguage": "Anzeigesprache ändern…",
     "openKeybindingsFile": "Tastenkürzel-Datei öffnen",
-    "openSettingsFile": "Benutzereinstellungsdatei öffnen"
+    "openSettingsFile": "Benutzereinstellungsdatei öffnen",
+    "keyboardShortcuts": "Tastenkürzel"
   },
   "help": {
-    "about": "Über Notoir"
+    "about": "Über Notoir",
+    "welcome": "Willkommen"
   },
   "app": {
     "quit": "Beenden",
-    "quitMac": "Notoir beenden"
+    "quitMac": "Notoir beenden",
+    "settings": "Einstellungen öffnen"
   },
   "workbench": {
     "showNotifications": "Benachrichtigungen anzeigen",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Zeilenendesequenz ändern…",
     "changeEncoding": "Dateicodierung ändern…",
     "changeLanguageMode": "Sprachmodus ändern…",
-    "type": "Text eingeben"
+    "type": "Text eingeben",
+    "changeIndentation": "Einrückung ändern",
+    "changeTabSize": "Tabulatorbreite ändern"
   },
   "workspace": {
     "open": "Arbeitsbereich öffnen…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Nicht gespeichertes Dokument wiederherstellen",
     "discardEntry": "Nicht gespeichertes Dokument verwerfen",
     "flush": "Wiederherstellungsdaten schreiben"
+  },
+  "welcome": {
+    "finish": "Willkommen abschließen"
   }
 }

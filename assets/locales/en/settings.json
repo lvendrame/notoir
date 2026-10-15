@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "General",
+    "editor": "Editor",
+    "appearance": "Appearance",
+    "files": "Files",
+    "workspace": "Workspace",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Plugins",
+    "keyboard": "Keyboard",
+    "advanced": "Advanced"
+  },
+  "ui": {
+    "search": "Search settings",
+    "openFile": "Open settings.toml",
+    "user": "User",
+    "workspace": "Workspace",
+    "modifiedUser": "Modified in User",
+    "modifiedWorkspace": "Modified in Workspace",
+    "overriddenWorkspace": "Overridden in Workspace",
+    "restricted": "Needs a trusted workspace",
+    "reset": "Reset Setting",
+    "copyId": "Copy Setting ID",
+    "copyToml": "Copy Setting as TOML",
+    "noResults": "No settings found.",
+    "unknown": "Unknown settings",
+    "languageAuto": "Automatic (system language)",
+    "more": "More Actions"
+  },
+  "kb": {
+    "search": "Search shortcuts",
+    "command": "Command",
+    "keybinding": "Keybinding",
+    "when": "When",
+    "source": "Source",
+    "default": "Default",
+    "plugin": "Plugin",
+    "user": "User",
+    "change": "Change",
+    "changeHint": "Press the new shortcut (Enter to finish a one-key shortcut, Esc to cancel)",
+    "remove": "Remove"
+  },
+  "language": "Language",
+  "workbench": {
+    "startup": "On startup",
+    "theme": "Theme",
+    "uiScale": "UI scale",
+    "tabs": {
+      "density": "Tab density",
+      "closeAllKeepsPinned": "Close All keeps pinned tabs"
+    },
+    "toolbar": {
+      "visible": "Toolbar"
+    },
+    "statusBar": {
+      "visible": "Status bar"
+    },
+    "breadcrumbs": {
+      "enabled": "Breadcrumbs"
+    }
+  },
+  "app": {
+    "hotExit": "Keep unsaved changes on exit"
+  },
+  "editor": {
+    "fontFamily": "Font family",
+    "fontSize": "Font size",
+    "lineHeight": "Line height",
+    "tabSize": "Tab size",
+    "insertSpaces": "Insert spaces",
+    "detectIndentation": "Detect indentation",
+    "wordWrap": "Word wrap",
+    "wordWrapColumn": "Word wrap column",
+    "lineNumbers": "Line numbers",
+    "renderWhitespace": "Render whitespace",
+    "highlightCurrentLine": "Highlight current line",
+    "cursorStyle": "Cursor style",
+    "cursorBlinking": "Cursor blinking",
+    "zoomScope": "Zoom scope",
+    "undoLimit": "Undo limit",
+    "emptySelectionClipboard": "Copy line without selection",
+    "rulers": "Rulers",
+    "minimap": {
+      "enabled": "Minimap",
+      "side": "Minimap side",
+      "width": "Minimap width",
+      "scale": "Minimap scale",
+      "opacity": "Minimap opacity",
+      "showViewport": "Minimap viewport",
+      "showSearchMarks": "Minimap search marks",
+      "showSelection": "Minimap selection marks"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Zen Mode: hide tabs",
+    "hideLineNumbers": "Zen Mode: hide line numbers",
+    "fullScreen": "Zen Mode: full screen",
+    "maxWidth": "Zen Mode: column width"
+  },
+  "files": {
+    "autoSave": "Auto save",
+    "autoSaveDelay": "Auto save delay (ms)",
+    "encoding": "Default encoding",
+    "eol": "Default line ending",
+    "atomicSave": "Atomic save",
+    "trimTrailingWhitespaceOnSave": "Trim trailing whitespace on save",
+    "insertFinalNewline": "Insert final newline",
+    "reloadCleanOnExternalChange": "Reload clean files changed on disk",
+    "exclude": "Excluded files"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Scratchpad language"
+  },
+  "explorer": {
+    "showHidden": "Show hidden files",
+    "showGitIgnored": "Show Git-ignored files",
+    "dimGitIgnored": "Dim Git-ignored files",
+    "sortOrder": "Sort order",
+    "autoReveal": "Reveal the active file",
+    "confirmDragAndDrop": "Confirm drag and drop"
+  },
+  "mcp": {
+    "autoStart": "Start MCP server automatically"
+  },
+  "logging": {
+    "level": "Log level"
+  }
+}

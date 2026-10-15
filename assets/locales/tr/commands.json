@@ -48,20 +48,25 @@
     "dockTab": "Sekmeyi Yerleştir",
     "toggleMinimap": "Mini Haritayı Aç/Kapat",
     "minimapSide": "Mini Harita Konumu",
-    "minimapScale": "Mini Harita Ölçeği"
+    "minimapScale": "Mini Harita Ölçeği",
+    "zenMode": "Zen Modunu Aç/Kapat",
+    "exitZenMode": "Zen Modundan Çık"
   },
   "preferences": {
     "changeTheme": "Temayı Değiştir…",
     "changeLanguage": "Görüntüleme Dilini Değiştir…",
     "openKeybindingsFile": "Klavye Kısayolları Dosyasını Aç",
-    "openSettingsFile": "Kullanıcı Ayarları Dosyasını Aç"
+    "openSettingsFile": "Kullanıcı Ayarları Dosyasını Aç",
+    "keyboardShortcuts": "Klavye Kısayolları"
   },
   "help": {
-    "about": "Notoir Hakkında"
+    "about": "Notoir Hakkında",
+    "welcome": "Hoş Geldiniz"
   },
   "app": {
     "quit": "Çıkış",
-    "quitMac": "Notoir'dan Çık"
+    "quitMac": "Notoir'dan Çık",
+    "settings": "Ayarları Aç"
   },
   "workbench": {
     "showNotifications": "Bildirimleri Göster",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Satır Sonu Dizisini Değiştir…",
     "changeEncoding": "Dosya Kodlamasını Değiştir…",
     "changeLanguageMode": "Dil Modunu Değiştir…",
-    "type": "Metin Yaz"
+    "type": "Metin Yaz",
+    "changeIndentation": "Girintiyi Değiştir",
+    "changeTabSize": "Sekme Boyutunu Değiştir"
   },
   "workspace": {
     "open": "Çalışma Alanı Aç…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Kaydedilmemiş Belgeyi Geri Yükle",
     "discardEntry": "Kaydedilmemiş Belgeyi At",
     "flush": "Kurtarma Anlık Görüntülerini Yaz"
+  },
+  "welcome": {
+    "finish": "Hoş Geldinizi Bitir"
   }
 }

@@ -48,20 +48,25 @@
     "dockTab": "Ancora scheda",
     "toggleMinimap": "Mostra/nascondi minimappa",
     "minimapSide": "Posizione della minimappa",
-    "minimapScale": "Scala della minimappa"
+    "minimapScale": "Scala della minimappa",
+    "zenMode": "Attiva/disattiva modalità Zen",
+    "exitZenMode": "Esci dalla modalità Zen"
   },
   "preferences": {
     "changeTheme": "Cambia tema…",
     "changeLanguage": "Cambia lingua di visualizzazione…",
     "openKeybindingsFile": "Apri file delle scorciatoie da tastiera",
-    "openSettingsFile": "Apri file delle impostazioni utente"
+    "openSettingsFile": "Apri file delle impostazioni utente",
+    "keyboardShortcuts": "Scorciatoie da tastiera"
   },
   "help": {
-    "about": "Informazioni su Notoir"
+    "about": "Informazioni su Notoir",
+    "welcome": "Benvenuto"
   },
   "app": {
     "quit": "Esci",
-    "quitMac": "Esci da Notoir"
+    "quitMac": "Esci da Notoir",
+    "settings": "Apri impostazioni"
   },
   "workbench": {
     "showNotifications": "Mostra notifiche",
@@ -144,7 +149,9 @@
     "changeLineEnding": "Cambia sequenza di fine riga…",
     "changeEncoding": "Cambia codifica del file…",
     "changeLanguageMode": "Cambia modalità linguaggio…",
-    "type": "Digita testo"
+    "type": "Digita testo",
+    "changeIndentation": "Cambia rientro",
+    "changeTabSize": "Cambia dimensione tabulazione"
   },
   "workspace": {
     "open": "Apri area di lavoro…",
@@ -186,5 +193,8 @@
     "restoreEntry": "Ripristina documento non salvato",
     "discardEntry": "Scarta documento non salvato",
     "flush": "Scrivi snapshot di recupero"
+  },
+  "welcome": {
+    "finish": "Termina benvenuto"
   }
 }

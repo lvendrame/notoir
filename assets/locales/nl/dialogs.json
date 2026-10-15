@@ -17,7 +17,15 @@
     "reopenWithEncoding": "Opnieuw openen met codering",
     "saveWithEncoding": "Opslaan met codering",
     "commands": "Typ een opdracht",
-    "recentlyUsed": "Recent gebruikt"
+    "recentlyUsed": "Recent gebruikt",
+    "indentation": "Inspringing",
+    "tabSize": "Tabgrootte",
+    "indentSpaces": "Inspringen met spaties",
+    "indentTabs": "Inspringen met tabs",
+    "changeTabSize": "Tabgrootte wijzigen",
+    "detectIndentation": "Inspringing uit inhoud detecteren",
+    "convertToSpaces": "Inspringing omzetten naar spaties",
+    "convertToTabs": "Inspringing omzetten naar tabs"
   },
   "open": {
     "title": "Bestand openen"

@@ -17,7 +17,15 @@
     "reopenWithEncoding": "Mit Codierung erneut öffnen",
     "saveWithEncoding": "Mit Codierung speichern",
     "commands": "Befehl eingeben",
-    "recentlyUsed": "Zuletzt verwendet"
+    "recentlyUsed": "Zuletzt verwendet",
+    "indentation": "Einrückung",
+    "tabSize": "Tabulatorbreite",
+    "indentSpaces": "Mit Leerzeichen einrücken",
+    "indentTabs": "Mit Tabulatoren einrücken",
+    "changeTabSize": "Tabulatorbreite ändern",
+    "detectIndentation": "Einrückung aus Inhalt erkennen",
+    "convertToSpaces": "Einrückung in Leerzeichen umwandeln",
+    "convertToTabs": "Einrückung in Tabulatoren umwandeln"
   },
   "open": {
     "title": "Datei öffnen"

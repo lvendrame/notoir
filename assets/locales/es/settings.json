@@ -1,0 +1,129 @@
+{
+  "category": {
+    "general": "General",
+    "editor": "Editor",
+    "appearance": "Apariencia",
+    "files": "Archivos",
+    "workspace": "Espacio de trabajo",
+    "git": "Git",
+    "mcp": "MCP",
+    "plugins": "Plugins",
+    "keyboard": "Teclado",
+    "advanced": "Avanzado"
+  },
+  "ui": {
+    "search": "Buscar en la configuración",
+    "openFile": "Abrir settings.toml",
+    "user": "Usuario",
+    "workspace": "Espacio de trabajo",
+    "modifiedUser": "Modificado en Usuario",
+    "modifiedWorkspace": "Modificado en el espacio de trabajo",
+    "overriddenWorkspace": "Reemplazado en el espacio de trabajo",
+    "restricted": "Requiere un espacio de trabajo de confianza",
+    "reset": "Restablecer ajuste",
+    "copyId": "Copiar ID del ajuste",
+    "copyToml": "Copiar ajuste como TOML",
+    "noResults": "No se encontraron ajustes.",
+    "unknown": "Ajustes desconocidos",
+    "languageAuto": "Automático (idioma del sistema)",
+    "more": "Más acciones"
+  },
+  "kb": {
+    "search": "Buscar atajos",
+    "command": "Comando",
+    "keybinding": "Atajo",
+    "when": "Cuándo",
+    "source": "Origen",
+    "default": "Predeterminado",
+    "plugin": "Plugin",
+    "user": "Usuario",
+    "change": "Cambiar",
+    "changeHint": "Pulsa el nuevo atajo (Intro termina un atajo de una tecla, Esc cancela)",
+    "remove": "Quitar"
+  },
+  "language": "Idioma",
+  "workbench": {
+    "startup": "Al iniciar",
+    "theme": "Tema",
+    "uiScale": "Escala de la interfaz",
+    "tabs": {
+      "density": "Densidad de pestañas",
+      "closeAllKeepsPinned": "Cerrar todo conserva las pestañas fijadas"
+    },
+    "toolbar": {
+      "visible": "Barra de herramientas"
+    },
+    "statusBar": {
+      "visible": "Barra de estado"
+    },
+    "breadcrumbs": {
+      "enabled": "Ruta de navegación"
+    }
+  },
+  "app": {
+    "hotExit": "Conservar cambios sin guardar al salir"
+  },
+  "editor": {
+    "fontFamily": "Familia de fuente",
+    "fontSize": "Tamaño de fuente",
+    "lineHeight": "Altura de línea",
+    "tabSize": "Tamaño de tabulación",
+    "insertSpaces": "Insertar espacios",
+    "detectIndentation": "Detectar sangría",
+    "wordWrap": "Ajuste de línea",
+    "wordWrapColumn": "Columna de ajuste",
+    "lineNumbers": "Números de línea",
+    "renderWhitespace": "Mostrar espacios en blanco",
+    "highlightCurrentLine": "Resaltar línea actual",
+    "cursorStyle": "Estilo del cursor",
+    "cursorBlinking": "Parpadeo del cursor",
+    "zoomScope": "Ámbito del zoom",
+    "undoLimit": "Límite de deshacer",
+    "emptySelectionClipboard": "Copiar línea sin selección",
+    "rulers": "Reglas",
+    "minimap": {
+      "enabled": "Minimapa",
+      "side": "Lado del minimapa",
+      "width": "Ancho del minimapa",
+      "scale": "Escala del minimapa",
+      "opacity": "Opacidad del minimapa",
+      "showViewport": "Zona visible en el minimapa",
+      "showSearchMarks": "Marcas de búsqueda en el minimapa",
+      "showSelection": "Marcas de selección en el minimapa"
+    }
+  },
+  "zenMode": {
+    "hideTabs": "Modo Zen: ocultar pestañas",
+    "hideLineNumbers": "Modo Zen: ocultar números de línea",
+    "fullScreen": "Modo Zen: pantalla completa",
+    "maxWidth": "Modo Zen: ancho de columna"
+  },
+  "files": {
+    "autoSave": "Guardado automático",
+    "autoSaveDelay": "Retraso del guardado automático (ms)",
+    "encoding": "Codificación predeterminada",
+    "eol": "Fin de línea predeterminado",
+    "atomicSave": "Guardado atómico",
+    "trimTrailingWhitespaceOnSave": "Recortar espacios finales al guardar",
+    "insertFinalNewline": "Insertar salto de línea final",
+    "reloadCleanOnExternalChange": "Recargar archivos sin cambios modificados en disco",
+    "exclude": "Archivos excluidos"
+  },
+  "scratchpad": {
+    "defaultLanguage": "Idioma del Scratchpad"
+  },
+  "explorer": {
+    "showHidden": "Mostrar archivos ocultos",
+    "showGitIgnored": "Mostrar archivos ignorados por Git",
+    "dimGitIgnored": "Atenuar archivos ignorados por Git",
+    "sortOrder": "Orden",
+    "autoReveal": "Mostrar el archivo activo",
+    "confirmDragAndDrop": "Confirmar arrastrar y soltar"
+  },
+  "mcp": {
+    "autoStart": "Iniciar el servidor MCP automáticamente"
+  },
+  "logging": {
+    "level": "Nivel de registro"
+  }
+}
