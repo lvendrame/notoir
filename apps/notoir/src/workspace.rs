@@ -1033,7 +1033,7 @@ impl AppCore {
         }
     }
 
-    fn handle_op(&mut self, out: OpOutcome) {
+    pub(crate) fn handle_op(&mut self, out: OpOutcome) {
         let key = |p: &Path| notoir_workspace::fs_io::identity(p).1;
         let mut touched: Vec<PathBuf> = Vec::new();
         for (from, to) in &out.renamed {

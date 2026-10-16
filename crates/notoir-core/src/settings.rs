@@ -60,7 +60,7 @@ pub enum SettingType {
 }
 
 impl SettingType {
-    fn accepts(&self, v: &SettingValue) -> bool {
+    pub fn accepts(&self, v: &SettingValue) -> bool {
         match (self, v) {
             (SettingType::Bool, SettingValue::Bool(_)) => true,
             (SettingType::Int { min, max }, SettingValue::Int(i)) => (min..=max).contains(&i),
@@ -868,6 +868,27 @@ impl Schema {
             category: C::Mcp,
             restricted: false,
             tags: &["timeout"],
+        });
+        s.define(SettingDef {
+            key: "mcp.maxReadBytes",
+            ty: T::Int {
+                min: 1024,
+                max: 64 * 1024 * 1024,
+            },
+            default: V::Int(2 * 1024 * 1024),
+            scopes: Scopes::USER_ONLY,
+            category: C::Mcp,
+            restricted: false,
+            tags: &["read", "limit"],
+        });
+        s.define(SettingDef {
+            key: "mcp.highlightEdits",
+            ty: T::Bool,
+            default: V::Bool(true),
+            scopes: Scopes::NO_LANGUAGE,
+            category: C::Mcp,
+            restricted: false,
+            tags: &["highlight", "edit"],
         });
         s.define(SettingDef {
             key: "mcp.activityRetentionDays",

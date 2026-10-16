@@ -127,7 +127,9 @@
     "autoStart": "MCP-server automatisch starten",
     "port": "Poort van de MCP-server",
     "requestTimeoutMs": "Time-out voor MCP-verzoeken (ms)",
-    "activityRetentionDays": "Dagen dat MCP-activiteit bewaard blijft"
+    "activityRetentionDays": "Dagen dat MCP-activiteit bewaard blijft",
+    "maxReadBytes": "Grootste MCP-leesactie zonder regelbereik (bytes)",
+    "highlightEdits": "Wijzigingen van MCP-clients markeren"
   },
   "logging": {
     "level": "Logniveau"

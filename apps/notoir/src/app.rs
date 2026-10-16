@@ -322,6 +322,10 @@ impl eframe::App for NotoirApp {
         self.core.compare_tick();
         self.core.git_tick();
         self.core.mcp_tick();
+        if !self.core.mcp.highlights.is_empty() {
+            // MCP edit highlights fade out.
+            ctx.request_repaint_after(std::time::Duration::from_millis(33));
+        }
         if let Some(due) = self.core.mcp_next_due() {
             ctx.request_repaint_after(std::time::Duration::from_millis(
                 due.saturating_sub(now).max(1),

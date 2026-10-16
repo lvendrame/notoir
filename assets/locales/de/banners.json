@@ -8,5 +8,6 @@
   "close": "Schließen",
   "keepRecovered": "Wiederhergestellte behalten",
   "useDisk": "Version vom Datenträger verwenden",
-  "compare": "Vergleichen"
+  "compare": "Vergleichen",
+  "changedByMcp": "„{{name}}“ wurde von „{{client}}“ (MCP) auf dem Datenträger geändert."
 }

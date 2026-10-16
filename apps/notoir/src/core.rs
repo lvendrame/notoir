@@ -518,6 +518,7 @@ impl AppCore {
             set_scroll: self.find.scroll.get(&view).copied(),
             highlight: !doc.is_some_and(|d| d.large_file),
             diagnostics: doc.map(|d| self.json_diagnostics(d.id)).unwrap_or_default(),
+            mcp_edits: doc.map(|d| self.mcp_highlights(d.id)).unwrap_or_default(),
             bookmarks: doc.map(|d| d.bookmark_lines()).unwrap_or_default(),
             fold_ranges: doc
                 .filter(|_| self.settings.bool("editor.folding", lang))

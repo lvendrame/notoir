@@ -8,5 +8,6 @@
   "close": "Close",
   "keepRecovered": "Keep Recovered",
   "useDisk": "Use Disk Version",
-  "compare": "Compare"
+  "compare": "Compare",
+  "changedByMcp": "“{{name}}” was changed on disk by “{{client}}” (MCP)."
 }

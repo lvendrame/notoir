@@ -127,7 +127,9 @@
     "autoStart": "MCP 서버 자동 시작",
     "port": "MCP 서버 포트",
     "requestTimeoutMs": "MCP 요청 시간 제한 (ms)",
-    "activityRetentionDays": "MCP 활동 보관 일수"
+    "activityRetentionDays": "MCP 활동 보관 일수",
+    "maxReadBytes": "줄 범위 없는 최대 MCP 읽기 크기 (바이트)",
+    "highlightEdits": "MCP 클라이언트의 편집 강조 표시"
   },
   "logging": {
     "level": "로그 수준"

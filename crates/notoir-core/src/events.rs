@@ -13,12 +13,16 @@ use crate::ids::{DocumentId, GroupId, ViewId};
 /// Who changed a document.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ChangeOrigin {
-    User { view: ViewId },
+    User {
+        view: ViewId,
+    },
     Undo,
     Redo,
     Reload,
     Format,
     Internal,
+    /// An MCP client's edit (spec 29): undoable, highlighted, in activity.
+    Mcp(crate::permissions::ClientId),
 }
 
 #[derive(Clone, Debug)]

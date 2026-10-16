@@ -8,5 +8,6 @@
   "close": "Zamknij",
   "keepRecovered": "Zachowaj odzyskaną",
   "useDisk": "Użyj wersji z dysku",
-  "compare": "Porównaj"
+  "compare": "Porównaj",
+  "changedByMcp": "Plik „{{name}}” został zmieniony na dysku przez „{{client}}” (MCP)."
 }

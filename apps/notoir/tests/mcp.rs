@@ -273,13 +273,14 @@ fn document_read_returns_the_buffer_or_the_disk() {
     };
     assert_eq!(structured["content"], "B A\n");
     assert_eq!(structured["dirty"], true);
-    // Not open: read from disk off the UI thread.
+    // Not open: loaded off the UI thread.
     let mut rx = call(&mut app, &c, "document_read", json!({ "path": "old.md" }));
     let ToolReply::Ok { structured, .. } = reply(&mut app, &mut rx) else {
         panic!("read failed");
     };
     assert_eq!(structured["content"], "old\n");
-    assert_eq!(structured["open"], false);
+    // Loaded into memory without a tab.
+    assert_eq!(structured["in_tab"], false);
     // Activity holds the target, never the content.
     let core = &app.harness.state().core;
     for e in &core.mcp.activity {

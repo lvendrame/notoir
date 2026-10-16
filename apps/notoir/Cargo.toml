@@ -16,6 +16,7 @@ notoir-storage.workspace = true
 notoir-workspace.workspace = true
 notoir-git.workspace = true
 notoir-mcp.workspace = true
+similar.workspace = true
 encoding_rs.workspace = true
 uuid.workspace = true
 eframe.workspace = true

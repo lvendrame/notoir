@@ -8,5 +8,6 @@
   "close": "Kapat",
   "keepRecovered": "Kurtarılanı Koru",
   "useDisk": "Diskteki Sürümü Kullan",
-  "compare": "Karşılaştır"
+  "compare": "Karşılaştır",
+  "changedByMcp": "“{{name}}” diskte “{{client}}” (MCP) tarafından değiştirildi."
 }

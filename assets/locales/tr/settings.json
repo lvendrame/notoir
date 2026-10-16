@@ -127,7 +127,9 @@
     "autoStart": "MCP sunucusunu otomatik başlat",
     "port": "MCP sunucusu bağlantı noktası",
     "requestTimeoutMs": "MCP istek zaman aşımı (ms)",
-    "activityRetentionDays": "MCP etkinliğinin saklanacağı gün sayısı"
+    "activityRetentionDays": "MCP etkinliğinin saklanacağı gün sayısı",
+    "maxReadBytes": "Satır aralığı olmadan en büyük MCP okuması (bayt)",
+    "highlightEdits": "MCP istemcilerinin düzenlemelerini vurgula"
   },
   "logging": {
     "level": "Günlük düzeyi"

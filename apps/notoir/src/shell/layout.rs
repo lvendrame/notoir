@@ -740,7 +740,19 @@ fn banner_bar(
         match banner.kind {
             BannerKind::Changed => (
                 crate::icons::Icon::RefreshCw,
-                t!("banners:changed", name = name),
+                match core
+                    .workbench
+                    .document(doc)
+                    .and_then(|d| d.path())
+                    .and_then(|p| core.mcp_disk_writer(p))
+                {
+                    Some(client) => t!(
+                        "banners:changedByMcp",
+                        name = name.as_str(),
+                        client = client.as_str()
+                    ),
+                    None => t!("banners:changed", name = name),
+                },
                 vec![
                     ("banners:compare", "compare.currentChanges"),
                     ("banners:reload", "file.reloadFromDisk"),

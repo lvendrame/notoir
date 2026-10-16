@@ -127,7 +127,9 @@
     "autoStart": "MCP サーバーを自動的に起動",
     "port": "MCP サーバーのポート",
     "requestTimeoutMs": "MCP 要求のタイムアウト (ミリ秒)",
-    "activityRetentionDays": "MCP アクティビティの保存日数"
+    "activityRetentionDays": "MCP アクティビティの保存日数",
+    "maxReadBytes": "行範囲なしの MCP 読み取りの最大サイズ (バイト)",
+    "highlightEdits": "MCP クライアントによる編集を強調表示"
   },
   "logging": {
     "level": "ログ レベル"

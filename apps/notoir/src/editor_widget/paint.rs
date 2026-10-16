@@ -228,6 +228,24 @@ pub(super) fn paint(
                 text_painter.rect_filled(rect, 2.0, color);
             }
         }
+        // MCP edits: a fading accent background (spec 29).
+        for &(ea, eb, strength) in &opts.mcp_edits {
+            let (a, b) = (ea.max(row.start), eb.min(row_end));
+            if a >= b {
+                continue;
+            }
+            let ca = col_of(&row.text, a - row.start, tab);
+            let cb = col_of(&row.text, b - row.start, tab);
+            let rect = Rect::from_min_max(
+                Pos2::new(col_x(ca), row.y),
+                Pos2::new(col_x(cb), row.y + m.row_h),
+            );
+            text_painter.rect_filled(
+                rect,
+                2.0,
+                kit.color(Tok::Accent).gamma_multiply(0.35 * strength),
+            );
+        }
         // Diagnostics: a wavy underline.
         for &(da, db) in &opts.diagnostics {
             let (a, b) = (da.max(row.start), db.min(row_end + 1));

@@ -8,5 +8,6 @@
   "close": "关闭",
   "keepRecovered": "保留恢复的版本",
   "useDisk": "使用磁盘版本",
-  "compare": "比较"
+  "compare": "比较",
+  "changedByMcp": "“{{name}}”已在磁盘上被“{{client}}”(MCP) 更改。"
 }

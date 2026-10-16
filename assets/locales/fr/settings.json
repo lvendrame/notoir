@@ -127,7 +127,9 @@
     "autoStart": "Démarrer le serveur MCP automatiquement",
     "port": "Port du serveur MCP",
     "requestTimeoutMs": "Délai d’expiration des requêtes MCP (ms)",
-    "activityRetentionDays": "Jours de conservation de l’activité MCP"
+    "activityRetentionDays": "Jours de conservation de l’activité MCP",
+    "maxReadBytes": "Lecture MCP maximale sans plage de lignes (octets)",
+    "highlightEdits": "Mettre en évidence les modifications des clients MCP"
   },
   "logging": {
     "level": "Niveau de journalisation"

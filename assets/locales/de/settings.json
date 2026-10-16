@@ -127,7 +127,9 @@
     "autoStart": "MCP-Server automatisch starten",
     "port": "Port des MCP-Servers",
     "requestTimeoutMs": "Zeitlimit für MCP-Anfragen (ms)",
-    "activityRetentionDays": "Tage, die MCP-Aktivität aufbewahrt wird"
+    "activityRetentionDays": "Tage, die MCP-Aktivität aufbewahrt wird",
+    "maxReadBytes": "Größter MCP-Lesevorgang ohne Zeilenbereich (Bytes)",
+    "highlightEdits": "Änderungen von MCP-Clients hervorheben"
   },
   "logging": {
     "level": "Protokollstufe"

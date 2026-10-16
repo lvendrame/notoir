@@ -8,5 +8,6 @@
   "close": "닫기",
   "keepRecovered": "복구된 버전 유지",
   "useDisk": "디스크 버전 사용",
-  "compare": "비교"
+  "compare": "비교",
+  "changedByMcp": "“{{name}}” 파일이 디스크에서 “{{client}}”(MCP)에 의해 변경되었습니다."
 }

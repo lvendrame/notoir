@@ -104,6 +104,8 @@ pub struct EditorOptions {
     pub highlight: bool,
     /// Error ranges drawn with a squiggle (JSON syntax errors).
     pub diagnostics: Vec<(usize, usize)>,
+    /// Recent MCP edits: char range and highlight strength (fades 1 → 0).
+    pub mcp_edits: Vec<(usize, usize, f32)>,
     /// Bookmarked lines (spec 12).
     pub bookmarks: Vec<usize>,
     /// Foldable regions; `None` when folding is off.

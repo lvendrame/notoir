@@ -127,7 +127,9 @@
     "autoStart": "Запускать сервер MCP автоматически",
     "port": "Порт MCP-сервера",
     "requestTimeoutMs": "Тайм-аут запросов MCP (мс)",
-    "activityRetentionDays": "Сколько дней хранить журнал MCP"
+    "activityRetentionDays": "Сколько дней хранить журнал MCP",
+    "maxReadBytes": "Максимальное чтение MCP без диапазона строк (байт)",
+    "highlightEdits": "Подсвечивать правки клиентов MCP"
   },
   "logging": {
     "level": "Уровень журнала"

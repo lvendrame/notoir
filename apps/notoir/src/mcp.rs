@@ -28,8 +28,6 @@ use crate::core::AppCore;
 pub const PROMPT_TIMEOUT_MS: u64 = 120_000;
 /// Activity entries kept in memory (the database keeps the rest).
 const ACTIVITY_KEEP: usize = 500;
-/// Reads above this need a line range (`mcp.maxReadBytes` default).
-const MAX_READ_BYTES: usize = 2 * 1024 * 1024;
 /// `last_seen` is written at most this often per client.
 const SEEN_WRITE_MS: i64 = 10_000;
 
@@ -61,9 +59,11 @@ pub struct ActivityEntry {
 /// A request waiting on the user.
 #[derive(Debug)]
 pub struct Waiting {
-    call: McpCall,
-    target: Target,
-    started: u64,
+    pub(crate) call: McpCall,
+    pub(crate) target: Target,
+    pub(crate) started: u64,
+    /// Ran again after loading its document (no second load).
+    pub(crate) retried: bool,
 }
 
 /// "Local Agent (MCP) wants to save notes.md."
@@ -117,25 +117,27 @@ pub enum McpDialog {
 
 /// What a call operates on, resolved before the gate.
 #[derive(Clone, Debug, PartialEq, Eq)]
-enum Target {
+pub(crate) enum Target {
     None,
     Path(PathBuf),
+    /// Outside the workspace (filesystem_* with the outside capability).
+    Outside(PathBuf),
 }
 
 /// A save started for a client, answered when the pipeline finishes.
 #[derive(Debug)]
-struct PendingSave {
-    doc: DocumentId,
-    call: McpCall,
-    target: Option<String>,
-    started: u64,
+pub(crate) struct PendingSave {
+    pub(crate) doc: DocumentId,
+    pub(crate) call: McpCall,
+    pub(crate) target: Option<String>,
+    pub(crate) started: u64,
 }
 
 pub struct McpState {
     pub server: Option<McpServer>,
     events_tx: Sender<ServerEvent>,
     events_rx: Receiver<ServerEvent>,
-    wake: Arc<dyn Fn() + Send + Sync>,
+    pub(crate) wake: Arc<dyn Fn() + Send + Sync>,
     pub registry: ClientRegistry,
     pub clients: Vec<ClientInfo>,
     /// Open sessions per client.
@@ -143,7 +145,7 @@ pub struct McpState {
     pub gate: PermissionGate,
     pub prompts: VecDeque<AskPrompt>,
     next_prompt: u64,
-    saves: Vec<PendingSave>,
+    pub(crate) saves: Vec<PendingSave>,
     /// Newest first.
     pub activity: VecDeque<ActivityEntry>,
     pub new_client: Option<NewClient>,
@@ -157,12 +159,33 @@ pub struct McpState {
     /// The executable named in Claude Desktop snippets (this binary unless
     /// set; snapshots use a neutral path).
     pub bridge_command: Option<String>,
-    /// Calls finished off the UI thread, logged and answered here.
-    done_tx: Sender<Finished>,
+    /// Work finished off the UI thread, continued here.
+    pub(crate) done_tx: Sender<Finished>,
     done_rx: Receiver<Finished>,
+    /// Documents loaded for MCP without a tab → last use (ms); unused clean
+    /// ones are closed again.
+    pub(crate) loaded: HashMap<DocumentId, u64>,
+    /// Recent MCP edits to highlight: (document, start, end, at ms).
+    pub highlights: Vec<(DocumentId, usize, usize, u64)>,
+    /// Files written by `filesystem_write` → the client and when (ms);
+    /// external-change banners name it.
+    pub disk_writers: HashMap<PathBuf, (ClientId, u64)>,
 }
 
-type Finished = (McpCall, Option<String>, u64, ToolReply);
+/// Work finished on a worker thread.
+pub(crate) enum Finished {
+    Reply {
+        call: McpCall,
+        target: Option<String>,
+        started: u64,
+        reply: ToolReply,
+    },
+    /// IO for a waiting call finished; the call continues on the UI thread.
+    After {
+        w: Waiting,
+        result: Result<crate::mcp_tools::AfterIo, ToolReply>,
+    },
+}
 
 impl McpState {
     pub fn new(wake: Arc<dyn Fn() + Send + Sync>) -> Self {
@@ -190,6 +213,9 @@ impl McpState {
             focus_prompt: false,
             seen_written: HashMap::new(),
             bridge_command: None,
+            loaded: HashMap::new(),
+            highlights: Vec::new(),
+            disk_writers: HashMap::new(),
         }
     }
 
@@ -263,7 +289,7 @@ impl McpState {
     }
 }
 
-fn epoch_ms() -> i64 {
+pub(crate) fn epoch_ms() -> i64 {
     std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_or(0, |d| d.as_millis() as i64)
@@ -434,11 +460,20 @@ impl AppCore {
                 }
             }
         }
-        while let Ok((call, target, started, reply)) = self.mcp.done_rx.try_recv() {
-            self.mcp_reply(call, target, started, reply);
+        while let Ok(f) = self.mcp.done_rx.try_recv() {
+            match f {
+                Finished::Reply {
+                    call,
+                    target,
+                    started,
+                    reply,
+                } => self.mcp_reply(call, target, started, reply),
+                Finished::After { w, result } => self.mcp_after(w, result),
+            }
         }
         self.mcp_finish_saves();
         self.mcp_expire_prompts();
+        self.mcp_cleanup();
     }
 
     /// When the next prompt times out (for repaint scheduling).
@@ -468,7 +503,7 @@ impl AppCore {
     }
 
     /// Records an activity entry (never document content).
-    fn mcp_log(
+    pub(crate) fn mcp_log(
         &mut self,
         client: Option<ClientId>,
         tool: &str,
@@ -505,18 +540,25 @@ impl AppCore {
         self.mcp.activity.truncate(ACTIVITY_KEEP);
     }
 
-    fn mcp_target_label(&self, target: &Target) -> Option<String> {
+    pub(crate) fn mcp_target_label(&self, target: &Target) -> Option<String> {
         match target {
             Target::None => None,
             Target::Path(p) => Some(paths::display(
                 self.workspace.as_ref().map(|w| w.root.as_path()),
                 p,
             )),
+            Target::Outside(p) => Some(p.to_string_lossy().into_owned()),
         }
     }
 
     /// Answers a call and logs it.
-    fn mcp_reply(&mut self, call: McpCall, target: Option<String>, started: u64, reply: ToolReply) {
+    pub(crate) fn mcp_reply(
+        &mut self,
+        call: McpCall,
+        target: Option<String>,
+        started: u64,
+        reply: ToolReply,
+    ) {
         let outcome = match &reply {
             ToolReply::Ok { .. } => "ok".to_owned(),
             ToolReply::Err { code, .. } if code == "permission_denied" => "denied".to_owned(),
@@ -541,9 +583,19 @@ impl AppCore {
         let Some(path) = path.as_str() else {
             return Err(ToolReply::error("invalid_args", "path must be a string"));
         };
+        // filesystem_* may reach absolute paths outside the workspace with
+        // the (default denied) outside-workspace capability.
+        let raw = std::path::Path::new(path);
+        let outside_ok = call.tool.starts_with("filesystem_") && raw.is_absolute();
         match &self.workspace {
             Some(ws) => paths::resolve(&ws.root, path)
                 .map(Target::Path)
+                .or_else(|e| match e {
+                    PathError::Outside if outside_ok => Ok(Target::Outside(
+                        std::fs::canonicalize(raw).unwrap_or_else(|_| raw.to_path_buf()),
+                    )),
+                    e => Err(e),
+                })
                 .map_err(|e| {
                     let msg = match e {
                         PathError::Outside => "The path is outside the workspace",
@@ -597,6 +649,7 @@ impl AppCore {
                 call,
                 target,
                 started,
+                retried: false,
             },
             def,
         );
@@ -607,7 +660,7 @@ impl AppCore {
     fn mcp_gate(&mut self, w: Waiting, def: &'static ToolDef) {
         let p = principal(&w.call.client);
         let mut ask = None;
-        for cap in def.capabilities {
+        for cap in &crate::mcp_tools::capabilities(def, &w) {
             match self.mcp.gate.check(&p, cap, true) {
                 Decision::Deny => {
                     let label = self.mcp_target_label(&w.target);
@@ -698,7 +751,8 @@ impl AppCore {
 
     fn mcp_gate_except(&mut self, w: Waiting, def: &'static ToolDef, granted: &Capability) {
         let p = principal(&w.call.client);
-        for cap in def.capabilities.iter().filter(|c| *c != granted) {
+        let caps = crate::mcp_tools::capabilities(def, &w);
+        for cap in caps.iter().filter(|c| *c != granted) {
             match self.mcp.gate.check(&p, cap, true) {
                 Decision::Allow => {}
                 Decision::Deny => {
@@ -747,131 +801,6 @@ impl AppCore {
     }
 
     // ── tools ────────────────────────────────────────────────────────────
-
-    fn mcp_run(&mut self, w: Waiting) {
-        let label = self.mcp_target_label(&w.target);
-        let Waiting {
-            call,
-            target,
-            started,
-        } = w;
-        let path = match &target {
-            Target::Path(p) => Some(p.clone()),
-            Target::None => None,
-        };
-        let reply = match call.tool.as_str() {
-            "workspace_get" => self.tool_workspace_get(),
-            "document_read" => match path {
-                Some(p) => match self.tool_document_read(&p, &call.args) {
-                    Some(r) => r,
-                    None => {
-                        // Not open: read from disk off the UI thread.
-                        let args = call.args.clone();
-                        let done = self.mcp.done_tx.clone();
-                        let wake = self.mcp.wake.clone();
-                        std::thread::spawn(move || {
-                            let reply = read_from_disk(&p, &args);
-                            if done.send((call, label, started, reply)).is_ok() {
-                                wake();
-                            }
-                        });
-                        return;
-                    }
-                },
-                None => missing_path(),
-            },
-            "document_save" => match path {
-                Some(p) => match self.tool_document_save(&p) {
-                    Ok(doc) => {
-                        self.mcp.saves.push(PendingSave {
-                            doc,
-                            call,
-                            target: label,
-                            started,
-                        });
-                        return;
-                    }
-                    Err(r) => r,
-                },
-                None => missing_path(),
-            },
-            "document_delete" => match path {
-                Some(p) => self.tool_document_delete(p),
-                None => missing_path(),
-            },
-            other => ToolReply::error("unknown_tool", format!("No tool named {other}")),
-        };
-        self.mcp_reply(call, label, started, reply);
-    }
-
-    fn tool_workspace_get(&self) -> ToolReply {
-        let open = self.workbench.documents.len();
-        match &self.workspace {
-            Some(ws) => ToolReply::Ok {
-                structured: json!({
-                    "root": ws.root.to_string_lossy(),
-                    "name": ws.name,
-                    "git": self.git.repo.is_some(),
-                    "open_documents": open,
-                }),
-                summary: format!("Workspace {} ({open} open documents)", ws.name),
-            },
-            None => ToolReply::Ok {
-                structured: json!({ "root": null, "open_documents": open }),
-                summary: format!("No workspace is open ({open} open documents)"),
-            },
-        }
-    }
-
-    /// The buffer of an open document; `None` when it is not open.
-    fn tool_document_read(&self, path: &std::path::Path, args: &Value) -> Option<ToolReply> {
-        let (_, key) = fs_io::identity(path);
-        let doc = self.workbench.document(self.workbench.find_by_key(&key)?)?;
-        let text = doc.buffer.rope().to_string();
-        Some(read_reply(
-            &text,
-            args,
-            json!({
-                "dirty": doc.is_dirty(),
-                "revision": doc.revision,
-                "language": notoir_editor::language::definition(doc.language).name,
-                "encoding": doc.encoding.label(),
-                "eol": doc.line_ending.label(),
-                "open": true,
-            }),
-        ))
-    }
-
-    fn tool_document_save(&mut self, path: &std::path::Path) -> Result<DocumentId, ToolReply> {
-        let (_, key) = fs_io::identity(path);
-        let Some(doc) = self.workbench.find_by_key(&key) else {
-            return Err(ToolReply::error(
-                "not_open",
-                "The document is not open in Notoir; nothing to save",
-            ));
-        };
-        // A save in flight (or nothing to save): wait for / report that.
-        let clean = self.workbench.document(doc).is_some_and(|d| !d.is_dirty());
-        if !self.saving.contains(&doc) && !clean {
-            self.save(doc);
-        }
-        Ok(doc)
-    }
-
-    fn tool_document_delete(&mut self, path: PathBuf) -> ToolReply {
-        if !path.exists() {
-            return ToolReply::error("not_found", "No such file");
-        }
-        if path.is_dir() {
-            return ToolReply::error("is_directory", "document_delete removes files only");
-        }
-        let shown = paths::display(self.workspace.as_ref().map(|w| w.root.as_path()), &path);
-        self.delete_paths(vec![path], false);
-        ToolReply::Ok {
-            structured: json!({ "path": shown, "trashed": true }),
-            summary: format!("Moved {shown} to the trash"),
-        }
-    }
 
     /// Answers saves whose pipeline finished.
     fn mcp_finish_saves(&mut self) {
@@ -1012,59 +941,10 @@ impl AppCore {
     }
 }
 
-fn missing_path() -> ToolReply {
-    ToolReply::error("invalid_args", "path is required")
-}
-
-/// Content (optionally lines `start_line..=end_line`) plus metadata.
-fn read_reply(text: &str, args: &Value, mut meta: Value) -> ToolReply {
-    let start = args.get("start_line").and_then(Value::as_u64);
-    let end = args.get("end_line").and_then(Value::as_u64);
-    let total = text.lines().count().max(1);
-    let content = if start.is_some() || end.is_some() {
-        let s = start.unwrap_or(1).max(1) as usize;
-        let e = end.map_or(total, |e| e as usize).min(total);
-        text.split_inclusive('\n')
-            .skip(s - 1)
-            .take(e.saturating_sub(s - 1))
-            .collect::<String>()
-    } else {
-        if text.len() > MAX_READ_BYTES {
-            return ToolReply::Err {
-                code: "too_large".into(),
-                message: "The document is larger than 2 MiB; pass start_line/end_line".into(),
-                data: json!({ "bytes": text.len(), "lines": total }),
-            };
-        }
-        text.to_owned()
-    };
-    let summary = format!("{} bytes, {} lines", content.len(), total);
-    if let Some(m) = meta.as_object_mut() {
-        m.insert("content".into(), Value::String(content));
-        m.insert("lines".into(), json!(total));
-    }
-    ToolReply::Ok {
-        structured: meta,
-        summary,
-    }
-}
-
-/// `document_read` of a document Notoir does not have open.
-fn read_from_disk(path: &std::path::Path, args: &Value) -> ToolReply {
-    match fs_io::load(path, &fs_io::LoadOptions::default()) {
-        Ok(loaded) => read_reply(
-            &loaded.text.text,
-            args,
-            json!({
-                "dirty": false,
-                "revision": 0,
-                "language": notoir_editor::language::definition(loaded.text.language).name,
-                "encoding": loaded.text.encoding.label(),
-                "eol": loaded.text.line_ending.label(),
-                "open": false,
-            }),
-        ),
-        Err(fs_io::LoadError::NotFound) => ToolReply::error("not_found", "No such file"),
-        Err(e) => ToolReply::error("read_failed", e.to_string()),
+impl AppCore {
+    /// The MCP client that recently wrote `path` with `filesystem_write`.
+    pub fn mcp_disk_writer(&self, path: &std::path::Path) -> Option<String> {
+        let (client, at) = self.mcp.disk_writers.get(path)?;
+        (self.now_ms.saturating_sub(*at) < 10 * 60_000).then(|| self.mcp.client_name(client))
     }
 }

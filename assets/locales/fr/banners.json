@@ -8,5 +8,6 @@
   "close": "Fermer",
   "keepRecovered": "Conserver la version récupérée",
   "useDisk": "Utiliser la version du disque",
-  "compare": "Comparer"
+  "compare": "Comparer",
+  "changedByMcp": "« {{name}} » a été modifié sur le disque par « {{client}} » (MCP)."
 }

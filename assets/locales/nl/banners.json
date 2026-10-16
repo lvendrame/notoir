@@ -8,5 +8,6 @@
   "close": "Sluiten",
   "keepRecovered": "Herstelde versie behouden",
   "useDisk": "Versie op schijf gebruiken",
-  "compare": "Vergelijken"
+  "compare": "Vergelijken",
+  "changedByMcp": "‘{{name}}’ is op schijf gewijzigd door ‘{{client}}’ (MCP)."
 }

@@ -8,5 +8,6 @@
   "close": "閉じる",
   "keepRecovered": "復元したものを保持",
   "useDisk": "ディスクのバージョンを使用",
-  "compare": "比較"
+  "compare": "比較",
+  "changedByMcp": "「{{name}}」はディスク上で「{{client}}」(MCP) によって変更されました。"
 }

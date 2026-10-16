@@ -1,6 +1,6 @@
 # 29 — MCP Server
 
-**Status:** Partial — M20: rmcp Streamable HTTP server on 127.0.0.1 (`mcp.port`, next free port), Host/Origin allow-lists, bearer tokens (256-bit, stored as SHA-256 hashes), per-client rate limit, `notoir mcp-bridge --token <t> [--port <p>]` stdio proxy ("Notoir is not running" when nothing listens), Start/Stop Server and `mcp.autoStart` (restricted), status bar `MCP ●N` with popover, Connections (Add Client with one-time token and Claude Code / Claude Desktop snippets, Revoke, Copy Config), Permissions matrix, Activity panel (filter, clear, click opens target; stored in `mcp_activity` with retention), workspace boundary (`..`, absolute paths, symlinks, device paths and data streams), tools `workspace_get`, `document_read` (buffer of open documents, disk otherwise), `document_save` (save pipeline), `document_delete` (trash). M21: the remaining tools (list/search, open/create/write/apply_edits/rename, editor_*, settings_*, git_*, filesystem_*), revision conflicts, edit highlighting, external-change banner naming the client. Deviation: activity times are UTC
+**Status:** Done — M20: transport (rmcp Streamable HTTP on 127.0.0.1, `mcp.port` or the next free port, Host/Origin allow-lists, bearer tokens stored as SHA-256 hashes, per-client rate limit), `notoir mcp-bridge`, lifecycle and `mcp.autoStart` (restricted), client identity (Add Client, one-time token, config snippets, revoke), status bar `MCP ●N` with popover, Connections, Permissions, Activity panel (`mcp_activity` with retention). M21: the full tool catalogue plus `editor_get_selection`; documents load into memory without a tab and get a background tab when edited; `document_write` / `document_apply_edits` as one undoable `ChangeOrigin::Mcp` transaction with `expected_revision` → `revision_conflict`; fading edit highlight (`mcp.highlightEdits`); `filesystem_write` atomic, then external-change handling with a banner naming the client; `filesystem.outsideWorkspace` for absolute paths of `filesystem_*`; `mcp.maxReadBytes`; activity targets with `(+a −b)` line counts. Later: resources (`notoir://document/{id}`), `git_commit` / `git_push` (Phase 6), plugin-contributed tools (spec 30). Deviations: activity times are UTC; open SSE streams of a revoked client end with their session keep-alive
 
 ## Purpose
 
@@ -96,6 +96,7 @@ to `[a-zA-Z0-9_-]`. Conceptual dotted names from product docs map 1:1 (`document
 | `document_delete` | `file.delete` | Move file to trash (default denied) |
 | `editor_get_open_tabs` | `editor.read` | Groups, tabs, active tab, dirty flags |
 | `editor_get_active_document` | `editor.read` | Active document id/path + selections |
+| `editor_get_selection` | `editor.read` + `document.read` | Selected text of the active editor (or a view) with its file and the range of every selection (1-based line/column and 0-based offsets) |
 | `editor_open_document` | `editor.control` | Open/focus a document in a tab, optional line |
 | `editor_select_range` | `editor.control` | Set selection in a view |
 | `editor_insert` | `document.modify` + `editor.read` | Insert at cursor/selection of the active view |
