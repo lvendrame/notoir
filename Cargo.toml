@@ -15,6 +15,7 @@ notoir-platform = { path = "crates/notoir-platform" }
 notoir-storage = { path = "crates/notoir-storage" }
 notoir-workspace = { path = "crates/notoir-workspace" }
 notoir-git = { path = "crates/notoir-git" }
+notoir-mcp = { path = "crates/notoir-mcp" }
 
 eframe = { version = "0.36.2", default-features = false, features = ["default_fonts", "glow", "wayland", "x11"] }
 egui = "0.36.2"
@@ -61,6 +62,7 @@ two-face = { version = "0.5.2", default-features = false, features = ["syntect-d
 ignore = "0.4.33"
 globset = "0.4.20"
 trash = "5.2.9"
+ureq = { version = "3.4.2", default-features = false }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "确认拖放"
   },
   "mcp": {
-    "autoStart": "自动启动 MCP 服务器"
+    "autoStart": "自动启动 MCP 服务器",
+    "port": "MCP 服务器端口",
+    "requestTimeoutMs": "MCP 请求超时 (毫秒)",
+    "activityRetentionDays": "MCP 活动保留天数"
   },
   "logging": {
     "level": "日志级别"

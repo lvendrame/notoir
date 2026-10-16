@@ -815,3 +815,55 @@ fn git_peek_snapshot() {
         img.save(out_dir().join("git-peek.png")).unwrap();
     }
 }
+
+/// MCP: status bar indicator, an Ask prompt and the Connections dialog with
+/// a new client's one-time token (docs/design/mcp-*.png).
+#[test]
+fn mcp_snapshots() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path().join("notes");
+    std::fs::create_dir_all(&root).unwrap();
+    let root = root.canonicalize().unwrap();
+    std::fs::write(root.join("notes.md"), "# Notes\n\nIdeas and plans.\n").unwrap();
+    let notes = root.join("notes.md");
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = vec![(root, None), (notes, None)];
+    });
+    common::settle(&mut app);
+    let core = &mut app.harness.state_mut().core;
+    core.mcp_start_on(0);
+    core.mcp.bridge_command = Some("/Applications/Notoir.app/Contents/MacOS/notoir".into());
+    let client = core.mcp_add_client("Local Agent").id;
+    core.mcp.new_client = None;
+    core.notifications.clear();
+    core.mcp.inject(notoir_mcp::ServerEvent::Connected {
+        client: client.clone(),
+        name: "local-agent".into(),
+    });
+    let (call, _rx) = notoir_mcp::McpCall::new(
+        client,
+        "document_save",
+        serde_json::json!({ "path": "notes.md" }),
+    );
+    core.mcp.inject(notoir_mcp::ServerEvent::Call(call));
+    app.harness.run_steps(4);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("mcp-prompt.png")).unwrap();
+    }
+    common::run(
+        &mut app,
+        "mcp.answerPrompt",
+        serde_json::json!({ "answer": "deny" }),
+    );
+    common::run(
+        &mut app,
+        "mcp.addClient",
+        serde_json::json!({ "name": "Claude Desktop" }),
+    );
+    app.harness.run_steps(4);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("mcp-connections.png")).unwrap();
+    }
+}

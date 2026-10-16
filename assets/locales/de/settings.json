@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "Ziehen und Ablegen bestätigen"
   },
   "mcp": {
-    "autoStart": "MCP-Server automatisch starten"
+    "autoStart": "MCP-Server automatisch starten",
+    "port": "Port des MCP-Servers",
+    "requestTimeoutMs": "Zeitlimit für MCP-Anfragen (ms)",
+    "activityRetentionDays": "Tage, die MCP-Aktivität aufbewahrt wird"
   },
   "logging": {
     "level": "Protokollstufe"

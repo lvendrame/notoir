@@ -342,5 +342,26 @@
     "peekChange": "変更を表示",
     "closePeek": "変更を閉じる",
     "selectRepository": "リポジトリを選択"
+  },
+  "mcp": {
+    "startServer": "MCP サーバーを起動",
+    "stopServer": "MCP サーバーを停止",
+    "connections": "MCP 接続…",
+    "permissions": "MCP 権限…",
+    "activity": "MCP アクティビティ",
+    "settings": "MCP 設定",
+    "addClient": "MCP クライアントを追加…",
+    "focusPrompt": "権限の確認に移動",
+    "togglePopover": "MCP サーバーの状態",
+    "closeDialog": "MCP ダイアログを閉じる",
+    "revokeClient": "MCP クライアントを取り消す",
+    "resetPermissions": "MCP 権限をリセット",
+    "denyAll": "MCP 権限をすべて拒否",
+    "clearSessionGrants": "MCP のセッション中の許可をクリア",
+    "setPermission": "MCP 権限を設定",
+    "answerPrompt": "権限の確認に応答",
+    "clearActivity": "MCP アクティビティをクリア",
+    "filterActivity": "MCP アクティビティを絞り込む",
+    "copyConfig": "MCP クライアントの設定をコピー"
   }
 }

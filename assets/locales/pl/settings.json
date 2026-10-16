@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "Potwierdzaj przeciąganie i upuszczanie"
   },
   "mcp": {
-    "autoStart": "Uruchamiaj serwer MCP automatycznie"
+    "autoStart": "Uruchamiaj serwer MCP automatycznie",
+    "port": "Port serwera MCP",
+    "requestTimeoutMs": "Limit czasu żądań MCP (ms)",
+    "activityRetentionDays": "Liczba dni przechowywania aktywności MCP"
   },
   "logging": {
     "level": "Poziom logowania"

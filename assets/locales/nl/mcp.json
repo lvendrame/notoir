@@ -1,0 +1,111 @@
+{
+  "started": "MCP-server actief op {{url}}",
+  "startFailed": "Kan de MCP-server niet starten. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "MCP-server: verbonden clients: {{count}}",
+  "statusTip": "MCP-server",
+  "popover": {
+    "url": "Server: {{url}}",
+    "clients": "Verbonden clients",
+    "none": "Geen clients verbonden",
+    "recent": "Recente activiteit",
+    "connections": "Verbindingen…",
+    "activity": "Activiteit…"
+  },
+  "prompt": {
+    "wants": "‘{{client}}’ (MCP) vraagt: {{what}}",
+    "wantsTarget": "‘{{client}}’ (MCP) vraagt: {{what}} — {{target}}",
+    "once": "Eenmaal toestaan",
+    "session": "Toestaan voor deze sessie",
+    "always": "Altijd toestaan",
+    "confirmAlways": "‘Altijd toestaan’ bevestigen",
+    "deny": "Weigeren",
+    "dangerConfirm": "Deze machtiging kan gegevens verwijderen of remotes wijzigen. Permanent toestaan?",
+    "remaining": "Geweigerd over {{seconds}} s",
+    "more": "+{{count}} wachtend"
+  },
+  "connections": {
+    "title": "MCP-verbindingen",
+    "empty": "Nog geen clients. Voeg er een toe om een agent te verbinden.",
+    "serverOff": "De MCP-server is niet actief.",
+    "name": "Naam",
+    "status": "Status",
+    "lastSeen": "Laatst gezien",
+    "created": "Token gemaakt",
+    "permissions": "Machtigingen",
+    "connected": "Verbonden",
+    "idle": "Niet verbonden",
+    "revoked": "Ingetrokken",
+    "never": "Nooit",
+    "summary": "{{allow}} toegestaan · {{ask}} vragen · {{deny}} geweigerd",
+    "add": "Client toevoegen…",
+    "edit": "Machtigingen bewerken…",
+    "revoke": "Intrekken",
+    "copyConfig": "Configuratie kopiëren"
+  },
+  "add": {
+    "title": "MCP-client toevoegen",
+    "name": "Naam van de client",
+    "placeholder": "bijv. Claude Desktop",
+    "create": "Maken"
+  },
+  "token": {
+    "title": "Token voor {{name}}",
+    "once": "Kopieer het nu: het token wordt maar één keer getoond.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (via mcp-bridge)",
+    "copy": "Kopiëren"
+  },
+  "perm": {
+    "title": "MCP-toegang — {{name}}",
+    "allow": "Toestaan",
+    "ask": "Vragen",
+    "deny": "Weigeren",
+    "reset": "Standaardwaarden herstellen",
+    "revokeAll": "Alles intrekken",
+    "session": "Sessiemachtigingen: {{list}}",
+    "sessionNone": "Geen sessiemachtigingen",
+    "clear": "Wissen"
+  },
+  "group": {
+    "workspace": "Werkruimte",
+    "editor": "Editor",
+    "git": "Git",
+    "settings": "Instellingen"
+  },
+  "activity": {
+    "all": "Alle clients",
+    "clear": "Wissen",
+    "empty": "Nog geen MCP-activiteit.",
+    "ok": "ok",
+    "denied": "geweigerd",
+    "rejected": "afgewezen: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "Bestanden lezen",
+    "workspace_search": "Bestanden doorzoeken",
+    "document_read": "Bestanden openen in het geheugen van Notoir",
+    "document_create": "Documenten maken",
+    "file_create": "Bestanden maken",
+    "document_modify": "Documenten wijzigen",
+    "document_save": "Documenten opslaan",
+    "file_rename": "Bestanden hernoemen",
+    "file_delete": "Bestanden verwijderen",
+    "filesystem_read": "Direct lezen van het bestandssysteem",
+    "filesystem_write": "Direct schrijven naar het bestandssysteem",
+    "filesystem_outsideWorkspace": "Toegang buiten de werkruimte",
+    "editor_read": "Tabbladen en het actieve document lezen",
+    "editor_control": "De editor bedienen (tabbladen openen, selecteren)",
+    "git_read": "Git-status en verschillen bekijken",
+    "git_commit": "Committen",
+    "git_push": "Pushen",
+    "settings_read": "Instellingen lezen",
+    "settings_modify": "Instellingen wijzigen",
+    "network": "Netwerktoegang",
+    "process": "Processen uitvoeren",
+    "clipboard": "Het klembord gebruiken",
+    "mcp_pluginTools": "MCP-tools aanbieden",
+    "plugins_modifyConfig": "Pluginconfiguratie wijzigen",
+    "command": "Opdrachten uitvoeren"
+  }
+}

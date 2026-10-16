@@ -342,5 +342,26 @@
     "peekChange": "Show Change",
     "closePeek": "Close Change",
     "selectRepository": "Select Repository"
+  },
+  "mcp": {
+    "startServer": "Start MCP Server",
+    "stopServer": "Stop MCP Server",
+    "connections": "MCP Connections…",
+    "permissions": "MCP Permissions…",
+    "activity": "MCP Activity",
+    "settings": "MCP Settings",
+    "addClient": "Add MCP Client…",
+    "focusPrompt": "Focus Permission Prompt",
+    "togglePopover": "MCP Server Status",
+    "closeDialog": "Close MCP Dialog",
+    "revokeClient": "Revoke MCP Client",
+    "resetPermissions": "Reset MCP Permissions",
+    "denyAll": "Deny All MCP Permissions",
+    "clearSessionGrants": "Clear MCP Session Grants",
+    "setPermission": "Set MCP Permission",
+    "answerPrompt": "Answer Permission Prompt",
+    "clearActivity": "Clear MCP Activity",
+    "filterActivity": "Filter MCP Activity",
+    "copyConfig": "Copy MCP Client Config"
   }
 }

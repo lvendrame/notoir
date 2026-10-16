@@ -32,6 +32,7 @@ pub const REGISTERED_PANELS: &[PanelId] = &[
     PanelId::Outline,
     PanelId::Output,
     PanelId::GitOutput,
+    PanelId::McpActivity,
 ];
 
 /// Theme setting: a fixed theme or "auto" (follow the OS).
@@ -206,6 +207,8 @@ pub struct AppCore {
     pub zen: Option<crate::settings_tab::ZenState>,
     /// Show the first-run page at startup (production launches).
     pub first_run_check: bool,
+    /// MCP server, clients, permissions and activity (spec 29 / 32).
+    pub mcp: crate::mcp::McpState,
 }
 
 impl AppCore {
@@ -284,6 +287,7 @@ impl AppCore {
         let theme_choice = ThemeChoice::from_setting(settings.str("workbench.theme", None))
             .unwrap_or(ThemeChoice::Fixed(ThemeId::Midnight));
 
+        let mcp = crate::mcp::McpState::new(wake.clone());
         let mut commands = CommandRegistry::default();
         crate::commands::register_all(&mut commands, opts.platform);
         let keymap = build_keymap(&commands, &user_bindings, opts.platform, &mut notifications);
@@ -349,6 +353,7 @@ impl AppCore {
             breadcrumbs_focus: false,
             zen: None,
             first_run_check: opts.first_run,
+            mcp,
             language,
             theme_choice,
             theme_override: opts.theme_override,
@@ -584,6 +589,8 @@ impl AppCore {
             .set_bool("gitBusy", self.git_busy())
             .set_bool("gitNetwork", self.git.net.is_some())
             .set_bool("gitPeek", self.git.peek.is_some())
+            .set_bool("mcpRunning", self.mcp.running())
+            .set_bool("mcpPrompt", !self.mcp.prompts.is_empty())
             .set_bool(
                 "gitPeekStageable",
                 self.git.peek.as_ref().is_some_and(|p| p.stageable),
@@ -919,6 +926,7 @@ impl AppCore {
     ) {
         self.load_recent();
         self.load_recent_workspaces();
+        self.mcp_init();
         self.recovery_start();
         self.restore_scratchpads();
         let restore = restore_session
@@ -935,11 +943,13 @@ impl AppCore {
         if self.first_run_check {
             self.maybe_first_run();
         }
+        self.mcp_autostart();
     }
 
     /// Exit: Scratchpads, session and recovery are written before the
     /// process ends.
     pub fn shutdown(&mut self) {
+        self.mcp_stop();
         self.flush_scratchpads(true);
         self.write_session(false);
         self.recovery_shutdown();

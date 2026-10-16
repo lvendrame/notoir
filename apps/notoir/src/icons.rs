@@ -33,6 +33,7 @@ macro_rules! icons {
 
 icons! {
     ArrowDownAZ => "lucide/arrow-down-a-z",
+    Activity => "lucide/activity",
     ArrowDown => "lucide/arrow-down",
     ArrowLeft => "lucide/arrow-left",
     ArrowLeftRight => "lucide/arrow-left-right",

@@ -321,6 +321,12 @@ impl eframe::App for NotoirApp {
         self.core.search_tick();
         self.core.compare_tick();
         self.core.git_tick();
+        self.core.mcp_tick();
+        if let Some(due) = self.core.mcp_next_due() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(
+                due.saturating_sub(now).max(1),
+            ));
+        }
         if self.core.git_gutter_pending() {
             ctx.request_repaint_after(std::time::Duration::from_millis(
                 crate::git::GUTTER_DEBOUNCE_MS,
@@ -398,7 +404,8 @@ impl eframe::App for NotoirApp {
             || self.ui.picker.is_some()
             || self.core.find.goto.is_some()
             || self.core.settings_ui.recording.is_some()
-            || !self.core.files.prompts.is_empty())
+            || !self.core.files.prompts.is_empty()
+            || self.core.mcp.dialog.is_some())
         {
             input::dispatch_keys(&ctx, &mut self.core, &context);
         }
@@ -506,6 +513,16 @@ impl eframe::App for NotoirApp {
             );
             shell::recovery_ui::show(&ctx, &mut kit, &self.core, top_offset, &mut actions);
             overlays::about(&ctx, &mut kit, &mut self.ui);
+            shell::mcp_ui::popover(&ctx, &mut kit, &self.core, bottom_offset, &mut actions);
+            shell::mcp_ui::dialogs(
+                &ctx,
+                &mut kit,
+                &self.core,
+                &mut self.ui.mcp_client_name,
+                &mut actions,
+            );
+            // Prompts show even in Zen Mode: a client is waiting on them.
+            shell::mcp_ui::ask_bar(&ctx, &mut kit, &mut self.core, bottom_offset, &mut actions);
             if let Some(answer) = shell::prompts::show(&ctx, &mut kit, &self.core) {
                 prompt_answer = Some(answer);
             }

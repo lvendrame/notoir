@@ -1,0 +1,111 @@
+{
+  "started": "MCP server running at {{url}}",
+  "startFailed": "Could not start the MCP server. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "MCP server: {{count}} connected clients",
+  "statusTip": "MCP server",
+  "popover": {
+    "url": "Server: {{url}}",
+    "clients": "Connected clients",
+    "none": "No clients connected",
+    "recent": "Recent activity",
+    "connections": "Connections…",
+    "activity": "Activity…"
+  },
+  "prompt": {
+    "wants": "“{{client}}” (MCP) requests: {{what}}",
+    "wantsTarget": "“{{client}}” (MCP) requests: {{what}} — {{target}}",
+    "once": "Allow Once",
+    "session": "Allow for Session",
+    "always": "Always Allow",
+    "confirmAlways": "Confirm Always Allow",
+    "deny": "Deny",
+    "dangerConfirm": "This permission can delete data or change remotes. Allow it permanently?",
+    "remaining": "Denied in {{seconds}} s",
+    "more": "+{{count}} waiting"
+  },
+  "connections": {
+    "title": "MCP Connections",
+    "empty": "No clients yet. Add one to connect an agent.",
+    "serverOff": "The MCP server is not running.",
+    "name": "Name",
+    "status": "Status",
+    "lastSeen": "Last seen",
+    "created": "Token created",
+    "permissions": "Permissions",
+    "connected": "Connected",
+    "idle": "Not connected",
+    "revoked": "Revoked",
+    "never": "Never",
+    "summary": "{{allow}} allowed · {{ask}} ask · {{deny}} denied",
+    "add": "Add Client…",
+    "edit": "Edit Permissions…",
+    "revoke": "Revoke",
+    "copyConfig": "Copy Config"
+  },
+  "add": {
+    "title": "Add MCP Client",
+    "name": "Client name",
+    "placeholder": "e.g. Claude Desktop",
+    "create": "Create"
+  },
+  "token": {
+    "title": "Token for {{name}}",
+    "once": "Copy it now: the token is shown only once.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (via mcp-bridge)",
+    "copy": "Copy"
+  },
+  "perm": {
+    "title": "MCP Access — {{name}}",
+    "allow": "Allow",
+    "ask": "Ask",
+    "deny": "Deny",
+    "reset": "Reset to Defaults",
+    "revokeAll": "Revoke All",
+    "session": "Session grants: {{list}}",
+    "sessionNone": "No session grants",
+    "clear": "Clear"
+  },
+  "group": {
+    "workspace": "Workspace",
+    "editor": "Editor",
+    "git": "Git",
+    "settings": "Settings"
+  },
+  "activity": {
+    "all": "All clients",
+    "clear": "Clear",
+    "empty": "No MCP activity yet.",
+    "ok": "ok",
+    "denied": "denied",
+    "rejected": "rejected: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "Read files",
+    "workspace_search": "Search files",
+    "document_read": "Open files in Notoir memory",
+    "document_create": "Create documents",
+    "file_create": "Create files",
+    "document_modify": "Modify documents",
+    "document_save": "Save documents",
+    "file_rename": "Rename files",
+    "file_delete": "Delete files",
+    "filesystem_read": "Raw filesystem read",
+    "filesystem_write": "Raw filesystem write",
+    "filesystem_outsideWorkspace": "Access outside the workspace",
+    "editor_read": "Read tabs and the active document",
+    "editor_control": "Control the editor (open tabs, select)",
+    "git_read": "View Git status and diffs",
+    "git_commit": "Commit",
+    "git_push": "Push",
+    "settings_read": "Read settings",
+    "settings_modify": "Modify settings",
+    "network": "Network access",
+    "process": "Run processes",
+    "clipboard": "Use the clipboard",
+    "mcp_pluginTools": "Expose MCP tools",
+    "plugins_modifyConfig": "Modify plugin configuration",
+    "command": "Run commands"
+  }
+}

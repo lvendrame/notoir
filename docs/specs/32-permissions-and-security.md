@@ -1,6 +1,6 @@
 # 32 — Permissions & Security
 
-**Status:** Not started — M20 (MCP), M22 (plugins)
+**Status:** Partial — M20: `PermissionGate` in notoir-core (principals, capabilities, risk classes, MCP defaults, evaluation order, Once/Session/Persistent grants, revocation), per-client matrix persisted in `mcp_grant`, non-modal Ask prompt above the status bar (F6 focuses it, identical requests share one prompt, 120 s timeout denies, "Always Allow" for dangerous capabilities needs a second click, shown in Zen Mode), path boundary with canonicalised symlinks. M22: plugin capabilities from manifests. Later: "Preview changes" diff in the prompt
 
 ## Purpose
 

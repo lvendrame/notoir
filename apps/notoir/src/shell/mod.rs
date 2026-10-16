@@ -17,6 +17,7 @@ pub mod find_widget;
 pub mod git_peek;
 pub mod json_tree;
 pub mod layout;
+pub mod mcp_ui;
 pub mod md_preview;
 pub mod outline;
 pub mod overlays;
@@ -74,6 +75,8 @@ pub struct UiState {
     pub json_trees: json_tree::JsonTrees,
     pub outline: outline::OutlineUi,
     pub scm: scm_panel::ScmUi,
+    /// MCP Add Client: the name being typed.
+    pub mcp_client_name: String,
 }
 
 /// Collects invocations produced while rendering one frame.

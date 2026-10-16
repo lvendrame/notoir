@@ -1,0 +1,111 @@
+{
+  "started": "MCP 서버가 {{url}}에서 실행 중입니다",
+  "startFailed": "MCP 서버를 시작할 수 없습니다. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "MCP 서버: 연결된 클라이언트 {{count}}개",
+  "statusTip": "MCP 서버",
+  "popover": {
+    "url": "서버: {{url}}",
+    "clients": "연결된 클라이언트",
+    "none": "연결된 클라이언트 없음",
+    "recent": "최근 활동",
+    "connections": "연결…",
+    "activity": "활동…"
+  },
+  "prompt": {
+    "wants": "“{{client}}”(MCP) 요청: {{what}}",
+    "wantsTarget": "“{{client}}”(MCP) 요청: {{what}} — {{target}}",
+    "once": "한 번 허용",
+    "session": "이번 세션 동안 허용",
+    "always": "항상 허용",
+    "confirmAlways": "항상 허용 확인",
+    "deny": "거부",
+    "dangerConfirm": "이 권한은 데이터를 삭제하거나 원격 저장소를 변경할 수 있습니다. 영구적으로 허용할까요?",
+    "remaining": "{{seconds}}초 후 거부",
+    "more": "+{{count}}개 대기 중"
+  },
+  "connections": {
+    "title": "MCP 연결",
+    "empty": "아직 클라이언트가 없습니다. 에이전트를 연결하려면 추가하세요.",
+    "serverOff": "MCP 서버가 실행 중이 아닙니다.",
+    "name": "이름",
+    "status": "상태",
+    "lastSeen": "마지막 활동",
+    "created": "토큰 생성",
+    "permissions": "권한",
+    "connected": "연결됨",
+    "idle": "연결 안 됨",
+    "revoked": "취소됨",
+    "never": "없음",
+    "summary": "허용 {{allow}} · 확인 {{ask}} · 거부 {{deny}}",
+    "add": "클라이언트 추가…",
+    "edit": "권한 편집…",
+    "revoke": "취소",
+    "copyConfig": "구성 복사"
+  },
+  "add": {
+    "title": "MCP 클라이언트 추가",
+    "name": "클라이언트 이름",
+    "placeholder": "예: Claude Desktop",
+    "create": "만들기"
+  },
+  "token": {
+    "title": "{{name}}의 토큰",
+    "once": "지금 복사하세요. 토큰은 한 번만 표시됩니다.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (mcp-bridge 사용)",
+    "copy": "복사"
+  },
+  "perm": {
+    "title": "MCP 액세스 — {{name}}",
+    "allow": "허용",
+    "ask": "확인",
+    "deny": "거부",
+    "reset": "기본값으로 재설정",
+    "revokeAll": "모두 취소",
+    "session": "세션 권한: {{list}}",
+    "sessionNone": "세션 권한 없음",
+    "clear": "지우기"
+  },
+  "group": {
+    "workspace": "작업 영역",
+    "editor": "편집기",
+    "git": "Git",
+    "settings": "설정"
+  },
+  "activity": {
+    "all": "모든 클라이언트",
+    "clear": "지우기",
+    "empty": "아직 MCP 활동이 없습니다.",
+    "ok": "ok",
+    "denied": "거부됨",
+    "rejected": "거절됨: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "파일 읽기",
+    "workspace_search": "파일 검색",
+    "document_read": "Notoir 메모리에서 파일 열기",
+    "document_create": "문서 만들기",
+    "file_create": "파일 만들기",
+    "document_modify": "문서 수정",
+    "document_save": "문서 저장",
+    "file_rename": "파일 이름 바꾸기",
+    "file_delete": "파일 삭제",
+    "filesystem_read": "파일 시스템 직접 읽기",
+    "filesystem_write": "파일 시스템 직접 쓰기",
+    "filesystem_outsideWorkspace": "작업 영역 밖 액세스",
+    "editor_read": "탭과 활성 문서 읽기",
+    "editor_control": "편집기 제어 (탭 열기, 선택)",
+    "git_read": "Git 상태 및 차이 보기",
+    "git_commit": "커밋",
+    "git_push": "푸시",
+    "settings_read": "설정 읽기",
+    "settings_modify": "설정 수정",
+    "network": "네트워크 액세스",
+    "process": "프로세스 실행",
+    "clipboard": "클립보드 사용",
+    "mcp_pluginTools": "MCP 도구 제공",
+    "plugins_modifyConfig": "플러그인 구성 수정",
+    "command": "명령 실행"
+  }
+}

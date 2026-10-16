@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "ドラッグ アンド ドロップを確認"
   },
   "mcp": {
-    "autoStart": "MCP サーバーを自動的に起動"
+    "autoStart": "MCP サーバーを自動的に起動",
+    "port": "MCP サーバーのポート",
+    "requestTimeoutMs": "MCP 要求のタイムアウト (ミリ秒)",
+    "activityRetentionDays": "MCP アクティビティの保存日数"
   },
   "logging": {
     "level": "ログ レベル"

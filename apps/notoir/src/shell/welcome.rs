@@ -136,7 +136,11 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
             "welcome:configure",
             Some(("app.settings", json!({ "category": "git" }))),
         ),
-        ("welcome:mcp", "welcome:learnMore", None),
+        (
+            "welcome:mcp",
+            "welcome:learnMore",
+            Some(("mcp.connections", json!({}))),
+        ),
         ("welcome:plugins", "welcome:explore", None),
     ] {
         ui.horizontal(|ui| {
@@ -158,7 +162,7 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
                         cmd(actions, id, args);
                     }
                 }
-                // MCP and plugins arrive in later milestones.
+                // Plugins arrive in a later milestone.
                 None => {
                     ui.add_enabled(false, egui::Button::new(t!(button)))
                         .on_disabled_hover_text(t!("welcome:comingLater"));

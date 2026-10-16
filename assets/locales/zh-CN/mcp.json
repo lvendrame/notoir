@@ -1,0 +1,111 @@
+{
+  "started": "MCP 服务器正在 {{url}} 运行",
+  "startFailed": "无法启动 MCP 服务器。{{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "MCP 服务器: {{count}} 个已连接客户端",
+  "statusTip": "MCP 服务器",
+  "popover": {
+    "url": "服务器: {{url}}",
+    "clients": "已连接客户端",
+    "none": "没有已连接的客户端",
+    "recent": "最近活动",
+    "connections": "连接…",
+    "activity": "活动…"
+  },
+  "prompt": {
+    "wants": "“{{client}}”(MCP) 请求: {{what}}",
+    "wantsTarget": "“{{client}}”(MCP) 请求: {{what}} — {{target}}",
+    "once": "允许一次",
+    "session": "本次会话允许",
+    "always": "始终允许",
+    "confirmAlways": "确认始终允许",
+    "deny": "拒绝",
+    "dangerConfirm": "此权限可以删除数据或更改远程仓库。要永久允许吗?",
+    "remaining": "{{seconds}} 秒后拒绝",
+    "more": "+{{count}} 个等待中"
+  },
+  "connections": {
+    "title": "MCP 连接",
+    "empty": "还没有客户端。添加一个以连接代理。",
+    "serverOff": "MCP 服务器未运行。",
+    "name": "名称",
+    "status": "状态",
+    "lastSeen": "上次活动",
+    "created": "令牌创建时间",
+    "permissions": "权限",
+    "connected": "已连接",
+    "idle": "未连接",
+    "revoked": "已撤销",
+    "never": "从未",
+    "summary": "允许 {{allow}} · 询问 {{ask}} · 拒绝 {{deny}}",
+    "add": "添加客户端…",
+    "edit": "编辑权限…",
+    "revoke": "撤销",
+    "copyConfig": "复制配置"
+  },
+  "add": {
+    "title": "添加 MCP 客户端",
+    "name": "客户端名称",
+    "placeholder": "例如 Claude Desktop",
+    "create": "创建"
+  },
+  "token": {
+    "title": "{{name}} 的令牌",
+    "once": "请立即复制: 令牌只显示一次。",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (通过 mcp-bridge)",
+    "copy": "复制"
+  },
+  "perm": {
+    "title": "MCP 访问权限 — {{name}}",
+    "allow": "允许",
+    "ask": "询问",
+    "deny": "拒绝",
+    "reset": "恢复默认值",
+    "revokeAll": "全部撤销",
+    "session": "会话授权: {{list}}",
+    "sessionNone": "没有会话授权",
+    "clear": "清除"
+  },
+  "group": {
+    "workspace": "工作区",
+    "editor": "编辑器",
+    "git": "Git",
+    "settings": "设置"
+  },
+  "activity": {
+    "all": "所有客户端",
+    "clear": "清除",
+    "empty": "还没有 MCP 活动。",
+    "ok": "ok",
+    "denied": "已拒绝",
+    "rejected": "已拒收: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "读取文件",
+    "workspace_search": "搜索文件",
+    "document_read": "在 Notoir 内存中打开文件",
+    "document_create": "创建文档",
+    "file_create": "创建文件",
+    "document_modify": "修改文档",
+    "document_save": "保存文档",
+    "file_rename": "重命名文件",
+    "file_delete": "删除文件",
+    "filesystem_read": "直接读取文件系统",
+    "filesystem_write": "直接写入文件系统",
+    "filesystem_outsideWorkspace": "访问工作区之外",
+    "editor_read": "读取标签页和活动文档",
+    "editor_control": "控制编辑器 (打开标签页、选择)",
+    "git_read": "查看 Git 状态和差异",
+    "git_commit": "提交",
+    "git_push": "推送",
+    "settings_read": "读取设置",
+    "settings_modify": "修改设置",
+    "network": "网络访问",
+    "process": "运行进程",
+    "clipboard": "使用剪贴板",
+    "mcp_pluginTools": "提供 MCP 工具",
+    "plugins_modifyConfig": "修改插件配置",
+    "command": "运行命令"
+  }
+}

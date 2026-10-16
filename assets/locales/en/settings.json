@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "Confirm drag and drop"
   },
   "mcp": {
-    "autoStart": "Start MCP server automatically"
+    "autoStart": "Start MCP server automatically",
+    "port": "MCP server port",
+    "requestTimeoutMs": "MCP request timeout (ms)",
+    "activityRetentionDays": "Days to keep MCP activity"
   },
   "logging": {
     "level": "Log level"

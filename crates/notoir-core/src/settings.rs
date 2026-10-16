@@ -844,6 +844,40 @@ impl Schema {
             restricted: true,
             tags: &["server"],
         });
+        // Machine-specific: one port per machine.
+        s.define(SettingDef {
+            key: "mcp.port",
+            ty: T::Int {
+                min: 1024,
+                max: 65535,
+            },
+            default: V::Int(47823),
+            scopes: Scopes::USER_ONLY,
+            category: C::Mcp,
+            restricted: false,
+            tags: &["server", "port"],
+        });
+        s.define(SettingDef {
+            key: "mcp.requestTimeoutMs",
+            ty: T::Int {
+                min: 1000,
+                max: 600_000,
+            },
+            default: V::Int(30_000),
+            scopes: Scopes::USER_ONLY,
+            category: C::Mcp,
+            restricted: false,
+            tags: &["timeout"],
+        });
+        s.define(SettingDef {
+            key: "mcp.activityRetentionDays",
+            ty: T::Int { min: 1, max: 365 },
+            default: V::Int(14),
+            scopes: Scopes::USER_ONLY,
+            category: C::Mcp,
+            restricted: false,
+            tags: &["activity", "log"],
+        });
         // Advanced
         s.define(SettingDef {
             key: "logging.level",

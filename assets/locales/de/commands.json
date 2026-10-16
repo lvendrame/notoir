@@ -342,5 +342,26 @@
     "peekChange": "Änderung anzeigen",
     "closePeek": "Änderung schließen",
     "selectRepository": "Repository auswählen"
+  },
+  "mcp": {
+    "startServer": "MCP-Server starten",
+    "stopServer": "MCP-Server stoppen",
+    "connections": "MCP-Verbindungen…",
+    "permissions": "MCP-Berechtigungen…",
+    "activity": "MCP-Aktivität",
+    "settings": "MCP-Einstellungen",
+    "addClient": "MCP-Client hinzufügen…",
+    "focusPrompt": "Zur Berechtigungsanfrage wechseln",
+    "togglePopover": "MCP-Serverstatus",
+    "closeDialog": "MCP-Dialog schließen",
+    "revokeClient": "MCP-Client widerrufen",
+    "resetPermissions": "MCP-Berechtigungen zurücksetzen",
+    "denyAll": "Alle MCP-Berechtigungen ablehnen",
+    "clearSessionGrants": "MCP-Sitzungsfreigaben leeren",
+    "setPermission": "MCP-Berechtigung festlegen",
+    "answerPrompt": "Berechtigungsanfrage beantworten",
+    "clearActivity": "MCP-Aktivität leeren",
+    "filterActivity": "MCP-Aktivität filtern",
+    "copyConfig": "MCP-Client-Konfiguration kopieren"
   }
 }

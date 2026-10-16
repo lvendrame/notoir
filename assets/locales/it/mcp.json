@@ -1,0 +1,111 @@
+{
+  "started": "Server MCP in esecuzione su {{url}}",
+  "startFailed": "Impossibile avviare il server MCP. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "Server MCP: client connessi: {{count}}",
+  "statusTip": "Server MCP",
+  "popover": {
+    "url": "Server: {{url}}",
+    "clients": "Client connessi",
+    "none": "Nessun client connesso",
+    "recent": "Attività recente",
+    "connections": "Connessioni…",
+    "activity": "Attività…"
+  },
+  "prompt": {
+    "wants": "“{{client}}” (MCP) richiede: {{what}}",
+    "wantsTarget": "“{{client}}” (MCP) richiede: {{what}} — {{target}}",
+    "once": "Consenti una volta",
+    "session": "Consenti per la sessione",
+    "always": "Consenti sempre",
+    "confirmAlways": "Conferma “Consenti sempre”",
+    "deny": "Nega",
+    "dangerConfirm": "Questo permesso può eliminare dati o modificare i remoti. Concederlo in modo permanente?",
+    "remaining": "Negato tra {{seconds}} s",
+    "more": "+{{count}} in attesa"
+  },
+  "connections": {
+    "title": "Connessioni MCP",
+    "empty": "Ancora nessun client. Aggiungine uno per collegare un agente.",
+    "serverOff": "Il server MCP non è in esecuzione.",
+    "name": "Nome",
+    "status": "Stato",
+    "lastSeen": "Ultimo accesso",
+    "created": "Token creato",
+    "permissions": "Permessi",
+    "connected": "Connesso",
+    "idle": "Non connesso",
+    "revoked": "Revocato",
+    "never": "Mai",
+    "summary": "{{allow}} consentiti · {{ask}} su richiesta · {{deny}} negati",
+    "add": "Aggiungi client…",
+    "edit": "Modifica permessi…",
+    "revoke": "Revoca",
+    "copyConfig": "Copia configurazione"
+  },
+  "add": {
+    "title": "Aggiungi client MCP",
+    "name": "Nome del client",
+    "placeholder": "ad es. Claude Desktop",
+    "create": "Crea"
+  },
+  "token": {
+    "title": "Token per {{name}}",
+    "once": "Copialo ora: il token viene mostrato una sola volta.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (tramite mcp-bridge)",
+    "copy": "Copia"
+  },
+  "perm": {
+    "title": "Accesso MCP — {{name}}",
+    "allow": "Consenti",
+    "ask": "Chiedi",
+    "deny": "Nega",
+    "reset": "Ripristina predefiniti",
+    "revokeAll": "Revoca tutto",
+    "session": "Permessi di sessione: {{list}}",
+    "sessionNone": "Nessun permesso di sessione",
+    "clear": "Cancella"
+  },
+  "group": {
+    "workspace": "Area di lavoro",
+    "editor": "Editor",
+    "git": "Git",
+    "settings": "Impostazioni"
+  },
+  "activity": {
+    "all": "Tutti i client",
+    "clear": "Cancella",
+    "empty": "Ancora nessuna attività MCP.",
+    "ok": "ok",
+    "denied": "negato",
+    "rejected": "rifiutato: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "Leggere file",
+    "workspace_search": "Cercare nei file",
+    "document_read": "Aprire file nella memoria di Notoir",
+    "document_create": "Creare documenti",
+    "file_create": "Creare file",
+    "document_modify": "Modificare documenti",
+    "document_save": "Salvare documenti",
+    "file_rename": "Rinominare file",
+    "file_delete": "Eliminare file",
+    "filesystem_read": "Lettura diretta del file system",
+    "filesystem_write": "Scrittura diretta nel file system",
+    "filesystem_outsideWorkspace": "Accesso fuori dall’area di lavoro",
+    "editor_read": "Leggere le schede e il documento attivo",
+    "editor_control": "Controllare l’editor (aprire schede, selezionare)",
+    "git_read": "Vedere stato e differenze Git",
+    "git_commit": "Eseguire commit",
+    "git_push": "Eseguire push",
+    "settings_read": "Leggere le impostazioni",
+    "settings_modify": "Modificare le impostazioni",
+    "network": "Accesso alla rete",
+    "process": "Eseguire processi",
+    "clipboard": "Usare gli appunti",
+    "mcp_pluginTools": "Esporre strumenti MCP",
+    "plugins_modifyConfig": "Modificare la configurazione dei plugin",
+    "command": "Eseguire comandi"
+  }
+}

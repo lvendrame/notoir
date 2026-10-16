@@ -1,6 +1,6 @@
 # 29 — MCP Server
 
-**Status:** Not started — M20, M21
+**Status:** Partial — M20: rmcp Streamable HTTP server on 127.0.0.1 (`mcp.port`, next free port), Host/Origin allow-lists, bearer tokens (256-bit, stored as SHA-256 hashes), per-client rate limit, `notoir mcp-bridge --token <t> [--port <p>]` stdio proxy ("Notoir is not running" when nothing listens), Start/Stop Server and `mcp.autoStart` (restricted), status bar `MCP ●N` with popover, Connections (Add Client with one-time token and Claude Code / Claude Desktop snippets, Revoke, Copy Config), Permissions matrix, Activity panel (filter, clear, click opens target; stored in `mcp_activity` with retention), workspace boundary (`..`, absolute paths, symlinks, device paths and data streams), tools `workspace_get`, `document_read` (buffer of open documents, disk otherwise), `document_save` (save pipeline), `document_delete` (trash). M21: the remaining tools (list/search, open/create/write/apply_edits/rename, editor_*, settings_*, git_*, filesystem_*), revision conflicts, edit highlighting, external-change banner naming the client. Deviation: activity times are UTC
 
 ## Purpose
 

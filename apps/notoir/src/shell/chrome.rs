@@ -284,6 +284,8 @@ pub fn status_bar(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
         .frame(bar_frame(kit))
         .show(ui, |ui| {
             ui.horizontal_centered(|ui| {
+                // MCP server (spec 29): `MCP ●2`.
+                super::mcp_ui::status_item(ui, kit, core, actions);
                 // Git branch (spec 28): `⎇ main* ↑1 ↓2`.
                 if let Some(branch) = core.git_branch_label() {
                     ui.add(kit.icon(

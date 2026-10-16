@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "Conferma trascinamento"
   },
   "mcp": {
-    "autoStart": "Avvia automaticamente il server MCP"
+    "autoStart": "Avvia automaticamente il server MCP",
+    "port": "Porta del server MCP",
+    "requestTimeoutMs": "Timeout delle richieste MCP (ms)",
+    "activityRetentionDays": "Giorni di conservazione dell’attività MCP"
   },
   "logging": {
     "level": "Livello di log"

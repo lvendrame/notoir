@@ -342,5 +342,26 @@
     "peekChange": "Değişikliği Göster",
     "closePeek": "Değişikliği Kapat",
     "selectRepository": "Depo Seç"
+  },
+  "mcp": {
+    "startServer": "MCP Sunucusunu Başlat",
+    "stopServer": "MCP Sunucusunu Durdur",
+    "connections": "MCP Bağlantıları…",
+    "permissions": "MCP İzinleri…",
+    "activity": "MCP Etkinliği",
+    "settings": "MCP Ayarları",
+    "addClient": "MCP İstemcisi Ekle…",
+    "focusPrompt": "İzin İsteğine Git",
+    "togglePopover": "MCP Sunucusu Durumu",
+    "closeDialog": "MCP İletişim Kutusunu Kapat",
+    "revokeClient": "MCP İstemcisini İptal Et",
+    "resetPermissions": "MCP İzinlerini Sıfırla",
+    "denyAll": "Tüm MCP İzinlerini Reddet",
+    "clearSessionGrants": "MCP Oturum İzinlerini Temizle",
+    "setPermission": "MCP İznini Ayarla",
+    "answerPrompt": "İzin İsteğini Yanıtla",
+    "clearActivity": "MCP Etkinliğini Temizle",
+    "filterActivity": "MCP Etkinliğini Filtrele",
+    "copyConfig": "MCP İstemci Yapılandırmasını Kopyala"
   }
 }

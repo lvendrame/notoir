@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "Confirmer le glisser-déposer"
   },
   "mcp": {
-    "autoStart": "Démarrer le serveur MCP automatiquement"
+    "autoStart": "Démarrer le serveur MCP automatiquement",
+    "port": "Port du serveur MCP",
+    "requestTimeoutMs": "Délai d’expiration des requêtes MCP (ms)",
+    "activityRetentionDays": "Jours de conservation de l’activité MCP"
   },
   "logging": {
     "level": "Niveau de journalisation"

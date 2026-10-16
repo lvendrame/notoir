@@ -15,6 +15,7 @@ pub mod layout;
 pub mod navigation;
 pub mod notifications;
 pub mod panels;
+pub mod permissions;
 pub mod settings;
 pub mod view;
 pub mod when;

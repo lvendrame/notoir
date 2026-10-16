@@ -1,0 +1,111 @@
+{
+  "started": "MCP-Server läuft unter {{url}}",
+  "startFailed": "Der MCP-Server konnte nicht gestartet werden. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "MCP-Server: verbundene Clients: {{count}}",
+  "statusTip": "MCP-Server",
+  "popover": {
+    "url": "Server: {{url}}",
+    "clients": "Verbundene Clients",
+    "none": "Keine Clients verbunden",
+    "recent": "Letzte Aktivität",
+    "connections": "Verbindungen…",
+    "activity": "Aktivität…"
+  },
+  "prompt": {
+    "wants": "„{{client}}“ (MCP) fordert an: {{what}}",
+    "wantsTarget": "„{{client}}“ (MCP) fordert an: {{what}} — {{target}}",
+    "once": "Einmal erlauben",
+    "session": "Für diese Sitzung erlauben",
+    "always": "Immer erlauben",
+    "confirmAlways": "„Immer erlauben“ bestätigen",
+    "deny": "Ablehnen",
+    "dangerConfirm": "Diese Berechtigung kann Daten löschen oder Remotes ändern. Dauerhaft erlauben?",
+    "remaining": "Abgelehnt in {{seconds}} s",
+    "more": "+{{count}} wartend"
+  },
+  "connections": {
+    "title": "MCP-Verbindungen",
+    "empty": "Noch keine Clients. Füge einen hinzu, um einen Agenten zu verbinden.",
+    "serverOff": "Der MCP-Server läuft nicht.",
+    "name": "Name",
+    "status": "Status",
+    "lastSeen": "Zuletzt gesehen",
+    "created": "Token erstellt",
+    "permissions": "Berechtigungen",
+    "connected": "Verbunden",
+    "idle": "Nicht verbunden",
+    "revoked": "Widerrufen",
+    "never": "Nie",
+    "summary": "{{allow}} erlaubt · {{ask}} fragen · {{deny}} abgelehnt",
+    "add": "Client hinzufügen…",
+    "edit": "Berechtigungen bearbeiten…",
+    "revoke": "Widerrufen",
+    "copyConfig": "Konfiguration kopieren"
+  },
+  "add": {
+    "title": "MCP-Client hinzufügen",
+    "name": "Name des Clients",
+    "placeholder": "z. B. Claude Desktop",
+    "create": "Erstellen"
+  },
+  "token": {
+    "title": "Token für {{name}}",
+    "once": "Jetzt kopieren: Das Token wird nur einmal angezeigt.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (über mcp-bridge)",
+    "copy": "Kopieren"
+  },
+  "perm": {
+    "title": "MCP-Zugriff — {{name}}",
+    "allow": "Erlauben",
+    "ask": "Fragen",
+    "deny": "Ablehnen",
+    "reset": "Auf Standard zurücksetzen",
+    "revokeAll": "Alle widerrufen",
+    "session": "Sitzungsfreigaben: {{list}}",
+    "sessionNone": "Keine Sitzungsfreigaben",
+    "clear": "Leeren"
+  },
+  "group": {
+    "workspace": "Arbeitsbereich",
+    "editor": "Editor",
+    "git": "Git",
+    "settings": "Einstellungen"
+  },
+  "activity": {
+    "all": "Alle Clients",
+    "clear": "Leeren",
+    "empty": "Noch keine MCP-Aktivität.",
+    "ok": "ok",
+    "denied": "abgelehnt",
+    "rejected": "zurückgewiesen: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "Dateien lesen",
+    "workspace_search": "Dateien durchsuchen",
+    "document_read": "Dateien im Notoir-Speicher öffnen",
+    "document_create": "Dokumente erstellen",
+    "file_create": "Dateien erstellen",
+    "document_modify": "Dokumente ändern",
+    "document_save": "Dokumente speichern",
+    "file_rename": "Dateien umbenennen",
+    "file_delete": "Dateien löschen",
+    "filesystem_read": "Direkter Dateisystem-Lesezugriff",
+    "filesystem_write": "Direkter Dateisystem-Schreibzugriff",
+    "filesystem_outsideWorkspace": "Zugriff außerhalb des Arbeitsbereichs",
+    "editor_read": "Tabs und aktives Dokument lesen",
+    "editor_control": "Editor steuern (Tabs öffnen, auswählen)",
+    "git_read": "Git-Status und Unterschiede anzeigen",
+    "git_commit": "Committen",
+    "git_push": "Pushen",
+    "settings_read": "Einstellungen lesen",
+    "settings_modify": "Einstellungen ändern",
+    "network": "Netzwerkzugriff",
+    "process": "Prozesse ausführen",
+    "clipboard": "Zwischenablage verwenden",
+    "mcp_pluginTools": "MCP-Tools bereitstellen",
+    "plugins_modifyConfig": "Plugin-Konfiguration ändern",
+    "command": "Befehle ausführen"
+  }
+}

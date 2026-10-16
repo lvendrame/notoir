@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "Slepen en neerzetten bevestigen"
   },
   "mcp": {
-    "autoStart": "MCP-server automatisch starten"
+    "autoStart": "MCP-server automatisch starten",
+    "port": "Poort van de MCP-server",
+    "requestTimeoutMs": "Time-out voor MCP-verzoeken (ms)",
+    "activityRetentionDays": "Dagen dat MCP-activiteit bewaard blijft"
   },
   "logging": {
     "level": "Logniveau"

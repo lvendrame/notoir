@@ -342,5 +342,26 @@
     "peekChange": "Показать изменение",
     "closePeek": "Закрыть изменение",
     "selectRepository": "Выбрать репозиторий"
+  },
+  "mcp": {
+    "startServer": "Запустить MCP-сервер",
+    "stopServer": "Остановить MCP-сервер",
+    "connections": "Подключения MCP…",
+    "permissions": "Разрешения MCP…",
+    "activity": "Журнал MCP",
+    "settings": "Настройки MCP",
+    "addClient": "Добавить MCP-клиента…",
+    "focusPrompt": "Перейти к запросу разрешения",
+    "togglePopover": "Состояние MCP-сервера",
+    "closeDialog": "Закрыть диалог MCP",
+    "revokeClient": "Отозвать MCP-клиента",
+    "resetPermissions": "Сбросить разрешения MCP",
+    "denyAll": "Запретить все разрешения MCP",
+    "clearSessionGrants": "Очистить разрешения MCP на сеанс",
+    "setPermission": "Задать разрешение MCP",
+    "answerPrompt": "Ответить на запрос разрешения",
+    "clearActivity": "Очистить журнал MCP",
+    "filterActivity": "Фильтровать журнал MCP",
+    "copyConfig": "Копировать конфигурацию MCP-клиента"
   }
 }

@@ -23,6 +23,7 @@ pub mod io;
 pub mod json;
 pub mod logging;
 pub mod markdown;
+pub mod mcp;
 pub mod menus;
 pub mod navigation;
 pub mod quick_open;

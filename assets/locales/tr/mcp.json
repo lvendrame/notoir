@@ -1,0 +1,111 @@
+{
+  "started": "MCP sunucusu {{url}} adresinde çalışıyor",
+  "startFailed": "MCP sunucusu başlatılamadı. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "MCP sunucusu: bağlı istemci sayısı: {{count}}",
+  "statusTip": "MCP sunucusu",
+  "popover": {
+    "url": "Sunucu: {{url}}",
+    "clients": "Bağlı istemciler",
+    "none": "Bağlı istemci yok",
+    "recent": "Son etkinlik",
+    "connections": "Bağlantılar…",
+    "activity": "Etkinlik…"
+  },
+  "prompt": {
+    "wants": "“{{client}}” (MCP) şunu istiyor: {{what}}",
+    "wantsTarget": "“{{client}}” (MCP) şunu istiyor: {{what}} — {{target}}",
+    "once": "Bir Kez İzin Ver",
+    "session": "Bu Oturum İçin İzin Ver",
+    "always": "Her Zaman İzin Ver",
+    "confirmAlways": "“Her Zaman İzin Ver”i Onayla",
+    "deny": "Reddet",
+    "dangerConfirm": "Bu izin verileri silebilir veya uzak depoları değiştirebilir. Kalıcı olarak izin verilsin mi?",
+    "remaining": "{{seconds}} sn içinde reddedilecek",
+    "more": "+{{count}} bekliyor"
+  },
+  "connections": {
+    "title": "MCP Bağlantıları",
+    "empty": "Henüz istemci yok. Bir ajan bağlamak için istemci ekleyin.",
+    "serverOff": "MCP sunucusu çalışmıyor.",
+    "name": "Ad",
+    "status": "Durum",
+    "lastSeen": "Son görülme",
+    "created": "Belirteç oluşturuldu",
+    "permissions": "İzinler",
+    "connected": "Bağlı",
+    "idle": "Bağlı değil",
+    "revoked": "İptal edildi",
+    "never": "Hiç",
+    "summary": "{{allow}} izinli · {{ask}} sor · {{deny}} reddedildi",
+    "add": "İstemci Ekle…",
+    "edit": "İzinleri Düzenle…",
+    "revoke": "İptal Et",
+    "copyConfig": "Yapılandırmayı Kopyala"
+  },
+  "add": {
+    "title": "MCP İstemcisi Ekle",
+    "name": "İstemci adı",
+    "placeholder": "örn. Claude Desktop",
+    "create": "Oluştur"
+  },
+  "token": {
+    "title": "{{name}} için belirteç",
+    "once": "Şimdi kopyalayın: belirteç yalnızca bir kez gösterilir.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (mcp-bridge ile)",
+    "copy": "Kopyala"
+  },
+  "perm": {
+    "title": "MCP Erişimi — {{name}}",
+    "allow": "İzin Ver",
+    "ask": "Sor",
+    "deny": "Reddet",
+    "reset": "Varsayılanlara Sıfırla",
+    "revokeAll": "Tümünü İptal Et",
+    "session": "Oturum izinleri: {{list}}",
+    "sessionNone": "Oturum izni yok",
+    "clear": "Temizle"
+  },
+  "group": {
+    "workspace": "Çalışma alanı",
+    "editor": "Düzenleyici",
+    "git": "Git",
+    "settings": "Ayarlar"
+  },
+  "activity": {
+    "all": "Tüm istemciler",
+    "clear": "Temizle",
+    "empty": "Henüz MCP etkinliği yok.",
+    "ok": "ok",
+    "denied": "reddedildi",
+    "rejected": "geri çevrildi: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "Dosyaları okuma",
+    "workspace_search": "Dosyalarda arama",
+    "document_read": "Dosyaları Notoir belleğinde açma",
+    "document_create": "Belge oluşturma",
+    "file_create": "Dosya oluşturma",
+    "document_modify": "Belgeleri değiştirme",
+    "document_save": "Belgeleri kaydetme",
+    "file_rename": "Dosyaları yeniden adlandırma",
+    "file_delete": "Dosyaları silme",
+    "filesystem_read": "Dosya sistemini doğrudan okuma",
+    "filesystem_write": "Dosya sistemine doğrudan yazma",
+    "filesystem_outsideWorkspace": "Çalışma alanı dışına erişim",
+    "editor_read": "Sekmeleri ve etkin belgeyi okuma",
+    "editor_control": "Düzenleyiciyi denetleme (sekme açma, seçme)",
+    "git_read": "Git durumunu ve farkları görme",
+    "git_commit": "Commit",
+    "git_push": "Push",
+    "settings_read": "Ayarları okuma",
+    "settings_modify": "Ayarları değiştirme",
+    "network": "Ağ erişimi",
+    "process": "İşlem çalıştırma",
+    "clipboard": "Panoyu kullanma",
+    "mcp_pluginTools": "MCP araçları sunma",
+    "plugins_modifyConfig": "Eklenti yapılandırmasını değiştirme",
+    "command": "Komut çalıştırma"
+  }
+}

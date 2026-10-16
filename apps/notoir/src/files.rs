@@ -361,7 +361,7 @@ fn error_detail(e: &dyn std::fmt::Display, path: &Path) -> String {
 }
 
 impl AppCore {
-    fn notify(&mut self, n: Notification) {
+    pub(crate) fn notify(&mut self, n: Notification) {
         let now = self.now_ms;
         self.notifications.notify(n, now);
     }

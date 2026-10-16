@@ -16,6 +16,7 @@ use rusqlite::{Connection, OptionalExtension, params};
 const MIGRATIONS: &[&str] = &[
     include_str!("../migrations/0001_initial.sql"),
     include_str!("../migrations/0002_workspace_trust.sql"),
+    include_str!("../migrations/0003_mcp.sql"),
 ];
 pub const SCHEMA_VERSION: u32 = MIGRATIONS.len() as u32;
 /// Unpinned recent entries kept per kind.
@@ -62,6 +63,30 @@ pub struct RecentEntry {
     pub display_name: Option<String>,
     pub last_opened: i64,
     pub pinned: bool,
+}
+
+/// A registered MCP client (`mcp_client`).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct McpClientRow {
+    pub client_id: String,
+    pub name: String,
+    /// Hex SHA-256 of the bearer token; the token itself is never stored.
+    pub token_hash: String,
+    pub created_at: i64,
+    pub last_seen: Option<i64>,
+    pub revoked: bool,
+}
+
+/// One MCP activity entry: no document contents, only targets and sizes.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct McpActivityRow {
+    /// Unix milliseconds.
+    pub at: i64,
+    pub client_id: Option<String>,
+    pub tool: String,
+    pub target: Option<String>,
+    pub outcome: String,
+    pub duration_ms: Option<i64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -437,6 +462,143 @@ impl StateDb {
             .is_some())
     }
 
+    // ── MCP ──────────────────────────────────────────────────────────────
+
+    pub fn insert_mcp_client(&self, row: &McpClientRow) -> Result<(), StorageError> {
+        self.write(|c| {
+            c.execute(
+                "INSERT INTO mcp_client (client_id, name, token_hash, created_at, last_seen, revoked) \
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+                params![
+                    row.client_id,
+                    row.name,
+                    row.token_hash,
+                    row.created_at,
+                    row.last_seen,
+                    row.revoked
+                ],
+            )
+            .map(drop)
+        })
+    }
+
+    pub fn mcp_clients(&self) -> Result<Vec<McpClientRow>, StorageError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT client_id, name, token_hash, created_at, last_seen, revoked \
+             FROM mcp_client ORDER BY created_at, client_id",
+        )?;
+        let rows = stmt.query_map([], |r| {
+            Ok(McpClientRow {
+                client_id: r.get(0)?,
+                name: r.get(1)?,
+                token_hash: r.get(2)?,
+                created_at: r.get::<_, Option<i64>>(3)?.unwrap_or(0),
+                last_seen: r.get(4)?,
+                revoked: r.get(5)?,
+            })
+        })?;
+        Ok(rows.collect::<Result<_, _>>()?)
+    }
+
+    pub fn set_mcp_client_revoked(&self, client_id: &str) -> Result<(), StorageError> {
+        self.write(|c| {
+            c.execute(
+                "UPDATE mcp_client SET revoked = 1 WHERE client_id = ?1",
+                [client_id],
+            )?;
+            c.execute("DELETE FROM mcp_grant WHERE client_id = ?1", [client_id])
+                .map(drop)
+        })
+    }
+
+    pub fn touch_mcp_client(&self, client_id: &str, now_ms: i64) -> Result<(), StorageError> {
+        self.write(|c| {
+            c.execute(
+                "UPDATE mcp_client SET last_seen = ?2 WHERE client_id = ?1",
+                params![client_id, now_ms],
+            )
+            .map(drop)
+        })
+    }
+
+    /// Replaces a client's configured permissions (capability key → decision).
+    pub fn save_mcp_grants(
+        &self,
+        client_id: &str,
+        grants: &[(String, String)],
+    ) -> Result<(), StorageError> {
+        if self.read_only {
+            return Ok(());
+        }
+        let tx = self.conn.unchecked_transaction()?;
+        tx.execute("DELETE FROM mcp_grant WHERE client_id = ?1", [client_id])?;
+        for (cap, decision) in grants {
+            tx.execute(
+                "INSERT INTO mcp_grant (client_id, capability, decision) VALUES (?1, ?2, ?3)",
+                params![client_id, cap, decision],
+            )?;
+        }
+        tx.commit()?;
+        Ok(())
+    }
+
+    pub fn mcp_grants(&self, client_id: &str) -> Result<Vec<(String, String)>, StorageError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT capability, decision FROM mcp_grant WHERE client_id = ?1 ORDER BY capability",
+        )?;
+        let rows = stmt.query_map([client_id], |r| Ok((r.get(0)?, r.get(1)?)))?;
+        Ok(rows.collect::<Result<_, _>>()?)
+    }
+
+    pub fn add_mcp_activity(&self, row: &McpActivityRow) -> Result<(), StorageError> {
+        self.write(|c| {
+            c.execute(
+                "INSERT INTO mcp_activity (at, client_id, tool, target, outcome, duration_ms) \
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+                params![
+                    row.at,
+                    row.client_id,
+                    row.tool,
+                    row.target,
+                    row.outcome,
+                    row.duration_ms
+                ],
+            )
+            .map(drop)
+        })
+    }
+
+    /// Most recent entries first.
+    pub fn mcp_activity(&self, limit: usize) -> Result<Vec<McpActivityRow>, StorageError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT at, client_id, tool, target, outcome, duration_ms FROM mcp_activity \
+             ORDER BY at DESC, id DESC LIMIT ?1",
+        )?;
+        let rows = stmt.query_map([limit as i64], |r| {
+            Ok(McpActivityRow {
+                at: r.get(0)?,
+                client_id: r.get(1)?,
+                tool: r.get(2)?,
+                target: r.get(3)?,
+                outcome: r.get(4)?,
+                duration_ms: r.get(5)?,
+            })
+        })?;
+        Ok(rows.collect::<Result<_, _>>()?)
+    }
+
+    /// Drops entries older than `before_ms` (retention, on startup).
+    pub fn prune_mcp_activity(&self, before_ms: i64) -> Result<(), StorageError> {
+        self.write(|c| {
+            c.execute("DELETE FROM mcp_activity WHERE at < ?1", [before_ms])
+                .map(drop)
+        })
+    }
+
+    pub fn clear_mcp_activity(&self) -> Result<(), StorageError> {
+        self.write(|c| c.execute("DELETE FROM mcp_activity", []).map(drop))
+    }
+
     pub fn is_notice_dismissed(&self, key: &str) -> Result<bool, StorageError> {
         Ok(self
             .conn
@@ -670,5 +832,52 @@ mod tests {
         assert!(!db.is_notice_dismissed("x").unwrap());
         db.dismiss_notice("x", 1).unwrap();
         assert!(db.is_notice_dismissed("x").unwrap());
+    }
+
+    #[test]
+    fn mcp_clients_grants_and_activity() {
+        let db = StateDb::open_in_memory().unwrap();
+        let row = McpClientRow {
+            client_id: "c1".into(),
+            name: "Claude Desktop".into(),
+            token_hash: "ab".into(),
+            created_at: 5,
+            last_seen: None,
+            revoked: false,
+        };
+        db.insert_mcp_client(&row).unwrap();
+        db.touch_mcp_client("c1", 9).unwrap();
+        db.save_mcp_grants("c1", &[("file.delete".into(), "allow".into())])
+            .unwrap();
+        assert_eq!(
+            db.mcp_grants("c1").unwrap(),
+            [("file.delete".to_owned(), "allow".to_owned())]
+        );
+        assert_eq!(db.mcp_clients().unwrap()[0].last_seen, Some(9));
+        db.set_mcp_client_revoked("c1").unwrap();
+        assert!(db.mcp_clients().unwrap()[0].revoked);
+        assert!(db.mcp_grants("c1").unwrap().is_empty());
+
+        for (at, tool) in [(1, "a"), (10, "b"), (20, "c")] {
+            db.add_mcp_activity(&McpActivityRow {
+                at,
+                client_id: Some("c1".into()),
+                tool: tool.into(),
+                target: None,
+                outcome: "ok".into(),
+                duration_ms: Some(1),
+            })
+            .unwrap();
+        }
+        db.prune_mcp_activity(5).unwrap();
+        let tools: Vec<String> = db
+            .mcp_activity(10)
+            .unwrap()
+            .into_iter()
+            .map(|r| r.tool)
+            .collect();
+        assert_eq!(tools, ["c", "b"]);
+        db.clear_mcp_activity().unwrap();
+        assert!(db.mcp_activity(10).unwrap().is_empty());
     }
 }

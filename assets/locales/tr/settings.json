@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "Sürükle ve bırakmayı onayla"
   },
   "mcp": {
-    "autoStart": "MCP sunucusunu otomatik başlat"
+    "autoStart": "MCP sunucusunu otomatik başlat",
+    "port": "MCP sunucusu bağlantı noktası",
+    "requestTimeoutMs": "MCP istek zaman aşımı (ms)",
+    "activityRetentionDays": "MCP etkinliğinin saklanacağı gün sayısı"
   },
   "logging": {
     "level": "Günlük düzeyi"

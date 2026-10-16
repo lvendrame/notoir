@@ -1,0 +1,111 @@
+{
+  "started": "MCP-сервер працює за адресою {{url}}",
+  "startFailed": "Не вдалося запустити MCP-сервер. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "MCP-сервер: підключені клієнти (кількість: {{count}})",
+  "statusTip": "MCP-сервер",
+  "popover": {
+    "url": "Сервер: {{url}}",
+    "clients": "Підключені клієнти",
+    "none": "Немає підключених клієнтів",
+    "recent": "Нещодавні дії",
+    "connections": "Підключення…",
+    "activity": "Журнал…"
+  },
+  "prompt": {
+    "wants": "«{{client}}» (MCP) запитує: {{what}}",
+    "wantsTarget": "«{{client}}» (MCP) запитує: {{what}} — {{target}}",
+    "once": "Дозволити один раз",
+    "session": "Дозволити на сеанс",
+    "always": "Завжди дозволяти",
+    "confirmAlways": "Підтвердити «Завжди дозволяти»",
+    "deny": "Заборонити",
+    "dangerConfirm": "Цей дозвіл може видаляти дані або змінювати віддалені репозиторії. Дозволити назавжди?",
+    "remaining": "Відмова через {{seconds}} с",
+    "more": "+{{count}} у черзі"
+  },
+  "connections": {
+    "title": "Підключення MCP",
+    "empty": "Клієнтів ще немає. Додайте клієнта, щоб підключити агента.",
+    "serverOff": "MCP-сервер не запущено.",
+    "name": "Ім’я",
+    "status": "Стан",
+    "lastSeen": "Остання активність",
+    "created": "Токен створено",
+    "permissions": "Дозволи",
+    "connected": "Підключено",
+    "idle": "Не підключено",
+    "revoked": "Відкликано",
+    "never": "Ніколи",
+    "summary": "дозволено: {{allow}} · питати: {{ask}} · заборонено: {{deny}}",
+    "add": "Додати клієнта…",
+    "edit": "Змінити дозволи…",
+    "revoke": "Відкликати",
+    "copyConfig": "Копіювати конфігурацію"
+  },
+  "add": {
+    "title": "Додати MCP-клієнта",
+    "name": "Ім’я клієнта",
+    "placeholder": "наприклад, Claude Desktop",
+    "create": "Створити"
+  },
+  "token": {
+    "title": "Токен для {{name}}",
+    "once": "Скопіюйте зараз: токен показується лише один раз.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (через mcp-bridge)",
+    "copy": "Копіювати"
+  },
+  "perm": {
+    "title": "Доступ MCP — {{name}}",
+    "allow": "Дозволити",
+    "ask": "Питати",
+    "deny": "Заборонити",
+    "reset": "Скинути до типових",
+    "revokeAll": "Відкликати все",
+    "session": "Дозволи на сеанс: {{list}}",
+    "sessionNone": "Немає дозволів на сеанс",
+    "clear": "Очистити"
+  },
+  "group": {
+    "workspace": "Робоча область",
+    "editor": "Редактор",
+    "git": "Git",
+    "settings": "Налаштування"
+  },
+  "activity": {
+    "all": "Усі клієнти",
+    "clear": "Очистити",
+    "empty": "Дій MCP ще немає.",
+    "ok": "ok",
+    "denied": "заборонено",
+    "rejected": "відхилено: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "Читання файлів",
+    "workspace_search": "Пошук у файлах",
+    "document_read": "Відкриття файлів у пам’яті Notoir",
+    "document_create": "Створення документів",
+    "file_create": "Створення файлів",
+    "document_modify": "Змінення документів",
+    "document_save": "Збереження документів",
+    "file_rename": "Перейменування файлів",
+    "file_delete": "Видалення файлів",
+    "filesystem_read": "Пряме читання файлової системи",
+    "filesystem_write": "Прямий запис у файлову систему",
+    "filesystem_outsideWorkspace": "Доступ поза робочою областю",
+    "editor_read": "Читання вкладок і активного документа",
+    "editor_control": "Керування редактором (відкриття вкладок, виділення)",
+    "git_read": "Перегляд стану та змін Git",
+    "git_commit": "Коміт",
+    "git_push": "Push",
+    "settings_read": "Читання налаштувань",
+    "settings_modify": "Змінення налаштувань",
+    "network": "Доступ до мережі",
+    "process": "Запуск процесів",
+    "clipboard": "Використання буфера обміну",
+    "mcp_pluginTools": "Надання інструментів MCP",
+    "plugins_modifyConfig": "Змінення конфігурації плагінів",
+    "command": "Виконання команд"
+  }
+}

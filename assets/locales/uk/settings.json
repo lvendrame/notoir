@@ -124,7 +124,10 @@
     "confirmDragAndDrop": "Підтверджувати перетягування"
   },
   "mcp": {
-    "autoStart": "Запускати сервер MCP автоматично"
+    "autoStart": "Запускати сервер MCP автоматично",
+    "port": "Порт MCP-сервера",
+    "requestTimeoutMs": "Тайм-аут запитів MCP (мс)",
+    "activityRetentionDays": "Скільки днів зберігати журнал MCP"
   },
   "logging": {
     "level": "Рівень журналу"

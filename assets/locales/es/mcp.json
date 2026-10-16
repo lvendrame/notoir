@@ -1,0 +1,111 @@
+{
+  "started": "Servidor MCP en ejecución en {{url}}",
+  "startFailed": "No se pudo iniciar el servidor MCP. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "Servidor MCP: clientes conectados: {{count}}",
+  "statusTip": "Servidor MCP",
+  "popover": {
+    "url": "Servidor: {{url}}",
+    "clients": "Clientes conectados",
+    "none": "No hay clientes conectados",
+    "recent": "Actividad reciente",
+    "connections": "Conexiones…",
+    "activity": "Actividad…"
+  },
+  "prompt": {
+    "wants": "“{{client}}” (MCP) solicita: {{what}}",
+    "wantsTarget": "“{{client}}” (MCP) solicita: {{what}} — {{target}}",
+    "once": "Permitir una vez",
+    "session": "Permitir en esta sesión",
+    "always": "Permitir siempre",
+    "confirmAlways": "Confirmar permitir siempre",
+    "deny": "Denegar",
+    "dangerConfirm": "Este permiso puede eliminar datos o cambiar remotos. ¿Permitirlo de forma permanente?",
+    "remaining": "Se denegará en {{seconds}} s",
+    "more": "+{{count}} en espera"
+  },
+  "connections": {
+    "title": "Conexiones MCP",
+    "empty": "Aún no hay clientes. Añade uno para conectar un agente.",
+    "serverOff": "El servidor MCP no está en ejecución.",
+    "name": "Nombre",
+    "status": "Estado",
+    "lastSeen": "Visto por última vez",
+    "created": "Token creado",
+    "permissions": "Permisos",
+    "connected": "Conectado",
+    "idle": "Sin conexión",
+    "revoked": "Revocado",
+    "never": "Nunca",
+    "summary": "{{allow}} permitidos · {{ask}} preguntar · {{deny}} denegados",
+    "add": "Añadir cliente…",
+    "edit": "Editar permisos…",
+    "revoke": "Revocar",
+    "copyConfig": "Copiar configuración"
+  },
+  "add": {
+    "title": "Añadir cliente MCP",
+    "name": "Nombre del cliente",
+    "placeholder": "p. ej., Claude Desktop",
+    "create": "Crear"
+  },
+  "token": {
+    "title": "Token de {{name}}",
+    "once": "Cópialo ahora: el token solo se muestra una vez.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (mediante mcp-bridge)",
+    "copy": "Copiar"
+  },
+  "perm": {
+    "title": "Acceso MCP — {{name}}",
+    "allow": "Permitir",
+    "ask": "Preguntar",
+    "deny": "Denegar",
+    "reset": "Restablecer valores predeterminados",
+    "revokeAll": "Revocar todo",
+    "session": "Permisos de sesión: {{list}}",
+    "sessionNone": "Sin permisos de sesión",
+    "clear": "Borrar"
+  },
+  "group": {
+    "workspace": "Espacio de trabajo",
+    "editor": "Editor",
+    "git": "Git",
+    "settings": "Configuración"
+  },
+  "activity": {
+    "all": "Todos los clientes",
+    "clear": "Borrar",
+    "empty": "Aún no hay actividad MCP.",
+    "ok": "ok",
+    "denied": "denegado",
+    "rejected": "rechazado: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "Leer archivos",
+    "workspace_search": "Buscar archivos",
+    "document_read": "Abrir archivos en la memoria de Notoir",
+    "document_create": "Crear documentos",
+    "file_create": "Crear archivos",
+    "document_modify": "Modificar documentos",
+    "document_save": "Guardar documentos",
+    "file_rename": "Cambiar nombre de archivos",
+    "file_delete": "Eliminar archivos",
+    "filesystem_read": "Lectura directa del sistema de archivos",
+    "filesystem_write": "Escritura directa en el sistema de archivos",
+    "filesystem_outsideWorkspace": "Acceso fuera del espacio de trabajo",
+    "editor_read": "Leer pestañas y el documento activo",
+    "editor_control": "Controlar el editor (abrir pestañas, seleccionar)",
+    "git_read": "Ver el estado y las diferencias de Git",
+    "git_commit": "Confirmar (commit)",
+    "git_push": "Enviar (push)",
+    "settings_read": "Leer la configuración",
+    "settings_modify": "Modificar la configuración",
+    "network": "Acceso a la red",
+    "process": "Ejecutar procesos",
+    "clipboard": "Usar el portapapeles",
+    "mcp_pluginTools": "Exponer herramientas MCP",
+    "plugins_modifyConfig": "Modificar la configuración de complementos",
+    "command": "Ejecutar comandos"
+  }
+}

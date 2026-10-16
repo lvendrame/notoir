@@ -1,0 +1,111 @@
+{
+  "started": "Serveur MCP actif sur {{url}}",
+  "startFailed": "Impossible de démarrer le serveur MCP. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "Serveur MCP : clients connectés : {{count}}",
+  "statusTip": "Serveur MCP",
+  "popover": {
+    "url": "Serveur : {{url}}",
+    "clients": "Clients connectés",
+    "none": "Aucun client connecté",
+    "recent": "Activité récente",
+    "connections": "Connexions…",
+    "activity": "Activité…"
+  },
+  "prompt": {
+    "wants": "« {{client}} » (MCP) demande : {{what}}",
+    "wantsTarget": "« {{client}} » (MCP) demande : {{what}} — {{target}}",
+    "once": "Autoriser une fois",
+    "session": "Autoriser pour la session",
+    "always": "Toujours autoriser",
+    "confirmAlways": "Confirmer « Toujours autoriser »",
+    "deny": "Refuser",
+    "dangerConfirm": "Cette autorisation peut supprimer des données ou modifier des dépôts distants. L’accorder définitivement ?",
+    "remaining": "Refus dans {{seconds}} s",
+    "more": "+{{count}} en attente"
+  },
+  "connections": {
+    "title": "Connexions MCP",
+    "empty": "Aucun client pour l’instant. Ajoutez-en un pour connecter un agent.",
+    "serverOff": "Le serveur MCP n’est pas démarré.",
+    "name": "Nom",
+    "status": "État",
+    "lastSeen": "Vu pour la dernière fois",
+    "created": "Jeton créé",
+    "permissions": "Autorisations",
+    "connected": "Connecté",
+    "idle": "Non connecté",
+    "revoked": "Révoqué",
+    "never": "Jamais",
+    "summary": "{{allow}} autorisées · {{ask}} sur demande · {{deny}} refusées",
+    "add": "Ajouter un client…",
+    "edit": "Modifier les autorisations…",
+    "revoke": "Révoquer",
+    "copyConfig": "Copier la configuration"
+  },
+  "add": {
+    "title": "Ajouter un client MCP",
+    "name": "Nom du client",
+    "placeholder": "p. ex. Claude Desktop",
+    "create": "Créer"
+  },
+  "token": {
+    "title": "Jeton de {{name}}",
+    "once": "Copiez-le maintenant : le jeton n’est affiché qu’une seule fois.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (via mcp-bridge)",
+    "copy": "Copier"
+  },
+  "perm": {
+    "title": "Accès MCP — {{name}}",
+    "allow": "Autoriser",
+    "ask": "Demander",
+    "deny": "Refuser",
+    "reset": "Rétablir les valeurs par défaut",
+    "revokeAll": "Tout révoquer",
+    "session": "Autorisations de session : {{list}}",
+    "sessionNone": "Aucune autorisation de session",
+    "clear": "Effacer"
+  },
+  "group": {
+    "workspace": "Espace de travail",
+    "editor": "Éditeur",
+    "git": "Git",
+    "settings": "Paramètres"
+  },
+  "activity": {
+    "all": "Tous les clients",
+    "clear": "Effacer",
+    "empty": "Aucune activité MCP pour l’instant.",
+    "ok": "ok",
+    "denied": "refusé",
+    "rejected": "rejeté : {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "Lire les fichiers",
+    "workspace_search": "Rechercher dans les fichiers",
+    "document_read": "Ouvrir des fichiers dans la mémoire de Notoir",
+    "document_create": "Créer des documents",
+    "file_create": "Créer des fichiers",
+    "document_modify": "Modifier des documents",
+    "document_save": "Enregistrer des documents",
+    "file_rename": "Renommer des fichiers",
+    "file_delete": "Supprimer des fichiers",
+    "filesystem_read": "Lecture directe du système de fichiers",
+    "filesystem_write": "Écriture directe dans le système de fichiers",
+    "filesystem_outsideWorkspace": "Accès hors de l’espace de travail",
+    "editor_read": "Lire les onglets et le document actif",
+    "editor_control": "Contrôler l’éditeur (ouvrir des onglets, sélectionner)",
+    "git_read": "Voir l’état et les différences Git",
+    "git_commit": "Valider (commit)",
+    "git_push": "Pousser (push)",
+    "settings_read": "Lire les paramètres",
+    "settings_modify": "Modifier les paramètres",
+    "network": "Accès au réseau",
+    "process": "Exécuter des processus",
+    "clipboard": "Utiliser le presse-papiers",
+    "mcp_pluginTools": "Exposer des outils MCP",
+    "plugins_modifyConfig": "Modifier la configuration des extensions",
+    "command": "Exécuter des commandes"
+  }
+}

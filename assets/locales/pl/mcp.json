@@ -1,0 +1,111 @@
+{
+  "started": "Serwer MCP działa pod adresem {{url}}",
+  "startFailed": "Nie udało się uruchomić serwera MCP. {{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "Serwer MCP: połączeni klienci (liczba: {{count}})",
+  "statusTip": "Serwer MCP",
+  "popover": {
+    "url": "Serwer: {{url}}",
+    "clients": "Połączeni klienci",
+    "none": "Brak połączonych klientów",
+    "recent": "Ostatnia aktywność",
+    "connections": "Połączenia…",
+    "activity": "Aktywność…"
+  },
+  "prompt": {
+    "wants": "„{{client}}” (MCP) prosi o: {{what}}",
+    "wantsTarget": "„{{client}}” (MCP) prosi o: {{what}} — {{target}}",
+    "once": "Zezwól raz",
+    "session": "Zezwól w tej sesji",
+    "always": "Zawsze zezwalaj",
+    "confirmAlways": "Potwierdź „Zawsze zezwalaj”",
+    "deny": "Odmów",
+    "dangerConfirm": "To uprawnienie może usuwać dane lub zmieniać repozytoria zdalne. Zezwolić na stałe?",
+    "remaining": "Odmowa za {{seconds}} s",
+    "more": "+{{count}} oczekuje"
+  },
+  "connections": {
+    "title": "Połączenia MCP",
+    "empty": "Brak klientów. Dodaj klienta, aby połączyć agenta.",
+    "serverOff": "Serwer MCP nie jest uruchomiony.",
+    "name": "Nazwa",
+    "status": "Stan",
+    "lastSeen": "Ostatnio widziany",
+    "created": "Token utworzony",
+    "permissions": "Uprawnienia",
+    "connected": "Połączony",
+    "idle": "Niepołączony",
+    "revoked": "Odwołany",
+    "never": "Nigdy",
+    "summary": "dozwolone: {{allow}} · pytaj: {{ask}} · zabronione: {{deny}}",
+    "add": "Dodaj klienta…",
+    "edit": "Edytuj uprawnienia…",
+    "revoke": "Odwołaj",
+    "copyConfig": "Kopiuj konfigurację"
+  },
+  "add": {
+    "title": "Dodaj klienta MCP",
+    "name": "Nazwa klienta",
+    "placeholder": "np. Claude Desktop",
+    "create": "Utwórz"
+  },
+  "token": {
+    "title": "Token dla {{name}}",
+    "once": "Skopiuj teraz: token jest wyświetlany tylko raz.",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (przez mcp-bridge)",
+    "copy": "Kopiuj"
+  },
+  "perm": {
+    "title": "Dostęp MCP — {{name}}",
+    "allow": "Zezwalaj",
+    "ask": "Pytaj",
+    "deny": "Odmawiaj",
+    "reset": "Przywróć domyślne",
+    "revokeAll": "Odwołaj wszystko",
+    "session": "Uprawnienia sesji: {{list}}",
+    "sessionNone": "Brak uprawnień sesji",
+    "clear": "Wyczyść"
+  },
+  "group": {
+    "workspace": "Obszar roboczy",
+    "editor": "Edytor",
+    "git": "Git",
+    "settings": "Ustawienia"
+  },
+  "activity": {
+    "all": "Wszyscy klienci",
+    "clear": "Wyczyść",
+    "empty": "Brak aktywności MCP.",
+    "ok": "ok",
+    "denied": "odmowa",
+    "rejected": "odrzucono: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "Odczyt plików",
+    "workspace_search": "Przeszukiwanie plików",
+    "document_read": "Otwieranie plików w pamięci Notoir",
+    "document_create": "Tworzenie dokumentów",
+    "file_create": "Tworzenie plików",
+    "document_modify": "Modyfikowanie dokumentów",
+    "document_save": "Zapisywanie dokumentów",
+    "file_rename": "Zmiana nazw plików",
+    "file_delete": "Usuwanie plików",
+    "filesystem_read": "Bezpośredni odczyt systemu plików",
+    "filesystem_write": "Bezpośredni zapis w systemie plików",
+    "filesystem_outsideWorkspace": "Dostęp poza obszarem roboczym",
+    "editor_read": "Odczyt kart i aktywnego dokumentu",
+    "editor_control": "Sterowanie edytorem (otwieranie kart, zaznaczanie)",
+    "git_read": "Podgląd stanu i różnic Git",
+    "git_commit": "Commit",
+    "git_push": "Push",
+    "settings_read": "Odczyt ustawień",
+    "settings_modify": "Zmiana ustawień",
+    "network": "Dostęp do sieci",
+    "process": "Uruchamianie procesów",
+    "clipboard": "Korzystanie ze schowka",
+    "mcp_pluginTools": "Udostępnianie narzędzi MCP",
+    "plugins_modifyConfig": "Zmiana konfiguracji wtyczek",
+    "command": "Uruchamianie poleceń"
+  }
+}

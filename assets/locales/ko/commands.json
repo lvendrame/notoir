@@ -342,5 +342,26 @@
     "peekChange": "변경 내용 표시",
     "closePeek": "변경 내용 닫기",
     "selectRepository": "리포지토리 선택"
+  },
+  "mcp": {
+    "startServer": "MCP 서버 시작",
+    "stopServer": "MCP 서버 중지",
+    "connections": "MCP 연결…",
+    "permissions": "MCP 권한…",
+    "activity": "MCP 활동",
+    "settings": "MCP 설정",
+    "addClient": "MCP 클라이언트 추가…",
+    "focusPrompt": "권한 요청으로 이동",
+    "togglePopover": "MCP 서버 상태",
+    "closeDialog": "MCP 대화 상자 닫기",
+    "revokeClient": "MCP 클라이언트 취소",
+    "resetPermissions": "MCP 권한 재설정",
+    "denyAll": "모든 MCP 권한 거부",
+    "clearSessionGrants": "MCP 세션 권한 지우기",
+    "setPermission": "MCP 권한 설정",
+    "answerPrompt": "권한 요청에 응답",
+    "clearActivity": "MCP 활동 지우기",
+    "filterActivity": "MCP 활동 필터링",
+    "copyConfig": "MCP 클라이언트 구성 복사"
   }
 }

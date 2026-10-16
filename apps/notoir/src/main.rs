@@ -9,6 +9,26 @@ use notoir_platform::single_instance::{self, Claim, InstanceRequest};
 
 fn main() -> eframe::Result {
     let args: Vec<String> = std::env::args().skip(1).collect();
+    // `notoir mcp-bridge --token <t> [--port <p>]`: MCP over stdio, proxied
+    // to the running app (spec 29). Never opens a window; stdout is protocol.
+    if args.first().map(String::as_str) == Some("mcp-bridge") {
+        match notoir_mcp::bridge::parse_args(&args[1..]) {
+            Ok((token, port)) => {
+                let stdin = std::io::stdin();
+                if let Err(e) = notoir_mcp::bridge::Bridge::new(&token, port)
+                    .run(stdin.lock(), std::io::stdout())
+                {
+                    eprintln!("notoir mcp-bridge: {e}");
+                    std::process::exit(1);
+                }
+            }
+            Err(e) => {
+                eprintln!("notoir mcp-bridge: {e}");
+                std::process::exit(2);
+            }
+        }
+        return Ok(());
+    }
     let cwd = std::env::current_dir().unwrap_or_default();
     let cli = cli::parse(&args, &cwd);
     if cli.version {

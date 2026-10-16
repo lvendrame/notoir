@@ -1,0 +1,111 @@
+{
+  "started": "MCP サーバーを {{url}} で実行中",
+  "startFailed": "MCP サーバーを起動できませんでした。{{reason}}",
+  "status": "MCP ●{{count}}",
+  "statusA11y": "MCP サーバー: 接続中のクライアント {{count}} 件",
+  "statusTip": "MCP サーバー",
+  "popover": {
+    "url": "サーバー: {{url}}",
+    "clients": "接続中のクライアント",
+    "none": "接続中のクライアントはありません",
+    "recent": "最近のアクティビティ",
+    "connections": "接続…",
+    "activity": "アクティビティ…"
+  },
+  "prompt": {
+    "wants": "「{{client}}」(MCP) の要求: {{what}}",
+    "wantsTarget": "「{{client}}」(MCP) の要求: {{what}} — {{target}}",
+    "once": "今回だけ許可",
+    "session": "このセッションで許可",
+    "always": "常に許可",
+    "confirmAlways": "「常に許可」を確定",
+    "deny": "拒否",
+    "dangerConfirm": "この権限ではデータの削除やリモートの変更が可能です。常に許可しますか?",
+    "remaining": "{{seconds}} 秒後に拒否",
+    "more": "+{{count}} 件待機中"
+  },
+  "connections": {
+    "title": "MCP 接続",
+    "empty": "クライアントはまだありません。エージェントを接続するには追加してください。",
+    "serverOff": "MCP サーバーは実行されていません。",
+    "name": "名前",
+    "status": "状態",
+    "lastSeen": "最終接続",
+    "created": "トークン作成日時",
+    "permissions": "権限",
+    "connected": "接続中",
+    "idle": "未接続",
+    "revoked": "取り消し済み",
+    "never": "なし",
+    "summary": "許可 {{allow}} · 確認 {{ask}} · 拒否 {{deny}}",
+    "add": "クライアントを追加…",
+    "edit": "権限を編集…",
+    "revoke": "取り消す",
+    "copyConfig": "設定をコピー"
+  },
+  "add": {
+    "title": "MCP クライアントを追加",
+    "name": "クライアント名",
+    "placeholder": "例: Claude Desktop",
+    "create": "作成"
+  },
+  "token": {
+    "title": "{{name}} のトークン",
+    "once": "今すぐコピーしてください。トークンは一度しか表示されません。",
+    "claudeCode": "Claude Code",
+    "claudeDesktop": "Claude Desktop (mcp-bridge 経由)",
+    "copy": "コピー"
+  },
+  "perm": {
+    "title": "MCP アクセス — {{name}}",
+    "allow": "許可",
+    "ask": "確認",
+    "deny": "拒否",
+    "reset": "既定値に戻す",
+    "revokeAll": "すべて取り消す",
+    "session": "セッション中の許可: {{list}}",
+    "sessionNone": "セッション中の許可はありません",
+    "clear": "クリア"
+  },
+  "group": {
+    "workspace": "ワークスペース",
+    "editor": "エディター",
+    "git": "Git",
+    "settings": "設定"
+  },
+  "activity": {
+    "all": "すべてのクライアント",
+    "clear": "クリア",
+    "empty": "MCP のアクティビティはまだありません。",
+    "ok": "ok",
+    "denied": "拒否",
+    "rejected": "拒絶: {{reason}}"
+  },
+  "cap": {
+    "workspace_read": "ファイルの読み取り",
+    "workspace_search": "ファイルの検索",
+    "document_read": "Notoir のメモリーでファイルを開く",
+    "document_create": "ドキュメントの作成",
+    "file_create": "ファイルの作成",
+    "document_modify": "ドキュメントの変更",
+    "document_save": "ドキュメントの保存",
+    "file_rename": "ファイル名の変更",
+    "file_delete": "ファイルの削除",
+    "filesystem_read": "ファイルシステムの直接読み取り",
+    "filesystem_write": "ファイルシステムへの直接書き込み",
+    "filesystem_outsideWorkspace": "ワークスペース外へのアクセス",
+    "editor_read": "タブとアクティブなドキュメントの読み取り",
+    "editor_control": "エディターの操作 (タブを開く、選択)",
+    "git_read": "Git の状態と差分の表示",
+    "git_commit": "コミット",
+    "git_push": "プッシュ",
+    "settings_read": "設定の読み取り",
+    "settings_modify": "設定の変更",
+    "network": "ネットワークへのアクセス",
+    "process": "プロセスの実行",
+    "clipboard": "クリップボードの使用",
+    "mcp_pluginTools": "MCP ツールの公開",
+    "plugins_modifyConfig": "プラグイン設定の変更",
+    "command": "コマンドの実行"
+  }
+}

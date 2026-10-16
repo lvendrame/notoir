@@ -29,6 +29,7 @@ fn activity_icon(p: PanelId) -> Icon {
         PanelId::SourceControl => Icon::GitBranch,
         PanelId::Outline => Icon::ListTree,
         PanelId::Plugins => Icon::Puzzle,
+        PanelId::McpActivity => Icon::Activity,
         _ => Icon::Files,
     }
 }
@@ -272,6 +273,7 @@ fn area_contents(
         PanelId::Output => output(ui, kit, core),
         PanelId::SourceControl => super::scm_panel::show(ui, kit, core, uis.scm, actions),
         PanelId::GitOutput => super::scm_panel::output(ui, kit, core),
+        PanelId::McpActivity => super::mcp_ui::activity_panel(ui, kit, core, actions),
         _ => {}
     }
 }

@@ -342,5 +342,26 @@
     "peekChange": "显示更改",
     "closePeek": "关闭更改",
     "selectRepository": "选择存储库"
+  },
+  "mcp": {
+    "startServer": "启动 MCP 服务器",
+    "stopServer": "停止 MCP 服务器",
+    "connections": "MCP 连接…",
+    "permissions": "MCP 权限…",
+    "activity": "MCP 活动",
+    "settings": "MCP 设置",
+    "addClient": "添加 MCP 客户端…",
+    "focusPrompt": "转到权限请求",
+    "togglePopover": "MCP 服务器状态",
+    "closeDialog": "关闭 MCP 对话框",
+    "revokeClient": "撤销 MCP 客户端",
+    "resetPermissions": "重置 MCP 权限",
+    "denyAll": "拒绝所有 MCP 权限",
+    "clearSessionGrants": "清除 MCP 会话授权",
+    "setPermission": "设置 MCP 权限",
+    "answerPrompt": "回应权限请求",
+    "clearActivity": "清除 MCP 活动",
+    "filterActivity": "筛选 MCP 活动",
+    "copyConfig": "复制 MCP 客户端配置"
   }
 }
