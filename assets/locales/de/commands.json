@@ -363,5 +363,18 @@
     "clearActivity": "MCP-Aktivität leeren",
     "filterActivity": "MCP-Aktivität filtern",
     "copyConfig": "MCP-Client-Konfiguration kopieren"
+  },
+  "plugins": {
+    "reload": "Plugins neu laden",
+    "installFromFolder": "Plugin aus Ordner installieren…",
+    "output": "Plugin-Ausgabe",
+    "openFolder": "Plugin-Ordner öffnen",
+    "review": "Plugin prüfen",
+    "reviewAnswer": "Plugin-Prüfung beantworten",
+    "enable": "Plugin aktivieren",
+    "disable": "Plugin deaktivieren",
+    "viewError": "Plugin-Fehler anzeigen",
+    "processAnswer": "Programmanfrage beantworten",
+    "run": "Plugin-Befehl ausführen"
   }
 }

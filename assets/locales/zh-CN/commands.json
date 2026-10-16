@@ -363,5 +363,18 @@
     "clearActivity": "清除 MCP 活动",
     "filterActivity": "筛选 MCP 活动",
     "copyConfig": "复制 MCP 客户端配置"
+  },
+  "plugins": {
+    "reload": "重新加载插件",
+    "installFromFolder": "从文件夹安装插件…",
+    "output": "插件输出",
+    "openFolder": "打开插件文件夹",
+    "review": "审核插件",
+    "reviewAnswer": "回应插件审核",
+    "enable": "启用插件",
+    "disable": "禁用插件",
+    "viewError": "查看插件错误",
+    "processAnswer": "回应程序请求",
+    "run": "运行插件命令"
   }
 }

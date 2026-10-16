@@ -261,6 +261,11 @@ impl<C> CommandRegistry<C> {
         Ok(())
     }
 
+    /// Removes a command (plugins unloading); returns it.
+    pub fn unregister(&mut self, id: &CommandId) -> Option<CommandSpec<C>> {
+        self.commands.remove(id)
+    }
+
     /// Keeps a renamed command reachable under its old id.
     pub fn alias(&mut self, old: impl Into<CommandId>, new: impl Into<CommandId>) {
         self.aliases.insert(old.into(), new.into());

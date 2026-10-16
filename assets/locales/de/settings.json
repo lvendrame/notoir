@@ -192,5 +192,12 @@
       "enabled": "Notizen synchronisieren aktivieren (committet und pusht alle Änderungen)",
       "commitMessage": "Vorlage der Commit-Nachricht für Notizen synchronisieren"
     }
+  },
+  "plugins": {
+    "directory": "Plugin-Ordner (leer: Standard)",
+    "memoryLimitMb": "Speicherlimit für Plugins (MB)",
+    "commandTimeoutMs": "Zeitlimit für Plugin-Befehle (ms)",
+    "eventTimeoutMs": "Zeitlimit für Plugin-Ereignisse (ms)",
+    "changeEventDebounceMs": "Verzögerung der Änderungsereignisse für Plugins (ms)"
   }
 }

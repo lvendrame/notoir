@@ -102,11 +102,13 @@ impl AppCore {
             Ok(bindings) => {
                 self.keymap = crate::core::build_keymap(
                     &self.commands,
+                    &self.plugins.bindings,
                     &bindings,
                     self.platform,
                     &mut self.notifications,
                 );
                 tracing::info!(count = bindings.len(), "keybindings applied");
+                self.user_bindings = bindings;
             }
             Err((line, detail)) => {
                 self.notifications.notify(

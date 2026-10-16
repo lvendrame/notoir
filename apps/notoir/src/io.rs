@@ -54,6 +54,18 @@ pub enum IoResult {
     Git(Box<crate::git::GitResult>),
     /// Another launch forwarded its command line (single instance).
     Instance(notoir_platform::single_instance::InstanceRequest),
+    /// The plugins directory was scanned.
+    PluginsScanned(Vec<notoir_plugins::Discovered>),
+    /// A folder's plugin.toml was read (Install from Folder).
+    PluginManifest {
+        dir: std::path::PathBuf,
+        result: Box<Result<notoir_plugins::Manifest, String>>,
+    },
+    /// A plugin was copied into the plugins directory.
+    PluginInstalled {
+        id: String,
+        error: Option<String>,
+    },
 }
 
 /// Replace in closed files: changed names, and failures with their error.

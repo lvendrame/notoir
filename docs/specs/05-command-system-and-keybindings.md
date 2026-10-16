@@ -1,6 +1,6 @@
 # 05 — Command System & Keybindings
 
-**Status:** Partial — command registry, when-expressions, keymap (M1); keyboard dispatch, menu/toolbar wiring (M3); Command Palette, keybindings.toml applied on save or external change, Preferences: Open Keyboard Shortcuts File (M9); shortcuts editor (M10), plugin keybindings (M22)
+**Status:** Done — command registry, when-expressions, keymap (M1); keyboard dispatch, menu/toolbar wiring (M3); Command Palette, keybindings.toml applied on save or external change, Preferences: Open Keyboard Shortcuts File (M9); shortcuts editor (M10); plugin commands (`plugin.<id>.<command>`, titles from the manifest and plugin locales) and plugin keybindings between user and default bindings, invalid plugin when-expressions rejected into Plugin Output (M22)
 
 ## Purpose
 

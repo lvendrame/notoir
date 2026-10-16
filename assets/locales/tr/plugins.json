@@ -1,0 +1,38 @@
+{
+  "needsReview": "“{{name}}” eklentisinin çalışmadan önce incelenmesi gerekiyor.",
+  "reviewAction": "İncele…",
+  "error": "“{{name}}” eklentisinde bir hata oluştu.",
+  "errorDisabled": "“{{name}}” eklentisinde bir hata oluştu ve eklenti devre dışı bırakıldı.",
+  "viewError": "Hatayı Görüntüle",
+  "reenable": "Yeniden Etkinleştir",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "Klasörden Eklenti Yükle",
+  "installInvalid": "Bu klasör geçerli bir eklenti değil.",
+  "installFailed": "“{{name}}” eklentisi yüklenemedi.",
+  "output": {
+    "empty": "Henüz eklenti çıktısı yok."
+  },
+  "perm": {
+    "documentsRead": "Açık belgeleri okuma",
+    "documentsWrite": "Açık belgeleri değiştirme",
+    "workspaceRead": "Çalışma alanındaki dosyaları okuma",
+    "workspaceWrite": "Çalışma alanına dosya yazma",
+    "network": "İnternet erişimi",
+    "process": "Program çalıştırma",
+    "clipboard": "Panoyu kullanma",
+    "settingsWrite": "Notoir ayarlarını değiştirme",
+    "mcpTools": "MCP araçları sunma"
+  },
+  "process": {
+    "title": "“{{name}}” bir program çalıştırmak istiyor:",
+    "once": "Bir Kez İzin Ver",
+    "always": "Her Zaman İzin Ver",
+    "deny": "Reddet"
+  },
+  "review": {
+    "title": "“{{name}}” {{version}} şunları istiyor:",
+    "titleUpdate": "“{{name}}” eklentisinin {{version}} güncellemesi şunları istiyor:",
+    "install": "Yükle",
+    "enable": "Etkinleştir"
+  }
+}

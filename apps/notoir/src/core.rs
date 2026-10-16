@@ -33,6 +33,7 @@ pub const REGISTERED_PANELS: &[PanelId] = &[
     PanelId::Output,
     PanelId::GitOutput,
     PanelId::McpActivity,
+    PanelId::PluginOutput,
 ];
 
 /// Theme setting: a fixed theme or "auto" (follow the OS).
@@ -209,6 +210,11 @@ pub struct AppCore {
     pub first_run_check: bool,
     /// MCP server, clients, permissions and activity (spec 29 / 32).
     pub mcp: crate::mcp::McpState,
+    /// Lua plugins (spec 30).
+    pub plugins: crate::plugins::PluginsState,
+    /// `keybindings.toml` as last loaded (the keymap is rebuilt when plugin
+    /// bindings change).
+    pub user_bindings: Vec<UserBinding>,
 }
 
 impl AppCore {
@@ -288,9 +294,16 @@ impl AppCore {
             .unwrap_or(ThemeChoice::Fixed(ThemeId::Midnight));
 
         let mcp = crate::mcp::McpState::new(wake.clone());
+        let plugins = crate::plugins::PluginsState::new(wake.clone());
         let mut commands = CommandRegistry::default();
         crate::commands::register_all(&mut commands, opts.platform);
-        let keymap = build_keymap(&commands, &user_bindings, opts.platform, &mut notifications);
+        let keymap = build_keymap(
+            &commands,
+            &[],
+            &user_bindings,
+            opts.platform,
+            &mut notifications,
+        );
 
         Self {
             paths,
@@ -354,6 +367,8 @@ impl AppCore {
             zen: None,
             first_run_check: opts.first_run,
             mcp,
+            plugins,
+            user_bindings: user_bindings.clone(),
             language,
             theme_choice,
             theme_override: opts.theme_override,
@@ -780,7 +795,13 @@ impl AppCore {
                     );
                 }
                 IoResult::Instance(req) => self.handle_instance_request(req),
+                IoResult::PluginsScanned(found) => self.plugins_scanned(found),
+                IoResult::PluginManifest { dir, result } => {
+                    self.plugins_manifest_read(dir, *result)
+                }
+                IoResult::PluginInstalled { id, error } => self.plugins_installed(id, error),
                 IoResult::FolderPicked(path) if self.git_clone_folder(path.as_deref()) => {}
+                IoResult::FolderPicked(path) if self.plugins_folder_picked(path.as_deref()) => {}
                 IoResult::FolderPicked(Some(path)) => self.open_workspace(&path),
                 IoResult::FolderPicked(None) => {}
                 IoResult::Workspace(r) => self.handle_workspace(r),
@@ -881,6 +902,7 @@ fn load_keybindings(
 
 pub(crate) fn build_keymap(
     commands: &CommandRegistry<AppCore>,
+    plugins: &[KeyBinding],
     user: &[UserBinding],
     platform: Platform,
     notifications: &mut NotificationCenter,
@@ -896,7 +918,7 @@ pub(crate) fn build_keymap(
             }
         }
     }
-    let (keymap, errors) = Keymap::build(defaults, Vec::new(), user, platform);
+    let (keymap, errors) = Keymap::build(defaults, plugins.to_vec(), user, platform);
     if !errors.is_empty() {
         notifications.notify(
             Notification::new(
@@ -945,12 +967,15 @@ impl AppCore {
             self.maybe_first_run();
         }
         self.mcp_autostart();
+        self.plugins_scan();
     }
 
     /// Exit: Scratchpads, session and recovery are written before the
     /// process ends.
     pub fn shutdown(&mut self) {
         self.mcp_stop();
+        // Plugin VMs stop when their handles drop.
+        self.plugins.entries.clear();
         self.flush_scratchpads(true);
         self.write_session(false);
         self.recovery_shutdown();

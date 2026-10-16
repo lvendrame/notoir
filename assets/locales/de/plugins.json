@@ -1,0 +1,38 @@
+{
+  "needsReview": "Das Plugin „{{name}}“ muss geprüft werden, bevor es ausgeführt werden kann.",
+  "reviewAction": "Prüfen…",
+  "error": "Im Plugin „{{name}}“ ist ein Fehler aufgetreten.",
+  "errorDisabled": "Im Plugin „{{name}}“ ist ein Fehler aufgetreten; es wurde deaktiviert.",
+  "viewError": "Fehler anzeigen",
+  "reenable": "Wieder aktivieren",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "Plugin aus Ordner installieren",
+  "installInvalid": "Dieser Ordner ist kein gültiges Plugin.",
+  "installFailed": "Das Plugin „{{name}}“ konnte nicht installiert werden.",
+  "output": {
+    "empty": "Noch keine Plugin-Ausgabe."
+  },
+  "perm": {
+    "documentsRead": "Geöffnete Dokumente lesen",
+    "documentsWrite": "Geöffnete Dokumente ändern",
+    "workspaceRead": "Dateien im Arbeitsbereich lesen",
+    "workspaceWrite": "Dateien im Arbeitsbereich schreiben",
+    "network": "Internetzugriff",
+    "process": "Programme ausführen",
+    "clipboard": "Zwischenablage verwenden",
+    "settingsWrite": "Notoir-Einstellungen ändern",
+    "mcpTools": "MCP-Tools bereitstellen"
+  },
+  "process": {
+    "title": "„{{name}}“ möchte ein Programm ausführen:",
+    "once": "Einmal erlauben",
+    "always": "Immer erlauben",
+    "deny": "Ablehnen"
+  },
+  "review": {
+    "title": "„{{name}}“ {{version}} fordert an:",
+    "titleUpdate": "Das Update von „{{name}}“ auf {{version}} fordert an:",
+    "install": "Installieren",
+    "enable": "Aktivieren"
+  }
+}

@@ -192,5 +192,12 @@
       "enabled": "Włącz Synchronizuj notatki (zatwierdza i wypycha wszystkie zmiany)",
       "commitMessage": "Szablon komunikatu zatwierdzenia dla Synchronizuj notatki"
     }
+  },
+  "plugins": {
+    "directory": "Folder wtyczek (pusty: domyślny)",
+    "memoryLimitMb": "Limit pamięci wtyczek (MB)",
+    "commandTimeoutMs": "Limit czasu poleceń wtyczek (ms)",
+    "eventTimeoutMs": "Limit czasu zdarzeń wtyczek (ms)",
+    "changeEventDebounceMs": "Opóźnienie zdarzeń zmian dla wtyczek (ms)"
   }
 }

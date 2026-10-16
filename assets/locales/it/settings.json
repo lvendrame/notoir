@@ -192,5 +192,12 @@
       "enabled": "Attiva Sincronizza note (esegue commit e push di tutte le modifiche)",
       "commitMessage": "Modello del messaggio di commit di Sincronizza note"
     }
+  },
+  "plugins": {
+    "directory": "Cartella dei plugin (vuoto: predefinita)",
+    "memoryLimitMb": "Limite di memoria dei plugin (MB)",
+    "commandTimeoutMs": "Tempo limite dei comandi dei plugin (ms)",
+    "eventTimeoutMs": "Tempo limite degli eventi dei plugin (ms)",
+    "changeEventDebounceMs": "Ritardo degli eventi di modifica per i plugin (ms)"
   }
 }

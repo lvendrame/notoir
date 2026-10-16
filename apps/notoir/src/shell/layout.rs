@@ -526,6 +526,7 @@ impl Renderer<'_, '_> {
                             Some(line) => gutter_context_items(line),
                             None => editor_context_items(),
                         };
+                        let items = menus::expand(&items, self.core);
                         let items = menus::visible_items(&items, &self.core.commands);
                         super::chrome::menu_items(
                             ui,
@@ -696,6 +697,8 @@ fn editor_context_items() -> Vec<menus::MenuItem> {
         MenuItem::Separator,
         cmd("navigate.goToLine"),
         cmd("bookmarks.toggle"),
+        MenuItem::Separator,
+        MenuItem::Dynamic(menus::DynamicMenu::PluginEditorContext),
         MenuItem::Separator,
         MenuItem::Submenu {
             label: "menus:sub.convertCase",

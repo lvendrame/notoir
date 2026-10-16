@@ -363,5 +363,18 @@
     "clearActivity": "Clear MCP Activity",
     "filterActivity": "Filter MCP Activity",
     "copyConfig": "Copy MCP Client Config"
+  },
+  "plugins": {
+    "reload": "Reload Plugins",
+    "installFromFolder": "Install Plugin from Folder…",
+    "output": "Plugin Output",
+    "openFolder": "Open Plugins Folder",
+    "review": "Review Plugin",
+    "reviewAnswer": "Answer Plugin Review",
+    "enable": "Enable Plugin",
+    "disable": "Disable Plugin",
+    "viewError": "View Plugin Error",
+    "processAnswer": "Answer Program Prompt",
+    "run": "Run Plugin Command"
   }
 }

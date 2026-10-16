@@ -17,6 +17,7 @@ const MIGRATIONS: &[&str] = &[
     include_str!("../migrations/0001_initial.sql"),
     include_str!("../migrations/0002_workspace_trust.sql"),
     include_str!("../migrations/0003_mcp.sql"),
+    include_str!("../migrations/0004_plugins.sql"),
 ];
 pub const SCHEMA_VERSION: u32 = MIGRATIONS.len() as u32;
 /// Unpinned recent entries kept per kind.
@@ -63,6 +64,16 @@ pub struct RecentEntry {
     pub display_name: Option<String>,
     pub last_opened: i64,
     pub pinned: bool,
+}
+
+/// A plugin approval (`plugin_approval`).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PluginApprovalRow {
+    pub plugin_id: String,
+    pub version: String,
+    pub permissions_hash: String,
+    pub approved_at: i64,
+    pub enabled: bool,
 }
 
 /// A registered MCP client (`mcp_client`).
@@ -460,6 +471,93 @@ impl StateDb {
             )
             .optional()?
             .is_some())
+    }
+
+    // ── plugins ──────────────────────────────────────────────────────────
+
+    pub fn set_plugin_approval(&self, row: &PluginApprovalRow) -> Result<(), StorageError> {
+        self.write(|c| {
+            c.execute(
+                "INSERT OR REPLACE INTO plugin_approval \
+                 (plugin_id, version, permissions_hash, approved_at, enabled) VALUES (?1, ?2, ?3, ?4, ?5)",
+                params![
+                    row.plugin_id,
+                    row.version,
+                    row.permissions_hash,
+                    row.approved_at,
+                    row.enabled
+                ],
+            )
+            .map(drop)
+        })
+    }
+
+    pub fn plugin_approvals(&self) -> Result<Vec<PluginApprovalRow>, StorageError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT plugin_id, version, permissions_hash, approved_at, enabled \
+             FROM plugin_approval ORDER BY plugin_id",
+        )?;
+        let rows = stmt.query_map([], |r| {
+            Ok(PluginApprovalRow {
+                plugin_id: r.get(0)?,
+                version: r.get(1)?,
+                permissions_hash: r.get(2)?,
+                approved_at: r.get(3)?,
+                enabled: r.get(4)?,
+            })
+        })?;
+        Ok(rows.collect::<Result<_, _>>()?)
+    }
+
+    pub fn set_plugin_enabled(&self, plugin_id: &str, enabled: bool) -> Result<(), StorageError> {
+        self.write(|c| {
+            c.execute(
+                "UPDATE plugin_approval SET enabled = ?2 WHERE plugin_id = ?1",
+                params![plugin_id, enabled],
+            )
+            .map(drop)
+        })
+    }
+
+    /// Forgets a plugin (uninstall): approval and grants.
+    pub fn remove_plugin(&self, plugin_id: &str) -> Result<(), StorageError> {
+        self.write(|c| {
+            c.execute(
+                "DELETE FROM plugin_approval WHERE plugin_id = ?1",
+                [plugin_id],
+            )?;
+            c.execute("DELETE FROM plugin_grant WHERE plugin_id = ?1", [plugin_id])
+                .map(drop)
+        })
+    }
+
+    pub fn set_plugin_grant(
+        &self,
+        plugin_id: &str,
+        capability: &str,
+        decision: Option<&str>,
+    ) -> Result<(), StorageError> {
+        self.write(|c| {
+            match decision {
+                Some(d) => c.execute(
+                    "INSERT OR REPLACE INTO plugin_grant (plugin_id, capability, decision) VALUES (?1, ?2, ?3)",
+                    params![plugin_id, capability, d],
+                ),
+                None => c.execute(
+                    "DELETE FROM plugin_grant WHERE plugin_id = ?1 AND capability = ?2",
+                    params![plugin_id, capability],
+                ),
+            }
+            .map(drop)
+        })
+    }
+
+    pub fn plugin_grants(&self, plugin_id: &str) -> Result<Vec<(String, String)>, StorageError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT capability, decision FROM plugin_grant WHERE plugin_id = ?1 ORDER BY capability",
+        )?;
+        let rows = stmt.query_map([plugin_id], |r| Ok((r.get(0)?, r.get(1)?)))?;
+        Ok(rows.collect::<Result<_, _>>()?)
     }
 
     // ── MCP ──────────────────────────────────────────────────────────────
@@ -879,5 +977,29 @@ mod tests {
         assert_eq!(tools, ["c", "b"]);
         db.clear_mcp_activity().unwrap();
         assert!(db.mcp_activity(10).unwrap().is_empty());
+    }
+
+    #[test]
+    fn plugin_approvals_and_grants() {
+        let db = StateDb::open_in_memory().unwrap();
+        let row = PluginApprovalRow {
+            plugin_id: "word-count".into(),
+            version: "1.0.0".into(),
+            permissions_hash: "ab".into(),
+            approved_at: 1,
+            enabled: true,
+        };
+        db.set_plugin_approval(&row).unwrap();
+        db.set_plugin_enabled("word-count", false).unwrap();
+        assert!(!db.plugin_approvals().unwrap()[0].enabled);
+        db.set_plugin_grant("word-count", "process", Some("allow"))
+            .unwrap();
+        assert_eq!(
+            db.plugin_grants("word-count").unwrap(),
+            [("process".to_owned(), "allow".to_owned())]
+        );
+        db.remove_plugin("word-count").unwrap();
+        assert!(db.plugin_approvals().unwrap().is_empty());
+        assert!(db.plugin_grants("word-count").unwrap().is_empty());
     }
 }

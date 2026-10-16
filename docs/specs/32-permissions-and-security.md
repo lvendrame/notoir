@@ -1,6 +1,6 @@
 # 32 — Permissions & Security
 
-**Status:** Partial — M20: `PermissionGate` in notoir-core (principals, capabilities, risk classes, MCP defaults, evaluation order, Once/Session/Persistent grants, revocation), per-client matrix persisted in `mcp_grant`, non-modal Ask prompt above the status bar (F6 focuses it, identical requests share one prompt, 120 s timeout denies, "Always Allow" for dangerous capabilities needs a second click, shown in Zen Mode), path boundary with canonicalised symlinks. M22: plugin capabilities from manifests. Later: "Preview changes" diff in the prompt
+**Status:** Done — M20: `PermissionGate` in notoir-core (principals, capabilities, risk classes, MCP defaults, evaluation order, Once/Session/Persistent grants, revocation), per-client matrix persisted in `mcp_grant`, non-modal Ask prompt above the status bar (F6, coalesced identical requests, 120 s timeout, dangerous Always Allow confirms), path boundary with canonicalised symlinks. M22: plugin principals get exactly their approved manifest permissions (unrequested → Deny without prompt), `process` asks per call unless always allowed (stored in `plugin_grant`). Later: "Preview changes" diff in the Ask prompt
 
 ## Purpose
 

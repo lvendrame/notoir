@@ -1,0 +1,38 @@
+{
+  "needsReview": "Wtyczka „{{name}}” wymaga sprawdzenia przed uruchomieniem.",
+  "reviewAction": "Sprawdź…",
+  "error": "We wtyczce „{{name}}” wystąpił błąd.",
+  "errorDisabled": "We wtyczce „{{name}}” wystąpił błąd i została wyłączona.",
+  "viewError": "Pokaż błąd",
+  "reenable": "Włącz ponownie",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "Zainstaluj wtyczkę z folderu",
+  "installInvalid": "Ten folder nie jest prawidłową wtyczką.",
+  "installFailed": "Nie udało się zainstalować wtyczki „{{name}}”.",
+  "output": {
+    "empty": "Brak danych wyjściowych wtyczek."
+  },
+  "perm": {
+    "documentsRead": "Odczyt otwartych dokumentów",
+    "documentsWrite": "Modyfikowanie otwartych dokumentów",
+    "workspaceRead": "Odczyt plików w obszarze roboczym",
+    "workspaceWrite": "Zapis plików w obszarze roboczym",
+    "network": "Dostęp do internetu",
+    "process": "Uruchamianie programów",
+    "clipboard": "Korzystanie ze schowka",
+    "settingsWrite": "Zmiana ustawień Notoir",
+    "mcpTools": "Udostępnianie narzędzi MCP"
+  },
+  "process": {
+    "title": "„{{name}}” chce uruchomić program:",
+    "once": "Zezwól raz",
+    "always": "Zawsze zezwalaj",
+    "deny": "Odmów"
+  },
+  "review": {
+    "title": "„{{name}}” {{version}} prosi o:",
+    "titleUpdate": "Aktualizacja „{{name}}” do wersji {{version}} prosi o:",
+    "install": "Zainstaluj",
+    "enable": "Włącz"
+  }
+}

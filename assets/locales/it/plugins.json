@@ -1,0 +1,38 @@
+{
+  "needsReview": "Il plugin “{{name}}” deve essere esaminato prima di poter essere eseguito.",
+  "reviewAction": "Esamina…",
+  "error": "Il plugin “{{name}}” ha riscontrato un errore.",
+  "errorDisabled": "Il plugin “{{name}}” ha riscontrato un errore ed è stato disattivato.",
+  "viewError": "Visualizza errore",
+  "reenable": "Riattiva",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "Installa plugin da una cartella",
+  "installInvalid": "Questa cartella non è un plugin valido.",
+  "installFailed": "Impossibile installare il plugin “{{name}}”.",
+  "output": {
+    "empty": "Ancora nessun output dei plugin."
+  },
+  "perm": {
+    "documentsRead": "Leggere i documenti aperti",
+    "documentsWrite": "Modificare i documenti aperti",
+    "workspaceRead": "Leggere i file dell’area di lavoro",
+    "workspaceWrite": "Scrivere file nell’area di lavoro",
+    "network": "Accesso a Internet",
+    "process": "Eseguire programmi",
+    "clipboard": "Usare gli appunti",
+    "settingsWrite": "Modificare le impostazioni di Notoir",
+    "mcpTools": "Fornire strumenti MCP"
+  },
+  "process": {
+    "title": "“{{name}}” vuole eseguire un programma:",
+    "once": "Consenti una volta",
+    "always": "Consenti sempre",
+    "deny": "Nega"
+  },
+  "review": {
+    "title": "“{{name}}” {{version}} richiede:",
+    "titleUpdate": "L’aggiornamento di “{{name}}” alla versione {{version}} richiede:",
+    "install": "Installa",
+    "enable": "Attiva"
+  }
+}

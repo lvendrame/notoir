@@ -1,6 +1,6 @@
 # 06 — Event System
 
-**Status:** Partial — typed events, outbox, frame-end drain (M1, M3); document subscribers (M5+)
+**Status:** Partial — typed events, outbox, frame-end drain (M1, M3); document subscribers (M5+); plugin host subscriber: documents opened / saved / closed / changed (coalesced per `plugins.changeEventDebounceMs`), active editor, workspace open / close forwarded as owned JSON payloads to subscribed plugins (M22). Later: `PluginLoaded` / `PluginUnloaded` as app events
 
 ## Purpose
 

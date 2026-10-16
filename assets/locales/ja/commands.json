@@ -363,5 +363,18 @@
     "clearActivity": "MCP アクティビティをクリア",
     "filterActivity": "MCP アクティビティを絞り込む",
     "copyConfig": "MCP クライアントの設定をコピー"
+  },
+  "plugins": {
+    "reload": "プラグインを再読み込み",
+    "installFromFolder": "フォルダーからプラグインをインストール…",
+    "output": "プラグインの出力",
+    "openFolder": "プラグイン フォルダーを開く",
+    "review": "プラグインを確認",
+    "reviewAnswer": "プラグインの確認に応答",
+    "enable": "プラグインを有効にする",
+    "disable": "プラグインを無効にする",
+    "viewError": "プラグインのエラーを表示",
+    "processAnswer": "プログラム実行の確認に応答",
+    "run": "プラグインのコマンドを実行"
   }
 }

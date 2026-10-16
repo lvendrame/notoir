@@ -1,0 +1,38 @@
+{
+  "needsReview": "插件“{{name}}”需要审核后才能运行。",
+  "reviewAction": "审核…",
+  "error": "插件“{{name}}”遇到错误。",
+  "errorDisabled": "插件“{{name}}”遇到错误，已被禁用。",
+  "viewError": "查看错误",
+  "reenable": "重新启用",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "从文件夹安装插件",
+  "installInvalid": "此文件夹不是有效的插件。",
+  "installFailed": "无法安装插件“{{name}}”。",
+  "output": {
+    "empty": "还没有插件输出。"
+  },
+  "perm": {
+    "documentsRead": "读取打开的文档",
+    "documentsWrite": "修改打开的文档",
+    "workspaceRead": "读取工作区中的文件",
+    "workspaceWrite": "写入工作区中的文件",
+    "network": "访问互联网",
+    "process": "运行程序",
+    "clipboard": "使用剪贴板",
+    "settingsWrite": "更改 Notoir 设置",
+    "mcpTools": "提供 MCP 工具"
+  },
+  "process": {
+    "title": "“{{name}}”想要运行程序:",
+    "once": "允许一次",
+    "always": "始终允许",
+    "deny": "拒绝"
+  },
+  "review": {
+    "title": "“{{name}}” {{version}} 请求:",
+    "titleUpdate": "“{{name}}”更新到 {{version}} 请求:",
+    "install": "安装",
+    "enable": "启用"
+  }
+}

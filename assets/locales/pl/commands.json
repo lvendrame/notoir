@@ -363,5 +363,18 @@
     "clearActivity": "Wyczyść aktywność MCP",
     "filterActivity": "Filtruj aktywność MCP",
     "copyConfig": "Kopiuj konfigurację klienta MCP"
+  },
+  "plugins": {
+    "reload": "Załaduj ponownie wtyczki",
+    "installFromFolder": "Zainstaluj wtyczkę z folderu…",
+    "output": "Dane wyjściowe wtyczek",
+    "openFolder": "Otwórz folder wtyczek",
+    "review": "Sprawdź wtyczkę",
+    "reviewAnswer": "Odpowiedz na sprawdzenie wtyczki",
+    "enable": "Włącz wtyczkę",
+    "disable": "Wyłącz wtyczkę",
+    "viewError": "Pokaż błąd wtyczki",
+    "processAnswer": "Odpowiedz na prośbę o program",
+    "run": "Uruchom polecenie wtyczki"
   }
 }

@@ -363,5 +363,18 @@
     "clearActivity": "MCP 활동 지우기",
     "filterActivity": "MCP 활동 필터링",
     "copyConfig": "MCP 클라이언트 구성 복사"
+  },
+  "plugins": {
+    "reload": "플러그인 다시 로드",
+    "installFromFolder": "폴더에서 플러그인 설치…",
+    "output": "플러그인 출력",
+    "openFolder": "플러그인 폴더 열기",
+    "review": "플러그인 검토",
+    "reviewAnswer": "플러그인 검토에 응답",
+    "enable": "플러그인 사용",
+    "disable": "플러그인 사용 중지",
+    "viewError": "플러그인 오류 보기",
+    "processAnswer": "프로그램 요청에 응답",
+    "run": "플러그인 명령 실행"
   }
 }

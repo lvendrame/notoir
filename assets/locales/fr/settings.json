@@ -192,5 +192,12 @@
       "enabled": "Activer Synchroniser les notes (valide et pousse toutes les modifications)",
       "commitMessage": "Modèle du message de commit de Synchroniser les notes"
     }
+  },
+  "plugins": {
+    "directory": "Dossier des extensions (vide : par défaut)",
+    "memoryLimitMb": "Limite de mémoire des extensions (Mo)",
+    "commandTimeoutMs": "Délai des commandes d’extension (ms)",
+    "eventTimeoutMs": "Délai des gestionnaires d’événements d’extension (ms)",
+    "changeEventDebounceMs": "Délai des événements de modification pour les extensions (ms)"
   }
 }

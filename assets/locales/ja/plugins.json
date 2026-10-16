@@ -1,0 +1,38 @@
+{
+  "needsReview": "プラグイン「{{name}}」は実行前に確認が必要です。",
+  "reviewAction": "確認…",
+  "error": "プラグイン「{{name}}」でエラーが発生しました。",
+  "errorDisabled": "プラグイン「{{name}}」でエラーが発生したため無効にしました。",
+  "viewError": "エラーを表示",
+  "reenable": "再度有効にする",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "フォルダーからプラグインをインストール",
+  "installInvalid": "このフォルダーは有効なプラグインではありません。",
+  "installFailed": "プラグイン「{{name}}」をインストールできませんでした。",
+  "output": {
+    "empty": "プラグインの出力はまだありません。"
+  },
+  "perm": {
+    "documentsRead": "開いているドキュメントの読み取り",
+    "documentsWrite": "開いているドキュメントの変更",
+    "workspaceRead": "ワークスペースのファイルの読み取り",
+    "workspaceWrite": "ワークスペースのファイルへの書き込み",
+    "network": "インターネットへのアクセス",
+    "process": "プログラムの実行",
+    "clipboard": "クリップボードの使用",
+    "settingsWrite": "Notoir の設定の変更",
+    "mcpTools": "MCP ツールの提供"
+  },
+  "process": {
+    "title": "「{{name}}」がプログラムを実行しようとしています:",
+    "once": "今回だけ許可",
+    "always": "常に許可",
+    "deny": "拒否"
+  },
+  "review": {
+    "title": "「{{name}}」{{version}} の要求:",
+    "titleUpdate": "「{{name}}」を {{version}} に更新するには次の許可が必要です:",
+    "install": "インストール",
+    "enable": "有効にする"
+  }
+}

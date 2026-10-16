@@ -192,5 +192,12 @@
       "enabled": "노트 동기화 사용 (모든 변경 내용을 커밋하고 푸시)",
       "commitMessage": "노트 동기화 커밋 메시지 템플릿"
     }
+  },
+  "plugins": {
+    "directory": "플러그인 폴더 (비우면 기본값)",
+    "memoryLimitMb": "플러그인 메모리 제한 (MB)",
+    "commandTimeoutMs": "플러그인 명령 시간 제한 (ms)",
+    "eventTimeoutMs": "플러그인 이벤트 시간 제한 (ms)",
+    "changeEventDebounceMs": "플러그인 변경 이벤트 지연 (ms)"
   }
 }

@@ -1,0 +1,38 @@
+{
+  "needsReview": "Plug-in ‘{{name}}’ moet worden beoordeeld voordat deze kan worden uitgevoerd.",
+  "reviewAction": "Beoordelen…",
+  "error": "Plug-in ‘{{name}}’ heeft een fout gevonden.",
+  "errorDisabled": "Plug-in ‘{{name}}’ heeft een fout gevonden en is uitgeschakeld.",
+  "viewError": "Fout bekijken",
+  "reenable": "Opnieuw inschakelen",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "Plug-in installeren uit map",
+  "installInvalid": "Deze map is geen geldige plug-in.",
+  "installFailed": "Kan plug-in ‘{{name}}’ niet installeren.",
+  "output": {
+    "empty": "Nog geen plug-inuitvoer."
+  },
+  "perm": {
+    "documentsRead": "Geopende documenten lezen",
+    "documentsWrite": "Geopende documenten wijzigen",
+    "workspaceRead": "Bestanden in de werkruimte lezen",
+    "workspaceWrite": "Bestanden in de werkruimte schrijven",
+    "network": "Internettoegang",
+    "process": "Programma’s uitvoeren",
+    "clipboard": "Het klembord gebruiken",
+    "settingsWrite": "Notoir-instellingen wijzigen",
+    "mcpTools": "MCP-tools aanbieden"
+  },
+  "process": {
+    "title": "‘{{name}}’ wil een programma uitvoeren:",
+    "once": "Eenmaal toestaan",
+    "always": "Altijd toestaan",
+    "deny": "Weigeren"
+  },
+  "review": {
+    "title": "‘{{name}}’ {{version}} vraagt om:",
+    "titleUpdate": "De update van ‘{{name}}’ naar {{version}} vraagt om:",
+    "install": "Installeren",
+    "enable": "Inschakelen"
+  }
+}

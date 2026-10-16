@@ -363,5 +363,18 @@
     "clearActivity": "Effacer l’activité MCP",
     "filterActivity": "Filtrer l’activité MCP",
     "copyConfig": "Copier la configuration du client MCP"
+  },
+  "plugins": {
+    "reload": "Recharger les extensions",
+    "installFromFolder": "Installer une extension depuis un dossier…",
+    "output": "Sortie des extensions",
+    "openFolder": "Ouvrir le dossier des extensions",
+    "review": "Examiner l’extension",
+    "reviewAnswer": "Répondre à l’examen de l’extension",
+    "enable": "Activer l’extension",
+    "disable": "Désactiver l’extension",
+    "viewError": "Voir l’erreur de l’extension",
+    "processAnswer": "Répondre à la demande d’exécution",
+    "run": "Exécuter une commande d’extension"
   }
 }

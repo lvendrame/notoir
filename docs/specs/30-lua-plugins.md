@@ -1,6 +1,6 @@
 # 30 — Lua Plugins
 
-**Status:** Not started — M22, M23
+**Status:** Partial — M22: crate `notoir-plugins` (manifest parsing and validation with line numbers, permission sets with a stable hash, discovery; one Lua 5.4 VM per plugin on its own thread with the restricted standard library, text-only `load`, a package-local `require`, memory limit, time budgets that pause while waiting for the UI and cannot be escaped with `pcall`); app `plugins.rs`: approval stored per version and permission hash, hand-copied plugins and permission-adding updates need review, Install from Folder with the permission prompt, manifest commands / keybindings / menus registered before activation, lazy activation (`onStartup`, `onCommand:`, `onLanguage:`, `onEvent:`), the API v1 (commands, notify, editor, documents, fs, workspace, settings, events, http, process with per-call prompt, clipboard, i18n, log) checked by the permission gate on every call, edits as undoable `ChangeOrigin::Plugin` transactions, Plugin Output, error notifications with View Error, disabling after three errors in 60 s or any limit violation with Re-enable. M23: status items, panels, formatters, outline providers, languages, plugin settings, Plugin Manager, Developer Tools, example plugins. Deviations: `notoir.http` speaks plain HTTP only (no TLS stack bundled)
 
 ## Purpose
 

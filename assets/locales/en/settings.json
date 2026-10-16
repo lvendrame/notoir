@@ -192,5 +192,12 @@
       "enabled": "Enable Sync Notes (commits and pushes every change)",
       "commitMessage": "Sync Notes commit message template"
     }
+  },
+  "plugins": {
+    "directory": "Plugins folder (empty: the default)",
+    "memoryLimitMb": "Plugin memory limit (MB)",
+    "commandTimeoutMs": "Plugin command time limit (ms)",
+    "eventTimeoutMs": "Plugin event handler time limit (ms)",
+    "changeEventDebounceMs": "Delay before plugins get change events (ms)"
   }
 }

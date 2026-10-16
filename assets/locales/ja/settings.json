@@ -192,5 +192,12 @@
       "enabled": "ノートの同期を有効にする (すべての変更をコミットしてプッシュ)",
       "commitMessage": "ノートの同期のコミット メッセージ テンプレート"
     }
+  },
+  "plugins": {
+    "directory": "プラグイン フォルダー (空欄: 既定)",
+    "memoryLimitMb": "プラグインのメモリー上限 (MB)",
+    "commandTimeoutMs": "プラグイン コマンドの制限時間 (ミリ秒)",
+    "eventTimeoutMs": "プラグイン イベントの制限時間 (ミリ秒)",
+    "changeEventDebounceMs": "プラグインへの変更イベントの遅延 (ミリ秒)"
   }
 }

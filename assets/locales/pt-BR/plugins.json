@@ -1,0 +1,38 @@
+{
+  "needsReview": "O plugin “{{name}}” precisa ser revisado antes de ser executado.",
+  "reviewAction": "Revisar…",
+  "error": "O plugin “{{name}}” encontrou um erro.",
+  "errorDisabled": "O plugin “{{name}}” encontrou um erro e foi desativado.",
+  "viewError": "Ver erro",
+  "reenable": "Reativar",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "Instalar plugin de uma pasta",
+  "installInvalid": "Esta pasta não é um plugin válido.",
+  "installFailed": "Não foi possível instalar o plugin “{{name}}”.",
+  "output": {
+    "empty": "Nenhuma saída de plugin ainda."
+  },
+  "perm": {
+    "documentsRead": "Ler documentos abertos",
+    "documentsWrite": "Modificar documentos abertos",
+    "workspaceRead": "Ler arquivos do workspace",
+    "workspaceWrite": "Gravar arquivos no workspace",
+    "network": "Acesso à internet",
+    "process": "Executar programas",
+    "clipboard": "Usar a área de transferência",
+    "settingsWrite": "Alterar configurações do Notoir",
+    "mcpTools": "Fornecer ferramentas MCP"
+  },
+  "process": {
+    "title": "“{{name}}” quer executar um programa:",
+    "once": "Permitir uma vez",
+    "always": "Sempre permitir",
+    "deny": "Negar"
+  },
+  "review": {
+    "title": "“{{name}}” {{version}} solicita:",
+    "titleUpdate": "A atualização de “{{name}}” para {{version}} solicita:",
+    "install": "Instalar",
+    "enable": "Ativar"
+  }
+}

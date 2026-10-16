@@ -363,5 +363,18 @@
     "clearActivity": "MCP Etkinliğini Temizle",
     "filterActivity": "MCP Etkinliğini Filtrele",
     "copyConfig": "MCP İstemci Yapılandırmasını Kopyala"
+  },
+  "plugins": {
+    "reload": "Eklentileri Yeniden Yükle",
+    "installFromFolder": "Klasörden Eklenti Yükle…",
+    "output": "Eklenti Çıktısı",
+    "openFolder": "Eklenti Klasörünü Aç",
+    "review": "Eklentiyi İncele",
+    "reviewAnswer": "Eklenti İncelemesini Yanıtla",
+    "enable": "Eklentiyi Etkinleştir",
+    "disable": "Eklentiyi Devre Dışı Bırak",
+    "viewError": "Eklenti Hatasını Görüntüle",
+    "processAnswer": "Program İsteğini Yanıtla",
+    "run": "Eklenti Komutunu Çalıştır"
   }
 }

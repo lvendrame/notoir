@@ -277,8 +277,33 @@ fn lookup(lang: Language, key: &str) -> Option<&'static String> {
         .or_else(|| t.get("en").and_then(|m| m.get(key)))
 }
 
+/// Strings registered at run time (plugin command titles), keyed
+/// `@plugin/<id>/<key>`; they already are in the current language.
+fn dynamic() -> &'static std::sync::RwLock<HashMap<String, String>> {
+    static DYNAMIC: OnceLock<std::sync::RwLock<HashMap<String, String>>> = OnceLock::new();
+    DYNAMIC.get_or_init(Default::default)
+}
+
+pub fn set_dynamic(key: &str, value: &str) {
+    if let Ok(mut d) = dynamic().write() {
+        d.insert(key.to_owned(), value.to_owned());
+    }
+}
+
+/// Drops every dynamic string starting with `prefix`.
+pub fn clear_dynamic(prefix: &str) {
+    if let Ok(mut d) = dynamic().write() {
+        d.retain(|k, _| !k.starts_with(prefix));
+    }
+}
+
 /// Raw lookup in `lang`; returns the key itself when missing everywhere.
 pub fn t_in(lang: Language, key: &str) -> String {
+    if key.starts_with('@')
+        && let Some(s) = dynamic().read().ok().and_then(|d| d.get(key).cloned())
+    {
+        return s;
+    }
     match lookup(lang, key) {
         Some(s) => s.clone(),
         None => {

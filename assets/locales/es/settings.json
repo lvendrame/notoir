@@ -192,5 +192,12 @@
       "enabled": "Activar Sincronizar notas (confirma e inserta todos los cambios)",
       "commitMessage": "Plantilla del mensaje de confirmación de Sincronizar notas"
     }
+  },
+  "plugins": {
+    "directory": "Carpeta de complementos (vacío: predeterminada)",
+    "memoryLimitMb": "Límite de memoria de complementos (MB)",
+    "commandTimeoutMs": "Tiempo límite de comandos de complementos (ms)",
+    "eventTimeoutMs": "Tiempo límite de eventos de complementos (ms)",
+    "changeEventDebounceMs": "Retraso de los eventos de cambio para complementos (ms)"
   }
 }

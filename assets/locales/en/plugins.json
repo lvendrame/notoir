@@ -1,0 +1,38 @@
+{
+  "needsReview": "Plugin “{{name}}” needs review before it can run.",
+  "reviewAction": "Review…",
+  "error": "Plugin “{{name}}” encountered an error.",
+  "errorDisabled": "Plugin “{{name}}” encountered an error and was disabled.",
+  "viewError": "View Error",
+  "reenable": "Re-enable",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "Install Plugin from Folder",
+  "installInvalid": "This folder is not a valid plugin.",
+  "installFailed": "Could not install the plugin “{{name}}”.",
+  "output": {
+    "empty": "No plugin output yet."
+  },
+  "perm": {
+    "documentsRead": "Read open documents",
+    "documentsWrite": "Modify open documents",
+    "workspaceRead": "Read files in the workspace",
+    "workspaceWrite": "Write files in the workspace",
+    "network": "Internet access",
+    "process": "Run programs",
+    "clipboard": "Use the clipboard",
+    "settingsWrite": "Change Notoir settings",
+    "mcpTools": "Provide MCP tools"
+  },
+  "process": {
+    "title": "“{{name}}” wants to run a program:",
+    "once": "Allow Once",
+    "always": "Always Allow",
+    "deny": "Deny"
+  },
+  "review": {
+    "title": "“{{name}}” {{version}} requests:",
+    "titleUpdate": "The update of “{{name}}” to {{version}} requests:",
+    "install": "Install",
+    "enable": "Enable"
+  }
+}

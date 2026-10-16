@@ -22,6 +22,7 @@ pub mod md_preview;
 pub mod outline;
 pub mod overlays;
 pub mod panels;
+pub mod plugins_ui;
 pub mod prompts;
 pub mod recovery_ui;
 pub mod scm_panel;

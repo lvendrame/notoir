@@ -1,0 +1,38 @@
+{
+  "needsReview": "El complemento “{{name}}” debe revisarse antes de ejecutarse.",
+  "reviewAction": "Revisar…",
+  "error": "El complemento “{{name}}” encontró un error.",
+  "errorDisabled": "El complemento “{{name}}” encontró un error y se desactivó.",
+  "viewError": "Ver error",
+  "reenable": "Volver a activar",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "Instalar complemento desde una carpeta",
+  "installInvalid": "Esta carpeta no es un complemento válido.",
+  "installFailed": "No se pudo instalar el complemento “{{name}}”.",
+  "output": {
+    "empty": "Aún no hay salida de complementos."
+  },
+  "perm": {
+    "documentsRead": "Leer documentos abiertos",
+    "documentsWrite": "Modificar documentos abiertos",
+    "workspaceRead": "Leer archivos del espacio de trabajo",
+    "workspaceWrite": "Escribir archivos en el espacio de trabajo",
+    "network": "Acceso a internet",
+    "process": "Ejecutar programas",
+    "clipboard": "Usar el portapapeles",
+    "settingsWrite": "Cambiar la configuración de Notoir",
+    "mcpTools": "Proporcionar herramientas MCP"
+  },
+  "process": {
+    "title": "“{{name}}” quiere ejecutar un programa:",
+    "once": "Permitir una vez",
+    "always": "Permitir siempre",
+    "deny": "Denegar"
+  },
+  "review": {
+    "title": "“{{name}}” {{version}} solicita:",
+    "titleUpdate": "La actualización de “{{name}}” a {{version}} solicita:",
+    "install": "Instalar",
+    "enable": "Activar"
+  }
+}

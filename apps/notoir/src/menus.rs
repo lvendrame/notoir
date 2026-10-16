@@ -42,6 +42,10 @@ pub enum DynamicMenu {
     RecentWorkspaces,
     RecentFiles,
     KeptScratchpads,
+    /// Commands plugins contribute to the Plugins menu.
+    PluginCommands,
+    /// Commands plugins contribute to the editor context menu.
+    PluginEditorContext,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -413,8 +417,12 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         items: vec![
             cmd("plugins.manager"),
             cmd("plugins.installed"),
+            cmd("plugins.installFromFolder"),
             cmd("plugins.reload"),
             SEP,
+            MenuItem::Dynamic(DynamicMenu::PluginCommands),
+            SEP,
+            cmd("plugins.output"),
             cmd("plugins.openFolder"),
             cmd("plugins.developerTools"),
         ],
@@ -476,6 +484,27 @@ pub fn expand(items: &[MenuItem], core: &AppCore) -> Vec<MenuItem> {
                         id: "workspace.openRecent",
                         args: json!({ "path": r.path }),
                         text: name,
+                    });
+                }
+            }
+            MenuItem::Dynamic(
+                d @ (DynamicMenu::PluginCommands | DynamicMenu::PluginEditorContext),
+            ) => {
+                let location = if *d == DynamicMenu::PluginCommands {
+                    "plugins"
+                } else {
+                    "editor/context"
+                };
+                for m in core
+                    .plugins
+                    .menu_items
+                    .iter()
+                    .filter(|m| m.location == location)
+                {
+                    out.push(MenuItem::Entry {
+                        id: "plugins.run",
+                        args: json!({ "id": m.command }),
+                        text: m.title.clone(),
                     });
                 }
             }

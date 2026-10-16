@@ -1,0 +1,38 @@
+{
+  "needsReview": "L’extension « {{name}} » doit être examinée avant de pouvoir s’exécuter.",
+  "reviewAction": "Examiner…",
+  "error": "L’extension « {{name}} » a rencontré une erreur.",
+  "errorDisabled": "L’extension « {{name}} » a rencontré une erreur et a été désactivée.",
+  "viewError": "Voir l’erreur",
+  "reenable": "Réactiver",
+  "notify": "{{name}} : {{message}}",
+  "installTitle": "Installer une extension depuis un dossier",
+  "installInvalid": "Ce dossier n’est pas une extension valide.",
+  "installFailed": "Impossible d’installer l’extension « {{name}} ».",
+  "output": {
+    "empty": "Aucune sortie d’extension pour l’instant."
+  },
+  "perm": {
+    "documentsRead": "Lire les documents ouverts",
+    "documentsWrite": "Modifier les documents ouverts",
+    "workspaceRead": "Lire les fichiers de l’espace de travail",
+    "workspaceWrite": "Écrire des fichiers dans l’espace de travail",
+    "network": "Accès à Internet",
+    "process": "Exécuter des programmes",
+    "clipboard": "Utiliser le presse-papiers",
+    "settingsWrite": "Modifier les paramètres de Notoir",
+    "mcpTools": "Fournir des outils MCP"
+  },
+  "process": {
+    "title": "« {{name}} » veut exécuter un programme :",
+    "once": "Autoriser une fois",
+    "always": "Toujours autoriser",
+    "deny": "Refuser"
+  },
+  "review": {
+    "title": "« {{name}} » {{version}} demande :",
+    "titleUpdate": "La mise à jour de « {{name}} » vers {{version}} demande :",
+    "install": "Installer",
+    "enable": "Activer"
+  }
+}

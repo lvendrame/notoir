@@ -192,5 +192,12 @@
       "enabled": "启用同步笔记 (提交并推送所有更改)",
       "commitMessage": "同步笔记的提交消息模板"
     }
+  },
+  "plugins": {
+    "directory": "插件文件夹 (留空: 默认)",
+    "memoryLimitMb": "插件内存上限 (MB)",
+    "commandTimeoutMs": "插件命令时间上限 (毫秒)",
+    "eventTimeoutMs": "插件事件时间上限 (毫秒)",
+    "changeEventDebounceMs": "插件更改事件延迟 (毫秒)"
   }
 }

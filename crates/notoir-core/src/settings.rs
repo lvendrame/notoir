@@ -899,6 +899,61 @@ impl Schema {
             restricted: false,
             tags: &["activity", "log"],
         });
+        // Plugins (machine-specific / resource limits: User scope)
+        s.define(SettingDef {
+            key: "plugins.directory",
+            ty: T::Str,
+            default: s_(""),
+            scopes: Scopes::USER_ONLY,
+            category: C::Plugins,
+            restricted: false,
+            tags: &["folder"],
+        });
+        s.define(SettingDef {
+            key: "plugins.memoryLimitMb",
+            ty: T::Int { min: 8, max: 1024 },
+            default: V::Int(64),
+            scopes: Scopes::USER_ONLY,
+            category: C::Plugins,
+            restricted: false,
+            tags: &["memory", "limit"],
+        });
+        s.define(SettingDef {
+            key: "plugins.commandTimeoutMs",
+            ty: T::Int {
+                min: 100,
+                max: 600_000,
+            },
+            default: V::Int(5000),
+            scopes: Scopes::USER_ONLY,
+            category: C::Plugins,
+            restricted: false,
+            tags: &["time", "limit"],
+        });
+        s.define(SettingDef {
+            key: "plugins.eventTimeoutMs",
+            ty: T::Int {
+                min: 10,
+                max: 60_000,
+            },
+            default: V::Int(200),
+            scopes: Scopes::USER_ONLY,
+            category: C::Plugins,
+            restricted: false,
+            tags: &["time", "limit"],
+        });
+        s.define(SettingDef {
+            key: "plugins.changeEventDebounceMs",
+            ty: T::Int {
+                min: 0,
+                max: 10_000,
+            },
+            default: V::Int(150),
+            scopes: Scopes::USER_ONLY,
+            category: C::Plugins,
+            restricted: false,
+            tags: &["events"],
+        });
         // Advanced
         s.define(SettingDef {
             key: "logging.level",

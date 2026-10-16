@@ -322,6 +322,12 @@ impl eframe::App for NotoirApp {
         self.core.compare_tick();
         self.core.git_tick();
         self.core.mcp_tick();
+        self.core.plugins_tick();
+        if let Some(due) = self.core.plugins_next_due() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(
+                due.saturating_sub(now).max(1),
+            ));
+        }
         if !self.core.mcp.highlights.is_empty() {
             // MCP edit highlights fade out.
             ctx.request_repaint_after(std::time::Duration::from_millis(33));
@@ -409,7 +415,9 @@ impl eframe::App for NotoirApp {
             || self.core.find.goto.is_some()
             || self.core.settings_ui.recording.is_some()
             || !self.core.files.prompts.is_empty()
-            || self.core.mcp.dialog.is_some())
+            || self.core.mcp.dialog.is_some()
+            || self.core.plugins.review.is_some()
+            || !self.core.plugins.process_prompts.is_empty())
         {
             input::dispatch_keys(&ctx, &mut self.core, &context);
         }
@@ -525,6 +533,8 @@ impl eframe::App for NotoirApp {
                 &mut self.ui.mcp_client_name,
                 &mut actions,
             );
+            shell::plugins_ui::review(&ctx, &mut kit, &self.core, &mut actions);
+            shell::plugins_ui::process_prompt(&ctx, &mut kit, &self.core, &mut actions);
             // Prompts show even in Zen Mode: a client is waiting on them.
             shell::mcp_ui::ask_bar(&ctx, &mut kit, &mut self.core, bottom_offset, &mut actions);
             if let Some(answer) = shell::prompts::show(&ctx, &mut kit, &self.core) {
@@ -622,6 +632,7 @@ impl eframe::App for NotoirApp {
             self.ui.window_title = title;
         }
         for event in self.core.workbench.events.drain() {
+            self.core.plugins_event(&event);
             match &event {
                 notoir_core::AppEvent::DocumentChanged { doc, .. } => {
                     self.core.scratchpad_changed(*doc);

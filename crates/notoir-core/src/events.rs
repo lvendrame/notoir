@@ -23,6 +23,8 @@ pub enum ChangeOrigin {
     Internal,
     /// An MCP client's edit (spec 29): undoable, highlighted, in activity.
     Mcp(crate::permissions::ClientId),
+    /// A plugin's edit (spec 30), by plugin id.
+    Plugin(String),
 }
 
 #[derive(Clone, Debug)]

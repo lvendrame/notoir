@@ -192,5 +192,12 @@
       "enabled": "Notları Eşitle’yi etkinleştir (tüm değişiklikleri commit edip push eder)",
       "commitMessage": "Notları Eşitle commit mesajı şablonu"
     }
+  },
+  "plugins": {
+    "directory": "Eklenti klasörü (boş: varsayılan)",
+    "memoryLimitMb": "Eklenti bellek sınırı (MB)",
+    "commandTimeoutMs": "Eklenti komut süre sınırı (ms)",
+    "eventTimeoutMs": "Eklenti olay süre sınırı (ms)",
+    "changeEventDebounceMs": "Eklentilere değişiklik olaylarının gecikmesi (ms)"
   }
 }

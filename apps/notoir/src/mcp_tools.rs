@@ -119,7 +119,7 @@ fn line_len(rope: &Rope, line: usize) -> usize {
 }
 
 /// A `{line, column}` (1-based) or `{offset}` position as a char offset.
-fn position(rope: &Rope, v: Option<&Value>) -> Result<usize, ToolReply> {
+pub(crate) fn position(rope: &Rope, v: Option<&Value>) -> Result<usize, ToolReply> {
     let v = v.ok_or_else(|| err("invalid_args", "a position is missing"))?;
     if let Some(o) = v.get("offset").and_then(Value::as_u64) {
         let o = o as usize;
@@ -153,7 +153,7 @@ fn position(rope: &Rope, v: Option<&Value>) -> Result<usize, ToolReply> {
     Ok(rope.line_to_char(line - 1) + column - 1)
 }
 
-fn range_json(rope: &Rope, from: usize, to: usize) -> Value {
+pub(crate) fn range_json(rope: &Rope, from: usize, to: usize) -> Value {
     let (sl, sc) = line_col(rope, from);
     let (el, ec) = line_col(rope, to);
     json!({

@@ -1,0 +1,38 @@
+{
+  "needsReview": "플러그인 “{{name}}”은(는) 실행 전에 검토가 필요합니다.",
+  "reviewAction": "검토…",
+  "error": "플러그인 “{{name}}”에서 오류가 발생했습니다.",
+  "errorDisabled": "플러그인 “{{name}}”에서 오류가 발생하여 사용 중지되었습니다.",
+  "viewError": "오류 보기",
+  "reenable": "다시 사용",
+  "notify": "{{name}}: {{message}}",
+  "installTitle": "폴더에서 플러그인 설치",
+  "installInvalid": "이 폴더는 올바른 플러그인이 아닙니다.",
+  "installFailed": "플러그인 “{{name}}”을(를) 설치할 수 없습니다.",
+  "output": {
+    "empty": "아직 플러그인 출력이 없습니다."
+  },
+  "perm": {
+    "documentsRead": "열린 문서 읽기",
+    "documentsWrite": "열린 문서 수정",
+    "workspaceRead": "작업 영역의 파일 읽기",
+    "workspaceWrite": "작업 영역에 파일 쓰기",
+    "network": "인터넷 액세스",
+    "process": "프로그램 실행",
+    "clipboard": "클립보드 사용",
+    "settingsWrite": "Notoir 설정 변경",
+    "mcpTools": "MCP 도구 제공"
+  },
+  "process": {
+    "title": "“{{name}}”이(가) 프로그램을 실행하려고 합니다:",
+    "once": "한 번 허용",
+    "always": "항상 허용",
+    "deny": "거부"
+  },
+  "review": {
+    "title": "“{{name}}” {{version}} 요청:",
+    "titleUpdate": "“{{name}}”을(를) {{version}}(으)로 업데이트하려면 다음이 필요합니다:",
+    "install": "설치",
+    "enable": "사용"
+  }
+}

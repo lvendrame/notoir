@@ -192,5 +192,12 @@
       "enabled": "Notities synchroniseren inschakelen (commit en pusht alle wijzigingen)",
       "commitMessage": "Sjabloon voor het commitbericht van Notities synchroniseren"
     }
+  },
+  "plugins": {
+    "directory": "Plug-inmap (leeg: standaard)",
+    "memoryLimitMb": "Geheugenlimiet voor plug-ins (MB)",
+    "commandTimeoutMs": "Tijdslimiet voor plug-inopdrachten (ms)",
+    "eventTimeoutMs": "Tijdslimiet voor plug-ingebeurtenissen (ms)",
+    "changeEventDebounceMs": "Vertraging van wijzigingsgebeurtenissen voor plug-ins (ms)"
   }
 }
