@@ -34,8 +34,9 @@ Release builds are not code-signed yet, so the first launch needs one extra step
 
 ## Status
 
-Under development: a daily-usable editor (files, workspaces, splits, recovery, find/replace, settings) with
-Markdown, JSON, Git, MCP and plugins still to come. See:
+Early releases (0.1.x). Every planned milestone is built: files, workspaces, splits, crash recovery, find/replace and
+workspace search, settings, Markdown preview, JSON tree view, file comparison, Git, the MCP server, Lua plugins, themes
+and updates. Builds are not code-signed yet (see [Install](#install)). See:
 
 - [`docs/specs/`](docs/specs/): functional and technical specifications (start with
   [`00-overview-and-scope.md`](docs/specs/00-overview-and-scope.md))
