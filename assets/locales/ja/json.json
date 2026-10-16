@@ -18,5 +18,27 @@
   "copyJsPath": "パスをコピー (JavaScript)",
   "expandAllBelow": "下をすべて展開",
   "collapseAllBelow": "下をすべて折りたたむ",
-  "revealInText": "テキストで表示"
+  "revealInText": "テキストで表示",
+  "edit": {
+    "value": "値を編集",
+    "renameKey": "キー名を変更",
+    "addProperty": "プロパティを追加",
+    "addElement": "要素を追加",
+    "moveUp": "上へ移動",
+    "moveDown": "下へ移動",
+    "delete": "削除",
+    "invalidNumber": "有効な JSON の数値ではありません。",
+    "invalidBoolean": "true または false を使用してください。",
+    "duplicateKey": "このキーはこのオブジェクトに既に存在します。",
+    "notAllowed": "ここではその変更はできません。",
+    "invalidJson": "ツリーで編集する前に JSON のエラーを修正してください。",
+    "type": {
+      "string": "文字列",
+      "number": "数値",
+      "boolean": "真偽値",
+      "null": "Null",
+      "object": "オブジェクト",
+      "array": "配列"
+    }
+  }
 }

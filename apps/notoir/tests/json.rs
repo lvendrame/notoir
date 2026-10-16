@@ -201,3 +201,142 @@ fn tsconfig_comments_allowed() {
     let doc = core.workbench.active_document().unwrap();
     assert!(core.json_diagnostics(doc).is_empty());
 }
+
+fn view_id(app: &common::TestApp) -> u64 {
+    app.harness.state().core.workbench.active_view().unwrap().0
+}
+
+fn tree_edit(app: &mut common::TestApp, args: Value) {
+    let mut args = args;
+    args["view"] = view_id(app).into();
+    common::run(app, "json.treeEdit", args);
+}
+
+#[test]
+fn tree_edits_are_minimal_and_undoable() {
+    let dir = tempfile::tempdir().unwrap();
+    let src = "{\n    \"name\": \"John\",\n    \"tags\": [1, 2],\n    \"meta\": {}\n}\n";
+    let mut app = open(write(dir.path(), "user.json", src));
+    mode(&mut app, "Split");
+    tree_edit(
+        &mut app,
+        serde_json::json!({ "path": [0, 0], "op": "value", "text": "Ann \"A\"" }),
+    );
+    assert_eq!(
+        text(&app),
+        "{\n    \"name\": \"Ann \\\"A\\\"\",\n    \"tags\": [1, 2],\n    \"meta\": {}\n}\n"
+    );
+    // One undo step restores the text.
+    common::run(&mut app, "edit.undo", Value::Null);
+    assert_eq!(text(&app), src);
+
+    tree_edit(
+        &mut app,
+        serde_json::json!({ "path": [0, 1], "op": "add", "kind": "number" }),
+    );
+    assert!(text(&app).contains("\"tags\": [1, 2, 0],"));
+    tree_edit(
+        &mut app,
+        serde_json::json!({ "path": [0, 2], "op": "add", "kind": "boolean" }),
+    );
+    // Indented like the file (4 spaces here).
+    assert!(
+        text(&app).contains("\"meta\": {\n        \"newKey\": false\n    }"),
+        "{}",
+        text(&app)
+    );
+    tree_edit(
+        &mut app,
+        serde_json::json!({ "path": [0, 1, 0], "op": "move", "delta": 1 }),
+    );
+    assert!(text(&app).contains("[2, 1, 0]"));
+    tree_edit(
+        &mut app,
+        serde_json::json!({ "path": [0, 0], "op": "delete" }),
+    );
+    assert!(text(&app).starts_with("{\n    \"tags\""), "{}", text(&app));
+    tree_edit(
+        &mut app,
+        serde_json::json!({ "path": [0, 0], "op": "key", "text": "labels" }),
+    );
+    assert!(text(&app).contains("\"labels\": [2, 1, 0]"));
+    // A bad number is refused and leaves the text alone.
+    let before = text(&app);
+    tree_edit(
+        &mut app,
+        serde_json::json!({ "path": [0, 0, 0], "op": "value", "text": "1.2.3" }),
+    );
+    assert_eq!(text(&app), before);
+}
+
+#[test]
+fn tree_edits_wait_for_valid_json() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(write(dir.path(), "bad.json", "{\"a\": 1,, }"));
+    mode(&mut app, "Split");
+    tree_edit(
+        &mut app,
+        serde_json::json!({ "path": [0, 0], "op": "delete" }),
+    );
+    assert_eq!(text(&app), "{\"a\": 1,, }");
+    assert!(
+        app.harness
+            .state()
+            .core
+            .notifications
+            .history()
+            .any(|n| n.message.key == "json:edit.invalidJson")
+    );
+}
+
+#[test]
+fn edit_value_and_add_property_from_the_tree() {
+    let dir = tempfile::tempdir().unwrap();
+    let src = "{\n  \"name\": \"John\",\n  \"age\": 42\n}\n";
+    let mut app = open(write(dir.path(), "user.json", src));
+    mode(&mut app, "Tree");
+    // Context menu → Edit Value, type, Enter.
+    app.harness.get_by_label("age: 42").click_secondary();
+    app.harness.run_steps(3);
+    app.harness.get_by_label("Edit Value").click();
+    app.harness.run_steps(3);
+    app.harness
+        .key_press_modifiers(egui::Modifiers::COMMAND, Key::A);
+    app.harness.event(egui::Event::Text("43".into()));
+    app.harness.key_press(Key::Enter);
+    app.harness.run_steps(3);
+    assert_eq!(text(&app), "{\n  \"name\": \"John\",\n  \"age\": 43\n}\n");
+
+    // A value of the wrong type is refused in place.
+    app.harness.get_by_label("age: 43").click_secondary();
+    app.harness.run_steps(3);
+    app.harness.get_by_label("Edit Value").click();
+    app.harness.run_steps(3);
+    app.harness
+        .key_press_modifiers(egui::Modifiers::COMMAND, Key::A);
+    app.harness.event(egui::Event::Text("forty".into()));
+    app.harness.key_press(Key::Enter);
+    app.harness.run_steps(3);
+    assert!(text(&app).contains("\"age\": 43"));
+    app.harness.key_press(Key::Escape);
+    app.harness.run_steps(3);
+
+    // Add Property → String, then name it.
+    app.harness.get_by_label("root: {}").click_secondary();
+    app.harness.run_steps(3);
+    app.harness.get_by_label_contains("Add Property").hover();
+    app.harness.run_steps(3);
+    app.harness.get_by_label("String").click();
+    app.harness.run_steps(4);
+    assert!(
+        text(&app).contains("  \"age\": 43,\n  \"newKey\": \"\"\n}"),
+        "{}",
+        text(&app)
+    );
+    app.harness
+        .key_press_modifiers(egui::Modifiers::COMMAND, Key::A);
+    app.harness.event(egui::Event::Text("city".into()));
+    app.harness.key_press(Key::Enter);
+    app.harness.run_steps(3);
+    assert!(text(&app).contains("  \"city\": \"\"\n}"), "{}", text(&app));
+}

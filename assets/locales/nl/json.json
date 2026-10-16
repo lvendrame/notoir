@@ -18,5 +18,27 @@
   "copyJsPath": "Pad kopiëren (JavaScript)",
   "expandAllBelow": "Alles eronder uitvouwen",
   "collapseAllBelow": "Alles eronder samenvouwen",
-  "revealInText": "Tonen in tekst"
+  "revealInText": "Tonen in tekst",
+  "edit": {
+    "value": "Waarde bewerken",
+    "renameKey": "Sleutel hernoemen",
+    "addProperty": "Eigenschap toevoegen",
+    "addElement": "Element toevoegen",
+    "moveUp": "Omhoog",
+    "moveDown": "Omlaag",
+    "delete": "Verwijderen",
+    "invalidNumber": "Dat is geen geldig JSON-getal.",
+    "invalidBoolean": "Gebruik true of false.",
+    "duplicateKey": "Die sleutel bestaat al in dit object.",
+    "notAllowed": "Die wijziging is hier niet mogelijk.",
+    "invalidJson": "Herstel de JSON-fouten voordat u in de boom bewerkt.",
+    "type": {
+      "string": "Tekenreeks",
+      "number": "Getal",
+      "boolean": "Booleaanse waarde",
+      "null": "Null",
+      "object": "Object",
+      "array": "Array"
+    }
+  }
 }

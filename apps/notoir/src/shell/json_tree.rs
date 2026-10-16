@@ -1,7 +1,8 @@
 //! JSON Tree view (docs/specs/25 §Tree View): virtualized rows (key or
 //! `[index]`, typed value preview, type/count), expand/collapse, filter, node
 //! selection mapped to the text, cursor sync, context menu, and the error
-//! banner over a greyed-out last valid tree.
+//! banner over a greyed-out last valid tree; tree edits (inline value and
+//! key editing, add / delete / move from the context menu).
 
 use std::collections::{HashMap, HashSet};
 
@@ -9,6 +10,7 @@ use egui::{Pos2, Rect, RichText, Sense, Vec2};
 use notoir_core::command::{CommandInvocation, InvocationSource};
 use notoir_core::ids::{DocumentId, ViewId};
 use notoir_editor::json::{JsonError, JsonNode, Kind, path_at, paths};
+use notoir_editor::json_edit::{self, NewValue};
 use serde_json::json;
 
 use super::{Actions, Kit};
@@ -30,7 +32,47 @@ pub struct TreeView {
     /// The editor caret last frame (cursor sync).
     pub last_caret: Option<usize>,
     pub scroll_to_selected: bool,
+    /// A key or value being edited in place.
+    pub editing: Option<InlineField>,
     initialized: bool,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct InlineField {
+    pub path: NodePath,
+    /// The key (else the value).
+    pub key: bool,
+    pub text: String,
+    focus: bool,
+    /// The last Enter was refused (bad number, duplicate key…).
+    invalid: bool,
+}
+
+impl InlineField {
+    fn new(path: NodePath, key: bool, text: String) -> Self {
+        Self {
+            path,
+            key,
+            text,
+            focus: true,
+            invalid: false,
+        }
+    }
+}
+
+/// A tree edit chosen this frame: the command args and where the
+/// selection (and maybe an inline key editor) goes next.
+struct TreeAction {
+    args: serde_json::Value,
+    select: Option<NodePath>,
+    edit_key: Option<String>,
+}
+
+fn editable_text(n: &JsonNode) -> Option<String> {
+    match n.kind {
+        Kind::String | Kind::Number | Kind::Bool => Some(n.value.clone().unwrap_or_default()),
+        _ => None,
+    }
 }
 
 #[derive(Default)]
@@ -268,7 +310,14 @@ pub fn show(
     let mut rows = Vec::new();
     flatten(roots, st, &mut rows);
     let dim = error.is_some();
+    let editable = !dim
+        && core
+            .workbench
+            .document(doc)
+            .is_some_and(|d| !d.is_read_only());
     let selected = st.selected.clone();
+    let mut editing = st.editing.take();
+    let mut tree_action: Option<TreeAction> = None;
     let scroll_to = std::mem::take(&mut st.scroll_to_selected)
         .then(|| rows.iter().position(|r| Some(&r.path) == selected.as_ref()))
         .flatten();
@@ -328,10 +377,15 @@ pub fn show(
                 (None, Some(i), _) => format!("[{i}]"),
                 (None, None, _) => t!("json:root"),
             };
+            let field = editing.as_mut().filter(|f| f.path == row.path);
+            let editing_key = field.as_ref().is_some_and(|f| f.key);
+            let editing_value = field.as_ref().is_some_and(|f| !f.key);
             let key_color = kit.color(Tok::SyntaxProperty).gamma_multiply(text_alpha);
             let kg = painter.layout_no_wrap(key.clone(), egui::FontId::monospace(12.5), key_color);
             let kw = kg.size().x;
-            painter.galley(Pos2::new(x, cy - kg.size().y / 2.0), kg, key_color);
+            if !editing_key {
+                painter.galley(Pos2::new(x, cy - kg.size().y / 2.0), kg, key_color);
+            }
             let preview = match row.node.kind {
                 Kind::Object => "{}".to_owned(),
                 Kind::Array => "[]".to_owned(),
@@ -345,13 +399,78 @@ pub fn show(
             };
             let vx = (x + kw + 16.0).max(x + 140.0);
             let vcolor = type_color(kit, row.node.kind).gamma_multiply(text_alpha);
-            painter.text(
-                Pos2::new(vx, cy),
-                egui::Align2::LEFT_CENTER,
-                &short,
-                egui::FontId::monospace(12.5),
-                vcolor,
-            );
+            if !editing_value {
+                painter.text(
+                    Pos2::new(vx, cy),
+                    egui::Align2::LEFT_CENTER,
+                    &short,
+                    egui::FontId::monospace(12.5),
+                    vcolor,
+                );
+            }
+            if let Some(f) = field {
+                let er = if f.key {
+                    Rect::from_min_max(
+                        Pos2::new(x - 2.0, r.top() + 1.0),
+                        Pos2::new(vx - 8.0, r.bottom() - 1.0),
+                    )
+                } else {
+                    Rect::from_min_max(
+                        Pos2::new(vx - 2.0, r.top() + 1.0),
+                        Pos2::new((r.right() - 80.0).max(vx + 60.0), r.bottom() - 1.0),
+                    )
+                };
+                let edit_id = egui::Id::new(("json-inline", view));
+                let te = ui.put(
+                    er,
+                    egui::TextEdit::singleline(&mut f.text)
+                        .id(edit_id)
+                        .font(egui::FontId::monospace(12.5))
+                        .margin(egui::Margin::symmetric(2, 0)),
+                );
+                if f.invalid {
+                    ui.painter().rect_stroke(
+                        er,
+                        2.0,
+                        egui::Stroke::new(1.0, kit.color(Tok::Danger)),
+                        egui::StrokeKind::Outside,
+                    );
+                }
+                if std::mem::take(&mut f.focus) {
+                    te.request_focus();
+                }
+                let (enter, esc) = ui.input(|i| {
+                    (
+                        i.key_pressed(egui::Key::Enter),
+                        i.key_pressed(egui::Key::Escape),
+                    )
+                });
+                if te.lost_focus() && enter {
+                    let ok = if f.key {
+                        json_edit::rename_key(roots, &f.path, &f.text).is_ok()
+                    } else {
+                        json_edit::set_value(roots, &f.path, &f.text).is_ok()
+                    };
+                    if ok {
+                        tree_action = Some(TreeAction {
+                            args: json!({
+                                "view": view.0,
+                                "path": f.path,
+                                "op": if f.key { "key" } else { "value" },
+                                "text": f.text,
+                            }),
+                            select: Some(f.path.clone()),
+                            edit_key: None,
+                        });
+                        f.path.clear();
+                    } else {
+                        f.invalid = true;
+                        f.focus = true;
+                    }
+                } else if esc || (te.lost_focus() && !enter) {
+                    f.path.clear();
+                }
+            }
             painter.text(
                 Pos2::new(r.right() - 6.0, cy),
                 egui::Align2::RIGHT_CENTER,
@@ -369,6 +488,12 @@ pub fn show(
             }
             if resp.double_clicked() && container {
                 toggle = Some(row.path.clone());
+            }
+            if resp.double_clicked()
+                && editable
+                && let Some(text) = editable_text(row.node)
+            {
+                editing = Some(InlineField::new(row.path.clone(), false, text));
             }
             resp.context_menu(|ui| {
                 let chain = chain_of(roots, &row.path);
@@ -410,6 +535,86 @@ pub fn show(
                     select = Some((row.path.clone(), false));
                     ui.close();
                 }
+                if !editable {
+                    return;
+                }
+                ui.separator();
+                let path = row.path.clone();
+                if let Some(text) = editable_text(row.node)
+                    && ui.button(t!("json:edit.value")).clicked()
+                {
+                    editing = Some(InlineField::new(path.clone(), false, text));
+                    ui.close();
+                }
+                if let Some(k) = &row.node.key
+                    && ui.button(t!("json:edit.renameKey")).clicked()
+                {
+                    editing = Some(InlineField::new(path.clone(), true, k.clone()));
+                    ui.close();
+                }
+                if container {
+                    let label = if row.node.kind == Kind::Object {
+                        "json:edit.addProperty"
+                    } else {
+                        "json:edit.addElement"
+                    };
+                    ui.menu_button(t!(label), |ui| {
+                        for v in NewValue::ALL {
+                            if ui
+                                .button(t!(&format!("json:edit.type.{}", v.key())))
+                                .clicked()
+                            {
+                                let mut new_path = path.clone();
+                                new_path.push(row.node.children.len());
+                                tree_action = Some(TreeAction {
+                                    args: json!({
+                                        "view": view.0, "path": path, "op": "add", "kind": v.key()
+                                    }),
+                                    select: Some(new_path),
+                                    edit_key: (row.node.kind == Kind::Object)
+                                        .then(|| json_edit::unique_key(row.node, "newKey")),
+                                });
+                                ui.close();
+                            }
+                        }
+                    });
+                }
+                if path.len() > 1 {
+                    let i = *path.last().expect("non-empty");
+                    let siblings =
+                        get(roots, &path[..path.len() - 1]).map_or(0, |p| p.children.len());
+                    for (label, delta, ok) in [
+                        ("json:edit.moveUp", -1i64, i > 0),
+                        ("json:edit.moveDown", 1, i + 1 < siblings),
+                    ] {
+                        if ui.add_enabled(ok, egui::Button::new(t!(label))).clicked() {
+                            let mut to = path.clone();
+                            *to.last_mut().expect("non-empty") = (i as i64 + delta) as usize;
+                            tree_action = Some(TreeAction {
+                                args: json!({
+                                    "view": view.0, "path": path, "op": "move", "delta": delta
+                                }),
+                                select: Some(to),
+                                edit_key: None,
+                            });
+                            ui.close();
+                        }
+                    }
+                    if ui.button(t!("json:edit.delete")).clicked() {
+                        let mut next = path.clone();
+                        if i == 0 {
+                            next.pop();
+                        } else {
+                            *next.last_mut().expect("non-empty") = i - 1;
+                        }
+                        tree_action = Some(TreeAction {
+                            args: json!({ "view": view.0, "path": path, "op": "delete" }),
+                            select: Some(next),
+                            edit_key: None,
+                        });
+                        ui.close();
+                    }
+                }
             });
         }
     });
@@ -424,6 +629,20 @@ pub fn show(
         expand_below = Some((p, true));
     }
     let st = trees.views.entry(view).or_default();
+    st.editing = editing.filter(|f| !f.path.is_empty());
+    if let Some(a) = tree_action {
+        cmd(actions, "json.treeEdit", a.args);
+        if let Some(p) = a.select {
+            for k in 1..p.len() {
+                st.expanded.insert(p[..k].to_vec());
+            }
+            if let Some(key) = a.edit_key {
+                st.editing = Some(InlineField::new(p.clone(), true, key));
+            }
+            st.selected = Some(p);
+            st.scroll_to_selected = true;
+        }
+    }
     if let Some(p) = toggle
         && !st.expanded.remove(&p)
     {

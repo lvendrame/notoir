@@ -1,7 +1,7 @@
 //! JSON commands (docs/specs/25).
 
 use notoir_core::command::{Category, CommandInvocation, CommandOutcome, CommandSpec};
-use notoir_core::ids::DocumentId;
+use notoir_core::ids::{DocumentId, ViewId};
 
 use super::{Specs, bad_args};
 use crate::core::AppCore;
@@ -26,6 +26,43 @@ pub(super) fn specs(out: &mut Specs) {
             .expect("valid"),
     );
     out.push(CommandSpec::new("json.selectRange", Category::Json, select_range).hidden());
+    out.push(CommandSpec::new("json.treeEdit", Category::Json, tree_edit).hidden());
+}
+
+/// `{ view, path: [..], op: "value" | "key" | "add" | "delete" | "move",
+/// text?, kind?, delta? }`: a JSON tree edit (spec 25).
+fn tree_edit(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    use crate::json::TreeOp;
+    let a = &inv.args;
+    let view = a.get("view").and_then(|v| v.as_u64()).map(ViewId);
+    let path: Option<Vec<usize>> = a
+        .get("path")
+        .and_then(|p| p.as_array())
+        .and_then(|p| p.iter().map(|i| i.as_u64().map(|i| i as usize)).collect());
+    let text = || a.get("text").and_then(|t| t.as_str()).map(str::to_owned);
+    let op = match a.get("op").and_then(|o| o.as_str()) {
+        Some("value") => text().map(TreeOp::Value),
+        Some("key") => text().map(TreeOp::Key),
+        Some("add") => a
+            .get("kind")
+            .and_then(|k| k.as_str())
+            .and_then(notoir_editor::json_edit::NewValue::from_key)
+            .map(TreeOp::Add),
+        Some("delete") => Some(TreeOp::Delete),
+        Some("move") => a
+            .get("delta")
+            .and_then(|d| d.as_i64())
+            .filter(|d| d.abs() == 1)
+            .map(|d| TreeOp::Move(d as isize)),
+        _ => None,
+    };
+    match (view, path, op) {
+        (Some(view), Some(path), Some(op)) if !path.is_empty() => {
+            core.json_tree_edit(view, &path, op);
+            CommandOutcome::Done
+        }
+        _ => bad_args(inv),
+    }
 }
 
 fn mode(core: &mut AppCore, m: &str) -> CommandOutcome {

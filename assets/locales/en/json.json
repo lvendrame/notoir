@@ -18,5 +18,27 @@
   "copyJsPath": "Copy Path (JavaScript)",
   "expandAllBelow": "Expand All Below",
   "collapseAllBelow": "Collapse All Below",
-  "revealInText": "Reveal in Text"
+  "revealInText": "Reveal in Text",
+  "edit": {
+    "value": "Edit Value",
+    "renameKey": "Rename Key",
+    "addProperty": "Add Property",
+    "addElement": "Add Element",
+    "moveUp": "Move Up",
+    "moveDown": "Move Down",
+    "delete": "Delete",
+    "invalidNumber": "That is not a valid JSON number.",
+    "invalidBoolean": "Use true or false.",
+    "duplicateKey": "That key already exists in this object.",
+    "notAllowed": "That change is not possible here.",
+    "invalidJson": "Fix the JSON errors before editing in the tree.",
+    "type": {
+      "string": "String",
+      "number": "Number",
+      "boolean": "Boolean",
+      "null": "Null",
+      "object": "Object",
+      "array": "Array"
+    }
+  }
 }

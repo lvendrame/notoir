@@ -1,6 +1,7 @@
 //! JSON views and commands (docs/specs/25): parse cache (last valid tree kept
 //! while the text is invalid), Text / Split / Tree modes, format / minify /
-//! sort keys as single undo steps, node selection.
+//! sort keys as single undo steps, node selection, and tree edits (value,
+//! key, add, delete, move) as minimal text edits in one undo step.
 
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -9,6 +10,7 @@ use notoir_core::ids::{DocumentId, ViewId};
 use notoir_core::notifications::{Notification, Severity, Translatable};
 use notoir_core::view::ViewKind;
 use notoir_editor::json::{self, Dialect, JsonError, JsonNode};
+use notoir_editor::json_edit::{self, NewValue, TreeEditError};
 use notoir_editor::{ChangeSet, EditKind, Range, Selection};
 
 use crate::core::AppCore;
@@ -24,6 +26,28 @@ pub struct JsonParsed {
     pub roots: Arc<Vec<JsonNode>>,
     pub error: Option<JsonError>,
     pub at_ms: u64,
+}
+
+/// An edit made in the JSON tree.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum TreeOp {
+    /// A scalar's new value as typed (strings unquoted).
+    Value(String),
+    Key(String),
+    /// A new member at the end (objects get a fresh `newKey…` name).
+    Add(NewValue),
+    Delete,
+    Move(isize),
+}
+
+/// Translation key for a refused tree edit.
+pub fn tree_error_key(e: &TreeEditError) -> &'static str {
+    match e {
+        TreeEditError::InvalidValue("number") => "json:edit.invalidNumber",
+        TreeEditError::InvalidValue(_) => "json:edit.invalidBoolean",
+        TreeEditError::DuplicateKey => "json:edit.duplicateKey",
+        TreeEditError::NoNode | TreeEditError::NotAllowed => "json:edit.notAllowed",
+    }
 }
 
 #[derive(Default)]
@@ -222,5 +246,109 @@ impl AppCore {
                 .workbench
                 .set_selection(view, Selection::caret(n.range.0));
         }
+    }
+
+    /// Applies a tree edit to `view`'s document as one undo step. Refused
+    /// (with a notification) while the text does not parse or the tree is
+    /// older than the text. Returns the edited node's path afterwards.
+    pub fn json_tree_edit(
+        &mut self,
+        view: ViewId,
+        path: &[usize],
+        op: TreeOp,
+    ) -> Option<Vec<usize>> {
+        let doc = self.workbench.view(view)?.document_id;
+        let revision = self.workbench.document(doc)?.revision;
+        let current = self
+            .json
+            .parsed
+            .get(&doc)
+            .filter(|p| p.revision == revision && p.error.is_none())
+            .map(|p| p.roots.clone());
+        let d = self.workbench.document(doc)?;
+        if d.is_read_only() {
+            return None;
+        }
+        let Some(roots) = current else {
+            self.json_tree_refused("json:edit.invalidJson");
+            return None;
+        };
+        let src = d.buffer.text();
+        let unit = self.indent_text(doc);
+        let result = match op {
+            TreeOp::Value(v) => {
+                json_edit::set_value(&roots, path, &v).map(|e| (e, path.to_vec(), None))
+            }
+            TreeOp::Key(k) => {
+                json_edit::rename_key(&roots, path, &k).map(|e| (e, path.to_vec(), None))
+            }
+            TreeOp::Add(value) => {
+                let container = path.split_first().and_then(|(f, rest)| {
+                    rest.iter()
+                        .try_fold(roots.get(*f)?, |n, i| n.children.get(*i))
+                });
+                match container {
+                    Some(c) => {
+                        let key = (c.kind == json::Kind::Object)
+                            .then(|| json_edit::unique_key(c, "newKey"));
+                        let mut new_path = path.to_vec();
+                        new_path.push(c.children.len());
+                        json_edit::add_child(&src, &roots, path, key.as_deref(), value, &unit)
+                            .map(|(e, start)| (e, new_path, Some(start)))
+                    }
+                    None => Err(TreeEditError::NoNode),
+                }
+            }
+            TreeOp::Delete => json_edit::delete(&roots, path).map(|e| {
+                let mut p = path.to_vec();
+                // The previous sibling (or the parent) is selected next.
+                match p.last_mut() {
+                    Some(0) => {
+                        p.pop();
+                    }
+                    Some(i) => *i -= 1,
+                    None => {}
+                }
+                (e, p, None)
+            }),
+            TreeOp::Move(delta) => {
+                json_edit::move_child(&src, &roots, path, delta).map(|(e, p)| {
+                    // The moved member's start after both swaps.
+                    let at = if delta < 0 {
+                        e[0].start
+                    } else {
+                        let grown =
+                            e[0].text.chars().count() as isize - (e[0].end - e[0].start) as isize;
+                        (e[1].start as isize + grown).max(0) as usize
+                    };
+                    (e, p, Some(at))
+                })
+            }
+        };
+        let (edits, new_path, at) = match result {
+            Ok(r) => r,
+            Err(e) => {
+                self.json_tree_refused(tree_error_key(&e));
+                return None;
+            }
+        };
+        if edits.is_empty() {
+            return Some(new_path);
+        }
+        let caret = at.unwrap_or(edits[0].start);
+        let changes = ChangeSet::new(edits).ok()?;
+        let now = self.now_ms;
+        self.workbench
+            .edit(view, changes, Selection::caret(caret), EditKind::Other, now)
+            .ok()?;
+        Some(new_path)
+    }
+
+    fn json_tree_refused(&mut self, key: &str) {
+        let now = self.now_ms;
+        self.notifications.notify(
+            Notification::new(Severity::Warning, Translatable::new(key)).dedupe("json-tree-edit"),
+            now,
+        );
     }
 }

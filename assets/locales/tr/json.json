@@ -18,5 +18,27 @@
   "copyJsPath": "Yolu Kopyala (JavaScript)",
   "expandAllBelow": "Altındakilerin Tümünü Genişlet",
   "collapseAllBelow": "Altındakilerin Tümünü Daralt",
-  "revealInText": "Metinde Göster"
+  "revealInText": "Metinde Göster",
+  "edit": {
+    "value": "Değeri düzenle",
+    "renameKey": "Anahtarı yeniden adlandır",
+    "addProperty": "Özellik ekle",
+    "addElement": "Öğe ekle",
+    "moveUp": "Yukarı taşı",
+    "moveDown": "Aşağı taşı",
+    "delete": "Sil",
+    "invalidNumber": "Bu geçerli bir JSON sayısı değil.",
+    "invalidBoolean": "true veya false kullanın.",
+    "duplicateKey": "Bu anahtar bu nesnede zaten var.",
+    "notAllowed": "Bu değişiklik burada yapılamaz.",
+    "invalidJson": "Ağaçta düzenlemeden önce JSON hatalarını düzeltin.",
+    "type": {
+      "string": "Dize",
+      "number": "Sayı",
+      "boolean": "Mantıksal",
+      "null": "Null",
+      "object": "Nesne",
+      "array": "Dizi"
+    }
+  }
 }

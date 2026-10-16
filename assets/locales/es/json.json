@@ -18,5 +18,27 @@
   "copyJsPath": "Copiar ruta (JavaScript)",
   "expandAllBelow": "Expandir todo debajo",
   "collapseAllBelow": "Contraer todo debajo",
-  "revealInText": "Mostrar en el texto"
+  "revealInText": "Mostrar en el texto",
+  "edit": {
+    "value": "Editar valor",
+    "renameKey": "Cambiar nombre de clave",
+    "addProperty": "Agregar propiedad",
+    "addElement": "Agregar elemento",
+    "moveUp": "Subir",
+    "moveDown": "Bajar",
+    "delete": "Eliminar",
+    "invalidNumber": "No es un número JSON válido.",
+    "invalidBoolean": "Usa true o false.",
+    "duplicateKey": "Esa clave ya existe en este objeto.",
+    "notAllowed": "Ese cambio no es posible aquí.",
+    "invalidJson": "Corrige los errores de JSON antes de editar en el árbol.",
+    "type": {
+      "string": "Cadena",
+      "number": "Número",
+      "boolean": "Booleano",
+      "null": "Nulo",
+      "object": "Objeto",
+      "array": "Matriz"
+    }
+  }
 }

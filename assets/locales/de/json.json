@@ -18,5 +18,27 @@
   "copyJsPath": "Pfad kopieren (JavaScript)",
   "expandAllBelow": "Alles darunter erweitern",
   "collapseAllBelow": "Alles darunter reduzieren",
-  "revealInText": "Im Text anzeigen"
+  "revealInText": "Im Text anzeigen",
+  "edit": {
+    "value": "Wert bearbeiten",
+    "renameKey": "Schlüssel umbenennen",
+    "addProperty": "Eigenschaft hinzufügen",
+    "addElement": "Element hinzufügen",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "delete": "Löschen",
+    "invalidNumber": "Das ist keine gültige JSON-Zahl.",
+    "invalidBoolean": "Verwenden Sie true oder false.",
+    "duplicateKey": "Dieser Schlüssel ist in diesem Objekt bereits vorhanden.",
+    "notAllowed": "Diese Änderung ist hier nicht möglich.",
+    "invalidJson": "Beheben Sie die JSON-Fehler, bevor Sie im Baum bearbeiten.",
+    "type": {
+      "string": "Zeichenkette",
+      "number": "Zahl",
+      "boolean": "Boolescher Wert",
+      "null": "Null",
+      "object": "Objekt",
+      "array": "Array"
+    }
+  }
 }

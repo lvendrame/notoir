@@ -18,5 +18,27 @@
   "copyJsPath": "경로 복사 (JavaScript)",
   "expandAllBelow": "아래 모두 펼치기",
   "collapseAllBelow": "아래 모두 접기",
-  "revealInText": "텍스트에서 표시"
+  "revealInText": "텍스트에서 표시",
+  "edit": {
+    "value": "값 편집",
+    "renameKey": "키 이름 바꾸기",
+    "addProperty": "속성 추가",
+    "addElement": "요소 추가",
+    "moveUp": "위로 이동",
+    "moveDown": "아래로 이동",
+    "delete": "삭제",
+    "invalidNumber": "올바른 JSON 숫자가 아닙니다.",
+    "invalidBoolean": "true 또는 false를 사용하세요.",
+    "duplicateKey": "이 키는 이미 이 개체에 있습니다.",
+    "notAllowed": "여기서는 그렇게 변경할 수 없습니다.",
+    "invalidJson": "트리에서 편집하기 전에 JSON 오류를 수정하세요.",
+    "type": {
+      "string": "문자열",
+      "number": "숫자",
+      "boolean": "부울",
+      "null": "Null",
+      "object": "개체",
+      "array": "배열"
+    }
+  }
 }

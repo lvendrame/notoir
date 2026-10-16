@@ -18,5 +18,27 @@
   "copyJsPath": "Copia percorso (JavaScript)",
   "expandAllBelow": "Espandi tutto sotto",
   "collapseAllBelow": "Comprimi tutto sotto",
-  "revealInText": "Mostra nel testo"
+  "revealInText": "Mostra nel testo",
+  "edit": {
+    "value": "Modifica valore",
+    "renameKey": "Rinomina chiave",
+    "addProperty": "Aggiungi proprietà",
+    "addElement": "Aggiungi elemento",
+    "moveUp": "Sposta su",
+    "moveDown": "Sposta giù",
+    "delete": "Elimina",
+    "invalidNumber": "Non è un numero JSON valido.",
+    "invalidBoolean": "Usa true o false.",
+    "duplicateKey": "La chiave esiste già in questo oggetto.",
+    "notAllowed": "Questa modifica non è possibile qui.",
+    "invalidJson": "Correggi gli errori JSON prima di modificare nell’albero.",
+    "type": {
+      "string": "Stringa",
+      "number": "Numero",
+      "boolean": "Booleano",
+      "null": "Null",
+      "object": "Oggetto",
+      "array": "Array"
+    }
+  }
 }

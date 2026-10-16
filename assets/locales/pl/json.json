@@ -18,5 +18,27 @@
   "copyJsPath": "Kopiuj ścieżkę (JavaScript)",
   "expandAllBelow": "Rozwiń wszystko poniżej",
   "collapseAllBelow": "Zwiń wszystko poniżej",
-  "revealInText": "Pokaż w tekście"
+  "revealInText": "Pokaż w tekście",
+  "edit": {
+    "value": "Edytuj wartość",
+    "renameKey": "Zmień nazwę klucza",
+    "addProperty": "Dodaj właściwość",
+    "addElement": "Dodaj element",
+    "moveUp": "Przenieś w górę",
+    "moveDown": "Przenieś w dół",
+    "delete": "Usuń",
+    "invalidNumber": "To nie jest prawidłowa liczba JSON.",
+    "invalidBoolean": "Użyj true lub false.",
+    "duplicateKey": "Ten klucz już istnieje w tym obiekcie.",
+    "notAllowed": "Ta zmiana nie jest tu możliwa.",
+    "invalidJson": "Popraw błędy JSON przed edycją w drzewie.",
+    "type": {
+      "string": "Ciąg",
+      "number": "Liczba",
+      "boolean": "Wartość logiczna",
+      "null": "Null",
+      "object": "Obiekt",
+      "array": "Tablica"
+    }
+  }
 }

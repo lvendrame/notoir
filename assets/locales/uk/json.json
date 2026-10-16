@@ -18,5 +18,27 @@
   "copyJsPath": "Копіювати шлях (JavaScript)",
   "expandAllBelow": "Розгорнути все нижче",
   "collapseAllBelow": "Згорнути все нижче",
-  "revealInText": "Показати в тексті"
+  "revealInText": "Показати в тексті",
+  "edit": {
+    "value": "Змінити значення",
+    "renameKey": "Перейменувати ключ",
+    "addProperty": "Додати властивість",
+    "addElement": "Додати елемент",
+    "moveUp": "Перемістити вгору",
+    "moveDown": "Перемістити вниз",
+    "delete": "Видалити",
+    "invalidNumber": "Це недійсне число JSON.",
+    "invalidBoolean": "Використовуйте true або false.",
+    "duplicateKey": "Такий ключ уже є в цьому об’єкті.",
+    "notAllowed": "Тут ця зміна неможлива.",
+    "invalidJson": "Виправте помилки JSON перед редагуванням у дереві.",
+    "type": {
+      "string": "Рядок",
+      "number": "Число",
+      "boolean": "Логічне значення",
+      "null": "Null",
+      "object": "Об’єкт",
+      "array": "Масив"
+    }
+  }
 }

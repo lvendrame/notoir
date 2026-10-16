@@ -18,5 +18,27 @@
   "copyJsPath": "复制路径 (JavaScript)",
   "expandAllBelow": "展开下方全部",
   "collapseAllBelow": "折叠下方全部",
-  "revealInText": "在文本中显示"
+  "revealInText": "在文本中显示",
+  "edit": {
+    "value": "编辑值",
+    "renameKey": "重命名键",
+    "addProperty": "添加属性",
+    "addElement": "添加元素",
+    "moveUp": "上移",
+    "moveDown": "下移",
+    "delete": "删除",
+    "invalidNumber": "不是有效的 JSON 数字。",
+    "invalidBoolean": "请使用 true 或 false。",
+    "duplicateKey": "此对象中已存在该键。",
+    "notAllowed": "此处无法进行该更改。",
+    "invalidJson": "请先修复 JSON 错误再在树中编辑。",
+    "type": {
+      "string": "字符串",
+      "number": "数字",
+      "boolean": "布尔值",
+      "null": "Null",
+      "object": "对象",
+      "array": "数组"
+    }
+  }
 }

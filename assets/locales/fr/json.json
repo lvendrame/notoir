@@ -18,5 +18,27 @@
   "copyJsPath": "Copier le chemin (JavaScript)",
   "expandAllBelow": "Tout développer en dessous",
   "collapseAllBelow": "Tout réduire en dessous",
-  "revealInText": "Afficher dans le texte"
+  "revealInText": "Afficher dans le texte",
+  "edit": {
+    "value": "Modifier la valeur",
+    "renameKey": "Renommer la clé",
+    "addProperty": "Ajouter une propriété",
+    "addElement": "Ajouter un élément",
+    "moveUp": "Monter",
+    "moveDown": "Descendre",
+    "delete": "Supprimer",
+    "invalidNumber": "Ce n’est pas un nombre JSON valide.",
+    "invalidBoolean": "Utilisez true ou false.",
+    "duplicateKey": "Cette clé existe déjà dans cet objet.",
+    "notAllowed": "Cette modification n’est pas possible ici.",
+    "invalidJson": "Corrigez les erreurs JSON avant de modifier dans l’arborescence.",
+    "type": {
+      "string": "Chaîne",
+      "number": "Nombre",
+      "boolean": "Booléen",
+      "null": "Null",
+      "object": "Objet",
+      "array": "Tableau"
+    }
+  }
 }

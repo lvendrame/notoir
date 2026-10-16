@@ -18,5 +18,27 @@
   "copyJsPath": "Копировать путь (JavaScript)",
   "expandAllBelow": "Развернуть всё ниже",
   "collapseAllBelow": "Свернуть всё ниже",
-  "revealInText": "Показать в тексте"
+  "revealInText": "Показать в тексте",
+  "edit": {
+    "value": "Изменить значение",
+    "renameKey": "Переименовать ключ",
+    "addProperty": "Добавить свойство",
+    "addElement": "Добавить элемент",
+    "moveUp": "Переместить вверх",
+    "moveDown": "Переместить вниз",
+    "delete": "Удалить",
+    "invalidNumber": "Это недопустимое число JSON.",
+    "invalidBoolean": "Используйте true или false.",
+    "duplicateKey": "Такой ключ уже есть в этом объекте.",
+    "notAllowed": "Здесь это изменение невозможно.",
+    "invalidJson": "Исправьте ошибки JSON, прежде чем редактировать в дереве.",
+    "type": {
+      "string": "Строка",
+      "number": "Число",
+      "boolean": "Логическое значение",
+      "null": "Null",
+      "object": "Объект",
+      "array": "Массив"
+    }
+  }
 }
