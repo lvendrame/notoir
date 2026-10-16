@@ -34,5 +34,53 @@
     "titleUpdate": "La actualización de “{{name}}” a {{version}} solicita:",
     "install": "Instalar",
     "enable": "Activar"
-  }
+  },
+  "dev": {
+    "all": "Todos los complementos",
+    "reload": "Recargar este complemento",
+    "status": "Estado: {{status}}",
+    "activatedBy": "Activado por: {{event}}",
+    "onStartup": "Se activa al iniciar, lo que ralentiza el inicio de Notoir. Es preferible onCommand / onLanguage.",
+    "apiCalls": "Llamadas a la API: {{list}}",
+    "lastError": "Último error: {{error}}",
+    "missing": "Traducciones que faltan: {{list}}"
+  },
+  "formatFailed": "No se pudo formatear con “{{name}}”; el documento no se modificó.",
+  "installZipTitle": "Instalar complemento desde un .zip",
+  "manager": {
+    "title": "Complementos",
+    "search": "Buscar complementos",
+    "installed": "Instalados ({{count}})",
+    "recommended": "Recomendados por el espacio de trabajo ({{count}})",
+    "empty": "No hay complementos instalados. Instala uno desde una carpeta o un archivo .zip.",
+    "noRecommendations": "Este espacio de trabajo no recomienda complementos.",
+    "notInstalled": "no instalado",
+    "enable": "Activar",
+    "disable": "Desactivar",
+    "permissions": "Permisos",
+    "settings": "Configuración",
+    "uninstall": "Desinstalar",
+    "noPermissions": "Sin permisos especiales",
+    "permissionsList": "Permisos: {{list}}",
+    "processAlways": "Ejecutar programas está siempre permitido.",
+    "revoke": "Revocar"
+  },
+  "panels": {
+    "empty": "Ningún complemento añade paneles aquí todavía.",
+    "noContent": "Aún no hay nada que mostrar.",
+    "unknownNode": "Elemento desconocido “{{kind}}”"
+  },
+  "status": {
+    "invalid": "No válido",
+    "incompatible": "Incompatible",
+    "needsReview": "Requiere revisión",
+    "disabled": "Desactivado",
+    "enabled": "Activado",
+    "active": "En ejecución"
+  },
+  "uninstall": {
+    "title": "¿Desinstalar “{{name}}”?",
+    "body": "La carpeta del complemento se moverá a la papelera."
+  },
+  "uninstallFailed": "No se pudo desinstalar “{{name}}”."
 }

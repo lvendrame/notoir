@@ -22,7 +22,7 @@ pub(super) fn specs(out: &mut Specs) {
     out.push(spec("json.goToParent", go_to_parent));
     out.push(
         CommandSpec::new("editor.formatDocument", Category::Edit, format_document)
-            .when(json)
+            .when(&format!("({json}) || pluginFormatter"))
             .expect("valid"),
     );
     out.push(CommandSpec::new("json.selectRange", Category::Json, select_range).hidden());
@@ -45,6 +45,12 @@ fn transform(core: &mut AppCore, op: &str) -> CommandOutcome {
 /// Format Document (editor context menu): the JSON formatter for now;
 /// plugin formatters join later (spec 30).
 fn format_document(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    // A plugin formatter for the language wins (spec 30).
+    if let Some(v) = core.workbench.active_editor()
+        && core.plugin_format(v)
+    {
+        return CommandOutcome::Done;
+    }
     transform(core, "format")
 }
 

@@ -8,6 +8,7 @@
 //! keystroke usually costs a few lines. Highlighting is driven up to a target
 //! line within a time budget; callers continue on later frames.
 
+use std::collections::HashMap;
 use std::sync::{Arc, OnceLock};
 use std::time::Instant;
 
@@ -78,6 +79,45 @@ fn grammar_name(lang: LanguageId) -> Option<&'static str> {
     })
 }
 
+/// Grammars registered at run time (plugin `.sublime-syntax` files), each in
+/// its own set.
+fn extra_syntaxes() -> &'static std::sync::RwLock<HashMap<&'static str, &'static SyntaxSet>> {
+    static EXTRA: OnceLock<std::sync::RwLock<HashMap<&'static str, &'static SyntaxSet>>> =
+        OnceLock::new();
+    EXTRA.get_or_init(Default::default)
+}
+
+/// Compiles a `.sublime-syntax` grammar for a (registered) language.
+pub fn register_syntax(lang: LanguageId, yaml: &str) -> Result<(), String> {
+    let def = syntect::parsing::SyntaxDefinition::load_from_str(yaml, true, None)
+        .map_err(|e| e.to_string())?;
+    let mut builder = syntect::parsing::SyntaxSetBuilder::new();
+    builder.add(def);
+    let set: &'static SyntaxSet = Box::leak(Box::new(builder.build()));
+    if let Ok(mut m) = extra_syntaxes().write() {
+        m.insert(lang.as_str(), set);
+    }
+    Ok(())
+}
+
+pub fn unregister_syntax(lang: LanguageId) {
+    if let Ok(mut m) = extra_syntaxes().write() {
+        m.remove(lang.as_str());
+    }
+}
+
+/// The grammar of a language and the set it belongs to.
+fn grammar(lang: LanguageId) -> Option<(&'static SyntaxSet, &'static SyntaxReference)> {
+    if let Some(set) = extra_syntaxes()
+        .read()
+        .ok()
+        .and_then(|m| m.get(lang.as_str()).copied())
+    {
+        return set.syntaxes().first().map(|s| (set, s));
+    }
+    syntax_for(lang).map(|s| (syntax_set(), s))
+}
+
 fn syntax_for(lang: LanguageId) -> Option<&'static SyntaxReference> {
     if lang == LanguageId::PLAINTEXT {
         return None;
@@ -101,7 +141,7 @@ fn syntax_for(lang: LanguageId) -> Option<&'static SyntaxReference> {
 
 /// Whether a language has a grammar.
 pub fn has_grammar(lang: LanguageId) -> bool {
-    syntax_for(lang).is_some()
+    grammar(lang).is_some()
 }
 
 /// Innermost scope wins; a few broad scopes are checked by prefix.
@@ -191,6 +231,8 @@ struct LineState {
 /// Incremental highlighter for one buffer.
 #[derive(Clone)]
 pub struct Highlighter {
+    /// The set the grammar belongs to (built-in or a registered one).
+    set: &'static SyntaxSet,
     /// Per line; `None` = start state unknown yet.
     lines: Vec<Option<LineState>>,
     /// Lines `[0, valid)` have spans matching the buffer.
@@ -214,7 +256,7 @@ impl std::fmt::Debug for Highlighter {
 impl Highlighter {
     /// `None` for plain text or languages without a grammar.
     pub fn new(lang: LanguageId, rope: &Rope) -> Option<Highlighter> {
-        let syntax = syntax_for(lang)?;
+        let (set, syntax) = grammar(lang)?;
         let mut lines = vec![None; rope.len_lines()];
         if let Some(first) = lines.first_mut() {
             *first = Some(LineState {
@@ -223,6 +265,7 @@ impl Highlighter {
             });
         }
         Some(Highlighter {
+            set,
             lines,
             valid: 0,
             settle_from: 0,
@@ -280,7 +323,7 @@ impl Highlighter {
             self.valid = 0;
         }
         let target = target.min(total.saturating_sub(1));
-        let ss = syntax_set();
+        let ss = self.set;
         let mut checks = 0u32;
         while self.valid <= target && self.valid < total {
             let i = self.valid;
@@ -481,5 +524,35 @@ mod tests {
         assert_eq!(h.valid_lines(), rope.len_lines());
         assert_eq!(kinds(&h, &rope, 21)[0].1, TokenKind::Comment);
         assert!(kinds(&h, &rope, 22).contains(&("let".into(), TokenKind::Keyword)));
+    }
+}
+
+#[cfg(test)]
+mod plugin_grammar_tests {
+    use super::*;
+
+    #[test]
+    fn registered_languages_and_grammars() {
+        let id = crate::language::register("org-test", "Org", &[".orgt".into()]);
+        assert_eq!(
+            crate::language::detect(Some("notes/todo.orgt"), "", &[]),
+            id
+        );
+        assert_eq!(crate::language::definition(id).name, "Org");
+        assert!(!has_grammar(id));
+        let yaml = "%YAML 1.2\n---\nname: Org\nscope: text.org\nfile_extensions: [orgt]\ncontexts:\n  main:\n    - match: '^\\*+ .*$'\n      scope: markup.heading.org\n";
+        register_syntax(id, yaml).unwrap();
+        assert!(has_grammar(id));
+        let rope = Rope::from_str("* Heading\ntext\n");
+        let mut h = Highlighter::new(id, &rope).unwrap();
+        assert!(h.highlight_to(&rope, 1, Instant::now() + std::time::Duration::from_secs(5)));
+        assert!(!h.spans(0).unwrap().is_empty());
+        assert!(register_syntax(id, "not: [yaml").is_err());
+        crate::language::unregister("org-test");
+        unregister_syntax(id);
+        assert_eq!(
+            crate::language::detect(Some("todo.orgt"), "", &[]),
+            LanguageId::PLAINTEXT
+        );
     }
 }

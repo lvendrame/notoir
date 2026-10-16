@@ -7,5 +7,6 @@
   "showAll": "Show All Tabs",
   "dropHere": "Drop a file here",
   "settings": "Settings",
-  "welcome": "Welcome"
+  "welcome": "Welcome",
+  "pluginManager": "Plugins"
 }

@@ -30,6 +30,7 @@ pub const REGISTERED_PANELS: &[PanelId] = &[
     PanelId::Search,
     PanelId::SourceControl,
     PanelId::Outline,
+    PanelId::Plugins,
     PanelId::Output,
     PanelId::GitOutput,
     PanelId::McpActivity,
@@ -606,6 +607,7 @@ impl AppCore {
             .set_bool("gitNetwork", self.git.net.is_some())
             .set_bool("gitPeek", self.git.peek.is_some())
             .set_bool("mcpRunning", self.mcp.running())
+            .set_bool("pluginFormatter", self.plugin_formatter_active())
             .set_bool("mcpPrompt", !self.mcp.prompts.is_empty())
             .set_bool(
                 "gitPeekStageable",
@@ -773,6 +775,7 @@ impl AppCore {
         results.extend(self.git_queue.drain());
         for result in results {
             match result {
+                IoResult::FilesPicked(paths) if self.plugins_files_picked(&paths) => {}
                 IoResult::FilesPicked(paths) => {
                     for p in paths {
                         self.open_path(&p, crate::files::OpenAt::default());
@@ -800,6 +803,13 @@ impl AppCore {
                     self.plugins_manifest_read(dir, *result)
                 }
                 IoResult::PluginInstalled { id, error } => self.plugins_installed(id, error),
+                IoResult::PluginSyntax {
+                    plugin,
+                    language,
+                    error,
+                } => self.plugins_syntax_loaded(&plugin, &language, error),
+                IoResult::PluginRecommendations(list) => self.plugins.recommended = list,
+                IoResult::PluginUninstalled { id, error } => self.plugins_uninstalled(id, error),
                 IoResult::FolderPicked(path) if self.git_clone_folder(path.as_deref()) => {}
                 IoResult::FolderPicked(path) if self.plugins_folder_picked(path.as_deref()) => {}
                 IoResult::FolderPicked(Some(path)) => self.open_workspace(&path),
@@ -984,7 +994,7 @@ impl AppCore {
 
     /// Command-line paths: files open as tabs; the first folder becomes this
     /// window's workspace and further folders open their own windows.
-    fn open_cli_paths(&mut self, paths: &[(std::path::PathBuf, Option<(usize, usize)>)]) {
+    pub fn open_cli_paths(&mut self, paths: &[(std::path::PathBuf, Option<(usize, usize)>)]) {
         let mut folder_used = false;
         for (path, at) in paths {
             if path.is_dir() {

@@ -1,0 +1,20 @@
+[plugin]
+id = "word-count"
+name = "Word Count"
+version = "1.0.0"
+api = "1"
+main = "main.lua"
+authors = ["Notoir"]
+description = "Counts words in the active document."
+license = "MIT"
+
+[permissions]
+documents_read = true
+
+[contributes]
+commands = [{ id = "count", title = "%commands.count%", category = "Plugins" }]
+keybindings = [{ command = "count", key = "Mod+Alt+W", when = "editorFocus" }]
+menus = [{ command = "count", location = "plugins" }, { command = "count", location = "editor/context" }]
+status_items = [{ id = "words", alignment = "right", priority = 50 }]
+settings = [{ key = "includeCode", type = "bool", default = false, title = "%settings.includeCode%" }]
+activation = ["onCommand:count", "onLanguage:markdown", "onLanguage:plaintext"]

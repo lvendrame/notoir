@@ -1,0 +1,20 @@
+[plugin]
+id = "todo-highlighter"
+name = "TODO Highlighter"
+version = "1.0.0"
+api = "1"
+description = "Lists TODO and FIXME lines, outlines .todo files and highlights them."
+license = "MIT"
+
+[permissions]
+documents_read = true
+documents_write = true
+
+[contributes]
+commands = [
+  { id = "refresh", title = "%commands.refresh%" },
+  { id = "reveal", title = "%commands.reveal%" },
+]
+panels = [{ id = "todos", title = "%panels.todos%", area = "secondary" }]
+languages = [{ id = "todo", name = "TODO list", extensions = [".todo"], syntax = "syntaxes/todo.sublime-syntax" }]
+activation = ["onStartup"]

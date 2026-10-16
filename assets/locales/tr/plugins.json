@@ -34,5 +34,53 @@
     "titleUpdate": "“{{name}}” eklentisinin {{version}} güncellemesi şunları istiyor:",
     "install": "Yükle",
     "enable": "Etkinleştir"
-  }
+  },
+  "dev": {
+    "all": "Tüm eklentiler",
+    "reload": "Bu eklentiyi yeniden yükle",
+    "status": "Durum: {{status}}",
+    "activatedBy": "Etkinleştiren: {{event}}",
+    "onStartup": "Başlangıçta etkinleşir; bu Notoir'in açılışını yavaşlatır. onCommand / onLanguage tercih edin.",
+    "apiCalls": "API çağrıları: {{list}}",
+    "lastError": "Son hata: {{error}}",
+    "missing": "Eksik çeviriler: {{list}}"
+  },
+  "formatFailed": "“{{name}}” ile biçimlendirme başarısız oldu; belge değiştirilmedi.",
+  "installZipTitle": ".zip'ten Eklenti Yükle",
+  "manager": {
+    "title": "Eklentiler",
+    "search": "Eklenti ara",
+    "installed": "Yüklü ({{count}})",
+    "recommended": "Çalışma alanının önerdikleri ({{count}})",
+    "empty": "Yüklü eklenti yok. Bir klasörden veya .zip dosyasından yükleyin.",
+    "noRecommendations": "Bu çalışma alanı eklenti önermiyor.",
+    "notInstalled": "yüklü değil",
+    "enable": "Etkinleştir",
+    "disable": "Devre Dışı Bırak",
+    "permissions": "İzinler",
+    "settings": "Ayarlar",
+    "uninstall": "Kaldır",
+    "noPermissions": "Özel izin yok",
+    "permissionsList": "İzinler: {{list}}",
+    "processAlways": "Program çalıştırmaya her zaman izin veriliyor.",
+    "revoke": "İptal Et"
+  },
+  "panels": {
+    "empty": "Henüz hiçbir eklenti buraya panel eklemiyor.",
+    "noContent": "Henüz gösterilecek bir şey yok.",
+    "unknownNode": "Bilinmeyen öğe “{{kind}}”"
+  },
+  "status": {
+    "invalid": "Geçersiz",
+    "incompatible": "Uyumsuz",
+    "needsReview": "İnceleme gerekli",
+    "disabled": "Devre dışı",
+    "enabled": "Etkin",
+    "active": "Çalışıyor"
+  },
+  "uninstall": {
+    "title": "“{{name}}” kaldırılsın mı?",
+    "body": "Eklenti klasörü çöp kutusuna taşınır."
+  },
+  "uninstallFailed": "“{{name}}” kaldırılamadı."
 }

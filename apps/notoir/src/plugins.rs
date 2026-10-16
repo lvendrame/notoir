@@ -71,6 +71,16 @@ pub struct PluginEntry {
     registered: HashSet<String>,
     /// Command ids contributed to the registry.
     contributed: Vec<CommandId>,
+    /// API calls by name (Developer Tools).
+    pub api_calls: std::collections::BTreeMap<String, u64>,
+    /// What activated the VM (`onCommand:count`…).
+    pub activated_by: Option<String>,
+    /// Translation keys `notoir.i18n.t` did not find.
+    pub missing: std::collections::BTreeSet<String>,
+    /// Setting keys registered for the plugin (`plugins.<id>.<key>`).
+    pub(crate) settings: Vec<String>,
+    /// Languages it registered.
+    pub(crate) languages: Vec<String>,
 }
 
 impl PluginEntry {
@@ -130,6 +140,28 @@ pub struct PluginsState {
     change_due: HashMap<DocumentId, u64>,
     /// The plugins directory scan finished (tests wait for it).
     pub scanned: bool,
+    /// Contributions handled in `plugin_contrib.rs`.
+    pub status_items: Vec<crate::plugin_contrib::PluginStatusItem>,
+    pub panels: Vec<crate::plugin_contrib::PluginPanel>,
+    /// (plugin, panel) → declarative UI tree.
+    pub panel_trees: HashMap<(String, String), Value>,
+    /// language → plugin.
+    pub formatters: HashMap<String, String>,
+    pub outlines: HashMap<String, String>,
+    pub(crate) next_call: u64,
+    pub(crate) calls: HashMap<u64, crate::plugin_contrib::ProvideCall>,
+    /// Plugin outline symbols per document: (revision, symbols).
+    pub outline_results: HashMap<DocumentId, (u64, Vec<notoir_editor::outline::Symbol>)>,
+    /// `text_input` node values (panel UI state).
+    pub input_buffers: HashMap<String, String>,
+    pub manager: crate::plugin_contrib::ManagerUi,
+    /// Developer Tools: the selected plugin.
+    pub dev_plugin: Option<String>,
+    /// `.notoir/plugins.toml` recommendations (id, version).
+    pub recommended: Vec<(String, String)>,
+    /// Uninstall waiting for confirmation.
+    pub uninstall_confirm: Option<String>,
+    pub(crate) zip_pick: bool,
 }
 
 impl PluginsState {
@@ -148,18 +180,36 @@ impl PluginsState {
             install_pick: false,
             change_due: HashMap::new(),
             scanned: false,
+            status_items: Vec::new(),
+            panels: Vec::new(),
+            panel_trees: HashMap::new(),
+            formatters: HashMap::new(),
+            outlines: HashMap::new(),
+            next_call: 1,
+            calls: HashMap::new(),
+            outline_results: HashMap::new(),
+            input_buffers: HashMap::new(),
+            manager: Default::default(),
+            dev_plugin: None,
+            recommended: Vec::new(),
+            uninstall_confirm: None,
+            zip_pick: false,
         }
+    }
+
+    pub(crate) fn runtime(&self, id: &str) -> Option<&PluginRuntime> {
+        self.entry(id).and_then(|e| e.runtime.as_ref())
     }
 
     pub fn entry(&self, id: &str) -> Option<&PluginEntry> {
         self.entries.iter().find(|e| e.id == id)
     }
 
-    fn entry_mut(&mut self, id: &str) -> Option<&mut PluginEntry> {
+    pub(crate) fn entry_mut(&mut self, id: &str) -> Option<&mut PluginEntry> {
         self.entries.iter_mut().find(|e| e.id == id)
     }
 
-    fn log(&mut self, plugin: &str, level: &str, message: impl Into<String>) {
+    pub(crate) fn log(&mut self, plugin: &str, level: &str, message: impl Into<String>) {
         let message = message.into();
         tracing::info!(plugin, level, message = message.as_str(), "plugin output");
         self.output
@@ -254,6 +304,7 @@ impl AppCore {
             .map(|a| (a.plugin_id.clone(), a))
             .collect();
         let mut review = Vec::new();
+        let mut seen = HashSet::new();
         for d in found {
             let folder = d
                 .dir
@@ -290,10 +341,15 @@ impl AppCore {
                     (id, Some(m), status)
                 }
             };
-            if self.plugins.entry(&id).is_some() {
+            if !seen.insert(id.clone()) {
                 self.plugins
                     .log(&id, "error", "Another plugin has the same id; ignored");
                 continue;
+            }
+            // Reload of a single plugin: the old entry goes.
+            if self.plugins.entry(&id).is_some() {
+                self.plugin_unload(&id);
+                self.plugins.entries.retain(|e| e.id != id);
             }
             if let PluginStatus::Invalid(e) = &status {
                 self.plugins
@@ -314,6 +370,11 @@ impl AppCore {
                 subscribed: HashSet::new(),
                 registered: HashSet::new(),
                 contributed: Vec::new(),
+                api_calls: Default::default(),
+                activated_by: None,
+                missing: Default::default(),
+                settings: Vec::new(),
+                languages: Vec::new(),
             });
             if enabled {
                 self.plugin_contribute(&id);
@@ -350,7 +411,7 @@ impl AppCore {
             .map(|e| e.id.clone())
             .collect();
         for id in startup {
-            self.plugin_activate(&id);
+            self.plugin_activate_by(&id, "onStartup");
         }
     }
 
@@ -454,10 +515,11 @@ impl AppCore {
         if let Some(e) = self.plugins.entry_mut(id) {
             e.contributed = contributed;
         }
+        self.plugin_contribute_more(id, &m, &dir, &table);
     }
 
     /// Stops the VM and removes the plugin's contributions.
-    fn plugin_unload(&mut self, id: &str) {
+    pub(crate) fn plugin_unload(&mut self, id: &str) {
         let Some(e) = self.plugins.entry_mut(id) else {
             return;
         };
@@ -480,6 +542,7 @@ impl AppCore {
             .retain(|m| !m.command.starts_with(&prefix));
         crate::i18n::clear_dynamic(&format!("@plugin/{id}/"));
         self.mcp.gate.reset(&principal(id));
+        self.plugin_unload_more(id);
     }
 
     pub(crate) fn plugins_rebuild_keymap(&mut self) {
@@ -494,6 +557,10 @@ impl AppCore {
 
     /// Starts the VM (runs `main.lua`) if it is not running.
     pub fn plugin_activate(&mut self, id: &str) {
+        self.plugin_activate_by(id, "manual");
+    }
+
+    pub fn plugin_activate_by(&mut self, id: &str, reason: &str) {
         let language = crate::i18n::language().code().to_owned();
         let memory = self.settings.int("plugins.memoryLimitMb", None).max(8) as usize;
         let command_ms = self.settings.int("plugins.commandTimeoutMs", None).max(100) as u64;
@@ -521,12 +588,13 @@ impl AppCore {
         };
         e.runtime = Some(PluginRuntime::start(cfg, tx, wake));
         e.status = PluginStatus::Active;
+        e.activated_by = Some(reason.to_owned());
         self.plugins.log(id, "info", "Activating");
     }
 
     /// Runs a plugin command, activating the plugin first.
     pub fn plugin_run_command(&mut self, plugin: &str, command: &str, args: Value) {
-        self.plugin_activate(plugin);
+        self.plugin_activate_by(plugin, &format!("onCommand:{command}"));
         if let Some(rt) = self.plugins.entry(plugin).and_then(|e| e.runtime.as_ref()) {
             rt.send(ToPlugin::Command {
                 command: command.to_owned(),
@@ -554,6 +622,16 @@ impl AppCore {
                     message,
                     kind,
                 } => self.plugin_error(&plugin, &during, &message, kind),
+                FromPlugin::Provided {
+                    plugin,
+                    call,
+                    result,
+                } => self.plugin_provided(&plugin, call, result),
+                FromPlugin::MissingTranslation { plugin, key } => {
+                    if let Some(e) = self.plugins.entry_mut(&plugin) {
+                        e.missing.insert(key);
+                    }
+                }
                 FromPlugin::Exited { plugin } => {
                     if let Some(e) = self.plugins.entry_mut(&plugin) {
                         e.runtime = None;
@@ -829,7 +907,7 @@ impl AppCore {
 
     // ── events ───────────────────────────────────────────────────────────
 
-    fn plugin_doc_payload(&self, doc: DocumentId) -> Value {
+    pub(crate) fn plugin_doc_payload(&self, doc: DocumentId) -> Value {
         let Some(d) = self.workbench.document(doc) else {
             return json!({ "document": doc.0 });
         };
@@ -903,7 +981,7 @@ impl AppCore {
             .map(|e| e.id.clone())
             .collect();
         for id in ids {
-            self.plugin_activate(&id);
+            self.plugin_activate_by(&id, event);
         }
     }
 
@@ -945,6 +1023,9 @@ impl AppCore {
         if !active {
             r.respond(Err(ApiError::new("disabled", "The plugin is not active")));
             return;
+        }
+        if let Some(e) = self.plugins.entry_mut(&r.plugin) {
+            *e.api_calls.entry(r.name.clone()).or_default() += 1;
         }
         if r.name == "process.check" {
             self.plugin_process_check(r);
@@ -1044,10 +1125,14 @@ impl AppCore {
             }
             "editor.active" => {
                 self.plugin_check(plugin, &Capability::EditorRead, "reading the editor")?;
-                Ok(self
-                    .workbench
-                    .active_editor()
-                    .map_or(Value::Null, |v| json!(v.0)))
+                // Settings, Welcome and Plugin Manager tabs are not editors.
+                let view = self.workbench.active_editor().filter(|v| {
+                    self.workbench
+                        .view(*v)
+                        .and_then(|v| self.workbench.document(v.document_id))
+                        .is_some_and(|d| !matches!(d.origin, DocumentOrigin::Virtual { .. }))
+                });
+                Ok(view.map_or(Value::Null, |v| json!(v.0)))
             }
             "editor.text" | "editor.selection" | "editor.selections" => {
                 self.plugin_check(plugin, &Capability::DocumentRead, "reading documents")?;
@@ -1192,15 +1277,19 @@ impl AppCore {
                 Ok(json!(files))
             }
             "settings.get" => {
-                let key = s("key").unwrap_or_default();
+                let key = self.plugin_setting_key(plugin, &s("key").unwrap_or_default());
                 Ok(self
                     .settings
                     .get(&key, None)
                     .map_or(Value::Null, setting_json))
             }
             "settings.set" => {
-                self.plugin_check(plugin, &Capability::SettingsModify, "changing settings")?;
-                let key = s("key").unwrap_or_default();
+                let raw = s("key").unwrap_or_default();
+                let key = self.plugin_setting_key(plugin, &raw);
+                // Its own settings are always writable.
+                if key == raw {
+                    self.plugin_check(plugin, &Capability::SettingsModify, "changing settings")?;
+                }
                 let Some(def) = self.schema.get(&key) else {
                     return Err(ApiError::new(
                         "unknown_setting",
@@ -1256,9 +1345,9 @@ impl AppCore {
                 self.plugin_check(plugin, &Capability::Clipboard, "the clipboard")?;
                 Ok(Value::Null)
             }
-            "status.set" | "panels.render" | "formatters.register" | "outline.register" => Err(
-                ApiError::new("not_supported", format!("{name} is not available yet")),
-            ),
+            "status.set" | "panels.render" | "formatters.register" | "outline.register" => {
+                self.plugin_contrib_api(plugin, name, args)
+            }
             other => Err(ApiError::new("unknown_api", format!("Unknown API {other}"))),
         }
     }

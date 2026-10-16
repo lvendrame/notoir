@@ -17,7 +17,7 @@ impl LanguageId {
 
     /// Looks up a registered language by id.
     pub fn from_id(id: &str) -> Option<LanguageId> {
-        LANGUAGES.iter().find(|l| l.id.0 == id).map(|l| l.id)
+        all().into_iter().find(|l| l.id.0 == id).map(|l| l.id)
     }
 }
 
@@ -225,10 +225,76 @@ pub static LANGUAGES: &[LanguageDef] = &[
 ];
 
 pub fn definition(id: LanguageId) -> &'static LanguageDef {
-    LANGUAGES
-        .iter()
+    all()
+        .into_iter()
         .find(|l| l.id == id)
         .unwrap_or(&LANGUAGES[0])
+}
+
+/// Languages added at run time (plugins, spec 30).
+fn extra() -> &'static std::sync::RwLock<Vec<&'static LanguageDef>> {
+    static EXTRA: std::sync::OnceLock<std::sync::RwLock<Vec<&'static LanguageDef>>> =
+        std::sync::OnceLock::new();
+    EXTRA.get_or_init(Default::default)
+}
+
+/// Built-in languages, then the registered ones.
+pub fn all() -> Vec<&'static LanguageDef> {
+    let mut v: Vec<&'static LanguageDef> = LANGUAGES.iter().collect();
+    if let Ok(e) = extra().read() {
+        v.extend(e.iter().copied());
+    }
+    v
+}
+
+/// Interns a string for the life of the process (registered languages
+/// keep `&'static` like the built-in table; each string leaks once).
+fn intern(s: &str) -> &'static str {
+    static SEEN: std::sync::OnceLock<std::sync::Mutex<std::collections::HashSet<&'static str>>> =
+        std::sync::OnceLock::new();
+    let mut seen = SEEN
+        .get_or_init(Default::default)
+        .lock()
+        .unwrap_or_else(|e| e.into_inner());
+    if let Some(found) = seen.get(s) {
+        return found;
+    }
+    let leaked: &'static str = Box::leak(s.to_owned().into_boxed_str());
+    seen.insert(leaked);
+    leaked
+}
+
+/// Registers (or replaces) a language contributed at run time. A built-in
+/// id is never replaced. Extensions are given without the leading dot.
+pub fn register(id: &str, name: &str, extensions: &[String]) -> LanguageId {
+    if let Some(l) = LANGUAGES.iter().find(|l| l.id.0 == id) {
+        return l.id;
+    }
+    let exts: Vec<&'static str> = extensions
+        .iter()
+        .map(|e| intern(&e.trim_start_matches('.').to_ascii_lowercase()))
+        .collect();
+    let def: &'static LanguageDef = Box::leak(Box::new(LanguageDef {
+        id: LanguageId(intern(id)),
+        name: intern(name),
+        extensions: Box::leak(exts.into_boxed_slice()),
+        file_names: &[],
+        interpreters: &[],
+        line_comment: None,
+        block_comment: None,
+    }));
+    if let Ok(mut e) = extra().write() {
+        e.retain(|l| l.id.0 != id);
+        e.push(def);
+    }
+    def.id
+}
+
+/// Removes a run-time language (plugin unloaded).
+pub fn unregister(id: &str) {
+    if let Ok(mut e) = extra().write() {
+        e.retain(|l| l.id.0 != id);
+    }
 }
 
 /// One `files.associations` entry: glob → language id.
@@ -257,7 +323,7 @@ pub fn detect(path: Option<&str>, first_line: &str, associations: &[Association]
                 return id;
             }
         }
-        if let Some(l) = LANGUAGES.iter().find(|l| l.file_names.contains(&name)) {
+        if let Some(l) = all().into_iter().find(|l| l.file_names.contains(&name)) {
             return l.id;
         }
         // VS Code-style config folders are JSON with comments (spec 25).
@@ -266,8 +332,8 @@ pub fn detect(path: Option<&str>, first_line: &str, associations: &[Association]
         }
         if let Some((_, ext)) = name.rsplit_once('.') {
             let ext = ext.to_ascii_lowercase();
-            if let Some(l) = LANGUAGES
-                .iter()
+            if let Some(l) = all()
+                .into_iter()
                 .find(|l| l.extensions.contains(&ext.as_str()))
             {
                 return l.id;
@@ -288,8 +354,8 @@ fn detect_first_line(line: &str) -> Option<LanguageId> {
             first.rsplit('/').next()?
         };
         let program = program.trim_end_matches(|c: char| c.is_ascii_digit() || c == '.');
-        return LANGUAGES
-            .iter()
+        return all()
+            .into_iter()
             .find(|l| {
                 l.interpreters
                     .iter()

@@ -219,6 +219,8 @@ fn manually_copied_plugin_is_disabled() {
         .query_all_by_label_contains("Read open documents")
         .next()
         .expect("permission list");
+    // The centred modal settles its size over a few frames.
+    app.harness.run_steps(3);
     app.harness.get_by_label("Enable").click();
     app.harness.run_steps(3);
     assert_eq!(status(&app, "word-count"), Some(PluginStatus::Enabled));

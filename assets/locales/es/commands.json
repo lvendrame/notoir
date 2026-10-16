@@ -375,6 +375,17 @@
     "disable": "Desactivar complemento",
     "viewError": "Ver error del complemento",
     "processAnswer": "Responder a la solicitud de programa",
-    "run": "Ejecutar comando de complemento"
+    "run": "Ejecutar comando de complemento",
+    "manager": "Administrador de complementos",
+    "installed": "Complementos instalados",
+    "developerTools": "Herramientas de desarrollo de complementos",
+    "installFromZip": "Instalar complemento desde un .zip…",
+    "uninstall": "Desinstalar complemento",
+    "uninstallAnswer": "Responder a la desinstalación",
+    "reloadPlugin": "Recargar complemento",
+    "panelAction": "Ejecutar acción del panel del complemento",
+    "togglePermissions": "Mostrar permisos del complemento",
+    "revokeProcess": "Revocar permiso de programas",
+    "settings": "Configuración del complemento"
   }
 }

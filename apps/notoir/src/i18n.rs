@@ -307,6 +307,10 @@ pub fn t_in(lang: Language, key: &str) -> String {
     match lookup(lang, key) {
         Some(s) => s.clone(),
         None => {
+            // Run-time strings (plugin setting titles under `settings:`).
+            if let Some(s) = dynamic().read().ok().and_then(|d| d.get(key).cloned()) {
+                return s;
+            }
             tracing::debug!(key, "missing translation key");
             key.to_owned()
         }

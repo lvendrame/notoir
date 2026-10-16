@@ -34,5 +34,53 @@
     "titleUpdate": "The update of “{{name}}” to {{version}} requests:",
     "install": "Install",
     "enable": "Enable"
-  }
+  },
+  "dev": {
+    "all": "All plugins",
+    "reload": "Reload this plugin",
+    "status": "Status: {{status}}",
+    "activatedBy": "Activated by: {{event}}",
+    "onStartup": "Activates on startup, which slows down Notoir’s start. Prefer onCommand / onLanguage.",
+    "apiCalls": "API calls: {{list}}",
+    "lastError": "Last error: {{error}}",
+    "missing": "Missing translations: {{list}}"
+  },
+  "formatFailed": "Formatting with “{{name}}” failed; the document was left unchanged.",
+  "installZipTitle": "Install Plugin from .zip",
+  "manager": {
+    "title": "Plugins",
+    "search": "Search plugins",
+    "installed": "Installed ({{count}})",
+    "recommended": "Recommended by workspace ({{count}})",
+    "empty": "No plugins installed. Install one from a folder or a .zip file.",
+    "noRecommendations": "This workspace recommends no plugins.",
+    "notInstalled": "not installed",
+    "enable": "Enable",
+    "disable": "Disable",
+    "permissions": "Permissions",
+    "settings": "Settings",
+    "uninstall": "Uninstall",
+    "noPermissions": "No special permissions",
+    "permissionsList": "Permissions: {{list}}",
+    "processAlways": "Running programs is always allowed.",
+    "revoke": "Revoke"
+  },
+  "panels": {
+    "empty": "No plugin adds panels here yet.",
+    "noContent": "Nothing to show yet.",
+    "unknownNode": "Unknown element “{{kind}}”"
+  },
+  "status": {
+    "invalid": "Invalid",
+    "incompatible": "Incompatible",
+    "needsReview": "Needs review",
+    "disabled": "Disabled",
+    "enabled": "Enabled",
+    "active": "Running"
+  },
+  "uninstall": {
+    "title": "Uninstall “{{name}}”?",
+    "body": "The plugin folder is moved to the trash."
+  },
+  "uninstallFailed": "Could not uninstall “{{name}}”."
 }

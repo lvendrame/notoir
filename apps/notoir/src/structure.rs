@@ -43,14 +43,22 @@ impl AppCore {
         {
             return Some(s.clone());
         }
+        let (revision, large, language) = (d.revision, d.large_file, d.language);
+        // A plugin outline provider wins over the built-in symbols.
+        let plugin_symbols = if large {
+            None
+        } else {
+            self.plugin_outline(doc)
+        };
+        let d = self.workbench.document(doc)?;
         let rope = d.buffer.rope();
         let s = Arc::new(Structure {
-            revision: d.revision,
-            folds: Arc::new(folding::fold_ranges(rope, d.language, d.large_file)),
-            symbols: if d.large_file {
+            revision,
+            folds: Arc::new(folding::fold_ranges(rope, language, large)),
+            symbols: if large {
                 Vec::new()
             } else {
-                outline::symbols(rope, d.language, usize::MAX)
+                plugin_symbols.unwrap_or_else(|| outline::symbols(rope, language, usize::MAX))
             },
             at_ms: now,
         });

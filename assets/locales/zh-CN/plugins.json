@@ -34,5 +34,53 @@
     "titleUpdate": "“{{name}}”更新到 {{version}} 请求:",
     "install": "安装",
     "enable": "启用"
-  }
+  },
+  "dev": {
+    "all": "所有插件",
+    "reload": "重新加载此插件",
+    "status": "状态: {{status}}",
+    "activatedBy": "激活来源: {{event}}",
+    "onStartup": "在启动时激活，会拖慢 Notoir 的启动。建议使用 onCommand / onLanguage。",
+    "apiCalls": "API 调用: {{list}}",
+    "lastError": "最近错误: {{error}}",
+    "missing": "缺少的翻译: {{list}}"
+  },
+  "formatFailed": "使用“{{name}}”格式化失败；文档未更改。",
+  "installZipTitle": "从 .zip 安装插件",
+  "manager": {
+    "title": "插件",
+    "search": "搜索插件",
+    "installed": "已安装 ({{count}})",
+    "recommended": "工作区推荐 ({{count}})",
+    "empty": "没有安装插件。请从文件夹或 .zip 文件安装。",
+    "noRecommendations": "此工作区没有推荐插件。",
+    "notInstalled": "未安装",
+    "enable": "启用",
+    "disable": "禁用",
+    "permissions": "权限",
+    "settings": "设置",
+    "uninstall": "卸载",
+    "noPermissions": "无特殊权限",
+    "permissionsList": "权限: {{list}}",
+    "processAlways": "始终允许运行程序。",
+    "revoke": "撤销"
+  },
+  "panels": {
+    "empty": "还没有插件在此添加面板。",
+    "noContent": "暂无内容。",
+    "unknownNode": "未知元素“{{kind}}”"
+  },
+  "status": {
+    "invalid": "无效",
+    "incompatible": "不兼容",
+    "needsReview": "需要审核",
+    "disabled": "已禁用",
+    "enabled": "已启用",
+    "active": "运行中"
+  },
+  "uninstall": {
+    "title": "卸载“{{name}}”？",
+    "body": "插件文件夹将被移到回收站。"
+  },
+  "uninstallFailed": "无法卸载“{{name}}”。"
 }

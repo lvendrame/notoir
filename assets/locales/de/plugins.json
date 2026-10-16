@@ -34,5 +34,53 @@
     "titleUpdate": "Das Update von „{{name}}“ auf {{version}} fordert an:",
     "install": "Installieren",
     "enable": "Aktivieren"
-  }
+  },
+  "dev": {
+    "all": "Alle Plugins",
+    "reload": "Dieses Plugin neu laden",
+    "status": "Status: {{status}}",
+    "activatedBy": "Aktiviert durch: {{event}}",
+    "onStartup": "Wird beim Start aktiviert und verlangsamt den Start von Notoir. Besser onCommand / onLanguage.",
+    "apiCalls": "API-Aufrufe: {{list}}",
+    "lastError": "Letzter Fehler: {{error}}",
+    "missing": "Fehlende Übersetzungen: {{list}}"
+  },
+  "formatFailed": "Formatieren mit „{{name}}“ ist fehlgeschlagen; das Dokument blieb unverändert.",
+  "installZipTitle": "Plugin aus .zip installieren",
+  "manager": {
+    "title": "Plugins",
+    "search": "Plugins durchsuchen",
+    "installed": "Installiert ({{count}})",
+    "recommended": "Vom Arbeitsbereich empfohlen ({{count}})",
+    "empty": "Keine Plugins installiert. Installiere eines aus einem Ordner oder einer .zip-Datei.",
+    "noRecommendations": "Dieser Arbeitsbereich empfiehlt keine Plugins.",
+    "notInstalled": "nicht installiert",
+    "enable": "Aktivieren",
+    "disable": "Deaktivieren",
+    "permissions": "Berechtigungen",
+    "settings": "Einstellungen",
+    "uninstall": "Deinstallieren",
+    "noPermissions": "Keine besonderen Berechtigungen",
+    "permissionsList": "Berechtigungen: {{list}}",
+    "processAlways": "Das Ausführen von Programmen ist immer erlaubt.",
+    "revoke": "Widerrufen"
+  },
+  "panels": {
+    "empty": "Noch fügt kein Plugin hier Bereiche hinzu.",
+    "noContent": "Noch nichts anzuzeigen.",
+    "unknownNode": "Unbekanntes Element „{{kind}}“"
+  },
+  "status": {
+    "invalid": "Ungültig",
+    "incompatible": "Inkompatibel",
+    "needsReview": "Prüfung nötig",
+    "disabled": "Deaktiviert",
+    "enabled": "Aktiviert",
+    "active": "Läuft"
+  },
+  "uninstall": {
+    "title": "„{{name}}“ deinstallieren?",
+    "body": "Der Plugin-Ordner wird in den Papierkorb verschoben."
+  },
+  "uninstallFailed": "„{{name}}“ konnte nicht deinstalliert werden."
 }

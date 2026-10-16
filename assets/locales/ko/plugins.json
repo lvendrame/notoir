@@ -34,5 +34,53 @@
     "titleUpdate": "“{{name}}”을(를) {{version}}(으)로 업데이트하려면 다음이 필요합니다:",
     "install": "설치",
     "enable": "사용"
-  }
+  },
+  "dev": {
+    "all": "모든 플러그인",
+    "reload": "이 플러그인 다시 로드",
+    "status": "상태: {{status}}",
+    "activatedBy": "활성화 이벤트: {{event}}",
+    "onStartup": "시작할 때 활성화되어 Notoir 시작이 느려집니다. onCommand / onLanguage를 권장합니다.",
+    "apiCalls": "API 호출: {{list}}",
+    "lastError": "마지막 오류: {{error}}",
+    "missing": "누락된 번역: {{list}}"
+  },
+  "formatFailed": "“{{name}}”(으)로 서식을 지정하지 못했습니다. 문서는 변경되지 않았습니다.",
+  "installZipTitle": ".zip에서 플러그인 설치",
+  "manager": {
+    "title": "플러그인",
+    "search": "플러그인 검색",
+    "installed": "설치됨 ({{count}})",
+    "recommended": "작업 영역 추천 ({{count}})",
+    "empty": "설치된 플러그인이 없습니다. 폴더나 .zip 파일에서 설치하세요.",
+    "noRecommendations": "이 작업 영역은 추천하는 플러그인이 없습니다.",
+    "notInstalled": "설치 안 됨",
+    "enable": "사용",
+    "disable": "사용 중지",
+    "permissions": "권한",
+    "settings": "설정",
+    "uninstall": "제거",
+    "noPermissions": "특별한 권한 없음",
+    "permissionsList": "권한: {{list}}",
+    "processAlways": "프로그램 실행이 항상 허용됩니다.",
+    "revoke": "취소"
+  },
+  "panels": {
+    "empty": "아직 여기에 패널을 추가하는 플러그인이 없습니다.",
+    "noContent": "아직 표시할 내용이 없습니다.",
+    "unknownNode": "알 수 없는 요소 “{{kind}}”"
+  },
+  "status": {
+    "invalid": "잘못됨",
+    "incompatible": "호환되지 않음",
+    "needsReview": "검토 필요",
+    "disabled": "사용 중지됨",
+    "enabled": "사용",
+    "active": "실행 중"
+  },
+  "uninstall": {
+    "title": "“{{name}}”을(를) 제거할까요?",
+    "body": "플러그인 폴더가 휴지통으로 이동됩니다."
+  },
+  "uninstallFailed": "“{{name}}”을(를) 제거할 수 없습니다."
 }

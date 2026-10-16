@@ -286,6 +286,8 @@ pub fn status_bar(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
             ui.horizontal_centered(|ui| {
                 // MCP server (spec 29): `MCP ●2`.
                 super::mcp_ui::status_item(ui, kit, core, actions);
+                // Plugin items on the left (spec 19).
+                super::plugins_ui::status_items(ui, kit, core, false, actions);
                 // Git branch (spec 28): `⎇ main* ↑1 ↓2`.
                 if let Some(branch) = core.git_branch_label() {
                     ui.add(kit.icon(
@@ -369,6 +371,7 @@ pub fn status_bar(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
                             InvocationSource::StatusBar,
                         ));
                     }
+                    super::plugins_ui::status_items(ui, kit, core, true, actions);
                     for item in document_items(core).into_iter().rev() {
                         ui.add_space(6.0);
                         let font = if item.mono {

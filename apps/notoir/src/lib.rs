@@ -27,6 +27,7 @@ pub mod mcp;
 pub mod mcp_tools;
 pub mod menus;
 pub mod navigation;
+pub mod plugin_contrib;
 pub mod plugins;
 pub mod quick_open;
 pub mod recovery;

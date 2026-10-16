@@ -34,5 +34,53 @@
     "titleUpdate": "La mise à jour de « {{name}} » vers {{version}} demande :",
     "install": "Installer",
     "enable": "Activer"
-  }
+  },
+  "dev": {
+    "all": "Toutes les extensions",
+    "reload": "Recharger cette extension",
+    "status": "État : {{status}}",
+    "activatedBy": "Activée par : {{event}}",
+    "onStartup": "S’active au démarrage, ce qui ralentit le lancement de Notoir. Préférez onCommand / onLanguage.",
+    "apiCalls": "Appels d’API : {{list}}",
+    "lastError": "Dernière erreur : {{error}}",
+    "missing": "Traductions manquantes : {{list}}"
+  },
+  "formatFailed": "Le formatage avec « {{name}} » a échoué ; le document n’a pas été modifié.",
+  "installZipTitle": "Installer une extension depuis un .zip",
+  "manager": {
+    "title": "Extensions",
+    "search": "Rechercher des extensions",
+    "installed": "Installées ({{count}})",
+    "recommended": "Recommandées par l’espace de travail ({{count}})",
+    "empty": "Aucune extension installée. Installez-en une depuis un dossier ou un fichier .zip.",
+    "noRecommendations": "Cet espace de travail ne recommande aucune extension.",
+    "notInstalled": "non installée",
+    "enable": "Activer",
+    "disable": "Désactiver",
+    "permissions": "Autorisations",
+    "settings": "Paramètres",
+    "uninstall": "Désinstaller",
+    "noPermissions": "Aucune autorisation particulière",
+    "permissionsList": "Autorisations : {{list}}",
+    "processAlways": "L’exécution de programmes est toujours autorisée.",
+    "revoke": "Révoquer"
+  },
+  "panels": {
+    "empty": "Aucune extension n’ajoute encore de panneau ici.",
+    "noContent": "Rien à afficher pour l’instant.",
+    "unknownNode": "Élément inconnu « {{kind}} »"
+  },
+  "status": {
+    "invalid": "Non valide",
+    "incompatible": "Incompatible",
+    "needsReview": "À examiner",
+    "disabled": "Désactivée",
+    "enabled": "Activée",
+    "active": "En cours d’exécution"
+  },
+  "uninstall": {
+    "title": "Désinstaller « {{name}} » ?",
+    "body": "Le dossier de l’extension est placé dans la corbeille."
+  },
+  "uninstallFailed": "Impossible de désinstaller « {{name}} »."
 }

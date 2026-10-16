@@ -375,6 +375,17 @@
     "disable": "Désactiver l’extension",
     "viewError": "Voir l’erreur de l’extension",
     "processAnswer": "Répondre à la demande d’exécution",
-    "run": "Exécuter une commande d’extension"
+    "run": "Exécuter une commande d’extension",
+    "manager": "Gestionnaire d’extensions",
+    "installed": "Extensions installées",
+    "developerTools": "Outils de développement des extensions",
+    "installFromZip": "Installer une extension depuis un .zip…",
+    "uninstall": "Désinstaller l’extension",
+    "uninstallAnswer": "Répondre à la désinstallation",
+    "reloadPlugin": "Recharger l’extension",
+    "panelAction": "Exécuter une action du panneau d’extension",
+    "togglePermissions": "Afficher les autorisations de l’extension",
+    "revokeProcess": "Révoquer l’autorisation d’exécution",
+    "settings": "Paramètres de l’extension"
   }
 }

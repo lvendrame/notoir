@@ -97,12 +97,37 @@ pub enum FromPlugin {
     Exited {
         plugin: String,
     },
+    /// A formatter / outline provider answered [`ToPlugin::Provide`].
+    Provided {
+        plugin: String,
+        call: u64,
+        result: Result<Value, String>,
+    },
+    /// `notoir.i18n.t` found no translation (Developer Tools).
+    MissingTranslation {
+        plugin: String,
+        key: String,
+    },
 }
 
 #[derive(Debug)]
 pub enum ToPlugin {
-    Command { command: String, args: Value },
-    Event { name: String, payload: Value },
+    Command {
+        command: String,
+        args: Value,
+    },
+    Event {
+        name: String,
+        payload: Value,
+    },
+    /// Runs a registered provider: `kind` is `format` or `outline`.
+    Provide {
+        call: u64,
+        kind: String,
+        language: String,
+        text: String,
+        options: Value,
+    },
     Shutdown,
 }
 
@@ -272,6 +297,25 @@ fn run(cfg: RuntimeConfig, rx: Receiver<ToPlugin>, out: &Out) {
                     Err(e) => out.error(&format!("command {command}"), &e, &budget.borrow()),
                 }
             }
+            ToPlugin::Provide {
+                call,
+                kind,
+                language,
+                text,
+                options,
+            } => {
+                budget.borrow_mut().start(cfg.command_budget);
+                let r = provide(&lua, &kind, &language, &text, &options);
+                budget.borrow_mut().stop();
+                if let Err(e) = &r {
+                    out.error(&format!("{kind} provider"), e, &budget.borrow());
+                }
+                out.send(FromPlugin::Provided {
+                    plugin: cfg.id.clone(),
+                    call,
+                    result: r.map_err(|e| e.to_string()),
+                });
+            }
             ToPlugin::Event { name, payload } => {
                 budget.borrow_mut().start(cfg.event_budget);
                 let r = call_global(&lua, "_emit", (name.clone(), payload));
@@ -282,6 +326,21 @@ fn run(cfg: RuntimeConfig, rx: Receiver<ToPlugin>, out: &Out) {
             }
         }
     }
+}
+
+/// Calls `notoir._provide(kind, language, text, options)`.
+fn provide(
+    lua: &Lua,
+    kind: &str,
+    language: &str,
+    text: &str,
+    options: &Value,
+) -> mlua::Result<Value> {
+    let notoir: mlua::Table = lua.globals().get("notoir")?;
+    let f: mlua::Function = notoir.get("_provide")?;
+    let opts = to_lua(lua, options)?;
+    let v: LuaValue = f.call((kind, language, text, opts))?;
+    from_lua(lua, v)
 }
 
 /// Calls `notoir.<name>(a, json)`.
@@ -489,10 +548,20 @@ fn sandbox(cfg: &RuntimeConfig, out: &Out, budget: Rc<RefCell<Budget>>) -> mlua:
     }
     {
         let table = Rc::new(load_locales(&cfg.dir, &cfg.language));
+        let o = out.clone();
         native.set(
             "t",
             lua.create_function(move |lua, (key, args): (String, LuaValue)| {
-                let mut s = table.get(&key).cloned().unwrap_or_else(|| key.clone());
+                let mut s = match table.get(&key) {
+                    Some(s) => s.clone(),
+                    None => {
+                        o.send(FromPlugin::MissingTranslation {
+                            plugin: o.plugin.clone(),
+                            key: key.clone(),
+                        });
+                        key.clone()
+                    }
+                };
                 if let Value::Object(map) = from_lua(lua, args)? {
                     for (k, v) in map {
                         let v = match v {

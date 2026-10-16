@@ -59,9 +59,9 @@ fn outcome_color(kit: &Kit, o: &str) -> egui::Color32 {
 
 fn decision_label(d: Decision) -> String {
     match d {
-        Decision::Allow => format!("✓ {}", t!("mcp:perm.allow")),
-        Decision::Ask => format!("? {}", t!("mcp:perm.ask")),
-        Decision::Deny => format!("✕ {}", t!("mcp:perm.deny")),
+        Decision::Allow => t!("mcp:perm.allow"),
+        Decision::Ask => t!("mcp:perm.ask"),
+        Decision::Deny => t!("mcp:perm.deny"),
     }
 }
 

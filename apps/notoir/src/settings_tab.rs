@@ -83,7 +83,7 @@ impl AppCore {
     }
 
     /// Opens (or focuses) a virtual tab rendered by `kind`.
-    fn open_virtual(&mut self, title: &str, kind: ViewKind) -> Option<ViewId> {
+    pub(crate) fn open_virtual(&mut self, title: &str, kind: ViewKind) -> Option<ViewId> {
         let existing = self
             .virtual_doc(title)
             .and_then(|doc| self.workbench.views.of_document(doc).next().map(|v| v.id));

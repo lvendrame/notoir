@@ -1,0 +1,7 @@
+{
+  "commands": { "refresh": "Refresh TODOs", "reveal": "Go to TODO" },
+  "panels": { "todos": "TODOs" },
+  "count": "{{n}} in this document",
+  "none": "No TODO or FIXME lines.",
+  "refresh": "Refresh"
+}

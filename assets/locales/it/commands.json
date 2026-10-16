@@ -375,6 +375,17 @@
     "disable": "Disattiva plugin",
     "viewError": "Visualizza errore del plugin",
     "processAnswer": "Rispondi alla richiesta di programma",
-    "run": "Esegui comando del plugin"
+    "run": "Esegui comando del plugin",
+    "manager": "Gestione plugin",
+    "installed": "Plugin installati",
+    "developerTools": "Strumenti di sviluppo dei plugin",
+    "installFromZip": "Installa plugin da un .zip…",
+    "uninstall": "Disinstalla plugin",
+    "uninstallAnswer": "Rispondi alla disinstallazione",
+    "reloadPlugin": "Ricarica plugin",
+    "panelAction": "Esegui azione del pannello del plugin",
+    "togglePermissions": "Mostra permessi del plugin",
+    "revokeProcess": "Revoca permesso dei programmi",
+    "settings": "Impostazioni del plugin"
   }
 }

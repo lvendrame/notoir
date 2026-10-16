@@ -298,6 +298,12 @@ impl Renderer<'_, '_> {
                     self.out.activate = Some(view);
                 }
             }
+            (Some(view), Some(notoir_core::view::ViewKind::PluginManager)) => {
+                let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
+                body_ui.set_clip_rect(body);
+                super::plugins_ui::manager(&mut body_ui, self.kit, self.core, self.actions);
+                let _ = view;
+            }
             (Some(view), Some(notoir_core::view::ViewKind::Welcome)) => {
                 let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
                 body_ui.set_clip_rect(body);

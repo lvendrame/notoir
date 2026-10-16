@@ -40,7 +40,11 @@ fn drive(rx: &Receiver<FromPlugin>, until: impl Fn(&FromPlugin) -> bool) -> Vec<
             FromPlugin::Request(r) => {
                 seen.push(format!("request {} {}", r.name, r.args));
                 let reply = match r.name.as_str() {
-                    "notify" | "commands.declared" | "events.subscribe" => Ok(Value::Null),
+                    "notify"
+                    | "commands.declared"
+                    | "events.subscribe"
+                    | "formatters.register"
+                    | "outline.register" => Ok(Value::Null),
                     "editor.active" => Ok(json!(7)),
                     "editor.text" => Ok(json!("hello world")),
                     _ => Err(ApiError::new(
@@ -60,6 +64,10 @@ fn drive(rx: &Receiver<FromPlugin>, until: impl Fn(&FromPlugin) -> bool) -> Vec<
             FromPlugin::Activated { .. } => seen.push("activated".into()),
             FromPlugin::CommandDone { command, .. } => seen.push(format!("done {command}")),
             FromPlugin::Exited { .. } => seen.push("exited".into()),
+            FromPlugin::Provided { call, result, .. } => {
+                seen.push(format!("provided {call} {result:?}"))
+            }
+            FromPlugin::MissingTranslation { key, .. } => seen.push(format!("missing {key}")),
         }
         if done {
             break;
@@ -244,5 +252,45 @@ fn script_errors_are_reported_with_location() {
             && err.contains("main.lua:1")
             && err.contains("boom a.md"),
         "{err}"
+    );
+}
+
+#[test]
+fn providers_answer_and_missing_translations_are_reported() {
+    let d = tempfile::tempdir().unwrap();
+    let cfg = plugin(
+        d.path(),
+        r#"
+        notoir.formatters.register("markdown", function(text) return string.upper(text) end)
+        notoir.outline.register("markdown", function(text) return { { name = "A", line = 1 } } end)
+        print(notoir.i18n.t("nope"))
+        "#,
+    );
+    let (rt, rx) = start(cfg);
+    let seen = drive(&rx, |e| matches!(e, FromPlugin::Activated { .. }));
+    assert!(seen.contains(&"missing nope".to_owned()), "{seen:?}");
+    rt.send(ToPlugin::Provide {
+        call: 7,
+        kind: "format".into(),
+        language: "markdown".into(),
+        text: "abc".into(),
+        options: Value::Null,
+    });
+    let seen = drive(&rx, |e| matches!(e, FromPlugin::Provided { .. }));
+    assert!(
+        seen.contains(&r#"provided 7 Ok(String("ABC"))"#.to_owned()),
+        "{seen:?}"
+    );
+    rt.send(ToPlugin::Provide {
+        call: 8,
+        kind: "outline".into(),
+        language: "rust".into(),
+        text: String::new(),
+        options: Value::Null,
+    });
+    let seen = drive(&rx, |e| matches!(e, FromPlugin::Provided { .. }));
+    assert!(
+        seen.iter().any(|s| s.starts_with("provided 8 Err")),
+        "{seen:?}"
     );
 }

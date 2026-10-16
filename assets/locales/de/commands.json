@@ -375,6 +375,17 @@
     "disable": "Plugin deaktivieren",
     "viewError": "Plugin-Fehler anzeigen",
     "processAnswer": "Programmanfrage beantworten",
-    "run": "Plugin-Befehl ausführen"
+    "run": "Plugin-Befehl ausführen",
+    "manager": "Plugin-Verwaltung",
+    "installed": "Installierte Plugins",
+    "developerTools": "Plugin-Entwicklertools",
+    "installFromZip": "Plugin aus .zip installieren…",
+    "uninstall": "Plugin deinstallieren",
+    "uninstallAnswer": "Deinstallation beantworten",
+    "reloadPlugin": "Plugin neu laden",
+    "panelAction": "Plugin-Bereichsaktion ausführen",
+    "togglePermissions": "Plugin-Berechtigungen anzeigen",
+    "revokeProcess": "Berechtigung für Programme widerrufen",
+    "settings": "Plugin-Einstellungen"
   }
 }

@@ -34,5 +34,53 @@
     "titleUpdate": "Оновлення «{{name}}» до {{version}} запитує:",
     "install": "Установити",
     "enable": "Увімкнути"
-  }
+  },
+  "dev": {
+    "all": "Усі плагіни",
+    "reload": "Перезавантажити цей плагін",
+    "status": "Стан: {{status}}",
+    "activatedBy": "Активовано подією: {{event}}",
+    "onStartup": "Активується під час запуску, що сповільнює старт Notoir. Краще onCommand / onLanguage.",
+    "apiCalls": "Виклики API: {{list}}",
+    "lastError": "Остання помилка: {{error}}",
+    "missing": "Відсутні переклади: {{list}}"
+  },
+  "formatFailed": "Форматування за допомогою «{{name}}» не вдалося; документ не змінено.",
+  "installZipTitle": "Установити плагін із .zip",
+  "manager": {
+    "title": "Плагіни",
+    "search": "Пошук плагінів",
+    "installed": "Установлено (кількість: {{count}})",
+    "recommended": "Рекомендовані робочою областю (кількість: {{count}})",
+    "empty": "Плагіни не встановлено. Установіть плагін із папки або файлу .zip.",
+    "noRecommendations": "Ця робоча область не рекомендує плагінів.",
+    "notInstalled": "не встановлено",
+    "enable": "Увімкнути",
+    "disable": "Вимкнути",
+    "permissions": "Дозволи",
+    "settings": "Налаштування",
+    "uninstall": "Видалити",
+    "noPermissions": "Особливих дозволів немає",
+    "permissionsList": "Дозволи: {{list}}",
+    "processAlways": "Запуск програм завжди дозволено.",
+    "revoke": "Відкликати"
+  },
+  "panels": {
+    "empty": "Поки жоден плагін не додає сюди панелі.",
+    "noContent": "Поки нічого показати.",
+    "unknownNode": "Невідомий елемент «{{kind}}»"
+  },
+  "status": {
+    "invalid": "Недійсний",
+    "incompatible": "Несумісний",
+    "needsReview": "Потребує перевірки",
+    "disabled": "Вимкнено",
+    "enabled": "Увімкнено",
+    "active": "Працює"
+  },
+  "uninstall": {
+    "title": "Видалити «{{name}}»?",
+    "body": "Папку плагіна буде переміщено до кошика."
+  },
+  "uninstallFailed": "Не вдалося видалити «{{name}}»."
 }

@@ -141,7 +141,11 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Acti
             "welcome:learnMore",
             Some(("mcp.connections", json!({}))),
         ),
-        ("welcome:plugins", "welcome:explore", None),
+        (
+            "welcome:plugins",
+            "welcome:explore",
+            Some(("plugins.manager", json!({}))),
+        ),
     ] {
         ui.horizontal(|ui| {
             ui.allocate_ui_with_layout(

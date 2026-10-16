@@ -375,6 +375,17 @@
     "disable": "Plug-in uitschakelen",
     "viewError": "Plug-infout bekijken",
     "processAnswer": "Programmaverzoek beantwoorden",
-    "run": "Plug-inopdracht uitvoeren"
+    "run": "Plug-inopdracht uitvoeren",
+    "manager": "Plug-inbeheer",
+    "installed": "Geïnstalleerde plug-ins",
+    "developerTools": "Ontwikkelhulpmiddelen voor plug-ins",
+    "installFromZip": "Plug-in installeren uit .zip…",
+    "uninstall": "Plug-in verwijderen",
+    "uninstallAnswer": "Verwijdering beantwoorden",
+    "reloadPlugin": "Plug-in opnieuw laden",
+    "panelAction": "Plug-inpaneelactie uitvoeren",
+    "togglePermissions": "Plug-inmachtigingen tonen",
+    "revokeProcess": "Machtiging voor programma’s intrekken",
+    "settings": "Plug-ininstellingen"
   }
 }

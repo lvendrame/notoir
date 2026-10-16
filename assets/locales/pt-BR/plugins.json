@@ -34,5 +34,53 @@
     "titleUpdate": "A atualização de “{{name}}” para {{version}} solicita:",
     "install": "Instalar",
     "enable": "Ativar"
-  }
+  },
+  "dev": {
+    "all": "Todos os plugins",
+    "reload": "Recarregar este plugin",
+    "status": "Status: {{status}}",
+    "activatedBy": "Ativado por: {{event}}",
+    "onStartup": "Ativa na inicialização, o que deixa o Notoir mais lento para iniciar. Prefira onCommand / onLanguage.",
+    "apiCalls": "Chamadas de API: {{list}}",
+    "lastError": "Último erro: {{error}}",
+    "missing": "Traduções ausentes: {{list}}"
+  },
+  "formatFailed": "A formatação com “{{name}}” falhou; o documento não foi alterado.",
+  "installZipTitle": "Instalar plugin de um .zip",
+  "manager": {
+    "title": "Plugins",
+    "search": "Pesquisar plugins",
+    "installed": "Instalados ({{count}})",
+    "recommended": "Recomendados pelo workspace ({{count}})",
+    "empty": "Nenhum plugin instalado. Instale um de uma pasta ou de um arquivo .zip.",
+    "noRecommendations": "Este workspace não recomenda plugins.",
+    "notInstalled": "não instalado",
+    "enable": "Ativar",
+    "disable": "Desativar",
+    "permissions": "Permissões",
+    "settings": "Configurações",
+    "uninstall": "Desinstalar",
+    "noPermissions": "Nenhuma permissão especial",
+    "permissionsList": "Permissões: {{list}}",
+    "processAlways": "Executar programas é sempre permitido.",
+    "revoke": "Revogar"
+  },
+  "panels": {
+    "empty": "Nenhum plugin adiciona painéis aqui ainda.",
+    "noContent": "Nada para mostrar ainda.",
+    "unknownNode": "Elemento desconhecido “{{kind}}”"
+  },
+  "status": {
+    "invalid": "Inválido",
+    "incompatible": "Incompatível",
+    "needsReview": "Precisa de revisão",
+    "disabled": "Desativado",
+    "enabled": "Ativado",
+    "active": "Em execução"
+  },
+  "uninstall": {
+    "title": "Desinstalar “{{name}}”?",
+    "body": "A pasta do plugin é movida para a lixeira."
+  },
+  "uninstallFailed": "Não foi possível desinstalar “{{name}}”."
 }

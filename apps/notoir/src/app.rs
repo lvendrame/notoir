@@ -417,6 +417,7 @@ impl eframe::App for NotoirApp {
             || !self.core.files.prompts.is_empty()
             || self.core.mcp.dialog.is_some()
             || self.core.plugins.review.is_some()
+            || self.core.plugins.uninstall_confirm.is_some()
             || !self.core.plugins.process_prompts.is_empty())
         {
             input::dispatch_keys(&ctx, &mut self.core, &context);
@@ -535,6 +536,7 @@ impl eframe::App for NotoirApp {
             );
             shell::plugins_ui::review(&ctx, &mut kit, &self.core, &mut actions);
             shell::plugins_ui::process_prompt(&ctx, &mut kit, &self.core, &mut actions);
+            shell::plugins_ui::uninstall_confirm(&ctx, &mut kit, &self.core, &mut actions);
             // Prompts show even in Zen Mode: a client is waiting on them.
             shell::mcp_ui::ask_bar(&ctx, &mut kit, &mut self.core, bottom_offset, &mut actions);
             if let Some(answer) = shell::prompts::show(&ctx, &mut kit, &self.core) {

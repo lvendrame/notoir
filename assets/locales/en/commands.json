@@ -375,6 +375,17 @@
     "disable": "Disable Plugin",
     "viewError": "View Plugin Error",
     "processAnswer": "Answer Program Prompt",
-    "run": "Run Plugin Command"
+    "run": "Run Plugin Command",
+    "manager": "Plugin Manager",
+    "installed": "Installed Plugins",
+    "developerTools": "Plugin Developer Tools",
+    "installFromZip": "Install Plugin from .zip…",
+    "uninstall": "Uninstall Plugin",
+    "uninstallAnswer": "Answer Uninstall",
+    "reloadPlugin": "Reload Plugin",
+    "panelAction": "Run Plugin Panel Action",
+    "togglePermissions": "Show Plugin Permissions",
+    "revokeProcess": "Revoke Program Permission",
+    "settings": "Plugin Settings"
   }
 }

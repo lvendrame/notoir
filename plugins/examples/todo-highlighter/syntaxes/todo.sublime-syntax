@@ -1,0 +1,15 @@
+%YAML 1.2
+---
+name: TODO list
+scope: text.todo
+file_extensions: [todo]
+contexts:
+  main:
+    - match: '^\s*- \[[xX]\] .*$'
+      scope: comment.line.done.todo
+    - match: '^\s*- \[ \]'
+      scope: keyword.control.todo
+    - match: '^#.*$'
+      scope: markup.heading.todo
+    - match: '\b(TODO|FIXME)\b'
+      scope: keyword.other.todo

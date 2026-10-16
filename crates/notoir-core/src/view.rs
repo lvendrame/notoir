@@ -19,6 +19,8 @@ pub enum ViewKind {
     Welcome,
     /// Compare tab (spec 27); its panes are detached views.
     Diff,
+    /// Plugins → Plugin Manager (spec 30).
+    PluginManager,
 }
 
 /// Top visible display row plus pixel offsets.

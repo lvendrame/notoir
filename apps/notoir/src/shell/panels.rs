@@ -274,7 +274,8 @@ fn area_contents(
         PanelId::SourceControl => super::scm_panel::show(ui, kit, core, uis.scm, actions),
         PanelId::GitOutput => super::scm_panel::output(ui, kit, core),
         PanelId::McpActivity => super::mcp_ui::activity_panel(ui, kit, core, actions),
-        PanelId::PluginOutput => super::plugins_ui::output(ui, kit, core),
+        PanelId::PluginOutput => super::plugins_ui::dev_tools(ui, kit, core, actions),
+        PanelId::Plugins => super::plugins_ui::plugins_panel(ui, kit, core, actions),
         _ => {}
     }
 }

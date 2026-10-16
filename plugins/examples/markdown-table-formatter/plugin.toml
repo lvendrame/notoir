@@ -1,0 +1,10 @@
+[plugin]
+id = "markdown-table-formatter"
+name = "Markdown Table Formatter"
+version = "1.0.0"
+api = "1"
+description = "Format Document aligns the columns of Markdown pipe tables."
+license = "MIT"
+
+[contributes]
+activation = ["onLanguage:markdown"]

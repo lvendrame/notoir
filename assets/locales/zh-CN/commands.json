@@ -375,6 +375,17 @@
     "disable": "禁用插件",
     "viewError": "查看插件错误",
     "processAnswer": "回应程序请求",
-    "run": "运行插件命令"
+    "run": "运行插件命令",
+    "manager": "插件管理器",
+    "installed": "已安装的插件",
+    "developerTools": "插件开发者工具",
+    "installFromZip": "从 .zip 安装插件…",
+    "uninstall": "卸载插件",
+    "uninstallAnswer": "回应卸载",
+    "reloadPlugin": "重新加载插件",
+    "panelAction": "运行插件面板操作",
+    "togglePermissions": "显示插件权限",
+    "revokeProcess": "撤销运行程序权限",
+    "settings": "插件设置"
   }
 }

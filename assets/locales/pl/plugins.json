@@ -34,5 +34,53 @@
     "titleUpdate": "Aktualizacja „{{name}}” do wersji {{version}} prosi o:",
     "install": "Zainstaluj",
     "enable": "Włącz"
-  }
+  },
+  "dev": {
+    "all": "Wszystkie wtyczki",
+    "reload": "Załaduj ponownie tę wtyczkę",
+    "status": "Stan: {{status}}",
+    "activatedBy": "Aktywowana przez: {{event}}",
+    "onStartup": "Aktywuje się przy starcie, co spowalnia uruchamianie Notoir. Lepiej użyć onCommand / onLanguage.",
+    "apiCalls": "Wywołania API: {{list}}",
+    "lastError": "Ostatni błąd: {{error}}",
+    "missing": "Brakujące tłumaczenia: {{list}}"
+  },
+  "formatFailed": "Formatowanie przez „{{name}}” nie powiodło się; dokument pozostał bez zmian.",
+  "installZipTitle": "Zainstaluj wtyczkę z pliku .zip",
+  "manager": {
+    "title": "Wtyczki",
+    "search": "Szukaj wtyczek",
+    "installed": "Zainstalowane (liczba: {{count}})",
+    "recommended": "Polecane przez obszar roboczy (liczba: {{count}})",
+    "empty": "Brak zainstalowanych wtyczek. Zainstaluj wtyczkę z folderu lub pliku .zip.",
+    "noRecommendations": "Ten obszar roboczy nie poleca żadnych wtyczek.",
+    "notInstalled": "niezainstalowana",
+    "enable": "Włącz",
+    "disable": "Wyłącz",
+    "permissions": "Uprawnienia",
+    "settings": "Ustawienia",
+    "uninstall": "Odinstaluj",
+    "noPermissions": "Brak specjalnych uprawnień",
+    "permissionsList": "Uprawnienia: {{list}}",
+    "processAlways": "Uruchamianie programów jest zawsze dozwolone.",
+    "revoke": "Odwołaj"
+  },
+  "panels": {
+    "empty": "Żadna wtyczka nie dodaje jeszcze tu paneli.",
+    "noContent": "Na razie nic do pokazania.",
+    "unknownNode": "Nieznany element „{{kind}}”"
+  },
+  "status": {
+    "invalid": "Nieprawidłowa",
+    "incompatible": "Niezgodna",
+    "needsReview": "Wymaga sprawdzenia",
+    "disabled": "Wyłączona",
+    "enabled": "Włączona",
+    "active": "Działa"
+  },
+  "uninstall": {
+    "title": "Odinstalować „{{name}}”?",
+    "body": "Folder wtyczki zostanie przeniesiony do kosza."
+  },
+  "uninstallFailed": "Nie udało się odinstalować „{{name}}”."
 }

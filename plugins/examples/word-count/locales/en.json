@@ -1,0 +1,7 @@
+{
+  "commands": { "count": "Count Words" },
+  "settings": { "includeCode": "Count words in code blocks" },
+  "status": "{{n}} words",
+  "tooltip": "Words in this document",
+  "result": "This document has {{n}} words."
+}

@@ -1,6 +1,6 @@
 # 17 — Shell Layout, Panels, Empty State & First Run
 
-**Status:** Partial — panel model, activity bar, sidebars, bottom panel, empty state (M0, M3); Scratchpad-on-type (M5); first-run Welcome page with language, live theme choice and Skip / Start writing, Help → Welcome (M10). MCP Learn More and Plugins Explore are disabled until those milestones; panel drag-docking later
+**Status:** Partial — panel model, activity bar, sidebars, bottom panel, empty state (M0, M3); Scratchpad-on-type (M5); first-run Welcome page with language, live theme choice and Skip / Start writing, Help → Welcome (M10). the Welcome page's MCP button opens Connections (M20) and Plugins opens the Plugin Manager; the Plugins panel hosts plugin-contributed panels (M23); panel drag-docking later
 
 ## Purpose
 

@@ -134,7 +134,7 @@ impl SettingDef {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Schema {
     defs: BTreeMap<&'static str, SettingDef>,
     /// Built-in language defaults, e.g. markdown → editor.wordWrap = "on".
@@ -149,6 +149,11 @@ impl Schema {
             def.key
         );
         self.defs.insert(def.key, def);
+    }
+
+    /// Removes a run-time definition (a plugin's settings).
+    pub fn remove(&mut self, key: &str) {
+        self.defs.remove(key);
     }
 
     pub fn language_default(

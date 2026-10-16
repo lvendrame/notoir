@@ -1,6 +1,6 @@
 # 16 — Command Palette
 
-**Status:** Done — second-step pickers with live theme preview (M3); Command Palette with translated and English fuzzy matching, recently used (persisted), shortcuts per row, show-all toggle with dimmed disabled commands, commands run with the context captured at open (M9). Uses Notoir's own fuzzy matcher instead of nucleo-matcher; plugin badges arrive with plugins (M22)
+**Status:** Done — second-step pickers with live theme preview (M3); Command Palette with translated and English fuzzy matching, recently used (persisted), shortcuts per row, show-all toggle with dimmed disabled commands, commands run with the context captured at open (M9). Uses Notoir's own fuzzy matcher instead of nucleo-matcher; plugin commands are listed as "Plugins: <title>" (M22)
 
 ## Purpose
 

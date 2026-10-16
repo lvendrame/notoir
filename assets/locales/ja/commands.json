@@ -375,6 +375,17 @@
     "disable": "プラグインを無効にする",
     "viewError": "プラグインのエラーを表示",
     "processAnswer": "プログラム実行の確認に応答",
-    "run": "プラグインのコマンドを実行"
+    "run": "プラグインのコマンドを実行",
+    "manager": "プラグイン マネージャー",
+    "installed": "インストール済みプラグイン",
+    "developerTools": "プラグイン開発者ツール",
+    "installFromZip": ".zip からプラグインをインストール…",
+    "uninstall": "プラグインをアンインストール",
+    "uninstallAnswer": "アンインストールの確認に応答",
+    "reloadPlugin": "プラグインを再読み込み",
+    "panelAction": "プラグイン パネルの操作を実行",
+    "togglePermissions": "プラグインの権限を表示",
+    "revokeProcess": "プログラム実行の許可を取り消す",
+    "settings": "プラグインの設定"
   }
 }

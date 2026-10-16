@@ -34,5 +34,53 @@
     "titleUpdate": "「{{name}}」を {{version}} に更新するには次の許可が必要です:",
     "install": "インストール",
     "enable": "有効にする"
-  }
+  },
+  "dev": {
+    "all": "すべてのプラグイン",
+    "reload": "このプラグインを再読み込み",
+    "status": "状態: {{status}}",
+    "activatedBy": "起動のきっかけ: {{event}}",
+    "onStartup": "起動時に有効になるため Notoir の起動が遅くなります。onCommand / onLanguage を推奨します。",
+    "apiCalls": "API 呼び出し: {{list}}",
+    "lastError": "最後のエラー: {{error}}",
+    "missing": "不足している翻訳: {{list}}"
+  },
+  "formatFailed": "「{{name}}」による書式設定に失敗しました。ドキュメントは変更されていません。",
+  "installZipTitle": ".zip からプラグインをインストール",
+  "manager": {
+    "title": "プラグイン",
+    "search": "プラグインを検索",
+    "installed": "インストール済み ({{count}})",
+    "recommended": "ワークスペースのおすすめ ({{count}})",
+    "empty": "プラグインはインストールされていません。フォルダーまたは .zip ファイルからインストールしてください。",
+    "noRecommendations": "このワークスペースにおすすめのプラグインはありません。",
+    "notInstalled": "未インストール",
+    "enable": "有効にする",
+    "disable": "無効にする",
+    "permissions": "権限",
+    "settings": "設定",
+    "uninstall": "アンインストール",
+    "noPermissions": "特別な権限はありません",
+    "permissionsList": "権限: {{list}}",
+    "processAlways": "プログラムの実行は常に許可されています。",
+    "revoke": "取り消す"
+  },
+  "panels": {
+    "empty": "ここにパネルを追加しているプラグインはまだありません。",
+    "noContent": "まだ表示する内容はありません。",
+    "unknownNode": "不明な要素「{{kind}}」"
+  },
+  "status": {
+    "invalid": "無効",
+    "incompatible": "非互換",
+    "needsReview": "確認が必要",
+    "disabled": "無効化済み",
+    "enabled": "有効",
+    "active": "実行中"
+  },
+  "uninstall": {
+    "title": "「{{name}}」をアンインストールしますか?",
+    "body": "プラグインのフォルダーはごみ箱に移動されます。"
+  },
+  "uninstallFailed": "「{{name}}」をアンインストールできませんでした。"
 }

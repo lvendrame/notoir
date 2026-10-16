@@ -34,5 +34,53 @@
     "titleUpdate": "De update van ‘{{name}}’ naar {{version}} vraagt om:",
     "install": "Installeren",
     "enable": "Inschakelen"
-  }
+  },
+  "dev": {
+    "all": "Alle plug-ins",
+    "reload": "Deze plug-in opnieuw laden",
+    "status": "Status: {{status}}",
+    "activatedBy": "Geactiveerd door: {{event}}",
+    "onStartup": "Wordt bij het opstarten geactiveerd, wat Notoir trager laat starten. Gebruik liever onCommand / onLanguage.",
+    "apiCalls": "API-aanroepen: {{list}}",
+    "lastError": "Laatste fout: {{error}}",
+    "missing": "Ontbrekende vertalingen: {{list}}"
+  },
+  "formatFailed": "Opmaken met ‘{{name}}’ is mislukt; het document is niet gewijzigd.",
+  "installZipTitle": "Plug-in installeren uit .zip",
+  "manager": {
+    "title": "Plug-ins",
+    "search": "Plug-ins zoeken",
+    "installed": "Geïnstalleerd ({{count}})",
+    "recommended": "Aanbevolen door de werkruimte ({{count}})",
+    "empty": "Geen plug-ins geïnstalleerd. Installeer er een uit een map of een .zip-bestand.",
+    "noRecommendations": "Deze werkruimte raadt geen plug-ins aan.",
+    "notInstalled": "niet geïnstalleerd",
+    "enable": "Inschakelen",
+    "disable": "Uitschakelen",
+    "permissions": "Machtigingen",
+    "settings": "Instellingen",
+    "uninstall": "Verwijderen",
+    "noPermissions": "Geen bijzondere machtigingen",
+    "permissionsList": "Machtigingen: {{list}}",
+    "processAlways": "Programma’s uitvoeren is altijd toegestaan.",
+    "revoke": "Intrekken"
+  },
+  "panels": {
+    "empty": "Nog geen plug-in voegt hier panelen toe.",
+    "noContent": "Nog niets te tonen.",
+    "unknownNode": "Onbekend element ‘{{kind}}’"
+  },
+  "status": {
+    "invalid": "Ongeldig",
+    "incompatible": "Niet compatibel",
+    "needsReview": "Beoordeling nodig",
+    "disabled": "Uitgeschakeld",
+    "enabled": "Ingeschakeld",
+    "active": "Actief"
+  },
+  "uninstall": {
+    "title": "‘{{name}}’ verwijderen?",
+    "body": "De plug-inmap wordt naar de prullenbak verplaatst."
+  },
+  "uninstallFailed": "Kan ‘{{name}}’ niet verwijderen."
 }

@@ -375,6 +375,17 @@
     "disable": "Wyłącz wtyczkę",
     "viewError": "Pokaż błąd wtyczki",
     "processAnswer": "Odpowiedz na prośbę o program",
-    "run": "Uruchom polecenie wtyczki"
+    "run": "Uruchom polecenie wtyczki",
+    "manager": "Menedżer wtyczek",
+    "installed": "Zainstalowane wtyczki",
+    "developerTools": "Narzędzia deweloperskie wtyczek",
+    "installFromZip": "Zainstaluj wtyczkę z pliku .zip…",
+    "uninstall": "Odinstaluj wtyczkę",
+    "uninstallAnswer": "Odpowiedz na odinstalowanie",
+    "reloadPlugin": "Załaduj ponownie wtyczkę",
+    "panelAction": "Wykonaj akcję panelu wtyczki",
+    "togglePermissions": "Pokaż uprawnienia wtyczki",
+    "revokeProcess": "Odwołaj uprawnienie do programów",
+    "settings": "Ustawienia wtyczki"
   }
 }

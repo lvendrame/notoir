@@ -1,0 +1,7 @@
+{
+  "commands": { "count": "Contar palavras" },
+  "settings": { "includeCode": "Contar palavras em blocos de código" },
+  "status": "{{n}} palavras",
+  "tooltip": "Palavras neste documento",
+  "result": "Este documento tem {{n}} palavras."
+}

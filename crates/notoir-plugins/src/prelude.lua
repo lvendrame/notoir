@@ -86,12 +86,18 @@ notoir.status = {
 notoir.panels = {
   render = function(id, tree) return call("panels.render", { id = id, tree = tree }) end,
 }
-notoir.formatters = {
-  register = function(language, fn) return call("formatters.register", { language = language }) end,
-}
-notoir.outline = {
-  register = function(language, fn) return call("outline.register", { language = language }) end,
-}
+notoir._providers = { format = {}, outline = {} }
+local function provider(kind)
+  return function(language, fn)
+    if type(language) ~= "string" or type(fn) ~= "function" then
+      error("register expects (language, function)", 2)
+    end
+    notoir._providers[kind][language] = fn
+    call(kind == "format" and "formatters.register" or "outline.register", { language = language })
+  end
+end
+notoir.formatters = { register = provider("format") }
+notoir.outline = { register = provider("outline") }
 
 notoir.http = { get = function(url, opts) return native.http_get(url, opts) end }
 notoir.process = {
@@ -120,6 +126,12 @@ function notoir._run_command(id, args)
   if not fn then error("command " .. id .. " was declared but not registered") end
   local ctx = { editor = notoir.editor.active(), args = args }
   return fn(ctx)
+end
+
+function notoir._provide(kind, language, text, opts)
+  local fn = notoir._providers[kind][language]
+  if not fn then error("no " .. kind .. " provider for " .. language) end
+  return fn(text, opts or {})
 end
 
 function notoir._emit(name, payload)

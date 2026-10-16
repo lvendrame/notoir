@@ -66,6 +66,19 @@ pub enum IoResult {
         id: String,
         error: Option<String>,
     },
+    /// A plugin grammar was compiled (or failed).
+    PluginSyntax {
+        plugin: String,
+        language: String,
+        error: Option<String>,
+    },
+    /// `.notoir/plugins.toml` recommendations (id, version).
+    PluginRecommendations(Vec<(String, String)>),
+    /// A plugin folder went to the trash.
+    PluginUninstalled {
+        id: String,
+        error: Option<String>,
+    },
 }
 
 /// Replace in closed files: changed names, and failures with their error.

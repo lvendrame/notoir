@@ -34,5 +34,53 @@
     "titleUpdate": "L’aggiornamento di “{{name}}” alla versione {{version}} richiede:",
     "install": "Installa",
     "enable": "Attiva"
-  }
+  },
+  "dev": {
+    "all": "Tutti i plugin",
+    "reload": "Ricarica questo plugin",
+    "status": "Stato: {{status}}",
+    "activatedBy": "Attivato da: {{event}}",
+    "onStartup": "Si attiva all’avvio, rallentando l’avvio di Notoir. Meglio onCommand / onLanguage.",
+    "apiCalls": "Chiamate API: {{list}}",
+    "lastError": "Ultimo errore: {{error}}",
+    "missing": "Traduzioni mancanti: {{list}}"
+  },
+  "formatFailed": "La formattazione con “{{name}}” non è riuscita; il documento non è stato modificato.",
+  "installZipTitle": "Installa plugin da un .zip",
+  "manager": {
+    "title": "Plugin",
+    "search": "Cerca plugin",
+    "installed": "Installati ({{count}})",
+    "recommended": "Consigliati dall’area di lavoro ({{count}})",
+    "empty": "Nessun plugin installato. Installane uno da una cartella o da un file .zip.",
+    "noRecommendations": "Questa area di lavoro non consiglia plugin.",
+    "notInstalled": "non installato",
+    "enable": "Attiva",
+    "disable": "Disattiva",
+    "permissions": "Permessi",
+    "settings": "Impostazioni",
+    "uninstall": "Disinstalla",
+    "noPermissions": "Nessun permesso speciale",
+    "permissionsList": "Permessi: {{list}}",
+    "processAlways": "L’esecuzione di programmi è sempre consentita.",
+    "revoke": "Revoca"
+  },
+  "panels": {
+    "empty": "Nessun plugin aggiunge ancora pannelli qui.",
+    "noContent": "Ancora nulla da mostrare.",
+    "unknownNode": "Elemento sconosciuto “{{kind}}”"
+  },
+  "status": {
+    "invalid": "Non valido",
+    "incompatible": "Incompatibile",
+    "needsReview": "Da esaminare",
+    "disabled": "Disattivato",
+    "enabled": "Attivato",
+    "active": "In esecuzione"
+  },
+  "uninstall": {
+    "title": "Disinstallare “{{name}}”?",
+    "body": "La cartella del plugin viene spostata nel cestino."
+  },
+  "uninstallFailed": "Impossibile disinstallare “{{name}}”."
 }

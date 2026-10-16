@@ -867,3 +867,51 @@ fn mcp_snapshots() {
         img.save(out_dir().join("mcp-connections.png")).unwrap();
     }
 }
+
+/// Plugin Manager with an installed example and a plugin needing review
+/// (docs/design/plugin-manager.png).
+#[test]
+fn plugin_manager_snapshot() {
+    let home = tempfile::tempdir().unwrap();
+    let paths = notoir_platform::AppPaths::under(home.path());
+    paths.ensure_dirs().unwrap();
+    let examples = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../plugins/examples");
+    for name in ["word-count", "todo-highlighter", "markdown-table-formatter"] {
+        notoir_workspace::fs_ops::copy_recursive(&examples.join(name), &paths.plugins.join(name))
+            .unwrap();
+    }
+    let (db, _) = notoir_storage::state_db::StateDb::open(&paths.data.join("state.db")).unwrap();
+    for name in ["word-count", "markdown-table-formatter"] {
+        let m = notoir_plugins::Manifest::load(&examples.join(name)).unwrap();
+        db.set_plugin_approval(&notoir_storage::state_db::PluginApprovalRow {
+            plugin_id: m.plugin.id.clone(),
+            version: m.plugin.version.clone(),
+            permissions_hash: m.permissions.hash(),
+            approved_at: 1,
+            enabled: true,
+        })
+        .unwrap();
+    }
+    drop(db);
+    let mut app = common::start_in(home, |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+    });
+    for _ in 0..40 {
+        common::settle(&mut app);
+        if app.harness.state().core.plugins.scanned {
+            break;
+        }
+    }
+    app.harness.state_mut().core.notifications.clear();
+    common::run(&mut app, "plugins.manager", serde_json::json!({}));
+    common::run(
+        &mut app,
+        "plugins.togglePermissions",
+        serde_json::json!({ "plugin": "word-count" }),
+    );
+    app.harness.run_steps(4);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("plugin-manager.png")).unwrap();
+    }
+}

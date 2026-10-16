@@ -375,6 +375,17 @@
     "disable": "Eklentiyi Devre Dışı Bırak",
     "viewError": "Eklenti Hatasını Görüntüle",
     "processAnswer": "Program İsteğini Yanıtla",
-    "run": "Eklenti Komutunu Çalıştır"
+    "run": "Eklenti Komutunu Çalıştır",
+    "manager": "Eklenti Yöneticisi",
+    "installed": "Yüklü Eklentiler",
+    "developerTools": "Eklenti Geliştirici Araçları",
+    "installFromZip": ".zip'ten Eklenti Yükle…",
+    "uninstall": "Eklentiyi Kaldır",
+    "uninstallAnswer": "Kaldırmayı Yanıtla",
+    "reloadPlugin": "Eklentiyi Yeniden Yükle",
+    "panelAction": "Eklenti Paneli Eylemini Çalıştır",
+    "togglePermissions": "Eklenti İzinlerini Göster",
+    "revokeProcess": "Program İznini İptal Et",
+    "settings": "Eklenti Ayarları"
   }
 }
