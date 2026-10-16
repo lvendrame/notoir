@@ -52,5 +52,14 @@
   "templateUnreadable": "Het sjabloon “{{name}}” kon niet worden gelezen.",
   "themeInvalid": "Het themabestand “{{file}}” kon niet worden geladen.",
   "exported": "“{{name}}” geëxporteerd.",
-  "exportFailed": "“{{name}}” kon niet worden geëxporteerd."
+  "exportFailed": "“{{name}}” kon niet worden geëxporteerd.",
+  "updateAvailable": "Notoir {{version}} is beschikbaar.",
+  "updateDownload": "Downloaden",
+  "updateUpToDate": "Notoir is up-to-date.",
+  "updateUnavailable": "Updates zijn niet beschikbaar in deze build.",
+  "updateCheckFailed": "Kan niet controleren op updates.",
+  "updateReady": "Notoir {{version}} is gedownload en geverifieerd.",
+  "updateInstallOnQuit": "Installeren bij afsluiten",
+  "updateDownloadFailed": "De update kon niet worden gedownload.",
+  "updateWillInstall": "Het installatieprogramma wordt geopend nadat Notoir is afgesloten."
 }

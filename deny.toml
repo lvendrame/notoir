@@ -37,6 +37,8 @@ allow = [
     "OFL-1.1",
     "Unlicense",
     "0BSD",
+    # webpki-roots (Mozilla's CA list, bundled for HTTPS).
+    "CDLA-Permissive-2.0",
     # egui default_fonts (Ubuntu Light): fallback glyphs only.
     "Ubuntu-font-1.0",
 ]

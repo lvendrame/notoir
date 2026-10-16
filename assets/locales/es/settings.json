@@ -200,5 +200,8 @@
     "commandTimeoutMs": "Tiempo límite de comandos de complementos (ms)",
     "eventTimeoutMs": "Tiempo límite de eventos de complementos (ms)",
     "changeEventDebounceMs": "Retraso de los eventos de cambio para complementos (ms)"
+  },
+  "update": {
+    "mode": "Actualizaciones: desactivadas, avisar cuando haya una o descargarla automáticamente"
   }
 }

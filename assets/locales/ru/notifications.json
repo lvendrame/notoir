@@ -52,5 +52,14 @@
   "templateUnreadable": "Не удалось прочитать шаблон «{{name}}».",
   "themeInvalid": "Не удалось загрузить файл темы «{{file}}».",
   "exported": "Файл «{{name}}» экспортирован.",
-  "exportFailed": "Не удалось экспортировать «{{name}}»."
+  "exportFailed": "Не удалось экспортировать «{{name}}».",
+  "updateAvailable": "Доступна версия Notoir {{version}}.",
+  "updateDownload": "Скачать",
+  "updateUpToDate": "Notoir обновлён до последней версии.",
+  "updateUnavailable": "В этой сборке обновления недоступны.",
+  "updateCheckFailed": "Не удалось проверить обновления.",
+  "updateReady": "Notoir {{version}} скачан и проверен.",
+  "updateInstallOnQuit": "Установить при выходе",
+  "updateDownloadFailed": "Не удалось скачать обновление.",
+  "updateWillInstall": "Установщик откроется после выхода из Notoir."
 }

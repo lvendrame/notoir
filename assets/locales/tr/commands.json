@@ -71,7 +71,10 @@
     "quitMac": "Notoir'dan Çık",
     "settings": "Ayarları Aç",
     "installShellCommand": "'notoir' Komutunu PATH'e Yükle",
-    "uninstallShellCommand": "'notoir' Komutunu PATH'ten Kaldır"
+    "uninstallShellCommand": "'notoir' Komutunu PATH'ten Kaldır",
+    "checkForUpdates": "Güncellemeleri denetle…",
+    "downloadUpdate": "Güncellemeyi indir",
+    "installUpdateOnQuit": "Çıkışta güncellemeyi yükle"
   },
   "workbench": {
     "showNotifications": "Bildirimleri Göster",

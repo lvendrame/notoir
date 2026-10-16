@@ -71,7 +71,10 @@
     "quitMac": "Notoir を終了",
     "settings": "設定を開く",
     "installShellCommand": "'notoir' コマンドを PATH にインストール",
-    "uninstallShellCommand": "'notoir' コマンドを PATH から削除"
+    "uninstallShellCommand": "'notoir' コマンドを PATH から削除",
+    "checkForUpdates": "アップデートを確認…",
+    "downloadUpdate": "アップデートをダウンロード",
+    "installUpdateOnQuit": "終了時にアップデートをインストール"
   },
   "workbench": {
     "showNotifications": "通知を表示",

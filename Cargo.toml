@@ -64,7 +64,10 @@ two-face = { version = "0.5.2", default-features = false, features = ["syntect-d
 ignore = "0.4.33"
 globset = "0.4.20"
 trash = "5.2.9"
-ureq = { version = "3.4.2", default-features = false }
+# rustls (ring) with the Mozilla root store: HTTPS for the updater and plugins.
+ureq = { version = "3.4.2", default-features = false, features = ["rustls"] }
+minisign-verify = "0.3.0"
+semver = "1.0.28"
 zip = { version = "9.0.3", default-features = false, features = ["deflate-flate2-zlib-rs"] }
 
 [workspace.lints.rust]

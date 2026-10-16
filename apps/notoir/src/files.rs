@@ -42,6 +42,8 @@ pub trait Dialogs: Send + Sync {
     fn open_external(&self, url: &str);
     /// Moves paths to the OS trash (called on a worker thread).
     fn trash(&self, paths: &[PathBuf]) -> Result<(), String>;
+    /// Hands a verified update installer to the platform (at exit).
+    fn install_update(&self, installer: &Path);
 }
 
 pub struct NativeDialogs;
@@ -57,6 +59,12 @@ impl Dialogs for NativeDialogs {
         notoir_platform::dialogs::save_file(opts, move |path| {
             poster.post(IoResult::SaveAsPicked { doc, path })
         });
+    }
+
+    fn install_update(&self, installer: &Path) {
+        if let Err(e) = notoir_platform::update::hand_off(installer) {
+            tracing::error!(error = %e, "could not start the update installer");
+        }
     }
 
     fn export_file(&self, opts: FileDialogOptions, doc: DocumentId, poster: Poster) {
@@ -95,6 +103,8 @@ pub struct ScriptedDialogs {
     pub trash_fails: Arc<std::sync::atomic::AtomicBool>,
     /// URLs handed to the OS.
     pub opened: Arc<Mutex<Vec<String>>>,
+    /// Update installers "handed to the platform".
+    pub installed: Arc<Mutex<Vec<PathBuf>>>,
 }
 
 impl ScriptedDialogs {
@@ -146,6 +156,13 @@ impl Dialogs for ScriptedDialogs {
             .pop_front()
             .flatten();
         poster.post(IoResult::SaveAsPicked { doc, path });
+    }
+
+    fn install_update(&self, installer: &Path) {
+        self.installed
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .push(installer.to_path_buf());
     }
 
     /// Answered from the same queue as Save As.

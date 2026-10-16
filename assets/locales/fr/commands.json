@@ -71,7 +71,10 @@
     "quitMac": "Quitter Notoir",
     "settings": "Ouvrir les paramètres",
     "installShellCommand": "Installer la commande 'notoir' dans le PATH",
-    "uninstallShellCommand": "Retirer la commande 'notoir' du PATH"
+    "uninstallShellCommand": "Retirer la commande 'notoir' du PATH",
+    "checkForUpdates": "Rechercher des mises à jour…",
+    "downloadUpdate": "Télécharger la mise à jour",
+    "installUpdateOnQuit": "Installer la mise à jour en quittant"
   },
   "workbench": {
     "showNotifications": "Afficher les notifications",

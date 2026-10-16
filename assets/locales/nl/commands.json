@@ -71,7 +71,10 @@
     "quitMac": "Notoir afsluiten",
     "settings": "Instellingen openen",
     "installShellCommand": "Opdracht 'notoir' in PATH installeren",
-    "uninstallShellCommand": "Opdracht 'notoir' uit PATH verwijderen"
+    "uninstallShellCommand": "Opdracht 'notoir' uit PATH verwijderen",
+    "checkForUpdates": "Controleren op updates…",
+    "downloadUpdate": "Update downloaden",
+    "installUpdateOnQuit": "Update installeren bij afsluiten"
   },
   "workbench": {
     "showNotifications": "Meldingen tonen",

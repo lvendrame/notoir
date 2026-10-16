@@ -123,6 +123,9 @@ pub struct StartOptions {
     pub restore_session: bool,
     /// Show the first-run page when no settings file exists.
     pub first_run: bool,
+    /// Update manifest URL and key (built in for release builds; tests set
+    /// their own).
+    pub update: Option<notoir_platform::update::UpdateConfig>,
 }
 
 impl StartOptions {
@@ -141,6 +144,7 @@ impl StartOptions {
             open_paths: Vec::new(),
             restore_session: false,
             first_run: false,
+            update: notoir_platform::update::UpdateConfig::built_in(),
         }
     }
 }
@@ -236,6 +240,7 @@ pub struct AppCore {
     pub notes: crate::notes::NotesState,
     pub text_index: crate::text_index::TextIndexState,
     pub templates: crate::templates::TemplatesState,
+    pub updates: crate::updates::UpdatesState,
 }
 
 /// A `notoir --wait` request (spec 38).
@@ -429,6 +434,7 @@ impl AppCore {
             notes: Default::default(),
             text_index: Default::default(),
             templates: Default::default(),
+            updates: crate::updates::UpdatesState::new(opts.update.clone()),
             language,
             theme_choice,
             custom_themes: Vec::new(),
@@ -889,6 +895,12 @@ impl AppCore {
                 IoResult::TextIndex(done) => self.text_index_done(*done),
                 IoResult::TemplatesListed(list) => self.templates_listed(list),
                 IoResult::CustomThemes(list) => self.custom_themes_loaded(list),
+                IoResult::UpdateStamp(ms) => self.updates_stamp(ms),
+                IoResult::UpdateChecked(r) => {
+                    let (result, manual) = *r;
+                    self.updates_checked(result, manual);
+                }
+                IoResult::UpdateDownloaded(r) => self.updates_downloaded(*r),
                 IoResult::TemplateLoaded(loaded) => {
                     let (t, text) = *loaded;
                     self.templates_loaded(t, text);
@@ -1066,6 +1078,7 @@ impl AppCore {
         self.load_recent_workspaces();
         self.mcp_init();
         self.reload_custom_themes();
+        self.updates_init();
         self.recovery_start();
         self.restore_scratchpads();
         let restore = restore_session
@@ -1096,6 +1109,7 @@ impl AppCore {
         self.write_session(false);
         self.recovery_shutdown();
         self.flush_io();
+        self.updates_hand_off();
     }
 
     /// Command-line paths: files open as tabs; the first folder becomes this

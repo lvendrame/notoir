@@ -71,7 +71,10 @@
     "quitMac": "Notoir 종료",
     "settings": "설정 열기",
     "installShellCommand": "PATH에 'notoir' 명령 설치",
-    "uninstallShellCommand": "PATH에서 'notoir' 명령 제거"
+    "uninstallShellCommand": "PATH에서 'notoir' 명령 제거",
+    "checkForUpdates": "업데이트 확인…",
+    "downloadUpdate": "업데이트 다운로드",
+    "installUpdateOnQuit": "종료 시 업데이트 설치"
   },
   "workbench": {
     "showNotifications": "알림 표시",

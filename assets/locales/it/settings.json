@@ -200,5 +200,8 @@
     "commandTimeoutMs": "Tempo limite dei comandi dei plugin (ms)",
     "eventTimeoutMs": "Tempo limite degli eventi dei plugin (ms)",
     "changeEventDebounceMs": "Ritardo degli eventi di modifica per i plugin (ms)"
+  },
+  "update": {
+    "mode": "Aggiornamenti: disattivati, avvisa quando disponibili o scarica automaticamente"
   }
 }

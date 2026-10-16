@@ -200,5 +200,8 @@
     "commandTimeoutMs": "插件命令时间上限 (毫秒)",
     "eventTimeoutMs": "插件事件时间上限 (毫秒)",
     "changeEventDebounceMs": "插件更改事件延迟 (毫秒)"
+  },
+  "update": {
+    "mode": "更新：关闭、有可用更新时通知，或自动下载"
   }
 }

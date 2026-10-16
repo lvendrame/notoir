@@ -200,5 +200,8 @@
     "commandTimeoutMs": "Délai des commandes d’extension (ms)",
     "eventTimeoutMs": "Délai des gestionnaires d’événements d’extension (ms)",
     "changeEventDebounceMs": "Délai des événements de modification pour les extensions (ms)"
+  },
+  "update": {
+    "mode": "Mises à jour : désactivées, notifier lorsqu’une est disponible ou la télécharger automatiquement"
   }
 }

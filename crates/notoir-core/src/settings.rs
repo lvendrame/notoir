@@ -619,6 +619,13 @@ impl Schema {
             C::General,
         );
         def(
+            "update.mode",
+            T::Enum(&["off", "notify", "download"]),
+            s_("notify"),
+            Scopes::USER_ONLY,
+            C::General,
+        );
+        def(
             "search.useIndex",
             T::Bool,
             V::Bool(true),

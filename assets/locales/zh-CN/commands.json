@@ -71,7 +71,10 @@
     "quitMac": "退出 Notoir",
     "settings": "打开设置",
     "installShellCommand": "在 PATH 中安装 'notoir' 命令",
-    "uninstallShellCommand": "从 PATH 中移除 'notoir' 命令"
+    "uninstallShellCommand": "从 PATH 中移除 'notoir' 命令",
+    "checkForUpdates": "检查更新…",
+    "downloadUpdate": "下载更新",
+    "installUpdateOnQuit": "退出时安装更新"
   },
   "workbench": {
     "showNotifications": "显示通知",

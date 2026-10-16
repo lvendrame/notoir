@@ -20,6 +20,14 @@ tracing.workspace = true
 rfd.workspace = true
 pollster.workspace = true
 interprocess.workspace = true
+ureq.workspace = true
+minisign-verify.workspace = true
+semver.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2 = "0.11.1"
 
 [dev-dependencies]
 tempfile.workspace = true
+ed25519-dalek = "3.0.0"
+base64 = "0.23"

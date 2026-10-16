@@ -52,5 +52,14 @@
   "templateUnreadable": "Impossibile leggere il modello «{{name}}».",
   "themeInvalid": "Impossibile caricare il file del tema «{{file}}».",
   "exported": "«{{name}}» esportato.",
-  "exportFailed": "Impossibile esportare «{{name}}»."
+  "exportFailed": "Impossibile esportare «{{name}}».",
+  "updateAvailable": "Notoir {{version}} è disponibile.",
+  "updateDownload": "Scarica",
+  "updateUpToDate": "Notoir è aggiornato.",
+  "updateUnavailable": "Gli aggiornamenti non sono disponibili in questa build.",
+  "updateCheckFailed": "Impossibile controllare gli aggiornamenti.",
+  "updateReady": "Notoir {{version}} è stato scaricato e verificato.",
+  "updateInstallOnQuit": "Installa all’uscita",
+  "updateDownloadFailed": "Impossibile scaricare l’aggiornamento.",
+  "updateWillInstall": "Il programma di installazione si aprirà dopo l’uscita da Notoir."
 }

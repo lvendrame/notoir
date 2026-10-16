@@ -40,4 +40,5 @@ pub mod structure;
 pub mod templates;
 pub mod text_index;
 pub mod theme;
+pub mod updates;
 pub mod workspace;

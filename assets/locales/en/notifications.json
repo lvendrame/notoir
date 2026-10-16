@@ -52,5 +52,14 @@
   "templateUnreadable": "Could not read the template “{{name}}”.",
   "themeInvalid": "The theme file “{{file}}” could not be loaded.",
   "exported": "Exported “{{name}}”.",
-  "exportFailed": "Could not export “{{name}}”."
+  "exportFailed": "Could not export “{{name}}”.",
+  "updateAvailable": "Notoir {{version}} is available.",
+  "updateDownload": "Download",
+  "updateUpToDate": "Notoir is up to date.",
+  "updateUnavailable": "Updates are not available in this build.",
+  "updateCheckFailed": "Could not check for updates.",
+  "updateReady": "Notoir {{version}} is downloaded and verified.",
+  "updateInstallOnQuit": "Install on Quit",
+  "updateDownloadFailed": "The update could not be downloaded.",
+  "updateWillInstall": "The installer opens after Notoir quits."
 }

@@ -200,5 +200,8 @@
     "commandTimeoutMs": "Limit czasu poleceń wtyczek (ms)",
     "eventTimeoutMs": "Limit czasu zdarzeń wtyczek (ms)",
     "changeEventDebounceMs": "Opóźnienie zdarzeń zmian dla wtyczek (ms)"
+  },
+  "update": {
+    "mode": "Aktualizacje: wyłączone, powiadamiaj o dostępności lub pobieraj automatycznie"
   }
 }

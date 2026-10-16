@@ -200,5 +200,8 @@
     "commandTimeoutMs": "プラグイン コマンドの制限時間 (ミリ秒)",
     "eventTimeoutMs": "プラグイン イベントの制限時間 (ミリ秒)",
     "changeEventDebounceMs": "プラグインへの変更イベントの遅延 (ミリ秒)"
+  },
+  "update": {
+    "mode": "アップデート: オフ、利用可能時に通知、または自動ダウンロード"
   }
 }

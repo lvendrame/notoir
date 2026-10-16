@@ -13,6 +13,10 @@ permissions:
 
 env:
   CARGO_TERM_COLOR: always
+  # Built into the binary (spec 31 §Updates); without them the updater is
+  # unavailable. The key is minisign's public key line.
+  NOTOIR_UPDATE_URL: ${{ vars.NOTOIR_UPDATE_URL }}
+  NOTOIR_UPDATE_PUBKEY: ${{ vars.NOTOIR_UPDATE_PUBKEY }}
 
 jobs:
   package:
@@ -93,6 +97,8 @@ jobs:
     needs: package
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    env:
+      HAS_MINISIGN_KEY: ${{ secrets.MINISIGN_SECRET_KEY != '' }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -100,6 +106,22 @@ jobs:
           merge-multiple: true
       - name: Combined checksums
         run: cat dist/SHA256SUMS-*.txt > dist/SHA256SUMS.txt
+      - uses: actions/checkout@v4
+        with:
+          path: src
+      - name: Signed update manifest
+        if: env.HAS_MINISIGN_KEY == 'true'
+        env:
+          # A password-less minisign secret key (`minisign -G -W`).
+          MINISIGN_SECRET_KEY: ${{ secrets.MINISIGN_SECRET_KEY }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y minisign
+          python3 src/scripts/update-manifest.py dist "${GITHUB_REF_NAME}" \
+            "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}"
+          printf '%s\n' "$MINISIGN_SECRET_KEY" > "$RUNNER_TEMP/minisign.key"
+          minisign -S -s "$RUNNER_TEMP/minisign.key" -m dist/update.json \
+            -x dist/update.json.minisig -t "notoir ${GITHUB_REF_NAME}"
+          rm -f "$RUNNER_TEMP/minisign.key"
       - uses: softprops/action-gh-release@v2
         with:
           files: dist/*

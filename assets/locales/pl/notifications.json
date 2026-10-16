@@ -52,5 +52,14 @@
   "templateUnreadable": "Nie można odczytać szablonu „{{name}}”.",
   "themeInvalid": "Nie można wczytać pliku motywu „{{file}}”.",
   "exported": "Wyeksportowano „{{name}}”.",
-  "exportFailed": "Nie można wyeksportować „{{name}}”."
+  "exportFailed": "Nie można wyeksportować „{{name}}”.",
+  "updateAvailable": "Dostępna jest wersja Notoir {{version}}.",
+  "updateDownload": "Pobierz",
+  "updateUpToDate": "Notoir jest aktualny.",
+  "updateUnavailable": "Aktualizacje nie są dostępne w tej kompilacji.",
+  "updateCheckFailed": "Nie można sprawdzić aktualizacji.",
+  "updateReady": "Pobrano i zweryfikowano Notoir {{version}}.",
+  "updateInstallOnQuit": "Zainstaluj przy zamykaniu",
+  "updateDownloadFailed": "Nie można pobrać aktualizacji.",
+  "updateWillInstall": "Instalator otworzy się po zamknięciu Notoir."
 }

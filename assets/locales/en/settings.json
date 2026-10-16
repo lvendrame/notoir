@@ -200,5 +200,8 @@
     "commandTimeoutMs": "Plugin command time limit (ms)",
     "eventTimeoutMs": "Plugin event handler time limit (ms)",
     "changeEventDebounceMs": "Delay before plugins get change events (ms)"
+  },
+  "update": {
+    "mode": "Updates: off, notify when one is available, or download it automatically"
   }
 }

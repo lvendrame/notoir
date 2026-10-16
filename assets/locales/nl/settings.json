@@ -200,5 +200,8 @@
     "commandTimeoutMs": "Tijdslimiet voor plug-inopdrachten (ms)",
     "eventTimeoutMs": "Tijdslimiet voor plug-ingebeurtenissen (ms)",
     "changeEventDebounceMs": "Vertraging van wijzigingsgebeurtenissen voor plug-ins (ms)"
+  },
+  "update": {
+    "mode": "Updates: uit, melden wanneer beschikbaar of automatisch downloaden"
   }
 }

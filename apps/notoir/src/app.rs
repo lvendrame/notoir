@@ -343,6 +343,7 @@ impl eframe::App for NotoirApp {
         self.core.plugins_tick();
         self.core.notes_tick();
         self.core.text_index_tick();
+        self.core.updates_tick();
         if let Some(due) = self.core.notes_next_due() {
             ctx.request_repaint_after(std::time::Duration::from_millis(
                 due.saturating_sub(now).max(1),

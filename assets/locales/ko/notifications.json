@@ -52,5 +52,14 @@
   "templateUnreadable": "템플릿 “{{name}}”을(를) 읽을 수 없습니다.",
   "themeInvalid": "테마 파일 “{{file}}”을(를) 불러올 수 없습니다.",
   "exported": "“{{name}}”을(를) 내보냈습니다.",
-  "exportFailed": "“{{name}}”을(를) 내보낼 수 없습니다."
+  "exportFailed": "“{{name}}”을(를) 내보낼 수 없습니다.",
+  "updateAvailable": "Notoir {{version}}을(를) 사용할 수 있습니다.",
+  "updateDownload": "다운로드",
+  "updateUpToDate": "Notoir가 최신 상태입니다.",
+  "updateUnavailable": "이 빌드에서는 업데이트를 사용할 수 없습니다.",
+  "updateCheckFailed": "업데이트를 확인할 수 없습니다.",
+  "updateReady": "Notoir {{version}}을(를) 다운로드하고 확인했습니다.",
+  "updateInstallOnQuit": "종료 시 설치",
+  "updateDownloadFailed": "업데이트를 다운로드할 수 없습니다.",
+  "updateWillInstall": "Notoir가 종료되면 설치 프로그램이 열립니다."
 }

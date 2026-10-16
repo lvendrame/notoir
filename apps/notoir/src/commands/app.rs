@@ -7,6 +7,36 @@ use super::Specs;
 use crate::core::{AppCore, Effect};
 
 pub(super) fn specs(out: &mut Specs, platform: Platform) {
+    out.push(CommandSpec::new(
+        "app.checkForUpdates",
+        Category::Help,
+        |c: &mut AppCore, _: &CommandInvocation| {
+            c.updates_check(true);
+            CommandOutcome::Done
+        },
+    ));
+    out.push(
+        CommandSpec::new(
+            "app.downloadUpdate",
+            Category::Help,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.updates_download();
+                CommandOutcome::Done
+            },
+        )
+        .hidden(),
+    );
+    out.push(
+        CommandSpec::new(
+            "app.installUpdateOnQuit",
+            Category::Help,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.updates_install_on_quit();
+                CommandOutcome::Done
+            },
+        )
+        .hidden(),
+    );
     // `notoir` on PATH (spec 38): off the UI thread (may ask for admin).
     out.push(CommandSpec::new(
         "app.installShellCommand",

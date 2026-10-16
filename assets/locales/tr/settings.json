@@ -200,5 +200,8 @@
     "commandTimeoutMs": "Eklenti komut süre sınırı (ms)",
     "eventTimeoutMs": "Eklenti olay süre sınırı (ms)",
     "changeEventDebounceMs": "Eklentilere değişiklik olaylarının gecikmesi (ms)"
+  },
+  "update": {
+    "mode": "Güncellemeler: kapalı, mevcut olduğunda bildir veya otomatik indir"
   }
 }

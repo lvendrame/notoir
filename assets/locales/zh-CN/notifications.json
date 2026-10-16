@@ -52,5 +52,14 @@
   "templateUnreadable": "无法读取模板“{{name}}”。",
   "themeInvalid": "无法加载主题文件“{{file}}”。",
   "exported": "已导出“{{name}}”。",
-  "exportFailed": "无法导出“{{name}}”。"
+  "exportFailed": "无法导出“{{name}}”。",
+  "updateAvailable": "Notoir {{version}} 可用。",
+  "updateDownload": "下载",
+  "updateUpToDate": "Notoir 已是最新版本。",
+  "updateUnavailable": "此版本不支持更新。",
+  "updateCheckFailed": "无法检查更新。",
+  "updateReady": "Notoir {{version}} 已下载并验证。",
+  "updateInstallOnQuit": "退出时安装",
+  "updateDownloadFailed": "无法下载更新。",
+  "updateWillInstall": "Notoir 退出后将打开安装程序。"
 }

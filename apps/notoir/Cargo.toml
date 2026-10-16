@@ -44,6 +44,9 @@ tempfile.workspace = true
 git2.workspace = true
 ureq.workspace = true
 tokio = { version = "1.53.3", features = ["sync"] }
+ed25519-dalek = "3.0.0"
+base64 = "0.23"
+sha2 = "0.11.1"
 
 # `scripts/package.sh` (cargo-packager 0.11): .app/.dmg (universal), .msi and
 # NSIS, .deb and AppImage. The bundle identifier must never change after the

@@ -9,6 +9,7 @@ pub mod shell_command;
 pub mod single_instance;
 pub mod system_fonts;
 pub mod trash;
+pub mod update;
 
 pub use paths::{AppPaths, PathsError};
 

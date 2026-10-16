@@ -200,5 +200,8 @@
     "commandTimeoutMs": "Zeitlimit für Plugin-Befehle (ms)",
     "eventTimeoutMs": "Zeitlimit für Plugin-Ereignisse (ms)",
     "changeEventDebounceMs": "Verzögerung der Änderungsereignisse für Plugins (ms)"
+  },
+  "update": {
+    "mode": "Updates: aus, bei Verfügbarkeit benachrichtigen oder automatisch herunterladen"
   }
 }

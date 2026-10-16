@@ -52,5 +52,14 @@
   "templateUnreadable": "テンプレート「{{name}}」を読み込めませんでした。",
   "themeInvalid": "テーマファイル「{{file}}」を読み込めませんでした。",
   "exported": "「{{name}}」をエクスポートしました。",
-  "exportFailed": "「{{name}}」をエクスポートできませんでした。"
+  "exportFailed": "「{{name}}」をエクスポートできませんでした。",
+  "updateAvailable": "Notoir {{version}} が利用可能です。",
+  "updateDownload": "ダウンロード",
+  "updateUpToDate": "Notoir は最新です。",
+  "updateUnavailable": "このビルドではアップデートを利用できません。",
+  "updateCheckFailed": "アップデートを確認できませんでした。",
+  "updateReady": "Notoir {{version}} をダウンロードして検証しました。",
+  "updateInstallOnQuit": "終了時にインストール",
+  "updateDownloadFailed": "アップデートをダウンロードできませんでした。",
+  "updateWillInstall": "Notoir の終了後にインストーラーが開きます。"
 }

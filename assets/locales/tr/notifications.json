@@ -52,5 +52,14 @@
   "templateUnreadable": "“{{name}}” şablonu okunamadı.",
   "themeInvalid": "“{{file}}” tema dosyası yüklenemedi.",
   "exported": "“{{name}}” dışa aktarıldı.",
-  "exportFailed": "“{{name}}” dışa aktarılamadı."
+  "exportFailed": "“{{name}}” dışa aktarılamadı.",
+  "updateAvailable": "Notoir {{version}} kullanılabilir.",
+  "updateDownload": "İndir",
+  "updateUpToDate": "Notoir güncel.",
+  "updateUnavailable": "Bu derlemede güncellemeler kullanılamaz.",
+  "updateCheckFailed": "Güncellemeler denetlenemedi.",
+  "updateReady": "Notoir {{version}} indirildi ve doğrulandı.",
+  "updateInstallOnQuit": "Çıkışta yükle",
+  "updateDownloadFailed": "Güncelleme indirilemedi.",
+  "updateWillInstall": "Yükleyici, Notoir kapandıktan sonra açılır."
 }

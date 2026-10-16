@@ -88,6 +88,16 @@ pub enum IoResult {
     NotesIndexed(u64, Box<notoir_workspace::links::LinkIndex>),
     /// The search index worker finished jobs (spec 34).
     TextIndex(Box<crate::text_index::IndexDone>),
+    /// The last update check time (ms since epoch), from the cache.
+    UpdateStamp(Option<i64>),
+    /// An update check finished: (result, started from the menu).
+    UpdateChecked(
+        Box<(
+            Result<Option<notoir_platform::update::Offer>, notoir_platform::update::UpdateError>,
+            bool,
+        )>,
+    ),
+    UpdateDownloaded(Box<Result<std::path::PathBuf, notoir_platform::update::UpdateError>>),
     /// Custom themes read from `<config>/themes/` (spec 21).
     CustomThemes(Vec<Result<crate::theme::Theme, (String, String)>>),
     /// New File from Template…: the templates found.
