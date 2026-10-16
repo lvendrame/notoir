@@ -641,3 +641,171 @@ mod tests {
         assert!(find_heading(&doc, "olá-mundo").is_some());
     }
 }
+
+/// A Markdown document rendered for HTML export (docs/specs/24): the body
+/// and the first heading's text (the page title).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct HtmlExport {
+    pub title: Option<String>,
+    pub body: String,
+}
+
+/// Wiki links become ordinary links to the target's exported page
+/// (`[[Note#Heading|alias]]` → `[alias](<Note.html#heading>)`).
+fn wiki_to_links(source: &str) -> String {
+    let links = crate::wiki::links(source);
+    if links.is_empty() {
+        return source.to_owned();
+    }
+    let chars: Vec<char> = source.chars().collect();
+    let mut out = String::with_capacity(source.len());
+    let mut at = 0;
+    for l in links {
+        out.extend(&chars[at..l.range.0]);
+        let label = l.alias.clone().unwrap_or_else(|| l.target.clone());
+        let label = label.replace('[', "\\[").replace(']', "\\]");
+        let mut href = if l.target.is_empty() {
+            String::new()
+        } else {
+            format!("{}.html", l.target.trim())
+        };
+        if let Some(h) = &l.heading {
+            href.push('#');
+            href.push_str(&slug(h));
+        }
+        out.push_str(&format!("[{label}](<{}>)", href.replace('>', "%3E")));
+        at = l.range.1;
+    }
+    out.extend(&chars[at..]);
+    out
+}
+
+/// Renders `source` to HTML with the preview's extensions; front matter is
+/// left out and headings get the preview's slugs as ids (so `#anchor` links
+/// work). Raw HTML in the source is escaped, as in the preview.
+pub fn to_html(source: &str) -> HtmlExport {
+    let opts = Options::ENABLE_TABLES
+        | Options::ENABLE_TASKLISTS
+        | Options::ENABLE_STRIKETHROUGH
+        | Options::ENABLE_FOOTNOTES
+        | Options::ENABLE_HEADING_ATTRIBUTES
+        | Options::ENABLE_YAML_STYLE_METADATA_BLOCKS
+        | Options::ENABLE_PLUSES_DELIMITED_METADATA_BLOCKS;
+    let text = wiki_to_links(source);
+    let mut events: Vec<Event> = Vec::new();
+    let mut in_meta = false;
+    for e in Parser::new_ext(&text, opts) {
+        match e {
+            Event::Start(Tag::MetadataBlock(_)) => in_meta = true,
+            Event::End(pulldown_cmark::TagEnd::MetadataBlock(_)) => in_meta = false,
+            _ if in_meta => {}
+            Event::Html(h) | Event::InlineHtml(h) => events.push(Event::Text(h)),
+            e => events.push(e),
+        }
+    }
+    // Heading ids and the title.
+    let mut title = None;
+    let mut i = 0;
+    while i < events.len() {
+        if let Event::Start(Tag::Heading { id, .. }) = &events[i] {
+            let has_id = id.is_some();
+            let mut text = String::new();
+            let mut j = i + 1;
+            while j < events.len()
+                && !matches!(events[j], Event::End(pulldown_cmark::TagEnd::Heading(_)))
+            {
+                if let Event::Text(t) | Event::Code(t) = &events[j] {
+                    text.push_str(t);
+                }
+                j += 1;
+            }
+            if title.is_none() && !text.trim().is_empty() {
+                title = Some(text.trim().to_owned());
+            }
+            if !has_id && let Event::Start(Tag::Heading { id, .. }) = &mut events[i] {
+                *id = Some(slug(&text).into());
+            }
+            i = j;
+        }
+        i += 1;
+    }
+    let mut body = String::new();
+    pulldown_cmark::html::push_html(&mut body, events.into_iter());
+    HtmlExport { title, body }
+}
+
+/// Escapes text for HTML element content and attribute values.
+pub fn escape_html(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            '\'' => out.push_str("&#39;"),
+            c => out.push(c),
+        }
+    }
+    out
+}
+
+/// A standalone page: readable on screen, light and dark, and in print.
+pub fn html_document(title: &str, body: &str, lang: &str) -> String {
+    const CSS: &str = "\
+:root{color-scheme:light dark;--fg:#1f2328;--muted:#59636e;--bg:#ffffff;--line:#d1d9e0;--code:#f6f8fa;--link:#0969da}
+@media (prefers-color-scheme:dark){:root{--fg:#e6e8eb;--muted:#9aa3ad;--bg:#16181d;--line:#30363d;--code:#22252d;--link:#6cb6ff}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,'Segoe UI',sans-serif}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+h1,h2,h3,h4{line-height:1.25;margin:1.6em 0 .6em}h1{font-size:2em}h2{font-size:1.5em;border-bottom:1px solid var(--line);padding-bottom:.3em}
+a{color:var(--link)}img{max-width:100%}
+code,pre{font-family:ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace;font-size:.9em;background:var(--code);border-radius:4px}
+code{padding:.1em .35em}pre{padding:.9em 1em;overflow:auto}pre code{padding:0;background:none}
+blockquote{margin:1em 0;padding:0 1em;color:var(--muted);border-left:3px solid var(--line)}
+table{border-collapse:collapse;margin:1em 0;display:block;overflow:auto}th,td{border:1px solid var(--line);padding:.4em .75em}
+hr{border:0;border-top:1px solid var(--line);margin:2em 0}
+li>input[type=checkbox]{margin-right:.4em}
+@media print{body{background:#fff;color:#000}main{max-width:none;padding:0}a{color:#000}pre,code{background:#f3f3f3}}
+";
+    format!(
+        "<!doctype html>\n<html lang=\"{}\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<meta name=\"generator\" content=\"Notoir\">\n<title>{}</title>\n<style>\n{CSS}</style>\n</head>\n<body>\n<main>\n{body}</main>\n</body>\n</html>\n",
+        escape_html(lang),
+        escape_html(title)
+    )
+}
+
+#[cfg(test)]
+mod export_tests {
+    use super::*;
+
+    #[test]
+    fn exports_html_with_ids_links_and_no_front_matter() {
+        let src = "---\ntitle: hidden\n---\n# Release Notes\n\nSee [[Plan#Next Steps|the plan]] and [[Other]].\n\n- [x] done\n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n<script>alert(1)</script>\n\n## Next Steps {#custom}\n";
+        let out = to_html(src);
+        assert_eq!(out.title.as_deref(), Some("Release Notes"));
+        assert!(!out.body.contains("hidden"));
+        assert!(
+            out.body
+                .contains("<h1 id=\"release-notes\">Release Notes</h1>"),
+            "{}",
+            out.body
+        );
+        assert!(out.body.contains("<h2 id=\"custom\">"));
+        assert!(
+            out.body
+                .contains("<a href=\"Plan.html#next-steps\">the plan</a>"),
+            "{}",
+            out.body
+        );
+        assert!(out.body.contains("<a href=\"Other.html\">Other</a>"));
+        assert!(out.body.contains("<table>"));
+        assert!(out.body.contains("checked=\"\""));
+        assert!(out.body.contains("&lt;script&gt;"), "raw HTML escaped");
+        let page = html_document("A <b>", &out.body, "en");
+        assert!(page.starts_with("<!doctype html>"));
+        assert!(page.contains("<title>A &lt;b&gt;</title>"));
+        // Code keeps wiki-link syntax as written.
+        assert!(to_html("`[[x]]`").body.contains("<code>[[x]]</code>"));
+    }
+}

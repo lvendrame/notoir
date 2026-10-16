@@ -23,6 +23,12 @@ pub(super) fn specs(out: &mut Specs) {
     out.push(spec("markdown.showEditor", show_editor));
     out.push(spec("markdown.showSplit", open_to_side));
     out.push(spec("markdown.showPreview", show_preview));
+    out.push(spec("markdown.exportHtml", |c, _| {
+        if let Some(doc) = c.workbench.active_document() {
+            c.markdown_export(doc);
+        }
+        CommandOutcome::Done
+    }));
     out.push(spec("markdown.toggleBold", toggle_bold).keys([k("Mod+B").when(md_edit)]));
     out.push(spec("markdown.toggleItalic", toggle_italic).keys([k("Mod+I").when(md_edit)]));
     out.push(spec("markdown.toggleCode", toggle_code));

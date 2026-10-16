@@ -135,6 +135,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         cmd("file.save"),
         cmd("file.saveAs"),
         cmd("file.saveAll"),
+        cmd("markdown.exportHtml"),
         sub(
             "menus:sub.autoSave",
             ["off", "afterDelay", "onFocusChange", "onWindowFocusLoss"]

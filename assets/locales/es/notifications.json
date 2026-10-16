@@ -50,5 +50,7 @@
   "shellCommandFailed": "No se pudo cambiar el comando notoir.",
   "noTemplates": "Aún no hay plantillas. Añade archivos Markdown a {{shared}} en el espacio de trabajo o cualquier archivo a {{personal}}.",
   "templateUnreadable": "No se pudo leer la plantilla «{{name}}».",
-  "themeInvalid": "No se pudo cargar el archivo de tema «{{file}}»."
+  "themeInvalid": "No se pudo cargar el archivo de tema «{{file}}».",
+  "exported": "Se exportó «{{name}}».",
+  "exportFailed": "No se pudo exportar «{{name}}»."
 }

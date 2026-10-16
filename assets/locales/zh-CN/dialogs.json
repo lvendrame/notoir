@@ -118,5 +118,8 @@
   },
   "git": {
     "history": "文件历史记录"
+  },
+  "export": {
+    "title": "导出为 HTML"
   }
 }

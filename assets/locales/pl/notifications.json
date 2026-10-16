@@ -50,5 +50,7 @@
   "shellCommandFailed": "Nie udało się zmienić polecenia notoir.",
   "noTemplates": "Brak szablonów. Dodaj pliki Markdown do {{shared}} w obszarze roboczym lub dowolne pliki do {{personal}}.",
   "templateUnreadable": "Nie można odczytać szablonu „{{name}}”.",
-  "themeInvalid": "Nie można wczytać pliku motywu „{{file}}”."
+  "themeInvalid": "Nie można wczytać pliku motywu „{{file}}”.",
+  "exported": "Wyeksportowano „{{name}}”.",
+  "exportFailed": "Nie można wyeksportować „{{name}}”."
 }

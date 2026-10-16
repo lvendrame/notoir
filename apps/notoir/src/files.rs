@@ -35,6 +35,8 @@ use crate::t;
 pub trait Dialogs: Send + Sync {
     fn pick_files(&self, opts: FileDialogOptions, poster: Poster);
     fn save_file(&self, opts: FileDialogOptions, doc: DocumentId, poster: Poster);
+    /// Export target for a document (Markdown → HTML, spec 24).
+    fn export_file(&self, opts: FileDialogOptions, doc: DocumentId, poster: Poster);
     fn pick_folder(&self, opts: FileDialogOptions, poster: Poster);
     /// Hands a URL to the OS (links). Scripted in tests.
     fn open_external(&self, url: &str);
@@ -54,6 +56,12 @@ impl Dialogs for NativeDialogs {
     fn save_file(&self, opts: FileDialogOptions, doc: DocumentId, poster: Poster) {
         notoir_platform::dialogs::save_file(opts, move |path| {
             poster.post(IoResult::SaveAsPicked { doc, path })
+        });
+    }
+
+    fn export_file(&self, opts: FileDialogOptions, doc: DocumentId, poster: Poster) {
+        notoir_platform::dialogs::save_file(opts, move |path| {
+            poster.post(IoResult::ExportPicked { doc, path })
         });
     }
 
@@ -138,6 +146,17 @@ impl Dialogs for ScriptedDialogs {
             .pop_front()
             .flatten();
         poster.post(IoResult::SaveAsPicked { doc, path });
+    }
+
+    /// Answered from the same queue as Save As.
+    fn export_file(&self, _: FileDialogOptions, doc: DocumentId, poster: Poster) {
+        let path = self
+            .saves
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .pop_front()
+            .flatten();
+        poster.post(IoResult::ExportPicked { doc, path });
     }
 
     fn pick_folder(&self, _: FileDialogOptions, poster: Poster) {

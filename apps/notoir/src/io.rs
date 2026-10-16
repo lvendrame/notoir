@@ -26,6 +26,16 @@ pub enum IoResult {
         doc: notoir_core::ids::DocumentId,
         path: Option<std::path::PathBuf>,
     },
+    /// Export dialog answer for a document.
+    ExportPicked {
+        doc: notoir_core::ids::DocumentId,
+        path: Option<std::path::PathBuf>,
+    },
+    /// An export was written (or failed).
+    Exported {
+        path: std::path::PathBuf,
+        result: Result<(), String>,
+    },
     Loaded(Box<crate::files::LoadOutcome>),
     Saved(Box<crate::files::SaveOutcome>),
     ScratchpadWriteFailed {

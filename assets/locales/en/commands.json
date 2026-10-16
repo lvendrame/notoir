@@ -227,7 +227,8 @@
     "insertLink": "Insert Link",
     "toggleTask": "Toggle Task",
     "openLink": "Open Link",
-    "revealSource": "Reveal Source"
+    "revealSource": "Reveal Source",
+    "exportHtml": "Export as HTML…"
   },
   "json": {
     "showText": "Show Text",

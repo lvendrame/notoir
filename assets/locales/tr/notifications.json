@@ -50,5 +50,7 @@
   "shellCommandFailed": "notoir komutu değiştirilemedi.",
   "noTemplates": "Henüz şablon yok. Çalışma alanındaki {{shared}} klasörüne Markdown dosyaları ya da {{personal}} klasörüne herhangi bir dosya ekleyin.",
   "templateUnreadable": "“{{name}}” şablonu okunamadı.",
-  "themeInvalid": "“{{file}}” tema dosyası yüklenemedi."
+  "themeInvalid": "“{{file}}” tema dosyası yüklenemedi.",
+  "exported": "“{{name}}” dışa aktarıldı.",
+  "exportFailed": "“{{name}}” dışa aktarılamadı."
 }

@@ -227,7 +227,8 @@
     "insertLink": "링크 삽입",
     "toggleTask": "작업 전환",
     "openLink": "링크 열기",
-    "revealSource": "원본 표시"
+    "revealSource": "원본 표시",
+    "exportHtml": "HTML로 내보내기…"
   },
   "json": {
     "showText": "텍스트 표시",

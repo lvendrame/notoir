@@ -227,7 +227,8 @@
     "insertLink": "Inserisci link",
     "toggleTask": "Attiva/disattiva attività",
     "openLink": "Apri link",
-    "revealSource": "Mostra sorgente"
+    "revealSource": "Mostra sorgente",
+    "exportHtml": "Esporta come HTML…"
   },
   "json": {
     "showText": "Mostra testo",

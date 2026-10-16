@@ -50,5 +50,7 @@
   "shellCommandFailed": "无法更改 notoir 命令。",
   "noTemplates": "还没有模板。请将 Markdown 文件添加到工作区的 {{shared}}，或将任意文件添加到 {{personal}}。",
   "templateUnreadable": "无法读取模板“{{name}}”。",
-  "themeInvalid": "无法加载主题文件“{{file}}”。"
+  "themeInvalid": "无法加载主题文件“{{file}}”。",
+  "exported": "已导出“{{name}}”。",
+  "exportFailed": "无法导出“{{name}}”。"
 }

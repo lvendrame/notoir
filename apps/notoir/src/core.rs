@@ -855,6 +855,8 @@ impl AppCore {
                     }
                 }
                 IoResult::SaveAsPicked { doc, path } => self.handle_save_as_picked(doc, path),
+                IoResult::ExportPicked { doc, path } => self.markdown_export_to(doc, path),
+                IoResult::Exported { path, result } => self.markdown_exported(path, result),
                 IoResult::Loaded(outcome) => self.handle_loaded(*outcome),
                 IoResult::Saved(outcome) => self.handle_saved(*outcome),
                 IoResult::ScratchpadWriteFailed { error } => {

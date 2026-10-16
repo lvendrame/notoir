@@ -304,3 +304,48 @@ fn language_override_to_markdown_shows_controls() {
             .any(|s| s.kind == notoir_editor::syntax::TokenKind::Heading)
     );
 }
+
+#[test]
+fn export_as_html() {
+    let dir = tempfile::tempdir().unwrap();
+    let src = dir.path().join("Notes.md");
+    std::fs::write(
+        &src,
+        "# Weekly Notes\n\nSee [[Plan#Next Steps]].\n\n- [ ] ship\n",
+    )
+    .unwrap();
+    let out = dir.path().join("export/Notes.html");
+    std::fs::create_dir_all(out.parent().unwrap()).unwrap();
+    let dialogs = notoir::files::ScriptedDialogs::default();
+    dialogs.answer_save(Some(out.clone()));
+    dialogs.answer_save(None);
+    let d = dialogs.clone();
+    let mut app = common::start(move |o| {
+        o.open_paths = vec![(src, None)];
+        o.dialogs = Some(std::sync::Arc::new(d));
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "markdown.exportHtml", serde_json::Value::Null);
+    common::settle(&mut app);
+    let html = std::fs::read_to_string(&out).unwrap();
+    assert!(html.starts_with("<!doctype html>"));
+    assert!(html.contains("<title>Weekly Notes</title>"));
+    assert!(html.contains("<h1 id=\"weekly-notes\">Weekly Notes</h1>"));
+    assert!(
+        html.contains("<a href=\"Plan.html#next-steps\">Plan</a>"),
+        "{html}"
+    );
+    assert!(
+        app.harness
+            .state()
+            .core
+            .notifications
+            .history()
+            .any(|n| n.message.key == "notifications:exported")
+    );
+    // Cancelling the dialog writes nothing.
+    std::fs::remove_file(&out).unwrap();
+    common::run(&mut app, "markdown.exportHtml", serde_json::Value::Null);
+    common::settle(&mut app);
+    assert!(!out.exists());
+}

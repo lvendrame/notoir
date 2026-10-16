@@ -227,7 +227,8 @@
     "insertLink": "Link invoegen",
     "toggleTask": "Taak in-/uitschakelen",
     "openLink": "Link openen",
-    "revealSource": "Bron tonen"
+    "revealSource": "Bron tonen",
+    "exportHtml": "Exporteren als HTML…"
   },
   "json": {
     "showText": "Tekst tonen",

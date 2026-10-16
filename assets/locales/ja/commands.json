@@ -227,7 +227,8 @@
     "insertLink": "リンクを挿入",
     "toggleTask": "タスクの切り替え",
     "openLink": "リンクを開く",
-    "revealSource": "ソースを表示"
+    "revealSource": "ソースを表示",
+    "exportHtml": "HTML としてエクスポート…"
   },
   "json": {
     "showText": "テキストを表示",

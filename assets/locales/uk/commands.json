@@ -227,7 +227,8 @@
     "insertLink": "Вставити посилання",
     "toggleTask": "Перемкнути завдання",
     "openLink": "Відкрити посилання",
-    "revealSource": "Показати джерело"
+    "revealSource": "Показати джерело",
+    "exportHtml": "Експортувати як HTML…"
   },
   "json": {
     "showText": "Показати текст",

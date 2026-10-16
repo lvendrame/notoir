@@ -227,7 +227,8 @@
     "insertLink": "插入链接",
     "toggleTask": "切换任务",
     "openLink": "打开链接",
-    "revealSource": "显示源代码"
+    "revealSource": "显示源代码",
+    "exportHtml": "导出为 HTML…"
   },
   "json": {
     "showText": "显示文本",

@@ -50,5 +50,7 @@
   "shellCommandFailed": "Не вдалося змінити команду notoir.",
   "noTemplates": "Шаблонів ще немає. Додайте файли Markdown до {{shared}} у робочій області або будь-які файли до {{personal}}.",
   "templateUnreadable": "Не вдалося прочитати шаблон «{{name}}».",
-  "themeInvalid": "Не вдалося завантажити файл теми «{{file}}»."
+  "themeInvalid": "Не вдалося завантажити файл теми «{{file}}».",
+  "exported": "Файл «{{name}}» експортовано.",
+  "exportFailed": "Не вдалося експортувати «{{name}}»."
 }

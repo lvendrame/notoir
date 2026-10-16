@@ -118,5 +118,8 @@
   },
   "git": {
     "history": "Bestandsgeschiedenis"
+  },
+  "export": {
+    "title": "Exporteren als HTML"
   }
 }

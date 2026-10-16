@@ -423,4 +423,82 @@ impl AppCore {
         };
         self.open_path(&path, at.clone());
     }
+
+    /// Export as HTML…: asks where, next to the document by default.
+    pub fn markdown_export(&mut self, doc: DocumentId) {
+        let Some(d) = self.workbench.document(doc) else {
+            return;
+        };
+        let stem = match &d.origin {
+            notoir_core::document::DocumentOrigin::File { path, .. } => path
+                .file_stem()
+                .map(|s| s.to_string_lossy().into_owned())
+                .unwrap_or_default(),
+            _ => self.document_title(doc),
+        };
+        let dir = d
+            .path()
+            .and_then(|p| p.parent())
+            .map(std::path::Path::to_path_buf)
+            .or_else(|| self.workspace.as_ref().map(|w| w.root.clone()));
+        let opts = notoir_platform::dialogs::FileDialogOptions {
+            title: Some(crate::t!("dialogs:export.title")),
+            directory: dir,
+            file_name: Some(format!("{stem}.html")),
+        };
+        self.files.dialogs.export_file(opts, doc, self.io.poster());
+    }
+
+    /// Renders and writes the page on the IO thread (through the save
+    /// writer: atomic, UTF-8).
+    pub fn markdown_export_to(&mut self, doc: DocumentId, path: Option<std::path::PathBuf>) {
+        let (Some(path), Some(d)) = (path, self.workbench.document(doc)) else {
+            return;
+        };
+        let text = d.buffer.text();
+        let fallback = path
+            .file_stem()
+            .map(|s| s.to_string_lossy().into_owned())
+            .unwrap_or_default();
+        let lang = crate::i18n::language().code().to_owned();
+        self.io.submit(move || {
+            let page = notoir_editor::markdown::to_html(&text);
+            let title = page.title.unwrap_or(fallback);
+            let html = notoir_editor::markdown::html_document(&title, &page.body, &lang);
+            let req = notoir_workspace::fs_io::SaveRequest {
+                path: path.clone(),
+                text: html,
+                encoding: notoir_editor::encoding::TextEncoding::UTF8,
+                line_ending: notoir_editor::LineEnding::Lf,
+                expected_hash: None,
+                // The dialog already confirmed replacing an existing file.
+                overwrite: true,
+                atomic: true,
+            };
+            let result = notoir_workspace::fs_io::save(&req)
+                .map(|_| ())
+                .map_err(|e| e.to_string());
+            Some(IoResult::Exported { path, result })
+        });
+    }
+
+    pub fn markdown_exported(&mut self, path: std::path::PathBuf, result: Result<(), String>) {
+        let name = path
+            .file_name()
+            .map(|n| n.to_string_lossy().into_owned())
+            .unwrap_or_default();
+        match result {
+            Ok(()) => self.notify(Notification::new(
+                Severity::Info,
+                Translatable::new("notifications:exported").arg("name", name),
+            )),
+            Err(e) => self.notify(
+                Notification::new(
+                    Severity::Error,
+                    Translatable::new("notifications:exportFailed").arg("name", name),
+                )
+                .detail(e),
+            ),
+        }
+    }
 }

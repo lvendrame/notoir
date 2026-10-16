@@ -50,5 +50,7 @@
   "shellCommandFailed": "The notoir command could not be changed.",
   "noTemplates": "No templates yet. Add Markdown files to {{shared}} in the workspace, or any file to {{personal}}.",
   "templateUnreadable": "Could not read the template “{{name}}”.",
-  "themeInvalid": "The theme file “{{file}}” could not be loaded."
+  "themeInvalid": "The theme file “{{file}}” could not be loaded.",
+  "exported": "Exported “{{name}}”.",
+  "exportFailed": "Could not export “{{name}}”."
 }

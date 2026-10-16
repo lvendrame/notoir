@@ -227,7 +227,8 @@
     "insertLink": "Link einfügen",
     "toggleTask": "Aufgabe umschalten",
     "openLink": "Link öffnen",
-    "revealSource": "Quelle anzeigen"
+    "revealSource": "Quelle anzeigen",
+    "exportHtml": "Als HTML exportieren…"
   },
   "json": {
     "showText": "Text anzeigen",

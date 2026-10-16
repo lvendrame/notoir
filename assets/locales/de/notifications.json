@@ -50,5 +50,7 @@
   "shellCommandFailed": "Der Befehl notoir konnte nicht geändert werden.",
   "noTemplates": "Noch keine Vorlagen. Legen Sie Markdown-Dateien in {{shared}} im Arbeitsbereich oder beliebige Dateien in {{personal}} ab.",
   "templateUnreadable": "Die Vorlage „{{name}}“ konnte nicht gelesen werden.",
-  "themeInvalid": "Die Theme-Datei „{{file}}“ konnte nicht geladen werden."
+  "themeInvalid": "Die Theme-Datei „{{file}}“ konnte nicht geladen werden.",
+  "exported": "„{{name}}“ exportiert.",
+  "exportFailed": "„{{name}}“ konnte nicht exportiert werden."
 }

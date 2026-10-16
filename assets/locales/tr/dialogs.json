@@ -118,5 +118,8 @@
   },
   "git": {
     "history": "Dosya Geçmişi"
+  },
+  "export": {
+    "title": "HTML olarak dışa aktar"
   }
 }

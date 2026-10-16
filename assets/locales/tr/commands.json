@@ -227,7 +227,8 @@
     "insertLink": "Bağlantı Ekle",
     "toggleTask": "Görevi Aç/Kapat",
     "openLink": "Bağlantıyı Aç",
-    "revealSource": "Kaynağı Göster"
+    "revealSource": "Kaynağı Göster",
+    "exportHtml": "HTML olarak dışa aktar…"
   },
   "json": {
     "showText": "Metni Göster",

@@ -50,5 +50,7 @@
   "shellCommandFailed": "Impossibile modificare il comando notoir.",
   "noTemplates": "Nessun modello. Aggiungi file Markdown in {{shared}} nell’area di lavoro o qualsiasi file in {{personal}}.",
   "templateUnreadable": "Impossibile leggere il modello «{{name}}».",
-  "themeInvalid": "Impossibile caricare il file del tema «{{file}}»."
+  "themeInvalid": "Impossibile caricare il file del tema «{{file}}».",
+  "exported": "«{{name}}» esportato.",
+  "exportFailed": "Impossibile esportare «{{name}}»."
 }
