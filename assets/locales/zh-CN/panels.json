@@ -76,5 +76,11 @@
     "loading": "正在加载…",
     "empty": "没有条目",
     "segment": "导航路径: {{name}}"
+  },
+  "backlinks": {
+    "title": "反向链接"
+  },
+  "tags": {
+    "title": "标签"
   }
 }

@@ -1,0 +1,34 @@
+{
+  "backlinks": {
+    "noNote": "Geri bağlantılarını görmek için çalışma alanından bir Markdown notu açın.",
+    "referencedBy": "Bağlantı veren notlar ({{count}}):",
+    "none": "Henüz buraya bağlantı veren not yok.",
+    "unlinked": "Bağlantısız anmalar",
+    "unlinkedCount": "Bağlantısız anmalar ({{count}})",
+    "noMentions": "Bağlantısız anma yok."
+  },
+  "create": {
+    "title": "“{{name}}” oluşturulsun mu?",
+    "body": "Bu adda bir not henüz yok. Boş bir not oluşturulup açılır.",
+    "confirm": "Not Oluştur"
+  },
+  "rename": {
+    "title": "{{count}} notta “{{old}}” bağlantıları güncellensin mi?",
+    "body": "Notun adı “{{new}}” olarak değiştirildi. Açık notlar her biri geri alınabilir tek bir düzenlemeyle değişir; kapalı notlar diskte yeniden yazılır.",
+    "confirm": "Bağlantıları Güncelle",
+    "skip": "Atla"
+  },
+  "indexing": "Notlar dizinleniyor…",
+  "searching": "Aranıyor…",
+  "missingHint": "Bu not henüz yok — oluşturmak için tıklayın",
+  "picker": {
+    "title": "Bir not seçin"
+  },
+  "tags": {
+    "count": "not: {{count}}",
+    "noWorkspace": "Etiketleri görmek için bir çalışma alanı açın.",
+    "none": "Henüz etiket yok. Notlarınıza #etiket ekleyin.",
+    "pickTitle": "Etikete göre notlar"
+  },
+  "updateFailed": "{{count}} notta bağlantılar güncellenemedi."
+}

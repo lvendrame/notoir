@@ -1,0 +1,34 @@
+{
+  "backlinks": {
+    "noNote": "Open een Markdown-notitie in de werkruimte om de terugverwijzingen te zien.",
+    "referencedBy": "Verwezen door ({{count}}):",
+    "none": "Nog geen notitie verwijst hierheen.",
+    "unlinked": "Ongelinkte vermeldingen",
+    "unlinkedCount": "Ongelinkte vermeldingen ({{count}})",
+    "noMentions": "Geen ongelinkte vermeldingen."
+  },
+  "create": {
+    "title": "‘{{name}}’ maken?",
+    "body": "Nog geen notitie heeft deze naam. Er wordt een lege notitie gemaakt en geopend.",
+    "confirm": "Notitie maken"
+  },
+  "rename": {
+    "title": "Links naar ‘{{old}}’ in {{count}} notities bijwerken?",
+    "body": "De notitie heet nu ‘{{new}}’. Geopende notities veranderen elk in één ongedaan te maken stap; gesloten notities worden op schijf herschreven.",
+    "confirm": "Links bijwerken",
+    "skip": "Overslaan"
+  },
+  "indexing": "Notities indexeren…",
+  "searching": "Zoeken…",
+  "missingHint": "De notitie bestaat nog niet — klik om haar te maken",
+  "picker": {
+    "title": "Kies een notitie"
+  },
+  "tags": {
+    "count": "notities: {{count}}",
+    "noWorkspace": "Open een werkruimte om de tags te zien.",
+    "none": "Nog geen tags. Voeg #tags toe aan je notities.",
+    "pickTitle": "Notities per tag"
+  },
+  "updateFailed": "Links in {{count}} notities konden niet worden bijgewerkt."
+}

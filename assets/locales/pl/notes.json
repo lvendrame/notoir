@@ -1,0 +1,34 @@
+{
+  "backlinks": {
+    "noNote": "Otwórz notatkę Markdown z obszaru roboczego, aby zobaczyć odwołania do niej.",
+    "referencedBy": "Odwołują się (liczba: {{count}}):",
+    "none": "Żadna notatka jeszcze tu nie odsyła.",
+    "unlinked": "Wzmianki bez linku",
+    "unlinkedCount": "Wzmianki bez linku (liczba: {{count}})",
+    "noMentions": "Brak wzmianek bez linku."
+  },
+  "create": {
+    "title": "Utworzyć „{{name}}”?",
+    "body": "Żadna notatka nie ma jeszcze tej nazwy. Zostanie utworzona i otwarta pusta notatka.",
+    "confirm": "Utwórz notatkę"
+  },
+  "rename": {
+    "title": "Zaktualizować linki do „{{old}}” w notatkach (liczba: {{count}})?",
+    "body": "Notatka ma teraz nazwę „{{new}}”. Otwarte notatki zmieniają się w jednym kroku do cofnięcia; zamknięte są zapisywane na dysku.",
+    "confirm": "Zaktualizuj linki",
+    "skip": "Pomiń"
+  },
+  "indexing": "Indeksowanie notatek…",
+  "searching": "Wyszukiwanie…",
+  "missingHint": "Ta notatka jeszcze nie istnieje — kliknij, aby ją utworzyć",
+  "picker": {
+    "title": "Wybierz notatkę"
+  },
+  "tags": {
+    "count": "notatki: {{count}}",
+    "noWorkspace": "Otwórz obszar roboczy, aby zobaczyć tagi.",
+    "none": "Brak tagów. Dodaj #tagi do notatek.",
+    "pickTitle": "Notatki według tagu"
+  },
+  "updateFailed": "Nie udało się zaktualizować linków w notatkach (liczba: {{count}})."
+}

@@ -106,6 +106,8 @@ pub struct EditorOptions {
     pub diagnostics: Vec<(usize, usize)>,
     /// Recent MCP edits: char range and highlight strength (fades 1 → 0).
     pub mcp_edits: Vec<(usize, usize, f32)>,
+    /// Wiki links: char range and whether the target is missing (spec 34).
+    pub wiki_links: std::sync::Arc<Vec<(usize, usize, bool)>>,
     /// Bookmarked lines (spec 12).
     pub bookmarks: Vec<usize>,
     /// Foldable regions; `None` when folding is off.
@@ -143,6 +145,8 @@ impl DiffDecor {
 
 /// Per-view state that only the widget needs.
 pub struct ViewCache {
+    /// The primary caret's rect as of the last frame (screen space).
+    pub(super) last_caret: Option<Rect>,
     revision: u64,
     rope: Rope,
     map: DisplayMap,
@@ -185,6 +189,7 @@ impl ViewCache {
     ) -> Self {
         let rope = doc.buffer.rope().clone();
         Self {
+            last_caret: None,
             revision: doc.revision,
             map: DisplayMap::new(&rope, wrap),
             rope,
@@ -272,6 +277,11 @@ impl EditorCaches {
     /// Drops caches of closed views.
     pub fn retain(&mut self, alive: impl Fn(ViewId) -> bool) {
         self.views.retain(|v, _| alive(*v));
+    }
+
+    /// The primary caret's rect as of the last frame (popups anchor to it).
+    pub fn caret_rect(&self, view: ViewId) -> Option<Rect> {
+        self.views.get(&view).and_then(|c| c.last_caret)
     }
 
     /// Where the minimap and gutter were drawn last frame (tests).

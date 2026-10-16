@@ -17,6 +17,7 @@ mod json;
 mod layout;
 mod markdown;
 mod mcp;
+mod notes;
 mod plugins;
 mod preferences;
 mod reliability;
@@ -44,6 +45,7 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     compare::specs(&mut specs);
     git::specs(&mut specs);
     mcp::specs(&mut specs);
+    notes::specs(&mut specs);
     plugins::specs(&mut specs);
     selection::specs(&mut specs);
     workspace::specs(&mut specs);

@@ -234,6 +234,10 @@ impl AppCore {
     /// A clicked link: web/mail to the OS, relative files open in Notoir
     /// (with `#anchor`), in-document anchors scroll, other schemes ask first.
     pub fn follow_md_link(&mut self, doc: DocumentId, url: &str) {
+        if let Some(target) = url.strip_prefix("wiki:") {
+            self.notes_follow(doc, target);
+            return;
+        }
         let lower = url.to_lowercase();
         if lower.starts_with("http://")
             || lower.starts_with("https://")
@@ -387,7 +391,7 @@ impl AppCore {
             .edit(view, changes, Selection::caret(caret), EditKind::Other, now);
     }
 
-    fn place_caret_at(&mut self, view: ViewId, at: &OpenAt) {
+    pub(crate) fn place_caret_at(&mut self, view: ViewId, at: &OpenAt) {
         // Same document: reuse the open-file caret placement.
         let Some(path) = self
             .workbench

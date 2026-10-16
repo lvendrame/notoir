@@ -19,6 +19,7 @@ pub mod json_tree;
 pub mod layout;
 pub mod mcp_ui;
 pub mod md_preview;
+pub mod notes_ui;
 pub mod outline;
 pub mod overlays;
 pub mod panels;

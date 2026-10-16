@@ -389,5 +389,17 @@
     "togglePermissions": "Afficher les autorisations de l’extension",
     "revokeProcess": "Révoquer l’autorisation d’exécution",
     "settings": "Paramètres de l’extension"
+  },
+  "notes": {
+    "followLink": "Suivre le lien",
+    "showBacklinks": "Afficher les rétroliens",
+    "showTags": "Afficher les étiquettes",
+    "rebuildIndex": "Reconstruire l’index des notes",
+    "pick": "Ouvrir la note",
+    "pickTag": "Afficher les notes avec l’étiquette",
+    "filterTag": "Filtrer par étiquette",
+    "complete": "Compléter le lien",
+    "findUnlinked": "Trouver les mentions sans lien",
+    "openLine": "Ouvrir la note à la ligne"
   }
 }

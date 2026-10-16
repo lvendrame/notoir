@@ -1,0 +1,34 @@
+{
+  "backlinks": {
+    "noNote": "Open a Markdown note in the workspace to see its backlinks.",
+    "referencedBy": "Referenced by ({{count}}):",
+    "none": "No notes link here yet.",
+    "unlinked": "Unlinked mentions",
+    "unlinkedCount": "Unlinked mentions ({{count}})",
+    "noMentions": "No unlinked mentions."
+  },
+  "create": {
+    "title": "Create “{{name}}”?",
+    "body": "No note has this name yet. A new empty note is created and opened.",
+    "confirm": "Create Note"
+  },
+  "rename": {
+    "title": "Update links to “{{old}}” in {{count}} notes?",
+    "body": "The note was renamed to “{{new}}”. Open notes change as one undoable edit each; closed notes are rewritten on disk.",
+    "confirm": "Update Links",
+    "skip": "Skip"
+  },
+  "indexing": "Indexing notes…",
+  "searching": "Searching…",
+  "missingHint": "The note does not exist yet — click to create it",
+  "picker": {
+    "title": "Choose a note"
+  },
+  "tags": {
+    "count": "notes: {{count}}",
+    "noWorkspace": "Open a workspace to see its tags.",
+    "none": "No tags yet. Add #tags to your notes.",
+    "pickTitle": "Notes by tag"
+  },
+  "updateFailed": "Links could not be updated in {{count}} notes."
+}

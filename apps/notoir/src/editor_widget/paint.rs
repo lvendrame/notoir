@@ -228,6 +228,32 @@ pub(super) fn paint(
                 text_painter.rect_filled(rect, 2.0, color);
             }
         }
+        // Wiki links: underlined; dashed in the warning colour when the
+        // note does not exist (spec 34).
+        for &(la, lb, missing) in opts.wiki_links.iter() {
+            let (a, b) = (la.max(row.start), lb.min(row_end));
+            if a >= b {
+                continue;
+            }
+            let ca = col_of(&row.text, a - row.start, tab);
+            let cb = col_of(&row.text, b - row.start, tab);
+            let (x0, x1) = (col_x(ca), col_x(cb));
+            let y = row.y + m.row_h - 2.0;
+            if missing {
+                let stroke = Stroke::new(1.0, kit.color(Tok::Warning));
+                let mut x = x0;
+                while x < x1 {
+                    text_painter
+                        .line_segment([Pos2::new(x, y), Pos2::new((x + 3.0).min(x1), y)], stroke);
+                    x += 6.0;
+                }
+            } else {
+                text_painter.line_segment(
+                    [Pos2::new(x0, y), Pos2::new(x1, y)],
+                    Stroke::new(1.0, kit.color(Tok::SyntaxLink)),
+                );
+            }
+        }
         // MCP edits: a fading accent background (spec 29).
         for &(ea, eb, strength) in &opts.mcp_edits {
             let (a, b) = (ea.max(row.start), eb.min(row_end));
@@ -401,7 +427,8 @@ pub(super) fn paint(
         );
     }
 
-    // Carets.
+    // Carets. The primary caret's place is kept for popups (`[[` completion).
+    cache.last_caret = caret_rect_in(&rows, sel.primary().head, m, tab, &col_x);
     let blink_on = !opts.blink || (now - cache.blink_epoch).rem_euclid(1.0) < 0.5;
     if focused && blink_on && cache.preedit.is_none() {
         let color = kit.color(Tok::EditorCursor);

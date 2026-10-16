@@ -389,5 +389,17 @@
     "togglePermissions": "Eklenti İzinlerini Göster",
     "revokeProcess": "Program İznini İptal Et",
     "settings": "Eklenti Ayarları"
+  },
+  "notes": {
+    "followLink": "Bağlantıyı İzle",
+    "showBacklinks": "Geri Bağlantıları Göster",
+    "showTags": "Etiketleri Göster",
+    "rebuildIndex": "Not Dizinini Yeniden Oluştur",
+    "pick": "Notu Aç",
+    "pickTag": "Etiketli Notları Göster",
+    "filterTag": "Etikete Göre Filtrele",
+    "complete": "Bağlantıyı Tamamla",
+    "findUnlinked": "Bağlantısız Anmaları Bul",
+    "openLine": "Notu Satırda Aç"
   }
 }

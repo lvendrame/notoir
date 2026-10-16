@@ -126,6 +126,33 @@ fn spec(core: &AppCore, prompt: &Prompt) -> Spec {
     let title_of = |d| core.document_title(d);
     match prompt {
         Prompt::Git(p) => git_spec(p),
+        Prompt::Notes(crate::notes::NotesPrompt::Create { name, .. }) => Spec {
+            title: t!("notes:create.title", name = name.as_str()),
+            body: t!("notes:create.body"),
+            list: Vec::new(),
+            buttons: vec![
+                (t!("notes:create.confirm"), Answer::Primary, false),
+                (t!("common:cancel"), Answer::Cancel, false),
+            ],
+        },
+        Prompt::Notes(crate::notes::NotesPrompt::UpdateLinks {
+            old_stem,
+            new_stem,
+            files,
+        }) => Spec {
+            title: t!(
+                "notes:rename.title",
+                count = files.len(),
+                old = old_stem.as_str(),
+                new = new_stem.as_str()
+            ),
+            body: t!("notes:rename.body"),
+            list: files.clone(),
+            buttons: vec![
+                (t!("notes:rename.confirm"), Answer::Primary, false),
+                (t!("notes:rename.skip"), Answer::Cancel, false),
+            ],
+        },
         Prompt::Unsaved { docs, .. } if docs.len() == 1 => Spec {
             title: t!("dialogs:unsaved.title", name = title_of(docs[0])),
             body: t!("dialogs:unsaved.body"),

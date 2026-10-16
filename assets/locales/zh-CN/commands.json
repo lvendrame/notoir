@@ -389,5 +389,17 @@
     "togglePermissions": "显示插件权限",
     "revokeProcess": "撤销运行程序权限",
     "settings": "插件设置"
+  },
+  "notes": {
+    "followLink": "跟随链接",
+    "showBacklinks": "显示反向链接",
+    "showTags": "显示标签",
+    "rebuildIndex": "重建笔记索引",
+    "pick": "打开笔记",
+    "pickTag": "显示带标签的笔记",
+    "filterTag": "按标签筛选",
+    "complete": "补全链接",
+    "findUnlinked": "查找未链接的提及",
+    "openLine": "在行处打开笔记"
   }
 }

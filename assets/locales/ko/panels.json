@@ -76,5 +76,11 @@
     "loading": "로드 중…",
     "empty": "항목 없음",
     "segment": "탐색 경로: {{name}}"
+  },
+  "backlinks": {
+    "title": "백링크"
+  },
+  "tags": {
+    "title": "태그"
   }
 }

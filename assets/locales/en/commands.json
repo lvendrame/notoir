@@ -389,5 +389,17 @@
     "togglePermissions": "Show Plugin Permissions",
     "revokeProcess": "Revoke Program Permission",
     "settings": "Plugin Settings"
+  },
+  "notes": {
+    "followLink": "Follow Link",
+    "showBacklinks": "Show Backlinks",
+    "showTags": "Show Tags",
+    "rebuildIndex": "Rebuild Notes Index",
+    "pick": "Open Note",
+    "pickTag": "Show Notes with Tag",
+    "filterTag": "Filter by Tag",
+    "complete": "Complete Link",
+    "findUnlinked": "Find Unlinked Mentions",
+    "openLine": "Open Note at Line"
   }
 }

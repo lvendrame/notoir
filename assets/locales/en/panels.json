@@ -76,5 +76,11 @@
     "loading": "Loading…",
     "empty": "No entries",
     "segment": "Breadcrumb: {{name}}"
+  },
+  "backlinks": {
+    "title": "Backlinks"
+  },
+  "tags": {
+    "title": "Tags"
   }
 }

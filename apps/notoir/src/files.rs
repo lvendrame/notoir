@@ -284,6 +284,8 @@ pub enum Prompt {
     ReplaceAll { count: usize, files: usize },
     /// Source Control confirmations.
     Git(crate::git_write::GitPrompt),
+    /// Wiki link confirmations (spec 34).
+    Notes(crate::notes::NotesPrompt),
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -1199,6 +1201,7 @@ impl AppCore {
         };
         match (prompt, answer) {
             (Prompt::Git(p), a) => self.git_answer(p, a),
+            (Prompt::Notes(p), a) => self.notes_answer(p, a),
             (_, Answer::Cancel) => {}
             (Prompt::Unsaved { docs, then }, Answer::Primary) => {
                 self.files.pending.push(Pending {

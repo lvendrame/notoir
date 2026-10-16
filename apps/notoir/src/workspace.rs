@@ -1033,10 +1033,29 @@ impl AppCore {
         }
     }
 
+    /// Creates an empty note and opens it (following a link to a missing
+    /// note, spec 34).
+    pub(crate) fn create_note_file(&mut self, target: PathBuf) {
+        self.run_op(move || {
+            if let Some(dir) = target.parent() {
+                std::fs::create_dir_all(dir)?;
+            }
+            fs_ops::create_file(&target).map(|()| OpOutcome {
+                created: vec![target.clone()],
+                open: Some(target.clone()),
+                select: Some(target.clone()),
+                undo: Some(UndoOp::Created(vec![target.clone()])),
+                ..Default::default()
+            })
+        });
+    }
+
     pub(crate) fn handle_op(&mut self, out: OpOutcome) {
         let key = |p: &Path| notoir_workspace::fs_io::identity(p).1;
         let mut touched: Vec<PathBuf> = Vec::new();
         for (from, to) in &out.renamed {
+            // Offer to update wiki links to a renamed note (spec 34).
+            self.notes_renamed(from, to);
             self.workbench.rename_paths(from, to, key);
             if let Some(ws) = self.workspace.as_mut() {
                 ws.tree.rename(from, to);

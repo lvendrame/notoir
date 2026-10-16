@@ -76,5 +76,11 @@
     "loading": "Caricamento…",
     "empty": "Nessuna voce",
     "segment": "Percorso: {{name}}"
+  },
+  "backlinks": {
+    "title": "Collegamenti in entrata"
+  },
+  "tags": {
+    "title": "Tag"
   }
 }

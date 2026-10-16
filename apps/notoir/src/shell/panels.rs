@@ -30,6 +30,8 @@ fn activity_icon(p: PanelId) -> Icon {
         PanelId::Outline => Icon::ListTree,
         PanelId::Plugins => Icon::Puzzle,
         PanelId::McpActivity => Icon::Activity,
+        PanelId::Backlinks => Icon::Link,
+        PanelId::Tags => Icon::Tag,
         _ => Icon::Files,
     }
 }
@@ -276,6 +278,8 @@ fn area_contents(
         PanelId::McpActivity => super::mcp_ui::activity_panel(ui, kit, core, actions),
         PanelId::PluginOutput => super::plugins_ui::dev_tools(ui, kit, core, actions),
         PanelId::Plugins => super::plugins_ui::plugins_panel(ui, kit, core, actions),
+        PanelId::Backlinks => super::notes_ui::backlinks(ui, kit, core, actions),
+        PanelId::Tags => super::notes_ui::tags(ui, kit, core, actions),
         _ => {}
     }
 }

@@ -389,5 +389,17 @@
     "togglePermissions": "Plugin-Berechtigungen anzeigen",
     "revokeProcess": "Berechtigung für Programme widerrufen",
     "settings": "Plugin-Einstellungen"
+  },
+  "notes": {
+    "followLink": "Link folgen",
+    "showBacklinks": "Rückverweise anzeigen",
+    "showTags": "Tags anzeigen",
+    "rebuildIndex": "Notizindex neu aufbauen",
+    "pick": "Notiz öffnen",
+    "pickTag": "Notizen mit Tag anzeigen",
+    "filterTag": "Nach Tag filtern",
+    "complete": "Link vervollständigen",
+    "findUnlinked": "Unverlinkte Erwähnungen suchen",
+    "openLine": "Notiz an Zeile öffnen"
   }
 }

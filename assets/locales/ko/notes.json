@@ -1,0 +1,34 @@
+{
+  "backlinks": {
+    "noNote": "백링크를 보려면 작업 영역의 Markdown 노트를 여세요.",
+    "referencedBy": "참조하는 노트 ({{count}}):",
+    "none": "아직 여기를 링크하는 노트가 없습니다.",
+    "unlinked": "링크되지 않은 언급",
+    "unlinkedCount": "링크되지 않은 언급 ({{count}})",
+    "noMentions": "링크되지 않은 언급이 없습니다."
+  },
+  "create": {
+    "title": "“{{name}}”을(를) 만들까요?",
+    "body": "아직 이 이름의 노트가 없습니다. 빈 노트를 만들어 엽니다.",
+    "confirm": "노트 만들기"
+  },
+  "rename": {
+    "title": "노트 {{count}}개에서 “{{old}}” 링크를 업데이트할까요?",
+    "body": "노트 이름이 “{{new}}”(으)로 바뀌었습니다. 열린 노트는 각각 실행 취소할 수 있는 한 번의 편집으로 바뀌고, 닫힌 노트는 디스크에서 다시 씁니다.",
+    "confirm": "링크 업데이트",
+    "skip": "건너뛰기"
+  },
+  "indexing": "노트 인덱싱 중…",
+  "searching": "검색 중…",
+  "missingHint": "아직 없는 노트입니다 — 클릭하여 만드세요",
+  "picker": {
+    "title": "노트 선택"
+  },
+  "tags": {
+    "count": "노트: {{count}}",
+    "noWorkspace": "태그를 보려면 작업 영역을 여세요.",
+    "none": "아직 태그가 없습니다. 노트에 #태그를 추가하세요.",
+    "pickTitle": "태그별 노트"
+  },
+  "updateFailed": "노트 {{count}}개에서 링크를 업데이트할 수 없습니다."
+}

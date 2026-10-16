@@ -1,0 +1,34 @@
+{
+  "backlinks": {
+    "noNote": "打开工作区中的 Markdown 笔记以查看反向链接。",
+    "referencedBy": "被引用 ({{count}}):",
+    "none": "还没有笔记链接到这里。",
+    "unlinked": "未链接的提及",
+    "unlinkedCount": "未链接的提及 ({{count}})",
+    "noMentions": "没有未链接的提及。"
+  },
+  "create": {
+    "title": "创建“{{name}}”？",
+    "body": "还没有这个名称的笔记。将创建并打开一个空笔记。",
+    "confirm": "创建笔记"
+  },
+  "rename": {
+    "title": "更新 {{count}} 个笔记中指向“{{old}}”的链接？",
+    "body": "笔记已重命名为“{{new}}”。打开的笔记各以一次可撤销的编辑更改；关闭的笔记在磁盘上重写。",
+    "confirm": "更新链接",
+    "skip": "跳过"
+  },
+  "indexing": "正在索引笔记…",
+  "searching": "正在搜索…",
+  "missingHint": "此笔记尚不存在 — 点击创建",
+  "picker": {
+    "title": "选择笔记"
+  },
+  "tags": {
+    "count": "笔记: {{count}}",
+    "noWorkspace": "打开工作区以查看其标签。",
+    "none": "还没有标签。在笔记中添加 #标签。",
+    "pickTitle": "按标签的笔记"
+  },
+  "updateFailed": "无法更新 {{count}} 个笔记中的链接。"
+}

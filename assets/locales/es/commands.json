@@ -389,5 +389,17 @@
     "togglePermissions": "Mostrar permisos del complemento",
     "revokeProcess": "Revocar permiso de programas",
     "settings": "Configuración del complemento"
+  },
+  "notes": {
+    "followLink": "Seguir enlace",
+    "showBacklinks": "Mostrar vínculos entrantes",
+    "showTags": "Mostrar etiquetas",
+    "rebuildIndex": "Reconstruir índice de notas",
+    "pick": "Abrir nota",
+    "pickTag": "Mostrar notas con la etiqueta",
+    "filterTag": "Filtrar por etiqueta",
+    "complete": "Completar enlace",
+    "findUnlinked": "Buscar menciones sin enlace",
+    "openLine": "Abrir nota en la línea"
   }
 }

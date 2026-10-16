@@ -314,7 +314,10 @@ impl Renderer<'_, '_> {
                 if let Some(d) = self.core.workbench.view(view).map(|v| v.document_id) {
                     self.core.structure(d);
                 }
-                let opts = self.core.editor_options(view);
+                let mut opts = self.core.editor_options(view);
+                if let Some(d) = self.core.workbench.view(view).map(|v| v.document_id) {
+                    opts.wiki_links = self.core.notes_doc_links(d);
+                }
                 let doc = self.core.workbench.view(view).map(|v| v.document_id);
                 // Breadcrumbs under the tab strip (spec 26).
                 let body = if self

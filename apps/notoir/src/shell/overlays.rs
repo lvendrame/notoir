@@ -273,6 +273,10 @@ pub enum PickerKind {
     GitBranchName,
     /// Clone Repository: URL (recent ones listed).
     GitCloneUrl,
+    /// Notes: link targets or the notes with a tag (spec 34).
+    Notes,
+    /// Quick Open `#`: tags (spec 34).
+    Tags,
 }
 
 /// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
@@ -395,7 +399,9 @@ impl Picker {
             | PickerKind::GitHistory
             | PickerKind::GitBranches
             | PickerKind::GitBranchName
-            | PickerKind::GitCloneUrl => String::new(),
+            | PickerKind::GitCloneUrl
+            | PickerKind::Notes
+            | PickerKind::Tags => String::new(),
             PickerKind::TabSize => doc
                 .map(|d| core.indent_style(d.id).tab_size.to_string())
                 .unwrap_or_default(),
@@ -410,6 +416,27 @@ impl Picker {
             PickerKind::Symbols => symbol_items(core),
             PickerKind::GitHistory => history_items(core),
             PickerKind::GitBranches => branch_items(core),
+            PickerKind::Notes => core
+                .notes
+                .picker
+                .iter()
+                .map(|(value, label, detail)| PickerItem {
+                    value: value.clone(),
+                    label: label.clone(),
+                    detail: detail.clone(),
+                })
+                .collect(),
+            PickerKind::Tags => core
+                .notes
+                .index
+                .tags()
+                .into_iter()
+                .map(|(tag, n)| PickerItem {
+                    value: tag.clone(),
+                    label: format!("#{tag}"),
+                    detail: t!("notes:tags.count", count = n),
+                })
+                .collect(),
             PickerKind::GitCloneUrl => core
                 .git
                 .recent_urls
@@ -539,7 +566,9 @@ impl Picker {
             | PickerKind::GitHistory
             | PickerKind::GitBranches
             | PickerKind::GitBranchName
-            | PickerKind::GitCloneUrl => Vec::new(),
+            | PickerKind::GitCloneUrl
+            | PickerKind::Notes
+            | PickerKind::Tags => Vec::new(),
             PickerKind::Indentation => [
                 ("spaces", "dialogs:picker.indentSpaces"),
                 ("tabs", "dialogs:picker.indentTabs"),
@@ -623,6 +652,8 @@ impl Picker {
             PickerKind::GitBranches => ("git.branchPick", json!({ "value": value })),
             PickerKind::GitBranchName => ("git.createBranch", json!({ "name": value })),
             PickerKind::GitCloneUrl => ("git.clone", json!({ "url": value })),
+            PickerKind::Notes => ("notes.pick", json!({ "value": value })),
+            PickerKind::Tags => ("notes.pickTag", json!({ "tag": value })),
         };
         CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
@@ -674,9 +705,13 @@ impl Picker {
         }
         if matches!(
             self.kind,
-            PickerKind::Symbols | PickerKind::GitHistory | PickerKind::GitBranches
+            PickerKind::Symbols
+                | PickerKind::GitHistory
+                | PickerKind::GitBranches
+                | PickerKind::Notes
+                | PickerKind::Tags
         ) {
-            let q = self.query.trim().trim_start_matches('@').trim();
+            let q = self.query.trim().trim_start_matches(['@', '#']).trim();
             if q.is_empty() {
                 return self.dynamic.clone();
             }
@@ -792,6 +827,7 @@ impl Picker {
             PickerKind::QuickOpen => match q.chars().next() {
                 Some('>') => Some(PickerEvent::Switch(PickerKind::Commands, q.to_owned())),
                 Some('@') => Some(PickerEvent::Switch(PickerKind::Symbols, q.to_owned())),
+                Some('#') => Some(PickerEvent::Switch(PickerKind::Tags, q.to_owned())),
                 Some(':') => Some(PickerEvent::GotoLine(q[1..].to_owned())),
                 _ => None,
             },
@@ -799,6 +835,9 @@ impl Picker {
                 Some(PickerEvent::Switch(PickerKind::QuickOpen, q.to_owned()))
             }
             PickerKind::Symbols if self.from_quick_open && !q.starts_with('@') => {
+                Some(PickerEvent::Switch(PickerKind::QuickOpen, q.to_owned()))
+            }
+            PickerKind::Tags if self.from_quick_open && !q.starts_with('#') => {
                 Some(PickerEvent::Switch(PickerKind::QuickOpen, q.to_owned()))
             }
             _ => None,
@@ -885,6 +924,8 @@ impl Picker {
             PickerKind::GitBranches => t!("git:branch.pickTitle"),
             PickerKind::GitBranchName => t!("git:branch.nameTitle"),
             PickerKind::GitCloneUrl => t!("git:clone.title"),
+            PickerKind::Notes => t!("notes:picker.title"),
+            PickerKind::Tags => t!("notes:tags.pickTitle"),
         };
         if self.kind == PickerKind::Commands && enter {
             // Disabled rows (shown with "show all") do not run.

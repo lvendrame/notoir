@@ -24,6 +24,7 @@ pub mod natural;
 pub mod outline;
 pub mod selection;
 pub mod syntax;
+pub mod wiki;
 pub mod wrap;
 
 pub use buffer::{Applied, EditKind, EditRequest, TextBuffer};

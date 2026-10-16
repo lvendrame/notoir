@@ -76,5 +76,11 @@
     "loading": "Chargement…",
     "empty": "Aucune entrée",
     "segment": "Fil d'Ariane : {{name}}"
+  },
+  "backlinks": {
+    "title": "Rétroliens"
+  },
+  "tags": {
+    "title": "Étiquettes"
   }
 }

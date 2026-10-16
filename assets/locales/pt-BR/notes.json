@@ -1,0 +1,34 @@
+{
+  "backlinks": {
+    "noNote": "Abra uma nota Markdown do workspace para ver os backlinks.",
+    "referencedBy": "Referenciada por ({{count}}):",
+    "none": "Nenhuma nota aponta para cá ainda.",
+    "unlinked": "Menções sem link",
+    "unlinkedCount": "Menções sem link ({{count}})",
+    "noMentions": "Nenhuma menção sem link."
+  },
+  "create": {
+    "title": "Criar “{{name}}”?",
+    "body": "Ainda não há nota com esse nome. Uma nota vazia será criada e aberta.",
+    "confirm": "Criar nota"
+  },
+  "rename": {
+    "title": "Atualizar os links para “{{old}}” em {{count}} notas?",
+    "body": "A nota foi renomeada para “{{new}}”. Notas abertas mudam em uma edição desfazível cada; notas fechadas são regravadas no disco.",
+    "confirm": "Atualizar links",
+    "skip": "Pular"
+  },
+  "indexing": "Indexando notas…",
+  "searching": "Pesquisando…",
+  "missingHint": "A nota ainda não existe — clique para criá-la",
+  "picker": {
+    "title": "Escolha uma nota"
+  },
+  "tags": {
+    "count": "notas: {{count}}",
+    "noWorkspace": "Abra um workspace para ver as tags.",
+    "none": "Nenhuma tag ainda. Adicione #tags às suas notas.",
+    "pickTitle": "Notas por tag"
+  },
+  "updateFailed": "Não foi possível atualizar os links em {{count}} notas."
+}

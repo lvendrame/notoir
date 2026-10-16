@@ -76,5 +76,11 @@
     "loading": "Wczytywanie…",
     "empty": "Brak pozycji",
     "segment": "Ścieżka: {{name}}"
+  },
+  "backlinks": {
+    "title": "Odwołania"
+  },
+  "tags": {
+    "title": "Tagi"
   }
 }

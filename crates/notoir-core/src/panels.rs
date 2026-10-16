@@ -18,6 +18,10 @@ pub enum PanelId {
     Problems,
     GitOutput,
     PluginOutput,
+    /// Notes linking to the active one (spec 34).
+    Backlinks,
+    /// Tags with counts (spec 34).
+    Tags,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -39,7 +43,11 @@ impl PanelId {
             PanelId::Explorer | PanelId::Search | PanelId::SourceControl | PanelId::Plugins => {
                 PanelArea::Primary
             }
-            PanelId::Outline | PanelId::MarkdownPreview | PanelId::JsonTree => PanelArea::Secondary,
+            PanelId::Outline
+            | PanelId::MarkdownPreview
+            | PanelId::JsonTree
+            | PanelId::Backlinks
+            | PanelId::Tags => PanelArea::Secondary,
             PanelId::McpActivity
             | PanelId::Output
             | PanelId::Problems
@@ -56,7 +64,9 @@ impl PanelId {
                 &[Primary, Secondary]
             }
             PanelId::Outline | PanelId::McpActivity => &[Primary, Secondary, Bottom],
-            PanelId::MarkdownPreview | PanelId::JsonTree => &[Primary, Secondary],
+            PanelId::MarkdownPreview | PanelId::JsonTree | PanelId::Backlinks | PanelId::Tags => {
+                &[Primary, Secondary]
+            }
             PanelId::Output | PanelId::Problems | PanelId::GitOutput | PanelId::PluginOutput => {
                 &[Bottom]
             }
@@ -78,6 +88,8 @@ impl PanelId {
             PanelId::Problems => "panels:problems.title",
             PanelId::GitOutput => "panels:gitOutput.title",
             PanelId::PluginOutput => "panels:pluginOutput.title",
+            PanelId::Backlinks => "panels:backlinks.title",
+            PanelId::Tags => "panels:tags.title",
         }
     }
 }

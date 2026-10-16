@@ -1,0 +1,34 @@
+{
+  "backlinks": {
+    "noNote": "Öffne eine Markdown-Notiz im Arbeitsbereich, um ihre Rückverweise zu sehen.",
+    "referencedBy": "Verwiesen von ({{count}}):",
+    "none": "Noch verweist keine Notiz hierher.",
+    "unlinked": "Unverlinkte Erwähnungen",
+    "unlinkedCount": "Unverlinkte Erwähnungen ({{count}})",
+    "noMentions": "Keine unverlinkten Erwähnungen."
+  },
+  "create": {
+    "title": "„{{name}}“ erstellen?",
+    "body": "Noch hat keine Notiz diesen Namen. Eine leere Notiz wird erstellt und geöffnet.",
+    "confirm": "Notiz erstellen"
+  },
+  "rename": {
+    "title": "Links auf „{{old}}“ in {{count}} Notizen aktualisieren?",
+    "body": "Die Notiz heißt jetzt „{{new}}“. Geöffnete Notizen ändern sich in je einem rückgängig machbaren Schritt; geschlossene werden auf dem Datenträger neu geschrieben.",
+    "confirm": "Links aktualisieren",
+    "skip": "Überspringen"
+  },
+  "indexing": "Notizen werden indiziert…",
+  "searching": "Suche…",
+  "missingHint": "Die Notiz gibt es noch nicht — zum Erstellen klicken",
+  "picker": {
+    "title": "Notiz auswählen"
+  },
+  "tags": {
+    "count": "Notizen: {{count}}",
+    "noWorkspace": "Öffne einen Arbeitsbereich, um seine Tags zu sehen.",
+    "none": "Noch keine Tags. Füge deinen Notizen #Tags hinzu.",
+    "pickTitle": "Notizen nach Tag"
+  },
+  "updateFailed": "Links in {{count}} Notizen konnten nicht aktualisiert werden."
+}

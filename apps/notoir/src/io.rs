@@ -74,6 +74,12 @@ pub enum IoResult {
     },
     /// `.notoir/plugins.toml` recommendations (id, version).
     PluginRecommendations(Vec<(String, String)>),
+    /// The notes link index was built (workspace generation, index).
+    NotesIndexed(u64, Box<notoir_workspace::links::LinkIndex>),
+    /// Links in closed notes were rewritten (failures).
+    NotesLinksUpdated(Vec<String>),
+    /// Unlinked mentions of a note.
+    NotesUnlinked(String, Vec<notoir_workspace::links::Backlink>),
     /// Help → Install / Uninstall 'notoir' Command finished.
     ShellCommand {
         install: bool,

@@ -432,6 +432,20 @@ pub(super) fn pointer(
         return;
     }
     let pos = pos_at(cache, m, pointer, tab);
+    // Ctrl/Cmd+click follows a link (wiki links, spec 34).
+    let command_click = ui.input(|i| {
+        i.modifiers.command
+            || i.events.iter().any(
+                |e| matches!(e, egui::Event::PointerButton { modifiers, .. } if modifiers.command),
+            )
+    });
+    if response.clicked() && command_click {
+        commands.push(
+            CommandInvocation::new("notes.followLink", InvocationSource::Internal)
+                .with_args(serde_json::json!({ "view": view.0, "offset": pos })),
+        );
+        return;
+    }
     let rope = cache.rope.clone();
     let start = |mode: DragMode, r: Range, cache: &mut ViewCache, wb: &mut Workbench| {
         cache.drag = Some(Drag {

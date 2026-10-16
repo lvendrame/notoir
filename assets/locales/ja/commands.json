@@ -389,5 +389,17 @@
     "togglePermissions": "プラグインの権限を表示",
     "revokeProcess": "プログラム実行の許可を取り消す",
     "settings": "プラグインの設定"
+  },
+  "notes": {
+    "followLink": "リンク先へ移動",
+    "showBacklinks": "バックリンクを表示",
+    "showTags": "タグを表示",
+    "rebuildIndex": "ノートのインデックスを再構築",
+    "pick": "ノートを開く",
+    "pickTag": "タグ付きのノートを表示",
+    "filterTag": "タグで絞り込む",
+    "complete": "リンクを補完",
+    "findUnlinked": "リンクされていない言及を検索",
+    "openLine": "ノートを行で開く"
   }
 }

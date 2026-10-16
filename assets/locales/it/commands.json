@@ -389,5 +389,17 @@
     "togglePermissions": "Mostra permessi del plugin",
     "revokeProcess": "Revoca permesso dei programmi",
     "settings": "Impostazioni del plugin"
+  },
+  "notes": {
+    "followLink": "Segui collegamento",
+    "showBacklinks": "Mostra collegamenti in entrata",
+    "showTags": "Mostra tag",
+    "rebuildIndex": "Ricostruisci indice delle note",
+    "pick": "Apri nota",
+    "pickTag": "Mostra note con il tag",
+    "filterTag": "Filtra per tag",
+    "complete": "Completa collegamento",
+    "findUnlinked": "Trova menzioni non collegate",
+    "openLine": "Apri nota alla riga"
   }
 }

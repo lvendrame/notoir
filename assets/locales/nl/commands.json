@@ -389,5 +389,17 @@
     "togglePermissions": "Plug-inmachtigingen tonen",
     "revokeProcess": "Machtiging voor programma’s intrekken",
     "settings": "Plug-ininstellingen"
+  },
+  "notes": {
+    "followLink": "Link volgen",
+    "showBacklinks": "Terugverwijzingen tonen",
+    "showTags": "Tags tonen",
+    "rebuildIndex": "Notitie-index opnieuw opbouwen",
+    "pick": "Notitie openen",
+    "pickTag": "Notities met tag tonen",
+    "filterTag": "Filteren op tag",
+    "complete": "Link aanvullen",
+    "findUnlinked": "Ongelinkte vermeldingen zoeken",
+    "openLine": "Notitie op regel openen"
   }
 }

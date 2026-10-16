@@ -1,0 +1,34 @@
+{
+  "backlinks": {
+    "noNote": "Ouvrez une note Markdown de l’espace de travail pour voir ses rétroliens.",
+    "referencedBy": "Référencée par ({{count}}) :",
+    "none": "Aucune note ne pointe encore ici.",
+    "unlinked": "Mentions sans lien",
+    "unlinkedCount": "Mentions sans lien ({{count}})",
+    "noMentions": "Aucune mention sans lien."
+  },
+  "create": {
+    "title": "Créer « {{name}} » ?",
+    "body": "Aucune note ne porte encore ce nom. Une note vide est créée et ouverte.",
+    "confirm": "Créer la note"
+  },
+  "rename": {
+    "title": "Mettre à jour les liens vers « {{old}} » dans {{count}} notes ?",
+    "body": "La note a été renommée « {{new}} ». Les notes ouvertes changent en une modification annulable chacune ; les notes fermées sont réécrites sur le disque.",
+    "confirm": "Mettre à jour les liens",
+    "skip": "Ignorer"
+  },
+  "indexing": "Indexation des notes…",
+  "searching": "Recherche…",
+  "missingHint": "La note n’existe pas encore — cliquez pour la créer",
+  "picker": {
+    "title": "Choisir une note"
+  },
+  "tags": {
+    "count": "notes : {{count}}",
+    "noWorkspace": "Ouvrez un espace de travail pour voir ses étiquettes.",
+    "none": "Aucune étiquette. Ajoutez des #étiquettes à vos notes.",
+    "pickTitle": "Notes par étiquette"
+  },
+  "updateFailed": "Impossible de mettre à jour les liens dans {{count}} notes."
+}

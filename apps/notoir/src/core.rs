@@ -30,6 +30,8 @@ pub const REGISTERED_PANELS: &[PanelId] = &[
     PanelId::Search,
     PanelId::SourceControl,
     PanelId::Outline,
+    PanelId::Backlinks,
+    PanelId::Tags,
     PanelId::Plugins,
     PanelId::Output,
     PanelId::GitOutput,
@@ -218,6 +220,8 @@ pub struct AppCore {
     pub user_bindings: Vec<UserBinding>,
     /// `notoir --wait` invocations waiting for their files to close.
     pub cli_waits: Vec<CliWait>,
+    /// Wiki links, backlinks and tags (spec 34).
+    pub notes: crate::notes::NotesState,
 }
 
 /// A `notoir --wait` request (spec 38).
@@ -408,6 +412,7 @@ impl AppCore {
             plugins,
             user_bindings: user_bindings.clone(),
             cli_waits: Vec::new(),
+            notes: Default::default(),
             language,
             theme_choice,
             theme_override: opts.theme_override,
@@ -573,6 +578,7 @@ impl AppCore {
             highlight: !doc.is_some_and(|d| d.large_file),
             diagnostics: doc.map(|d| self.json_diagnostics(d.id)).unwrap_or_default(),
             mcp_edits: doc.map(|d| self.mcp_highlights(d.id)).unwrap_or_default(),
+            wiki_links: Default::default(),
             bookmarks: doc.map(|d| d.bookmark_lines()).unwrap_or_default(),
             fold_ranges: doc
                 .filter(|_| self.settings.bool("editor.folding", lang))
@@ -848,6 +854,9 @@ impl AppCore {
                 } => self.plugins_syntax_loaded(&plugin, &language, error),
                 IoResult::PluginRecommendations(list) => self.plugins.recommended = list,
                 IoResult::PluginUninstalled { id, error } => self.plugins_uninstalled(id, error),
+                IoResult::NotesIndexed(generation, index) => self.notes_indexed(generation, *index),
+                IoResult::NotesLinksUpdated(failed) => self.notes_links_updated(failed),
+                IoResult::NotesUnlinked(rel, found) => self.notes_unlinked_found(rel, found),
                 IoResult::ShellCommand { install, result } => {
                     let n = match (install, result) {
                         (true, Ok(p)) => Notification::new(
@@ -927,6 +936,8 @@ pub fn panel_key(p: PanelId) -> &'static str {
         PanelId::Problems => "problems",
         PanelId::GitOutput => "gitOutput",
         PanelId::PluginOutput => "pluginOutput",
+        PanelId::Backlinks => "backlinks",
+        PanelId::Tags => "tags",
     }
 }
 

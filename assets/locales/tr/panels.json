@@ -76,5 +76,11 @@
     "loading": "Yükleniyor…",
     "empty": "Girdi yok",
     "segment": "İçerik haritası: {{name}}"
+  },
+  "backlinks": {
+    "title": "Geri Bağlantılar"
+  },
+  "tags": {
+    "title": "Etiketler"
   }
 }

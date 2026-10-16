@@ -389,5 +389,17 @@
     "togglePermissions": "Mostrar permissões do plugin",
     "revokeProcess": "Revogar permissão de programas",
     "settings": "Configurações do plugin"
+  },
+  "notes": {
+    "followLink": "Seguir link",
+    "showBacklinks": "Mostrar backlinks",
+    "showTags": "Mostrar tags",
+    "rebuildIndex": "Reconstruir índice de notas",
+    "pick": "Abrir nota",
+    "pickTag": "Mostrar notas com a tag",
+    "filterTag": "Filtrar por tag",
+    "complete": "Completar link",
+    "findUnlinked": "Encontrar menções sem link",
+    "openLine": "Abrir nota na linha"
   }
 }

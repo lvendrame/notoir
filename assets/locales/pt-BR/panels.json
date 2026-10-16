@@ -76,5 +76,11 @@
     "loading": "Carregando…",
     "empty": "Nenhuma entrada",
     "segment": "Trilha: {{name}}"
+  },
+  "backlinks": {
+    "title": "Backlinks"
+  },
+  "tags": {
+    "title": "Tags"
   }
 }

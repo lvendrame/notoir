@@ -1,6 +1,6 @@
 # 34 — Future Note Features (Phase 6)
 
-**Status:** Not started — Phase 6 (M24, M25)
+**Status:** Partial — M24: wiki links (`[[Note]]`, `[[Note#Heading|alias]]`, paths; parsed outside code and front matter) resolved case-insensitively by file stem, then as paths relative to the linking note or the root (a note next to the source wins over others of the same name, else a picker); Ctrl/Cmd+click or Follow Link (Alt+Enter) opens the target at its heading; a missing target asks to create the note next to the linking one; the editor underlines links (dashed for missing ones); `[[` completion from the note index (Up/Down/Enter/Tab/Esc, one undo step); the preview renders links (missing ones dashed with an icon) and follows them; renaming a note offers to update links (open notes as one undoable edit each, closed ones rewritten on disk); Backlinks panel with context snippets and unlinked mentions (searched in the background, open buffers included); tags from prose and front matter (`tags: [..]` or a list), Tags panel with counts and the notes of a tag, Quick Open `#` lists tags then their notes; Notes: Rebuild Index. The link index is an in-memory cache rebuilt from the files whenever the workspace file index is, with edited buffers folded in. M25: indexed full-text search (on-disk index), templates
 
 ## Purpose
 

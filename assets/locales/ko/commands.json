@@ -389,5 +389,17 @@
     "togglePermissions": "플러그인 권한 표시",
     "revokeProcess": "프로그램 실행 권한 취소",
     "settings": "플러그인 설정"
+  },
+  "notes": {
+    "followLink": "링크 따라가기",
+    "showBacklinks": "백링크 표시",
+    "showTags": "태그 표시",
+    "rebuildIndex": "노트 인덱스 다시 만들기",
+    "pick": "노트 열기",
+    "pickTag": "태그가 있는 노트 표시",
+    "filterTag": "태그로 필터",
+    "complete": "링크 완성",
+    "findUnlinked": "링크되지 않은 언급 찾기",
+    "openLine": "줄에서 노트 열기"
   }
 }

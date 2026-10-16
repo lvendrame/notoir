@@ -76,5 +76,11 @@
     "loading": "Cargando…",
     "empty": "Sin entradas",
     "segment": "Ruta: {{name}}"
+  },
+  "backlinks": {
+    "title": "Vínculos entrantes"
+  },
+  "tags": {
+    "title": "Etiquetas"
   }
 }

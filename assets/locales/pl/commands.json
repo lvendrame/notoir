@@ -389,5 +389,17 @@
     "togglePermissions": "Pokaż uprawnienia wtyczki",
     "revokeProcess": "Odwołaj uprawnienie do programów",
     "settings": "Ustawienia wtyczki"
+  },
+  "notes": {
+    "followLink": "Przejdź do linku",
+    "showBacklinks": "Pokaż odwołania",
+    "showTags": "Pokaż tagi",
+    "rebuildIndex": "Przebuduj indeks notatek",
+    "pick": "Otwórz notatkę",
+    "pickTag": "Pokaż notatki z tagiem",
+    "filterTag": "Filtruj według tagu",
+    "complete": "Uzupełnij link",
+    "findUnlinked": "Znajdź wzmianki bez linku",
+    "openLine": "Otwórz notatkę w wierszu"
   }
 }

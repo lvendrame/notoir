@@ -76,5 +76,11 @@
     "loading": "Laden…",
     "empty": "Geen items",
     "segment": "Kruimelpad: {{name}}"
+  },
+  "backlinks": {
+    "title": "Terugverwijzingen"
+  },
+  "tags": {
+    "title": "Tags"
   }
 }

@@ -331,6 +331,12 @@ impl eframe::App for NotoirApp {
         self.core.git_tick();
         self.core.mcp_tick();
         self.core.plugins_tick();
+        self.core.notes_tick();
+        if let Some(due) = self.core.notes_next_due() {
+            ctx.request_repaint_after(std::time::Duration::from_millis(
+                due.saturating_sub(now).max(1),
+            ));
+        }
         if !self.core.cli_waits.is_empty() {
             self.core.cli_wait_tick();
             ctx.request_repaint_after(std::time::Duration::from_millis(250));
@@ -420,6 +426,20 @@ impl eframe::App for NotoirApp {
             }
         }
 
+        // `[[` completion keys go to the popup, not the editor or keymap.
+        if self.core.notes.completion.is_some() {
+            for key in [
+                egui::Key::ArrowDown,
+                egui::Key::ArrowUp,
+                egui::Key::Enter,
+                egui::Key::Tab,
+                egui::Key::Escape,
+            ] {
+                if ctx.input_mut(|i| i.consume_key(egui::Modifiers::NONE, key)) {
+                    self.core.notes_completion_key(key);
+                }
+            }
+        }
         let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
         let context = self.core.context(fullscreen);
         if !(self.ui.about_open
@@ -538,6 +558,7 @@ impl eframe::App for NotoirApp {
             );
             shell::recovery_ui::show(&ctx, &mut kit, &self.core, top_offset, &mut actions);
             overlays::about(&ctx, &mut kit, &mut self.ui);
+            shell::notes_ui::completion(&ctx, &mut kit, &self.core, &self.ui.editors, &mut actions);
             shell::mcp_ui::popover(&ctx, &mut kit, &self.core, bottom_offset, &mut actions);
             shell::mcp_ui::dialogs(
                 &ctx,
@@ -649,6 +670,7 @@ impl eframe::App for NotoirApp {
             self.core.plugins_event(&event);
             match &event {
                 notoir_core::AppEvent::DocumentChanged { doc, .. } => {
+                    self.core.notes_doc_changed(*doc);
                     self.core.scratchpad_changed(*doc);
                     self.core.recovery_doc_changed(*doc);
                     self.core.autosave_doc_changed(*doc);

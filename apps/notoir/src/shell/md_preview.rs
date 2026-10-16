@@ -55,6 +55,8 @@ struct Style {
 
 struct Ctx<'a> {
     doc: DocumentId,
+    /// Lowercase wiki link targets with no note (styled as missing).
+    missing: std::collections::HashSet<String>,
     base_dir: Option<PathBuf>,
     size: f32,
     interactive: bool,
@@ -168,8 +170,14 @@ pub fn show(
     }
     let mut blocks_out: Vec<(usize, usize, f32, f32)> = Vec::new();
     let mut images_wanted: Vec<PathBuf> = Vec::new();
+    let missing = notoir_editor::wiki::links(&rope.to_string())
+        .into_iter()
+        .filter(|l| !l.target.is_empty() && core.notes_missing(doc, &l.target))
+        .map(|l| l.target.to_lowercase())
+        .collect();
     let cx = Ctx {
         doc,
+        missing,
         base_dir,
         size,
         interactive,
@@ -451,6 +459,32 @@ fn cell_ui(
     });
 }
 
+/// Text with `[[wiki links]]`: plain runs and `wiki:` link runs showing the
+/// alias (or the target).
+fn wiki_runs(text: &str, style: Style, out: &mut Vec<Run>) {
+    let chars: Vec<char> = text.chars().collect();
+    let mut last = 0;
+    for l in notoir_editor::wiki::links(text) {
+        if l.range.0 > last {
+            out.push(Run::Text(
+                chars[last..l.range.0].iter().collect(),
+                style,
+                None,
+            ));
+        }
+        let target = match &l.heading {
+            Some(h) => format!("{}#{h}", l.target),
+            None => l.target.clone(),
+        };
+        let shown = l.alias.clone().unwrap_or_else(|| target.clone());
+        out.push(Run::Text(shown, style, Some(format!("wiki:{target}"))));
+        last = l.range.1;
+    }
+    if last < chars.len() {
+        out.push(Run::Text(chars[last..].iter().collect(), style, None));
+    }
+}
+
 /// One styled run of inline content.
 enum Run {
     Text(String, Style, Option<String>),
@@ -461,6 +495,7 @@ enum Run {
 fn flatten(inlines: &[Inline], style: Style, link: Option<&str>, out: &mut Vec<Run>) {
     for i in inlines {
         match i {
+            Inline::Text(t) if link.is_none() && t.contains("[[") => wiki_runs(t, style, out),
             Inline::Text(t) => out.push(Run::Text(t.clone(), style, link.map(str::to_owned))),
             Inline::Html(t) => out.push(Run::Text(
                 t.clone(),
@@ -568,6 +603,48 @@ fn inline_flow(
                         rt = rt.background_color(kit.color(Tok::BgPanel));
                     }
                     match link {
+                        // A wiki link to a missing note: dashed, with an icon.
+                        Some(url)
+                            if url.strip_prefix("wiki:").is_some_and(|t| {
+                                let name = t.split('#').next().unwrap_or(t).trim();
+                                !name.is_empty() && cx.missing.contains(&name.to_lowercase())
+                            }) =>
+                        {
+                            ui.add(kit.icon(
+                                ui.ctx(),
+                                crate::icons::Icon::FilePlus,
+                                size * 0.85,
+                                kit.color(Tok::Warning),
+                            ));
+                            let resp = ui
+                                .add(
+                                    egui::Label::new(rt.color(kit.color(Tok::Warning)))
+                                        .sense(Sense::click()),
+                                )
+                                .on_hover_text(t!("notes:missingHint"));
+                            let r = resp.rect;
+                            let mut x = r.left();
+                            while x < r.right() {
+                                ui.painter().line_segment(
+                                    [
+                                        egui::pos2(x, r.bottom() - 1.0),
+                                        egui::pos2((x + 3.0).min(r.right()), r.bottom() - 1.0),
+                                    ],
+                                    egui::Stroke::new(1.0, kit.color(Tok::Warning)),
+                                );
+                                x += 6.0;
+                            }
+                            if resp.hovered() {
+                                ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand);
+                            }
+                            if resp.clicked() {
+                                cmd(
+                                    actions,
+                                    "markdown.openLink",
+                                    json!({ "doc": cx.doc.0, "url": url }),
+                                );
+                            }
+                        }
                         Some(url) => {
                             let resp = ui
                                 .add(egui::Label::new(rt.underline()).sense(Sense::click()))
