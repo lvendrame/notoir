@@ -1,0 +1,16 @@
+{
+  "about": "Notoir — hızlı, yerel bir metin düzenleyici ve çalışma alanı.",
+  "usage": "Kullanım:",
+  "paths": "yollar",
+  "fileLineCol": "dosya:satır[:sütun]",
+  "options": "Seçenekler:",
+  "optNewWindow": "Çalışan pencere yerine yeni bir pencere aç",
+  "optGoto": "Bir dosyayı satırda ve isteğe bağlı sütunda aç",
+  "optWait": "Açılan dosyalar kapanana kadar bekle",
+  "optHelp": "Bu yardımı göster",
+  "optVersion": "Sürümü göster",
+  "pathsHelp": "Dosyalar belge, klasörler çalışma alanı olarak açılır; göreli yollar geçerli dizinden başlar. Yol verilmezse son oturum geri yüklenir.",
+  "unknownOption": "bilinmeyen seçenek {{option}}",
+  "missingValue": "{{option}} bir değer gerektirir",
+  "seeHelp": "Kullanım için “notoir --help” çalıştırın."
+}

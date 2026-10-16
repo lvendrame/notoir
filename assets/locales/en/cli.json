@@ -1,0 +1,16 @@
+{
+  "about": "Notoir — a fast native text editor and workspace.",
+  "usage": "Usage:",
+  "paths": "paths",
+  "fileLineCol": "file:line[:col]",
+  "options": "Options:",
+  "optNewWindow": "Open a new window instead of using the running one",
+  "optGoto": "Open a file at a line and optional column",
+  "optWait": "Wait until the opened files are closed",
+  "optHelp": "Show this help",
+  "optVersion": "Show the version",
+  "pathsHelp": "Files open as documents and folders as workspaces; relative paths start in the current directory. Without paths, the last session is restored.",
+  "unknownOption": "unknown option {{option}}",
+  "missingValue": "{{option}} needs a value",
+  "seeHelp": "Run “notoir --help” for usage."
+}

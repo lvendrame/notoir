@@ -44,5 +44,8 @@
   "gitNoHistory": "Nenhum commit altera {{name}}.",
   "gitFailed": "O Git não conseguiu ler {{name}}.",
   "gitNotInRepo": "{{name}} não está em um repositório Git.",
-  "gitNotAtRevision": "{{name}} não existe nessa revisão."
+  "gitNotAtRevision": "{{name}} não existe nessa revisão.",
+  "shellCommandInstalled": "O comando notoir foi instalado: {{path}}",
+  "shellCommandRemoved": "O comando notoir foi removido: {{path}}",
+  "shellCommandFailed": "Não foi possível alterar o comando notoir."
 }

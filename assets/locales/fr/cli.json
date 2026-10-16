@@ -1,0 +1,16 @@
+{
+  "about": "Notoir — un éditeur de texte et espace de travail natif et rapide.",
+  "usage": "Utilisation :",
+  "paths": "chemins",
+  "fileLineCol": "fichier:ligne[:colonne]",
+  "options": "Options :",
+  "optNewWindow": "Ouvrir une nouvelle fenêtre au lieu d’utiliser celle déjà ouverte",
+  "optGoto": "Ouvrir un fichier à une ligne et une colonne facultative",
+  "optWait": "Attendre la fermeture des fichiers ouverts",
+  "optHelp": "Afficher cette aide",
+  "optVersion": "Afficher la version",
+  "pathsHelp": "Les fichiers s’ouvrent comme documents et les dossiers comme espaces de travail ; les chemins relatifs partent du répertoire courant. Sans chemin, la dernière session est restaurée.",
+  "unknownOption": "option inconnue {{option}}",
+  "missingValue": "{{option}} nécessite une valeur",
+  "seeHelp": "Exécutez « notoir --help » pour l’utilisation."
+}

@@ -1,0 +1,16 @@
+{
+  "about": "Notoir — 快速的原生文本编辑器和工作区。",
+  "usage": "用法:",
+  "paths": "路径",
+  "fileLineCol": "文件:行[:列]",
+  "options": "选项:",
+  "optNewWindow": "打开新窗口而不是使用正在运行的窗口",
+  "optGoto": "在指定行 (和可选列) 打开文件",
+  "optWait": "等待打开的文件关闭",
+  "optHelp": "显示此帮助",
+  "optVersion": "显示版本",
+  "pathsHelp": "文件作为文档打开，文件夹作为工作区打开；相对路径从当前目录开始。不提供路径时恢复上次会话。",
+  "unknownOption": "未知选项 {{option}}",
+  "missingValue": "{{option}} 需要一个值",
+  "seeHelp": "运行“notoir --help”查看用法。"
+}

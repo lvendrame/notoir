@@ -28,8 +28,12 @@ pub struct Launch {
     pub open_paths: Vec<(std::path::PathBuf, Option<(usize, usize)>)>,
     /// No paths and not `--new-window`: restore the last session.
     pub restore_session: bool,
-    pub instance_rx:
-        Option<std::sync::mpsc::Receiver<notoir_platform::single_instance::InstanceRequest>>,
+    pub instance_rx: Option<
+        std::sync::mpsc::Receiver<(
+            notoir_platform::single_instance::InstanceRequest,
+            Option<notoir_platform::single_instance::Waiter>,
+        )>,
+    >,
 }
 
 pub struct NotoirApp {
@@ -45,8 +49,12 @@ pub struct NotoirApp {
     /// CJK scripts seen in editor text this session.
     cjk_seen: fonts::CjkUse,
     wait_for_fonts: bool,
-    instance_rx:
-        Option<std::sync::mpsc::Receiver<notoir_platform::single_instance::InstanceRequest>>,
+    instance_rx: Option<
+        std::sync::mpsc::Receiver<(
+            notoir_platform::single_instance::InstanceRequest,
+            Option<notoir_platform::single_instance::Waiter>,
+        )>,
+    >,
 }
 
 impl NotoirApp {
@@ -306,8 +314,8 @@ impl eframe::App for NotoirApp {
             .as_ref()
             .map(|rx| rx.try_iter().collect())
             .unwrap_or_default();
-        for req in forwarded {
-            self.core.handle_instance_request(req);
+        for (req, waiter) in forwarded {
+            self.core.handle_instance_request(req, waiter);
         }
         self.ensure_fonts(&ctx);
         if self.ui.picker.is_none() {
@@ -323,6 +331,10 @@ impl eframe::App for NotoirApp {
         self.core.git_tick();
         self.core.mcp_tick();
         self.core.plugins_tick();
+        if !self.core.cli_waits.is_empty() {
+            self.core.cli_wait_tick();
+            ctx.request_repaint_after(std::time::Duration::from_millis(250));
+        }
         if let Some(due) = self.core.plugins_next_due() {
             ctx.request_repaint_after(std::time::Duration::from_millis(
                 due.saturating_sub(now).max(1),

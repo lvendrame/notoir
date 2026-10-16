@@ -44,5 +44,8 @@
   "gitNoHistory": "没有提交修改过 {{name}}。",
   "gitFailed": "Git 无法读取 {{name}}。",
   "gitNotInRepo": "{{name}} 不在 Git 仓库中。",
-  "gitNotAtRevision": "{{name}} 在该修订版本中不存在。"
+  "gitNotAtRevision": "{{name}} 在该修订版本中不存在。",
+  "shellCommandInstalled": "notoir 命令已安装: {{path}}",
+  "shellCommandRemoved": "notoir 命令已移除: {{path}}",
+  "shellCommandFailed": "无法更改 notoir 命令。"
 }

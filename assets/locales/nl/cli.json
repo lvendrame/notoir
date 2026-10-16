@@ -1,0 +1,16 @@
+{
+  "about": "Notoir — een snelle native teksteditor en werkruimte.",
+  "usage": "Gebruik:",
+  "paths": "paden",
+  "fileLineCol": "bestand:regel[:kolom]",
+  "options": "Opties:",
+  "optNewWindow": "Een nieuw venster openen in plaats van het geopende te gebruiken",
+  "optGoto": "Een bestand openen op een regel en optionele kolom",
+  "optWait": "Wachten tot de geopende bestanden zijn gesloten",
+  "optHelp": "Deze hulp tonen",
+  "optVersion": "De versie tonen",
+  "pathsHelp": "Bestanden openen als documenten en mappen als werkruimten; relatieve paden beginnen in de huidige map. Zonder paden wordt de laatste sessie hersteld.",
+  "unknownOption": "onbekende optie {{option}}",
+  "missingValue": "{{option}} heeft een waarde nodig",
+  "seeHelp": "Voer ‘notoir --help’ uit voor het gebruik."
+}

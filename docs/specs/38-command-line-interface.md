@@ -1,6 +1,6 @@
 # 38 — Command-Line Interface
 
-**Status:** Not started — M23a
+**Status:** Partial — M23a: `notoir --help` (translated to the OS language) and `--version` (`Notoir <version>`) print and exit without a window; unknown options and missing values print the error and a `notoir --help` hint and exit 2; `--` ends options; paths resolve against the terminal's directory (files as documents, folders as workspaces, `notoir .`), several per call, `--goto file:line[:col]` keeping colon paths whole; no paths restores the session; single-instance forwarding with `--new-window` to bypass it; `--wait` keeps the terminal until the files of that call have no tabs (the instance keeps the socket connection and writes `done`; with no instance running the command starts one and waits as a forwarder; released when the app exits). Command availability: Linux packages install `/usr/bin/notoir`; the macOS app, the AppImage and Windows installs get it from Help › Install 'notoir' Command in PATH (`/usr/local/bin` link with administrator authorization when needed, `~/.local/bin` link to the AppImage, or the install folder on the user PATH) and Help › Uninstall 'notoir' Command. Not covered by automated tests: the command on PATH after installing a real package, and `--new-window` opening a second window (needs a display); both need a manual check. Deviations: the DMG and AppImage cannot install the command or remove it on their own — the in-app commands do; `--new-window --wait` waits for that window to close
 
 ## Purpose
 

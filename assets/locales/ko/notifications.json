@@ -44,5 +44,8 @@
   "gitNoHistory": "{{name}}을(를) 변경한 커밋이 없습니다.",
   "gitFailed": "Git이 {{name}}을(를) 읽을 수 없습니다.",
   "gitNotInRepo": "{{name}}은(는) Git 저장소에 없습니다.",
-  "gitNotAtRevision": "{{name}}은(는) 해당 리비전에 없습니다."
+  "gitNotAtRevision": "{{name}}은(는) 해당 리비전에 없습니다.",
+  "shellCommandInstalled": "notoir 명령이 설치되었습니다: {{path}}",
+  "shellCommandRemoved": "notoir 명령이 제거되었습니다: {{path}}",
+  "shellCommandFailed": "notoir 명령을 변경할 수 없습니다."
 }

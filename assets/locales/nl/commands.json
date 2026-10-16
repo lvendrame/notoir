@@ -69,7 +69,9 @@
   "app": {
     "quit": "Afsluiten",
     "quitMac": "Notoir afsluiten",
-    "settings": "Instellingen openen"
+    "settings": "Instellingen openen",
+    "installShellCommand": "Opdracht 'notoir' in PATH installeren",
+    "uninstallShellCommand": "Opdracht 'notoir' uit PATH verwijderen"
   },
   "workbench": {
     "showNotifications": "Meldingen tonen",

@@ -5,6 +5,7 @@ pub mod dialogs;
 pub mod elevation;
 pub mod paths;
 pub mod reveal;
+pub mod shell_command;
 pub mod single_instance;
 pub mod system_fonts;
 pub mod trash;

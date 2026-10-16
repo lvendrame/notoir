@@ -1,0 +1,16 @@
+{
+  "about": "Notoir — ein schneller nativer Texteditor und Arbeitsbereich.",
+  "usage": "Verwendung:",
+  "paths": "Pfade",
+  "fileLineCol": "datei:zeile[:spalte]",
+  "options": "Optionen:",
+  "optNewWindow": "Ein neues Fenster öffnen statt das laufende zu verwenden",
+  "optGoto": "Eine Datei an einer Zeile und optionalen Spalte öffnen",
+  "optWait": "Warten, bis die geöffneten Dateien geschlossen sind",
+  "optHelp": "Diese Hilfe anzeigen",
+  "optVersion": "Die Version anzeigen",
+  "pathsHelp": "Dateien öffnen als Dokumente, Ordner als Arbeitsbereiche; relative Pfade beginnen im aktuellen Verzeichnis. Ohne Pfade wird die letzte Sitzung wiederhergestellt.",
+  "unknownOption": "unbekannte Option {{option}}",
+  "missingValue": "{{option}} braucht einen Wert",
+  "seeHelp": "„notoir --help“ zeigt die Verwendung."
+}

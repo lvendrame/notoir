@@ -44,5 +44,8 @@
   "gitNoHistory": "{{name}} dosyasını değiştiren commit yok.",
   "gitFailed": "Git {{name}} dosyasını okuyamadı.",
   "gitNotInRepo": "{{name}} bir Git deposunda değil.",
-  "gitNotAtRevision": "{{name}} bu revizyonda yok."
+  "gitNotAtRevision": "{{name}} bu revizyonda yok.",
+  "shellCommandInstalled": "notoir komutu yüklendi: {{path}}",
+  "shellCommandRemoved": "notoir komutu kaldırıldı: {{path}}",
+  "shellCommandFailed": "notoir komutu değiştirilemedi."
 }

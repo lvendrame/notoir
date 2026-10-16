@@ -30,10 +30,28 @@ fn main() -> eframe::Result {
         return Ok(());
     }
     let cwd = std::env::current_dir().unwrap_or_default();
-    let cli = cli::parse(&args, &cwd);
-    if cli.version {
-        println!("notoir {}", env!("CARGO_PKG_VERSION"));
+    // Terminal output follows the OS language (settings are not read yet).
+    let lang = notoir::i18n::Language::detect(notoir_platform::os_locale().as_deref(), None);
+    let cli = match cli::parse(&args, &cwd) {
+        Ok(cli) => cli,
+        Err(e) => {
+            eprintln!("notoir: {}", e.message(lang));
+            eprintln!("{}", notoir::i18n::t_in(lang, "cli:seeHelp"));
+            std::process::exit(2);
+        }
+    };
+    if cli.help {
+        print!("{}", cli::usage(lang));
         return Ok(());
+    }
+    if cli.version {
+        println!("{}", cli::version_line());
+        return Ok(());
+    }
+    // `--wait` (spec 38): this process only forwards and waits; the window
+    // lives in the running instance, started here when there is none.
+    if cli.wait && !cli.new_window {
+        std::process::exit(wait_for_instance(&args, &cwd));
     }
     let paths = AppPaths::resolve().and_then(|p| p.ensure_dirs().map(|()| p));
     let _log_guard = match &paths {
@@ -45,7 +63,7 @@ fn main() -> eframe::Result {
     };
 
     // Single instance: hand the command line to a running window (spec 31).
-    let (tx, rx) = channel::<InstanceRequest>();
+    let (tx, rx) = channel::<(InstanceRequest, Option<single_instance::Waiter>)>();
     let repaint: Arc<OnceLock<egui::Context>> = Arc::new(OnceLock::new());
     let mut instance_rx = None;
     if !cli.new_window {
@@ -54,8 +72,8 @@ fn main() -> eframe::Result {
             args: args.clone(),
         };
         let waker = repaint.clone();
-        match single_instance::claim(&single_instance::socket_name(), &request, move |req| {
-            let _ = tx.send(req);
+        match single_instance::claim(&single_instance::socket_name(), &request, move |req, w| {
+            let _ = tx.send((req, w));
             if let Some(ctx) = waker.get() {
                 ctx.request_repaint();
             }
@@ -113,4 +131,50 @@ fn main() -> eframe::Result {
     );
     tracing::info!("exiting Notoir");
     result
+}
+
+/// `--wait`: forwards to the running instance (starting one without
+/// `--wait` if needed) and returns once the files are closed there.
+fn wait_for_instance(args: &[String], cwd: &std::path::Path) -> i32 {
+    let name = single_instance::socket_name();
+    let request = InstanceRequest {
+        cwd: cwd.to_path_buf(),
+        args: args.to_vec(),
+    };
+    match single_instance::forward(&name, &request) {
+        Ok(true) => return 0,
+        Ok(false) => {}
+        Err(e) => {
+            eprintln!("notoir: {e}");
+            return 1;
+        }
+    }
+    // No instance: start one with the same session behaviour (no paths, so
+    // it restores the session), then hand it the request.
+    let exe = match std::env::current_exe() {
+        Ok(e) => e,
+        Err(e) => {
+            eprintln!("notoir: {e}");
+            return 1;
+        }
+    };
+    if let Err(e) = std::process::Command::new(exe)
+        .current_dir(cwd)
+        .stdin(std::process::Stdio::null())
+        .stdout(std::process::Stdio::null())
+        .stderr(std::process::Stdio::null())
+        .spawn()
+    {
+        eprintln!("notoir: {e}");
+        return 1;
+    }
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
+    while std::time::Instant::now() < deadline {
+        std::thread::sleep(std::time::Duration::from_millis(100));
+        if let Ok(true) = single_instance::forward(&name, &request) {
+            return 0;
+        }
+    }
+    eprintln!("notoir: Notoir did not start");
+    1
 }

@@ -44,5 +44,8 @@
   "gitNoHistory": "Жоден коміт не змінює {{name}}.",
   "gitFailed": "Git не зміг прочитати {{name}}.",
   "gitNotInRepo": "{{name}} не в репозиторії Git.",
-  "gitNotAtRevision": "{{name}} не існує в цій ревізії."
+  "gitNotAtRevision": "{{name}} не існує в цій ревізії.",
+  "shellCommandInstalled": "Команду notoir установлено: {{path}}",
+  "shellCommandRemoved": "Команду notoir видалено: {{path}}",
+  "shellCommandFailed": "Не вдалося змінити команду notoir."
 }

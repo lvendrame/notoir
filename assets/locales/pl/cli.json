@@ -1,0 +1,16 @@
+{
+  "about": "Notoir — szybki natywny edytor tekstu i obszar roboczy.",
+  "usage": "Użycie:",
+  "paths": "ścieżki",
+  "fileLineCol": "plik:wiersz[:kolumna]",
+  "options": "Opcje:",
+  "optNewWindow": "Otwórz nowe okno zamiast używać otwartego",
+  "optGoto": "Otwórz plik w wierszu i opcjonalnej kolumnie",
+  "optWait": "Czekaj, aż otwarte pliki zostaną zamknięte",
+  "optHelp": "Pokaż tę pomoc",
+  "optVersion": "Pokaż wersję",
+  "pathsHelp": "Pliki otwierają się jako dokumenty, a foldery jako obszary robocze; ścieżki względne zaczynają się w bieżącym katalogu. Bez ścieżek przywracana jest ostatnia sesja.",
+  "unknownOption": "nieznana opcja {{option}}",
+  "missingValue": "{{option}} wymaga wartości",
+  "seeHelp": "Uruchom „notoir --help”, aby zobaczyć sposób użycia."
+}

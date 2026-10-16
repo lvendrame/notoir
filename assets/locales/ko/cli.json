@@ -1,0 +1,16 @@
+{
+  "about": "Notoir — 빠른 네이티브 텍스트 편집기이자 작업 영역입니다.",
+  "usage": "사용법:",
+  "paths": "경로",
+  "fileLineCol": "파일:줄[:열]",
+  "options": "옵션:",
+  "optNewWindow": "실행 중인 창 대신 새 창 열기",
+  "optGoto": "파일을 지정한 줄(과 선택적 열)에서 열기",
+  "optWait": "열린 파일이 닫힐 때까지 기다리기",
+  "optHelp": "이 도움말 표시",
+  "optVersion": "버전 표시",
+  "pathsHelp": "파일은 문서로, 폴더는 작업 영역으로 열립니다. 상대 경로는 현재 디렉터리에서 시작합니다. 경로가 없으면 마지막 세션을 복원합니다.",
+  "unknownOption": "알 수 없는 옵션 {{option}}",
+  "missingValue": "{{option}}에는 값이 필요합니다",
+  "seeHelp": "사용법은 “notoir --help”를 실행하세요."
+}

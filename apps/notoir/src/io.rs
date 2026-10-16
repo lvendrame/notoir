@@ -74,6 +74,11 @@ pub enum IoResult {
     },
     /// `.notoir/plugins.toml` recommendations (id, version).
     PluginRecommendations(Vec<(String, String)>),
+    /// Help → Install / Uninstall 'notoir' Command finished.
+    ShellCommand {
+        install: bool,
+        result: Result<String, String>,
+    },
     /// A plugin folder went to the trash.
     PluginUninstalled {
         id: String,

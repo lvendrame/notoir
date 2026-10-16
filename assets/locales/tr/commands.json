@@ -69,7 +69,9 @@
   "app": {
     "quit": "Çıkış",
     "quitMac": "Notoir'dan Çık",
-    "settings": "Ayarları Aç"
+    "settings": "Ayarları Aç",
+    "installShellCommand": "'notoir' Komutunu PATH'e Yükle",
+    "uninstallShellCommand": "'notoir' Komutunu PATH'ten Kaldır"
   },
   "workbench": {
     "showNotifications": "Bildirimleri Göster",

@@ -44,5 +44,8 @@
   "gitNoHistory": "{{name}} を変更したコミットはありません。",
   "gitFailed": "Git は {{name}} を読み取れませんでした。",
   "gitNotInRepo": "{{name}} は Git リポジトリにありません。",
-  "gitNotAtRevision": "そのリビジョンには {{name}} が存在しません。"
+  "gitNotAtRevision": "そのリビジョンには {{name}} が存在しません。",
+  "shellCommandInstalled": "notoir コマンドをインストールしました: {{path}}",
+  "shellCommandRemoved": "notoir コマンドを削除しました: {{path}}",
+  "shellCommandFailed": "notoir コマンドを変更できませんでした。"
 }

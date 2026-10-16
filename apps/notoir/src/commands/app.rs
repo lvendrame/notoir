@@ -7,6 +7,35 @@ use super::Specs;
 use crate::core::{AppCore, Effect};
 
 pub(super) fn specs(out: &mut Specs, platform: Platform) {
+    // `notoir` on PATH (spec 38): off the UI thread (may ask for admin).
+    out.push(CommandSpec::new(
+        "app.installShellCommand",
+        Category::Help,
+        |c: &mut AppCore, _: &CommandInvocation| {
+            c.io.submit(|| {
+                Some(crate::io::IoResult::ShellCommand {
+                    install: true,
+                    result: notoir_platform::shell_command::install()
+                        .map(|p| p.display().to_string()),
+                })
+            });
+            CommandOutcome::Done
+        },
+    ));
+    out.push(CommandSpec::new(
+        "app.uninstallShellCommand",
+        Category::Help,
+        |c: &mut AppCore, _: &CommandInvocation| {
+            c.io.submit(|| {
+                Some(crate::io::IoResult::ShellCommand {
+                    install: false,
+                    result: notoir_platform::shell_command::uninstall()
+                        .map(|p| p.display().to_string()),
+                })
+            });
+            CommandOutcome::Done
+        },
+    ));
     let mut quit =
         CommandSpec::new("app.quit", Category::File, quit).keys([KeyBindingDef::new("Mod+Q")]);
     if platform == Platform::Mac {

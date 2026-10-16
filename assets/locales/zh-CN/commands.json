@@ -69,7 +69,9 @@
   "app": {
     "quit": "退出",
     "quitMac": "退出 Notoir",
-    "settings": "打开设置"
+    "settings": "打开设置",
+    "installShellCommand": "在 PATH 中安装 'notoir' 命令",
+    "uninstallShellCommand": "从 PATH 中移除 'notoir' 命令"
   },
   "workbench": {
     "showNotifications": "显示通知",

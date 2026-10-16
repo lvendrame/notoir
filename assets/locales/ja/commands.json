@@ -69,7 +69,9 @@
   "app": {
     "quit": "終了",
     "quitMac": "Notoir を終了",
-    "settings": "設定を開く"
+    "settings": "設定を開く",
+    "installShellCommand": "'notoir' コマンドを PATH にインストール",
+    "uninstallShellCommand": "'notoir' コマンドを PATH から削除"
   },
   "workbench": {
     "showNotifications": "通知を表示",

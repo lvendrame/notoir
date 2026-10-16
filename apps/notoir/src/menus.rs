@@ -437,6 +437,9 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         cmd("help.viewLogs"),
         cmd("recovery.show"),
         SEP,
+        cmd("app.installShellCommand"),
+        cmd("app.uninstallShellCommand"),
+        SEP,
         cmd("app.checkForUpdates"),
     ];
     if !mac {

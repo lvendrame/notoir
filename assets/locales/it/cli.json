@@ -1,0 +1,16 @@
+{
+  "about": "Notoir — un editor di testo e area di lavoro nativo e veloce.",
+  "usage": "Uso:",
+  "paths": "percorsi",
+  "fileLineCol": "file:riga[:colonna]",
+  "options": "Opzioni:",
+  "optNewWindow": "Apri una nuova finestra invece di usare quella aperta",
+  "optGoto": "Apri un file a una riga e colonna facoltativa",
+  "optWait": "Attendi la chiusura dei file aperti",
+  "optHelp": "Mostra questa guida",
+  "optVersion": "Mostra la versione",
+  "pathsHelp": "I file si aprono come documenti e le cartelle come aree di lavoro; i percorsi relativi partono dalla directory corrente. Senza percorsi viene ripristinata l’ultima sessione.",
+  "unknownOption": "opzione sconosciuta {{option}}",
+  "missingValue": "{{option}} richiede un valore",
+  "seeHelp": "Esegui “notoir --help” per l’uso."
+}

@@ -216,6 +216,43 @@ pub struct AppCore {
     /// `keybindings.toml` as last loaded (the keymap is rebuilt when plugin
     /// bindings change).
     pub user_bindings: Vec<UserBinding>,
+    /// `notoir --wait` invocations waiting for their files to close.
+    pub cli_waits: Vec<CliWait>,
+}
+
+/// A `notoir --wait` request (spec 38).
+pub struct CliWait {
+    keys: Vec<notoir_core::document::PathKey>,
+    waiter: Option<notoir_platform::single_instance::Waiter>,
+    /// One of the files had a tab.
+    seen: bool,
+    since: u64,
+}
+
+/// A waited request whose files never opened (folders only, load errors)
+/// is released after this long.
+const CLI_WAIT_UNSEEN_MS: u64 = 30_000;
+
+impl AppCore {
+    /// Releases `--wait` terminals whose files no longer have tabs.
+    pub fn cli_wait_tick(&mut self) {
+        let now = self.now_ms;
+        let wb = &self.workbench;
+        for w in &mut self.cli_waits {
+            let open = w.keys.iter().any(|k| {
+                wb.find_by_key(k)
+                    .is_some_and(|d| wb.views.of_document(d).any(|v| !v.detached))
+            });
+            if open {
+                w.seen = true;
+            } else if (w.seen || now.saturating_sub(w.since) > CLI_WAIT_UNSEEN_MS)
+                && let Some(waiter) = w.waiter.take()
+            {
+                waiter.finish();
+            }
+        }
+        self.cli_waits.retain(|w| w.waiter.is_some());
+    }
 }
 
 impl AppCore {
@@ -370,6 +407,7 @@ impl AppCore {
             mcp,
             plugins,
             user_bindings: user_bindings.clone(),
+            cli_waits: Vec::new(),
             language,
             theme_choice,
             theme_override: opts.theme_override,
@@ -797,7 +835,7 @@ impl AppCore {
                         now,
                     );
                 }
-                IoResult::Instance(req) => self.handle_instance_request(req),
+                IoResult::Instance(req) => self.handle_instance_request(req, None),
                 IoResult::PluginsScanned(found) => self.plugins_scanned(found),
                 IoResult::PluginManifest { dir, result } => {
                     self.plugins_manifest_read(dir, *result)
@@ -810,6 +848,24 @@ impl AppCore {
                 } => self.plugins_syntax_loaded(&plugin, &language, error),
                 IoResult::PluginRecommendations(list) => self.plugins.recommended = list,
                 IoResult::PluginUninstalled { id, error } => self.plugins_uninstalled(id, error),
+                IoResult::ShellCommand { install, result } => {
+                    let n = match (install, result) {
+                        (true, Ok(p)) => Notification::new(
+                            Severity::Info,
+                            Translatable::new("notifications:shellCommandInstalled").arg("path", p),
+                        ),
+                        (false, Ok(p)) => Notification::new(
+                            Severity::Info,
+                            Translatable::new("notifications:shellCommandRemoved").arg("path", p),
+                        ),
+                        (_, Err(e)) => Notification::new(
+                            Severity::Error,
+                            Translatable::new("notifications:shellCommandFailed"),
+                        )
+                        .detail(e),
+                    };
+                    self.notify(n);
+                }
                 IoResult::FolderPicked(path) if self.git_clone_folder(path.as_deref()) => {}
                 IoResult::FolderPicked(path) if self.plugins_folder_picked(path.as_deref()) => {}
                 IoResult::FolderPicked(Some(path)) => self.open_workspace(&path),
@@ -1023,9 +1079,22 @@ impl AppCore {
     pub fn handle_instance_request(
         &mut self,
         req: notoir_platform::single_instance::InstanceRequest,
+        waiter: Option<notoir_platform::single_instance::Waiter>,
     ) {
         let paths = crate::cli::paths(&req.args, &req.cwd);
         self.open_cli_paths(&paths);
+        if let Some(waiter) = waiter {
+            let keys = paths
+                .iter()
+                .map(|(p, _)| notoir_workspace::fs_io::identity(p).1)
+                .collect();
+            self.cli_waits.push(CliWait {
+                keys,
+                waiter: Some(waiter),
+                seen: false,
+                since: self.now_ms,
+            });
+        }
         if std::env::var("NOTOIR_TEST_COMMANDS").as_deref() == Ok("1") {
             for (id, args) in crate::cli::commands(&req.args, &req.cwd) {
                 let args = serde_json::from_str(&args).unwrap_or(serde_json::Value::Null);

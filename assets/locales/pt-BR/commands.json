@@ -69,7 +69,9 @@
   "app": {
     "quit": "Sair",
     "quitMac": "Encerrar o Notoir",
-    "settings": "Abrir Configurações"
+    "settings": "Abrir Configurações",
+    "installShellCommand": "Instalar o comando 'notoir' no PATH",
+    "uninstallShellCommand": "Remover o comando 'notoir' do PATH"
   },
   "workbench": {
     "showNotifications": "Mostrar Notificações",
