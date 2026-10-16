@@ -161,7 +161,9 @@ pub fn show(
         .str("markdown.preview.loadRemoteImages", None)
         .to_owned();
     let state = previews.views.entry(view).or_default();
-    let mut scroll = egui::ScrollArea::vertical()
+    // Sideways too: a pane narrower than the minimum column scrolls instead
+    // of squeezing the text.
+    let mut scroll = egui::ScrollArea::both()
         .id_salt(("md-preview", view))
         .auto_shrink([false, false]);
     if let Some(o) = state.set_offset.take() {
@@ -186,7 +188,8 @@ pub fn show(
     let images = &previews.images;
     let out = scroll.show(ui, |ui| {
         let avail = ui.available_width();
-        let w = max_w.min(avail - 32.0).max(120.0);
+        let min_w = (size * 20.0).max(320.0);
+        let w = max_w.min(avail - 32.0).max(min_w);
         let pad = ((avail - w) / 2.0).max(16.0);
         ui.add_space(16.0);
         let top = ui.cursor().top();

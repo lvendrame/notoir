@@ -396,3 +396,43 @@ fn wide_content_wraps_or_scrolls_inside_the_column() {
     assert!(after.left() < before.left(), "{before:?} → {after:?}");
     assert!(after.right() <= preview_right, "{after:?} in view");
 }
+
+/// A pane narrower than the minimum column scrolls sideways instead of
+/// squeezing the text into a sliver.
+#[test]
+fn narrow_preview_scrolls_sideways_instead_of_squeezing() {
+    let dir = tempfile::tempdir().unwrap();
+    let words: Vec<String> = (0..60).map(|i| format!("w{i}")).collect();
+    let md = format!("# Narrow\n\n{}\n", words.join(" "));
+    let mut app = open(vec![write(dir.path(), "narrow.md", &md)]);
+    common::run(&mut app, "markdown.showSplit", Value::Null);
+    // The Explorer leaves the preview about 220 px.
+    app.harness.set_size(egui::vec2(520.0, 800.0));
+    app.harness.run_steps(4);
+    let rects: Vec<egui::Rect> = words
+        .iter()
+        .filter_map(|w| {
+            let label = format!("{w} ");
+            app.harness.query_by_label(&label).map(|n| n.rect())
+        })
+        .collect();
+    assert!(!rects.is_empty());
+    let row = rects.iter().map(|r| r.right()).fold(f32::MIN, f32::max)
+        - rects.iter().map(|r| r.left()).fold(f32::MAX, f32::min);
+    assert!(row >= 300.0, "rows keep a readable width: {row}");
+    let before = app.harness.get_by_label("Narrow").rect();
+    app.harness
+        .input_mut()
+        .events
+        .push(Event::PointerMoved(before.center()));
+    app.harness.run_steps(2);
+    app.harness.input_mut().events.push(Event::MouseWheel {
+        unit: egui::MouseWheelUnit::Point,
+        delta: egui::vec2(-500.0, 0.0),
+        phase: egui::TouchPhase::Move,
+        modifiers: Modifiers::NONE,
+    });
+    app.harness.run_steps(30);
+    let after = app.harness.get_by_label("Narrow").rect();
+    assert!(after.left() < before.left(), "{before:?} → {after:?}");
+}

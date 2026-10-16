@@ -403,9 +403,11 @@ const WIDE_MD: &str = "# Wide content\n\nA paragraph with a very long link [http
 
 #[test]
 fn markdown_wide_content_snapshot() {
-    for (name, command) in [
-        ("markdown-wide-split", "markdown.showSplit"),
-        ("markdown-wide-preview", "markdown.showPreview"),
+    for (name, command, width) in [
+        ("markdown-wide-split", "markdown.showSplit", 1280.0),
+        ("markdown-wide-preview", "markdown.showPreview", 1280.0),
+        // Narrower than the minimum column: the preview scrolls sideways.
+        ("markdown-wide-narrow", "markdown.showPreview", 560.0),
     ] {
         let dir = tempfile::tempdir().unwrap();
         let p = dir.path().join("wide.md");
@@ -417,6 +419,7 @@ fn markdown_wide_content_snapshot() {
         });
         common::settle(&mut app);
         common::run(&mut app, command, serde_json::Value::Null);
+        app.harness.set_size(egui::vec2(width, 800.0));
         common::settle(&mut app);
         app.harness.run_steps(3);
         if let Ok(img) = app.harness.render() {
