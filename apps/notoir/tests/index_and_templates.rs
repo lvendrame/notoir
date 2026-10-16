@@ -65,6 +65,21 @@ fn search(app: &mut common::TestApp, text: &str) -> (Vec<String>, bool) {
     (rels, st.indexed)
 }
 
+/// A search answered from the index. The index is not current while a sync
+/// is in flight (watcher events can start one at any time), so this waits
+/// for it and retries a search that had to stream.
+fn indexed_search(app: &mut common::TestApp, text: &str) -> Vec<String> {
+    let deadline = Instant::now() + Duration::from_secs(20);
+    loop {
+        assert!(wait_for(app, index_ready), "index current");
+        let (files, indexed) = search(app, text);
+        if indexed {
+            return files;
+        }
+        assert!(Instant::now() < deadline, "search never used the index");
+    }
+}
+
 const FILES: &[(&str, &str)] = &[
     ("README.md", "Notoir keeps a needle here.\n"),
     ("docs/guide.md", "Another NEEDLE in the guide.\n"),
@@ -84,7 +99,8 @@ fn index_is_disposable() {
     let mut app = open(&root);
     assert!(wait_for(&mut app, index_ready), "index built");
     let expected = vec!["README.md".to_owned(), "docs/guide.md".to_owned()];
-    assert_eq!(search(&mut app, "needle"), (expected.clone(), true));
+    assert_eq!(indexed_search(&mut app, "needle"), expected);
+    assert!(wait_for(&mut app, index_ready));
     let (cache, dir) = {
         let core = &app.harness.state().core;
         let dir = core.text_index_dir().unwrap();
@@ -110,7 +126,7 @@ fn index_is_disposable() {
     assert_eq!(search(&mut app, "needle"), (expected.clone(), false));
     assert!(wait_for(&mut app, index_ready), "index rebuilt");
     assert!(dir.join("text.sqlite").exists());
-    assert_eq!(search(&mut app, "needle"), (expected, true));
+    assert_eq!(indexed_search(&mut app, "needle"), expected);
 }
 
 #[test]
@@ -130,8 +146,8 @@ fn index_follows_changes_and_rebuilds_on_request() {
                 .is_some_and(|w| w.index.iter().any(|e| e.rel == "new.md"))
     }));
     assert_eq!(
-        search(&mut app, "zebra"),
-        (vec!["docs/other.md".into(), "new.md".into()], true)
+        indexed_search(&mut app, "zebra"),
+        vec!["docs/other.md".to_owned(), "new.md".to_owned()]
     );
     // Short and regex queries stream.
     assert!(!search(&mut app, "ze").1);
@@ -141,8 +157,7 @@ fn index_follows_changes_and_rebuilds_on_request() {
 
     // Rebuild: streaming until it finishes, then indexed again.
     common::run(&mut app, "search.rebuildIndex", json!({}));
-    assert!(wait_for(&mut app, index_ready));
-    assert!(search(&mut app, "zebra").1);
+    assert!(!indexed_search(&mut app, "zebra").is_empty());
     assert_eq!(
         app.harness.state().core.text_index.last.map(|s| s.added),
         Some(4),

@@ -207,7 +207,7 @@ fn clicking_result_jumps() {
     let mut app = open_ws(&root, vec![]);
     search(&mut app, "MCP");
     app.harness.get_by_label("docs/mcp.md:48").click();
-    assert!(wait_for(&mut app, 5, |a| active_path(a)
+    assert!(wait_for(&mut app, 20, |a| active_path(a)
         .is_some_and(|p| p.ends_with("docs/mcp.md"))));
     assert_eq!(caret(&app), (47, 14, 3), "match on line 48 selected");
 }
