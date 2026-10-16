@@ -397,6 +397,34 @@ fn markdown_split_snapshot() {
     }
 }
 
+/// Content wider than the preview column: a wide table, a long code line,
+/// long unbroken words and links, in the split and in the preview alone.
+const WIDE_MD: &str = "# Wide content\n\nA paragraph with a very long link [https://example.com/a/really/long/path/that/goes/on/and/on/without/any/spaces/at/all/index.html](https://example.com) and Supercalifragilisticexpialidociouswordthatkeepsgoingandgoingwithoutanybreakpointatall in the middle of the text so it has to wrap somewhere sensible.\n\n| Name | Description | Owner | Status | Notes | Created | Updated | Priority |\n|---|---|---|---|---|---|---|---|\n| Recovery | Hot exit keeps unsaved buffers across restarts and crashes | core team | done | Covers scratchpads and untitled files too | 2025-01-10 | 2026-10-01 | high |\n| Preview | Markdown preview with tables, images, wiki links and task lists | editor | new | Wide tables must stay readable at any width | 2025-03-02 | 2026-10-16 | medium |\n\n```rust\nfn main() { let message = \"this line of code is much longer than the preview column and must not be cut off\"; println!(\"{message}\"); }\n```\n\nThe end.\n";
+
+#[test]
+fn markdown_wide_content_snapshot() {
+    for (name, command) in [
+        ("markdown-wide-split", "markdown.showSplit"),
+        ("markdown-wide-preview", "markdown.showPreview"),
+    ] {
+        let dir = tempfile::tempdir().unwrap();
+        let p = dir.path().join("wide.md");
+        std::fs::write(&p, WIDE_MD).unwrap();
+        let mut app = common::start(move |o| {
+            o.language_override = Some(Language::En);
+            o.theme_override = Some(ThemeId::Midnight);
+            o.open_paths = vec![(p, None)];
+        });
+        common::settle(&mut app);
+        common::run(&mut app, command, serde_json::Value::Null);
+        common::settle(&mut app);
+        app.harness.run_steps(3);
+        if let Ok(img) = app.harness.render() {
+            img.save(out_dir().join(format!("{name}.png"))).unwrap();
+        }
+    }
+}
+
 #[test]
 fn json_split_snapshot() {
     let dir = tempfile::tempdir().unwrap();

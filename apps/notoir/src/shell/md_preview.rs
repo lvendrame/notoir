@@ -279,7 +279,15 @@ fn block(
                 .inner_margin(egui::Margin::same(10))
                 .show(ui, |ui| {
                     ui.set_width(ui.available_width());
-                    ui.add(egui::Label::new(job).wrap_mode(egui::TextWrapMode::Extend));
+                    // Long lines scroll sideways instead of being cut off.
+                    egui::ScrollArea::horizontal()
+                        .id_salt(("md-code", b.range.0))
+                        .scroll_bar_visibility(
+                            egui::scroll_area::ScrollBarVisibility::AlwaysVisible,
+                        )
+                        .show(ui, |ui| {
+                            ui.add(egui::Label::new(job).wrap_mode(egui::TextWrapMode::Extend));
+                        });
                 });
         }
         BlockKind::Quote(children) => {
@@ -350,40 +358,46 @@ fn block(
             header,
             rows,
         } => {
-            egui::Grid::new(("md-table", b.range.0))
-                .striped(true)
-                .spacing([18.0, 6.0])
+            // A table wider than the column scrolls sideways.
+            egui::ScrollArea::horizontal()
+                .id_salt(("md-table-scroll", b.range.0))
+                .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysVisible)
                 .show(ui, |ui| {
-                    for (i, cell) in header.iter().enumerate() {
-                        cell_ui(
-                            ui,
-                            kit,
-                            cx,
-                            cell,
-                            aligns.get(i).copied().unwrap_or(Align::None),
-                            true,
-                            images,
-                            wanted,
-                            actions,
-                        );
-                    }
-                    ui.end_row();
-                    for row in rows {
-                        for (i, cell) in row.iter().enumerate() {
-                            cell_ui(
-                                ui,
-                                kit,
-                                cx,
-                                cell,
-                                aligns.get(i).copied().unwrap_or(Align::None),
-                                false,
-                                images,
-                                wanted,
-                                actions,
-                            );
-                        }
-                        ui.end_row();
-                    }
+                    egui::Grid::new(("md-table", b.range.0))
+                        .striped(true)
+                        .spacing([18.0, 6.0])
+                        .show(ui, |ui| {
+                            for (i, cell) in header.iter().enumerate() {
+                                cell_ui(
+                                    ui,
+                                    kit,
+                                    cx,
+                                    cell,
+                                    aligns.get(i).copied().unwrap_or(Align::None),
+                                    true,
+                                    images,
+                                    wanted,
+                                    actions,
+                                );
+                            }
+                            ui.end_row();
+                            for row in rows {
+                                for (i, cell) in row.iter().enumerate() {
+                                    cell_ui(
+                                        ui,
+                                        kit,
+                                        cx,
+                                        cell,
+                                        aligns.get(i).copied().unwrap_or(Align::None),
+                                        false,
+                                        images,
+                                        wanted,
+                                        actions,
+                                    );
+                                }
+                                ui.end_row();
+                            }
+                        });
                 });
         }
         BlockKind::Rule => {
@@ -403,18 +417,26 @@ fn block(
             .id_salt(("front-matter", b.range.0))
             .default_open(false)
             .show(ui, |ui| {
-                egui::Grid::new(("fm", b.range.0)).show(ui, |ui| {
-                    for line in src.lines().filter(|l| !l.trim().is_empty()) {
-                        let (k, v) = line.split_once([':', '=']).unwrap_or((line, ""));
-                        ui.label(
-                            RichText::new(k.trim())
-                                .font(crate::fonts::mono(cx.size * 0.85))
-                                .color(kit.color(Tok::SyntaxProperty)),
-                        );
-                        ui.label(RichText::new(v.trim()).font(crate::fonts::mono(cx.size * 0.85)));
-                        ui.end_row();
-                    }
-                });
+                egui::ScrollArea::horizontal()
+                    .id_salt(("fm-scroll", b.range.0))
+                    .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysVisible)
+                    .show(ui, |ui| {
+                        egui::Grid::new(("fm", b.range.0)).show(ui, |ui| {
+                            for line in src.lines().filter(|l| !l.trim().is_empty()) {
+                                let (k, v) = line.split_once([':', '=']).unwrap_or((line, ""));
+                                ui.label(
+                                    RichText::new(k.trim())
+                                        .font(crate::fonts::mono(cx.size * 0.85))
+                                        .color(kit.color(Tok::SyntaxProperty)),
+                                );
+                                ui.label(
+                                    RichText::new(v.trim())
+                                        .font(crate::fonts::mono(cx.size * 0.85)),
+                                );
+                                ui.end_row();
+                            }
+                        });
+                    });
             });
         }
         BlockKind::Footnote { label, blocks } => {
@@ -573,7 +595,9 @@ fn inline_flow(
         None,
         &mut runs,
     );
-    ui.horizontal_wrapped(|ui| {
+    // Table cells (`Extend`) stay on one line; the table scrolls instead.
+    let one_line = ui.style().wrap_mode == Some(egui::TextWrapMode::Extend);
+    let flow = |ui: &mut egui::Ui| {
         ui.spacing_mut().item_spacing.x = 0.0;
         for run in runs {
             match run {
@@ -586,42 +610,57 @@ fn inline_flow(
                     } else {
                         FontId::proportional(size)
                     };
-                    let mut rt = RichText::new(text).font(font).color(if link.is_some() {
+                    let missing = link.as_deref().is_some_and(|url| {
+                        url.strip_prefix("wiki:").is_some_and(|t| {
+                            let name = t.split('#').next().unwrap_or(t).trim();
+                            !name.is_empty() && cx.missing.contains(&name.to_lowercase())
+                        })
+                    });
+                    let color = if missing {
+                        kit.color(Tok::Warning)
+                    } else if link.is_some() {
                         kit.color(Tok::SyntaxLink)
                     } else if st.code {
                         kit.color(Tok::SyntaxCode)
                     } else {
                         kit.color(Tok::TextPrimary)
-                    });
-                    if st.emphasis {
-                        rt = rt.italics();
+                    };
+                    let code_bg = kit.color(Tok::BgPanel);
+                    let rich = |piece: &str| {
+                        let mut rt = RichText::new(piece).font(font.clone()).color(color);
+                        if st.emphasis {
+                            rt = rt.italics();
+                        }
+                        if st.strike {
+                            rt = rt.strikethrough();
+                        }
+                        if st.code {
+                            rt = rt.background_color(code_bg);
+                        }
+                        if link.is_some() && !missing {
+                            rt = rt.underline();
+                        }
+                        rt
+                    };
+                    // A wiki link to a missing note: dashed, with an icon.
+                    if missing {
+                        ui.add(kit.icon(
+                            ui.ctx(),
+                            crate::icons::Icon::FilePlus,
+                            size * 0.85,
+                            kit.color(Tok::Warning),
+                        ));
                     }
-                    if st.strike {
-                        rt = rt.strikethrough();
-                    }
-                    if st.code {
-                        rt = rt.background_color(kit.color(Tok::BgPanel));
-                    }
-                    match link {
-                        // A wiki link to a missing note: dashed, with an icon.
-                        Some(url)
-                            if url.strip_prefix("wiki:").is_some_and(|t| {
-                                let name = t.split('#').next().unwrap_or(t).trim();
-                                !name.is_empty() && cx.missing.contains(&name.to_lowercase())
-                            }) =>
-                        {
-                            ui.add(kit.icon(
-                                ui.ctx(),
-                                crate::icons::Icon::FilePlus,
-                                size * 0.85,
-                                kit.color(Tok::Warning),
-                            ));
-                            let resp = ui
-                                .add(
-                                    egui::Label::new(rt.color(kit.color(Tok::Warning)))
-                                        .sense(Sense::click()),
-                                )
-                                .on_hover_text(t!("notes:missingHint"));
+                    // One label per word: the row wraps between words, and a
+                    // word longer than the column starts a row and wraps
+                    // inside it instead of running past the edge.
+                    for piece in text.split_inclusive(char::is_whitespace) {
+                        let Some(url) = &link else {
+                            ui.add(egui::Label::new(rich(piece)));
+                            continue;
+                        };
+                        let resp = ui.add(egui::Label::new(rich(piece)).sense(Sense::click()));
+                        let resp = if missing {
                             let r = resp.rect;
                             let mut x = r.left();
                             while x < r.right() {
@@ -630,45 +669,35 @@ fn inline_flow(
                                         egui::pos2(x, r.bottom() - 1.0),
                                         egui::pos2((x + 3.0).min(r.right()), r.bottom() - 1.0),
                                     ],
-                                    egui::Stroke::new(1.0, kit.color(Tok::Warning)),
+                                    egui::Stroke::new(1.0, color),
                                 );
                                 x += 6.0;
                             }
-                            if resp.hovered() {
-                                ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand);
-                            }
-                            if resp.clicked() {
-                                cmd(
-                                    actions,
-                                    "markdown.openLink",
-                                    json!({ "doc": cx.doc.0, "url": url }),
-                                );
-                            }
+                            resp.on_hover_text(t!("notes:missingHint"))
+                        } else {
+                            resp.on_hover_text(url)
+                        };
+                        if resp.hovered() {
+                            ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand);
                         }
-                        Some(url) => {
-                            let resp = ui
-                                .add(egui::Label::new(rt.underline()).sense(Sense::click()))
-                                .on_hover_text(&url);
-                            if resp.hovered() {
-                                ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand);
-                            }
-                            if resp.clicked() {
-                                cmd(
-                                    actions,
-                                    "markdown.openLink",
-                                    json!({ "doc": cx.doc.0, "url": url }),
-                                );
-                            }
-                        }
-                        None => {
-                            ui.add(egui::Label::new(rt));
+                        if resp.clicked() {
+                            cmd(
+                                actions,
+                                "markdown.openLink",
+                                json!({ "doc": cx.doc.0, "url": url }),
+                            );
                         }
                     }
                 }
                 Run::Image(url, alt) => image(ui, kit, cx, &url, &alt, images, wanted),
             }
         }
-    });
+    };
+    if one_line {
+        ui.horizontal(flow);
+    } else {
+        ui.horizontal_wrapped(flow);
+    }
 }
 
 fn image(

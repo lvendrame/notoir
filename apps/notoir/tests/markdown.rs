@@ -349,3 +349,50 @@ fn export_as_html() {
     common::settle(&mut app);
     assert!(!out.exists());
 }
+
+/// Wide content stays inside the preview column: long words wrap within it,
+/// and a table wider than the column scrolls sideways instead of being cut.
+#[test]
+fn wide_content_wraps_or_scrolls_inside_the_column() {
+    let dir = tempfile::tempdir().unwrap();
+    let long_word = "Supercalifragilisticexpialidociouswordthatkeepsgoingandgoingwithoutanybreakpointatallreallyverylong";
+    let md = format!(
+        "# Wide\n\nSome text then {long_word} and more.\n\n| Name | Description | Owner | Status | Notes | Created | Updated | Priority |\n|---|---|---|---|---|---|---|---|\n| Recovery | Hot exit keeps unsaved buffers across restarts and crashes | core team | done | Covers scratchpads and untitled files too | 2025-01-10 | 2026-10-01 | high |\n"
+    );
+    let mut app = open(vec![write(dir.path(), "wide.md", &md)]);
+    common::run(&mut app, "markdown.showSplit", Value::Null);
+    app.harness.run_steps(3);
+    let column_left = app.harness.get_by_label("Wide").rect().left();
+    let preview_right = app.harness.ctx.content_rect().right();
+    // The long word starts a row of its own at the column's left edge.
+    let word = app
+        .harness
+        .query_all_by_label_contains("Supercalifragilistic")
+        .next()
+        .expect("long word")
+        .rect();
+    assert!(
+        word.left() >= column_left - 0.5 && word.right() <= preview_right,
+        "word {word:?} inside the column from {column_left}"
+    );
+    // The last column starts out of view, and scrolling the table sideways
+    // brings it in.
+    let before = app.harness.get_by_label("Priority").rect();
+    assert!(before.right() > preview_right - 16.0, "{before:?}");
+    let name = app.harness.get_by_label("Name").rect().center();
+    app.harness
+        .input_mut()
+        .events
+        .push(Event::PointerMoved(name));
+    app.harness.run_steps(2);
+    app.harness.input_mut().events.push(Event::MouseWheel {
+        unit: egui::MouseWheelUnit::Point,
+        delta: egui::vec2(-2000.0, 0.0),
+        phase: egui::TouchPhase::Move,
+        modifiers: Modifiers::NONE,
+    });
+    app.harness.run_steps(30);
+    let after = app.harness.get_by_label("Priority").rect();
+    assert!(after.left() < before.left(), "{before:?} → {after:?}");
+    assert!(after.right() <= preview_right, "{after:?} in view");
+}
