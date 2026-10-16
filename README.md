@@ -10,6 +10,28 @@ None of these take up permanent screen space until you use them.
 
 Runs on Windows 10/11, macOS (Apple Silicon and Intel), and Linux (X11/Wayland). Available in 14 languages.
 
+## Install
+
+Download the installer for your system from the [latest release](https://github.com/lvendrame/notoir/releases/latest):
+
+| System | File |
+|---|---|
+| macOS (Apple Silicon and Intel) | `Notoir_<version>_universal.dmg` |
+| Windows | `notoir_<version>_x64_en-US.msi` or `notoir_<version>_x64-setup.exe` |
+| Linux | `notoir_<version>_amd64.deb` or `notoir_<version>_x86_64.AppImage` |
+
+Release builds are not code-signed yet, so the first launch needs one extra step:
+
+- **macOS** says "Notoir" Not Opened. Drag Notoir to Applications, then run:
+  ```sh
+  xattr -dr com.apple.quarantine /Applications/Notoir.app
+  ```
+  (or click **Open Anyway** in System Settings → Privacy & Security).
+- **Windows** SmartScreen says "Windows protected your PC": click **More info** → **Run anyway**.
+- **Linux** AppImage: `chmod +x notoir_*.AppImage` before running it.
+
+`SHA256SUMS.txt` in each release lists the checksum of every file.
+
 ## Status
 
 Under development: a daily-usable editor (files, workspaces, splits, recovery, find/replace, settings) with
