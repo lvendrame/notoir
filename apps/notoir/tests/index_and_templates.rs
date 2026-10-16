@@ -202,11 +202,13 @@ fn new_file_from_a_workspace_template() {
         core.commit_edit();
     }
     let file = root.join("Standup.md");
-    let mut expected = format!("# Standup\n\nDate: {}\n\n- \n", today());
-    // A new file takes the platform's line ending.
-    if cfg!(windows) {
-        expected = expected.replace('\n', "\r\n");
-    }
+    let text = format!("# Standup\n\nDate: {}\n\n- \n", today());
+    // A new file takes the platform's line ending (the buffer keeps `\n`).
+    let expected = if cfg!(windows) {
+        text.replace('\n', "\r\n")
+    } else {
+        text.clone()
+    };
     // Created, filled and saved through the pipeline.
     assert!(wait_for(&mut app, |a| {
         let core = &a.harness.state().core;
@@ -220,11 +222,7 @@ fn new_file_from_a_workspace_template() {
     let core = &app.harness.state().core;
     let view = core.workbench.active_view().unwrap();
     let caret = core.workbench.view(view).unwrap().selection.primary().head;
-    assert_eq!(
-        caret,
-        expected.find("- ").unwrap() + 2,
-        "caret at {{cursor}}"
-    );
+    assert_eq!(caret, text.find("- ").unwrap() + 2, "caret at {{cursor}}");
 }
 
 #[test]
