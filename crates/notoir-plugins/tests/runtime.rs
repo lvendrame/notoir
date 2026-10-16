@@ -16,6 +16,7 @@ fn plugin(dir: &Path, main: &str) -> RuntimeConfig {
     std::fs::write(dir.join("main.lua"), main).unwrap();
     RuntimeConfig {
         id: "test".into(),
+        instance: 1,
         dir: dir.to_path_buf(),
         main: "main.lua".into(),
         permissions: Permissions::default(),
@@ -28,11 +29,11 @@ fn plugin(dir: &Path, main: &str) -> RuntimeConfig {
 
 /// Answers requests like the UI would: `notify` and `editor.active` work,
 /// everything else is denied. Returns every event seen until `until`.
-fn drive(rx: &Receiver<FromPlugin>, until: impl Fn(&FromPlugin) -> bool) -> Vec<String> {
+fn drive(rx: &Receiver<(u64, FromPlugin)>, until: impl Fn(&FromPlugin) -> bool) -> Vec<String> {
     let deadline = Instant::now() + Duration::from_secs(10);
     let mut seen = Vec::new();
     while Instant::now() < deadline {
-        let Ok(e) = rx.recv_timeout(Duration::from_millis(50)) else {
+        let Ok((_, e)) = rx.recv_timeout(Duration::from_millis(50)) else {
             continue;
         };
         let done = until(&e);
@@ -76,7 +77,7 @@ fn drive(rx: &Receiver<FromPlugin>, until: impl Fn(&FromPlugin) -> bool) -> Vec<
     seen
 }
 
-fn start(cfg: RuntimeConfig) -> (PluginRuntime, Receiver<FromPlugin>) {
+fn start(cfg: RuntimeConfig) -> (PluginRuntime, Receiver<(u64, FromPlugin)>) {
     let (tx, rx) = channel();
     (PluginRuntime::start(cfg, tx, Arc::new(|| {})), rx)
 }

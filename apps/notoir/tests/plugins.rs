@@ -524,3 +524,58 @@ fn malformed_manifest_is_invalid() {
     }
     assert!(output(&app).iter().any(|l| l.contains("Invalid plugin")));
 }
+
+// Reload Plugins while a plugin runs: the old VM's late exit must not
+// deactivate the new one (regression).
+#[test]
+fn reload_keeps_restarted_plugins_working() {
+    let toml = SAVER_TOML.replace(
+        "[contributes]",
+        "[contributes]\ncommands = [{ id = \"busy\", title = \"Busy\" }]",
+    );
+    let lua = "notoir.events.on('on_file_save', function() end)\n\
+               notoir.commands.register({ id = 'busy', run = function()\n\
+                 local t = os.clock() + 1.0\n\
+                 while os.clock() < t do end\n\
+               end })\n\
+               notoir.log.info('ready')";
+    let (_ws, _root, mut app) = start_with(&toml, lua, true, "plugins.commandTimeoutMs = 5000\n");
+    let ready = |a: &common::TestApp, n: usize| {
+        output(a)
+            .iter()
+            .filter(|l| l.ends_with("info ready"))
+            .count()
+            >= n
+    };
+    assert!(wait_for(&mut app, |a| ready(a, 1)));
+    for round in 2..=4 {
+        // The old VM is still busy when the new one starts.
+        common::run(&mut app, "plugin.saver.busy", json!({}));
+        std::thread::sleep(Duration::from_millis(100));
+        common::run(&mut app, "plugins.reload", json!({}));
+        assert!(
+            wait_for(&mut app, |a| ready(a, round)),
+            "{:?}",
+            output(&app)
+        );
+    }
+    // Let every old VM finish its command and exit.
+    std::thread::sleep(Duration::from_millis(1500));
+    common::settle(&mut app);
+    let lines = output(&app);
+    assert!(
+        !lines
+            .iter()
+            .any(|l| l.contains("not active") || l.contains(" error ")),
+        "{lines:?}"
+    );
+    assert_eq!(status(&app, "saver"), Some(PluginStatus::Active));
+    assert!(
+        app.harness
+            .state()
+            .core
+            .plugins
+            .entry("saver")
+            .is_some_and(|e| e.subscribed.contains("on_file_save"))
+    );
+}

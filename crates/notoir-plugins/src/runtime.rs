@@ -131,9 +131,16 @@ pub enum ToPlugin {
     Shutdown,
 }
 
+/// Events of plugin VMs, tagged with the VM's instance number: after a
+/// reload, late events of the previous VM of the same plugin are told
+/// apart from the new one's.
+pub type PluginEvents = Sender<(u64, FromPlugin)>;
+
 #[derive(Clone, Debug)]
 pub struct RuntimeConfig {
     pub id: String,
+    /// Unique per started VM (see [`PluginEvents`]).
+    pub instance: u64,
     pub dir: PathBuf,
     pub main: String,
     pub permissions: Permissions,
@@ -147,14 +154,16 @@ pub struct RuntimeConfig {
 /// A running plugin VM. Dropping it asks the thread to stop.
 pub struct PluginRuntime {
     pub id: String,
+    pub instance: u64,
     tx: Sender<ToPlugin>,
 }
 
 impl PluginRuntime {
     /// Starts the thread and activates the plugin (runs `main`).
-    pub fn start(cfg: RuntimeConfig, events: Sender<FromPlugin>, wake: Wake) -> PluginRuntime {
+    pub fn start(cfg: RuntimeConfig, events: PluginEvents, wake: Wake) -> PluginRuntime {
         let (tx, rx) = channel();
         let id = cfg.id.clone();
+        let instance = cfg.instance;
         let spawned = std::thread::Builder::new()
             .name(format!("plugin-{id}"))
             .spawn(move || {
@@ -163,6 +172,7 @@ impl PluginRuntime {
                     events: events.clone(),
                     wake: wake.clone(),
                     plugin: plugin.clone(),
+                    instance,
                 };
                 // A runaway script is ended by unwinding out of the VM.
                 let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -173,7 +183,7 @@ impl PluginRuntime {
         if let Err(e) = spawned {
             tracing::error!(plugin = %id, error = %e, "could not start plugin thread");
         }
-        PluginRuntime { id, tx }
+        PluginRuntime { id, instance, tx }
     }
 
     pub fn send(&self, msg: ToPlugin) -> bool {
@@ -189,14 +199,15 @@ impl Drop for PluginRuntime {
 
 #[derive(Clone)]
 struct Out {
-    events: Sender<FromPlugin>,
+    events: PluginEvents,
     wake: Wake,
     plugin: String,
+    instance: u64,
 }
 
 impl Out {
     fn send(&self, e: FromPlugin) {
-        if self.events.send(e).is_ok() {
+        if self.events.send((self.instance, e)).is_ok() {
             (self.wake)();
         }
     }

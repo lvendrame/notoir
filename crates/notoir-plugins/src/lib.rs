@@ -8,6 +8,6 @@ pub mod runtime;
 
 pub use manifest::{API_VERSION, Discovered, Manifest, ManifestError, Permissions, scan};
 pub use runtime::{
-    ApiError, ApiResult, ErrorKind, FromPlugin, PluginRequest, PluginRuntime, RuntimeConfig,
-    ToPlugin, Wake,
+    ApiError, ApiResult, ErrorKind, FromPlugin, PluginEvents, PluginRequest, PluginRuntime,
+    RuntimeConfig, ToPlugin, Wake,
 };

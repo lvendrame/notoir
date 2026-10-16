@@ -124,7 +124,16 @@ end
 function notoir._run_command(id, args)
   local fn = notoir._commands[id]
   if not fn then error("command " .. id .. " was declared but not registered") end
-  local ctx = { editor = notoir.editor.active(), args = args }
+  -- `ctx.editor` is resolved on first use, so commands that never touch
+  -- the editor need no document permission.
+  local ctx = setmetatable({ args = args }, {
+    __index = function(t, k)
+      if k ~= "editor" then return nil end
+      local editor = notoir.editor.active()
+      rawset(t, "editor", editor)
+      return editor
+    end,
+  })
   return fn(ctx)
 end
 

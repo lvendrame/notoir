@@ -8,7 +8,7 @@
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
-use std::sync::mpsc::{Receiver, Sender, channel};
+use std::sync::mpsc::{Receiver, channel};
 use std::time::Duration;
 
 use notoir_core::command::{
@@ -124,8 +124,10 @@ pub struct PluginMenuItem {
 
 pub struct PluginsState {
     pub entries: Vec<PluginEntry>,
-    tx: Sender<FromPlugin>,
-    rx: Receiver<FromPlugin>,
+    tx: notoir_plugins::PluginEvents,
+    rx: Receiver<(u64, FromPlugin)>,
+    /// Instance number of the next VM started.
+    next_instance: u64,
     wake: Arc<dyn Fn() + Send + Sync>,
     /// Plugin Output: (plugin, level, message).
     pub output: VecDeque<(String, String, String)>,
@@ -171,6 +173,7 @@ impl PluginsState {
             entries: Vec::new(),
             tx,
             rx,
+            next_instance: 1,
             wake,
             output: VecDeque::new(),
             review: None,
@@ -235,6 +238,20 @@ fn denied(what: &str) -> ApiError {
         "permission_denied",
         format!("{what} is not allowed for this plugin"),
     )
+}
+
+/// The plugin an event comes from.
+fn plugin_of(e: &FromPlugin) -> &str {
+    match e {
+        FromPlugin::Request(r) => &r.plugin,
+        FromPlugin::Activated { plugin }
+        | FromPlugin::CommandDone { plugin, .. }
+        | FromPlugin::Log { plugin, .. }
+        | FromPlugin::Error { plugin, .. }
+        | FromPlugin::Exited { plugin }
+        | FromPlugin::Provided { plugin, .. }
+        | FromPlugin::MissingTranslation { plugin, .. } => plugin,
+    }
 }
 
 /// `plugin.<plugin-id>.<command>`.
@@ -570,14 +587,20 @@ impl AppCore {
         let Some(e) = self.plugins.entry_mut(id) else {
             return;
         };
-        if e.status != PluginStatus::Enabled || e.runtime.is_some() {
+        if e.status != PluginStatus::Enabled || e.runtime.is_some() || e.manifest.is_none() {
             return;
         }
+        let instance = self.plugins.next_instance;
+        self.plugins.next_instance += 1;
+        let Some(e) = self.plugins.entry_mut(id) else {
+            return;
+        };
         let Some(m) = &e.manifest else {
             return;
         };
         let cfg = RuntimeConfig {
             id: id.to_owned(),
+            instance,
             dir: e.dir.clone(),
             main: m.plugin.main.clone(),
             permissions: m.permissions.clone(),
@@ -606,7 +629,25 @@ impl AppCore {
     // ── per frame ────────────────────────────────────────────────────────
 
     pub fn plugins_tick(&mut self) {
-        while let Ok(e) = self.plugins.rx.try_recv() {
+        while let Ok((instance, e)) = self.plugins.rx.try_recv() {
+            // Late events of a VM that was replaced (reload, disable +
+            // enable) must not touch the current one.
+            let current = self.plugins.runtime(plugin_of(&e)).map(|rt| rt.instance);
+            if current != Some(instance) {
+                match e {
+                    FromPlugin::Request(r) => r.respond(Err(ApiError::new(
+                        "stopped",
+                        "This plugin instance was stopped",
+                    ))),
+                    FromPlugin::Log {
+                        plugin,
+                        level,
+                        message,
+                    } => self.plugins.log(&plugin, &level, message),
+                    _ => {}
+                }
+                continue;
+            }
             match e {
                 FromPlugin::Request(r) => self.plugin_request(r),
                 FromPlugin::Activated { plugin } => self.plugins.log(&plugin, "info", "Activated"),
