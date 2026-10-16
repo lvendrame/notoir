@@ -551,6 +551,8 @@ mod tests {
         let mut cfg = r.config().unwrap();
         cfg.set_str("user.name", "Tester").unwrap();
         cfg.set_str("user.email", "t@example.com").unwrap();
+        // Checkouts keep LF whatever the global config (Windows: CRLF).
+        cfg.set_bool("core.autocrlf", false).unwrap();
         std::fs::write(root.join("a.md"), "one\ntwo\n").unwrap();
         std::fs::create_dir(root.join("docs")).unwrap();
         std::fs::write(root.join("docs/b.md"), "b\n").unwrap();

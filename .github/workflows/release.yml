@@ -40,7 +40,7 @@ jobs:
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: tag
         env:
           PUBLISH: ${{ inputs.publish }}
@@ -75,7 +75,7 @@ jobs:
       HAS_WINDOWS_CERT: ${{ secrets.WINDOWS_CERTIFICATE != '' }}
       HAS_GPG_KEY: ${{ secrets.GPG_PRIVATE_KEY != '' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - name: Linux system libraries
@@ -150,7 +150,7 @@ jobs:
           merge-multiple: true
       - name: Combined checksums
         run: cat dist/SHA256SUMS-*.txt > dist/SHA256SUMS.txt
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: src
       - name: Signed update manifest

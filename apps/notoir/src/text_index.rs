@@ -34,6 +34,7 @@ struct Worker {
     dir: PathBuf,
     tx: Sender<Job>,
     cancel: Arc<AtomicBool>,
+    thread: Option<std::thread::JoinHandle<()>>,
 }
 
 impl Drop for Worker {
@@ -120,6 +121,19 @@ fn run_worker(
 }
 
 impl AppCore {
+    /// Exit: stops the worker and waits for it, so the database is closed
+    /// (Windows cannot delete or replace a file that is still open).
+    /// Cancellation is checked per file, so this returns promptly.
+    pub(crate) fn text_index_shutdown(&mut self) {
+        if let Some(mut w) = self.text_index.worker.take() {
+            let thread = w.thread.take();
+            drop(w);
+            if let Some(t) = thread {
+                let _ = t.join();
+            }
+        }
+    }
+
     fn text_index_enabled(&self) -> bool {
         self.workspace.is_some() && self.settings.bool("search.useIndex", None)
     }
@@ -152,16 +166,20 @@ impl AppCore {
                     let poster = self.fs.poster();
                     move || run_worker(dir, generation, rx, cancel, poster)
                 });
-            if let Err(e) = spawned {
-                tracing::error!(error = %e, "could not start the search index worker");
-                return;
-            }
+            let thread = match spawned {
+                Ok(t) => t,
+                Err(e) => {
+                    tracing::error!(error = %e, "could not start the search index worker");
+                    return;
+                }
+            };
             self.text_index = TextIndexState {
                 worker: Some(Worker {
                     generation,
                     dir,
                     tx,
                     cancel,
+                    thread: Some(thread),
                 }),
                 ..Default::default()
             };

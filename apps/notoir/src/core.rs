@@ -1105,6 +1105,7 @@ impl AppCore {
         self.mcp_stop();
         // Plugin VMs stop when their handles drop.
         self.plugins.entries.clear();
+        self.text_index_shutdown();
         self.flush_scratchpads(true);
         self.write_session(false);
         self.recovery_shutdown();

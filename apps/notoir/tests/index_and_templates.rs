@@ -202,7 +202,11 @@ fn new_file_from_a_workspace_template() {
         core.commit_edit();
     }
     let file = root.join("Standup.md");
-    let expected = format!("# Standup\n\nDate: {}\n\n- \n", today());
+    let mut expected = format!("# Standup\n\nDate: {}\n\n- \n", today());
+    // A new file takes the platform's line ending.
+    if cfg!(windows) {
+        expected = expected.replace('\n', "\r\n");
+    }
     // Created, filled and saved through the pipeline.
     assert!(wait_for(&mut app, |a| {
         let core = &a.harness.state().core;

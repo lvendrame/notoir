@@ -49,6 +49,8 @@ fn set_identity(r: &git2::Repository) {
     let mut cfg = r.config().unwrap();
     cfg.set_str("user.name", "Tester").unwrap();
     cfg.set_str("user.email", "t@example.com").unwrap();
+    // Checkouts keep LF whatever the global config (Windows: CRLF).
+    cfg.set_bool("core.autocrlf", false).unwrap();
 }
 
 /// A repo with README.md and notes.md committed.
@@ -181,6 +183,7 @@ fn git_identity(dir: &Path) {
         ("commit.gpgsign", "false"),
         ("pull.rebase", "false"),
         ("push.autoSetupRemote", "false"),
+        ("core.autocrlf", "false"),
     ] {
         git(dir, &["config", k, v]);
     }
@@ -193,7 +196,17 @@ fn remote_pair() -> (tempfile::TempDir, PathBuf, PathBuf, PathBuf) {
     let root = d.path().canonicalize().unwrap();
     git(&root, &["init", "-q", "--bare", "-b", "main", "remote.git"]);
     let bare = root.join("remote.git");
-    git(&root, &["clone", "-q", "remote.git", "a"]);
+    git(
+        &root,
+        &[
+            "clone",
+            "-q",
+            "-c",
+            "core.autocrlf=false",
+            "remote.git",
+            "a",
+        ],
+    );
     let a = root.join("a");
     git_identity(&a);
     git(&a, &["symbolic-ref", "HEAD", "refs/heads/main"]);
@@ -201,7 +214,17 @@ fn remote_pair() -> (tempfile::TempDir, PathBuf, PathBuf, PathBuf) {
     git(&a, &["add", "."]);
     git(&a, &["commit", "-q", "-m", "first"]);
     git(&a, &["push", "-q", "-u", "origin", "main"]);
-    git(&root, &["clone", "-q", "remote.git", "b"]);
+    git(
+        &root,
+        &[
+            "clone",
+            "-q",
+            "-c",
+            "core.autocrlf=false",
+            "remote.git",
+            "b",
+        ],
+    );
     let b = root.join("b");
     git_identity(&b);
     (d, bare, a, b)

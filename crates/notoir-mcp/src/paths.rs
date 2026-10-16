@@ -112,8 +112,9 @@ mod tests {
             resolve(&root, "docs/new/file.md"),
             Ok(canon.join("docs/new/file.md"))
         );
+        // An absolute path (not verbatim `\\?\`: those are rejected below).
         assert_eq!(
-            resolve(&root, canon.join("notes.md").to_str().unwrap()),
+            resolve(&root, root.join("notes.md").to_str().unwrap()),
             Ok(canon.join("notes.md"))
         );
         assert_eq!(resolve(&root, "../secrets.txt"), Err(PathError::Outside));

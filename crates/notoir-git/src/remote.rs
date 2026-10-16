@@ -153,6 +153,16 @@ pub fn classify_stderr(stderr: &str) -> Option<GitError> {
     }
 }
 
+/// `\\?\C:\dir` → `C:\dir`: canonical Windows paths are verbatim, which
+/// git for Windows rejects ("Invalid argument"). UNC and other forms are kept.
+fn plain(path: &Path) -> PathBuf {
+    let s = path.to_string_lossy();
+    match s.strip_prefix(r"\\?\") {
+        Some(rest) if rest.as_bytes().get(1) == Some(&b':') => PathBuf::from(rest),
+        _ => path.to_path_buf(),
+    }
+}
+
 /// A child's stdout or stderr.
 type Pipe = Box<dyn Read + Send>;
 
@@ -178,7 +188,7 @@ impl SystemGit {
 
     fn command(&self, cwd: &Path, args: &[&str]) -> Command {
         let mut cmd = Command::new(&self.program);
-        cmd.current_dir(cwd)
+        cmd.current_dir(plain(cwd))
             .args(["-c", "color.ui=false", "-c", "core.quotepath=false"])
             .args(args)
             .stdin(Stdio::null())
@@ -391,10 +401,14 @@ impl GitRemote for SystemGit {
         cancel: CancellationToken,
     ) -> Result<(), GitError> {
         let parent = dest.parent().unwrap_or(Path::new("."));
+        let dest = plain(dest);
         let dest_s = dest.to_string_lossy();
+        // A local path given as the URL.
+        let url = plain(Path::new(url));
+        let url = url.to_string_lossy();
         let run = self.run(
             parent,
-            &["clone", "--progress", "--", url, &dest_s],
+            &["clone", "--progress", "--", &url, &dest_s],
             &out,
             &cancel,
         )?;
@@ -410,6 +424,17 @@ impl GitRemote for SystemGit {
 mod tests {
     use super::*;
     use crate::{Git2Backend, GitBackend, StatusOpts};
+
+    #[test]
+    fn verbatim_drive_paths_are_made_plain() {
+        assert_eq!(
+            plain(Path::new(r"\\?\C:\Users\me\repo")),
+            PathBuf::from(r"C:\Users\me\repo")
+        );
+        for kept in [r"\\?\UNC\server\share", r"C:\x", "/tmp/x", "relative"] {
+            assert_eq!(plain(Path::new(kept)), PathBuf::from(kept));
+        }
+    }
 
     #[test]
     fn progress_lines() {
@@ -484,6 +509,7 @@ mod tests {
         // Independent of the developer's global configuration.
         sh(dir, &["config", "push.autoSetupRemote", "false"]);
         sh(dir, &["config", "pull.rebase", "false"]);
+        sh(dir, &["config", "core.autocrlf", "false"]);
     }
 
     /// A bare "remote" and two clones of it with one shared commit.
