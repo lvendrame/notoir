@@ -24,7 +24,8 @@
     "autoSave": "자동 저장",
     "sortLines": "줄 정렬",
     "lineNumbers": "줄 번호",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "설정 명령 복사"
   },
   "item": {
     "primarySidebar": "기본 사이드바",

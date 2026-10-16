@@ -364,7 +364,8 @@
     "answerPrompt": "권한 요청에 응답",
     "clearActivity": "MCP 활동 지우기",
     "filterActivity": "MCP 활동 필터링",
-    "copyConfig": "MCP 클라이언트 구성 복사"
+    "copyConfig": "MCP 클라이언트 구성 복사",
+    "copySetup": "MCP 설정 명령 복사"
   },
   "plugins": {
     "reload": "플러그인 다시 로드",

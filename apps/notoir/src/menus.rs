@@ -78,6 +78,19 @@ fn sub(label: &'static str, items: Vec<MenuItem>) -> MenuItem {
 
 const SEP: MenuItem = MenuItem::Separator;
 
+/// MCP → Copy Setup Command: one item per supported client.
+fn mcp_setup_items() -> Vec<MenuItem> {
+    crate::mcp::McpTarget::ALL
+        .iter()
+        .map(|t| MenuItem::Command {
+            id: "mcp.copySetup",
+            args: json!({ "target": t.key() }),
+            label: Some(format!("mcp:setup.{}", t.key())),
+            checked: None,
+        })
+        .collect()
+}
+
 /// The full menu bar for `platform`.
 pub fn menu_bar(platform: Platform) -> Vec<Menu> {
     let mac = platform == Platform::Mac;
@@ -389,6 +402,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
                 cmd("mcp.startServer"),
                 cmd("mcp.stopServer"),
                 cmd("mcp.connections"),
+                sub("menus:sub.mcpSetup", mcp_setup_items()),
                 cmd("mcp.permissions"),
                 cmd("mcp.activity"),
                 cmd("mcp.settings"),
@@ -595,6 +609,36 @@ mod tests {
         assert_eq!(labels(Platform::Windows), common);
         assert_eq!(labels(Platform::Mac)[0], "menus:top.app");
         assert_eq!(labels(Platform::Mac)[1..], common);
+    }
+
+    #[test]
+    fn mcp_setup_submenu_lists_every_client() {
+        let r = registry(Platform::Linux);
+        let tools = menu_bar(Platform::Linux)
+            .into_iter()
+            .find(|m| m.label == "menus:top.tools")
+            .unwrap();
+        let items = visible_items(&tools.items, &r);
+        let find_sub = |items: &[MenuItem], key: &str| {
+            items.iter().find_map(|i| match i {
+                MenuItem::Submenu { label, items } if *label == key => Some(items.clone()),
+                _ => None,
+            })
+        };
+        let mcp = find_sub(&items, "menus:sub.mcp").expect("MCP submenu");
+        let setup = find_sub(&mcp, "menus:sub.mcpSetup").expect("setup submenu");
+        let targets: Vec<String> = setup
+            .iter()
+            .map(|i| match i {
+                MenuItem::Command { id, args, .. } => {
+                    assert_eq!(*id, "mcp.copySetup");
+                    args["target"].as_str().unwrap().to_owned()
+                }
+                other => panic!("unexpected {other:?}"),
+            })
+            .collect();
+        let all: Vec<&str> = crate::mcp::McpTarget::ALL.iter().map(|t| t.key()).collect();
+        assert_eq!(targets, all);
     }
 
     fn contains(items: &[MenuItem], id: &str) -> bool {

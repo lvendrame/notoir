@@ -364,7 +364,8 @@
     "answerPrompt": "Answer Permission Prompt",
     "clearActivity": "Clear MCP Activity",
     "filterActivity": "Filter MCP Activity",
-    "copyConfig": "Copy MCP Client Config"
+    "copyConfig": "Copy MCP Client Config",
+    "copySetup": "Copy MCP Setup Command"
   },
   "plugins": {
     "reload": "Reload Plugins",

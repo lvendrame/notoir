@@ -4,13 +4,14 @@
 
 use notoir_core::command::{Category, CommandInvocation, CommandOutcome, CommandSpec};
 use notoir_core::keymap::KeyBindingDef;
+use notoir_core::notifications::{Notification, NotificationSource, Severity, Translatable};
 use notoir_core::panels::PanelId;
 use notoir_core::permissions::{Capability, ClientId, Decision};
 use notoir_core::settings::SettingCategory;
 
 use super::{Specs, arg, bad_args};
 use crate::core::{AppCore, Effect};
-use crate::mcp::{McpDialog, PromptAnswer};
+use crate::mcp::{McpDialog, McpTarget, PromptAnswer};
 
 type Handler = fn(&mut AppCore, &CommandInvocation) -> CommandOutcome;
 
@@ -107,6 +108,7 @@ pub(super) fn specs(out: &mut Specs) {
         done()
     }));
     out.push(hidden("mcp.copyConfig", copy_config));
+    out.push(hidden("mcp.copySetup", copy_setup));
 }
 
 fn client_arg(inv: &CommandInvocation) -> Option<ClientId> {
@@ -175,7 +177,7 @@ fn set_permission(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome
     }
 }
 
-/// `{ client, kind: "claudeCode" | "claudeDesktop" }`: the snippet with the
+/// `{ client, kind }` (an [`McpTarget`] key): the snippet with the
 /// token while it is still shown, else with a placeholder.
 fn copy_config(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     let Some(id) = client_arg(inv) else {
@@ -187,11 +189,42 @@ fn copy_config(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
         .as_ref()
         .filter(|n| n.id == id)
         .map_or_else(|| "<token>".to_owned(), |n| n.token.clone());
-    let (code, desktop) = core.mcp.snippets(&token);
-    let text = match arg(inv, "kind") {
-        Some("claudeDesktop") => desktop,
-        _ => code,
-    };
+    let target = arg(inv, "kind")
+        .and_then(McpTarget::from_key)
+        .unwrap_or(McpTarget::ClaudeCode);
+    let text = core.mcp.snippet(target, &token);
     core.effects.push(Effect::CopyText(text));
+    done()
+}
+
+/// `{ target }`: registers a client named after the platform and copies its
+/// setup command with the new token.
+fn copy_setup(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    let Some(target) = arg(inv, "target").and_then(McpTarget::from_key) else {
+        return bad_args(inv);
+    };
+    let brand = target.brand();
+    let taken = |name: &str| {
+        core.mcp
+            .clients
+            .iter()
+            .any(|c| !c.revoked && c.name.eq_ignore_ascii_case(name))
+    };
+    let name = std::iter::once(brand.to_owned())
+        .chain((2..).map(|n| format!("{brand} {n}")))
+        .find(|n| !taken(n))
+        .expect("unbounded");
+    let new = core.mcp_add_client(&name);
+    let text = core.mcp.snippet(target, &new.token);
+    core.effects.push(Effect::CopyText(text));
+    core.notify(
+        Notification::new(
+            Severity::Info,
+            Translatable::new("mcp:setup.copied")
+                .arg("platform", brand)
+                .arg("name", name),
+        )
+        .source(NotificationSource::Mcp),
+    );
     done()
 }

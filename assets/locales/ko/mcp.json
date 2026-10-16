@@ -107,5 +107,16 @@
     "mcp_pluginTools": "MCP 도구 제공",
     "plugins_modifyConfig": "플러그인 구성 수정",
     "command": "명령 실행"
+  },
+  "setup": {
+    "claudeCode": "Claude Code",
+    "codex": "Codex",
+    "kimi": "Kimi",
+    "gemini": "Gemini CLI",
+    "openCode": "OpenCode",
+    "claudeDesktop": "Claude Desktop",
+    "cursor": "Cursor",
+    "vsCode": "VS Code",
+    "copied": "{{platform}} 설정을 복사했습니다. 클라이언트 “{{name}}”을(를) 만들었습니다. MCP 연결에서 취소할 수 있습니다."
   }
 }

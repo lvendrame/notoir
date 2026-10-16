@@ -107,5 +107,16 @@
     "mcp_pluginTools": "MCP ツールの公開",
     "plugins_modifyConfig": "プラグイン設定の変更",
     "command": "コマンドの実行"
+  },
+  "setup": {
+    "claudeCode": "Claude Code",
+    "codex": "Codex",
+    "kimi": "Kimi",
+    "gemini": "Gemini CLI",
+    "openCode": "OpenCode",
+    "claudeDesktop": "Claude Desktop",
+    "cursor": "Cursor",
+    "vsCode": "VS Code",
+    "copied": "{{platform}} の設定をコピーしました。クライアント「{{name}}」を作成しました。MCP 接続で取り消せます。"
   }
 }

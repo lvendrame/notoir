@@ -364,7 +364,8 @@
     "answerPrompt": "Machtigingsverzoek beantwoorden",
     "clearActivity": "MCP-activiteit wissen",
     "filterActivity": "MCP-activiteit filteren",
-    "copyConfig": "MCP-clientconfiguratie kopiëren"
+    "copyConfig": "MCP-clientconfiguratie kopiëren",
+    "copySetup": "MCP-installatieopdracht kopiëren"
   },
   "plugins": {
     "reload": "Plug-ins opnieuw laden",

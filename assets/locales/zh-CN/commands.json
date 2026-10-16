@@ -364,7 +364,8 @@
     "answerPrompt": "回应权限请求",
     "clearActivity": "清除 MCP 活动",
     "filterActivity": "筛选 MCP 活动",
-    "copyConfig": "复制 MCP 客户端配置"
+    "copyConfig": "复制 MCP 客户端配置",
+    "copySetup": "复制 MCP 设置命令"
   },
   "plugins": {
     "reload": "重新加载插件",

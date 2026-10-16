@@ -107,5 +107,16 @@
     "mcp_pluginTools": "Публикация инструментов MCP",
     "plugins_modifyConfig": "Изменение конфигурации плагинов",
     "command": "Выполнение команд"
+  },
+  "setup": {
+    "claudeCode": "Claude Code",
+    "codex": "Codex",
+    "kimi": "Kimi",
+    "gemini": "Gemini CLI",
+    "openCode": "OpenCode",
+    "claudeDesktop": "Claude Desktop",
+    "cursor": "Cursor",
+    "vsCode": "VS Code",
+    "copied": "Настройка {{platform}} скопирована. Создан клиент «{{name}}»; отозвать его можно в разделе «Подключения MCP»."
   }
 }

@@ -364,7 +364,8 @@
     "answerPrompt": "権限の確認に応答",
     "clearActivity": "MCP アクティビティをクリア",
     "filterActivity": "MCP アクティビティを絞り込む",
-    "copyConfig": "MCP クライアントの設定をコピー"
+    "copyConfig": "MCP クライアントの設定をコピー",
+    "copySetup": "MCP セットアップコマンドをコピー"
   },
   "plugins": {
     "reload": "プラグインを再読み込み",

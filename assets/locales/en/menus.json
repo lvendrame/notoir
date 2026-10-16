@@ -24,7 +24,8 @@
     "autoSave": "Auto Save",
     "sortLines": "Sort Lines",
     "lineNumbers": "Line Numbers",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "Copy Setup Command"
   },
   "item": {
     "primarySidebar": "Primary Sidebar",

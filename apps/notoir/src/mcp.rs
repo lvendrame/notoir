@@ -262,30 +262,134 @@ impl McpState {
         n
     }
 
-    /// Config snippets for a client (`token` is a placeholder once the
+    /// The setup snippet for `target` (`token` is a placeholder once the
     /// one-time display is gone).
-    pub fn snippets(&self, token: &str) -> (String, String) {
+    pub fn snippet(&self, target: McpTarget, token: &str) -> String {
         let port = self
             .server
             .as_ref()
             .map_or(notoir_mcp::DEFAULT_PORT, McpServer::port);
         let url = format!("http://127.0.0.1:{port}/mcp");
-        let claude_code = format!(
-            "claude mcp add --transport http notoir {url} --header \"Authorization: Bearer {token}\""
-        );
+        let bearer = format!("Authorization: Bearer {token}");
         let exe = self.bridge_command.clone().unwrap_or_else(|| {
             std::env::current_exe()
                 .map(|p| p.to_string_lossy().into_owned())
                 .unwrap_or_else(|_| "notoir".into())
         });
-        // Written by hand to keep "command" before "args".
-        let q = |v: &str| Value::String(v.to_owned()).to_string();
-        let desktop = format!(
-            "{{\n  \"mcpServers\": {{\n    \"notoir\": {{\n      \"command\": {},\n      \"args\": [\"mcp-bridge\", \"--token\", {}, \"--port\", \"{port}\"]\n    }}\n  }}\n}}",
-            q(&exe),
-            q(token)
-        );
-        (claude_code, desktop)
+        let headers = json!({ "Authorization": format!("Bearer {token}") });
+        let pretty = |v: Value| serde_json::to_string_pretty(&v).unwrap_or_default();
+        match target {
+            McpTarget::ClaudeCode => {
+                format!("claude mcp add --transport http notoir {url} --header \"{bearer}\"")
+            }
+            McpTarget::Kimi => {
+                format!("kimi mcp add --transport http notoir {url} --header \"{bearer}\"")
+            }
+            // `--header` is an array option: it must follow the positionals
+            // or it would swallow them.
+            McpTarget::Gemini => {
+                format!("gemini mcp add --transport http notoir {url} --header \"{bearer}\"")
+            }
+            // Codex reads HTTP bearer tokens only from an environment
+            // variable, so it runs the stdio bridge instead.
+            McpTarget::Codex => format!(
+                "codex mcp add notoir -- {} mcp-bridge --token {token} --port {port}",
+                shell_quote(&exe)
+            ),
+            McpTarget::OpenCode => pretty(json!({
+                "$schema": "https://opencode.ai/config.json",
+                "mcp": { "notoir": {
+                    "type": "remote", "url": url, "headers": headers, "oauth": false
+                } }
+            })),
+            McpTarget::Cursor => pretty(json!({
+                "mcpServers": { "notoir": { "url": url, "headers": headers } }
+            })),
+            McpTarget::VsCode => {
+                let config = json!({
+                    "name": "notoir", "type": "http", "url": url, "headers": headers
+                })
+                .to_string();
+                format!("code --add-mcp {}", shell_quote(&config))
+            }
+            McpTarget::ClaudeDesktop => {
+                // Written by hand to keep "command" before "args".
+                let q = |v: &str| Value::String(v.to_owned()).to_string();
+                format!(
+                    "{{\n  \"mcpServers\": {{\n    \"notoir\": {{\n      \"command\": {},\n      \"args\": [\"mcp-bridge\", \"--token\", {}, \"--port\", \"{port}\"]\n    }}\n  }}\n}}",
+                    q(&exe),
+                    q(token)
+                )
+            }
+        }
+    }
+}
+
+/// Clients the setup snippets are written for.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum McpTarget {
+    ClaudeCode,
+    Codex,
+    Kimi,
+    Gemini,
+    OpenCode,
+    ClaudeDesktop,
+    Cursor,
+    VsCode,
+}
+
+impl McpTarget {
+    pub const ALL: [McpTarget; 8] = [
+        McpTarget::ClaudeCode,
+        McpTarget::Codex,
+        McpTarget::Kimi,
+        McpTarget::Gemini,
+        McpTarget::OpenCode,
+        McpTarget::ClaudeDesktop,
+        McpTarget::Cursor,
+        McpTarget::VsCode,
+    ];
+
+    pub fn key(self) -> &'static str {
+        match self {
+            McpTarget::ClaudeCode => "claudeCode",
+            McpTarget::Codex => "codex",
+            McpTarget::Kimi => "kimi",
+            McpTarget::Gemini => "gemini",
+            McpTarget::OpenCode => "openCode",
+            McpTarget::ClaudeDesktop => "claudeDesktop",
+            McpTarget::Cursor => "cursor",
+            McpTarget::VsCode => "vsCode",
+        }
+    }
+
+    pub fn from_key(key: &str) -> Option<McpTarget> {
+        McpTarget::ALL.into_iter().find(|t| t.key() == key)
+    }
+
+    /// The product name (never translated): the menu label and the name of
+    /// the client registered for it.
+    pub fn brand(self) -> &'static str {
+        match self {
+            McpTarget::ClaudeCode => "Claude Code",
+            McpTarget::Codex => "Codex",
+            McpTarget::Kimi => "Kimi",
+            McpTarget::Gemini => "Gemini CLI",
+            McpTarget::OpenCode => "OpenCode",
+            McpTarget::ClaudeDesktop => "Claude Desktop",
+            McpTarget::Cursor => "Cursor",
+            McpTarget::VsCode => "VS Code",
+        }
+    }
+}
+
+/// Quotes `s` as one argument for the platform shell (POSIX single quotes;
+/// cmd.exe / PowerShell double quotes).
+fn shell_quote(s: &str) -> String {
+    if cfg!(windows) {
+        format!("\"{}\"", s.replace('"', "\\\""))
+    } else {
+        format!("'{}'", s.replace('\'', "'\\''"))
     }
 }
 

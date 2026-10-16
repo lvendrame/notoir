@@ -107,5 +107,16 @@
     "mcp_pluginTools": "Exponer herramientas MCP",
     "plugins_modifyConfig": "Modificar la configuración de complementos",
     "command": "Ejecutar comandos"
+  },
+  "setup": {
+    "claudeCode": "Claude Code",
+    "codex": "Codex",
+    "kimi": "Kimi",
+    "gemini": "Gemini CLI",
+    "openCode": "OpenCode",
+    "claudeDesktop": "Claude Desktop",
+    "cursor": "Cursor",
+    "vsCode": "VS Code",
+    "copied": "Configuración de {{platform}} copiada. Se creó el cliente «{{name}}»; revócalo en Conexiones MCP."
   }
 }

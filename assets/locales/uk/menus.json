@@ -24,7 +24,8 @@
     "autoSave": "Автозбереження",
     "sortLines": "Сортувати рядки",
     "lineNumbers": "Номери рядків",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "Копіювати команду налаштування"
   },
   "item": {
     "primarySidebar": "Основна бічна панель",

@@ -107,5 +107,16 @@
     "mcp_pluginTools": "MCP-tools aanbieden",
     "plugins_modifyConfig": "Pluginconfiguratie wijzigen",
     "command": "Opdrachten uitvoeren"
+  },
+  "setup": {
+    "claudeCode": "Claude Code",
+    "codex": "Codex",
+    "kimi": "Kimi",
+    "gemini": "Gemini CLI",
+    "openCode": "OpenCode",
+    "claudeDesktop": "Claude Desktop",
+    "cursor": "Cursor",
+    "vsCode": "VS Code",
+    "copied": "{{platform}}-installatie gekopieerd. Client “{{name}}” is aangemaakt; trek hem in bij MCP-verbindingen."
   }
 }

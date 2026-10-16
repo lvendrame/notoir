@@ -24,7 +24,8 @@
     "autoSave": "Автосохранение",
     "sortLines": "Сортировать строки",
     "lineNumbers": "Номера строк",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "Копировать команду настройки"
   },
   "item": {
     "primarySidebar": "Основная боковая панель",

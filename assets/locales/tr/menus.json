@@ -24,7 +24,8 @@
     "autoSave": "Otomatik Kaydet",
     "sortLines": "Satırları Sırala",
     "lineNumbers": "Satır Numaraları",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "Kurulum komutunu kopyala"
   },
   "item": {
     "primarySidebar": "Birincil Kenar Çubuğu",

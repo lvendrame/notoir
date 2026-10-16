@@ -24,7 +24,8 @@
     "autoSave": "Automatisch speichern",
     "sortLines": "Zeilen sortieren",
     "lineNumbers": "Zeilennummern",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "Einrichtungsbefehl kopieren"
   },
   "item": {
     "primarySidebar": "Primäre Seitenleiste",

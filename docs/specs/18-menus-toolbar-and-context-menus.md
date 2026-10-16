@@ -119,7 +119,7 @@ Clone Repository…, ───, Sync Notes (when enabled in settings).
 Compare Files…
 Format Document                    Shift+Alt+F
 ─────
-MCP ›   Start Server · Stop Server · Connections · Permissions · Activity · Settings
+MCP ›   Start Server · Stop Server · Connections · Copy Setup Command › · Permissions · Activity · Settings
 ─────
 Reload Window
 Reload Plugins

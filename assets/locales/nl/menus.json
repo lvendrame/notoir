@@ -24,7 +24,8 @@
     "autoSave": "Automatisch opslaan",
     "sortLines": "Regels sorteren",
     "lineNumbers": "Regelnummers",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "Installatieopdracht kopiëren"
   },
   "item": {
     "primarySidebar": "Primaire zijbalk",

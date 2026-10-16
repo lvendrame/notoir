@@ -107,5 +107,16 @@
     "mcp_pluginTools": "提供 MCP 工具",
     "plugins_modifyConfig": "修改插件配置",
     "command": "运行命令"
+  },
+  "setup": {
+    "claudeCode": "Claude Code",
+    "codex": "Codex",
+    "kimi": "Kimi",
+    "gemini": "Gemini CLI",
+    "openCode": "OpenCode",
+    "claudeDesktop": "Claude Desktop",
+    "cursor": "Cursor",
+    "vsCode": "VS Code",
+    "copied": "已复制 {{platform}} 设置。已创建客户端“{{name}}”；可在 MCP 连接中撤销。"
   }
 }

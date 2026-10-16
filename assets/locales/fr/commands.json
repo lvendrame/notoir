@@ -364,7 +364,8 @@
     "answerPrompt": "Répondre à la demande d’autorisation",
     "clearActivity": "Effacer l’activité MCP",
     "filterActivity": "Filtrer l’activité MCP",
-    "copyConfig": "Copier la configuration du client MCP"
+    "copyConfig": "Copier la configuration du client MCP",
+    "copySetup": "Copier la commande de configuration MCP"
   },
   "plugins": {
     "reload": "Recharger les extensions",

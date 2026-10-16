@@ -364,7 +364,8 @@
     "answerPrompt": "Odpowiedz na prośbę o uprawnienie",
     "clearActivity": "Wyczyść aktywność MCP",
     "filterActivity": "Filtruj aktywność MCP",
-    "copyConfig": "Kopiuj konfigurację klienta MCP"
+    "copyConfig": "Kopiuj konfigurację klienta MCP",
+    "copySetup": "Kopiuj polecenie konfiguracji MCP"
   },
   "plugins": {
     "reload": "Załaduj ponownie wtyczki",

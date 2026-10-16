@@ -107,5 +107,16 @@
     "mcp_pluginTools": "Udostępnianie narzędzi MCP",
     "plugins_modifyConfig": "Zmiana konfiguracji wtyczek",
     "command": "Uruchamianie poleceń"
+  },
+  "setup": {
+    "claudeCode": "Claude Code",
+    "codex": "Codex",
+    "kimi": "Kimi",
+    "gemini": "Gemini CLI",
+    "openCode": "OpenCode",
+    "claudeDesktop": "Claude Desktop",
+    "cursor": "Cursor",
+    "vsCode": "VS Code",
+    "copied": "Skopiowano konfigurację {{platform}}. Utworzono klienta „{{name}}”; możesz go odwołać w Połączeniach MCP."
   }
 }

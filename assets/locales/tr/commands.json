@@ -364,7 +364,8 @@
     "answerPrompt": "İzin İsteğini Yanıtla",
     "clearActivity": "MCP Etkinliğini Temizle",
     "filterActivity": "MCP Etkinliğini Filtrele",
-    "copyConfig": "MCP İstemci Yapılandırmasını Kopyala"
+    "copyConfig": "MCP İstemci Yapılandırmasını Kopyala",
+    "copySetup": "MCP kurulum komutunu kopyala"
   },
   "plugins": {
     "reload": "Eklentileri Yeniden Yükle",

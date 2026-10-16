@@ -107,5 +107,16 @@
     "mcp_pluginTools": "Надання інструментів MCP",
     "plugins_modifyConfig": "Змінення конфігурації плагінів",
     "command": "Виконання команд"
+  },
+  "setup": {
+    "claudeCode": "Claude Code",
+    "codex": "Codex",
+    "kimi": "Kimi",
+    "gemini": "Gemini CLI",
+    "openCode": "OpenCode",
+    "claudeDesktop": "Claude Desktop",
+    "cursor": "Cursor",
+    "vsCode": "VS Code",
+    "copied": "Налаштування {{platform}} скопійовано. Створено клієнта «{{name}}»; відкликати його можна в «Підключеннях MCP»."
   }
 }

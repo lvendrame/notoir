@@ -107,5 +107,16 @@
     "mcp_pluginTools": "MCP araçları sunma",
     "plugins_modifyConfig": "Eklenti yapılandırmasını değiştirme",
     "command": "Komut çalıştırma"
+  },
+  "setup": {
+    "claudeCode": "Claude Code",
+    "codex": "Codex",
+    "kimi": "Kimi",
+    "gemini": "Gemini CLI",
+    "openCode": "OpenCode",
+    "claudeDesktop": "Claude Desktop",
+    "cursor": "Cursor",
+    "vsCode": "VS Code",
+    "copied": "{{platform}} kurulumu kopyalandı. “{{name}}” istemcisi oluşturuldu; MCP Bağlantıları'ndan iptal edebilirsiniz."
   }
 }

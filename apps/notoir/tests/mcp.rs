@@ -473,3 +473,158 @@ fn clients_and_permissions_persist_across_restarts() {
         notoir_core::permissions::Decision::Deny
     );
 }
+
+/// Runs `mcp.copySetup` from the menu and returns what it copied.
+fn copy_setup(app: &mut common::TestApp, target: &str) -> Option<String> {
+    let inv = notoir_core::command::CommandInvocation::new(
+        "mcp.copySetup",
+        notoir_core::command::InvocationSource::Menu,
+    )
+    .with_args(json!({ "target": target }));
+    app.harness.state_mut().core.enqueue(inv);
+    app.harness.step();
+    app.harness
+        .output()
+        .platform_output
+        .commands
+        .iter()
+        .find_map(|c| match c {
+            egui::OutputCommand::CopyText(t) => Some(t.clone()),
+            _ => None,
+        })
+}
+
+#[test]
+fn copy_setup_registers_a_client_and_copies_its_command() {
+    let mut app = common::start(|_| {});
+    let text = copy_setup(&mut app, "codex").expect("copied");
+    let core = &app.harness.state().core;
+    let c = core.mcp.clients.last().expect("client added");
+    assert_eq!(c.name, "Codex");
+    // The copied command carries the new client's working token.
+    let token = text
+        .split("--token ")
+        .nth(1)
+        .and_then(|r| r.split_whitespace().next())
+        .expect("token in command");
+    assert_eq!(core.mcp.registry.authenticate(token), Some(c.id.clone()));
+    assert!(text.starts_with("codex mcp add notoir -- "));
+    assert!(text.contains("mcp-bridge"));
+    assert!(
+        core.notifications
+            .history()
+            .any(|n| n.message.key == "mcp:setup.copied"
+                && n.message.args.contains(&("name".into(), "Codex".into())))
+    );
+
+    // A second client for the same platform gets its own name.
+    copy_setup(&mut app, "codex").expect("copied");
+    assert_eq!(
+        app.harness.state().core.mcp.clients.last().unwrap().name,
+        "Codex 2"
+    );
+    // Unknown platforms register nothing.
+    let n = app.harness.state().core.mcp.clients.len();
+    assert_eq!(copy_setup(&mut app, "nope"), None);
+    assert_eq!(app.harness.state().core.mcp.clients.len(), n);
+}
+
+#[test]
+fn setup_snippets_for_every_client() {
+    let app = common::start(|_| {});
+    let mcp = &app.harness.state().core.mcp;
+    let url = format!("http://127.0.0.1:{}/mcp", notoir_mcp::DEFAULT_PORT);
+    let snippet = |key: &str| mcp.snippet(notoir::mcp::McpTarget::from_key(key).unwrap(), "T0K");
+    let header = "--header \"Authorization: Bearer T0K\"";
+    assert_eq!(
+        snippet("claudeCode"),
+        format!("claude mcp add --transport http notoir {url} {header}")
+    );
+    assert_eq!(
+        snippet("kimi"),
+        format!("kimi mcp add --transport http notoir {url} {header}")
+    );
+    assert_eq!(
+        snippet("gemini"),
+        format!("gemini mcp add --transport http notoir {url} {header}")
+    );
+    let json_of = |s: String| serde_json::from_str::<Value>(&s).expect("valid JSON");
+    let bearer = json!({ "Authorization": "Bearer T0K" });
+    let open_code = json_of(snippet("openCode"));
+    assert_eq!(open_code["mcp"]["notoir"]["type"], "remote");
+    assert_eq!(open_code["mcp"]["notoir"]["url"], url.as_str());
+    assert_eq!(open_code["mcp"]["notoir"]["headers"], bearer);
+    let cursor = json_of(snippet("cursor"));
+    assert_eq!(cursor["mcpServers"]["notoir"]["url"], url.as_str());
+    assert_eq!(cursor["mcpServers"]["notoir"]["headers"], bearer);
+    let desktop = json_of(snippet("claudeDesktop"));
+    assert_eq!(
+        desktop["mcpServers"]["notoir"]["args"],
+        json!([
+            "mcp-bridge",
+            "--token",
+            "T0K",
+            "--port",
+            notoir_mcp::DEFAULT_PORT.to_string()
+        ])
+    );
+    let vs = snippet("vsCode");
+    let arg = vs.strip_prefix("code --add-mcp ").expect("code --add-mcp");
+    let inner = if cfg!(windows) {
+        arg.trim_matches('"').replace("\\\"", "\"")
+    } else {
+        arg.trim_matches('\'').to_owned()
+    };
+    let vs = json_of(inner);
+    assert_eq!(vs["type"], "http");
+    assert_eq!(vs["url"], url.as_str());
+    assert_eq!(vs["headers"], bearer);
+}
+
+#[test]
+fn setup_menu_copies_the_cursor_config() {
+    let mut app = common::start(common::with_language(
+        notoir::i18n::Language::En,
+        notoir::theme::ThemeId::Midnight,
+    ));
+    app.harness.get_by_label("Tools").click();
+    app.harness.run_steps(3);
+    // Submenus open on hover (their labels end in an arrow).
+    for label in ["MCP ⏵", "Copy Setup Command ⏵"] {
+        app.harness
+            .query_all_by_label_contains(label)
+            .next()
+            .unwrap_or_else(|| panic!("menu item {label}"))
+            .hover();
+        app.harness.run_steps(3);
+    }
+    app.harness
+        .query_all_by_label_contains("Cursor")
+        .next()
+        .expect("Cursor item")
+        .click();
+    app.harness.step();
+    let copied = app
+        .harness
+        .output()
+        .platform_output
+        .commands
+        .iter()
+        .find_map(|c| match c {
+            egui::OutputCommand::CopyText(t) => Some(t.clone()),
+            _ => None,
+        });
+    app.harness.run_steps(3);
+    let core = &app.harness.state().core;
+    assert_eq!(
+        core.mcp.clients.last().map(|c| c.name.as_str()),
+        Some("Cursor")
+    );
+    let v: Value = serde_json::from_str(&copied.expect("copied")).unwrap();
+    assert!(
+        v["mcpServers"]["notoir"]["headers"]["Authorization"]
+            .as_str()
+            .unwrap()
+            .starts_with("Bearer ")
+    );
+}

@@ -10,7 +10,7 @@ use serde_json::{Value, json};
 
 use super::{Actions, Kit};
 use crate::core::AppCore;
-use crate::mcp::{ActivityEntry, McpDialog};
+use crate::mcp::{ActivityEntry, McpDialog, McpTarget};
 use crate::t;
 use crate::theme::Tok;
 
@@ -508,11 +508,11 @@ fn token_box(
                     .font(crate::fonts::mono(12.0))
                     .color(kit.color(Tok::TextPrimary)),
             );
-            let (code, desktop) = core.mcp.snippets(&new.token);
-            for (label, kind, snippet) in [
-                ("mcp:token.claudeCode", "claudeCode", code),
-                ("mcp:token.claudeDesktop", "claudeDesktop", desktop),
+            for (label, target) in [
+                ("mcp:token.claudeCode", McpTarget::ClaudeCode),
+                ("mcp:token.claudeDesktop", McpTarget::ClaudeDesktop),
             ] {
+                let (kind, snippet) = (target.key(), core.mcp.snippet(target, &new.token));
                 ui.add_space(6.0);
                 ui.horizontal(|ui| {
                     ui.label(

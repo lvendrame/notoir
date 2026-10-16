@@ -1,6 +1,6 @@
 # 29 — MCP Server
 
-**Status:** Done — M20: transport (rmcp Streamable HTTP on 127.0.0.1, `mcp.port` or the next free port, Host/Origin allow-lists, bearer tokens stored as SHA-256 hashes, per-client rate limit), `notoir mcp-bridge`, lifecycle and `mcp.autoStart` (restricted), client identity (Add Client, one-time token, config snippets, revoke), status bar `MCP ●N` with popover, Connections, Permissions, Activity panel (`mcp_activity` with retention). M21: the full tool catalogue plus `editor_get_selection`; documents load into memory without a tab and get a background tab when edited; `document_write` / `document_apply_edits` as one undoable `ChangeOrigin::Mcp` transaction with `expected_revision` → `revision_conflict`; fading edit highlight (`mcp.highlightEdits`); `filesystem_write` atomic, then external-change handling with a banner naming the client; `filesystem.outsideWorkspace` for absolute paths of `filesystem_*`; `mcp.maxReadBytes`; activity targets with `(+a −b)` line counts. Later: resources (`notoir://document/{id}`), `git_commit` / `git_push` (Phase 6), plugin-contributed tools (spec 30). Deviations: activity times are UTC; open SSE streams of a revoked client end with their session keep-alive
+**Status:** Done — M20: transport (rmcp Streamable HTTP on 127.0.0.1, `mcp.port` or the next free port, Host/Origin allow-lists, bearer tokens stored as SHA-256 hashes, per-client rate limit), `notoir mcp-bridge`, lifecycle and `mcp.autoStart` (restricted), client identity (Add Client, one-time token, config snippets, revoke), status bar `MCP ●N` with popover, Connections, Permissions, Activity panel (`mcp_activity` with retention). M21: the full tool catalogue plus `editor_get_selection`; Copy Setup Command submenu (8 client platforms); documents load into memory without a tab and get a background tab when edited; `document_write` / `document_apply_edits` as one undoable `ChangeOrigin::Mcp` transaction with `expected_revision` → `revision_conflict`; fading edit highlight (`mcp.highlightEdits`); `filesystem_write` atomic, then external-change handling with a banner naming the client; `filesystem.outsideWorkspace` for absolute paths of `filesystem_*`; `mcp.maxReadBytes`; activity targets with `(+a −b)` line counts. Later: resources (`notoir://document/{id}`), `git_commit` / `git_push` (Phase 6), plugin-contributed tools (spec 30). Deviations: activity times are UTC; open SSE streams of a revoked client end with their session keep-alive
 
 ## Purpose
 
@@ -36,6 +36,13 @@ Permission semantics are in spec 32.
   token, shows copyable config snippets (Claude Code `claude mcp add --transport http notoir http://127.0.0.1:47823/mcp
   --header "Authorization: Bearer …"`, Claude Desktop JSON using the bridge), and stores only the token hash
   (`mcp_client` table, spec 23). The token is shown once.
+- Tools → MCP › Copy Setup Command › Claude Code · Codex · Kimi · Gemini CLI · OpenCode · Claude Desktop · Cursor ·
+  VS Code: registers a new client named after the platform ("Codex", then "Codex 2", …) and copies a ready-to-paste
+  setup with its token — `claude` / `kimi` / `gemini mcp add --transport http … --header "Authorization: Bearer …"`,
+  `codex mcp add notoir -- <notoir> mcp-bridge --token … --port …` (Codex takes HTTP bearer tokens only from an
+  environment variable, so it uses the bridge), OpenCode `opencode.json` (`type: remote`, `headers`, `oauth: false`),
+  Cursor `mcpServers` JSON (`url` + `headers`), `code --add-mcp '{…}'`, and the Claude Desktop bridge JSON. A
+  notification names the created client; it is revoked like any other in Connections.
 - Each request is attributed to a `ClientId`. The client's self-reported `clientInfo.name` from `initialize` is
   displayed alongside but never used for authorization.
 - Revoke: immediately rejects the token and drops its sessions.

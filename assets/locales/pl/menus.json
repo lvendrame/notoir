@@ -24,7 +24,8 @@
     "autoSave": "Autozapis",
     "sortLines": "Sortuj wiersze",
     "lineNumbers": "Numery wierszy",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "Kopiuj polecenie konfiguracji"
   },
   "item": {
     "primarySidebar": "Główny pasek boczny",

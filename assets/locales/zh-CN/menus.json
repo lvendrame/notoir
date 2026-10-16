@@ -24,7 +24,8 @@
     "autoSave": "自动保存",
     "sortLines": "排列行",
     "lineNumbers": "行号",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "复制设置命令"
   },
   "item": {
     "primarySidebar": "主侧边栏",

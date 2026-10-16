@@ -24,7 +24,8 @@
     "autoSave": "自動保存",
     "sortLines": "行の並べ替え",
     "lineNumbers": "行番号",
-    "git": "Git"
+    "git": "Git",
+    "mcpSetup": "セットアップコマンドをコピー"
   },
   "item": {
     "primarySidebar": "プライマリ サイドバー",
