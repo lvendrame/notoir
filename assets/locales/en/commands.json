@@ -110,7 +110,9 @@
     "keepMine": "Keep My Version",
     "useDiskVersion": "Use Disk Version",
     "autoSave": "Toggle Auto Save",
-    "saveAsAdmin": "Save as Administrator…"
+    "saveAsAdmin": "Save as Administrator…",
+    "newFromTemplate": "New File from Template…",
+    "pickTemplate": "Use Template"
   },
   "edit": {
     "undo": "Undo",
@@ -271,7 +273,8 @@
     "dismiss": "Dismiss Search Result",
     "replaceOne": "Replace",
     "undoReplace": "Undo Replace",
-    "copyPath": "Copy Path"
+    "copyPath": "Copy Path",
+    "rebuildIndex": "Rebuild Search Index"
   },
   "quickOpen": {
     "open": "Open"

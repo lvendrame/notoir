@@ -30,5 +30,10 @@
     "none": "Aucune étiquette. Ajoutez des #étiquettes à vos notes.",
     "pickTitle": "Notes par étiquette"
   },
-  "updateFailed": "Impossible de mettre à jour les liens dans {{count}} notes."
+  "updateFailed": "Impossible de mettre à jour les liens dans {{count}} notes.",
+  "templates": {
+    "shared": "Espace de travail",
+    "personal": "Personnel",
+    "pickTitle": "Choisir un modèle"
+  }
 }

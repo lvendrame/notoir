@@ -35,6 +35,8 @@ pub struct SearchState {
     pub done: bool,
     pub truncated: bool,
     pub error: Option<String>,
+    /// The last finished search read only files the index listed.
+    pub indexed: bool,
     pub generation: u64,
     cancel: Option<Arc<AtomicBool>>,
     /// Run at this time (debounce).
@@ -116,6 +118,7 @@ impl AppCore {
             exclude,
             max_file_size: self.settings.int("search.maxFileSize", None).max(0) as u64,
             max_results: self.settings.int("search.maxResults", None).max(1) as usize,
+            index: self.text_index_dir(),
         };
         // Open documents are searched in memory (unsaved edits included).
         let mut snapshots: HashMap<PathBuf, Rope> = HashMap::new();
@@ -158,6 +161,7 @@ impl AppCore {
         }
         self.search.results.extend(batch.files);
         if batch.done {
+            self.search.indexed = batch.indexed;
             self.search.done = true;
             self.search.truncated = batch.truncated;
             self.search.error = batch.error;

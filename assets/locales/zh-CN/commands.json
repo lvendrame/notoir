@@ -110,7 +110,9 @@
     "keepMine": "保留我的版本",
     "useDiskVersion": "使用磁盘版本",
     "autoSave": "切换自动保存",
-    "saveAsAdmin": "以管理员身份保存…"
+    "saveAsAdmin": "以管理员身份保存…",
+    "newFromTemplate": "从模板新建文件…",
+    "pickTemplate": "使用模板"
   },
   "edit": {
     "undo": "撤销",
@@ -271,7 +273,8 @@
     "dismiss": "忽略搜索结果",
     "replaceOne": "替换",
     "undoReplace": "撤消替换",
-    "copyPath": "复制路径"
+    "copyPath": "复制路径",
+    "rebuildIndex": "重建搜索索引"
   },
   "quickOpen": {
     "open": "打开"

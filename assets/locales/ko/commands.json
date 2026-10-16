@@ -110,7 +110,9 @@
     "keepMine": "내 버전 유지",
     "useDiskVersion": "디스크 버전 사용",
     "autoSave": "자동 저장 전환",
-    "saveAsAdmin": "관리자 권한으로 저장…"
+    "saveAsAdmin": "관리자 권한으로 저장…",
+    "newFromTemplate": "템플릿에서 새 파일…",
+    "pickTemplate": "템플릿 사용"
   },
   "edit": {
     "undo": "실행 취소",
@@ -271,7 +273,8 @@
     "dismiss": "검색 결과 닫기",
     "replaceOne": "바꾸기",
     "undoReplace": "바꾸기 실행 취소",
-    "copyPath": "경로 복사"
+    "copyPath": "경로 복사",
+    "rebuildIndex": "검색 색인 다시 만들기"
   },
   "quickOpen": {
     "open": "열기"

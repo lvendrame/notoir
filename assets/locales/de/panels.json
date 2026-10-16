@@ -24,7 +24,8 @@
     "copyPath": "Pfad kopieren",
     "replaceInFile": "In Datei ersetzen",
     "dismiss": "Verwerfen",
-    "replaceOne": "Ersetzen"
+    "replaceOne": "Ersetzen",
+    "indexing": "Suchindex wird aufgebaut – Dateien werden direkt durchsucht"
   },
   "sourceControl": {
     "title": "Quellcodeverwaltung"

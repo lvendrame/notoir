@@ -47,5 +47,7 @@
   "gitNotAtRevision": "{{name}} не існує в цій ревізії.",
   "shellCommandInstalled": "Команду notoir установлено: {{path}}",
   "shellCommandRemoved": "Команду notoir видалено: {{path}}",
-  "shellCommandFailed": "Не вдалося змінити команду notoir."
+  "shellCommandFailed": "Не вдалося змінити команду notoir.",
+  "noTemplates": "Шаблонів ще немає. Додайте файли Markdown до {{shared}} у робочій області або будь-які файли до {{personal}}.",
+  "templateUnreadable": "Не вдалося прочитати шаблон «{{name}}»."
 }

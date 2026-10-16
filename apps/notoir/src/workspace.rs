@@ -27,9 +27,17 @@ use crate::io::IoResult;
 /// Inline name editor in the tree.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum EditKind {
-    NewFile { dir: PathBuf },
-    NewFolder { dir: PathBuf },
-    Rename { path: PathBuf },
+    NewFile {
+        dir: PathBuf,
+        /// New File from Template… (spec 34): the chosen template.
+        template: Option<crate::templates::TemplateText>,
+    },
+    NewFolder {
+        dir: PathBuf,
+    },
+    Rename {
+        path: PathBuf,
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -739,7 +747,7 @@ impl AppCore {
             _ => String::new(),
         };
         let dir = match &kind {
-            EditKind::NewFile { dir } | EditKind::NewFolder { dir } => Some(dir.clone()),
+            EditKind::NewFile { dir, .. } | EditKind::NewFolder { dir } => Some(dir.clone()),
             EditKind::Rename { .. } => None,
         };
         ws.filter_open = false;
@@ -764,7 +772,7 @@ impl AppCore {
         let name = edit.text.trim();
         fs_ops::validate_name(name, TargetOs::current())?;
         let (dir, except) = match &edit.kind {
-            EditKind::NewFile { dir } | EditKind::NewFolder { dir } => (dir.clone(), None),
+            EditKind::NewFile { dir, .. } | EditKind::NewFolder { dir } => (dir.clone(), None),
             EditKind::Rename { path } => (
                 path.parent().map_or(ws.root.clone(), Path::to_path_buf),
                 Some(path.clone()),
@@ -839,6 +847,18 @@ impl AppCore {
         };
         ws.edit = None;
         match edit.kind {
+            EditKind::NewFile {
+                template: Some(t), ..
+            } => {
+                // The template's extension when the name has none.
+                let target = if target.extension().is_none() && !t.ext.is_empty() {
+                    target.with_extension(&t.ext)
+                } else {
+                    target
+                };
+                self.templates_arm(&target, &t);
+                self.create_note_file(target);
+            }
             EditKind::NewFile { .. } => self.run_op(move || {
                 fs_ops::create_file(&target).map(|()| OpOutcome {
                     created: vec![target.clone()],

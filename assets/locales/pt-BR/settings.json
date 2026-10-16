@@ -161,7 +161,8 @@
     "maxResults": "Número máximo de resultados da pesquisa no espaço de trabalho",
     "maxFileSize": "Arquivos maiores que isto são ignorados pela pesquisa (bytes)",
     "exclude": "Globs excluídos da pesquisa no espaço de trabalho",
-    "quickOpenMaxFiles": "Número máximo de arquivos listados pela Abertura Rápida"
+    "quickOpenMaxFiles": "Número máximo de arquivos listados pela Abertura Rápida",
+    "useIndex": "Manter um índice de pesquisa do espaço de trabalho na pasta de cache"
   },
   "navigation": {
     "minLineDistance": "Saltos do cursor maiores que este número de linhas são registrados para Voltar/Avançar"

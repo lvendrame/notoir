@@ -24,7 +24,8 @@
     "copyPath": "Copy Path",
     "replaceInFile": "Replace in File",
     "dismiss": "Dismiss",
-    "replaceOne": "Replace"
+    "replaceOne": "Replace",
+    "indexing": "Search index is building — searching the files directly"
   },
   "sourceControl": {
     "title": "Source Control"

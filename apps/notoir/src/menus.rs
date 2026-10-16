@@ -111,6 +111,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
     let mut file = vec![
         cmd("file.newUntitled"),
         cmd("file.newScratchpad"),
+        cmd("file.newFromTemplate"),
         cmd("file.newWindow"),
         SEP,
         cmd("file.open"),

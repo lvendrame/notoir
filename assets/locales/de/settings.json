@@ -161,7 +161,8 @@
     "maxResults": "Maximale Anzahl Suchergebnisse im Arbeitsbereich",
     "maxFileSize": "Größere Dateien überspringt die Suche (Bytes)",
     "exclude": "Von der Suche ausgeschlossene Globs",
-    "quickOpenMaxFiles": "Maximale Anzahl Dateien in „Schnell öffnen“"
+    "quickOpenMaxFiles": "Maximale Anzahl Dateien in „Schnell öffnen“",
+    "useIndex": "Suchindex des Arbeitsbereichs im Cache-Ordner führen"
   },
   "navigation": {
     "minLineDistance": "Cursorsprünge über so viele Zeilen werden für Zurück/Vorwärts gespeichert"

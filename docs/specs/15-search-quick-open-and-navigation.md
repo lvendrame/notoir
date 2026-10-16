@@ -39,7 +39,7 @@ files to exclude  [ **/archive/**      ]
 - Result list virtualized; context menu on file rows: Open, Open to the Side, Copy Path, Dismiss; on match rows:
   Replace, Dismiss.
 - "Find in Folder…" from the Explorer prefills `files to include`.
-- Future: indexed search (spec 34) plugs in behind the same panel.
+- Indexed search (spec 34, M25) plugs in behind the same panel: a current full-text index narrows the files read; `search.useIndex` (default on).
 
 ## Quick Open
 

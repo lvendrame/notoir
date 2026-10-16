@@ -32,6 +32,10 @@ pub struct SearchOptions {
     pub exclude: Vec<String>,
     pub max_file_size: u64,
     pub max_results: usize,
+    /// A ready full-text index folder ([`crate::text_index`]): when the
+    /// query has a literal to look up, only the files it lists (plus open
+    /// documents it knows) are read instead of walking the workspace.
+    pub index: Option<PathBuf>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -61,6 +65,8 @@ pub struct Batch {
     pub truncated: bool,
     /// Invalid regex: the message (the search did not run).
     pub error: Option<String>,
+    /// The workspace part came from the full-text index.
+    pub indexed: bool,
 }
 
 /// Globs from user input: a bare name or folder (`docs`, `*.md`) matches
@@ -164,37 +170,10 @@ pub fn run(
                 *last = Instant::now();
             }
         };
+    let mut indexed = false;
     if let Some(root) = &opts.root {
-        let walk = ignore::WalkBuilder::new(root)
-            .standard_filters(false)
-            .git_ignore(true)
-            .git_exclude(true)
-            .require_git(false)
-            .follow_links(false)
-            .filter_entry({
-                let root = root.clone();
-                let exclude = exclude.clone();
-                move |e| match e.path().strip_prefix(&root) {
-                    Ok(rel) if !rel.as_os_str().is_empty() => !exclude.is_match(rel),
-                    _ => true,
-                }
-            })
-            .build();
-        for entry in walk.flatten() {
-            if cancel.load(Ordering::Relaxed) {
-                return;
-            }
-            if !entry.file_type().is_some_and(|t| t.is_file()) {
-                continue;
-            }
-            let path = entry.path();
-            let Ok(rel) = path.strip_prefix(root) else {
-                continue;
-            };
-            if !include.is_empty() && !include.is_match(rel) {
-                continue;
-            }
-            let rel = rel.to_string_lossy().replace('\\', "/");
+        // One workspace file: the open document's text or the file's.
+        let mut visit = |path: &Path, rel: String, size: Option<u64>| -> bool {
             let canonical = path.canonicalize().unwrap_or_else(|_| path.to_path_buf());
             let rope = match snapshots.get(&canonical) {
                 Some(r) => {
@@ -202,15 +181,18 @@ pub fn run(
                     r.clone()
                 }
                 None => {
-                    if entry.metadata().is_ok_and(|m| m.len() > opts.max_file_size) {
-                        continue;
+                    if size.is_some_and(|n| n > opts.max_file_size) {
+                        return false;
                     }
                     let Ok(bytes) = std::fs::read(path) else {
-                        continue;
+                        return false;
                     };
+                    if bytes.len() as u64 > opts.max_file_size {
+                        return false;
+                    }
                     match decode(&bytes) {
                         Some(t) => Rope::from_str(&t),
-                        None => continue,
+                        None => return false,
                     }
                 }
             };
@@ -228,10 +210,80 @@ pub fn run(
                 );
             }
             if total >= opts.max_results {
-                truncated = true;
-                break;
+                return true;
             }
             flush(&mut pending, &mut last, &mut emit);
+            false
+        };
+        let candidates = opts
+            .index
+            .as_deref()
+            .zip(crate::text_index::lookup_text(&opts.query))
+            .and_then(
+                |(dir, text)| match indexed_candidates(dir, text, root, snapshots) {
+                    Ok(c) => Some(c),
+                    Err(e) => {
+                        tracing::debug!(error = %e, "search index unavailable; streaming");
+                        None
+                    }
+                },
+            );
+        if let Some(rels) = candidates {
+            indexed = true;
+            for rel in rels {
+                if cancel.load(Ordering::Relaxed) {
+                    return;
+                }
+                let rel_path = Path::new(&rel);
+                if exclude.is_match(rel_path)
+                    || (!include.is_empty() && !include.is_match(rel_path))
+                {
+                    continue;
+                }
+                if visit(&root.join(&rel), rel, None) {
+                    truncated = true;
+                    break;
+                }
+            }
+        } else {
+            let walk = ignore::WalkBuilder::new(root)
+                .standard_filters(false)
+                .git_ignore(true)
+                .git_exclude(true)
+                .require_git(false)
+                .follow_links(false)
+                // Path order, as index lookups return (stable result order).
+                .sort_by_file_name(|a, b| a.cmp(b))
+                .filter_entry({
+                    let root = root.clone();
+                    let exclude = exclude.clone();
+                    move |e| match e.path().strip_prefix(&root) {
+                        Ok(rel) if !rel.as_os_str().is_empty() => !exclude.is_match(rel),
+                        _ => true,
+                    }
+                })
+                .build();
+            for entry in walk.flatten() {
+                if cancel.load(Ordering::Relaxed) {
+                    return;
+                }
+                if !entry.file_type().is_some_and(|t| t.is_file()) {
+                    continue;
+                }
+                let path = entry.path();
+                let Ok(rel) = path.strip_prefix(root) else {
+                    continue;
+                };
+                if !include.is_empty() && !include.is_match(rel) {
+                    continue;
+                }
+                let rel = rel.to_string_lossy().replace('\\', "/");
+                let size = entry.metadata().ok().map(|m| m.len());
+                if visit(path, rel, size) {
+                    truncated = true;
+                    break;
+                }
+            }
         }
     }
     // Open documents outside the walk (no workspace, or outside the root).
@@ -295,7 +347,31 @@ pub fn run(
         done: true,
         truncated,
         error: None,
+        indexed,
     });
+}
+
+/// Index hits plus the open documents the index covers (their unsaved text
+/// may match where the file on disk does not), sorted and unique.
+fn indexed_candidates(
+    dir: &Path,
+    text: &str,
+    root: &Path,
+    snapshots: &HashMap<PathBuf, Rope>,
+) -> Result<Vec<String>, crate::text_index::IndexError> {
+    let reader = crate::text_index::IndexReader::open(dir)?;
+    let mut rels = reader.candidates(text)?;
+    for path in snapshots.keys() {
+        if let Ok(rel) = path.strip_prefix(root) {
+            let rel = rel.to_string_lossy().replace('\\', "/");
+            if reader.contains(&rel)? {
+                rels.push(rel);
+            }
+        }
+    }
+    rels.sort();
+    rels.dedup();
+    Ok(rels)
 }
 
 /// Replace All in a closed file: load, replace, save with the conflict check.
@@ -341,6 +417,7 @@ mod tests {
             exclude: vec!["**/.git".into()],
             max_file_size: 5 * 1024 * 1024,
             max_results: 20_000,
+            index: None,
         }
     }
 
@@ -368,6 +445,56 @@ mod tests {
         std::fs::write(root.join("build/out.txt"), "MCP\n").unwrap();
         std::fs::write(root.join("bin.dat"), b"MCP\0\0\0").unwrap();
         (d, root)
+    }
+
+    #[test]
+    fn indexed_search_matches_streaming_search() {
+        let (d, root) = tree();
+        std::fs::write(root.join("docs/other.md"), "nothing here\n").unwrap();
+        let dir = d.path().join("index");
+        // The workspace file list (gitignored files are not indexed).
+        let files: Vec<String> = ["README.md", "docs/mcp.md", "docs/other.md", "bin.dat"]
+            .map(String::from)
+            .into();
+        crate::text_index::TextIndex::open(&dir)
+            .unwrap()
+            .sync(&root, &files, 1 << 20, &AtomicBool::new(false))
+            .unwrap();
+        // An open document whose unsaved text matches.
+        let mut snaps = HashMap::new();
+        snaps.insert(root.join("docs/other.md"), Rope::from_str("an MCP draft\n"));
+        for (text, case_sensitive, include) in [
+            ("mcp", false, vec![]),
+            ("MCP", true, vec![]),
+            ("mcp", false, vec!["docs".to_owned()]),
+        ] {
+            let mut o = opts(&root, text);
+            o.query.case_sensitive = case_sensitive;
+            o.include = include;
+            // Same files in the same order.
+            let mut streamed = Vec::new();
+            run(&o, &snaps, &[], &AtomicBool::new(false), |b| {
+                streamed.extend(b.files)
+            });
+            o.index = Some(dir.clone());
+            let mut indexed_flag = false;
+            let mut indexed = Vec::new();
+            run(&o, &snaps, &[], &AtomicBool::new(false), |b| {
+                indexed_flag |= b.indexed;
+                indexed.extend(b.files)
+            });
+            assert!(indexed_flag, "{text}: index used");
+            assert_eq!(indexed, streamed, "{text}");
+            assert!(!streamed.is_empty());
+        }
+        // A missing index streams.
+        let mut o = opts(&root, "mcp");
+        o.index = Some(d.path().join("nope"));
+        let mut used = false;
+        run(&o, &snaps, &[], &AtomicBool::new(false), |b| {
+            used |= b.indexed
+        });
+        assert!(!used);
     }
 
     #[test]

@@ -47,5 +47,7 @@
   "gitNotAtRevision": "{{name}} n’existe pas à cette révision.",
   "shellCommandInstalled": "La commande notoir est installée : {{path}}",
   "shellCommandRemoved": "La commande notoir a été retirée : {{path}}",
-  "shellCommandFailed": "Impossible de modifier la commande notoir."
+  "shellCommandFailed": "Impossible de modifier la commande notoir.",
+  "noTemplates": "Aucun modèle pour l’instant. Ajoutez des fichiers Markdown dans {{shared}} de l’espace de travail, ou n’importe quel fichier dans {{personal}}.",
+  "templateUnreadable": "Impossible de lire le modèle « {{name}} »."
 }

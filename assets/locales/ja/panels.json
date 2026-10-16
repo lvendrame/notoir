@@ -24,7 +24,8 @@
     "copyPath": "パスをコピー",
     "replaceInFile": "ファイル内で置換",
     "dismiss": "閉じる",
-    "replaceOne": "置換"
+    "replaceOne": "置換",
+    "indexing": "検索インデックスを作成中 — ファイルを直接検索しています"
   },
   "sourceControl": {
     "title": "ソース管理"

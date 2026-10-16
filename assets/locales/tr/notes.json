@@ -30,5 +30,10 @@
     "none": "Henüz etiket yok. Notlarınıza #etiket ekleyin.",
     "pickTitle": "Etikete göre notlar"
   },
-  "updateFailed": "{{count}} notta bağlantılar güncellenemedi."
+  "updateFailed": "{{count}} notta bağlantılar güncellenemedi.",
+  "templates": {
+    "shared": "Çalışma alanı",
+    "personal": "Kişisel",
+    "pickTitle": "Bir şablon seçin"
+  }
 }

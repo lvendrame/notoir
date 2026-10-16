@@ -110,7 +110,9 @@
     "keepMine": "Mantieni la mia versione",
     "useDiskVersion": "Usa la versione su disco",
     "autoSave": "Attiva/disattiva salvataggio automatico",
-    "saveAsAdmin": "Salva come amministratore…"
+    "saveAsAdmin": "Salva come amministratore…",
+    "newFromTemplate": "Nuovo file da modello…",
+    "pickTemplate": "Usa modello"
   },
   "edit": {
     "undo": "Annulla",
@@ -271,7 +273,8 @@
     "dismiss": "Ignora risultato di ricerca",
     "replaceOne": "Sostituisci",
     "undoReplace": "Annulla sostituzione",
-    "copyPath": "Copia percorso"
+    "copyPath": "Copia percorso",
+    "rebuildIndex": "Ricostruisci indice di ricerca"
   },
   "quickOpen": {
     "open": "Apri"

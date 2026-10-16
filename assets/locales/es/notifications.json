@@ -47,5 +47,7 @@
   "gitNotAtRevision": "{{name}} no existe en esa revisión.",
   "shellCommandInstalled": "El comando notoir está instalado: {{path}}",
   "shellCommandRemoved": "Se quitó el comando notoir: {{path}}",
-  "shellCommandFailed": "No se pudo cambiar el comando notoir."
+  "shellCommandFailed": "No se pudo cambiar el comando notoir.",
+  "noTemplates": "Aún no hay plantillas. Añade archivos Markdown a {{shared}} en el espacio de trabajo o cualquier archivo a {{personal}}.",
+  "templateUnreadable": "No se pudo leer la plantilla «{{name}}»."
 }

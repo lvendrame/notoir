@@ -30,5 +30,10 @@
     "none": "タグはまだありません。ノートに #タグ を追加してください。",
     "pickTitle": "タグ別のノート"
   },
-  "updateFailed": "{{count}} 件のノートでリンクを更新できませんでした。"
+  "updateFailed": "{{count}} 件のノートでリンクを更新できませんでした。",
+  "templates": {
+    "shared": "ワークスペース",
+    "personal": "個人",
+    "pickTitle": "テンプレートを選択"
+  }
 }

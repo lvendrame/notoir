@@ -2650,6 +2650,7 @@ name = "notoir"
 version = "0.1.0"
 dependencies = [
  "arboard",
+ "chrono",
  "eframe",
  "egui",
  "egui_kittest",
@@ -2801,6 +2802,7 @@ dependencies = [
  "notoir-core",
  "notoir-editor",
  "notoir-storage",
+ "rusqlite",
  "tempfile",
  "thiserror 2.0.21",
  "tracing",

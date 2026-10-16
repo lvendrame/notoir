@@ -21,6 +21,33 @@ pub(super) fn specs(out: &mut Specs) {
             .keys([k("Mod+O")])
             .icon("folder-open"),
     );
+    out.push(CommandSpec::new(
+        "file.newFromTemplate",
+        Category::File,
+        |c: &mut AppCore, inv: &CommandInvocation| {
+            let dir = c
+                .workspace
+                .as_ref()
+                .map(|ws| ws.target_dir(c.explorer_target(inv).as_deref()));
+            c.templates_start(dir);
+            CommandOutcome::Done
+        },
+    ));
+    out.push(
+        CommandSpec::new(
+            "file.pickTemplate",
+            Category::File,
+            |c: &mut AppCore, inv: &CommandInvocation| match super::arg(inv, "path") {
+                Some(p) => {
+                    let p = p.to_owned();
+                    c.templates_pick(&p);
+                    CommandOutcome::Done
+                }
+                None => super::bad_args(inv),
+            },
+        )
+        .hidden(),
+    );
     out.push(
         CommandSpec::new("file.newScratchpad", Category::File, new_scratchpad)
             .keys([k("Mod+Alt+N")]),

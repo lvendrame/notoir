@@ -110,7 +110,9 @@
     "keepMine": "Conserver ma version",
     "useDiskVersion": "Utiliser la version du disque",
     "autoSave": "Activer/désactiver l'enregistrement automatique",
-    "saveAsAdmin": "Enregistrer en tant qu’administrateur…"
+    "saveAsAdmin": "Enregistrer en tant qu’administrateur…",
+    "newFromTemplate": "Nouveau fichier à partir d’un modèle…",
+    "pickTemplate": "Utiliser le modèle"
   },
   "edit": {
     "undo": "Annuler",
@@ -271,7 +273,8 @@
     "dismiss": "Ignorer le résultat de recherche",
     "replaceOne": "Remplacer",
     "undoReplace": "Annuler le remplacement",
-    "copyPath": "Copier le chemin"
+    "copyPath": "Copier le chemin",
+    "rebuildIndex": "Reconstruire l’index de recherche"
   },
   "quickOpen": {
     "open": "Ouvrir"

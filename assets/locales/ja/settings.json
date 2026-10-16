@@ -161,7 +161,8 @@
     "maxResults": "ワークスペース検索の最大結果数",
     "maxFileSize": "これより大きいファイルは検索でスキップ (バイト)",
     "exclude": "ワークスペース検索から除外する glob",
-    "quickOpenMaxFiles": "クイックオープンに表示する最大ファイル数"
+    "quickOpenMaxFiles": "クイックオープンに表示する最大ファイル数",
+    "useIndex": "ワークスペースの検索インデックスをキャッシュフォルダーに保持する"
   },
   "navigation": {
     "minLineDistance": "この行数を超えるカーソル移動を戻る/進むに記録"

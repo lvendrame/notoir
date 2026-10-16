@@ -37,5 +37,7 @@ pub mod session;
 pub mod settings_tab;
 pub mod shell;
 pub mod structure;
+pub mod templates;
+pub mod text_index;
 pub mod theme;
 pub mod workspace;

@@ -110,7 +110,9 @@
     "keepMine": "Meine Version behalten",
     "useDiskVersion": "Version vom Datenträger verwenden",
     "autoSave": "Automatisches Speichern umschalten",
-    "saveAsAdmin": "Als Administrator speichern…"
+    "saveAsAdmin": "Als Administrator speichern…",
+    "newFromTemplate": "Neue Datei aus Vorlage…",
+    "pickTemplate": "Vorlage verwenden"
   },
   "edit": {
     "undo": "Rückgängig",
@@ -271,7 +273,8 @@
     "dismiss": "Suchergebnis verwerfen",
     "replaceOne": "Ersetzen",
     "undoReplace": "Ersetzen rückgängig machen",
-    "copyPath": "Pfad kopieren"
+    "copyPath": "Pfad kopieren",
+    "rebuildIndex": "Suchindex neu aufbauen"
   },
   "quickOpen": {
     "open": "Öffnen"

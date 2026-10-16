@@ -47,5 +47,7 @@
   "gitNotAtRevision": "{{name}} bu revizyonda yok.",
   "shellCommandInstalled": "notoir komutu yüklendi: {{path}}",
   "shellCommandRemoved": "notoir komutu kaldırıldı: {{path}}",
-  "shellCommandFailed": "notoir komutu değiştirilemedi."
+  "shellCommandFailed": "notoir komutu değiştirilemedi.",
+  "noTemplates": "Henüz şablon yok. Çalışma alanındaki {{shared}} klasörüne Markdown dosyaları ya da {{personal}} klasörüne herhangi bir dosya ekleyin.",
+  "templateUnreadable": "“{{name}}” şablonu okunamadı."
 }

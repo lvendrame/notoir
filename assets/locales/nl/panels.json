@@ -24,7 +24,8 @@
     "copyPath": "Pad kopiëren",
     "replaceInFile": "Vervangen in bestand",
     "dismiss": "Negeren",
-    "replaceOne": "Vervangen"
+    "replaceOne": "Vervangen",
+    "indexing": "Zoekindex wordt opgebouwd — bestanden worden direct doorzocht"
   },
   "sourceControl": {
     "title": "Broncodebeheer"

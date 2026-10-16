@@ -161,7 +161,8 @@
     "maxResults": "Maximum number of workspace search results",
     "maxFileSize": "Files larger than this are skipped by workspace search (bytes)",
     "exclude": "Globs excluded from workspace search",
-    "quickOpenMaxFiles": "Maximum number of files Quick Open lists"
+    "quickOpenMaxFiles": "Maximum number of files Quick Open lists",
+    "useIndex": "Keep a search index of the workspace in the cache folder"
   },
   "navigation": {
     "minLineDistance": "Cursor jumps longer than this many lines are recorded for Back/Forward"

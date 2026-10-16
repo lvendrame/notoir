@@ -161,7 +161,8 @@
     "maxResults": "작업 영역 검색 최대 결과 수",
     "maxFileSize": "이보다 큰 파일은 검색에서 건너뜀 (바이트)",
     "exclude": "작업 영역 검색에서 제외할 glob",
-    "quickOpenMaxFiles": "빠른 열기에 표시할 최대 파일 수"
+    "quickOpenMaxFiles": "빠른 열기에 표시할 최대 파일 수",
+    "useIndex": "캐시 폴더에 작업 영역 검색 색인 유지"
   },
   "navigation": {
     "minLineDistance": "이보다 많은 줄의 커서 이동은 뒤로/앞으로 기록에 저장"

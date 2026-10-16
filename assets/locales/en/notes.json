@@ -30,5 +30,10 @@
     "none": "No tags yet. Add #tags to your notes.",
     "pickTitle": "Notes by tag"
   },
-  "updateFailed": "Links could not be updated in {{count}} notes."
+  "updateFailed": "Links could not be updated in {{count}} notes.",
+  "templates": {
+    "shared": "Workspace",
+    "personal": "Personal",
+    "pickTitle": "Choose a template"
+  }
 }

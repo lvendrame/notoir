@@ -110,7 +110,9 @@
     "keepMine": "Zachowaj moją wersję",
     "useDiskVersion": "Użyj wersji z dysku",
     "autoSave": "Przełącz autozapis",
-    "saveAsAdmin": "Zapisz jako administrator…"
+    "saveAsAdmin": "Zapisz jako administrator…",
+    "newFromTemplate": "Nowy plik z szablonu…",
+    "pickTemplate": "Użyj szablonu"
   },
   "edit": {
     "undo": "Cofnij",
@@ -271,7 +273,8 @@
     "dismiss": "Odrzuć wynik wyszukiwania",
     "replaceOne": "Zamień",
     "undoReplace": "Cofnij zamianę",
-    "copyPath": "Kopiuj ścieżkę"
+    "copyPath": "Kopiuj ścieżkę",
+    "rebuildIndex": "Odbuduj indeks wyszukiwania"
   },
   "quickOpen": {
     "open": "Otwórz"

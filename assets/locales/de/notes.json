@@ -30,5 +30,10 @@
     "none": "Noch keine Tags. Füge deinen Notizen #Tags hinzu.",
     "pickTitle": "Notizen nach Tag"
   },
-  "updateFailed": "Links in {{count}} Notizen konnten nicht aktualisiert werden."
+  "updateFailed": "Links in {{count}} Notizen konnten nicht aktualisiert werden.",
+  "templates": {
+    "shared": "Arbeitsbereich",
+    "personal": "Persönlich",
+    "pickTitle": "Vorlage auswählen"
+  }
 }

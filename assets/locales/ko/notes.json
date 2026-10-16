@@ -30,5 +30,10 @@
     "none": "아직 태그가 없습니다. 노트에 #태그를 추가하세요.",
     "pickTitle": "태그별 노트"
   },
-  "updateFailed": "노트 {{count}}개에서 링크를 업데이트할 수 없습니다."
+  "updateFailed": "노트 {{count}}개에서 링크를 업데이트할 수 없습니다.",
+  "templates": {
+    "shared": "작업 영역",
+    "personal": "개인",
+    "pickTitle": "템플릿 선택"
+  }
 }

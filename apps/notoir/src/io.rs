@@ -76,6 +76,12 @@ pub enum IoResult {
     PluginRecommendations(Vec<(String, String)>),
     /// The notes link index was built (workspace generation, index).
     NotesIndexed(u64, Box<notoir_workspace::links::LinkIndex>),
+    /// The search index worker finished jobs (spec 34).
+    TextIndex(Box<crate::text_index::IndexDone>),
+    /// New File from Template…: the templates found.
+    TemplatesListed(Vec<crate::templates::Template>),
+    /// A chosen template's text.
+    TemplateLoaded(Box<(crate::templates::Template, std::io::Result<String>)>),
     /// Links in closed notes were rewritten (failures).
     NotesLinksUpdated(Vec<String>),
     /// Unlinked mentions of a note.

@@ -24,7 +24,8 @@
     "copyPath": "Copiar Caminho",
     "replaceInFile": "Substituir no Arquivo",
     "dismiss": "Descartar",
-    "replaceOne": "Substituir"
+    "replaceOne": "Substituir",
+    "indexing": "Índice de pesquisa em construção — pesquisando os arquivos diretamente"
   },
   "sourceControl": {
     "title": "Controle de Código"

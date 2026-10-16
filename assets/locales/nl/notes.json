@@ -30,5 +30,10 @@
     "none": "Nog geen tags. Voeg #tags toe aan je notities.",
     "pickTitle": "Notities per tag"
   },
-  "updateFailed": "Links in {{count}} notities konden niet worden bijgewerkt."
+  "updateFailed": "Links in {{count}} notities konden niet worden bijgewerkt.",
+  "templates": {
+    "shared": "Werkruimte",
+    "personal": "Persoonlijk",
+    "pickTitle": "Kies een sjabloon"
+  }
 }

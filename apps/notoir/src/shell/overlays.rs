@@ -277,6 +277,8 @@ pub enum PickerKind {
     Notes,
     /// Quick Open `#`: tags (spec 34).
     Tags,
+    /// New File from Template… (spec 34).
+    Templates,
 }
 
 /// Encodings offered by the encoding picker (WHATWG labels; `utf-8-bom` is ours).
@@ -401,7 +403,8 @@ impl Picker {
             | PickerKind::GitBranchName
             | PickerKind::GitCloneUrl
             | PickerKind::Notes
-            | PickerKind::Tags => String::new(),
+            | PickerKind::Tags
+            | PickerKind::Templates => String::new(),
             PickerKind::TabSize => doc
                 .map(|d| core.indent_style(d.id).tab_size.to_string())
                 .unwrap_or_default(),
@@ -424,6 +427,20 @@ impl Picker {
                     value: value.clone(),
                     label: label.clone(),
                     detail: detail.clone(),
+                })
+                .collect(),
+            PickerKind::Templates => core
+                .templates
+                .list
+                .iter()
+                .map(|t| PickerItem {
+                    value: t.path.to_string_lossy().into_owned(),
+                    label: t.name.clone(),
+                    detail: if t.shared {
+                        t!("notes:templates.shared")
+                    } else {
+                        t!("notes:templates.personal")
+                    },
                 })
                 .collect(),
             PickerKind::Tags => core
@@ -568,7 +585,8 @@ impl Picker {
             | PickerKind::GitBranchName
             | PickerKind::GitCloneUrl
             | PickerKind::Notes
-            | PickerKind::Tags => Vec::new(),
+            | PickerKind::Tags
+            | PickerKind::Templates => Vec::new(),
             PickerKind::Indentation => [
                 ("spaces", "dialogs:picker.indentSpaces"),
                 ("tabs", "dialogs:picker.indentTabs"),
@@ -654,6 +672,7 @@ impl Picker {
             PickerKind::GitCloneUrl => ("git.clone", json!({ "url": value })),
             PickerKind::Notes => ("notes.pick", json!({ "value": value })),
             PickerKind::Tags => ("notes.pickTag", json!({ "tag": value })),
+            PickerKind::Templates => ("file.pickTemplate", json!({ "path": value })),
         };
         CommandInvocation::new(id, InvocationSource::Palette).with_args(args)
     }
@@ -710,6 +729,7 @@ impl Picker {
                 | PickerKind::GitBranches
                 | PickerKind::Notes
                 | PickerKind::Tags
+                | PickerKind::Templates
         ) {
             let q = self.query.trim().trim_start_matches(['@', '#']).trim();
             if q.is_empty() {
@@ -926,6 +946,7 @@ impl Picker {
             PickerKind::GitCloneUrl => t!("git:clone.title"),
             PickerKind::Notes => t!("notes:picker.title"),
             PickerKind::Tags => t!("notes:tags.pickTitle"),
+            PickerKind::Templates => t!("notes:templates.pickTitle"),
         };
         if self.kind == PickerKind::Commands && enter {
             // Disabled rows (shown with "show all") do not run.

@@ -30,5 +30,10 @@
     "none": "Aún no hay etiquetas. Añade #etiquetas a tus notas.",
     "pickTitle": "Notas por etiqueta"
   },
-  "updateFailed": "No se pudieron actualizar los enlaces en {{count}} notas."
+  "updateFailed": "No se pudieron actualizar los enlaces en {{count}} notas.",
+  "templates": {
+    "shared": "Espacio de trabajo",
+    "personal": "Personal",
+    "pickTitle": "Elige una plantilla"
+  }
 }

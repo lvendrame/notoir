@@ -110,7 +110,9 @@
     "keepMine": "Benim Sürümümü Koru",
     "useDiskVersion": "Diskteki Sürümü Kullan",
     "autoSave": "Otomatik Kaydetmeyi Aç/Kapat",
-    "saveAsAdmin": "Yönetici Olarak Kaydet…"
+    "saveAsAdmin": "Yönetici Olarak Kaydet…",
+    "newFromTemplate": "Şablondan yeni dosya…",
+    "pickTemplate": "Şablonu kullan"
   },
   "edit": {
     "undo": "Geri Al",
@@ -271,7 +273,8 @@
     "dismiss": "Arama Sonucunu Kapat",
     "replaceOne": "Değiştir",
     "undoReplace": "Değiştirmeyi Geri Al",
-    "copyPath": "Yolu Kopyala"
+    "copyPath": "Yolu Kopyala",
+    "rebuildIndex": "Arama dizinini yeniden oluştur"
   },
   "quickOpen": {
     "open": "Aç"

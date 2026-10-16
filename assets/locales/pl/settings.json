@@ -161,7 +161,8 @@
     "maxResults": "Maksymalna liczba wyników wyszukiwania",
     "maxFileSize": "Większe pliki są pomijane przez wyszukiwanie (bajty)",
     "exclude": "Globy wykluczone z wyszukiwania",
-    "quickOpenMaxFiles": "Maksymalna liczba plików w szybkim otwieraniu"
+    "quickOpenMaxFiles": "Maksymalna liczba plików w szybkim otwieraniu",
+    "useIndex": "Przechowuj indeks wyszukiwania obszaru roboczego w folderze pamięci podręcznej"
   },
   "navigation": {
     "minLineDistance": "Skoki kursora o więcej wierszy są zapisywane dla Wstecz/Dalej"

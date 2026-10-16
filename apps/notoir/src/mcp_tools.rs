@@ -730,6 +730,7 @@ impl AppCore {
             exclude,
             max_file_size: self.settings.int("search.maxFileSize", None).max(0) as u64,
             max_results: (cursor + limit + 1).min(20_000),
+            index: self.text_index_dir(),
         };
         // Open documents are searched as held in memory.
         let mut snapshots: HashMap<PathBuf, Rope> = HashMap::new();

@@ -110,7 +110,9 @@
     "keepMine": "自分のバージョンを保持",
     "useDiskVersion": "ディスクのバージョンを使用",
     "autoSave": "自動保存の切り替え",
-    "saveAsAdmin": "管理者として保存…"
+    "saveAsAdmin": "管理者として保存…",
+    "newFromTemplate": "テンプレートから新規ファイル…",
+    "pickTemplate": "テンプレートを使用"
   },
   "edit": {
     "undo": "元に戻す",
@@ -271,7 +273,8 @@
     "dismiss": "検索結果を閉じる",
     "replaceOne": "置換",
     "undoReplace": "置換を元に戻す",
-    "copyPath": "パスをコピー"
+    "copyPath": "パスをコピー",
+    "rebuildIndex": "検索インデックスを再構築"
   },
   "quickOpen": {
     "open": "開く"

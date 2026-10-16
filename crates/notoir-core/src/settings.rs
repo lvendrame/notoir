@@ -619,6 +619,13 @@ impl Schema {
             C::General,
         );
         def(
+            "search.useIndex",
+            T::Bool,
+            V::Bool(true),
+            Scopes::NO_LANGUAGE,
+            C::General,
+        );
+        def(
             "search.maxFileSize",
             T::Int {
                 min: 1024,

@@ -30,5 +30,10 @@
     "none": "Nenhuma tag ainda. Adicione #tags às suas notas.",
     "pickTitle": "Notas por tag"
   },
-  "updateFailed": "Não foi possível atualizar os links em {{count}} notas."
+  "updateFailed": "Não foi possível atualizar os links em {{count}} notas.",
+  "templates": {
+    "shared": "Espaço de trabalho",
+    "personal": "Pessoal",
+    "pickTitle": "Escolha um modelo"
+  }
 }

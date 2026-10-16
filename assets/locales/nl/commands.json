@@ -110,7 +110,9 @@
     "keepMine": "Mijn versie behouden",
     "useDiskVersion": "Versie op schijf gebruiken",
     "autoSave": "Automatisch opslaan in-/uitschakelen",
-    "saveAsAdmin": "Opslaan als beheerder…"
+    "saveAsAdmin": "Opslaan als beheerder…",
+    "newFromTemplate": "Nieuw bestand uit sjabloon…",
+    "pickTemplate": "Sjabloon gebruiken"
   },
   "edit": {
     "undo": "Ongedaan maken",
@@ -271,7 +273,8 @@
     "dismiss": "Zoekresultaat negeren",
     "replaceOne": "Vervangen",
     "undoReplace": "Vervangen ongedaan maken",
-    "copyPath": "Pad kopiëren"
+    "copyPath": "Pad kopiëren",
+    "rebuildIndex": "Zoekindex opnieuw opbouwen"
   },
   "quickOpen": {
     "open": "Openen"

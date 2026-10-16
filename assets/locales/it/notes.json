@@ -30,5 +30,10 @@
     "none": "Ancora nessun tag. Aggiungi #tag alle tue note.",
     "pickTitle": "Note per tag"
   },
-  "updateFailed": "Impossibile aggiornare i collegamenti in {{count}} note."
+  "updateFailed": "Impossibile aggiornare i collegamenti in {{count}} note.",
+  "templates": {
+    "shared": "Area di lavoro",
+    "personal": "Personale",
+    "pickTitle": "Scegli un modello"
+  }
 }

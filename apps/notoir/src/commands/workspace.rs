@@ -216,7 +216,10 @@ fn target_dir(core: &AppCore, inv: &CommandInvocation) -> Option<PathBuf> {
 
 fn new_file(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     if let Some(dir) = target_dir(core, inv) {
-        core.begin_edit(EditKind::NewFile { dir });
+        core.begin_edit(EditKind::NewFile {
+            dir,
+            template: None,
+        });
     }
     CommandOutcome::Done
 }

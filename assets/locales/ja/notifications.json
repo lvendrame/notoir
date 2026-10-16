@@ -47,5 +47,7 @@
   "gitNotAtRevision": "そのリビジョンには {{name}} が存在しません。",
   "shellCommandInstalled": "notoir コマンドをインストールしました: {{path}}",
   "shellCommandRemoved": "notoir コマンドを削除しました: {{path}}",
-  "shellCommandFailed": "notoir コマンドを変更できませんでした。"
+  "shellCommandFailed": "notoir コマンドを変更できませんでした。",
+  "noTemplates": "テンプレートがありません。ワークスペースの {{shared}} に Markdown ファイルを、または {{personal}} に任意のファイルを追加してください。",
+  "templateUnreadable": "テンプレート「{{name}}」を読み込めませんでした。"
 }

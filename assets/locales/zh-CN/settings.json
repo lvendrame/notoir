@@ -161,7 +161,8 @@
     "maxResults": "工作区搜索的最大结果数",
     "maxFileSize": "搜索会跳过大于此大小的文件(字节)",
     "exclude": "从工作区搜索中排除的 glob",
-    "quickOpenMaxFiles": "快速打开列出的最大文件数"
+    "quickOpenMaxFiles": "快速打开列出的最大文件数",
+    "useIndex": "在缓存文件夹中保留工作区的搜索索引"
   },
   "navigation": {
     "minLineDistance": "超过此行数的光标跳转会记录到后退/前进"

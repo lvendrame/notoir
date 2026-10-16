@@ -255,7 +255,7 @@ pub fn show(
     };
     let mut lines: Vec<Line> = Vec::with_capacity(rows.len() + 1);
     let new_in = match ws.edit.as_ref().map(|e| &e.kind) {
-        Some(EditKind::NewFile { dir }) => Some((dir.clone(), false)),
+        Some(EditKind::NewFile { dir, .. }) => Some((dir.clone(), false)),
         Some(EditKind::NewFolder { dir }) => Some((dir.clone(), true)),
         _ => None,
     };

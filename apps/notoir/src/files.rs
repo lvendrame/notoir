@@ -582,6 +582,7 @@ impl AppCore {
             return;
         };
         self.place_caret(view, &at);
+        self.templates_opened(doc, view, &loaded.path);
         self.apply_markdown_default_mode(view);
         if !at.keep_focus {
             self.effects.push(Effect::FocusEditor(view));

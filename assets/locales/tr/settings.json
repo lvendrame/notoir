@@ -161,7 +161,8 @@
     "maxResults": "En fazla çalışma alanı arama sonucu",
     "maxFileSize": "Bundan büyük dosyalar aramada atlanır (bayt)",
     "exclude": "Aramadan hariç tutulan globlar",
-    "quickOpenMaxFiles": "Hızlı Aç'ın listelediği en fazla dosya"
+    "quickOpenMaxFiles": "Hızlı Aç'ın listelediği en fazla dosya",
+    "useIndex": "Çalışma alanının arama dizinini önbellek klasöründe tut"
   },
   "navigation": {
     "minLineDistance": "Bundan fazla satırlık imleç atlamaları Geri/İleri için kaydedilir"

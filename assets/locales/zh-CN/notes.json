@@ -30,5 +30,10 @@
     "none": "还没有标签。在笔记中添加 #标签。",
     "pickTitle": "按标签的笔记"
   },
-  "updateFailed": "无法更新 {{count}} 个笔记中的链接。"
+  "updateFailed": "无法更新 {{count}} 个笔记中的链接。",
+  "templates": {
+    "shared": "工作区",
+    "personal": "个人",
+    "pickTitle": "选择模板"
+  }
 }

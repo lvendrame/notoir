@@ -30,5 +30,10 @@
     "none": "Brak tagów. Dodaj #tagi do notatek.",
     "pickTitle": "Notatki według tagu"
   },
-  "updateFailed": "Nie udało się zaktualizować linków w notatkach (liczba: {{count}})."
+  "updateFailed": "Nie udało się zaktualizować linków w notatkach (liczba: {{count}}).",
+  "templates": {
+    "shared": "Obszar roboczy",
+    "personal": "Osobisty",
+    "pickTitle": "Wybierz szablon"
+  }
 }

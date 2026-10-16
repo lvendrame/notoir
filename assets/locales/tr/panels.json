@@ -24,7 +24,8 @@
     "copyPath": "Yolu Kopyala",
     "replaceInFile": "Dosyada Değiştir",
     "dismiss": "Kapat",
-    "replaceOne": "Değiştir"
+    "replaceOne": "Değiştir",
+    "indexing": "Arama dizini oluşturuluyor — dosyalar doğrudan aranıyor"
   },
   "sourceControl": {
     "title": "Kaynak Denetimi"

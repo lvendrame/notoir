@@ -16,6 +16,19 @@ pub(super) fn specs(out: &mut Specs) {
             .keys([k("Mod+Shift+F")])
             .icon("search"),
     );
+    out.push(
+        CommandSpec::new(
+            "search.rebuildIndex",
+            Category::Edit,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.text_index_rebuild();
+                c.notes_rebuild();
+                CommandOutcome::Done
+            },
+        )
+        .when("hasWorkspace")
+        .expect("valid"),
+    );
     out.push(CommandSpec::new(
         "search.replaceAll",
         Category::Edit,

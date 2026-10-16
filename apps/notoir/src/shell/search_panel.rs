@@ -49,6 +49,7 @@ enum Row {
 
 pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &mut AppCore, actions: &mut Actions) {
     let mut changed = false;
+    let index_building = core.text_index_building();
     let st = &mut core.search;
     ui.spacing_mut().item_spacing.y = 4.0;
     let row_h = 24.0;
@@ -186,6 +187,13 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &mut AppCore, actions: &mut 
             RichText::new(t!("panels:search.truncated"))
                 .size(11.0)
                 .color(kit.color(Tok::Warning)),
+        );
+    }
+    if index_building && !st.query.is_empty() {
+        ui.label(
+            RichText::new(t!("panels:search.indexing"))
+                .size(11.0)
+                .color(kit.color(Tok::TextTertiary)),
         );
     }
     let mut rows = Vec::new();

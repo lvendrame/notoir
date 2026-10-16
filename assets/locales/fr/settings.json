@@ -161,7 +161,8 @@
     "maxResults": "Nombre maximal de résultats de recherche",
     "maxFileSize": "Les fichiers plus grands sont ignorés par la recherche (octets)",
     "exclude": "Globs exclus de la recherche",
-    "quickOpenMaxFiles": "Nombre maximal de fichiers listés par l'ouverture rapide"
+    "quickOpenMaxFiles": "Nombre maximal de fichiers listés par l'ouverture rapide",
+    "useIndex": "Conserver un index de recherche de l’espace de travail dans le dossier de cache"
   },
   "navigation": {
     "minLineDistance": "Les sauts du curseur de plus de lignes sont enregistrés pour Précédent/Suivant"

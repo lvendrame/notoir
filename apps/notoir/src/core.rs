@@ -222,6 +222,8 @@ pub struct AppCore {
     pub cli_waits: Vec<CliWait>,
     /// Wiki links, backlinks and tags (spec 34).
     pub notes: crate::notes::NotesState,
+    pub text_index: crate::text_index::TextIndexState,
+    pub templates: crate::templates::TemplatesState,
 }
 
 /// A `notoir --wait` request (spec 38).
@@ -413,6 +415,8 @@ impl AppCore {
             user_bindings: user_bindings.clone(),
             cli_waits: Vec::new(),
             notes: Default::default(),
+            text_index: Default::default(),
+            templates: Default::default(),
             language,
             theme_choice,
             theme_override: opts.theme_override,
@@ -855,6 +859,12 @@ impl AppCore {
                 IoResult::PluginRecommendations(list) => self.plugins.recommended = list,
                 IoResult::PluginUninstalled { id, error } => self.plugins_uninstalled(id, error),
                 IoResult::NotesIndexed(generation, index) => self.notes_indexed(generation, *index),
+                IoResult::TextIndex(done) => self.text_index_done(*done),
+                IoResult::TemplatesListed(list) => self.templates_listed(list),
+                IoResult::TemplateLoaded(loaded) => {
+                    let (t, text) = *loaded;
+                    self.templates_loaded(t, text);
+                }
                 IoResult::NotesLinksUpdated(failed) => self.notes_links_updated(failed),
                 IoResult::NotesUnlinked(rel, found) => self.notes_unlinked_found(rel, found),
                 IoResult::ShellCommand { install, result } => {

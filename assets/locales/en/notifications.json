@@ -47,5 +47,7 @@
   "gitNotAtRevision": "{{name}} does not exist at that revision.",
   "shellCommandInstalled": "The notoir command is installed: {{path}}",
   "shellCommandRemoved": "The notoir command was removed: {{path}}",
-  "shellCommandFailed": "The notoir command could not be changed."
+  "shellCommandFailed": "The notoir command could not be changed.",
+  "noTemplates": "No templates yet. Add Markdown files to {{shared}} in the workspace, or any file to {{personal}}.",
+  "templateUnreadable": "Could not read the template “{{name}}”."
 }

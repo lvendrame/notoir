@@ -24,7 +24,8 @@
     "copyPath": "复制路径",
     "replaceInFile": "在文件中替换",
     "dismiss": "忽略",
-    "replaceOne": "替换"
+    "replaceOne": "替换",
+    "indexing": "正在构建搜索索引 — 直接搜索文件"
   },
   "sourceControl": {
     "title": "源代码管理"
