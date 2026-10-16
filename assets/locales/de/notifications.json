@@ -49,5 +49,6 @@
   "shellCommandRemoved": "Der Befehl notoir wurde entfernt: {{path}}",
   "shellCommandFailed": "Der Befehl notoir konnte nicht geändert werden.",
   "noTemplates": "Noch keine Vorlagen. Legen Sie Markdown-Dateien in {{shared}} im Arbeitsbereich oder beliebige Dateien in {{personal}} ab.",
-  "templateUnreadable": "Die Vorlage „{{name}}“ konnte nicht gelesen werden."
+  "templateUnreadable": "Die Vorlage „{{name}}“ konnte nicht gelesen werden.",
+  "themeInvalid": "Die Theme-Datei „{{file}}“ konnte nicht geladen werden."
 }

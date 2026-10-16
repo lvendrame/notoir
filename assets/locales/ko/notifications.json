@@ -49,5 +49,6 @@
   "shellCommandRemoved": "notoir 명령이 제거되었습니다: {{path}}",
   "shellCommandFailed": "notoir 명령을 변경할 수 없습니다.",
   "noTemplates": "템플릿이 없습니다. 작업 영역의 {{shared}}에 Markdown 파일을 추가하거나 {{personal}}에 아무 파일이나 추가하세요.",
-  "templateUnreadable": "템플릿 “{{name}}”을(를) 읽을 수 없습니다."
+  "templateUnreadable": "템플릿 “{{name}}”을(를) 읽을 수 없습니다.",
+  "themeInvalid": "테마 파일 “{{file}}”을(를) 불러올 수 없습니다."
 }

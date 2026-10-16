@@ -27,7 +27,8 @@
     "convertToSpaces": "Преобразовать отступы в пробелы",
     "convertToTabs": "Преобразовать отступы в табуляцию",
     "symbols": "Перейти к символу",
-    "symbolLine": "строка {{line}}"
+    "symbolLine": "строка {{line}}",
+    "themeCustom": "Пользовательская"
   },
   "open": {
     "title": "Открыть файл"

@@ -64,7 +64,7 @@ impl AppCore {
             .filter_map(|d| d.path())
             .filter(|p| root.as_ref().is_none_or(|r| !p.starts_with(r)))
             .filter_map(|p| p.parent().map(Path::to_path_buf))
-            .chain(std::iter::once(self.paths.config.clone()))
+            .chain([self.paths.config.clone(), self.paths.themes.clone()])
             .collect();
         if wanted == self.doc_watch.dirs || self.doc_watch.failed {
             return;
@@ -96,6 +96,14 @@ impl AppCore {
     pub fn check_changed_paths(&mut self, paths: &[PathBuf]) {
         if paths.iter().any(|p| self.is_config_file(p)) {
             self.reload_config();
+        }
+        let themes = &self.paths.themes;
+        let canonical = themes.canonicalize().ok();
+        if paths
+            .iter()
+            .any(|p| p.starts_with(themes) || canonical.as_ref().is_some_and(|c| p.starts_with(c)))
+        {
+            self.reload_custom_themes();
         }
         let changed: HashSet<&Path> = paths.iter().map(PathBuf::as_path).collect();
         let docs: Vec<(DocumentId, PathBuf)> = self

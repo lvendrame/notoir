@@ -37,12 +37,10 @@ fn change_theme(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     let Some(choice) = ThemeChoice::from_setting(value) else {
         return bad_args(inv);
     };
+    let value = choice.setting_value();
     core.theme_choice = choice;
     core.theme_override = None;
-    core.set_user_setting(
-        "workbench.theme",
-        Some(SettingValue::Str(choice.setting_value().to_owned())),
-    );
+    core.set_user_setting("workbench.theme", Some(SettingValue::Str(value)));
     core.effects.push(Effect::ApplyTheme);
     CommandOutcome::Done
 }

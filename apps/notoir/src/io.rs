@@ -78,6 +78,8 @@ pub enum IoResult {
     NotesIndexed(u64, Box<notoir_workspace::links::LinkIndex>),
     /// The search index worker finished jobs (spec 34).
     TextIndex(Box<crate::text_index::IndexDone>),
+    /// Custom themes read from `<config>/themes/` (spec 21).
+    CustomThemes(Vec<Result<crate::theme::Theme, (String, String)>>),
     /// New File from Template…: the templates found.
     TemplatesListed(Vec<crate::templates::Template>),
     /// A chosen template's text.

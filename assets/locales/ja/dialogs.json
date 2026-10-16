@@ -27,7 +27,8 @@
     "convertToSpaces": "インデントをスペースに変換",
     "convertToTabs": "インデントをタブに変換",
     "symbols": "シンボルへ移動",
-    "symbolLine": "{{line}} 行"
+    "symbolLine": "{{line}} 行",
+    "themeCustom": "カスタム"
   },
   "open": {
     "title": "ファイルを開く"

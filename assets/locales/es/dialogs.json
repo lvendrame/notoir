@@ -27,7 +27,8 @@
     "convertToSpaces": "Convertir sangría a espacios",
     "convertToTabs": "Convertir sangría a tabulaciones",
     "symbols": "Ir al símbolo",
-    "symbolLine": "línea {{line}}"
+    "symbolLine": "línea {{line}}",
+    "themeCustom": "Personalizado"
   },
   "open": {
     "title": "Abrir archivo"

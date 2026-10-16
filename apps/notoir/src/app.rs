@@ -39,7 +39,8 @@ pub struct Launch {
 pub struct NotoirApp {
     pub core: AppCore,
     pub ui: UiState,
-    theme_id: ThemeId,
+    /// Id of the applied theme and the custom-theme load it came from.
+    theme_key: (String, u64),
     /// The theme being drawn (tests check what the UI shows).
     pub theme: Theme,
     icons: IconCache,
@@ -90,11 +91,13 @@ impl NotoirApp {
         let mut core = AppCore::new(&opts, move || repaint.request_repaint());
         core.startup(&opts.open_paths, opts.restore_session);
         let theme_id = core.theme(system_dark(ctx));
+        let theme = core.load_theme(&theme_id);
+        let theme_key = (theme_id, core.themes_generation);
         let mut app = Self {
             core,
             ui: UiState::default(),
-            theme_id,
-            theme: theme_id.load(),
+            theme_key,
+            theme,
             icons: IconCache::default(),
             started: Instant::now(),
             fonts_installed: None,
@@ -109,8 +112,13 @@ impl NotoirApp {
         app
     }
 
-    pub fn theme_id(&self) -> ThemeId {
-        self.theme_id
+    /// Id of the applied theme.
+    pub fn theme_id(&self) -> &str {
+        &self.theme_key.0
+    }
+
+    pub fn theme(&self) -> &Theme {
+        &self.theme
     }
 
     fn apply_language(&mut self, ctx: &egui::Context) {
@@ -149,17 +157,19 @@ impl NotoirApp {
         }
     }
 
-    fn set_theme(&mut self, ctx: &egui::Context, id: ThemeId) {
-        if id != self.theme_id {
-            self.theme_id = id;
-            self.theme = id.load();
+    fn set_theme(&mut self, ctx: &egui::Context, id: String) {
+        let key = (id, self.core.themes_generation);
+        if key != self.theme_key {
+            self.theme = self.core.load_theme(&key.0);
             self.theme.apply(ctx);
+            tracing::debug!(requested = %key.0, applied = %self.theme.id, "theme applied");
             self.core
                 .workbench
                 .events
                 .emit(notoir_core::AppEvent::ThemeChanged {
-                    theme: id.id().to_owned(),
+                    theme: key.0.clone(),
                 });
+            self.theme_key = key;
         }
     }
 

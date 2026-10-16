@@ -27,7 +27,8 @@
     "convertToSpaces": "들여쓰기를 공백으로 변환",
     "convertToTabs": "들여쓰기를 탭으로 변환",
     "symbols": "기호로 이동",
-    "symbolLine": "{{line}}줄"
+    "symbolLine": "{{line}}줄",
+    "themeCustom": "사용자 지정"
   },
   "open": {
     "title": "파일 열기"

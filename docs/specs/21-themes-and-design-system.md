@@ -1,6 +1,6 @@
 # 21 — Themes, Design System & Accessibility
 
-**Status:** Partial — tokens, built-in themes, icons, contrast, theme switching incl. auto (M0, M3); custom themes (M26)
+**Status:** Done — tokens, built-in themes, icons, contrast, theme switching incl. auto (M0, M3); custom themes (M26: `<config>/themes/*.toml` read in the background at startup and again whenever that folder changes; tokens a theme leaves out — and `base` names it does not define — come from Notoir Midnight / Notoir Paper by `kind`; ids of built-in themes and `auto` are rejected; invalid files raise a warning naming the file; custom themes are listed in the theme picker and the Settings dropdown and selected by id in `workbench.theme`). Deviation: `workbench.autoThemeLight` / `autoThemeDark` are not implemented — auto always uses Midnight / Paper
 
 ## Purpose
 

@@ -27,7 +27,8 @@
     "convertToSpaces": "Einrückung in Leerzeichen umwandeln",
     "convertToTabs": "Einrückung in Tabulatoren umwandeln",
     "symbols": "Zu Symbol wechseln",
-    "symbolLine": "Zeile {{line}}"
+    "symbolLine": "Zeile {{line}}",
+    "themeCustom": "Benutzerdefiniert"
   },
   "open": {
     "title": "Datei öffnen"

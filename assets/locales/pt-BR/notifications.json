@@ -49,5 +49,6 @@
   "shellCommandRemoved": "O comando notoir foi removido: {{path}}",
   "shellCommandFailed": "Não foi possível alterar o comando notoir.",
   "noTemplates": "Ainda não há modelos. Adicione arquivos Markdown a {{shared}} no espaço de trabalho ou qualquer arquivo a {{personal}}.",
-  "templateUnreadable": "Não foi possível ler o modelo “{{name}}”."
+  "templateUnreadable": "Não foi possível ler o modelo “{{name}}”.",
+  "themeInvalid": "Não foi possível carregar o arquivo de tema “{{file}}”."
 }

@@ -174,7 +174,7 @@ fn first_run_skip() {
     );
     assert_eq!(
         app.harness.state().core.theme(true),
-        notoir::theme::ThemeId::Midnight
+        notoir::theme::ThemeId::Midnight.id()
     );
     let mut app = common::restart(app, first_run);
     common::settle(&mut app);
@@ -190,7 +190,7 @@ fn first_run_theme_choice_applies() {
     app.harness.run_steps(3);
     assert_eq!(
         app.harness.state().core.theme(true),
-        notoir::theme::ThemeId::Paper
+        notoir::theme::ThemeId::Paper.id()
     );
     assert_eq!(
         app.harness.state().theme.name,

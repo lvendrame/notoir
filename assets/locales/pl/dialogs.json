@@ -27,7 +27,8 @@
     "convertToSpaces": "Zamień wcięcie na spacje",
     "convertToTabs": "Zamień wcięcie na tabulatory",
     "symbols": "Przejdź do symbolu",
-    "symbolLine": "wiersz {{line}}"
+    "symbolLine": "wiersz {{line}}",
+    "themeCustom": "Własny"
   },
   "open": {
     "title": "Otwórz plik"

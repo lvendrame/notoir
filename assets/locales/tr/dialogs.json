@@ -27,7 +27,8 @@
     "convertToSpaces": "Girintiyi Boşluğa Dönüştür",
     "convertToTabs": "Girintiyi Sekmeye Dönüştür",
     "symbols": "Sembole Git",
-    "symbolLine": "{{line}}. satır"
+    "symbolLine": "{{line}}. satır",
+    "themeCustom": "Özel"
   },
   "open": {
     "title": "Dosya Aç"

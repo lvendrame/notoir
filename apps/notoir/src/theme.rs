@@ -150,6 +150,44 @@ impl ThemeId {
     pub fn load(self) -> Theme {
         Theme::parse(self.source()).unwrap_or_else(|e| panic!("built-in theme {}: {e}", self.id()))
     }
+
+    /// The built-in theme custom themes of `kind` inherit from.
+    pub fn base_for(kind: ThemeKind) -> ThemeId {
+        match kind {
+            ThemeKind::Dark => ThemeId::Midnight,
+            ThemeKind::Light => ThemeId::Paper,
+        }
+    }
+}
+
+/// Custom themes (spec 21): every `*.toml` in `dir`, sorted by file name;
+/// an unreadable or invalid file yields `(file name, error)`.
+pub fn load_custom_dir(dir: &std::path::Path) -> Vec<Result<Theme, (String, String)>> {
+    let Ok(entries) = std::fs::read_dir(dir) else {
+        return Vec::new();
+    };
+    let mut files: Vec<std::path::PathBuf> = entries
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| {
+            p.extension()
+                .is_some_and(|x| x.eq_ignore_ascii_case("toml"))
+        })
+        .collect();
+    files.sort();
+    files
+        .into_iter()
+        .map(|p| {
+            let name = p
+                .file_name()
+                .map(|n| n.to_string_lossy().into_owned())
+                .unwrap_or_default();
+            std::fs::read_to_string(&p)
+                .map_err(|e| e.to_string())
+                .and_then(|s| Theme::parse_custom(&s).map_err(|e| e.to_string()))
+                .map_err(|e| (name, e))
+        })
+        .collect()
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize)]
@@ -179,6 +217,8 @@ pub enum ThemeError {
     Cycle(String),
     #[error("missing token {0}")]
     Missing(&'static str),
+    #[error("theme id {0:?} is reserved")]
+    ReservedId(String),
 }
 
 #[derive(Deserialize)]
@@ -186,6 +226,11 @@ struct Meta {
     id: String,
     name: String,
     kind: ThemeKind,
+}
+
+#[derive(Deserialize)]
+struct MetaOnly {
+    meta: Meta,
 }
 
 #[derive(Deserialize)]
@@ -229,6 +274,25 @@ pub struct Theme {
 impl Theme {
     /// Parses a theme file; every [`Tok`] must resolve.
     pub fn parse(source: &str) -> Result<Theme, ThemeError> {
+        Self::parse_over(source, None)
+    }
+
+    /// Parses a user theme: tokens it leaves out (or bases it names but does
+    /// not define) come from the built-in theme of the same kind.
+    pub fn parse_custom(source: &str) -> Result<Theme, ThemeError> {
+        let kind = toml::from_str::<MetaOnly>(source)
+            .map_err(|e| ThemeError::Toml(e.to_string()))?
+            .meta
+            .kind;
+        let theme = Self::parse_over(source, Some(&ThemeId::base_for(kind).load()))?;
+        if theme.id == "auto" || ThemeId::from_id(&theme.id).is_some() || theme.id.trim().is_empty()
+        {
+            return Err(ThemeError::ReservedId(theme.id));
+        }
+        Ok(theme)
+    }
+
+    fn parse_over(source: &str, base: Option<&Theme>) -> Result<Theme, ThemeError> {
         let file: ThemeFile =
             toml::from_str(source).map_err(|e| ThemeError::Toml(e.to_string()))?;
         let mut raw: HashMap<String, RawValue> = file.ui;
@@ -242,14 +306,16 @@ impl Theme {
         }
         let mut resolved: HashMap<String, Style> = HashMap::new();
         for name in raw.keys() {
-            resolve(name, &raw, &mut resolved, 0)?;
+            resolve(name, &raw, &mut resolved, base, 0)?;
         }
         let mut styles = HashMap::new();
         for tok in Tok::ALL {
             let style = resolved
                 .get(tok.name())
+                .copied()
+                .or_else(|| base.map(|b| b.style(*tok)))
                 .ok_or(ThemeError::Missing(tok.name()))?;
-            styles.insert(tok.name(), *style);
+            styles.insert(tok.name(), style);
         }
         Ok(Theme {
             id: file.meta.id,
@@ -372,6 +438,7 @@ fn resolve(
     name: &str,
     raw: &HashMap<String, RawValue>,
     resolved: &mut HashMap<String, Style>,
+    inherit: Option<&Theme>,
     depth: usize,
 ) -> Result<Style, ThemeError> {
     if let Some(s) = resolved.get(name) {
@@ -396,13 +463,16 @@ fn resolve(
             let mut color = match (color, base) {
                 (Some(hex), _) => parse_hex(name, hex)?,
                 (None, Some(base)) => {
-                    if !raw.contains_key(base) {
+                    if raw.contains_key(base) {
+                        resolve(base, raw, resolved, inherit, depth + 1)?.color
+                    } else if let Some(s) = inherit.and_then(|t| t.styles.get(base.as_str())) {
+                        s.color
+                    } else {
                         return Err(ThemeError::UnknownBase {
                             token: name.to_owned(),
                             base: base.clone(),
                         });
                     }
-                    resolve(base, raw, resolved, depth + 1)?.color
                 }
                 (None, None) => {
                     return Err(ThemeError::BadColor {
@@ -557,5 +627,34 @@ mod tests {
     #[test]
     fn contrast_of_black_on_white_is_21() {
         assert!((contrast(Color32::BLACK, Color32::WHITE) - 21.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn custom_themes_inherit_from_the_base_of_their_kind() {
+        let light = Theme::parse_custom(
+            "[meta]\nid = \"sand\"\nname = \"Sand\"\nkind = \"light\"\n[ui]\n\"accent.soft\" = { base = \"accent\", alpha = 0.5 }\n",
+        )
+        .unwrap();
+        let paper = ThemeId::Paper.load();
+        // A base defined only in the built-in theme resolves from it.
+        assert_eq!(light.color(Tok::Accent), paper.color(Tok::Accent));
+        assert_eq!(
+            light.color(Tok::AccentSoft),
+            with_alpha(paper.color(Tok::Accent), 0.5)
+        );
+        assert_eq!(light.color(Tok::BgEditor), paper.color(Tok::BgEditor));
+        for reserved in ["notoir-paper", "auto", " "] {
+            let src = format!("[meta]\nid = \"{reserved}\"\nname = \"X\"\nkind = \"dark\"\n");
+            assert!(matches!(
+                Theme::parse_custom(&src),
+                Err(ThemeError::ReservedId(_))
+            ));
+        }
+        assert!(
+            Theme::parse_custom(
+                "[meta]\nid = \"x\"\nname = \"X\"\nkind = \"dark\"\n[ui]\na = { base = \"nope\" }\n"
+            )
+            .is_err()
+        );
     }
 }

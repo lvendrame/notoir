@@ -27,7 +27,8 @@
     "convertToSpaces": "Converti il rientro in spazi",
     "convertToTabs": "Converti il rientro in tabulazioni",
     "symbols": "Vai al simbolo",
-    "symbolLine": "riga {{line}}"
+    "symbolLine": "riga {{line}}",
+    "themeCustom": "Personalizzato"
   },
   "open": {
     "title": "Apri file"

@@ -27,7 +27,8 @@
     "convertToSpaces": "Convert Indentation to Spaces",
     "convertToTabs": "Convert Indentation to Tabs",
     "symbols": "Go to Symbol",
-    "symbolLine": "line {{line}}"
+    "symbolLine": "line {{line}}",
+    "themeCustom": "Custom"
   },
   "open": {
     "title": "Open File"

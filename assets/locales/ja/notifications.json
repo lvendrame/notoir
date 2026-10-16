@@ -49,5 +49,6 @@
   "shellCommandRemoved": "notoir コマンドを削除しました: {{path}}",
   "shellCommandFailed": "notoir コマンドを変更できませんでした。",
   "noTemplates": "テンプレートがありません。ワークスペースの {{shared}} に Markdown ファイルを、または {{personal}} に任意のファイルを追加してください。",
-  "templateUnreadable": "テンプレート「{{name}}」を読み込めませんでした。"
+  "templateUnreadable": "テンプレート「{{name}}」を読み込めませんでした。",
+  "themeInvalid": "テーマファイル「{{file}}」を読み込めませんでした。"
 }

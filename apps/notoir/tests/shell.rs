@@ -78,13 +78,13 @@ fn bottom_panel_toggles_with_shortcut() {
 #[test]
 fn switch_theme_instantly() {
     let mut app = common::start(|_| {});
-    assert_eq!(app.harness.state().theme_id(), ThemeId::Midnight);
+    assert_eq!(app.harness.state().theme_id(), ThemeId::Midnight.id());
     common::run(
         &mut app,
         "preferences.changeTheme",
         json!({ "theme": "notoir-paper" }),
     );
-    assert_eq!(app.harness.state().theme_id(), ThemeId::Paper);
+    assert_eq!(app.harness.state().theme_id(), ThemeId::Paper.id());
     let paper = ThemeId::Paper.load();
     // The theme is applied to both egui style slots.
     let fill = app
@@ -107,12 +107,16 @@ fn theme_picker_previews_live_and_escape_restores() {
     assert!(app.harness.query_by_label("SELECT COLOR THEME").is_some());
     app.harness.key_press(egui::Key::ArrowDown);
     app.harness.run_steps(3);
-    assert_eq!(app.harness.state().theme_id(), ThemeId::Paper, "preview");
+    assert_eq!(
+        app.harness.state().theme_id(),
+        ThemeId::Paper.id(),
+        "preview"
+    );
     app.harness.key_press(egui::Key::Escape);
     app.harness.run_steps(3);
     assert_eq!(
         app.harness.state().theme_id(),
-        ThemeId::Midnight,
+        ThemeId::Midnight.id(),
         "restored"
     );
     assert!(app.harness.state().ui.picker.is_none());
@@ -201,4 +205,92 @@ fn about_dialog_shows_version() {
     common::run(&mut app, "help.about", Value::Null);
     let version = format!("Version {}", env!("CARGO_PKG_VERSION"));
     assert!(app.harness.query_by_label(&version).is_some());
+}
+
+// spec 21: "Custom theme inherits missing tokens"
+#[test]
+fn custom_theme_inherits_missing_tokens_and_reloads() {
+    let home = tempfile::tempdir().unwrap();
+    let themes = home.path().join("config/themes");
+    std::fs::create_dir_all(&themes).unwrap();
+    let theme_file = themes.join("deep-sea.toml");
+    std::fs::write(
+        &theme_file,
+        "[meta]\nid = \"deep-sea\"\nname = \"Deep Sea\"\nkind = \"dark\"\n[ui]\n\"bg.editor\" = \"#001122\"\n",
+    )
+    .unwrap();
+    std::fs::write(themes.join("broken.toml"), "[meta]\nid = 3\n").unwrap();
+    let mut app = common::start_in(home, |_| {});
+    common::settle(&mut app);
+    assert!(
+        app.harness
+            .state()
+            .core
+            .notifications
+            .history()
+            .any(|n| n.message.key == "notifications:themeInvalid"),
+        "invalid theme reported"
+    );
+    // Listed in the theme picker.
+    common::run(&mut app, "preferences.changeTheme", Value::Null);
+    assert!(app.harness.query_by_label_contains("Deep Sea").is_some());
+    app.harness.key_press(egui::Key::Escape);
+    app.harness.run_steps(3);
+
+    common::run(
+        &mut app,
+        "preferences.changeTheme",
+        json!({ "theme": "deep-sea" }),
+    );
+    let midnight = ThemeId::Midnight.load();
+    {
+        let state = app.harness.state();
+        assert_eq!(state.theme_id(), "deep-sea");
+        let theme = state.theme();
+        assert_eq!(
+            theme.color(Tok::BgEditor),
+            egui::Color32::from_rgb(0, 0x11, 0x22)
+        );
+        // Every other token comes from Notoir Midnight.
+        for tok in Tok::ALL.iter().filter(|t| **t != Tok::BgEditor) {
+            assert_eq!(theme.style(*tok), midnight.style(*tok), "{}", tok.name());
+        }
+    }
+    // Editing the file applies at once.
+    std::fs::write(
+        &theme_file,
+        "[meta]\nid = \"deep-sea\"\nname = \"Deep Sea\"\nkind = \"dark\"\n[ui]\n\"bg.editor\" = \"#002233\"\n",
+    )
+    .unwrap();
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(20);
+    let want = egui::Color32::from_rgb(0, 0x22, 0x33);
+    while app.harness.state().theme().color(Tok::BgEditor) != want
+        && std::time::Instant::now() < deadline
+    {
+        common::settle(&mut app);
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    }
+    assert_eq!(app.harness.state().theme().color(Tok::BgEditor), want);
+}
+
+// spec 21: "Auto theme follows OS"
+#[test]
+fn auto_theme_follows_os() {
+    let mut app = common::start(|_| {});
+    app.harness.input_mut().system_theme = Some(egui::Theme::Dark);
+    common::run(
+        &mut app,
+        "preferences.changeTheme",
+        json!({ "theme": "auto" }),
+    );
+    assert_eq!(app.harness.state().theme_id(), ThemeId::Midnight.id());
+    // The OS switches to light mode.
+    app.harness.input_mut().system_theme = Some(egui::Theme::Light);
+    app.harness.run_steps(3);
+    assert_eq!(app.harness.state().theme_id(), ThemeId::Paper.id());
+    let paper = ThemeId::Paper.load();
+    assert_eq!(
+        app.harness.state().theme().color(Tok::BgEditor),
+        paper.color(Tok::BgEditor)
+    );
 }

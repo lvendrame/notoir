@@ -49,5 +49,6 @@
   "shellCommandRemoved": "De opdracht notoir is verwijderd: {{path}}",
   "shellCommandFailed": "De opdracht notoir kon niet worden gewijzigd.",
   "noTemplates": "Nog geen sjablonen. Voeg Markdown-bestanden toe aan {{shared}} in de werkruimte, of een willekeurig bestand aan {{personal}}.",
-  "templateUnreadable": "Het sjabloon “{{name}}” kon niet worden gelezen."
+  "templateUnreadable": "Het sjabloon “{{name}}” kon niet worden gelezen.",
+  "themeInvalid": "Het themabestand “{{file}}” kon niet worden geladen."
 }

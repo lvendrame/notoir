@@ -27,7 +27,8 @@
     "convertToSpaces": "将缩进转换为空格",
     "convertToTabs": "将缩进转换为制表符",
     "symbols": "转到符号",
-    "symbolLine": "第 {{line}} 行"
+    "symbolLine": "第 {{line}} 行",
+    "themeCustom": "自定义"
   },
   "open": {
     "title": "打开文件"

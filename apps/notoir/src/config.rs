@@ -124,4 +124,39 @@ impl AppCore {
             }
         }
     }
+
+    /// Reads `<config>/themes/*.toml` in the background (startup and when
+    /// the folder changes).
+    pub fn reload_custom_themes(&mut self) {
+        let dir = self.paths.themes.clone();
+        self.fs
+            .submit(move || Some(IoResult::CustomThemes(crate::theme::load_custom_dir(&dir))));
+    }
+
+    pub fn custom_themes_loaded(
+        &mut self,
+        list: Vec<Result<crate::theme::Theme, (String, String)>>,
+    ) {
+        let mut themes: Vec<crate::theme::Theme> = Vec::new();
+        for item in list {
+            match item {
+                // The first file with an id wins.
+                Ok(t) if !themes.iter().any(|x| x.id == t.id) => themes.push(t),
+                Ok(t) => tracing::warn!(id = %t.id, "duplicate custom theme id ignored"),
+                Err((file, error)) => {
+                    tracing::warn!(%file, %error, "invalid custom theme");
+                    self.notify(
+                        Notification::new(
+                            Severity::Warning,
+                            Translatable::new("notifications:themeInvalid").arg("file", file),
+                        )
+                        .detail(error),
+                    );
+                }
+            }
+        }
+        self.custom_themes = themes;
+        self.themes_generation += 1;
+        self.effects.push(Effect::ApplyTheme);
+    }
 }

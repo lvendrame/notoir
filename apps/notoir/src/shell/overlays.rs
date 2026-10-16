@@ -375,7 +375,7 @@ impl Picker {
             .active_document()
             .and_then(|d| core.workbench.document(d));
         let current = match kind {
-            PickerKind::Theme => core.theme_choice.setting_value().to_owned(),
+            PickerKind::Theme => core.theme_choice.setting_value(),
             PickerKind::Language => core.language.code().to_owned(),
             PickerKind::LineEnding => doc
                 .map(|d| d.line_ending.label().to_lowercase())
@@ -454,6 +454,15 @@ impl Picker {
                     detail: t!("notes:tags.count", count = n),
                 })
                 .collect(),
+            PickerKind::Theme => core
+                .custom_themes
+                .iter()
+                .map(|t| PickerItem {
+                    value: t.id.clone(),
+                    label: t.name.clone(),
+                    detail: t!("dialogs:picker.themeCustom"),
+                })
+                .collect(),
             PickerKind::GitCloneUrl => core
                 .git
                 .recent_urls
@@ -471,7 +480,7 @@ impl Picker {
             .flatten()
             .and_then(|v| core.workbench.view(v))
             .map(|v| (v.id, v.selection.clone(), v.scroll));
-        let selected = Self::all_items(kind)
+        let selected = Self::all_items(kind, &dynamic)
             .iter()
             .position(|i| i.value == current)
             .unwrap_or(0);
@@ -506,7 +515,8 @@ impl Picker {
         picker
     }
 
-    fn all_items(kind: PickerKind) -> Vec<PickerItem> {
+    /// Fixed rows (`dynamic` adds custom themes before "Auto").
+    fn all_items(kind: PickerKind, dynamic: &[PickerItem]) -> Vec<PickerItem> {
         match kind {
             PickerKind::Theme => {
                 let mut items: Vec<PickerItem> = ThemeId::ALL
@@ -517,8 +527,9 @@ impl Picker {
                         detail: String::new(),
                     })
                     .collect();
+                items.extend(dynamic.iter().cloned());
                 items.push(PickerItem {
-                    value: ThemeChoice::Auto.setting_value().to_owned(),
+                    value: ThemeChoice::Auto.setting_value(),
                     label: t!("dialogs:picker.themeAuto"),
                     detail: String::new(),
                 });
@@ -748,7 +759,7 @@ impl Picker {
             return scored.into_iter().map(|(_, i)| i.clone()).collect();
         }
         let q = self.query.to_lowercase();
-        Self::all_items(self.kind)
+        Self::all_items(self.kind, &self.dynamic)
             .into_iter()
             .filter(|i| {
                 q.is_empty()

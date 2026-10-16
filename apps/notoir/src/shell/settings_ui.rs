@@ -407,6 +407,9 @@ fn control(
                     for t in crate::theme::ThemeId::ALL {
                         ui.selectable_value(&mut v, t.id().to_owned(), t.load().name);
                     }
+                    for t in &core.custom_themes {
+                        ui.selectable_value(&mut v, t.id.clone(), &t.name);
+                    }
                     ui.selectable_value(&mut v, "auto".to_owned(), t!("dialogs:picker.themeAuto"));
                 });
             (v != *s).then_some(SettingValue::Str(v))

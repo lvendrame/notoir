@@ -49,5 +49,6 @@
   "shellCommandRemoved": "The notoir command was removed: {{path}}",
   "shellCommandFailed": "The notoir command could not be changed.",
   "noTemplates": "No templates yet. Add Markdown files to {{shared}} in the workspace, or any file to {{personal}}.",
-  "templateUnreadable": "Could not read the template “{{name}}”."
+  "templateUnreadable": "Could not read the template “{{name}}”.",
+  "themeInvalid": "The theme file “{{file}}” could not be loaded."
 }

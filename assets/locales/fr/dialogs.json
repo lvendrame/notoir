@@ -27,7 +27,8 @@
     "convertToSpaces": "Convertir l'indentation en espaces",
     "convertToTabs": "Convertir l'indentation en tabulations",
     "symbols": "Atteindre le symbole",
-    "symbolLine": "ligne {{line}}"
+    "symbolLine": "ligne {{line}}",
+    "themeCustom": "Personnalisé"
   },
   "open": {
     "title": "Ouvrir un fichier"

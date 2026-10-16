@@ -27,7 +27,8 @@
     "convertToSpaces": "Inspringing omzetten naar spaties",
     "convertToTabs": "Inspringing omzetten naar tabs",
     "symbols": "Naar symbool",
-    "symbolLine": "regel {{line}}"
+    "symbolLine": "regel {{line}}",
+    "themeCustom": "Aangepast"
   },
   "open": {
     "title": "Bestand openen"

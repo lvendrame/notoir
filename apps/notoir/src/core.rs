@@ -39,33 +39,41 @@ pub const REGISTERED_PANELS: &[PanelId] = &[
     PanelId::PluginOutput,
 ];
 
-/// Theme setting: a fixed theme or "auto" (follow the OS).
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Theme setting: a built-in theme, a custom theme (by id, from
+/// `<config>/themes/`) or "auto" (follow the OS).
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ThemeChoice {
     Fixed(ThemeId),
+    Custom(String),
     Auto,
 }
 
 impl ThemeChoice {
     pub fn from_setting(value: &str) -> Option<ThemeChoice> {
+        let value = value.trim();
         if value == "auto" {
             Some(ThemeChoice::Auto)
+        } else if let Some(t) = ThemeId::from_id(value) {
+            Some(ThemeChoice::Fixed(t))
         } else {
-            ThemeId::from_id(value).map(ThemeChoice::Fixed)
+            (!value.is_empty()).then(|| ThemeChoice::Custom(value.to_owned()))
         }
     }
 
-    pub fn setting_value(self) -> &'static str {
+    pub fn setting_value(&self) -> String {
         match self {
-            ThemeChoice::Fixed(t) => t.id(),
-            ThemeChoice::Auto => "auto",
+            ThemeChoice::Fixed(t) => t.id().to_owned(),
+            ThemeChoice::Custom(id) => id.clone(),
+            ThemeChoice::Auto => "auto".to_owned(),
         }
     }
 
-    pub fn resolve(self, system_dark: bool) -> ThemeId {
+    /// The theme id to show.
+    pub fn resolve(&self, system_dark: bool) -> String {
         match self {
-            ThemeChoice::Fixed(t) => t,
-            ThemeChoice::Auto => ThemeId::for_system(system_dark),
+            ThemeChoice::Fixed(t) => t.id().to_owned(),
+            ThemeChoice::Custom(id) => id.clone(),
+            ThemeChoice::Auto => ThemeId::for_system(system_dark).id().to_owned(),
         }
     }
 }
@@ -153,6 +161,10 @@ pub struct AppCore {
     pub io: IoQueue,
     pub language: Language,
     pub theme_choice: ThemeChoice,
+    /// Valid themes from `<config>/themes/` (spec 21).
+    pub custom_themes: Vec<crate::theme::Theme>,
+    /// Bumped whenever `custom_themes` is reloaded.
+    pub themes_generation: u64,
     /// Theme override from the environment (wins over the setting).
     pub theme_override: Option<ThemeId>,
     pub effects: Vec<Effect>,
@@ -419,6 +431,8 @@ impl AppCore {
             templates: Default::default(),
             language,
             theme_choice,
+            custom_themes: Vec::new(),
+            themes_generation: 0,
             theme_override: opts.theme_override,
             effects: Vec::new(),
             now_ms: 0,
@@ -434,10 +448,21 @@ impl AppCore {
         }
     }
 
-    /// Theme to show given the OS preference.
-    pub fn theme(&self, system_dark: bool) -> ThemeId {
-        self.theme_override
-            .unwrap_or_else(|| self.theme_choice.resolve(system_dark))
+    /// Id of the theme to show given the OS preference.
+    pub fn theme(&self, system_dark: bool) -> String {
+        match self.theme_override {
+            Some(t) => t.id().to_owned(),
+            None => self.theme_choice.resolve(system_dark),
+        }
+    }
+
+    /// A theme by id: built-in, or a loaded custom theme; an unknown id
+    /// falls back to Notoir Midnight.
+    pub fn load_theme(&self, id: &str) -> crate::theme::Theme {
+        ThemeId::from_id(id)
+            .map(ThemeId::load)
+            .or_else(|| self.custom_themes.iter().find(|t| t.id == id).cloned())
+            .unwrap_or_else(|| ThemeId::Midnight.load())
     }
 
     pub fn toolbar_visible(&self) -> bool {
@@ -861,6 +886,7 @@ impl AppCore {
                 IoResult::NotesIndexed(generation, index) => self.notes_indexed(generation, *index),
                 IoResult::TextIndex(done) => self.text_index_done(*done),
                 IoResult::TemplatesListed(list) => self.templates_listed(list),
+                IoResult::CustomThemes(list) => self.custom_themes_loaded(list),
                 IoResult::TemplateLoaded(loaded) => {
                     let (t, text) = *loaded;
                     self.templates_loaded(t, text);
@@ -1037,6 +1063,7 @@ impl AppCore {
         self.load_recent();
         self.load_recent_workspaces();
         self.mcp_init();
+        self.reload_custom_themes();
         self.recovery_start();
         self.restore_scratchpads();
         let restore = restore_session

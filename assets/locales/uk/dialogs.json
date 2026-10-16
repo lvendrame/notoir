@@ -27,7 +27,8 @@
     "convertToSpaces": "Перетворити відступи на пробіли",
     "convertToTabs": "Перетворити відступи на табуляцію",
     "symbols": "Перейти до символу",
-    "symbolLine": "рядок {{line}}"
+    "symbolLine": "рядок {{line}}",
+    "themeCustom": "Користувацька"
   },
   "open": {
     "title": "Відкрити файл"
