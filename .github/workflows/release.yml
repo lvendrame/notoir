@@ -3,24 +3,67 @@ name: Release
 # Tag push (v1.2.3) builds every package format on its OS, signs when the
 # secrets exist, and attaches packages, checksums and debug symbols to a
 # GitHub release (docs/specs/31 §Packaging).
+# A manual run (Actions → Release → Run workflow) builds the packages as
+# workflow artifacts; with "publish" ticked it also tags the commit
+# v<Cargo version> and publishes the release.
 on:
   push:
     tags: ["v*"]
   workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish a release tagged v<Cargo version> at this commit"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   CARGO_TERM_COLOR: always
   # Built into the binary (spec 31 §Updates); without them the updater is
-  # unavailable. The key is minisign's public key line.
-  NOTOIR_UPDATE_URL: ${{ vars.NOTOIR_UPDATE_URL }}
+  # unavailable. The key is minisign's public key line. The manifest URL
+  # defaults to the latest (non-prerelease) release's update.json.
+  NOTOIR_UPDATE_URL: ${{ vars.NOTOIR_UPDATE_URL || format('https://github.com/{0}/releases/latest/download/update.json', github.repository) }}
   NOTOIR_UPDATE_PUBKEY: ${{ vars.NOTOIR_UPDATE_PUBKEY }}
 
 jobs:
+  # Installers carry the Cargo version and update.json the tag's: they must
+  # agree, so a mismatched tag fails before an hour of packaging. Outputs the
+  # release tag, or nothing when this run does not publish.
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: tag
+        env:
+          PUBLISH: ${{ inputs.publish }}
+        run: |
+          version=$(cargo pkgid -p notoir)
+          version=${version##*[#@]}
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            if [[ "v$version" != "$GITHUB_REF_NAME" ]]; then
+              echo "::error::tag $GITHUB_REF_NAME does not match the Cargo version $version"
+              exit 1
+            fi
+            echo "tag=$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+          elif [[ "$PUBLISH" == "true" ]]; then
+            if git ls-remote --exit-code --tags origin "refs/tags/v$version" >/dev/null; then
+              echo "::error::tag v$version already exists: bump the version in Cargo.toml first"
+              exit 1
+            fi
+            echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          fi
+
   package:
     name: package (${{ matrix.os }})
+    needs: version
     strategy:
       fail-fast: false
       matrix:
@@ -94,11 +137,12 @@ jobs:
           if-no-files-found: error
 
   release:
-    needs: package
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [version, package]
+    if: needs.version.outputs.tag != ''
     runs-on: ubuntu-latest
     env:
       HAS_MINISIGN_KEY: ${{ secrets.MINISIGN_SECRET_KEY != '' }}
+      TAG: ${{ needs.version.outputs.tag }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -116,15 +160,17 @@ jobs:
           MINISIGN_SECRET_KEY: ${{ secrets.MINISIGN_SECRET_KEY }}
         run: |
           sudo apt-get update && sudo apt-get install -y minisign
-          python3 src/scripts/update-manifest.py dist "${GITHUB_REF_NAME}" \
-            "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}"
+          python3 src/scripts/update-manifest.py dist "$TAG" \
+            "https://github.com/${GITHUB_REPOSITORY}/releases/download/$TAG"
           printf '%s\n' "$MINISIGN_SECRET_KEY" > "$RUNNER_TEMP/minisign.key"
           minisign -S -s "$RUNNER_TEMP/minisign.key" -m dist/update.json \
-            -x dist/update.json.minisig -t "notoir ${GITHUB_REF_NAME}"
+            -x dist/update.json.minisig -t "notoir $TAG"
           rm -f "$RUNNER_TEMP/minisign.key"
       - uses: softprops/action-gh-release@v2
         with:
+          # Created at this commit when the tag does not exist yet (manual runs).
+          tag_name: ${{ env.TAG }}
+          target_commitish: ${{ github.sha }}
           files: dist/*
           generate_release_notes: true
-          # Builds without signing secrets are previews.
-          prerelease: ${{ contains(github.ref, '-') }}
+          prerelease: ${{ contains(env.TAG, '-') }}

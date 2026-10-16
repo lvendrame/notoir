@@ -23,6 +23,8 @@ pub const CURRENT: &str = env!("CARGO_PKG_VERSION");
 pub struct UpdatesState {
     /// Manifest URL and key (built in for release builds).
     pub config: Option<UpdateConfig>,
+    /// The installer kind this build updates with (`update::platform_key`).
+    pub platform: Option<&'static str>,
     /// The last check time (ms since epoch) has been read from the cache.
     stamp_loaded: bool,
     last_check_ms: Option<i64>,
@@ -39,6 +41,7 @@ impl UpdatesState {
     pub fn new(config: Option<UpdateConfig>) -> Self {
         Self {
             config,
+            platform: update::platform_key(),
             ..Default::default()
         }
     }
@@ -76,7 +79,7 @@ impl AppCore {
     /// Per frame: a daily check when enabled.
     pub fn updates_tick(&mut self) {
         let u = &self.updates;
-        if !u.stamp_loaded || u.checking || u.config.is_none() || update::platform_key().is_none() {
+        if !u.stamp_loaded || u.checking || u.config.is_none() || u.platform.is_none() {
             return;
         }
         if self.update_mode() == "off" {
@@ -92,7 +95,7 @@ impl AppCore {
 
     /// Checks now; `manual` (Help → Check for Updates…) reports every outcome.
     pub fn updates_check(&mut self, manual: bool) {
-        let (Some(cfg), Some(platform)) = (self.updates.config.clone(), update::platform_key())
+        let (Some(cfg), Some(platform)) = (self.updates.config.clone(), self.updates.platform)
         else {
             if manual {
                 self.notify(Notification::new(

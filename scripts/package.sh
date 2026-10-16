@@ -13,7 +13,9 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-VERSION=$(cargo metadata --no-deps --format-version 1 | python3 -c 'import json,sys; print(next(p["version"] for p in json.load(sys.stdin)["packages"] if p["name"]=="notoir"))')
+# `path+file:///…/apps/notoir#1.2.3` (no Python: Windows runners lack python3).
+VERSION=$(cargo pkgid -p notoir)
+VERSION=${VERSION##*[#@]}
 OUT=target/packages
 rm -rf "$OUT"
 mkdir -p "$OUT"

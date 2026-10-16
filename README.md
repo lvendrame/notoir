@@ -38,6 +38,27 @@ scripts/package.sh   # macOS: universal .app + .dmg · Windows (Git Bash): .msi 
 ```
 
 Output, `SHA256SUMS-<os>.txt` and debug symbols land in `target/packages`. Signing runs only when the secrets named at
-the top of the script are set; unsigned builds are previews. Pushing a `v*` tag runs `.github/workflows/release.yml`,
-which packages on all three OSes and publishes a GitHub release with combined checksums. The crash suite runs nightly
+the top of the script are set; unsigned builds are previews. The crash suite runs nightly
 (`cargo test -p notoir --test crash -- --ignored`).
+
+## Releasing
+
+1. Set `version` in the root `Cargo.toml` (e.g. `0.2.0`), commit, push.
+2. Either push a tag (`git tag v0.2.0 && git push origin v0.2.0`), or run Actions → Release → Run workflow with
+   **publish** ticked: it tags the chosen commit `v<Cargo version>` (refusing an existing tag).
+
+`.github/workflows/release.yml` then checks that the tag matches the Cargo version, packages on all three OSes and
+publishes a GitHub release with every installer, `SHA256SUMS.txt`, debug symbols and, when signing is set up, a signed
+`update.json`. Tags containing `-` become prereleases; the part after `-` must be a number (`v0.2.0-1`), because MSI
+versions are numeric. A manual run without **publish** only builds the packages as workflow artifacts.
+
+Optional repository secrets (each step is skipped without them):
+
+| Secrets | Effect |
+|---|---|
+| `APPLE_CERTIFICATE` (base64 .p12), `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`; `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_PASSWORD` | macOS signing; notarization |
+| `WINDOWS_CERTIFICATE` (base64 .pfx), `WINDOWS_CERTIFICATE_PASSWORD` | Authenticode for .msi and setup .exe |
+| `GPG_PRIVATE_KEY`, `GPG_KEY_ID` | AppImage `.asc` signature |
+| `MINISIGN_SECRET_KEY` (password-less, `minisign -G -W`) + variable `NOTOIR_UPDATE_PUBKEY` | Signed `update.json`; enables the in-app updater |
+
+`NOTOIR_UPDATE_URL` (variable) defaults to the latest release's `update.json`.

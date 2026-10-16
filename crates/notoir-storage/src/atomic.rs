@@ -6,7 +6,7 @@
 //! the directory is not writable; callers that write user files keep a
 //! recovery snapshot first, so the fallback never risks the only copy.
 
-use std::fs::{self, File, OpenOptions};
+use std::fs::{self, OpenOptions};
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 
@@ -122,7 +122,7 @@ fn write_in_place(target: &Path, bytes: &[u8], sync: bool) -> io::Result<()> {
 
 #[cfg(unix)]
 fn sync_dir(dir: &Path) {
-    if let Ok(d) = File::open(dir) {
+    if let Ok(d) = fs::File::open(dir) {
         let _ = d.sync_all();
     }
 }

@@ -109,10 +109,15 @@ fn manifest(base: &str, sha: &str) -> Vec<u8> {
 
 fn start(cfg: UpdateConfig, dialogs: &notoir::files::ScriptedDialogs) -> common::TestApp {
     let d = dialogs.clone();
-    common::start(move |o| {
+    let mut app = common::start(move |o| {
         o.update = Some(cfg);
         o.dialogs = Some(Arc::new(d));
-    })
+    });
+    // Linux builds outside an AppImage have no updater (their package
+    // manager updates them); test the AppImage flow there.
+    app.harness.state_mut().core.updates.platform =
+        Some(platform_key().unwrap_or("linux-appimage"));
+    app
 }
 
 fn wait_for(app: &mut common::TestApp, f: impl Fn(&common::TestApp) -> bool) -> bool {
@@ -180,10 +185,6 @@ fn invalid_signature_is_rejected() {
 
 #[test]
 fn verified_update_is_offered_downloaded_and_handed_off_at_exit() {
-    if platform_key().is_none() {
-        // Linux distro packages: the package manager updates them.
-        return;
-    }
     let installer = b"pretend installer".to_vec();
     let sha: String = sha2::Sha256::digest(&installer)
         .iter()
@@ -246,9 +247,6 @@ fn verified_update_is_offered_downloaded_and_handed_off_at_exit() {
 
 #[test]
 fn a_tampered_download_is_discarded() {
-    if platform_key().is_none() {
-        return;
-    }
     let files_base = serve(HashMap::from([(
         "/Notoir-99.0.0.dmg".to_owned(),
         b"evil".to_vec(),
