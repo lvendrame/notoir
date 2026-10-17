@@ -218,10 +218,18 @@ pub fn parse(source: &str) -> MdDoc {
         items: Vec::new(),
         text: String::new(),
     };
+    /// Appends `i`, joining adjacent text: the parser splits text at
+    /// brackets, which would cut `[[wiki links]]` apart.
+    fn append(v: &mut Vec<Inline>, i: Inline) {
+        match (v.last_mut(), i) {
+            (Some(Inline::Text(last)), Inline::Text(t)) => last.push_str(&t),
+            (_, i) => v.push(i),
+        }
+    }
     fn push_inline(stack: &mut [Open], i: Inline) {
         if let Some(top) = stack.last_mut() {
             match &mut top.frame {
-                Frame::Inlines(v) => v.push(i),
+                Frame::Inlines(v) => append(v, i),
                 Frame::Blocks(v) => {
                     // Loose text directly in a block container (tight list
                     // items): wrap in a paragraph.
@@ -229,7 +237,7 @@ pub fn parse(source: &str) -> MdDoc {
                         Some(Block {
                             kind: BlockKind::Paragraph(p),
                             ..
-                        }) => p.push(i),
+                        }) => append(p, i),
                         _ => v.push(Block {
                             kind: BlockKind::Paragraph(vec![i]),
                             range: top.range,
@@ -578,6 +586,27 @@ mod tests {
         };
         assert_eq!(q.len(), 1);
         assert!(matches!(doc.blocks[3].kind, BlockKind::Rule));
+    }
+
+    #[test]
+    fn wiki_links_stay_in_one_text_run() {
+        let doc = parse("See [[Roadmap]] and [[Notes#Plan|the plan]].\n\n- tight [[Item]]\n");
+        let BlockKind::Paragraph(p) = &doc.blocks[0].kind else {
+            panic!("{:?}", doc.blocks)
+        };
+        assert_eq!(
+            p,
+            &vec![Inline::Text(
+                "See [[Roadmap]] and [[Notes#Plan|the plan]].".into()
+            )]
+        );
+        let BlockKind::List { items, .. } = &doc.blocks[1].kind else {
+            panic!("{:?}", doc.blocks)
+        };
+        let BlockKind::Paragraph(p) = &items[0].blocks[0].kind else {
+            panic!("{:?}", items[0])
+        };
+        assert_eq!(p, &vec![Inline::Text("tight [[Item]]".into())]);
     }
 
     #[test]

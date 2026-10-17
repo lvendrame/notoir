@@ -200,6 +200,27 @@ fn editor_marks_links_and_missing_targets() {
 }
 
 #[test]
+fn preview_renders_wiki_links_without_brackets() {
+    let (_d, _root, mut app) = notes_app("Project Plan.md");
+    common::run(&mut app, "markdown.showPreview", json!({}));
+    common::settle(&mut app);
+    // The alias is shown instead of the link syntax.
+    app.harness
+        .query_all_by_label_contains("section")
+        .next()
+        .expect("alias of the heading link");
+    let brackets = app
+        .harness
+        .query_all_by_label_contains("[")
+        .map(|n| format!("{n:?}"))
+        .collect::<Vec<_>>();
+    assert!(
+        brackets.is_empty(),
+        "raw link syntax in the preview: {brackets:?}"
+    );
+}
+
+#[test]
 fn completion_after_double_brackets() {
     let (_d, _root, mut app) = notes_app("notes/Meeting.md");
     let core = &mut app.harness.state_mut().core;
