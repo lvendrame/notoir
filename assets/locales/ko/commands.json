@@ -241,7 +241,8 @@
     "minify": "축소",
     "sortKeys": "키 정렬",
     "goToParent": "부모로 이동",
-    "selectRange": "노드 선택"
+    "selectRange": "노드 선택",
+    "treeEdit": "JSON 트리 편집"
   },
   "fold": {
     "fold": "접기",

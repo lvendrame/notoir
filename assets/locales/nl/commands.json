@@ -241,7 +241,8 @@
     "minify": "Minimaliseren",
     "sortKeys": "Sleutels sorteren",
     "goToParent": "Naar bovenliggend element",
-    "selectRange": "Knooppunt selecteren"
+    "selectRange": "Knooppunt selecteren",
+    "treeEdit": "JSON-boom bewerken"
   },
   "fold": {
     "fold": "Samenvouwen",

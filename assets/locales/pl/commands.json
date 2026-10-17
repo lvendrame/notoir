@@ -241,7 +241,8 @@
     "minify": "Minifikuj",
     "sortKeys": "Sortuj klucze",
     "goToParent": "Przejdź do elementu nadrzędnego",
-    "selectRange": "Zaznacz węzeł"
+    "selectRange": "Zaznacz węzeł",
+    "treeEdit": "Edytuj drzewo JSON"
   },
   "fold": {
     "fold": "Zwiń",

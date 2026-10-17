@@ -241,7 +241,8 @@
     "minify": "压缩",
     "sortKeys": "排序键",
     "goToParent": "转到父级",
-    "selectRange": "选择节点"
+    "selectRange": "选择节点",
+    "treeEdit": "编辑 JSON 树"
   },
   "fold": {
     "fold": "折叠",

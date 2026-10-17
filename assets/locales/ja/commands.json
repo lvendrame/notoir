@@ -241,7 +241,8 @@
     "minify": "最小化",
     "sortKeys": "キーを並べ替え",
     "goToParent": "親へ移動",
-    "selectRange": "ノードを選択"
+    "selectRange": "ノードを選択",
+    "treeEdit": "JSON ツリーを編集"
   },
   "fold": {
     "fold": "折りたたむ",

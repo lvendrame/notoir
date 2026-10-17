@@ -241,7 +241,8 @@
     "minify": "Minimizza",
     "sortKeys": "Ordina chiavi",
     "goToParent": "Vai al padre",
-    "selectRange": "Seleziona nodo"
+    "selectRange": "Seleziona nodo",
+    "treeEdit": "Modifica albero JSON"
   },
   "fold": {
     "fold": "Comprimi",

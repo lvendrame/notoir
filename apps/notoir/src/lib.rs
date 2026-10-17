@@ -9,6 +9,8 @@ pub mod commands;
 pub mod compare;
 pub mod config;
 pub mod core;
+#[doc(hidden)]
+pub mod docs_ref;
 pub mod editor_widget;
 pub mod external;
 pub mod files;

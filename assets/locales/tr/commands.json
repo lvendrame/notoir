@@ -241,7 +241,8 @@
     "minify": "Küçült",
     "sortKeys": "Anahtarları Sırala",
     "goToParent": "Üst Öğeye Git",
-    "selectRange": "Düğümü Seç"
+    "selectRange": "Düğümü Seç",
+    "treeEdit": "JSON ağacını düzenle"
   },
   "fold": {
     "fold": "Daralt",
