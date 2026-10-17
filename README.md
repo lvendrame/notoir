@@ -10,6 +10,11 @@ None of these take up permanent screen space until you use them.
 
 Runs on Windows 10/11, macOS (Apple Silicon and Intel), and Linux (X11/Wayland). Available in 14 languages.
 
+**Documentation:** the [Notoir user guide](https://lvendrame.github.io/notoir/) covers every feature, with
+screenshots, plus reference pages for shortcuts, settings, commands, the MCP tools and the Lua plugin API.
+
+![Notoir with a workspace open and a Markdown file in split view](docs/guide/src/images/hero.png)
+
 ## Install
 
 Download the installer for your system from the [latest release](https://github.com/lvendrame/notoir/releases/latest):
@@ -30,7 +35,8 @@ Release builds are not code-signed yet, so the first launch needs one extra step
 - **Windows** SmartScreen says "Windows protected your PC": click **More info** → **Run anyway**.
 - **Linux** AppImage: `chmod +x notoir_*.AppImage` before running it.
 
-`SHA256SUMS.txt` in each release lists the checksum of every file.
+`SHA256SUMS.txt` in each release lists the checksum of every file. See
+[Installing Notoir](https://lvendrame.github.io/notoir/install.html) for details and updates.
 
 ## Status
 
@@ -41,6 +47,7 @@ and updates. Builds are not code-signed yet (see [Install](#install)). See:
 - [`docs/specs/`](docs/specs/): functional and technical specifications (start with
   [`00-overview-and-scope.md`](docs/specs/00-overview-and-scope.md))
 - [`docs/plan/orchestrator.md`](docs/plan/orchestrator.md): milestone plan and status
+- [`docs/guide/`](docs/guide/): the user guide ([how it is built](docs/guide/README.md))
 
 ## Development
 

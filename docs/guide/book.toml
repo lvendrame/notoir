@@ -1,0 +1,15 @@
+[book]
+title = "Notoir"
+description = "User guide for Notoir, a fast native text editor and workspace."
+authors = ["Notoir contributors"]
+language = "en"
+src = "src"
+
+[output.html]
+git-repository-url = "https://github.com/lvendrame/notoir"
+edit-url-template = "https://github.com/lvendrame/notoir/edit/main/docs/guide/{path}"
+default-theme = "light"
+preferred-dark-theme = "navy"
+
+[output.html.search]
+enable = true
