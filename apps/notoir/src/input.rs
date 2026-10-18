@@ -80,9 +80,84 @@ pub fn dispatch_keys(ctx: &egui::Context, core: &mut AppCore, context: &ContextS
     }
 }
 
+/// macOS Control-click is a secondary click. winit reports it as a primary
+/// press with Control held, so the press and its release are rewritten here.
+#[derive(Default)]
+pub struct CtrlClick {
+    active: bool,
+}
+
+impl CtrlClick {
+    pub fn apply(&mut self, raw: &mut egui::RawInput) {
+        for event in &mut raw.events {
+            if let egui::Event::PointerButton {
+                button,
+                pressed,
+                modifiers,
+                ..
+            } = event
+                && *button == egui::PointerButton::Primary
+            {
+                if *pressed {
+                    self.active = modifiers.ctrl && !modifiers.mac_cmd;
+                }
+                if self.active {
+                    *button = egui::PointerButton::Secondary;
+                    modifiers.ctrl = false;
+                }
+                if !*pressed {
+                    self.active = false;
+                }
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn button(pressed: bool, ctrl: bool) -> egui::Event {
+        egui::Event::PointerButton {
+            pos: egui::pos2(1.0, 1.0),
+            button: egui::PointerButton::Primary,
+            pressed,
+            modifiers: egui::Modifiers {
+                ctrl,
+                ..Default::default()
+            },
+        }
+    }
+
+    fn buttons(raw: &egui::RawInput) -> Vec<egui::PointerButton> {
+        raw.events
+            .iter()
+            .filter_map(|e| match e {
+                egui::Event::PointerButton { button, .. } => Some(*button),
+                _ => None,
+            })
+            .collect()
+    }
+
+    #[test]
+    fn ctrl_click_becomes_secondary_until_release() {
+        use egui::PointerButton::{Primary, Secondary};
+        let mut remap = CtrlClick::default();
+        // Control released before the button: the release still pairs.
+        let mut raw = egui::RawInput {
+            events: vec![button(true, true)],
+            ..Default::default()
+        };
+        remap.apply(&mut raw);
+        assert_eq!(buttons(&raw), [Secondary]);
+        raw.events = vec![button(false, false)];
+        remap.apply(&mut raw);
+        assert_eq!(buttons(&raw), [Secondary]);
+        // Plain clicks are untouched.
+        raw.events = vec![button(true, false), button(false, false)];
+        remap.apply(&mut raw);
+        assert_eq!(buttons(&raw), [Primary, Primary]);
+    }
 
     #[test]
     fn egui_keys_map_to_keystrokes() {

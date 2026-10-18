@@ -50,6 +50,7 @@ pub struct NotoirApp {
     /// CJK scripts seen in editor text this session.
     cjk_seen: fonts::CjkUse,
     wait_for_fonts: bool,
+    ctrl_click: crate::input::CtrlClick,
     instance_rx: Option<
         std::sync::mpsc::Receiver<(
             notoir_platform::single_instance::InstanceRequest,
@@ -103,6 +104,7 @@ impl NotoirApp {
             fonts_installed: None,
             cjk_seen: fonts::CjkUse::default(),
             wait_for_fonts: opts.wait_for_fonts,
+            ctrl_click: Default::default(),
             instance_rx: None,
         };
         app.apply_language(ctx);
@@ -733,6 +735,12 @@ impl eframe::App for NotoirApp {
         }
         if let Some(expiry) = self.core.notifications.next_expiry() {
             ctx.request_repaint_after(std::time::Duration::from_millis(expiry.saturating_sub(now)));
+        }
+    }
+
+    fn raw_input_hook(&mut self, _ctx: &egui::Context, raw_input: &mut egui::RawInput) {
+        if cfg!(target_os = "macos") {
+            self.ctrl_click.apply(raw_input);
         }
     }
 
