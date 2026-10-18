@@ -15,6 +15,11 @@ ignore = [
     { id = "RUSTSEC-2025-0141", reason = "syntect packdump format; input is compiled into the binary" },
     # yaml-rust: only used at build time to compile .sublime-syntax grammars.
     { id = "RUSTSEC-2024-0320", reason = "build-time only (notoir-editor/build.rs)" },
+    # zvariant / zvariant_derive / zbus_names: merged into zbus 6; zbus 5 comes
+    # with eframe's Linux accessibility (accesskit_unix). Review when egui moves on.
+    { id = "RUSTSEC-2026-0370", reason = "zbus 5 via accesskit_unix; no upgrade until egui moves to zbus 6" },
+    { id = "RUSTSEC-2026-0371", reason = "zbus 5 via accesskit_unix; no upgrade until egui moves to zbus 6" },
+    { id = "RUSTSEC-2026-0372", reason = "zbus 5 via accesskit_unix; no upgrade until egui moves to zbus 6" },
 ]
 
 [licenses]

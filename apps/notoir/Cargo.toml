@@ -83,7 +83,7 @@ file-associations = [
 minimum-system-version = "11.0"
 
 [package.metadata.packager.deb]
-depends = ["libgtk-3-0", "libxkbcommon0", "libfontconfig1"]
+depends = ["libgtk-3-0", "libxkbcommon0", "libxkbcommon-x11-0", "libfontconfig1"]
 section = "editors"
 priority = "optional"
 

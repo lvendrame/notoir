@@ -64,7 +64,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb libxkbcommon-dev libgtk-3-dev libwayland-dev libfontconfig1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
+          sudo apt-get install -y xvfb libxkbcommon-dev libxkbcommon-x11-dev libgtk-3-dev libwayland-dev libfontconfig1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
       - name: Crash suite
         if: runner.os == 'Linux'
         run: xvfb-run -a cargo test -p notoir --test crash -- --ignored --test-threads=1
