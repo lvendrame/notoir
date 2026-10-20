@@ -36,6 +36,7 @@
     "toggleWhitespace": "공백 문자 전환",
     "toggleCurrentLineHighlight": "현재 줄 강조 표시 전환",
     "togglePin": "탭 고정 또는 고정 해제",
+    "keepOpen": "열어 두기",
     "duplicate": "보기 복제",
     "activate": "탭 활성화",
     "reopenClosedTab": "닫은 탭 다시 열기",

@@ -48,7 +48,8 @@
     "uiScale": "Escala da interface",
     "tabs": {
       "density": "Densidade das abas",
-      "closeAllKeepsPinned": "Fechar Tudo mantém abas fixadas"
+      "closeAllKeepsPinned": "Fechar Tudo mantém abas fixadas",
+      "previewMode": "Clique simples no Explorador abre uma aba de pré-visualização"
     },
     "toolbar": {
       "visible": "Barra de ferramentas"

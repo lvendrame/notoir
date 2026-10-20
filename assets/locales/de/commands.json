@@ -36,6 +36,7 @@
     "toggleWhitespace": "Leerzeichen anzeigen ein/aus",
     "toggleCurrentLineHighlight": "Hervorhebung der aktuellen Zeile ein/aus",
     "togglePin": "Tab anheften oder lösen",
+    "keepOpen": "Geöffnet lassen",
     "duplicate": "Ansicht duplizieren",
     "activate": "Tab aktivieren",
     "reopenClosedTab": "Geschlossenen Tab wieder öffnen",

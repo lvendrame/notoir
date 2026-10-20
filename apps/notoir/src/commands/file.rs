@@ -118,6 +118,11 @@ pub(super) fn specs(out: &mut Specs) {
             .icon("pin"),
     );
     out.push(
+        CommandSpec::new("view.keepOpen", Category::View, keep_open)
+            .when(editor)
+            .expect("valid"),
+    );
+    out.push(
         CommandSpec::new("view.duplicate", Category::View, duplicate)
             .when(editor)
             .expect("valid"),
@@ -357,6 +362,13 @@ fn toggle_pin(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     if let Some(v) = view_of(core, inv) {
         let next = !pinned(core, v);
         let _ = core.workbench.set_pinned(v, next);
+    }
+    CommandOutcome::Done
+}
+
+fn keep_open(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    if let Some(v) = view_of(core, inv) {
+        core.workbench.keep_open(v);
     }
     CommandOutcome::Done
 }

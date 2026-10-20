@@ -48,7 +48,8 @@
     "uiScale": "Scala dell'interfaccia",
     "tabs": {
       "density": "Densità delle schede",
-      "closeAllKeepsPinned": "Chiudi tutto mantiene le schede fissate"
+      "closeAllKeepsPinned": "Chiudi tutto mantiene le schede fissate",
+      "previewMode": "Un clic nell'Esplora risorse apre una scheda di anteprima"
     },
     "toolbar": {
       "visible": "Barra degli strumenti"

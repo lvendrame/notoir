@@ -149,6 +149,7 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Fold Level 6 | `fold.foldLevel6` | `⌘K ⌘6` | `Ctrl+K Ctrl+6` |
 | Fold Level 7 | `fold.foldLevel7` | `⌘K ⌘7` | `Ctrl+K Ctrl+7` |
 | Full Screen | `view.toggleFullScreen` | `⌃⌘F` | `F11` |
+| Keep Open | `view.keepOpen` |  |  |
 | Maximize Editor Group | `workbench.maximizeGroup` |  |  |
 | Minimap Position *(hidden)* | `view.minimapSide` |  |  |
 | Minimap Scale *(hidden)* | `view.minimapScale` |  |  |

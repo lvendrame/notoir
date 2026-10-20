@@ -106,9 +106,10 @@ fn context_items(core: &AppCore, view: ViewId) -> Vec<MenuItem> {
         checked: None,
     };
     let pinned = core.workbench.view(view).is_some_and(|v| v.pinned);
+    let preview = core.workbench.view(view).is_some_and(|v| v.preview);
     let pin_label = if pinned { "tabs:unpin" } else { "tabs:pin" };
     let reveal_label = notoir_platform::reveal_label_key();
-    vec![
+    let mut items = vec![
         cmd("file.save"),
         cmd("file.saveAs"),
         MenuItem::Separator,
@@ -145,11 +146,20 @@ fn context_items(core: &AppCore, view: ViewId) -> Vec<MenuItem> {
         cmd("file.copyRelativePath"),
         MenuItem::Command {
             id: "file.reveal",
-            args,
+            args: args.clone(),
             label: Some(reveal_label.to_owned()),
             checked: None,
         },
-    ]
+    ];
+    if preview {
+        let pin = items
+            .iter()
+            .position(|i| matches!(i, MenuItem::Command { id, .. } if *id == "view.togglePin"));
+        if let Some(i) = pin {
+            items.insert(i + 1, cmd("view.keepOpen"));
+        }
+    }
+    items
 }
 
 fn invoke(actions: &mut Actions, id: &'static str, view: ViewId) {
@@ -292,7 +302,19 @@ fn tab(
         None if active => kit.color(Tok::TextPrimary),
         None => kit.color(Tok::TextSecondary),
     };
-    let galley = ui.painter().layout_no_wrap(label.clone(), font, text_color);
+    // A preview tab (spec 04) shows its name in italics.
+    let mut job = egui::text::LayoutJob::default();
+    job.append(
+        &label,
+        0.0,
+        egui::TextFormat {
+            font_id: font,
+            color: text_color,
+            italics: v.preview,
+            ..Default::default()
+        },
+    );
+    let galley = ui.fonts_mut(|f| f.layout_job(job));
     let lock = doc.read_only != ReadOnly::No;
     let width = 12.0
         + ICON_SM
@@ -405,6 +427,9 @@ fn tab(
     }
     if resp.middle_clicked() {
         invoke(actions, "file.close", view);
+    }
+    if resp.double_clicked() && v.preview {
+        invoke(actions, "view.keepOpen", view);
     }
     resp.context_menu(|ui| {
         ui.set_min_width(240.0);

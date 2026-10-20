@@ -9,6 +9,9 @@ not closed by **Close Others**, **Close Tabs to the Right** or **Close Saved Tab
 them apart.
 
 - Click to switch; middle-click or the × to close. Double-click the empty part of the strip for a new untitled file.
+- **Preview tabs**: clicking a file in the Explorer opens it in a preview tab (name in italics), which the next file you
+  click replaces. Double-click the file (or the tab) to keep it open; editing it or pinning it keeps it too, as does
+  **Keep Open** in the tab's context menu. Turn this off with `workbench.tabs.previewMode`.
 - **Next Tab** / **Previous Tab**: `Ctrl+PageDown` / `Ctrl+PageUp` (⌥⌘→ / ⌥⌘←).
 - **Switch to Previous Tab**: `Ctrl+Tab` (⌃Tab) goes back to the tab you used last.
 - **Reopen Closed Tab**: `Ctrl+Shift+T` (⇧⌘T).

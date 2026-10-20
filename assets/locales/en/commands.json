@@ -36,6 +36,7 @@
     "toggleWhitespace": "Toggle Whitespace",
     "toggleCurrentLineHighlight": "Toggle Current Line Highlight",
     "togglePin": "Pin or Unpin Tab",
+    "keepOpen": "Keep Open",
     "duplicate": "Duplicate View",
     "activate": "Activate Tab",
     "reopenClosedTab": "Reopen Closed Tab",

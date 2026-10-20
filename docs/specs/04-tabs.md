@@ -1,6 +1,6 @@
 # 04 — Tabs
 
-**Status:** Partial — tab strip with states, disambiguation, pin, close/close others/to the right/saved/all, context menu, reopen closed tab, overflow list (M5); drag reorder and split/move-group items (M6), compare items (M17)
+**Status:** Partial — tab strip with states, disambiguation, pin, close/close others/to the right/saved/all, context menu, reopen closed tab, overflow list (M5); drag reorder and split/move-group items (M6), compare items (M17); preview tabs (Explorer single-click, `workbench.tabs.previewMode`, default on)
 
 ## Purpose
 
@@ -44,8 +44,13 @@ uses full accent; unfocused group's active tab uses muted accent.
   confirming dirty ones).
 - New tabs open to the right of the active tab (`workbench.tabs.openPosition`: `right` default | `end`).
 - Tab density: `workbench.tabs.density = compact | default` (spec 21).
-- Opening a file from Explorer single-click opens a **preview tab** (italic label, replaced by the next preview) when
-  `workbench.tabs.previewMode = true` (default false to keep the model simple; double-click always opens a normal tab).
+- Opening a file from Explorer single-click opens a **preview tab** (italic label) when
+  `workbench.tabs.previewMode = true` (default). Each group has at most one; the next single-click in the same group
+  replaces it in its slot. A file already open in any tab is just activated. A preview tab becomes a normal tab when
+  the file is double-clicked (or opened with Enter) in the Explorer, its tab is double-clicked, its document is edited
+  (undo/redo included, reloads from disk excluded), it is pinned, or "Keep Open" is chosen in the tab context menu.
+  Other ways of opening (Quick Open, search, Source Control, breadcrumbs, MCP) open normal tabs. Preview state is kept
+  in the session.
 
 ## Context Menu
 
@@ -73,6 +78,7 @@ Move to Previous Group
 Move to Next Group
 ──────────────
 Pin Tab / Unpin Tab
+Keep Open                    (only on a preview tab)
 ──────────────
 Copy Path
 Copy Relative Path           (only when inside a workspace)
@@ -112,6 +118,34 @@ Feature: Tab states
   Scenario: Same-named files are disambiguated
     Given "docs/README.md" and "api/README.md" are open
     Then the tabs read "README.md — docs" and "README.md — api"
+
+Feature: Preview tabs
+
+  Scenario: Single-click replaces the preview tab
+    Given a workspace with "a.md" and "b.md" and no open tabs
+    When the user clicks "a.md" in the Explorer
+    Then "a.md" opens in a preview tab
+    When the user clicks "b.md" in the Explorer
+    Then "b.md" replaces "a.md" in the preview tab
+
+  Scenario: Double-click keeps the tab open
+    Given a workspace with "a.md" and "b.md" and no open tabs
+    When the user double-clicks "a.md" in the Explorer
+    Then "a.md" opens in a normal tab
+    When the user clicks "b.md" in the Explorer
+    Then "a.md" stays open and "b.md" opens in a preview tab
+
+  Scenario: Double-clicking a preview tab keeps it open
+    Given "a.md" is open in a preview tab
+    When the user double-clicks its tab
+    And the user clicks "b.md" in the Explorer
+    Then "a.md" stays open as a normal tab and "b.md" opens in a preview tab
+
+  Scenario: Editing a preview tab keeps it open
+    Given "a.md" is open in a preview tab
+    When the user types a character
+    And the user clicks "b.md" in the Explorer
+    Then "a.md" stays open as a normal tab and "b.md" opens in a preview tab
 
 Feature: Tab context menu
 

@@ -14,7 +14,7 @@ Window**, **New Window** or **Cancel**. **File › Close Workspace** closes it.
 The Explorer (`Ctrl+Shift+E`, ⇧⌘E) shows the workspace as a tree. It loads folders as you expand them, so huge folders
 open instantly, and it follows changes made by other programs.
 
-- **Click** a file to open it; use **Open to the Side** in its context menu to open it in another group.
+- **Click** a file to preview it in a tab the next click replaces; **double-click** to keep it open. Use **Open to the Side** in its context menu to open it in another group.
 - **Filter Files in Explorer** (`Ctrl+Alt+F`, ⌥⌘F) narrows the tree to matching names, searching the whole workspace.
 - The buttons at the top of the panel (shown on hover) are **New File**, **New Folder**, **Refresh** and **Collapse
   All**. The **⋯** menu has **Show Hidden Files**, **Show Git-Ignored Files** and **Sort Order** (Folders First, Mixed,

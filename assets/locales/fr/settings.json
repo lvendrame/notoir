@@ -48,7 +48,8 @@
     "uiScale": "Échelle de l'interface",
     "tabs": {
       "density": "Densité des onglets",
-      "closeAllKeepsPinned": "Tout fermer conserve les onglets épinglés"
+      "closeAllKeepsPinned": "Tout fermer conserve les onglets épinglés",
+      "previewMode": "Un simple clic dans l'Explorateur ouvre un onglet d'aperçu"
     },
     "toolbar": {
       "visible": "Barre d'outils"

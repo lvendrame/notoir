@@ -36,6 +36,7 @@
     "toggleWhitespace": "Mostra/nascondi spazi",
     "toggleCurrentLineHighlight": "Attiva/disattiva evidenziazione riga corrente",
     "togglePin": "Aggiungi o rimuovi puntina dalla scheda",
+    "keepOpen": "Mantieni aperta",
     "duplicate": "Duplica vista",
     "activate": "Attiva scheda",
     "reopenClosedTab": "Riapri scheda chiusa",

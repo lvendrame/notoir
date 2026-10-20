@@ -36,6 +36,7 @@
     "toggleWhitespace": "Afficher/masquer les espaces",
     "toggleCurrentLineHighlight": "Activer/désactiver la surbrillance de la ligne active",
     "togglePin": "Épingler ou détacher l'onglet",
+    "keepOpen": "Garder ouvert",
     "duplicate": "Dupliquer la vue",
     "activate": "Activer l'onglet",
     "reopenClosedTab": "Rouvrir l'onglet fermé",

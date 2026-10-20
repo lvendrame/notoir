@@ -339,10 +339,16 @@ fn open_entry(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
         .get("preserveFocus")
         .and_then(|v| v.as_bool())
         .unwrap_or(false);
+    let preview = inv
+        .args
+        .get("preview")
+        .and_then(|v| v.as_bool())
+        .unwrap_or(false);
     core.open_path(
         &path,
         crate::files::OpenAt {
             keep_focus,
+            preview,
             ..Default::default()
         },
     );

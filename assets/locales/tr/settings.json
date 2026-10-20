@@ -48,7 +48,8 @@
     "uiScale": "Arayüz ölçeği",
     "tabs": {
       "density": "Sekme yoğunluğu",
-      "closeAllKeepsPinned": "Tümünü Kapat sabitlenmiş sekmeleri korur"
+      "closeAllKeepsPinned": "Tümünü Kapat sabitlenmiş sekmeleri korur",
+      "previewMode": "Gezgin'de tek tıklama önizleme sekmesi açar"
     },
     "toolbar": {
       "visible": "Araç çubuğu"

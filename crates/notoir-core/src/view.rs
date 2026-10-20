@@ -42,6 +42,9 @@ pub struct EditorView {
     pub zoom: Option<f32>,
     pub wrap_override: Option<bool>,
     pub pinned: bool,
+    /// A preview tab (spec 04): replaced by the next preview open in its
+    /// group until it is kept (edit, double-click, pin, Keep Open).
+    pub preview: bool,
     /// Editor share of a Markdown split (0.2–0.8).
     pub preview_ratio: f32,
     /// Folded regions (spec 12), anchored to the text so they survive edits.
@@ -71,6 +74,7 @@ impl EditorView {
             zoom: None,
             wrap_override: None,
             pinned: false,
+            preview: false,
             preview_ratio: 0.5,
             folds: Vec::new(),
             detached: false,
@@ -103,11 +107,12 @@ impl EditorView {
     }
 
     /// A copy for Duplicate View / split: same document and position, new id,
-    /// never pinned.
+    /// never pinned or a preview.
     pub fn duplicate(&self, id: ViewId) -> Self {
         Self {
             id,
             pinned: false,
+            preview: false,
             ..self.clone()
         }
     }

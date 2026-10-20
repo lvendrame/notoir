@@ -229,6 +229,10 @@ pub struct OpenAt {
     pub select_chars: usize,
     /// Open in the group beside the active one (`Mod+Enter`).
     pub side: bool,
+    /// Open as the group's preview tab (Explorer single click, spec 04) when
+    /// `workbench.tabs.previewMode` is on. Opening an open file without it
+    /// keeps that file's preview tab.
+    pub preview: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -434,7 +438,23 @@ impl AppCore {
         };
         let (_, key) = fs_io::identity(path);
         if let Some(doc) = self.workbench.find_by_key(&key) {
-            // Already open: focus a view where it is, else add one here.
+            self.show_open_document(doc, group, &at);
+            return;
+        }
+        self.load(
+            path.to_path_buf(),
+            LoadPurpose::Open {
+                group,
+                at,
+                allow_binary: false,
+            },
+        );
+    }
+
+    /// Focuses a view of the already open `doc` where it is, else adds one in
+    /// `group`.
+    fn show_open_document(&mut self, doc: DocumentId, group: GroupId, at: &OpenAt) {
+        {
             let existing = if at.side {
                 self.workbench.view_in_group(doc, group)
             } else {
@@ -455,20 +475,14 @@ impl AppCore {
                 },
             };
             let _ = self.workbench.activate_view(view);
-            self.place_caret(view, &at);
+            if !at.preview {
+                self.workbench.keep_open(view);
+            }
+            self.place_caret(view, at);
             if !at.keep_focus {
                 self.effects.push(Effect::FocusEditor(view));
             }
-            return;
         }
-        self.load(
-            path.to_path_buf(),
-            LoadPurpose::Open {
-                group,
-                at,
-                allow_binary: false,
-            },
-        );
     }
 
     pub(crate) fn load_for(&mut self, path: PathBuf, purpose: LoadPurpose) {
@@ -604,17 +618,26 @@ impl AppCore {
         };
         let read_only = loaded.text.read_only;
         let mixed = loaded.text.mixed_line_endings;
-        let doc = self.workbench.open_document(origin, loaded.text);
-        self.restore_bookmarks(doc);
         let group = if self.workbench.layout.group(group).is_some() {
             group
         } else {
             self.workbench.layout.active_group
         };
-        let Ok(view) = self
-            .workbench
-            .open_view(doc, group, TabPosition::AfterActive)
-        else {
+        // A second open of the same file (single then double click) can
+        // finish after the first one did.
+        if let Some(doc) = self.workbench.find_by_key(&loaded.key) {
+            self.show_open_document(doc, group, &at);
+            return;
+        }
+        let doc = self.workbench.open_document(origin, loaded.text);
+        self.restore_bookmarks(doc);
+        let opened = if at.preview && self.settings.bool("workbench.tabs.previewMode", None) {
+            self.workbench.open_preview(doc, group)
+        } else {
+            self.workbench
+                .open_view(doc, group, TabPosition::AfterActive)
+        };
+        let Ok(view) = opened else {
             return;
         };
         self.place_caret(view, &at);

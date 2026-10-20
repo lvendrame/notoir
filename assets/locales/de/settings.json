@@ -48,7 +48,8 @@
     "uiScale": "UI-Skalierung",
     "tabs": {
       "density": "Tab-Dichte",
-      "closeAllKeepsPinned": "Alle schließen behält angeheftete Tabs"
+      "closeAllKeepsPinned": "Alle schließen behält angeheftete Tabs",
+      "previewMode": "Einfacher Klick im Explorer öffnet einen Vorschau-Tab"
     },
     "toolbar": {
       "visible": "Symbolleiste"

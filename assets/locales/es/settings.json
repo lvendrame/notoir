@@ -48,7 +48,8 @@
     "uiScale": "Escala de la interfaz",
     "tabs": {
       "density": "Densidad de pestañas",
-      "closeAllKeepsPinned": "Cerrar todo conserva las pestañas fijadas"
+      "closeAllKeepsPinned": "Cerrar todo conserva las pestañas fijadas",
+      "previewMode": "Un clic en el Explorador abre una pestaña de vista previa"
     },
     "toolbar": {
       "visible": "Barra de herramientas"

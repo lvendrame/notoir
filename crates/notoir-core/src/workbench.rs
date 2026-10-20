@@ -238,6 +238,67 @@ impl Workbench {
         Ok(id)
     }
 
+    /// The preview tab of `group` (spec 04), if any.
+    pub fn preview_view(&self, group: GroupId) -> Option<ViewId> {
+        let g = self.layout.group(group)?;
+        g.tabs
+            .iter()
+            .copied()
+            .find(|v| self.views.get(*v).is_some_and(|view| view.preview))
+    }
+
+    /// Opens `doc` as the preview tab of `group`: it takes the slot of the
+    /// group's current preview tab, which closes. A preview already showing
+    /// `doc` is just activated.
+    pub fn open_preview(
+        &mut self,
+        doc: DocumentId,
+        group: GroupId,
+    ) -> Result<ViewId, WorkbenchError> {
+        let old = self.preview_view(group);
+        if let Some(old) = old
+            && self.views.get(old).is_some_and(|v| v.document_id == doc)
+        {
+            self.activate_view(old)?;
+            return Ok(old);
+        }
+        let position = old
+            .and_then(|o| self.layout.group(group)?.index_of(o))
+            .map_or(TabPosition::AfterActive, TabPosition::Index);
+        let view = self.open_view(doc, group, position)?;
+        if let Some(v) = self.views.get_mut(view) {
+            v.preview = true;
+        }
+        if let Some(old) = old {
+            // Editing keeps a tab, so a preview is never dirty; a dirty one
+            // (should it happen) stays open as a normal tab.
+            match self.close_view(old, false)? {
+                CloseOutcome::Closed => {}
+                CloseOutcome::NeedsConfirmation(_) => self.keep_open(old),
+            }
+        }
+        Ok(view)
+    }
+
+    /// Turns a preview tab into a normal one.
+    pub fn keep_open(&mut self, view: ViewId) {
+        if let Some(v) = self.views.get_mut(view) {
+            v.preview = false;
+        }
+    }
+
+    fn keep_document_open(&mut self, doc: DocumentId) {
+        let views: Vec<ViewId> = self
+            .views
+            .of_document(doc)
+            .filter(|v| v.preview)
+            .map(|v| v.id)
+            .collect();
+        for v in views {
+            self.keep_open(v);
+        }
+    }
+
     fn add_tab(
         &mut self,
         view: ViewId,
@@ -540,10 +601,11 @@ impl Workbench {
             .layout
             .group_of(view)
             .ok_or(WorkbenchError::NoSuchView)?;
-        self.views
-            .get_mut(view)
-            .ok_or(WorkbenchError::NoSuchView)?
-            .pinned = pinned;
+        let v = self.views.get_mut(view).ok_or(WorkbenchError::NoSuchView)?;
+        v.pinned = pinned;
+        if pinned {
+            v.preview = false;
+        }
         let g = self.layout.group_mut(group).expect("exists");
         let index = g.index_of(view).expect("in group");
         g.tabs.remove(index);
@@ -780,6 +842,10 @@ impl Workbench {
         if let Some(v) = view.and_then(|v| self.views.get_mut(v)) {
             v.selection = selection_after.clamp(len);
         }
+        // Editing keeps a preview tab; a reload from disk does not.
+        if !matches!(origin, ChangeOrigin::Reload) {
+            self.keep_document_open(doc);
+        }
         self.events.emit(AppEvent::DocumentChanged {
             doc,
             revision,
@@ -838,6 +904,7 @@ impl Workbench {
         if let Some(v) = self.views.get_mut(view) {
             v.selection = applied.selection.clamp(len);
         }
+        self.keep_document_open(doc);
         Ok(true)
     }
 }
@@ -1141,6 +1208,64 @@ mod tests {
         let g = wb.move_view_to_neighbor(b, true).unwrap();
         assert_eq!(wb.layout.groups_in_order().len(), 2);
         assert_eq!(wb.layout.group_of(b), Some(g));
+    }
+
+    fn preview(wb: &mut Workbench, name: &str) -> (DocumentId, ViewId) {
+        let doc = wb.open_document(file(name), loaded(""));
+        let group = wb.layout.active_group;
+        let view = wb.open_preview(doc, group).unwrap();
+        (doc, view)
+    }
+
+    #[test]
+    fn preview_replaces_previous_preview_in_its_slot() {
+        let mut wb = Workbench::new();
+        let (_, a) = open(&mut wb, "a.md", "");
+        let (_, p) = preview(&mut wb, "p.md");
+        let (_, c) = open(&mut wb, "c.md", "");
+        wb.activate_view(c).unwrap();
+        let (pdoc, q) = preview(&mut wb, "q.md");
+        assert_eq!(wb.layout.active().tabs, vec![a, q, c]);
+        assert!(wb.view(p).is_none());
+        assert!(wb.view(q).unwrap().preview);
+        assert_eq!(wb.active_view(), Some(q));
+        // The same document again re-activates the preview.
+        wb.activate_view(a).unwrap();
+        assert_eq!(wb.open_preview(pdoc, wb.layout.active_group).unwrap(), q);
+        assert_eq!(wb.active_view(), Some(q));
+    }
+
+    #[test]
+    fn kept_preview_is_not_replaced() {
+        let mut wb = Workbench::new();
+        let (_, a) = preview(&mut wb, "a.md");
+        wb.keep_open(a);
+        let (_, b) = preview(&mut wb, "b.md");
+        assert_eq!(wb.layout.active().tabs, vec![a, b]);
+        assert!(!wb.view(a).unwrap().preview);
+        assert!(wb.view(b).unwrap().preview);
+    }
+
+    #[test]
+    fn editing_or_pinning_keeps_a_preview() {
+        let mut wb = Workbench::new();
+        let (_, a) = preview(&mut wb, "a.md");
+        type_at(&mut wb, a, 0, "x", 0);
+        assert!(!wb.view(a).unwrap().preview);
+        let (_, b) = preview(&mut wb, "b.md");
+        wb.set_pinned(b, true).unwrap();
+        assert!(!wb.view(b).unwrap().preview);
+        assert_eq!(wb.layout.active().tabs.len(), 2);
+    }
+
+    #[test]
+    fn each_group_has_its_own_preview() {
+        let mut wb = Workbench::new();
+        let (_, a) = preview(&mut wb, "a.md");
+        wb.split_active(Direction::Right);
+        let (_, b) = preview(&mut wb, "b.md");
+        assert!(wb.view(a).is_some_and(|v| v.preview));
+        assert!(wb.view(b).is_some_and(|v| v.preview));
     }
 
     #[test]

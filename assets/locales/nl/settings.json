@@ -48,7 +48,8 @@
     "uiScale": "UI-schaal",
     "tabs": {
       "density": "Tabdichtheid",
-      "closeAllKeepsPinned": "Alles sluiten behoudt vastgemaakte tabbladen"
+      "closeAllKeepsPinned": "Alles sluiten behoudt vastgemaakte tabbladen",
+      "previewMode": "Enkele klik in de Verkenner opent een voorbeeldtabblad"
     },
     "toolbar": {
       "visible": "Werkbalk"

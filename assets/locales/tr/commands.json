@@ -36,6 +36,7 @@
     "toggleWhitespace": "Boşlukları Aç/Kapat",
     "toggleCurrentLineHighlight": "Geçerli Satır Vurgusunu Aç/Kapat",
     "togglePin": "Sekmeyi Sabitle veya Sabitlemeyi Kaldır",
+    "keepOpen": "Açık Tut",
     "duplicate": "Görünümü Çoğalt",
     "activate": "Sekmeyi Etkinleştir",
     "reopenClosedTab": "Kapatılan Sekmeyi Yeniden Aç",

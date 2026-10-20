@@ -36,6 +36,7 @@
     "toggleWhitespace": "Alternar espacios en blanco",
     "toggleCurrentLineHighlight": "Alternar resaltado de línea actual",
     "togglePin": "Fijar o desfijar pestaña",
+    "keepOpen": "Mantener abierta",
     "duplicate": "Duplicar vista",
     "activate": "Activar pestaña",
     "reopenClosedTab": "Reabrir pestaña cerrada",

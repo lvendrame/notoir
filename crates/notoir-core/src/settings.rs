@@ -505,6 +505,13 @@ impl Schema {
             C::Files,
         );
         def(
+            "workbench.tabs.previewMode",
+            T::Bool,
+            V::Bool(true),
+            Scopes::USER_ONLY,
+            C::Appearance,
+        );
+        def(
             "workbench.tabs.closeAllKeepsPinned",
             T::Bool,
             V::Bool(false),

@@ -36,6 +36,7 @@
     "toggleWhitespace": "切换空白字符",
     "toggleCurrentLineHighlight": "切换当前行突出显示",
     "togglePin": "固定或取消固定标签页",
+    "keepOpen": "保持打开",
     "duplicate": "复制视图",
     "activate": "激活标签页",
     "reopenClosedTab": "重新打开关闭的标签页",

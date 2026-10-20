@@ -48,7 +48,8 @@
     "uiScale": "Skala interfejsu",
     "tabs": {
       "density": "Gęstość kart",
-      "closeAllKeepsPinned": "Zamknij wszystkie zachowuje przypięte karty"
+      "closeAllKeepsPinned": "Zamknij wszystkie zachowuje przypięte karty",
+      "previewMode": "Pojedyncze kliknięcie w Eksploratorze otwiera kartę podglądu"
     },
     "toolbar": {
       "visible": "Pasek narzędzi"

@@ -36,6 +36,7 @@
     "toggleWhitespace": "空白文字の表示切り替え",
     "toggleCurrentLineHighlight": "現在行の強調表示の切り替え",
     "togglePin": "タブのピン留め/解除",
+    "keepOpen": "開いたままにする",
     "duplicate": "ビューの複製",
     "activate": "タブをアクティブにする",
     "reopenClosedTab": "閉じたタブを再度開く",

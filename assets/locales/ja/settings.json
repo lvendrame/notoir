@@ -48,7 +48,8 @@
     "uiScale": "UI の倍率",
     "tabs": {
       "density": "タブの密度",
-      "closeAllKeepsPinned": "すべて閉じるでピン留めタブを残す"
+      "closeAllKeepsPinned": "すべて閉じるでピン留めタブを残す",
+      "previewMode": "エクスプローラーのシングルクリックでプレビュータブを開く"
     },
     "toolbar": {
       "visible": "ツール バー"

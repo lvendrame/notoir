@@ -476,3 +476,141 @@ fn tree_keyboard_navigation_and_f2() {
             .is_none()
     );
 }
+
+/// The Explorer row (left of the tab strip) or the tab labelled `name`.
+fn labelled(app: &common::TestApp, name: &str, tab: bool) -> egui::Rect {
+    let mut rects: Vec<egui::Rect> = app
+        .harness
+        .query_all_by_label(name)
+        .map(|n| n.rect())
+        .collect();
+    rects.sort_by(|a, b| a.left().total_cmp(&b.left()));
+    if tab {
+        *rects.last().unwrap()
+    } else {
+        rects[0]
+    }
+}
+
+fn click_at(app: &mut common::TestApp, rect: egui::Rect, times: usize) {
+    let pos = rect.center();
+    app.harness.event(Event::PointerMoved(pos));
+    app.harness.step();
+    // One frame for all presses: the harness otherwise spends a step (a
+    // quarter second) per event, too slow for a double click.
+    let events = &mut app.harness.input_mut().events;
+    for _ in 0..times {
+        for pressed in [true, false] {
+            events.push(Event::PointerButton {
+                pos,
+                button: egui::PointerButton::Primary,
+                pressed,
+                modifiers: Modifiers::default(),
+            });
+        }
+    }
+    app.harness.run_steps(3);
+    common::settle(app);
+}
+
+/// The open tabs of the active group as (file name, preview).
+fn tabs(app: &common::TestApp) -> Vec<(String, bool)> {
+    let wb = &app.harness.state().core.workbench;
+    wb.layout
+        .active()
+        .tabs
+        .iter()
+        .map(|v| {
+            let view = wb.view(*v).unwrap();
+            let doc = wb.document(view.document_id).unwrap();
+            let name = doc.path().unwrap().file_name().unwrap();
+            (name.to_string_lossy().into_owned(), view.preview)
+        })
+        .collect()
+}
+
+fn preview_folder() -> (tempfile::TempDir, PathBuf, common::TestApp) {
+    let (d, root) = folder();
+    write(&root, "a.md", "x");
+    write(&root, "b.md", "y");
+    let app = open_ws(&ScriptedDialogs::default(), &root, vec![]);
+    (d, root, app)
+}
+
+// spec 04: "Single-click replaces the preview tab"
+#[test]
+fn single_click_replaces_the_preview_tab() {
+    let (_d, _root, mut app) = preview_folder();
+    let a = labelled(&app, "a.md", false);
+    click_at(&mut app, a, 1);
+    assert_eq!(tabs(&app), vec![("a.md".to_owned(), true)]);
+    let b = labelled(&app, "b.md", false);
+    click_at(&mut app, b, 1);
+    assert_eq!(tabs(&app), vec![("b.md".to_owned(), true)]);
+    assert_eq!(active_text(&app), "y");
+}
+
+// spec 04: "Double-click keeps the tab open"
+#[test]
+fn double_click_in_the_explorer_keeps_the_tab_open() {
+    let (_d, _root, mut app) = preview_folder();
+    let a = labelled(&app, "a.md", false);
+    click_at(&mut app, a, 2);
+    assert_eq!(tabs(&app), vec![("a.md".to_owned(), false)]);
+    let b = labelled(&app, "b.md", false);
+    click_at(&mut app, b, 1);
+    assert_eq!(
+        tabs(&app),
+        vec![("a.md".to_owned(), false), ("b.md".to_owned(), true)]
+    );
+}
+
+// spec 04: "Double-clicking a preview tab keeps it open"
+#[test]
+fn double_click_on_the_preview_tab_keeps_it_open() {
+    let (_d, _root, mut app) = preview_folder();
+    let a = labelled(&app, "a.md", false);
+    click_at(&mut app, a, 1);
+    let tab = labelled(&app, "a.md", true);
+    click_at(&mut app, tab, 2);
+    assert_eq!(tabs(&app), vec![("a.md".to_owned(), false)]);
+    let b = labelled(&app, "b.md", false);
+    click_at(&mut app, b, 1);
+    assert_eq!(
+        tabs(&app),
+        vec![("a.md".to_owned(), false), ("b.md".to_owned(), true)]
+    );
+}
+
+// spec 04: "Editing a preview tab keeps it open"
+#[test]
+fn editing_a_preview_tab_keeps_it_open() {
+    let (_d, _root, mut app) = preview_folder();
+    let a = labelled(&app, "a.md", false);
+    click_at(&mut app, a, 1);
+    common::run(&mut app, "editor.type", json!({ "text": "!" }));
+    let b = labelled(&app, "b.md", false);
+    click_at(&mut app, b, 1);
+    assert_eq!(
+        tabs(&app),
+        vec![("a.md".to_owned(), false), ("b.md".to_owned(), true)]
+    );
+}
+
+#[test]
+fn preview_mode_off_opens_normal_tabs() {
+    let (_d, _root, mut app) = preview_folder();
+    app.harness.state_mut().core.set_setting_in_scope(
+        "workbench.tabs.previewMode",
+        Some(notoir_core::settings::SettingValue::Bool(false)),
+    );
+    common::settle(&mut app);
+    let a = labelled(&app, "a.md", false);
+    click_at(&mut app, a, 1);
+    let b = labelled(&app, "b.md", false);
+    click_at(&mut app, b, 1);
+    assert_eq!(
+        tabs(&app),
+        vec![("a.md".to_owned(), false), ("b.md".to_owned(), false)]
+    );
+}

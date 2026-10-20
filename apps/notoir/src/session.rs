@@ -49,6 +49,9 @@ pub struct TabData {
     pub source: TabSource,
     #[serde(default)]
     pub pinned: bool,
+    /// A preview tab (spec 04).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub preview: bool,
     /// (anchor, head) per range.
     #[serde(default)]
     pub selection: Vec<(usize, usize)>,
@@ -229,6 +232,7 @@ impl AppCore {
                     tabs.push(TabData {
                         source,
                         pinned: view.pinned,
+                        preview: view.preview,
                         selection: view
                             .selection
                             .ranges()
@@ -524,6 +528,7 @@ impl AppCore {
                 };
                 view.wrap_override = tab.wrap;
                 view.zoom = tab.zoom;
+                view.preview = tab.preview;
                 view.folds = tab
                     .folds
                     .iter()

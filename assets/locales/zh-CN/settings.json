@@ -48,7 +48,8 @@
     "uiScale": "界面缩放",
     "tabs": {
       "density": "标签页密度",
-      "closeAllKeepsPinned": "全部关闭时保留固定的标签页"
+      "closeAllKeepsPinned": "全部关闭时保留固定的标签页",
+      "previewMode": "在资源管理器中单击以预览标签页打开"
     },
     "toolbar": {
       "visible": "工具栏"

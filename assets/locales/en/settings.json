@@ -48,7 +48,8 @@
     "uiScale": "UI scale",
     "tabs": {
       "density": "Tab density",
-      "closeAllKeepsPinned": "Close All keeps pinned tabs"
+      "closeAllKeepsPinned": "Close All keeps pinned tabs",
+      "previewMode": "Single-click in the Explorer opens a preview tab"
     },
     "toolbar": {
       "visible": "Toolbar"

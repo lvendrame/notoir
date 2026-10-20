@@ -36,6 +36,7 @@
     "toggleWhitespace": "Alternar Espaços em Branco",
     "toggleCurrentLineHighlight": "Alternar Realce da Linha Atual",
     "togglePin": "Fixar ou Desafixar Aba",
+    "keepOpen": "Manter Aberta",
     "duplicate": "Duplicar Visualização",
     "activate": "Ativar Aba",
     "reopenClosedTab": "Reabrir Aba Fechada",

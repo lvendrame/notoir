@@ -625,7 +625,11 @@ fn node_row(
                 cmd(
                     actions,
                     "explorer.open",
-                    json!({ "path": row.path.to_string_lossy(), "preserveFocus": true }),
+                    json!({
+                        "path": row.path.to_string_lossy(),
+                        "preserveFocus": true,
+                        "preview": true,
+                    }),
                 );
             }
         }

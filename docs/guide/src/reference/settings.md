@@ -74,6 +74,7 @@ Every built-in setting with its type, default value and the scopes it can be set
 | `workbench.statusBar.visible` | Status bar | boolean | `true` | user |
 | `workbench.tabs.closeAllKeepsPinned` | Close All keeps pinned tabs | boolean | `false` | user |
 | `workbench.tabs.density` | Tab density | `"default"` \| `"compact"` | `"default"` | user |
+| `workbench.tabs.previewMode` | Single-click in the Explorer opens a preview tab | boolean | `true` | user |
 | `workbench.theme` | Theme | string | `"notoir-midnight"` | user |
 | `workbench.toolbar.visible` | Toolbar | boolean | `true` | user |
 | `workbench.uiScale` | UI scale | number 0.8–1.5 | `1.0` | user |
