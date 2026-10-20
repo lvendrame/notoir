@@ -64,6 +64,9 @@
     "keyboardShortcuts": "键盘快捷方式"
   },
   "help": {
+    "documentation": "文档",
+    "contextHelp": "当前上下文的帮助",
+    "keyboardReference": "键盘快捷方式参考",
     "about": "关于 Notoir",
     "welcome": "欢迎"
   },

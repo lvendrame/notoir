@@ -36,14 +36,15 @@ pub fn keystroke(key: egui::Key, mods: egui::Modifiers, platform: Platform) -> O
 
 /// Feeds this frame's key presses to the keymap; matched presses are consumed
 /// and their commands queued. Skipped while a text field has focus so typing
-/// and text-editing keys reach the field.
+/// and text-editing keys reach the field — except F1 (context help), which no
+/// text field uses.
 pub fn dispatch_keys(ctx: &egui::Context, core: &mut AppCore, context: &ContextSnapshot) {
     // Other text fields (picker filter…) keep their keys; the editor does not.
     // The Explorer tree takes focus too but leaves its shortcuts to the keymap.
     let explorer_tree = ctx.memory(|m| m.has_focus(crate::shell::explorer::tree_id()));
-    if ctx.egui_wants_keyboard_input() && !core.editor_focused && !explorer_tree {
+    let text_field = ctx.egui_wants_keyboard_input() && !core.editor_focused && !explorer_tree;
+    if text_field {
         core.keymap.cancel_pending();
-        return;
     }
     let platform = core.platform;
     let presses: Vec<(egui::Key, egui::Modifiers)> = ctx.input(|i| {
@@ -56,7 +57,9 @@ pub fn dispatch_keys(ctx: &egui::Context, core: &mut AppCore, context: &ContextS
                     repeat: false,
                     modifiers,
                     ..
-                } => Some((*key, *modifiers)),
+                } if !text_field || (*key == egui::Key::F1 && modifiers.is_none()) => {
+                    Some((*key, *modifiers))
+                }
                 _ => None,
             })
             .collect()

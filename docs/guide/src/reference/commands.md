@@ -161,7 +161,7 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Reopen Closed Tab | `view.reopenClosedTab` | `⇧⌘T` | `Ctrl+Shift+T` |
 | Reset Zoom | `view.zoomReset` | `⌘0` | `Ctrl+0` |
 | Reveal Active File in Explorer | `explorer.revealActive` |  |  |
-| Show All Commands | `workbench.commandPalette` | `⇧⌘P`, `F1` | `Ctrl+Shift+P`, `F1` |
+| Show All Commands | `workbench.commandPalette` | `⇧⌘P` | `Ctrl+Shift+P` |
 | Show Explorer | `view.showExplorer` | `⇧⌘E` | `Ctrl+Shift+E` |
 | Show Git-Ignored Files | `explorer.toggleGitIgnored` |  |  |
 | Show Hidden Files | `explorer.toggleHidden` |  |  |
@@ -303,10 +303,13 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Check for Updates… | `app.checkForUpdates` |  |  |
 | Discard Unsaved Document *(hidden)* | `recovery.discardEntry` |  |  |
 | Discard Unsaved Documents *(hidden)* | `recovery.discard` |  |  |
+| Documentation | `help.documentation` |  |  |
 | Download Update *(hidden)* | `app.downloadUpdate` |  |  |
 | Finish Welcome *(hidden)* | `welcome.finish` |  |  |
+| Help for Current Context | `help.contextHelp` | `F1` | `F1` |
 | Install 'notoir' Command in PATH | `app.installShellCommand` |  |  |
 | Install Update on Quit *(hidden)* | `app.installUpdateOnQuit` |  |  |
+| Keyboard Shortcut Reference | `help.keyboardReference` |  |  |
 | Recover Unsaved Documents… | `recovery.show` |  |  |
 | Restore All Unsaved Documents *(hidden)* | `recovery.restoreAll` |  |  |
 | Restore Unsaved Document *(hidden)* | `recovery.restoreEntry` |  |  |

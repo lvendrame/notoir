@@ -69,7 +69,7 @@ Default shortcuts. Linux uses the Windows column, with `Super` in place of `Win`
 | Full Screen | `⌃⌘F` | `F11` |  |
 | Reopen Closed Tab | `⇧⌘T` | `Ctrl+Shift+T` |  |
 | Reset Zoom | `⌘0` | `Ctrl+0` |  |
-| Show All Commands | `⇧⌘P`, `F1` | `Ctrl+Shift+P`, `F1` |  |
+| Show All Commands | `⇧⌘P` | `Ctrl+Shift+P` |  |
 | Show Explorer | `⇧⌘E` | `Ctrl+Shift+E` |  |
 | Show Output | `⇧⌘U` | `Ctrl+Shift+U` |  |
 | Split Right | `⌘\` | `Ctrl+\` |  |
@@ -104,6 +104,12 @@ Default shortcuts. Linux uses the Windows column, with `Super` in place of `Win`
 | Quick Open… | `⌘P` | `Ctrl+P` |  |
 | Switch to Previous Tab | `⌃Tab` | `Ctrl+Tab` |  |
 | Toggle Bookmark | `⌘F2` | `Ctrl+F2` |  |
+
+## Help
+
+| Command | macOS | Windows / Linux | When |
+|---|---|---|---|
+| Help for Current Context | `F1` | `F1` |  |
 
 ## Markdown
 

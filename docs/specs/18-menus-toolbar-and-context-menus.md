@@ -1,6 +1,6 @@
 # 18 — Menus, Toolbar & Context Menus
 
-**Status:** Partial — data-driven menu bar, minimal toolbar (M3); items appear with their commands; contextual controls (M13, M14, M17)
+**Status:** Partial — data-driven menu bar, minimal toolbar (M3); items appear with their commands; contextual controls (M13, M14, M17); Help › Documentation, Keyboard Shortcut Reference and context help on F1
 
 ## Purpose
 
@@ -142,6 +142,15 @@ Plugin Manager, Installed Plugins, Reload Plugins, ───, Open Plugins Folde
 Welcome, Documentation, Keyboard Shortcut Reference, ───, Report Issue, View Logs, Recover Unsaved Documents…, ───,
 Check for Updates (only when updater is enabled, spec 31), ───, About Notoir (in app menu on macOS).
 
+**Documentation** (`help.documentation`) opens the published user guide (https://lvendrame.github.io/notoir/) in the
+browser; **Keyboard Shortcut Reference** (`help.keyboardReference`) opens its shortcut reference page.
+**F1** (`help.contextHelp`, "Help for Current Context") opens the guide page for what the user is working on, first
+match wins: the focused Explorer (Workspaces); the active tab's kind (Settings, or Keyboard Shortcuts on that
+category; Welcome → First steps; Compare; Plugin Manager; Markdown preview/split; JSON tree/split); the active text
+editor (find widget open → Find and search; Markdown; JSON; a focused scratchpad or untitled file → Files; any other
+focused editor → Editing); the visible primary sidebar panel (Explorer, Search, Source Control, Outline, Plugins,
+Backlinks/Tags, MCP Activity). Otherwise the guide's start page opens.
+
 ## Toolbar
 
 Fixed minimal set (customizable later via `workbench.toolbar.items`, spec 05):
@@ -206,6 +215,20 @@ Feature: Menus
     Given the workspace is not a Git repository
     Then "Initialize Repository" and "Clone Repository…" are enabled
     And "Commit…" is disabled
+
+Feature: Help
+
+  Scenario: Documentation opens the user guide
+    When the user chooses Help › Documentation
+    Then the browser opens "https://lvendrame.github.io/notoir/"
+
+  Scenario: F1 opens the guide page for the focused feature
+    Given the Explorer has keyboard focus
+    When the user presses F1
+    Then the browser opens "https://lvendrame.github.io/notoir/workspaces.html"
+    When a Markdown document is active and the editor has focus
+    And the user presses F1
+    Then the browser opens "https://lvendrame.github.io/notoir/markdown.html"
 
 Feature: Toolbar
 

@@ -64,6 +64,9 @@
     "keyboardShortcuts": "キーボード ショートカット"
   },
   "help": {
+    "documentation": "ドキュメント",
+    "contextHelp": "現在のコンテキストのヘルプ",
+    "keyboardReference": "キーボード ショートカット一覧",
     "about": "Notoir について",
     "welcome": "ようこそ"
   },

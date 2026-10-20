@@ -64,6 +64,9 @@
     "keyboardShortcuts": "Sneltoetsen"
   },
   "help": {
+    "documentation": "Documentatie",
+    "contextHelp": "Help voor huidige context",
+    "keyboardReference": "Overzicht sneltoetsen",
     "about": "Over Notoir",
     "welcome": "Welkom"
   },

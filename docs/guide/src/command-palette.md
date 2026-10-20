@@ -1,6 +1,6 @@
 # The command palette
 
-**View › Show All Commands** (`Ctrl+Shift+P`, ⇧⌘P, or `F1`) lists every command you can run right now, with its
+**View › Show All Commands** (`Ctrl+Shift+P`, ⇧⌘P) lists every command you can run right now, with its
 shortcut. Type a few letters to filter: matching is fuzzy, so `tgww` finds *View: Toggle Word Wrap*.
 
 ![The command palette filtered by "split"](images/palette.png)

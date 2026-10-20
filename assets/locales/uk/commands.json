@@ -64,6 +64,9 @@
     "keyboardShortcuts": "Сполучення клавіш"
   },
   "help": {
+    "documentation": "Документація",
+    "contextHelp": "Довідка щодо поточного контексту",
+    "keyboardReference": "Довідник сполучень клавіш",
     "about": "Про Notoir",
     "welcome": "Привітання"
   },

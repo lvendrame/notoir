@@ -64,6 +64,9 @@
     "keyboardShortcuts": "Scorciatoie da tastiera"
   },
   "help": {
+    "documentation": "Documentazione",
+    "contextHelp": "Guida per il contesto corrente",
+    "keyboardReference": "Riferimento scorciatoie da tastiera",
     "about": "Informazioni su Notoir",
     "welcome": "Benvenuto"
   },

@@ -40,8 +40,14 @@ each workspace. See [Workspaces and the Explorer](workspaces.md).
 
 ## Find any command
 
-Press `Ctrl+Shift+P` (⇧⌘P) or `F1` to open the [command palette](command-palette.md) and type what you want to do:
+Press `Ctrl+Shift+P` (⇧⌘P) to open the [command palette](command-palette.md) and type what you want to do:
 "split", "theme", "word wrap"… Every command in Notoir is listed there with its shortcut.
+
+## Get help
+
+Press `F1` to open the page of this guide about what you are working on: the Explorer, a Markdown or JSON file, the
+Settings tab, the Git panel… **Help › Documentation** opens the guide's start page, and **Help › Keyboard Shortcut
+Reference** the list of shortcuts.
 
 ## Where next
 

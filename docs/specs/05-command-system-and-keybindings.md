@@ -103,7 +103,8 @@ pub struct KeyBinding { pub chord: KeyChord /* 1 or 2 keystrokes */, pub command
 | `edit.findNext` / `edit.findPrevious` | F3 / Shift+F3 | Cmd+G / Cmd+Shift+G |
 | `search.workspace` | Ctrl+Shift+F | Cmd+Shift+F |
 | `navigate.quickOpen` | Ctrl+P | Cmd+P |
-| `workbench.commandPalette` | Ctrl+Shift+P, F1 | Cmd+Shift+P, F1 |
+| `workbench.commandPalette` | Ctrl+Shift+P | Cmd+Shift+P |
+| `help.contextHelp` | F1 | F1 |
 | `navigate.goToLine` | Ctrl+G | Ctrl+G |
 | `navigate.back` / `forward` | Alt+← / Alt+→ | Ctrl+- / Ctrl+Shift+- |
 | `view.zoomIn` / `zoomOut` / `zoomReset` | Ctrl++ / Ctrl+- / Ctrl+0 | Cmd++ / Cmd+- / Cmd+0 |

@@ -112,7 +112,7 @@ pub(super) fn specs(out: &mut Specs) {
     );
     out.push(
         CommandSpec::new("workbench.commandPalette", Category::View, palette)
-            .keys([k("Mod+Shift+P"), k("F1")]),
+            .keys([k("Mod+Shift+P")]),
     );
     out.push(CommandSpec::new(
         "view.toggleMinimap",

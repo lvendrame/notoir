@@ -64,6 +64,9 @@
     "keyboardShortcuts": "Сочетания клавиш"
   },
   "help": {
+    "documentation": "Документация",
+    "contextHelp": "Справка по текущему контексту",
+    "keyboardReference": "Справочник сочетаний клавиш",
     "about": "О программе Notoir",
     "welcome": "Приветствие"
   },

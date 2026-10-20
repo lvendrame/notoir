@@ -64,6 +64,9 @@
     "keyboardShortcuts": "Atajos de teclado"
   },
   "help": {
+    "documentation": "Documentación",
+    "contextHelp": "Ayuda para el contexto actual",
+    "keyboardReference": "Referencia de atajos de teclado",
     "about": "Acerca de Notoir",
     "welcome": "Bienvenida"
   },

@@ -72,7 +72,7 @@ The menu bar as it appears on Windows and Linux, with default shortcuts. On macO
 
 ## View
 
-- Show All Commands — `Ctrl+Shift+P`, `F1`
+- Show All Commands — `Ctrl+Shift+P`
 - Quick Open… — `Ctrl+P`
 - **Panels** ›
   - Explorer
@@ -195,6 +195,8 @@ The menu bar as it appears on Windows and Linux, with default shortcuts. On macO
 ## Help
 
 - Welcome
+- Documentation
+- Keyboard Shortcut Reference
 - Recover Unsaved Documents…
 - Install 'notoir' Command in PATH
 - Uninstall 'notoir' Command from PATH

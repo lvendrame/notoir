@@ -64,6 +64,9 @@
     "keyboardShortcuts": "Klavye Kısayolları"
   },
   "help": {
+    "documentation": "Belgeler",
+    "contextHelp": "Geçerli Bağlam için Yardım",
+    "keyboardReference": "Klavye Kısayolları Başvurusu",
     "about": "Notoir Hakkında",
     "welcome": "Hoş Geldiniz"
   },

@@ -8,7 +8,7 @@ Define the Command Palette UI: the central entry point that keeps advanced featu
 
 ## Behaviour
 
-`workbench.commandPalette` (`Mod+Shift+P`, `F1`), or `>` in Quick Open. Overlay at the top centre, width
+`workbench.commandPalette` (`Mod+Shift+P`), or `>` in Quick Open. Overlay at the top centre, width
 min(640 px, 60 % window), max 12 visible rows.
 
 ```text

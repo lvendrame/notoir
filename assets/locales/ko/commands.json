@@ -64,6 +64,9 @@
     "keyboardShortcuts": "키보드 바로 가기"
   },
   "help": {
+    "documentation": "문서",
+    "contextHelp": "현재 컨텍스트 도움말",
+    "keyboardReference": "바로 가기 키 참조",
     "about": "Notoir 정보",
     "welcome": "시작"
   },

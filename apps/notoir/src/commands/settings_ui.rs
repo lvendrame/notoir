@@ -26,6 +26,15 @@ pub(super) fn specs(out: &mut Specs) {
         .icon("keyboard"),
     );
     out.push(CommandSpec::new("help.welcome", Category::Help, welcome));
+    out.push(
+        CommandSpec::new("help.documentation", Category::Help, documentation).icon("book-open"),
+    );
+    out.push(CommandSpec::new("help.contextHelp", Category::Help, context_help).keys([k("F1")]));
+    out.push(CommandSpec::new(
+        "help.keyboardReference",
+        Category::Help,
+        keyboard_reference,
+    ));
     out.push(CommandSpec::new("welcome.finish", Category::Help, finish_welcome).hidden());
     out.push(CommandSpec::new("view.zenMode", Category::View, zen).keys([k("Mod+K Z")]));
     out.push(
@@ -67,6 +76,24 @@ fn settings(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
 
 fn shortcuts(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
     core.open_settings(Some(SettingCategory::Keyboard));
+    CommandOutcome::Done
+}
+
+fn documentation(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    core.files.dialogs.open_external(&crate::help::url(None));
+    CommandOutcome::Done
+}
+
+/// F1: the guide page for what the user is working on.
+fn context_help(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    let url = crate::help::url(crate::help::topic(core));
+    core.files.dialogs.open_external(&url);
+    CommandOutcome::Done
+}
+
+fn keyboard_reference(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    let url = crate::help::url(Some(crate::help::SHORTCUTS));
+    core.files.dialogs.open_external(&url);
     CommandOutcome::Done
 }
 
