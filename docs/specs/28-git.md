@@ -1,6 +1,6 @@
 # 28 — Git & Source Control
 
-**Status:** Partial — read side (M18): detection, status, decorations, gutter bars, Compare with HEAD / Revision, File History, Open File at Revision. Write side (M19): Source Control panel (message with Mod+Enter and 72-column ruler, Commit / Commit All / Commit & Push / Amend, Staged Changes / Changes / Merge Conflicts with hover actions and context menus, smart commit prompt, discard confirmation with untracked files to the trash), branch picker (switch, create, create from, remote branches as tracking branches, save-first prompt, refused overwrites), fetch / pull (ffOnly, rebase, merge, diverged prompt) / push (publish on first push) / sync (confirmed once per workspace) through the system git with streamed Git Output, status bar progress and cancel, clone (URL picker, folder, open prompt), Initialize Repository, Sync Notes (save, commit all, fetch, predicted-conflict stop, rebase, push); opt-in `git.autoFetch` timer, `git.pullOnOpen`, `git.autoPush`. M18 completion: gutter peek (click a change bar: original lines, Revert Change as an undoable edit, Stage Change writing only that hunk to the index, Escape / second click closes); nested repositories one level below the root (`git.scanNestedRepos`, off by default) with decorations and gutters per repository and a repository switcher in Source Control; status runs on their own threads, newer runs supersede older ones. Later: Sync Notes triggers (on open, every N minutes, on close); Add to .gitignore; tree view of changes; git2 network fallback without a system git
+**Status:** Partial — read side (M18): detection, status, decorations, gutter bars, Compare with HEAD / Revision, File History, Open File at Revision. Write side (M19): Source Control panel (message with Mod+Enter and 72-column ruler, Commit / Commit All / Commit & Push / Amend, Staged Changes / Changes / Merge Conflicts with hover actions and context menus, smart commit prompt, discard confirmation with untracked files to the trash), branch picker (switch, create, create from, remote branches as tracking branches, save-first prompt, refused overwrites), fetch / pull (ffOnly, rebase, merge, diverged prompt) / push (publish on first push) / sync (confirmed once per workspace) through the system git with streamed Git Output, status bar progress and cancel, clone (URL picker, folder, open prompt), Initialize Repository, Sync Notes (save, commit all, fetch, predicted-conflict stop, rebase, push); opt-in `git.autoFetch` timer, `git.pullOnOpen`, `git.autoPush`; external repository rediscovery and manual-save auto-commit grouped per repository, with dependent Auto Push. M18 completion: gutter peek (click a change bar: original lines, Revert Change as an undoable edit, Stage Change writing only that hunk to the index, Escape / second click closes); nested repositories one level below the root (`git.scanNestedRepos`, off by default) with decorations and gutters per repository and a repository switcher in Source Control; status runs on their own threads, newer runs supersede older ones. Later: Sync Notes triggers (on open, every N minutes, on close); Add to .gitignore; tree view of changes; git2 network fallback without a system git
 
 ## Purpose
 
@@ -65,6 +65,34 @@ On workspace open (`git.autoDetect = true`): discover the repo containing the ro
 monorepo-of-notes setups, `git.scanNestedRepos`). Files outside any repo get no decorations. Settings: `git.enabled`
 (default true), `git.autoDetect` (true), `git.autoFetch` (**false**), `git.pullOnOpen` (**false**), `git.autoCommit`
 (**false**), `git.autoPush` (**false**, restricted), `git.confirmSync` (true), `git.pullMode` (`ffOnly`).
+
+## Manual-save automation
+
+File → Auto Commit (after Auto Save) offers Off / On Manual Save, stored through `git.autoCommit` at Workspace scope.
+Only explicit Save, Save As, and Save All qualify; autosave, recovery, external changes, plugins/MCP, and internal Git
+workflow saves do not. Save All waits for all writes and dialogs, then commits successful changed snapshots once per
+repository. Failed/cancelled saves are excluded and reported. Ignored files, unchanged contents, and files outside
+detected repositories are excluded. New non-ignored files qualify. Preserve unrelated index entries and the Source
+Control message draft; participating files include their full saved content, including previously staged hunks.
+
+One included file uses `File saved - {file_name} - Date: {yyyy-MM-dd} Time: {HH-mm-ss}` (basename). Multiple files use
+`Save files - {yyyy-MM-dd HH:mm:ss}`, a blank line, then sorted, unique repository-relative paths with forward slashes,
+one per line. Use local 24-hour time when the save batch finishes. Do not create empty commits.
+
+File → Auto Commit → Auto Push uses `git.autoPush` (off by default), stored at Workspace scope.
+Explicit menu choices are remembered locally per workspace as consent, so the checkbox works immediately without
+trusting unrelated workspace settings. Repository-provided `git.autoPush` still requires trust unless the user has
+made that local choice. Its checkbox is selectable
+only with Auto Commit enabled; turning Auto Commit off also turns Auto Push off. Enabling Auto Commit does not enable
+Auto Push. Auto Push applies to manual and automatic commits and sends all pending commits on the branch. Successful
+auto-commits trigger one background push per repository; missing upstream requires publish confirmation. Cancellation
+or push failure preserves the local commit, with Git Output and Retry on failure. Never force-push or automatically
+pull to resolve rejection. Pending pushes retain their originating repository/branch and are discarded after workspace
+or branch changes or disabling Auto Push. Automatic commits skip unfinished merge/rebase/conflict states.
+
+Repository discovery also runs after relevant filesystem changes and on window focus (500 ms debounce). `git.refresh`
+rediscovers repositories even when none is known. The no-repository Source Control state shows Refresh above Initialize.
+Discovery remains asynchronous, respects detection settings, and retains the selected repository if still present.
 
 ## Decorations
 
@@ -226,4 +254,50 @@ Feature: Sync Notes
     Given "a.md" is open and clean
     When the user switches to a branch where "a.md" differs
     Then the editor shows the branch's version of "a.md"
+Feature: Manual-save automation
+
+  Scenario: Detect external repository initialization
+    Given an open workspace without a Git repository
+    Then Source Control offers Refresh above Initialize Repository
+    When Git is initialized externally
+    Then the repository is detected without reopening the workspace
+
+  Scenario: Save All creates one grouped commit
+    Given Auto Commit is enabled and two open files have unsaved edits
+    And an unrelated file is staged
+    When the user chooses Save All
+    Then one commit contains both saved files with a multi-file subject and sorted relative paths
+    And unrelated staged content remains staged and outside the commit
+    And no push runs while Auto Push is off
+
+  Scenario: Single-file save retains original message
+    Given Auto Commit is enabled and a file is open
+    When an internal save writes the file
+    Then no automatic commit is created
+    When the user chooses Save All with only that file changed
+    Then one commit uses the original single-line file-save message
+
+  Scenario: Auto Push depends on Auto Commit
+    Given a Git workspace with automation off
+    Then Auto Push cannot be enabled through its command
+    When Auto Commit and Auto Push are enabled then Auto Commit is disabled
+    Then both workspace preferences are off
+    When Auto Commit is enabled again
+    Then Auto Push stays off
+
+  Scenario: Save All pushes its grouped commit
+    Given Auto Commit and Auto Push are enabled with a configured upstream
+    When the user chooses Save All
+    Then one automatic push sends the save commit to the originating repository's upstream
+
+  Scenario: Auto Push selection in an untrusted workspace
+    Given an untrusted workspace with Auto Commit off
+    When the user opens the File menu
+    Then Auto Push appears only inside Auto Commit and is disabled
+    When the user enables On Manual Save and clicks Auto Push
+    Then Auto Push becomes checked without trusting the workspace or enabling MCP
+    And the choice survives reopening that workspace
+    When the user clicks Auto Push again
+    Then Auto Push becomes unchecked
+
 ```

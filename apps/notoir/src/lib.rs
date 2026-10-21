@@ -17,6 +17,7 @@ pub mod files;
 pub mod find;
 pub mod fonts;
 pub mod git;
+pub mod git_auto;
 pub mod git_write;
 pub mod help;
 pub mod i18n;

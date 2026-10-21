@@ -138,5 +138,6 @@
     "title": "Alteração {{n}} de {{total}}",
     "close": "Fechar",
     "added": "Linhas adicionadas; a base não tem nada aqui."
-  }
+  },
+  "autoPushHelp": "Enviar após commits manuais e automáticos. Envia todos os commits pendentes da branch."
 }

@@ -27,6 +27,10 @@ The menu bar as it appears on Windows and Linux, with default shortcuts. On macO
   - After Delay
   - On Focus Change
   - On Window Focus Loss
+- **Auto Commit** ›
+  - Off
+  - On Manual Save
+  - Auto Push
 - Revert File
 - Close — `Ctrl+W`
 - Close Others

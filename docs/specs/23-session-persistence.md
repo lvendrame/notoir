@@ -18,6 +18,7 @@ Per workspace (keyed by canonical root path) and for the "no workspace" session:
 - Explorer expanded directories (capped at 500 paths), Explorer scroll
 - Search panel last query and toggles
 - Bookmarks per file path
+- Explicit Auto Push consent, kept locally and separate from repository settings (spec 28)
 - Navigation history (optional, `workbench.restoreNavigationHistory = false` by default)
 
 Global:
@@ -73,6 +74,7 @@ CREATE TABLE permission_grant (principal TEXT NOT NULL, capability TEXT NOT NULL
 CREATE TABLE mcp_activity (id INTEGER PRIMARY KEY, at INTEGER NOT NULL, client_id TEXT, tool TEXT NOT NULL, target TEXT, outcome TEXT NOT NULL, duration_ms INTEGER);
 CREATE TABLE plugin_approval (plugin_id TEXT PRIMARY KEY, version TEXT NOT NULL, permissions_hash TEXT NOT NULL, approved_at INTEGER NOT NULL, enabled INTEGER NOT NULL);
 CREATE TABLE notice_dismissed (key TEXT PRIMARY KEY, at INTEGER NOT NULL);
+CREATE TABLE workspace_push_consent (workspace_key TEXT PRIMARY KEY, enabled INTEGER NOT NULL CHECK (enabled IN (0, 1)));
 ```
 
 ## Write Policy

@@ -119,7 +119,13 @@ pub(crate) fn menu_items(
                 let check = kit.icon(ui.ctx(), Icon::Check, ICON_SM, check_color);
                 let button = egui::Button::new((check, text)).shortcut_text(shortcut_for(core, id));
                 let enabled = spec.enablement.eval(context);
-                if ui.add_enabled(enabled, button).clicked() {
+                let response = ui.add_enabled(enabled, button);
+                let response = if *id == "git.autoPush" {
+                    response.on_hover_text(t!("git:autoPushHelp"))
+                } else {
+                    response
+                };
+                if response.clicked() {
                     actions.push(
                         CommandInvocation::new(*id, InvocationSource::Menu).with_args(args.clone()),
                     );

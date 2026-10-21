@@ -25,7 +25,8 @@
     "sortLines": "Satırları Sırala",
     "lineNumbers": "Satır Numaraları",
     "git": "Git",
-    "mcpSetup": "Kurulum komutunu kopyala"
+    "mcpSetup": "Kurulum komutunu kopyala",
+    "autoCommit": "Otomatik commit"
   },
   "item": {
     "primarySidebar": "Birincil Kenar Çubuğu",
@@ -47,5 +48,9 @@
     "afterDelay": "Gecikmeden Sonra",
     "onFocusChange": "Odak Değişince",
     "onWindowFocusLoss": "Pencere Odağı Kaybedince"
+  },
+  "autoCommit": {
+    "off": "Kapalı",
+    "manual": "Elle kaydederken"
   }
 }

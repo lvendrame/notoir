@@ -227,6 +227,9 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Command | Id | macOS | Windows / Linux |
 |---|---|---|---|
 | Amend Last Commit | `git.commitAmend` |  |  |
+| Auto Commit | `git.autoCommit` |  |  |
+| Auto Push | `git.autoPush` |  |  |
+| Auto Push *(hidden)* | `git.retryAutoPush` |  |  |
 | Cancel Git Operation | `git.cancel` |  |  |
 | Check Out Branch *(hidden)* | `git.checkout` |  |  |
 | Choose Branch *(hidden)* | `git.branchPick` |  |  |

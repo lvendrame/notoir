@@ -25,7 +25,8 @@
     "sortLines": "Sort Lines",
     "lineNumbers": "Line Numbers",
     "git": "Git",
-    "mcpSetup": "Copy Setup Command"
+    "mcpSetup": "Copy Setup Command",
+    "autoCommit": "Auto Commit"
   },
   "item": {
     "primarySidebar": "Primary Sidebar",
@@ -47,5 +48,9 @@
     "afterDelay": "After Delay",
     "onFocusChange": "On Focus Change",
     "onWindowFocusLoss": "On Window Focus Loss"
+  },
+  "autoCommit": {
+    "off": "Off",
+    "manual": "On Manual Save"
   }
 }

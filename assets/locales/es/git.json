@@ -138,5 +138,6 @@
     "title": "Cambio {{n}} de {{total}}",
     "close": "Cerrar",
     "added": "Líneas añadidas; la base no tiene nada aquí."
-  }
+  },
+  "autoPushHelp": "Enviar tras los commits manuales y automáticos. Envía todos los commits pendientes de la rama."
 }

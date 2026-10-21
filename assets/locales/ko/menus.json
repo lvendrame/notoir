@@ -25,7 +25,8 @@
     "sortLines": "줄 정렬",
     "lineNumbers": "줄 번호",
     "git": "Git",
-    "mcpSetup": "설정 명령 복사"
+    "mcpSetup": "설정 명령 복사",
+    "autoCommit": "자동 커밋"
   },
   "item": {
     "primarySidebar": "기본 사이드바",
@@ -47,5 +48,9 @@
     "afterDelay": "지연 후",
     "onFocusChange": "포커스 변경 시",
     "onWindowFocusLoss": "창이 포커스를 잃을 때"
+  },
+  "autoCommit": {
+    "off": "끄기",
+    "manual": "수동 저장 시"
   }
 }

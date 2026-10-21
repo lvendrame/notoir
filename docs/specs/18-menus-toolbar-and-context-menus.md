@@ -36,6 +36,9 @@ Save                              Mod+S
 Save As…                          Mod+Shift+S
 Save All                          Mod+Alt+S
 Auto Save ›   ◉ Off  ○ After Delay  ○ On Focus Change  ○ On Window Focus Loss
+Auto Commit › ◉ Off  ○ On Manual Save
+              ───
+              Auto Push (checkbox; enabled only when Auto Commit is on)
 Revert File
 ─────
 Close                             Mod+W

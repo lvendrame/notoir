@@ -138,5 +138,6 @@
     "title": "Zmiana {{n}} z {{total}}",
     "close": "Zamknij",
     "added": "Dodane wiersze; w wersji bazowej nic tu nie ma."
-  }
+  },
+  "autoPushHelp": "Wysyłaj po ręcznych i automatycznych commitach. Wysyła wszystkie oczekujące commity gałęzi."
 }

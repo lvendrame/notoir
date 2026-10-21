@@ -41,11 +41,85 @@ pub(super) fn specs(out: &mut Specs) {
     out.push(spec("git.openFileAtRevision", |c, i| {
         history(c, i, HistoryMode::OpenAtRevision)
     }));
-    out.push(spec("git.refresh", |c, _| {
-        c.git_refresh_soon();
-        CommandOutcome::Done
-    }));
+    out.push(
+        CommandSpec::new(
+            "git.refresh",
+            Category::Git,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.git_rediscover_soon();
+                CommandOutcome::Done
+            },
+        )
+        .when("hasWorkspace")
+        .expect("valid"),
+    );
     out.push(CommandSpec::new("git.historyPick", Category::Git, history_pick).hidden());
+
+    out.push(
+        CommandSpec::new(
+            "git.autoCommit",
+            Category::Git,
+            |c: &mut AppCore, i: &CommandInvocation| {
+                let enabled = match arg(i, "mode") {
+                    Some("off") => false,
+                    Some("manual") => true,
+                    None => !c.settings.bool("git.autoCommit", None),
+                    _ => return bad_args(i),
+                };
+                c.set_workspace_setting(
+                    "git.autoCommit",
+                    Some(notoir_core::settings::SettingValue::Bool(enabled)),
+                );
+                if !enabled {
+                    c.set_workspace_auto_push(false);
+                }
+                CommandOutcome::Done
+            },
+        )
+        .when("hasWorkspace")
+        .expect("valid"),
+    );
+    out.push(
+        CommandSpec::new(
+            "git.autoPush",
+            Category::Git,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                let enabled = !c.settings.bool("git.autoPush", None);
+                c.set_workspace_auto_push(enabled);
+                CommandOutcome::Done
+            },
+        )
+        .when("hasWorkspace && autoCommit")
+        .expect("valid"),
+    );
+    out.push(
+        CommandSpec::new(
+            "git.retryAutoPush",
+            Category::Git,
+            |c: &mut AppCore, i: &CommandInvocation| {
+                if let (Some(workdir), Some(branch), Some(generation)) = (
+                    arg(i, "workdir"),
+                    arg(i, "branch"),
+                    i.args.get("generation").and_then(|v| v.as_u64()),
+                ) && let Some(repo) = c
+                    .git
+                    .repos
+                    .iter()
+                    .find(|r| r.workdir == std::path::Path::new(workdir))
+                    .cloned()
+                {
+                    c.git_queue_auto_push(crate::git_auto::PushTarget {
+                        repo,
+                        branch: branch.to_owned(),
+                        generation,
+                        publish: None,
+                    });
+                }
+                CommandOutcome::Done
+            },
+        )
+        .hidden(),
+    );
 
     // Gutter peek
     out.push(CommandSpec::new("git.peekChange", Category::Git, peek_change).hidden());

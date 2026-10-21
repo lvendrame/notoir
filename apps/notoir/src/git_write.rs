@@ -124,6 +124,7 @@ pub enum NetDone {
 
 /// The running network operation.
 pub struct NetRun {
+    pub auto_target: Option<crate::git_auto::PushTarget>,
     pub op: NetOp,
     pub cancel: CancellationToken,
     /// Last progress line: percent and phase.
@@ -141,6 +142,10 @@ pub enum BranchPick {
 /// Git confirmations (shown by the prompt queue).
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum GitPrompt {
+    AutoPublish {
+        target: crate::git_auto::PushTarget,
+        remote: String,
+    },
     Discard {
         tracked: Vec<String>,
         untracked: Vec<String>,
@@ -313,6 +318,7 @@ fn run_net(
                 repo,
                 PushOpts {
                     set_upstream: publish.clone(),
+                    ..Default::default()
                 },
                 out,
                 cancel,
@@ -352,7 +358,7 @@ fn pull_mode(s: &str) -> PullMode {
 }
 
 /// Why an operation failed, for notifications.
-fn reason_key(e: &GitError) -> &'static str {
+pub(crate) fn reason_key(e: &GitError) -> &'static str {
     match e {
         GitError::Auth => "git:reason.auth",
         GitError::Locked => "git:reason.locked",
@@ -574,11 +580,19 @@ impl AppCore {
 
     /// Starts a network operation on its own thread.
     pub fn git_start_net(&mut self, op: NetOp) {
+        self.git_start_net_for(op, self.git.repo.clone(), None);
+    }
+
+    pub fn git_start_net_for(
+        &mut self,
+        op: NetOp,
+        repo: Option<RepoInfo>,
+        auto_target: Option<crate::git_auto::PushTarget>,
+    ) {
         if self.git.net.is_some() {
             self.git_say(Severity::Info, Translatable::new("git:alreadyRunning"));
             return;
         }
-        let repo = self.git.repo.clone();
         if repo.is_none() && !matches!(op, NetOp::Clone { .. }) {
             return;
         }
@@ -593,6 +607,7 @@ impl AppCore {
             self.git.notice = None;
         }
         self.git.net = Some(NetRun {
+            auto_target: auto_target.clone(),
             op: op.clone(),
             cancel: cancel.clone(),
             progress: None,
@@ -608,7 +623,29 @@ impl AppCore {
                     SystemGit::find(Some(&git_path)).map(|g| Arc::new(g) as Arc<dyn GitRemote>)
                 });
                 let result = match remote {
-                    Some(remote) => run_net(&*backend, &*remote, repo.as_ref(), &op, sink, cancel),
+                    Some(remote) => {
+                        if let Some(target) = auto_target {
+                            let opts = PushOpts {
+                                set_upstream: target.publish,
+                                branch: Some(target.branch.clone()),
+                            };
+                            backend
+                                .status(&target.repo, StatusOpts::default())
+                                .and_then(|status| {
+                                    if status.head.branch.as_deref() != Some(target.branch.as_str())
+                                    {
+                                        return Err(GitError::Git(
+                                            "Branch changed before pushing".into(),
+                                        ));
+                                    }
+                                    remote
+                                        .push(&target.repo, opts, sink, cancel)
+                                        .map(|()| NetDone::Done)
+                                })
+                        } else {
+                            run_net(&*backend, &*remote, repo.as_ref(), &op, sink, cancel)
+                        }
+                    }
                     None => Err(GitError::NoGit),
                 };
                 poster.post(IoResult::Git(Box::new(GitResult::Net {
@@ -652,7 +689,16 @@ impl AppCore {
         op: NetOp,
         result: Result<NetDone, GitError>,
     ) {
-        self.git.net = None;
+        let auto_target = self.git.net.take().and_then(|n| n.auto_target);
+        if let Some(target) = auto_target {
+            if generation == self.git.generation {
+                if let Err(e) = result {
+                    self.git_auto_failed("git:failed.push", &target, &e, true);
+                }
+                self.git_refresh_soon();
+            }
+            return;
+        }
         if let NetOp::Clone { url, dest } = &op {
             match result {
                 Ok(_) => {
@@ -1027,6 +1073,10 @@ impl AppCore {
             }
             (GitPrompt::Diverged { .. }, Answer::Secondary) => {
                 self.git_start_net(NetOp::Pull(PullMode::Merge))
+            }
+            (GitPrompt::AutoPublish { mut target, remote }, Answer::Primary) => {
+                target.publish = Some((remote, target.branch.clone()));
+                self.git_queue_auto_push(target);
             }
             (GitPrompt::Publish { branch, remote }, Answer::Primary) => {
                 self.git_start_net(NetOp::Push {

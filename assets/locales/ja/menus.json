@@ -25,7 +25,8 @@
     "sortLines": "行の並べ替え",
     "lineNumbers": "行番号",
     "git": "Git",
-    "mcpSetup": "セットアップコマンドをコピー"
+    "mcpSetup": "セットアップコマンドをコピー",
+    "autoCommit": "自動コミット"
   },
   "item": {
     "primarySidebar": "プライマリ サイドバー",
@@ -47,5 +48,9 @@
     "afterDelay": "遅延後",
     "onFocusChange": "フォーカス変更時",
     "onWindowFocusLoss": "ウィンドウのフォーカス喪失時"
+  },
+  "autoCommit": {
+    "off": "オフ",
+    "manual": "手動保存時"
   }
 }

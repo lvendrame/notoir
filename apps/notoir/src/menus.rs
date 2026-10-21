@@ -148,6 +148,27 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
                 })
                 .collect(),
         ),
+        sub(
+            "menus:sub.autoCommit",
+            ["off", "manual"]
+                .into_iter()
+                .map(|mode| MenuItem::Command {
+                    id: "git.autoCommit",
+                    args: json!({"mode": mode}),
+                    label: Some(format!("menus:autoCommit.{mode}")),
+                    checked: Some(format!("autoCommit.{mode}")),
+                })
+                .chain([
+                    SEP,
+                    MenuItem::Command {
+                        id: "git.autoPush",
+                        args: json!({}),
+                        label: None,
+                        checked: Some("autoPush".into()),
+                    },
+                ])
+                .collect(),
+        ),
         cmd("file.revert"),
         SEP,
         cmd("file.close"),

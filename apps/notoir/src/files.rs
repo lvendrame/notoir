@@ -275,6 +275,8 @@ pub struct SaveOutcome {
     pub save_as: bool,
     pub encoding: TextEncoding,
     pub result: Result<Saved, SaveError>,
+    pub auto_batch: Option<(u64, u64)>,
+    pub saved_bytes: Vec<u8>,
 }
 
 // ── prompts ──────────────────────────────────────────────────────────────
@@ -362,6 +364,7 @@ pub const RECENT_SHOWN: usize = 10;
 
 /// File-related state owned by `AppCore`.
 pub struct FileState {
+    manual_save: bool,
     pub dialogs: Arc<dyn Dialogs>,
     pub prompts: VecDeque<Prompt>,
     pub pending: Vec<Pending>,
@@ -378,6 +381,7 @@ pub struct FileState {
 impl FileState {
     pub fn new(dialogs: Arc<dyn Dialogs>, scratch_dir: PathBuf) -> Self {
         Self {
+            manual_save: false,
             dialogs,
             prompts: VecDeque::new(),
             pending: Vec::new(),
@@ -767,6 +771,14 @@ impl AppCore {
 
     // ── saving ───────────────────────────────────────────────────────────
 
+    /// Marks the synchronous entry into the save pipeline as user initiated.
+    pub fn manual_save(&mut self, action: impl FnOnce(&mut Self)) {
+        let previous = self.files.manual_save;
+        self.files.manual_save = true;
+        action(self);
+        self.files.manual_save = previous;
+    }
+
     /// File → Save. Untitled documents and Scratchpads go through Save As.
     pub fn save(&mut self, doc: DocumentId) {
         let Some(d) = self.workbench.document(doc) else {
@@ -817,9 +829,14 @@ impl AppCore {
     }
 
     pub fn handle_save_as_picked(&mut self, doc: DocumentId, path: Option<PathBuf>) {
+        if self.workbench.document(doc).is_none() {
+            self.auto_save_cancelled(doc);
+            return;
+        }
         let Some(path) = path else {
             // Cancelled: anything waiting on this save is abandoned.
             self.files.pending.retain(|p| !p.waiting.contains(&doc));
+            self.auto_save_cancelled(doc);
             return;
         };
         let (_, key) = fs_io::identity(&path);
@@ -830,6 +847,7 @@ impl AppCore {
                     Translatable::new("notifications:saveAsOpenDirty")
                         .arg("name", file_name(&path)),
                 ));
+                self.auto_save_cancelled(doc);
                 return;
             }
             let views: Vec<ViewId> = self
@@ -842,7 +860,10 @@ impl AppCore {
                 let _ = self.workbench.close_view(v, true);
             }
         }
+        let manual = self.files.manual_save;
+        self.files.manual_save = self.git.auto_save.documents.contains_key(&doc);
         self.start_save(doc, path, true, None, false);
+        self.files.manual_save = manual;
     }
 
     /// Save as Administrator… (spec 36): the same save, with the final
@@ -889,6 +910,15 @@ impl AppCore {
         let line_ending = d.line_ending;
         let atomic = self.settings.bool("files.atomicSave", None);
         let elevation = elevated.then(|| self.elevation.clone());
+        let auto_batch = if self.files.manual_save {
+            self.git
+                .auto_save
+                .documents
+                .remove(&doc)
+                .map(|id| (self.git.generation, id))
+        } else {
+            None
+        };
         self.saving.insert(doc);
         self.io.submit(move || {
             let req = SaveRequest {
@@ -911,6 +941,15 @@ impl AppCore {
                 }),
                 None => fs_io::save(&req),
             };
+            let saved_bytes = if auto_batch.is_some() && result.is_ok() {
+                notoir_editor::encoding::encode(
+                    &notoir_editor::line_ending::denormalize(&req.text, req.line_ending),
+                    req.encoding,
+                )
+                .expect("successful save was encodable")
+            } else {
+                Vec::new()
+            };
             Some(IoResult::Saved(Box::new(SaveOutcome {
                 doc,
                 state,
@@ -918,6 +957,8 @@ impl AppCore {
                 save_as,
                 encoding,
                 result,
+                auto_batch,
+                saved_bytes,
             })))
         });
     }
@@ -982,9 +1023,16 @@ impl AppCore {
             save_as,
             encoding,
             result,
+            auto_batch,
+            saved_bytes,
         } = outcome;
+        if !matches!(result, Err(SaveError::Conflict)) {
+            let snapshot = result.is_ok().then(|| (path.clone(), saved_bytes));
+            self.auto_save_finished(doc, auto_batch, snapshot);
+        }
         self.saving.remove(&doc);
         if self.workbench.document(doc).is_none() {
+            self.auto_save_finished(doc, auto_batch, None);
             return;
         }
         match result {
@@ -1023,6 +1071,11 @@ impl AppCore {
                 self.saved_continue(doc);
             }
             Err(SaveError::Conflict) => {
+                if let Some((generation, id)) = auto_batch
+                    && generation == self.git.generation
+                {
+                    self.git.auto_save.documents.insert(doc, id);
+                }
                 self.files.prompts.push_back(Prompt::SaveConflict { doc });
             }
             Err(SaveError::ElevationCancelled) => {
@@ -1262,6 +1315,10 @@ impl AppCore {
         match (prompt, answer) {
             (Prompt::Git(p), a) => self.git_answer(p, a),
             (Prompt::Notes(p), a) => self.notes_answer(p, a),
+            (Prompt::SaveConflict { doc }, Answer::Cancel) => {
+                self.auto_save_cancelled(doc);
+                self.files.pending.retain(|p| !p.waiting.contains(&doc));
+            }
             (_, Answer::Cancel) => {}
             (Prompt::Unsaved { docs, then }, Answer::Primary) => {
                 self.files.pending.push(Pending {
@@ -1318,10 +1375,11 @@ impl AppCore {
                     .and_then(|d| d.path())
                     .map(Path::to_path_buf)
                 {
-                    self.start_save(doc, path, false, None, true);
+                    self.manual_save(|core| core.start_save(doc, path, false, None, true));
                 }
             }
             (Prompt::SaveConflict { doc }, _) => {
+                self.auto_save_cancelled(doc);
                 self.files.pending.retain(|p| !p.waiting.contains(&doc))
             }
             (Prompt::Revert { doc }, Answer::Primary) => {

@@ -25,7 +25,8 @@
     "sortLines": "Trier les lignes",
     "lineNumbers": "Numéros de ligne",
     "git": "Git",
-    "mcpSetup": "Copier la commande de configuration"
+    "mcpSetup": "Copier la commande de configuration",
+    "autoCommit": "Commit automatique"
   },
   "item": {
     "primarySidebar": "Barre latérale principale",
@@ -47,5 +48,9 @@
     "afterDelay": "Après un délai",
     "onFocusChange": "Au changement de focus",
     "onWindowFocusLoss": "À la perte de focus de la fenêtre"
+  },
+  "autoCommit": {
+    "off": "Désactivé",
+    "manual": "À l’enregistrement manuel"
   }
 }

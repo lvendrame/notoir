@@ -92,3 +92,22 @@ For a notes workspace kept in a Git repository, **Git › Sync Notes** does the 
 
 If a conflict is likely, it stops after the commit and opens Source Control with an explanation; nothing is ever
 reset or force-pushed. Enable it with `notes.sync.enabled` (it needs a trusted workspace).
+
+## Commit and push on save
+
+Choose **File → Auto Commit → On Manual Save** to commit after Save, Save As, or Save All. The preference is off by
+default and applies to the current workspace. Autosave does not trigger commits. Save All creates one commit per
+repository containing successfully saved, changed files. Failed/cancelled saves and ignored files are excluded.
+Other files' staged changes stay outside these commits; staged hunks in a saved file are included in its full save.
+
+A single-file commit uses `File saved - meeting.md - Date: 2026-10-21 Time: 14-32-08`. A multi-file commit uses
+`Save files - 2026-10-21 14:32:08`, followed by a blank line and sorted repository-relative paths, one per line.
+Dates and times use your local timezone.
+
+Enable **File → Auto Commit → Auto Push** to push after manual and automatic commits. This sends **all pending commits on the branch**.
+It requires Auto Commit to be enabled. Your explicit choice is remembered locally for this workspace without trusting its other settings. Turning Auto Commit off also turns
+Auto Push off. Publishing a branch requires confirmation. Push failures keep local commits and offer Retry and Git
+Output; Notoir does not force-push or pull automatically to resolve rejection.
+
+If you initialize Git outside Notoir, it detects the repository automatically. You can also click **Refresh Git Status**
+above **Initialize Repository** in Source Control or switch away from Notoir and back to trigger detection.

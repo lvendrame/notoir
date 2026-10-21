@@ -266,6 +266,19 @@ pub struct BranchInfo {
     pub time: i64,
 }
 
+/// Exact bytes successfully written by one save operation.
+#[derive(Clone, Debug)]
+pub struct SavedFile {
+    pub path: String,
+    pub bytes: Vec<u8>,
+}
+
+#[derive(Clone, Debug)]
+pub struct SavedCommit {
+    pub sha: String,
+    pub message: String,
+}
+
 /// Local Git operations.
 pub trait GitBackend: Send + Sync {
     /// The repository containing `path`, if any.
@@ -303,6 +316,15 @@ pub trait GitBackend: Send + Sync {
     fn discard(&self, repo: &RepoInfo, paths: &[String]) -> Result<(), GitError>;
     /// Commits the index; returns the short SHA.
     fn commit(&self, repo: &RepoInfo, msg: &str, opts: CommitOpts) -> Result<String, GitError>;
+    /// Commit saved snapshots without including unrelated index entries.
+    /// `branch` is checked before writing; an unchanged batch returns None.
+    fn commit_saved(
+        &self,
+        repo: &RepoInfo,
+        files: &[SavedFile],
+        branch: &str,
+        timestamp: &str,
+    ) -> Result<Option<SavedCommit>, GitError>;
     /// Local branches (newest first), then remote branches.
     fn branches(&self, repo: &RepoInfo) -> Result<Vec<BranchInfo>, GitError>;
     /// Switches to a local branch, or creates a tracking branch for a remote

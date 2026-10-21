@@ -681,6 +681,16 @@ impl AppCore {
             )
             .set_bool("compareSelected", self.compare.selected.is_some())
             .set_bool("columnSelection", self.column_mode)
+            .set_bool("autoCommit", self.settings.bool("git.autoCommit", None))
+            .set_bool(
+                "autoCommit.manual",
+                self.settings.bool("git.autoCommit", None),
+            )
+            .set_bool(
+                "autoCommit.off",
+                !self.settings.bool("git.autoCommit", None),
+            )
+            .set_bool("autoPush", self.settings.bool("git.autoPush", None))
             .set_bool("gitRepo", self.git.repo.is_some())
             .set_bool("gitBusy", self.git_busy())
             .set_bool("gitNetwork", self.git.net.is_some())

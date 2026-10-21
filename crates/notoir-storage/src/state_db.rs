@@ -18,6 +18,7 @@ const MIGRATIONS: &[&str] = &[
     include_str!("../migrations/0002_workspace_trust.sql"),
     include_str!("../migrations/0003_mcp.sql"),
     include_str!("../migrations/0004_plugins.sql"),
+    include_str!("../migrations/0005_workspace_push_consent.sql"),
 ];
 pub const SCHEMA_VERSION: u32 = MIGRATIONS.len() as u32;
 /// Unpinned recent entries kept per kind.
@@ -442,6 +443,22 @@ impl StateDb {
 
     // ── workspace trust ──────────────────────────────────────────────────
 
+    /// A local, explicit choice; None leaves the regular trust rules in place.
+    pub fn workspace_push_consent(&self, key: &str) -> Result<Option<bool>, StorageError> {
+        Ok(self
+            .conn
+            .query_row(
+                "SELECT enabled FROM workspace_push_consent WHERE workspace_key = ?1",
+                [key],
+                |r| r.get(0),
+            )
+            .optional()?)
+    }
+
+    pub fn set_workspace_push_consent(&self, key: &str, enabled: bool) -> Result<(), StorageError> {
+        self.write(|c| c.execute("INSERT INTO workspace_push_consent (workspace_key, enabled) VALUES (?1, ?2) ON CONFLICT(workspace_key) DO UPDATE SET enabled = excluded.enabled", params![key, enabled]).map(drop))
+    }
+
     pub fn set_workspace_trusted(
         &self,
         workspace_key: &str,
@@ -738,6 +755,22 @@ fn set_aside_corrupt(path: &Path) -> Result<PathBuf, StorageError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn push_consent_is_local_persistent_and_independent_of_workspace_trust() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("state.db");
+        let (db, _) = StateDb::open(&path).unwrap();
+        assert_eq!(db.workspace_push_consent("first").unwrap(), None);
+        db.set_workspace_push_consent("first", true).unwrap();
+        assert!(!db.is_workspace_trusted("first").unwrap());
+        assert_eq!(db.workspace_push_consent("second").unwrap(), None);
+        drop(db);
+        let (db, _) = StateDb::open(&path).unwrap();
+        assert_eq!(db.workspace_push_consent("first").unwrap(), Some(true));
+        db.set_workspace_push_consent("first", false).unwrap();
+        assert_eq!(db.workspace_push_consent("first").unwrap(), Some(false));
+    }
 
     #[test]
     fn creates_schema_and_reopens() {

@@ -138,5 +138,6 @@
     "title": "Modifica {{n}} di {{total}}",
     "close": "Chiudi",
     "added": "Righe aggiunte; la base qui non contiene nulla."
-  }
+  },
+  "autoPushHelp": "Esegui il push dopo i commit manuali e automatici. Invia tutti i commit in sospeso del ramo."
 }

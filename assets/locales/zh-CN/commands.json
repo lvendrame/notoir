@@ -356,7 +356,10 @@
     "stageChange": "暂存更改",
     "peekChange": "显示更改",
     "closePeek": "关闭更改",
-    "selectRepository": "选择存储库"
+    "selectRepository": "选择存储库",
+    "autoCommit": "自动提交",
+    "autoPush": "自动推送",
+    "retryAutoPush": "自动推送"
   },
   "mcp": {
     "startServer": "启动 MCP 服务器",

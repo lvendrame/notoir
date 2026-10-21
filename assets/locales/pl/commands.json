@@ -356,7 +356,10 @@
     "stageChange": "Dodaj zmianę do poczekalni",
     "peekChange": "Pokaż zmianę",
     "closePeek": "Zamknij zmianę",
-    "selectRepository": "Wybierz repozytorium"
+    "selectRepository": "Wybierz repozytorium",
+    "autoCommit": "Automatyczny commit",
+    "autoPush": "Automatyczny push",
+    "retryAutoPush": "Automatyczny push"
   },
   "mcp": {
     "startServer": "Uruchom serwer MCP",

@@ -8,6 +8,10 @@ Define three independent systems: **Save** (user writes to the real file), **Aut
 **Recovery** (always-on snapshots of unsaved state into Notoir's own storage). Recovery is the first line of data-loss
 prevention and is one of the earliest subsystems built (milestone M8).
 
+Explicit Save / Save As / Save All operations carry their origin and operation identity through dialogs and retries.
+Their successful snapshots can trigger the opt-in Git automation in spec 28; autosave and internal saves never do.
+Save All automation waits for every member to succeed, fail, or be cancelled before grouping successful files.
+
 ## Save
 
 Commands: `file.save`, `file.saveAs`, `file.saveAll`, `file.revert`, `file.saveWithEncoding`.

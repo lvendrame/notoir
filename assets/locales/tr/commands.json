@@ -356,7 +356,10 @@
     "stageChange": "Değişikliği Hazırla",
     "peekChange": "Değişikliği Göster",
     "closePeek": "Değişikliği Kapat",
-    "selectRepository": "Depo Seç"
+    "selectRepository": "Depo Seç",
+    "autoCommit": "Otomatik commit",
+    "autoPush": "Otomatik push",
+    "retryAutoPush": "Otomatik push"
   },
   "mcp": {
     "startServer": "MCP Sunucusunu Başlat",

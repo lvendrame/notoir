@@ -138,5 +138,6 @@
     "title": "Modification {{n}} sur {{total}}",
     "close": "Fermer",
     "added": "Lignes ajoutées ; la base ne contient rien ici."
-  }
+  },
+  "autoPushHelp": "Pousser après les commits manuels et automatiques. Envoie tous les commits en attente de la branche."
 }

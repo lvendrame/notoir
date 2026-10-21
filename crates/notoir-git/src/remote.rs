@@ -62,6 +62,8 @@ pub enum PullResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct PushOpts {
+    /// Explicit source branch for a save-triggered push.
+    pub branch: Option<String>,
     /// First push of a branch: `git push -u <remote> <branch>`.
     pub set_upstream: Option<(String, String)>,
 }
@@ -382,6 +384,25 @@ impl GitRemote for SystemGit {
         cancel: CancellationToken,
     ) -> Result<(), GitError> {
         let mut args = vec!["push", "--progress"];
+        let destination;
+        let refspec;
+        if opts.set_upstream.is_none()
+            && let Some(branch) = &opts.branch
+        {
+            let repository = git2::Repository::open(&repo.git_dir)?;
+            if repository.head()?.shorthand()? != branch.as_str() {
+                return Err(GitError::Git("Branch changed before pushing".into()));
+            }
+            let config = repository.config()?;
+            destination = config
+                .get_string(&format!("branch.{branch}.remote"))
+                .map_err(|_| GitError::NoUpstream)?;
+            let merge = config
+                .get_string(&format!("branch.{branch}.merge"))
+                .map_err(|_| GitError::NoUpstream)?;
+            refspec = format!("refs/heads/{branch}:{merge}");
+            args.extend([destination.as_str(), refspec.as_str()]);
+        }
         if let Some((remote, branch)) = &opts.set_upstream {
             args.extend(["-u", remote.as_str(), branch.as_str()]);
         }
@@ -536,6 +557,7 @@ mod tests {
             &a,
             PushOpts {
                 set_upstream: Some(("origin".into(), "main".into())),
+                ..Default::default()
             },
             out.clone(),
             Default::default(),

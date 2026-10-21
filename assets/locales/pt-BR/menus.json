@@ -25,7 +25,8 @@
     "sortLines": "Ordenar Linhas",
     "lineNumbers": "Números de Linha",
     "git": "Git",
-    "mcpSetup": "Copiar comando de configuração"
+    "mcpSetup": "Copiar comando de configuração",
+    "autoCommit": "Commit automático"
   },
   "item": {
     "primarySidebar": "Barra Lateral Principal",
@@ -47,5 +48,9 @@
     "afterDelay": "Após Atraso",
     "onFocusChange": "Ao Mudar o Foco",
     "onWindowFocusLoss": "Ao Perder o Foco da Janela"
+  },
+  "autoCommit": {
+    "off": "Desativado",
+    "manual": "Ao salvar manualmente"
   }
 }

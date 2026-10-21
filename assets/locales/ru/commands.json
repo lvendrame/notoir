@@ -356,7 +356,10 @@
     "stageChange": "Индексировать изменение",
     "peekChange": "Показать изменение",
     "closePeek": "Закрыть изменение",
-    "selectRepository": "Выбрать репозиторий"
+    "selectRepository": "Выбрать репозиторий",
+    "autoCommit": "Автокоммит",
+    "autoPush": "Автоотправка",
+    "retryAutoPush": "Автоотправка"
   },
   "mcp": {
     "startServer": "Запустить MCP-сервер",

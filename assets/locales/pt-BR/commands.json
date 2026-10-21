@@ -356,7 +356,10 @@
     "stageChange": "Preparar Alteração",
     "peekChange": "Mostrar Alteração",
     "closePeek": "Fechar Alteração",
-    "selectRepository": "Selecionar Repositório"
+    "selectRepository": "Selecionar Repositório",
+    "autoCommit": "Commit automático",
+    "autoPush": "Push automático",
+    "retryAutoPush": "Tentar push automático novamente"
   },
   "mcp": {
     "startServer": "Iniciar servidor MCP",

@@ -25,7 +25,8 @@
     "sortLines": "排列行",
     "lineNumbers": "行号",
     "git": "Git",
-    "mcpSetup": "复制设置命令"
+    "mcpSetup": "复制设置命令",
+    "autoCommit": "自动提交"
   },
   "item": {
     "primarySidebar": "主侧边栏",
@@ -47,5 +48,9 @@
     "afterDelay": "延迟后",
     "onFocusChange": "焦点改变时",
     "onWindowFocusLoss": "窗口失去焦点时"
+  },
+  "autoCommit": {
+    "off": "关闭",
+    "manual": "手动保存时"
   }
 }

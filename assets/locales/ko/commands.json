@@ -356,7 +356,10 @@
     "stageChange": "변경 내용 스테이징",
     "peekChange": "변경 내용 표시",
     "closePeek": "변경 내용 닫기",
-    "selectRepository": "리포지토리 선택"
+    "selectRepository": "리포지토리 선택",
+    "autoCommit": "자동 커밋",
+    "autoPush": "자동 푸시",
+    "retryAutoPush": "자동 푸시"
   },
   "mcp": {
     "startServer": "MCP 서버 시작",

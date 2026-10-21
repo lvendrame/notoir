@@ -12,7 +12,7 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use egui::{Key, Modifiers};
-use egui_kittest::kittest::Queryable;
+use egui_kittest::kittest::{NodeT, Queryable};
 use notoir::files::Prompt;
 use notoir::git_write::GitPrompt;
 use notoir_core::panels::PanelId;
@@ -1369,4 +1369,759 @@ fn source_control_panel_keeps_its_width() {
         (after - before).abs() < 0.5,
         "the sidebar grew from {before} to {after}"
     );
+}
+
+fn edit_open_files(app: &mut common::TestApp, prefix: &str) {
+    let core = &mut app.harness.state_mut().core;
+    let views: Vec<_> = core
+        .workbench
+        .documents
+        .values()
+        .filter(|d| d.path().is_some())
+        .filter_map(|d| core.workbench.views.of_document(d.id).next().map(|v| v.id))
+        .collect();
+    for view in views {
+        core.workbench
+            .edit(
+                view,
+                notoir_editor::ChangeSet::insert(0, prefix),
+                notoir_editor::Selection::caret(prefix.len()),
+                notoir_editor::EditKind::Other,
+                0,
+            )
+            .unwrap();
+    }
+}
+
+// spec 28: "Detect external repository initialization"
+#[test]
+fn external_init_is_detected_and_refresh_is_available_without_repository() {
+    let d = tempfile::tempdir().unwrap();
+    let root = d.path().canonicalize().unwrap();
+    let mut app = common::start({
+        let root = root.clone();
+        move |o| o.open_paths = vec![(root, None)]
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "git.showSourceControl", Value::Null);
+    assert!(app.harness.query_by_label("Refresh Git Status").is_some());
+    git2::Repository::init(&root).unwrap();
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .repo
+        .is_some()));
+    assert_eq!(
+        app.harness.state().core.git.repo.as_ref().unwrap().workdir,
+        root
+    );
+}
+
+// spec 28: "Save All creates one grouped commit"
+#[test]
+fn manual_save_all_groups_files_and_preserves_other_staging() {
+    let (_d, root, r) = repo();
+    let mut app = open(&root, vec![root.join("README.md"), root.join("notes.md")]);
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    std::fs::write(root.join("unrelated.md"), "staged separately").unwrap();
+    let mut index = r.index().unwrap();
+    index.add_path(Path::new("unrelated.md")).unwrap();
+    index.write().unwrap();
+    let parent = r.head().unwrap().target().unwrap();
+    edit_open_files(&mut app, "changed ");
+    common::run(&mut app, "file.saveAll", Value::Null);
+    assert!(wait_for(&mut app, |_| r.head().unwrap().target().unwrap() != parent));
+    let head = r.head().unwrap().peel_to_commit().unwrap();
+    assert_eq!(head.parent_id(0).unwrap(), parent);
+    let message = head.message().unwrap();
+    assert!(message.starts_with("Save files - "));
+    assert!(message.ends_with("\n\nREADME.md\nnotes.md"));
+    assert!(
+        head.tree()
+            .unwrap()
+            .get_path(Path::new("unrelated.md"))
+            .is_err()
+    );
+    assert!(
+        r.index()
+            .unwrap()
+            .get_path(Path::new("unrelated.md"), 0)
+            .is_some()
+    );
+    assert_eq!(app.harness.state().core.git.network_runs, 0);
+}
+
+// spec 28: "Single-file save retains original message"
+#[test]
+fn manual_single_file_save_and_internal_save_exclusion() {
+    let (_d, root, r) = repo();
+    let mut app = open(&root, vec![root.join("notes.md")]);
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    let parent = r.head().unwrap().target().unwrap();
+    edit_open_files(&mut app, "internal ");
+    let doc = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .active_document()
+        .unwrap();
+    app.harness.state_mut().core.save(doc);
+    assert!(wait_for(&mut app, |a| !a
+        .harness
+        .state()
+        .core
+        .saving
+        .contains(&doc)));
+    assert_eq!(r.head().unwrap().target().unwrap(), parent);
+    edit_open_files(&mut app, "manual ");
+    common::run(&mut app, "file.saveAll", Value::Null);
+    assert!(wait_for(&mut app, |_| r.head().unwrap().target().unwrap() != parent));
+    let message = head_summary(&r);
+    assert!(message.starts_with("File saved - notes.md - Date: "));
+    assert!(message.contains(" Time: "));
+    assert_eq!(
+        r.head()
+            .unwrap()
+            .peel_to_commit()
+            .unwrap()
+            .message()
+            .unwrap()
+            .lines()
+            .count(),
+        1
+    );
+}
+
+// spec 28: "Auto Push depends on Auto Commit"
+#[test]
+fn auto_push_menu_dependency_and_workspace_settings() {
+    let (_d, root, _r) = repo();
+    let mut app = open(&root, vec![]);
+    assert!(
+        !app.harness
+            .state()
+            .core
+            .settings
+            .bool("git.autoCommit", None)
+    );
+    common::run(&mut app, "git.autoPush", Value::Null);
+    assert!(!app.harness.state().core.settings.bool("git.autoPush", None));
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    // Explicit local consent works without trusting unrelated workspace settings.
+    common::run(&mut app, "git.autoPush", Value::Null);
+    assert!(app.harness.state().core.settings.bool("git.autoPush", None));
+    common::run(&mut app, "git.autoCommit", json!({"mode":"off"}));
+    assert!(
+        !app.harness
+            .state()
+            .core
+            .settings
+            .bool("git.autoCommit", None)
+    );
+    assert!(!app.harness.state().core.settings.bool("git.autoPush", None));
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    assert!(!app.harness.state().core.settings.bool("git.autoPush", None));
+    assert!(wait_for(&mut app, |_| std::fs::read_to_string(
+        root.join(".notoir/settings.toml")
+    )
+    .is_ok_and(
+        |s| s.contains("autoCommit = true") && s.contains("autoPush = false")
+    )));
+}
+
+// spec 28: "Save All pushes its grouped commit"
+#[test]
+fn auto_push_sends_grouped_commit_to_local_remote() {
+    if !has_git() {
+        return;
+    }
+    let (_d, bare, a, _b) = remote_pair();
+    let r = git2::Repository::open(&a).unwrap();
+    std::fs::write(a.join("second.md"), "second\n").unwrap();
+    git(&a, &["add", "second.md"]);
+    git(&a, &["commit", "-q", "-m", "second file"]);
+    git(&a, &["push", "-q"]);
+    let mut app = open(&a, vec![a.join("n.md"), a.join("second.md")]);
+    common::run(&mut app, "workspace.trust", Value::Null);
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    common::run(&mut app, "git.autoPush", Value::Null);
+    let parent = r.head().unwrap().target().unwrap();
+    edit_open_files(&mut app, "saved ");
+    common::run(&mut app, "file.saveAll", Value::Null);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .network_runs
+        == 1
+        && a.harness.state().core.git.net.is_none()));
+    assert_ne!(r.head().unwrap().target().unwrap(), parent);
+    let head = r.head().unwrap().peel_to_commit().unwrap();
+    assert_eq!(head.parent_id(0).unwrap(), parent);
+    assert!(head.message().unwrap().ends_with("\n\nn.md\nsecond.md"));
+    let remote = git2::Repository::open_bare(&bare).unwrap();
+    assert_eq!(
+        remote.find_reference("refs/heads/main").unwrap().target(),
+        r.head().unwrap().target()
+    );
+}
+
+#[test]
+fn save_all_waits_for_conflict_cancellation_then_commits_successful_files() {
+    let (_d, root, r) = repo();
+    let mut app = open(&root, vec![root.join("README.md"), root.join("notes.md")]);
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    let parent = r.head().unwrap().target().unwrap();
+    edit_open_files(&mut app, "changed ");
+    std::fs::write(root.join("notes.md"), "external change\n").unwrap();
+    common::run(&mut app, "file.saveAll", Value::Null);
+    assert!(wait_for(&mut app, |a| matches!(
+        front_prompt(a),
+        Some(Prompt::SaveConflict { .. })
+    )));
+    assert_eq!(
+        r.head().unwrap().target().unwrap(),
+        parent,
+        "batch waits for the prompt"
+    );
+    app.harness
+        .state_mut()
+        .core
+        .answer_prompt(notoir::files::Answer::Cancel);
+    assert!(wait_for(&mut app, |_| r.head().unwrap().target().unwrap() != parent));
+    assert!(head_summary(&r).starts_with("File saved - README.md - Date: "));
+    let tree = r.head().unwrap().peel_to_commit().unwrap().tree().unwrap();
+    let note = tree.get_path(Path::new("notes.md")).unwrap();
+    assert_eq!(r.find_blob(note.id()).unwrap().content(), b"one\n");
+    assert_eq!(
+        std::fs::read(root.join("notes.md")).unwrap(),
+        b"external change\n"
+    );
+}
+
+#[test]
+fn auto_push_publish_cancellation_preserves_local_commit() {
+    if !has_git() {
+        return;
+    }
+    let (_d, bare, a, _b) = remote_pair();
+    git(&a, &["checkout", "-q", "-b", "save-checkpoints"]);
+    let r = git2::Repository::open(&a).unwrap();
+    let mut app = open(&a, vec![a.join("n.md")]);
+    common::run(&mut app, "workspace.trust", Value::Null);
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    common::run(&mut app, "git.autoPush", Value::Null);
+    let parent = r.head().unwrap().target().unwrap();
+    edit_open_files(&mut app, "saved ");
+    common::run(&mut app, "file.save", Value::Null);
+    assert!(wait_for(&mut app, |a| matches!(
+        front_prompt(a),
+        Some(Prompt::Git(GitPrompt::AutoPublish { .. }))
+    )));
+    let saved = r.head().unwrap().target().unwrap();
+    assert_ne!(saved, parent);
+    app.harness
+        .state_mut()
+        .core
+        .answer_prompt(notoir::files::Answer::Cancel);
+    common::settle(&mut app);
+    assert_eq!(app.harness.state().core.git.network_runs, 0);
+    assert_eq!(r.head().unwrap().target().unwrap(), saved);
+    assert!(
+        git2::Repository::open_bare(&bare)
+            .unwrap()
+            .find_reference("refs/heads/save-checkpoints")
+            .is_err()
+    );
+}
+
+#[test]
+fn auto_push_rejection_keeps_local_commit_and_offers_targeted_retry() {
+    if !has_git() {
+        return;
+    }
+    let (_d, _bare, a, _b) = remote_pair();
+    let r = git2::Repository::open(&a).unwrap();
+    let remote = Arc::new(FakeRemote::default());
+    *remote.push_error.lock().unwrap() = Some((GitError::Rejected, "rejected test push".into()));
+    let mut app = open_with(&a, vec![a.join("n.md")], {
+        let remote = remote.clone();
+        move |o| o.git_remote = Some(remote)
+    });
+    common::run(&mut app, "workspace.trust", Value::Null);
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    common::run(&mut app, "git.autoPush", Value::Null);
+    edit_open_files(&mut app, "saved ");
+    common::run(&mut app, "file.save", Value::Null);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .network_runs
+        == 1
+        && a.harness.state().core.git.net.is_none()));
+    let saved = r.head().unwrap().target().unwrap();
+    assert!(head_summary(&r).starts_with("File saved - n.md -"));
+    assert!(
+        notification_texts(&app)
+            .iter()
+            .any(|s| s.contains("Push failed"))
+    );
+    assert_eq!(
+        remote.calls.lock().unwrap().len(),
+        1,
+        "no automatic pull or retry"
+    );
+    let generation = app.harness.state().core.git.generation;
+    common::run(
+        &mut app,
+        "git.retryAutoPush",
+        json!({"workdir":a,"branch":"main","generation":generation}),
+    );
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .network_runs
+        == 2
+        && a.harness.state().core.git.net.is_none()));
+    assert_eq!(r.head().unwrap().target().unwrap(), saved);
+}
+
+#[test]
+fn save_as_commits_new_file_and_preserves_encoding_and_line_endings() {
+    let (_d, root, r) = repo();
+    let target = root.join("new.md");
+    let dialogs = Arc::new(notoir::files::ScriptedDialogs::default());
+    dialogs.answer_save(Some(target.clone()));
+    let mut app = open_with(&root, vec![root.join("notes.md")], {
+        let dialogs = dialogs.clone();
+        move |o| o.dialogs = Some(dialogs)
+    });
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    let doc = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .active_document()
+        .unwrap();
+    app.harness
+        .state_mut()
+        .core
+        .workbench
+        .document_mut(doc)
+        .unwrap()
+        .line_ending = notoir_editor::LineEnding::CrLf;
+    edit_open_files(&mut app, "new ");
+    let parent = r.head().unwrap().target().unwrap();
+    common::run(&mut app, "file.saveAs", Value::Null);
+    assert!(wait_for(&mut app, |_| r.head().unwrap().target().unwrap() != parent));
+    let tree = r.head().unwrap().peel_to_commit().unwrap().tree().unwrap();
+    let entry = tree.get_path(Path::new("new.md")).unwrap();
+    assert_eq!(
+        r.find_blob(entry.id()).unwrap().content(),
+        std::fs::read(target).unwrap()
+    );
+    assert_eq!(r.find_blob(entry.id()).unwrap().content(), b"new one\r\n");
+    assert!(head_summary(&r).starts_with("File saved - new.md - Date: "));
+}
+
+#[test]
+fn save_all_groups_each_nested_repository_separately() {
+    let (_d, root, outer) = repo();
+    let nested = root.join("nested");
+    std::fs::create_dir(&nested).unwrap();
+    let inner = git2::Repository::init(&nested).unwrap();
+    set_identity(&inner);
+    std::fs::write(nested.join("inner.md"), "inside\n").unwrap();
+    commit_all(&inner, "Inner initial");
+    let mut app = open(&root, vec![root.join("notes.md"), nested.join("inner.md")]);
+    app.harness
+        .state_mut()
+        .core
+        .set_user_setting("git.scanNestedRepos", Some(SettingValue::Bool(true)));
+    common::run(&mut app, "git.refresh", Value::Null);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .repos
+        .len()
+        == 2
+        && a.harness
+            .state()
+            .core
+            .git_status_for(&nested)
+            .is_some_and(|s| s.head.branch.is_some())));
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    let old_outer = outer.head().unwrap().target().unwrap();
+    let old_inner = inner.head().unwrap().target().unwrap();
+    edit_open_files(&mut app, "saved ");
+    common::run(&mut app, "file.saveAll", Value::Null);
+    common::run(&mut app, "git.selectRepository", json!({"path": nested}));
+    assert!(wait_for(&mut app, |_| outer
+        .head()
+        .unwrap()
+        .target()
+        .unwrap()
+        != old_outer
+        && inner.head().unwrap().target().unwrap() != old_inner));
+    assert!(head_summary(&outer).starts_with("File saved - notes.md - Date: "));
+    assert!(head_summary(&inner).starts_with("File saved - inner.md - Date: "));
+    assert_eq!(
+        outer
+            .head()
+            .unwrap()
+            .peel_to_commit()
+            .unwrap()
+            .parent_id(0)
+            .unwrap(),
+        old_outer
+    );
+    assert_eq!(
+        inner
+            .head()
+            .unwrap()
+            .peel_to_commit()
+            .unwrap()
+            .parent_id(0)
+            .unwrap(),
+        old_inner
+    );
+}
+
+/// Opt-in live round trip through the app against the real my_documents
+/// origin. Requires an isolated worktree supplied by NOTOIR_LIVE_WORKTREE.
+/// The caller owns local worktree/branch cleanup; the test removes its remote
+/// branch even on failure. Only generated test files are used.
+#[test]
+#[ignore = "pushes a temporary branch to the real my_documents origin"]
+fn my_documents_auto_save_live_round_trip() {
+    let root = PathBuf::from(
+        std::env::var("NOTOIR_LIVE_WORKTREE")
+            .expect("set NOTOIR_LIVE_WORKTREE to an isolated my_documents worktree"),
+    )
+    .canonicalize()
+    .unwrap();
+    let r = git2::Repository::open(&root).unwrap();
+    assert_eq!(
+        r.find_remote("origin").unwrap().url().ok(),
+        Some("git@github.com:lvendrame/my_documents.git")
+    );
+    let temp_branch = branch(&r);
+    assert!(
+        temp_branch.starts_with("codex/notoir-live-save-"),
+        "must use an isolated test branch"
+    );
+    // The caller owns the supplied local worktree; this test owns the remote
+    // branch it publishes and removes that branch even if an assertion fails.
+    struct RemoteCleanup {
+        root: PathBuf,
+        branch: String,
+    }
+    impl Drop for RemoteCleanup {
+        fn drop(&mut self) {
+            let exists = Command::new("git")
+                .current_dir(&self.root)
+                .args([
+                    "ls-remote",
+                    "--exit-code",
+                    "--heads",
+                    "origin",
+                    &self.branch,
+                ])
+                .output();
+            if exists.is_ok_and(|out| out.status.success()) {
+                match Command::new("git")
+                    .current_dir(&self.root)
+                    .args(["push", "origin", "--delete", &self.branch])
+                    .output()
+                {
+                    Ok(out) if out.status.success() => {
+                        println!("LIVE CLEANUP: temporary remote branch removed")
+                    }
+                    _ => eprintln!(
+                        "Live test cleanup failed: remove remote branch {}",
+                        self.branch
+                    ),
+                }
+            }
+        }
+    }
+    let _remote_cleanup = RemoteCleanup {
+        root: root.clone(),
+        branch: temp_branch.clone(),
+    };
+    let directory = root.join("__notoir_live__");
+    assert!(directory.is_dir());
+    let alpha = directory.join("alpha.md");
+    let beta = directory.join("beta.md");
+    let staged_only = "__notoir_live__/staged-only.md";
+    let mut index = r.index().unwrap();
+    index.add_path(Path::new(staged_only)).unwrap();
+    index.write().unwrap();
+    let staged_oid = index.get_path(Path::new(staged_only), 0).unwrap().id;
+    let initial = r.head().unwrap().target().unwrap();
+    let mut app = open(&root, vec![alpha.clone(), beta.clone()]);
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    let beta_doc = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .active_document()
+        .unwrap();
+    let beta_view = app.harness.state().core.workbench.active_view().unwrap();
+    common::run(
+        &mut app,
+        "editor.type",
+        json!({"text":"First live manual save\n"}),
+    );
+    common::run(&mut app, "file.save", Value::Null);
+    assert!(wait_for(&mut app, |_| r.head().unwrap().target().unwrap() != initial));
+    assert!(head_summary(&r).starts_with("File saved - beta.md - Date: "));
+    let first = r.head().unwrap().peel_to_commit().unwrap();
+    let expected = first
+        .tree()
+        .unwrap()
+        .get_path(Path::new("__notoir_live__/beta.md"))
+        .unwrap()
+        .id();
+    assert_eq!(
+        r.find_blob(expected).unwrap().content(),
+        std::fs::read(&beta).unwrap()
+    );
+    assert_eq!(app.harness.state().core.git.network_runs, 0);
+    println!(
+        "LIVE PASS: manual Save created single-file message and exact saved contents; no push while disabled"
+    );
+
+    let before_batch = r.head().unwrap().target().unwrap();
+    edit_open_files(&mut app, "Live Save All\n");
+    common::run(&mut app, "file.saveAll", Value::Null);
+    assert!(wait_for(&mut app, |_| r.head().unwrap().target().unwrap()
+        != before_batch));
+    let grouped = r.head().unwrap().peel_to_commit().unwrap();
+    assert_eq!(grouped.parent_id(0).unwrap(), before_batch);
+    assert!(grouped.message().unwrap().starts_with("Save files - "));
+    assert!(
+        grouped
+            .message()
+            .unwrap()
+            .ends_with("\n\n__notoir_live__/alpha.md\n__notoir_live__/beta.md")
+    );
+    assert!(
+        grouped
+            .tree()
+            .unwrap()
+            .get_path(Path::new(staged_only))
+            .is_err()
+    );
+    assert_eq!(
+        r.index()
+            .unwrap()
+            .get_path(Path::new(staged_only), 0)
+            .unwrap()
+            .id,
+        staged_oid
+    );
+    println!("LIVE PASS: Save All created one commit with both paths; unrelated staging preserved");
+
+    assert!(!app.harness.state().core.workspace.as_ref().unwrap().trusted);
+    app.harness.get_by_label("File").click();
+    app.harness.run_steps(2);
+    app.harness.get_by_label_contains("Auto Commit").click();
+    app.harness.run_steps(2);
+    app.harness.get_by_label_contains("Auto Push").click();
+    common::settle(&mut app);
+    assert!(app.harness.state().core.settings.bool("git.autoPush", None));
+    assert!(!app.harness.state().core.workspace.as_ref().unwrap().trusted);
+    // Select beta explicitly, then make a real user save through the registry.
+    app.harness
+        .state_mut()
+        .core
+        .workbench
+        .activate_view(beta_view)
+        .unwrap();
+    common::run(&mut app, "editor.type", json!({"text":"Live publish\n"}));
+    common::run(&mut app, "file.save", json!({"doc":beta_doc.0}));
+    assert!(wait_for(&mut app, |a| matches!(
+        front_prompt(a),
+        Some(Prompt::Git(GitPrompt::AutoPublish { .. }))
+    )));
+    app.harness.get_by_label("Publish").click();
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .network_runs
+        == 1
+        && a.harness.state().core.git.net.is_none()));
+    let published = r.head().unwrap().target().unwrap();
+    let actual_remote = git(
+        &root,
+        &["ls-remote", "origin", &format!("refs/heads/{temp_branch}")],
+    );
+    assert!(
+        actual_remote.starts_with(&published.to_string()),
+        "remote SHA must match local save commit: {actual_remote}"
+    );
+    println!(
+        "LIVE PASS: Auto Push requested publishing and pushed the save commit to GitHub ({published})"
+    );
+
+    let before_push = r.head().unwrap().target().unwrap();
+    edit_open_files(&mut app, "Live grouped push\n");
+    common::run(&mut app, "file.saveAll", Value::Null);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .network_runs
+        == 2
+        && a.harness.state().core.git.net.is_none()));
+    let head = r.head().unwrap().peel_to_commit().unwrap();
+    assert_eq!(head.parent_id(0).unwrap(), before_push);
+    assert!(
+        head.message()
+            .unwrap()
+            .ends_with("\n\n__notoir_live__/alpha.md\n__notoir_live__/beta.md")
+    );
+    let actual_remote = git(
+        &root,
+        &["ls-remote", "origin", &format!("refs/heads/{temp_branch}")],
+    );
+    assert!(actual_remote.starts_with(&head.id().to_string()));
+    assert_eq!(
+        r.index()
+            .unwrap()
+            .get_path(Path::new(staged_only), 0)
+            .unwrap()
+            .id,
+        staged_oid
+    );
+    assert!(
+        head.tree()
+            .unwrap()
+            .get_path(Path::new(staged_only))
+            .is_err()
+    );
+    println!(
+        "LIVE PASS: Save All auto-pushed exactly once; GitHub SHA matches grouped commit; staged-only file excluded"
+    );
+
+    common::run(&mut app, "git.autoCommit", json!({"mode":"off"}));
+    assert!(
+        !app.harness
+            .state()
+            .core
+            .settings
+            .bool("git.autoCommit", None)
+    );
+    assert!(!app.harness.state().core.settings.bool("git.autoPush", None));
+    common::run(&mut app, "git.autoCommit", json!({"mode":"manual"}));
+    assert!(!app.harness.state().core.settings.bool("git.autoPush", None));
+    assert!(wait_for(&mut app, idle));
+    println!(
+        "LIVE PASS: disabling Auto Commit also disabled Auto Push; re-enabling did not turn Auto Push on"
+    );
+}
+
+// spec 28: "Auto Push selection in an untrusted workspace"
+#[test]
+fn auto_push_is_inside_auto_commit_and_checks_in_an_untrusted_workspace() {
+    let (_d, root, _r) = repo();
+    let mut app = open(&root, vec![]);
+    assert!(!app.harness.state().core.workspace.as_ref().unwrap().trusted);
+    let open_submenu = |app: &mut common::TestApp| {
+        app.harness.key_press(Key::Escape);
+        app.harness.key_press(Key::Escape);
+        app.harness.run_steps(2);
+        app.harness.get_by_label("File").click();
+        app.harness.run_steps(2);
+        assert!(
+            app.harness.query_by_label_contains("Auto Push").is_none(),
+            "Auto Push must not be a top-level File entry"
+        );
+        app.harness.get_by_label_contains("Auto Commit").click();
+        app.harness.run_steps(2);
+    };
+    open_submenu(&mut app);
+    assert!(
+        app.harness
+            .get_by_label_contains("Auto Push")
+            .accesskit_node()
+            .is_disabled()
+    );
+    app.harness.get_by_label_contains("On Manual Save").click();
+    common::settle(&mut app);
+    open_submenu(&mut app);
+    assert!(
+        !app.harness
+            .get_by_label_contains("Auto Push")
+            .accesskit_node()
+            .is_disabled()
+    );
+    app.harness.get_by_label_contains("Auto Push").click();
+    common::settle(&mut app);
+    assert!(app.harness.state().core.settings.bool("git.autoPush", None));
+    assert_eq!(
+        app.harness.state().core.context(false).get("autoPush"),
+        Some(&notoir_core::when::Value::Bool(true))
+    );
+    assert!(
+        !app.harness.state().core.workspace.as_ref().unwrap().trusted,
+        "the checkbox must not trust the whole workspace"
+    );
+    assert!(
+        !app.harness
+            .state()
+            .core
+            .settings
+            .bool("mcp.autoStart", None)
+    );
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .state_db
+        .as_ref()
+        .unwrap()
+        .workspace_push_consent(&a.harness.state().core.workspace.as_ref().unwrap().key)
+        .unwrap()
+        == Some(true)));
+    let key = app
+        .harness
+        .state()
+        .core
+        .workspace
+        .as_ref()
+        .unwrap()
+        .key
+        .clone();
+    // Reopen the workspace: local consent survives but does not leak to another folder.
+    app.harness.key_press(Key::Escape);
+    app.harness.key_press(Key::Escape);
+    common::run(&mut app, "workspace.close", Value::Null);
+    app.harness.state_mut().core.open_workspace(&root);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .workspace
+        .as_ref()
+        .is_some_and(|ws| ws.key == key)
+        && a.harness.state().core.settings.bool("git.autoPush", None)));
+    common::run(&mut app, "git.autoPush", Value::Null);
+    assert!(!app.harness.state().core.settings.bool("git.autoPush", None));
 }

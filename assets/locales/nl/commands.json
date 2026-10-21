@@ -356,7 +356,10 @@
     "stageChange": "Wijziging stagen",
     "peekChange": "Wijziging tonen",
     "closePeek": "Wijziging sluiten",
-    "selectRepository": "Repository kiezen"
+    "selectRepository": "Repository kiezen",
+    "autoCommit": "Automatisch committen",
+    "autoPush": "Automatisch pushen",
+    "retryAutoPush": "Automatisch pushen"
   },
   "mcp": {
     "startServer": "MCP-server starten",

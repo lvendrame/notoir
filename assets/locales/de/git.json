@@ -138,5 +138,6 @@
     "title": "Änderung {{n}} von {{total}}",
     "close": "Schließen",
     "added": "Hinzugefügte Zeilen; die Basis enthält hier nichts."
-  }
+  },
+  "autoPushHelp": "Nach manuellen und automatischen Commits pushen. Sendet alle ausstehenden Commits des Branches."
 }

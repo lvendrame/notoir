@@ -138,5 +138,6 @@
     "title": "Değişiklik {{n}} / {{total}}",
     "close": "Kapat",
     "added": "Eklenen satırlar; temelde burada bir şey yok."
-  }
+  },
+  "autoPushHelp": "Elle ve otomatik commitlerden sonra push yapar. Daldaki bekleyen tüm commitleri gönderir."
 }

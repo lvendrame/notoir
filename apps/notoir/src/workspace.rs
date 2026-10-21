@@ -104,6 +104,7 @@ pub struct Workspace {
     pub key: String,
     pub name: String,
     pub trusted: bool,
+    pub auto_push_choice: Option<bool>,
     pub generation: u64,
     pub tree: ExplorerTree,
     pub filters: Arc<Filters>,
@@ -189,12 +190,20 @@ impl AppCore {
             Some(ws) => (ws.settings.clone(), ws.trusted),
             None => (None, false),
         };
+        let mut overrides = SettingsLayer::default();
+        if let Some(enabled) = self.workspace.as_ref().and_then(|ws| ws.auto_push_choice) {
+            overrides.set(
+                "git.autoPush",
+                notoir_core::settings::SettingValue::Bool(enabled),
+            );
+        }
         ResolvedSettings::new(
             self.schema.clone(),
             self.user_settings.clone(),
             layer,
             trusted,
         )
+        .with_workspace_user_overrides(overrides)
     }
 
     pub(crate) fn apply_resolved_settings(&mut self) {
@@ -279,6 +288,10 @@ impl AppCore {
             .state_db
             .as_ref()
             .is_some_and(|db| db.is_workspace_trusted(&key).unwrap_or(false));
+        let auto_push_choice = self
+            .state_db
+            .as_ref()
+            .and_then(|db| db.workspace_push_consent(&key).ok().flatten());
         let excludes = self.settings.str_list("files.exclude", None);
         let filters = Arc::new(Filters::new(&root, &excludes));
         let poster = self.fs.poster();
@@ -301,6 +314,7 @@ impl AppCore {
             root: root.clone(),
             key,
             trusted,
+            auto_push_choice,
             generation,
             filters,
             index: Arc::new(Vec::new()),
@@ -553,7 +567,7 @@ impl AppCore {
                 self.handle_fs_changes(paths);
             }
             WsEvent::SettingsLoaded(layer) => {
-                let restricted: Vec<String> = layer
+                let mut restricted: Vec<String> = layer
                     .as_ref()
                     .map(|l| {
                         l.values
@@ -565,6 +579,9 @@ impl AppCore {
                     .unwrap_or_default();
                 let ws = self.workspace.as_mut().expect("checked");
                 ws.settings = layer;
+                if ws.auto_push_choice.is_some() {
+                    restricted.retain(|key| key != "git.autoPush");
+                }
                 let untrusted = !ws.trusted;
                 self.apply_resolved_settings();
                 if untrusted && !restricted.is_empty() {

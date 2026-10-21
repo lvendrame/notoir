@@ -432,6 +432,157 @@ impl GitBackend for Git2Backend {
         Ok(id.to_string()[..7].to_owned())
     }
 
+    fn commit_saved(
+        &self,
+        repo: &RepoInfo,
+        files: &[crate::SavedFile],
+        branch: &str,
+        timestamp: &str,
+    ) -> Result<Option<crate::SavedCommit>, GitError> {
+        let r = open(repo)?;
+        if r.state() != git2::RepositoryState::Clean || r.index()?.has_conflicts() {
+            return Err(GitError::Git(
+                "Repository has an unfinished merge, rebase, or conflicts".into(),
+            ));
+        }
+        let reference = format!("refs/heads/{branch}");
+        if r.find_reference("HEAD")?.symbolic_target()? != Some(reference.as_str()) {
+            return Err(GitError::Git("Branch changed since saving".into()));
+        }
+        // Hold both the branch and index locks throughout the update.
+        let mut transaction = r.transaction()?;
+        transaction.lock_ref(&reference)?;
+        let lock_path = repo.git_dir.join("index.lock");
+        let lock = std::fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&lock_path)
+            .map_err(|e| {
+                if e.kind() == std::io::ErrorKind::AlreadyExists {
+                    GitError::Locked
+                } else {
+                    GitError::Git(e.to_string())
+                }
+            })?;
+        struct LockGuard(Option<PathBuf>);
+        impl Drop for LockGuard {
+            fn drop(&mut self) {
+                if let Some(path) = self.0.take() {
+                    let _ = std::fs::remove_file(path);
+                }
+            }
+        }
+        let mut guard = LockGuard(Some(lock_path.clone()));
+        let head = r.head().ok().and_then(|h| h.peel_to_commit().ok());
+        let base = head.as_ref().map(|h| h.tree()).transpose()?;
+        let mut tree_index = git2::Index::new()?;
+        if let Some(tree) = &base {
+            tree_index.read_tree(tree)?;
+        }
+        let index = r.index()?;
+        let temp = tempfile::tempdir_in(&repo.git_dir).map_err(|e| GitError::Git(e.to_string()))?;
+        let mut updated = git2::Index::open(&temp.path().join("index"))?;
+        for entry in index.iter() {
+            updated.add(&entry)?;
+        }
+        let mut changed = std::collections::BTreeSet::new();
+        for file in files {
+            let path = Path::new(&file.path);
+            if path.is_absolute()
+                || path
+                    .components()
+                    .any(|c| !matches!(c, std::path::Component::Normal(_)))
+            {
+                return Err(GitError::Git("Invalid repository-relative path".into()));
+            }
+            let original = tree_index.get_path(path, 0);
+            if original.is_none()
+                && index.get_path(path, 0).is_none()
+                && r.status_should_ignore(path)?
+            {
+                continue;
+            }
+            let oid = r.blob(&file.bytes)?;
+            if original.as_ref().is_some_and(|e| e.id == oid) {
+                continue;
+            }
+            let mut entry =
+                original
+                    .or_else(|| index.get_path(path, 0))
+                    .unwrap_or(git2::IndexEntry {
+                        ctime: git2::IndexTime::new(0, 0),
+                        mtime: git2::IndexTime::new(0, 0),
+                        dev: 0,
+                        ino: 0,
+                        mode: 0o100644,
+                        uid: 0,
+                        gid: 0,
+                        file_size: 0,
+                        id: oid,
+                        flags: 0,
+                        flags_extended: 0,
+                        path: file.path.as_bytes().to_vec(),
+                    });
+            entry.id = oid;
+            entry.file_size = file.bytes.len() as u32;
+            entry.mtime = git2::IndexTime::new(0, 0);
+            entry.ctime = git2::IndexTime::new(0, 0);
+            tree_index.add(&entry)?;
+            updated.add(&entry)?;
+            changed.insert(file.path.clone());
+        }
+        if changed.is_empty() {
+            return Ok(None);
+        }
+        let message = if changed.len() == 1 {
+            let path = changed.first().expect("one path");
+            let name = Path::new(path)
+                .file_name()
+                .unwrap_or_default()
+                .to_string_lossy();
+            let (date, time) = timestamp.split_once(' ').unwrap_or((timestamp, "00:00:00"));
+            format!(
+                "File saved - {name} - Date: {date} Time: {}",
+                time.replace(':', "-")
+            )
+        } else {
+            format!(
+                "Save files - {timestamp}\n\n{}",
+                changed.into_iter().collect::<Vec<_>>().join("\n")
+            )
+        };
+        let sig = r.signature().map_err(|_| GitError::Identity)?;
+        let tree = r.find_tree(tree_index.write_tree_to(&r)?)?;
+        let parents: Vec<_> = head.iter().collect();
+        let oid = r.commit(None, &sig, &sig, &message, &tree, &parents)?;
+        updated.write()?;
+        let bytes =
+            std::fs::read(temp.path().join("index")).map_err(|e| GitError::Git(e.to_string()))?;
+        use std::io::Write;
+        let mut lock = lock;
+        lock.write_all(&bytes)
+            .and_then(|()| lock.sync_all())
+            .map_err(|e| GitError::Git(e.to_string()))?;
+        drop(lock);
+        // Recheck HEAD: external checkouts must not redirect this operation.
+        if r.find_reference("HEAD")?.symbolic_target()? != Some(reference.as_str()) {
+            return Err(GitError::Git("Branch changed since saving".into()));
+        }
+        transaction.set_target(&reference, oid, Some(&sig), &message)?;
+        transaction.commit()?;
+        // Disarm before releasing the filename: another process may immediately
+        // acquire index.lock after the rename, and its lock must remain intact.
+        let owned_lock = guard.0.take().expect("owned index lock");
+        if let Err(e) = std::fs::rename(&owned_lock, repo.git_dir.join("index")) {
+            let _ = std::fs::remove_file(&owned_lock);
+            return Err(GitError::Git(e.to_string()));
+        }
+        Ok(Some(crate::SavedCommit {
+            sha: oid.to_string()[..7].to_owned(),
+            message,
+        }))
+    }
+
     fn branches(&self, repo: &RepoInfo) -> Result<Vec<BranchInfo>, GitError> {
         let r = open(repo)?;
         let mut local = Vec::new();
@@ -573,6 +724,185 @@ mod tests {
         let parents: Vec<&git2::Commit> = parent.iter().collect();
         r.commit(Some("HEAD"), &sig, &sig, msg, &tree, &parents)
             .unwrap();
+    }
+
+    #[test]
+    fn saved_commit_preserves_unrelated_staging_and_uses_saved_bytes() {
+        let (_d, repo) = fixture();
+        let r = Repository::open(&repo.git_dir).unwrap();
+        std::fs::write(repo.absolute("docs/b.md"), "staged elsewhere\n").unwrap();
+        Git2Backend.stage(&repo, &["docs/b.md".into()]).unwrap();
+        std::fs::write(repo.absolute("a.md"), "later disk content\n").unwrap();
+        let branch = r.head().unwrap().shorthand().unwrap().to_owned();
+        let result = Git2Backend
+            .commit_saved(
+                &repo,
+                &[crate::SavedFile {
+                    path: "a.md".into(),
+                    bytes: b"saved snapshot\n".to_vec(),
+                }],
+                &branch,
+                "2026-10-21 14:32:08",
+            )
+            .unwrap()
+            .unwrap();
+        assert_eq!(
+            result.message,
+            "File saved - a.md - Date: 2026-10-21 Time: 14-32-08"
+        );
+        assert_eq!(
+            Git2Backend
+                .read_base(&repo, "a.md", DiffBase::Head)
+                .unwrap()
+                .unwrap(),
+            b"saved snapshot\n"
+        );
+        assert_eq!(
+            Git2Backend
+                .read_base(&repo, "a.md", DiffBase::Index)
+                .unwrap()
+                .unwrap(),
+            b"saved snapshot\n"
+        );
+        assert_eq!(
+            Git2Backend
+                .read_base(&repo, "docs/b.md", DiffBase::Head)
+                .unwrap()
+                .unwrap(),
+            b"b\n"
+        );
+        assert_eq!(
+            Git2Backend
+                .read_base(&repo, "docs/b.md", DiffBase::Index)
+                .unwrap()
+                .unwrap(),
+            b"staged elsewhere\n"
+        );
+        assert_eq!(
+            std::fs::read(repo.absolute("a.md")).unwrap(),
+            b"later disk content\n"
+        );
+    }
+
+    #[test]
+    fn saved_batch_filters_sorts_and_avoids_empty_commits() {
+        let (_d, repo) = fixture();
+        let r = Repository::open(&repo.git_dir).unwrap();
+        let branch = r.head().unwrap().shorthand().unwrap().to_owned();
+        std::fs::write(repo.absolute(".gitignore"), "ignored.md\n").unwrap();
+        let file = |path: &str, bytes: &[u8]| crate::SavedFile {
+            path: path.into(),
+            bytes: bytes.to_vec(),
+        };
+        let result = Git2Backend
+            .commit_saved(
+                &repo,
+                &[
+                    file("z.md", b"new"),
+                    file("a.md", b"changed"),
+                    file("ignored.md", b"ignored"),
+                    file("docs/b.md", b"b\n"),
+                ],
+                &branch,
+                "2026-10-21 14:32:08",
+            )
+            .unwrap()
+            .unwrap();
+        assert_eq!(
+            result.message,
+            "Save files - 2026-10-21 14:32:08\n\na.md\nz.md"
+        );
+        assert!(
+            Git2Backend
+                .commit_saved(
+                    &repo,
+                    &[file("a.md", b"changed")],
+                    &branch,
+                    "2026-10-21 14:32:09"
+                )
+                .unwrap()
+                .is_none()
+        );
+        assert!(!repo.git_dir.join("index.lock").exists());
+    }
+
+    #[test]
+    fn saved_commit_rejects_locks_branch_changes_and_conflicts_without_staging() {
+        let (_d, repo) = fixture();
+        let r = Repository::open(&repo.git_dir).unwrap();
+        let branch = r.head().unwrap().shorthand().unwrap().to_owned();
+        let head = r.head().unwrap().target().unwrap();
+        let files = [crate::SavedFile {
+            path: "a.md".into(),
+            bytes: b"new".to_vec(),
+        }];
+        std::fs::write(repo.git_dir.join("index.lock"), "external lock").unwrap();
+        assert!(matches!(
+            Git2Backend.commit_saved(&repo, &files, &branch, "2026-10-21 14:32:08"),
+            Err(GitError::Locked)
+        ));
+        assert_eq!(
+            std::fs::read(repo.git_dir.join("index.lock")).unwrap(),
+            b"external lock"
+        );
+        std::fs::remove_file(repo.git_dir.join("index.lock")).unwrap();
+        assert!(
+            Git2Backend
+                .commit_saved(&repo, &files, "another", "2026-10-21 14:32:08")
+                .is_err()
+        );
+        std::fs::write(repo.git_dir.join("MERGE_HEAD"), head.to_string()).unwrap();
+        assert!(
+            Git2Backend
+                .commit_saved(&repo, &files, &branch, "2026-10-21 14:32:08")
+                .is_err()
+        );
+        assert_eq!(r.head().unwrap().target().unwrap(), head);
+        assert_eq!(
+            Git2Backend
+                .read_base(&repo, "a.md", DiffBase::Index)
+                .unwrap()
+                .unwrap(),
+            b"one\ntwo\n"
+        );
+    }
+
+    #[test]
+    fn saved_commit_supports_unborn_repository() {
+        let dir = tempfile::tempdir().unwrap();
+        let r = Repository::init(dir.path()).unwrap();
+        r.config().unwrap().set_str("user.name", "Tester").unwrap();
+        r.config()
+            .unwrap()
+            .set_str("user.email", "t@example.com")
+            .unwrap();
+        let branch = r
+            .find_reference("HEAD")
+            .unwrap()
+            .symbolic_target()
+            .unwrap()
+            .unwrap()
+            .strip_prefix("refs/heads/")
+            .unwrap()
+            .to_owned();
+        let repo = Git2Backend.discover(dir.path()).unwrap().unwrap();
+        let result = Git2Backend
+            .commit_saved(
+                &repo,
+                &[crate::SavedFile {
+                    path: "new.md".into(),
+                    bytes: b"first".to_vec(),
+                }],
+                &branch,
+                "2026-10-21 14:32:08",
+            )
+            .unwrap()
+            .unwrap();
+        assert!(result.message.starts_with("File saved - new.md -"));
+        assert_eq!(
+            r.head().unwrap().peel_to_commit().unwrap().parent_count(),
+            0
+        );
     }
 
     #[test]

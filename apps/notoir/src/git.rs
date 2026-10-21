@@ -85,6 +85,7 @@ pub struct History {
 
 #[derive(Debug)]
 pub enum GitResult {
+    Auto(crate::git_auto::AutoResult),
     /// The repository containing the workspace root, then repositories
     /// one level below it (`git.scanNestedRepos`).
     Discovered {
@@ -176,6 +177,9 @@ pub struct GitState {
     /// Workspace root Git was detected for.
     pub(crate) root: Option<PathBuf>,
     pub status_due: Option<u64>,
+    discovery_due: Option<u64>,
+    discovery_running: bool,
+    pub auto_save: crate::git_auto::AutoSaveState,
     /// Latest status run; older results are dropped.
     status_seq: u64,
     /// Status runs on their threads (at most [`STATUS_PARALLEL`]).
@@ -231,6 +235,9 @@ impl GitState {
             generation: 0,
             root: None,
             status_due: None,
+            discovery_due: None,
+            discovery_running: false,
+            auto_save: Default::default(),
             status_seq: 0,
             status_in_flight: 0,
             status_again: false,
@@ -360,6 +367,16 @@ impl AppCore {
         true
     }
 
+    /// Rediscover even when the workspace has no known repository.
+    pub fn git_rediscover_soon(&mut self) {
+        if self.git_enabled() && self.workspace.is_some() {
+            self.git
+                .discovery_due
+                .get_or_insert(self.now_ms + STATUS_DEBOUNCE_MS);
+        }
+        self.git_refresh_soon();
+    }
+
     /// Schedules a debounced status refresh.
     pub fn git_refresh_soon(&mut self) {
         if !self.git.repos.is_empty() {
@@ -371,6 +388,17 @@ impl AppCore {
     /// File-system events: work-tree changes and index/HEAD/ref updates
     /// refresh the status (other `.git` churn is ignored).
     pub fn git_paths_changed(&mut self, paths: &[PathBuf]) {
+        if self.git.repos.is_empty()
+            || paths.iter().any(|p| {
+                p.file_name().is_some_and(|n| n == ".git")
+                    || (p.file_name().is_some_and(|n| n == "HEAD")
+                        && p.parent()
+                            .and_then(|p| p.file_name())
+                            .is_some_and(|n| n == ".git"))
+            })
+        {
+            self.git_rediscover_soon();
+        }
         let relevant = self.git.repos.iter().any(|repo| {
             paths.iter().any(|p| match p.strip_prefix(&repo.git_dir) {
                 Ok(inside) => {
@@ -399,6 +427,9 @@ impl AppCore {
             .map(|w| w.root.clone());
         if root != self.git.root {
             self.git.root = root.clone();
+            self.git.discovery_running = false;
+            self.git.discovery_due = None;
+            self.git.auto_save = Default::default();
             self.git.generation += 1;
             self.git.repo = None;
             self.git.repos.clear();
@@ -410,7 +441,16 @@ impl AppCore {
             self.git.next_fetch = None;
             self.git.notice = None;
             self.git.remotes.clear();
+            if root.is_some() {
+                self.git.discovery_due = Some(self.now_ms);
+            }
+        }
+        if self.git.discovery_due.is_some_and(|due| self.now_ms >= due)
+            && !self.git.discovery_running
+        {
+            self.git.discovery_due = None;
             if let Some(root) = root {
+                self.git.discovery_running = true;
                 let backend = self.git.backend.clone();
                 let generation = self.git.generation;
                 let nested = self.settings.bool("git.scanNestedRepos", None);
@@ -423,6 +463,7 @@ impl AppCore {
                 });
             }
         }
+        self.git_auto_tick();
         if let Some(due) = self.git.status_due
             && self.now_ms >= due
         {
@@ -450,10 +491,15 @@ impl AppCore {
     }
 
     pub fn git_next_due(&self) -> Option<u64> {
-        match (self.git.status_due, self.git.next_fetch) {
-            (Some(a), Some(b)) => Some(a.min(b)),
-            (a, b) => a.or(b),
-        }
+        [
+            self.git.status_due,
+            self.git.next_fetch,
+            self.git.discovery_due,
+            (!self.git_busy() && self.git.auto_save.has_ready_work()).then_some(self.now_ms),
+        ]
+        .into_iter()
+        .flatten()
+        .min()
     }
 
     /// `git.autoFetch` (off by default): fetch every `git.autoFetchPeriod`
@@ -533,12 +579,20 @@ impl AppCore {
 
     pub fn handle_git(&mut self, result: GitResult) {
         match result {
+            GitResult::Auto(result) => self.git_auto_result(result),
             GitResult::Discovered { generation, repos } if generation == self.git.generation => {
                 for r in &repos {
                     tracing::info!(workdir = %r.workdir.display(), "git repository");
                 }
-                let found = !repos.is_empty();
-                self.git.repo = repos.first().cloned();
+                self.git.discovery_running = false;
+                let found = !repos.is_empty() && self.git.repos.is_empty();
+                self.git.repo = self
+                    .git
+                    .repo
+                    .as_ref()
+                    .and_then(|prev| repos.iter().find(|r| r.workdir == prev.workdir))
+                    .cloned()
+                    .or_else(|| repos.first().cloned());
                 self.git.repos = repos;
                 self.git_start_status();
                 // `git.pullOnOpen` (off by default).

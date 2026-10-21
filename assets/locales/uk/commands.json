@@ -356,7 +356,10 @@
     "stageChange": "Індексувати зміну",
     "peekChange": "Показати зміну",
     "closePeek": "Закрити зміну",
-    "selectRepository": "Вибрати репозиторій"
+    "selectRepository": "Вибрати репозиторій",
+    "autoCommit": "Автокоміт",
+    "autoPush": "Автовідправлення",
+    "retryAutoPush": "Автовідправлення"
   },
   "mcp": {
     "startServer": "Запустити MCP-сервер",

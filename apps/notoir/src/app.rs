@@ -429,7 +429,7 @@ impl eframe::App for NotoirApp {
             self.core.window_focus_lost();
         }
         if !self.ui.window_focused && focused {
-            self.core.git_refresh_soon();
+            self.core.git_rediscover_soon();
         }
         self.ui.window_focused = focused;
         if ctx.input(|i| i.viewport().close_requested()) {

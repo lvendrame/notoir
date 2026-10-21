@@ -123,6 +123,9 @@ pub fn show(
     if core.git.repo.is_none() {
         ui.label(muted(kit, t!("git:scm.noRepo")));
         ui.add_space(8.0);
+        if ui.button(t!("commands:git.refresh")).clicked() {
+            actions.push(inv("git.refresh", json!({})));
+        }
         if ui.button(t!("commands:git.init")).clicked() {
             actions.push(inv("git.init", json!({})));
         }

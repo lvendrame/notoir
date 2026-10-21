@@ -138,5 +138,6 @@
     "title": "Wijziging {{n}} van {{total}}",
     "close": "Sluiten",
     "added": "Toegevoegde regels; de basis bevat hier niets."
-  }
+  },
+  "autoPushHelp": "Push na handmatige en automatische commits. Verstuurt alle nog niet gepushte commits op de branch."
 }

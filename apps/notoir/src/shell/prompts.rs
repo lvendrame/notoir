@@ -82,7 +82,11 @@ fn git_spec(p: &GitPrompt) -> Spec {
                 (t!("common:cancel"), Answer::Cancel, false),
             ],
         },
-        GitPrompt::Publish { branch, remote } => Spec {
+        GitPrompt::Publish { branch, remote }
+        | GitPrompt::AutoPublish {
+            target: crate::git_auto::PushTarget { branch, .. },
+            remote,
+        } => Spec {
             title: t!("git:publish.title", branch = branch, remote = remote),
             body: t!("git:publish.body"),
             list: Vec::new(),

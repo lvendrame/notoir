@@ -25,7 +25,8 @@
     "sortLines": "Zeilen sortieren",
     "lineNumbers": "Zeilennummern",
     "git": "Git",
-    "mcpSetup": "Einrichtungsbefehl kopieren"
+    "mcpSetup": "Einrichtungsbefehl kopieren",
+    "autoCommit": "Automatischer Commit"
   },
   "item": {
     "primarySidebar": "Primäre Seitenleiste",
@@ -47,5 +48,9 @@
     "afterDelay": "Nach Verzögerung",
     "onFocusChange": "Bei Fokuswechsel",
     "onWindowFocusLoss": "Wenn das Fenster den Fokus verliert"
+  },
+  "autoCommit": {
+    "off": "Aus",
+    "manual": "Beim manuellen Speichern"
   }
 }

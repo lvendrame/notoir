@@ -356,7 +356,10 @@
     "stageChange": "変更をステージ",
     "peekChange": "変更を表示",
     "closePeek": "変更を閉じる",
-    "selectRepository": "リポジトリを選択"
+    "selectRepository": "リポジトリを選択",
+    "autoCommit": "自動コミット",
+    "autoPush": "自動プッシュ",
+    "retryAutoPush": "自動プッシュ"
   },
   "mcp": {
     "startServer": "MCP サーバーを起動",

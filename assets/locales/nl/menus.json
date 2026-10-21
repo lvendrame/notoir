@@ -25,7 +25,8 @@
     "sortLines": "Regels sorteren",
     "lineNumbers": "Regelnummers",
     "git": "Git",
-    "mcpSetup": "Installatieopdracht kopiëren"
+    "mcpSetup": "Installatieopdracht kopiëren",
+    "autoCommit": "Automatisch committen"
   },
   "item": {
     "primarySidebar": "Primaire zijbalk",
@@ -47,5 +48,9 @@
     "afterDelay": "Na vertraging",
     "onFocusChange": "Bij focuswissel",
     "onWindowFocusLoss": "Als het venster de focus verliest"
+  },
+  "autoCommit": {
+    "off": "Uit",
+    "manual": "Bij handmatig opslaan"
   }
 }

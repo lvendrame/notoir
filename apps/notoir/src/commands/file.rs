@@ -220,14 +220,16 @@ fn new_window(_: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
 
 fn save(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     if let Some(doc) = doc_of(core, inv) {
-        core.save(doc);
+        core.begin_manual_save(vec![doc], &inv.source);
+        core.manual_save(|core| core.save(doc));
     }
     CommandOutcome::Done
 }
 
 fn save_as(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     if let Some(doc) = doc_of(core, inv) {
-        core.save_as(doc);
+        core.begin_manual_save(vec![doc], &inv.source);
+        core.manual_save(|core| core.save_as(doc));
     }
     CommandOutcome::Done
 }
@@ -239,8 +241,16 @@ fn save_as_admin(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome 
     CommandOutcome::Done
 }
 
-fn save_all(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
-    core.save_all();
+fn save_all(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    let docs = core
+        .workbench
+        .documents
+        .values()
+        .filter(|d| d.is_dirty())
+        .map(|d| d.id)
+        .collect();
+    core.begin_manual_save(docs, &inv.source);
+    core.manual_save(|core| core.save_all());
     CommandOutcome::Done
 }
 

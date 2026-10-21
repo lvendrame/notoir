@@ -1048,6 +1048,7 @@ pub struct ResolvedSettings {
     user: SettingsLayer,
     workspace: Option<SettingsLayer>,
     workspace_trusted: bool,
+    workspace_user_overrides: SettingsLayer,
     warnings: Vec<SettingsWarning>,
 }
 
@@ -1063,10 +1064,17 @@ impl ResolvedSettings {
             user,
             workspace,
             workspace_trusted,
+            workspace_user_overrides: SettingsLayer::default(),
             warnings: Vec::new(),
         };
         r.warnings = r.validate();
         r
+    }
+
+    /// Local user choices for this workspace, never loaded from repository files.
+    pub fn with_workspace_user_overrides(mut self, overrides: SettingsLayer) -> Self {
+        self.workspace_user_overrides = overrides;
+        self
     }
 
     pub fn defaults(schema: Arc<Schema>) -> Self {
@@ -1137,6 +1145,11 @@ impl ResolvedSettings {
             language
                 .and_then(|l| layer.languages.get(l))
                 .and_then(|m| m.get(def.key))
+        }
+        if def.scopes.workspace
+            && let Some(value) = self.workspace_user_overrides.values.get(key).filter(ok)
+        {
+            return Some(value);
         }
         let workspace_allowed = def.scopes.workspace && (!def.restricted || self.workspace_trusted);
         if let Some(ws) = self.workspace.as_ref().filter(|_| workspace_allowed) {
@@ -1221,6 +1234,24 @@ impl ResolvedSettings {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn local_workspace_choice_does_not_trust_repository_settings() {
+        let mut workspace = SettingsLayer::default();
+        workspace.set("git.autoPush", SettingValue::Bool(true));
+        workspace.set("mcp.autoStart", SettingValue::Bool(true));
+        let base =
+            ResolvedSettings::new(schema(), SettingsLayer::default(), Some(workspace), false);
+        assert!(!base.bool("git.autoPush", None));
+        let mut choice = SettingsLayer::default();
+        choice.set("git.autoPush", SettingValue::Bool(true));
+        let enabled = base.clone().with_workspace_user_overrides(choice.clone());
+        assert!(enabled.bool("git.autoPush", None));
+        assert!(!enabled.bool("mcp.autoStart", None));
+        choice.set("git.autoPush", SettingValue::Bool(false));
+        let disabled = base.with_workspace_user_overrides(choice);
+        assert!(!disabled.bool("git.autoPush", None));
+    }
 
     fn schema() -> Arc<Schema> {
         Arc::new(Schema::builtin())

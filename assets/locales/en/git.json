@@ -138,5 +138,6 @@
     "title": "Change {{n}} of {{total}}",
     "close": "Close",
     "added": "Added lines; the base has nothing here."
-  }
+  },
+  "autoPushHelp": "Push after manual and automatic commits. Sends all pending commits on the branch."
 }
