@@ -62,7 +62,8 @@ Editor-area view (`ViewKind::Diff`), opening as a tab titled `left ↔ right`:
 ```
 
 - Two editor panes reusing the editor widget (gutter, syntax highlighting, wrap) with filler rows aligning hunks.
-- Synchronized vertical scrolling (and horizontal when wrap off).
+- Synchronized vertical scrolling (and horizontal when wrap off). Horizontal overflow shows a draggable scrollbar
+  beneath each pane, with a shared range that reaches the longest line on either side.
 - Colours: `diff.removedLine`/`insertedLine` backgrounds plus `−`/`+` gutter markers (not colour alone); inline changes
   with stronger backgrounds.
 - Overview ruler shows hunk positions; click to jump.

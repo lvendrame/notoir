@@ -294,3 +294,26 @@ fn auto_theme_follows_os() {
         paper.color(Tok::BgEditor)
     );
 }
+
+#[test]
+fn explorer_is_first_after_restoring_old_panel_order() {
+    use notoir_core::panels::PanelId;
+    let mut app = common::start(|_| {});
+    {
+        let core = &mut app.harness.state_mut().core;
+        core.panels
+            .primary
+            .panels
+            .retain(|p| *p != PanelId::Explorer);
+        core.panels.primary.panels.push(PanelId::Explorer);
+        core.panels
+            .ensure_registered(notoir::core::REGISTERED_PANELS);
+    }
+    app.harness.run_steps(3);
+    for label in ["Search", "Source Control"] {
+        assert!(
+            app.harness.get_by_label("Explorer").rect().top()
+                < app.harness.get_by_label(label).rect().top()
+        );
+    }
+}

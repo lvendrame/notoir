@@ -605,7 +605,7 @@ fn compare_snapshot() {
     let notes = d.path().join("notes.md");
     std::fs::write(
         &notes,
-        "# Notoir\n\nThe editor is fast.\nIt supports splits.\nGit is optional.\n\n## Compare\n\nSide by side.\nOld ending.\n",
+        "# Notoir\n\nThe editor is fast.\nIt supports splits.\nGit is optional.\n\n## Compare\n\nSide by side, with synchronized horizontal scrollbars so that even a long line can be read all the way to its end.\nOld ending.\n",
     )
     .unwrap();
     let notes = notes.canonicalize().unwrap();
@@ -631,7 +631,7 @@ fn compare_snapshot() {
                     notoir_editor::ChangeSet::replace(
                         0,
                         len,
-                        "# Notoir\n\nThe editor is fast.\nIt supports true splits.\nAnd duplicate views.\nGit is optional.\n\n## Compare\n\nSide by side.\n",
+                        "# Notoir\n\nThe editor is fast.\nIt supports true splits.\nAnd duplicate views.\nGit is optional.\n\n## Compare\n\nSide by side, with synchronized horizontal scrollbars so that even a long line can be read all the way to its end.\n",
                     ),
                     notoir_editor::Selection::caret(0),
                     notoir_editor::EditKind::Other,

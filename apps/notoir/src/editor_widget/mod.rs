@@ -126,6 +126,9 @@ pub struct EditorOptions {
 /// Diff colouring of one side (docs/specs/27 §Diff View).
 #[derive(Clone, Debug, PartialEq)]
 pub struct DiffDecor {
+    /// Shared horizontal extent and gutter sizing for synchronized panes.
+    pub width_cols: usize,
+    pub max_lines: usize,
     /// Right side: inserted colours and `+`; left: removed and `−`.
     pub inserted: bool,
     /// Changed line ranges, sorted.
@@ -271,12 +274,36 @@ impl ViewCache {
 #[derive(Default)]
 pub struct EditorCaches {
     views: HashMap<ViewId, ViewCache>,
+    widths: HashMap<ViewId, (u64, usize, usize)>,
 }
 
 impl EditorCaches {
+    /// Longest display line, cached until the document or tab size changes.
+    pub fn width_cols(&mut self, view: ViewId, doc: &Document, tab: usize) -> usize {
+        let entry = self.widths.entry(view).or_insert((u64::MAX, 0, 0));
+        if entry.0 != doc.revision || entry.1 != tab {
+            let width = doc
+                .buffer
+                .rope()
+                .lines()
+                .map(|line| {
+                    line.chars()
+                        .take_while(|c| *c != '\n' && *c != '\r')
+                        .fold(0, |col, c| {
+                            col + notoir_editor::wrap::char_cols(c, col, tab)
+                        })
+                })
+                .max()
+                .unwrap_or(0);
+            *entry = (doc.revision, tab, width);
+        }
+        entry.2
+    }
+
     /// Drops caches of closed views.
     pub fn retain(&mut self, alive: impl Fn(ViewId) -> bool) {
         self.views.retain(|v, _| alive(*v));
+        self.widths.retain(|v, _| alive(*v));
     }
 
     /// The primary caret's rect as of the last frame (popups anchor to it).
@@ -445,7 +472,10 @@ pub fn show(
         + fold_w
         + match opts.line_numbers {
             LineNumbers::Off => char_w * 0.5,
-            _ => (gutter_digits(lines) as f32 + 1.0) * char_w,
+            _ => {
+                (gutter_digits(opts.diff.as_ref().map_or(lines, |d| d.max_lines)) as f32 + 1.0)
+                    * char_w
+            }
         };
     // Zen Mode: a centred column.
     let rect = match opts.max_width_cols {
@@ -480,10 +510,19 @@ pub fn show(
         Pos2::new(left, rect.top()),
         Vec2::new(gutter_w, rect.height()),
     );
-    let text = Rect::from_min_max(
+    let mut text = Rect::from_min_max(
         Pos2::new(gutter.right() + opts.padding, rect.top()),
         Pos2::new(right, rect.bottom()),
     );
+    let horizontal_width = opts
+        .diff
+        .as_ref()
+        .filter(|_| opts.wrap == WrapMode::Off)
+        .map_or(0.0, |d| (d.width_cols + 1) as f32 * char_w);
+    let horizontal_scrollbar = horizontal_width > text.width();
+    if horizontal_scrollbar {
+        text.max.y = (text.bottom() - SCROLLBAR_W).max(text.top());
+    }
     let bookmark_lane = Rect::from_min_size(gutter.min, Vec2::new(lane_w, gutter.height()));
     let fold_lane = (fold_w > 0.0)
         .then(|| Rect::from_min_max(Pos2::new(gutter.right() - fold_w, gutter.top()), gutter.max));
@@ -584,6 +623,12 @@ pub fn show(
         cache.reveal = false;
     }
 
+    if opts.diff.is_some() {
+        cache.scroll_x = cache
+            .scroll_x
+            .clamp(0.0, (horizontal_width - m.text.width()).max(0.0));
+    }
+
     // Syntax highlighting up to the viewport bottom within a frame budget;
     // later frames continue (spec 26).
     let language = wb
@@ -615,6 +660,9 @@ pub fn show(
         .map(|v| v.selection.clone())
         .unwrap_or_default();
     out.cjk = paint::paint(ui, kit, cache, &selection, &m, opts, focused, now);
+    if horizontal_scrollbar {
+        paint::horizontal_scrollbar(ui, kit, id, cache, &m, horizontal_width);
+    }
     paint::scrollbar(ui, kit, id, cache, &m);
     cache.minimap_rect = mini_rect.filter(|_| mini.is_some());
     cache.gutter_rect = m.gutter;

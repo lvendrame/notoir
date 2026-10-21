@@ -49,6 +49,8 @@ fn decor(s: &mut DiffSession) -> (DiffDecor, DiffDecor) {
         return (l.clone(), r.clone());
     }
     let side = |side: Side| DiffDecor {
+        width_cols: 0,
+        max_lines: 0,
         inserted: side == Side::Right,
         lines: Arc::new(s.diff.changed_lines(side)),
         spans: Arc::new(s.diff.inline_spans(side)),
@@ -282,7 +284,20 @@ pub fn show(
     );
 
     // Panes, scrolled together.
-    let (ldec, rdec) = decor(&mut s);
+    let (mut ldec, mut rdec) = decor(&mut s);
+    let mut width_cols = 0;
+    let mut max_lines = 0;
+    for pane in [&s.left, &s.right] {
+        let opts = core.editor_options(pane.view);
+        if let Some(doc) = core.workbench.document(pane.doc) {
+            width_cols = width_cols.max(editors.width_cols(pane.view, doc, opts.indent.tab_size));
+            max_lines = max_lines.max(doc.buffer.rope().len_lines());
+        }
+    }
+    for dec in [&mut ldec, &mut rdec] {
+        dec.width_cols = width_cols;
+        dec.max_lines = max_lines;
+    }
     let pending = s.sync_pending.take();
     if let Some(p) = pending {
         s.sync = Some(p);

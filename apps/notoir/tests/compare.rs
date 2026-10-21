@@ -419,3 +419,89 @@ fn panes_scroll_together() {
     assert!(ly > 100.0, "scrolled to the change ({ly})");
     assert!((ly - ry).abs() < 0.5, "{ly} vs {ry}");
 }
+
+#[test]
+fn horizontal_scrollbars_reach_long_lines_and_stay_synchronized() {
+    let dir = tempfile::tempdir().unwrap();
+    let a = write(
+        dir.path(),
+        "wide.txt",
+        &format!("{}END\n", "\t日本e\u{301}".repeat(100)),
+    );
+    let b = write(dir.path(), "short.txt", "short\n");
+    let mut app = open(vec![a, b]);
+    let (ta, tb) = (tab_of(&app, "wide.txt"), tab_of(&app, "short.txt"));
+    common::run(&mut app, "compare.select", json!({ "view": ta.0 }));
+    common::run(&mut app, "compare.withSelected", json!({ "view": tb.0 }));
+    common::settle(&mut app);
+    let tab = diff_tab(&app);
+    let session = &app.harness.state().core.compare.sessions[&tab];
+    let (left, right, doc) = (session.left.view, session.right.view, session.left.doc);
+    let editors = &app.harness.state().ui.editors;
+    let lg = editors.geometry(left).unwrap().1;
+    let rg = editors.geometry(right).unwrap().1;
+    let pane_width = rg.left() - lg.left() - 26.0;
+    let end = egui::pos2(lg.left() + pane_width - 12.0, lg.bottom() - 5.0);
+    let start = egui::pos2(lg.right() + 20.0, end.y);
+    let selection = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .view(left)
+        .unwrap()
+        .selection
+        .clone();
+    // Click the track at its far end with a standard primary mouse button.
+    app.harness.hover_at(end);
+    app.harness.run_steps(1);
+    for pressed in [true, false] {
+        app.harness.event(egui::Event::PointerButton {
+            pos: end,
+            button: egui::PointerButton::Primary,
+            pressed,
+            modifiers: Modifiers::NONE,
+        });
+        app.harness.run_steps(1);
+    }
+    app.harness.run_steps(6);
+    let x = app.harness.state().ui.editors.scroll_px(left).unwrap().1;
+    assert!(x > 3000.0, "reaches the far end of the long line: {x}");
+    assert!((x - app.harness.state().ui.editors.scroll_px(right).unwrap().1).abs() < 0.5);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .view(left)
+            .unwrap()
+            .selection,
+        selection
+    );
+
+    // Drag the thumb back to the start without changing the selection.
+    app.harness.drag_at(end);
+    app.harness.run_steps(1);
+    for i in 1..=8 {
+        app.harness.hover_at(end + (start - end) * (i as f32 / 8.0));
+        app.harness.run_steps(1);
+    }
+    app.harness.drop_at(start);
+    app.harness.run_steps(6);
+    let after_drag = app.harness.state().ui.editors.scroll_px(left).unwrap().1;
+    assert!(after_drag < x / 4.0, "thumb dragged back: {after_drag}");
+    assert!((after_drag - app.harness.state().ui.editors.scroll_px(right).unwrap().1).abs() < 0.5);
+
+    app.harness.set_size(egui::vec2(1000.0, 600.0));
+    app.harness.run_steps(4);
+    set_text(&mut app, doc, "now short\n");
+    common::settle(&mut app);
+    assert_eq!(
+        app.harness.state().ui.editors.scroll_px(left).unwrap().1,
+        0.0
+    );
+    assert_eq!(
+        app.harness.state().ui.editors.scroll_px(right).unwrap().1,
+        0.0
+    );
+}

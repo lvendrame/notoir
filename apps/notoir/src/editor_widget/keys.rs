@@ -378,6 +378,10 @@ pub(super) fn pointer(
     let Some(pointer) = response.interact_pointer_pos() else {
         return;
     };
+    // Scrollbar interactions must not place the caret or start a selection.
+    if pointer.y >= m.text.bottom() && cache.drag.is_none() {
+        return;
+    }
     // Only the primary button places the caret: a right-click opens the
     // context menu over the selection as it is (spec 37).
     let primary = ui.input(|i| {

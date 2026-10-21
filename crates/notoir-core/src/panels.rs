@@ -179,6 +179,16 @@ impl PanelLayout {
                 area.active.get_or_insert(id);
             }
         }
+        // Old sessions may have appended Explorer after other panels.
+        if let Some(index) = self
+            .primary
+            .panels
+            .iter()
+            .position(|p| *p == PanelId::Explorer)
+        {
+            self.primary.panels.remove(index);
+            self.primary.panels.insert(0, PanelId::Explorer);
+        }
     }
 
     pub fn area(&self, area: PanelArea) -> &AreaState {
@@ -303,6 +313,19 @@ impl PanelLayout {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn restored_explorer_order_preserves_active_panel_and_other_positions() {
+        let mut layout = PanelLayout::new(&[PanelId::Search, PanelId::Plugins, PanelId::Explorer]);
+        layout.ensure_registered(&[PanelId::Explorer, PanelId::Search, PanelId::Plugins]);
+        assert_eq!(
+            layout.primary.panels,
+            vec![PanelId::Explorer, PanelId::Search, PanelId::Plugins]
+        );
+        assert_eq!(layout.primary.active, Some(PanelId::Search));
+        layout.ensure_registered(&[PanelId::Explorer, PanelId::Search, PanelId::Plugins]);
+        assert_eq!(layout.primary.panels[0], PanelId::Explorer);
+    }
 
     const ALL: &[PanelId] = &[
         PanelId::Explorer,

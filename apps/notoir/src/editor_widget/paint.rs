@@ -737,7 +737,7 @@ pub(super) fn scrollbar(
 ) {
     let track = Rect::from_min_max(
         Pos2::new(m.rect.right() - SCROLLBAR_W, m.rect.top()),
-        m.rect.max,
+        Pos2::new(m.rect.right(), m.text.bottom()),
     );
     let total = cache.map.total_rows() as f32 * m.row_h + m.text.height() - m.row_h;
     if total <= m.text.height() + 0.5 {
@@ -764,5 +764,64 @@ pub(super) fn scrollbar(
     } else {
         kit.color(Tok::MinimapViewport)
     };
+    ui.painter().rect_filled(thumb, 3.0, color);
+}
+
+/// Horizontal diff scrollbar, kept outside the text viewport.
+pub(super) fn horizontal_scrollbar(
+    ui: &egui::Ui,
+    kit: &mut Kit,
+    id: egui::Id,
+    cache: &mut ViewCache,
+    m: &Metrics,
+    content_width: f32,
+) {
+    let track = Rect::from_min_max(
+        Pos2::new(m.text.left(), m.text.bottom()),
+        Pos2::new(m.text.right(), m.rect.bottom()),
+    );
+    let max_scroll = (content_width - m.text.width()).max(0.0);
+    let thumb_w = (track.width() * m.text.width() / content_width)
+        .max(24.0)
+        .min(track.width());
+    let travel = (track.width() - thumb_w).max(1.0);
+    let thumb_x = track.left() + cache.scroll_x / max_scroll.max(1.0) * travel;
+    let thumb = Rect::from_min_size(
+        Pos2::new(thumb_x, track.top() + 2.0),
+        Vec2::new(thumb_w, SCROLLBAR_W - 4.0),
+    );
+    let resp = ui.interact(track, id.with("hscroll"), Sense::click_and_drag());
+    let grab_id = id.with("hscroll-grab");
+    if ui.input(|i| i.pointer.primary_pressed())
+        && resp.contains_pointer()
+        && let Some(p) = ui.input(|i| i.pointer.interact_pos())
+    {
+        let grab = if thumb.contains(p) {
+            p.x - thumb.left()
+        } else {
+            thumb_w / 2.0
+        };
+        ui.ctx().data_mut(|d| d.insert_temp(grab_id, grab));
+    }
+    if (resp.dragged() || resp.clicked())
+        && let Some(p) = resp.interact_pointer_pos()
+    {
+        let grab = ui
+            .ctx()
+            .data(|d| d.get_temp::<f32>(grab_id))
+            .unwrap_or(thumb_w / 2.0);
+        cache.scroll_x = ((p.x - track.left() - grab) / travel).clamp(0.0, 1.0) * max_scroll;
+        ui.ctx().request_repaint();
+    }
+    let color = if resp.hovered() || resp.dragged() {
+        kit.color(Tok::MinimapViewportHover)
+    } else {
+        kit.color(Tok::MinimapViewport)
+    };
+    // Recompute after interaction so the thumb reflects the new offset immediately.
+    let thumb = thumb.translate(Vec2::new(
+        track.left() + cache.scroll_x / max_scroll.max(1.0) * travel - thumb.left(),
+        0.0,
+    ));
     ui.painter().rect_filled(thumb, 3.0, color);
 }
