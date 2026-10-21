@@ -1141,7 +1141,24 @@ fn clone_asks_for_a_folder_then_offers_to_open() {
         .event(egui::Event::Text(bare.to_string_lossy().into_owned()));
     app.harness.run_steps(2);
     app.harness.key_press(Key::Enter);
-    assert!(wait_for(&mut app, |a| front_prompt(a).is_some()));
+    // Observe the first frame of the asynchronously opened prompt, including
+    // when cloning finishes at the end of a UI-test settling loop (Windows CI).
+    let deadline = Instant::now() + Duration::from_secs(20);
+    loop {
+        app.harness.step();
+        if front_prompt(&app).is_some() {
+            break;
+        }
+        assert!(Instant::now() < deadline, "clone did not finish");
+        std::thread::sleep(Duration::from_millis(1));
+    }
+    assert!(matches!(
+        front_prompt(&app),
+        Some(Prompt::Git(GitPrompt::OpenCloned(_)))
+    ));
+    // A centered modal needs another frame to position itself using its actual
+    // size. Clicking its first-frame coordinates can miss the Open button.
+    app.harness.run_steps(3);
     assert!(dest_root.join("remote/n.md").exists());
     assert!(
         app.harness
@@ -1149,6 +1166,13 @@ fn clone_asks_for_a_folder_then_offers_to_open() {
             .is_some()
     );
     app.harness.get_by_label("Open").click();
+    app.harness.run_steps(3);
+    let cloned = dest_root.join("remote").canonicalize().unwrap();
+    assert_eq!(
+        app.harness.state().core.workspace.as_ref().map(|w| &w.root),
+        Some(&cloned),
+        "Open must activate the cloned workspace before repository detection"
+    );
     assert!(wait_for(&mut app, |a| a
         .harness
         .state()
@@ -1156,6 +1180,10 @@ fn clone_asks_for_a_folder_then_offers_to_open() {
         .git
         .repo
         .is_some()));
+    assert_eq!(
+        app.harness.state().core.git.repo.as_ref().unwrap().workdir,
+        cloned
+    );
     assert_eq!(
         app.harness.state().core.git.recent_urls,
         [bare.to_string_lossy().into_owned()]
