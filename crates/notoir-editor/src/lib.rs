@@ -34,3 +34,5 @@ pub use language::LanguageId;
 pub use line_ending::LineEnding;
 pub use ropey::Rope;
 pub use selection::{Range, Selection};
+
+pub mod yaml;

@@ -227,16 +227,6 @@ impl Renderer<'_, '_> {
             .layout
             .group(group)
             .is_some_and(|g| !g.tabs.is_empty());
-        if !has_tabs && self.only_group {
-            empty_state::show(&mut child, self.kit, self.core, self.actions);
-            self.areas.push(GroupArea {
-                group,
-                strip: Rect::NOTHING,
-                body: rect,
-                tabs: Vec::new(),
-            });
-            return;
-        }
         let mut tab_rects = Vec::new();
         let hide_tabs =
             self.core.zen.is_some() && self.core.settings.bool("zenMode.hideTabs", None);
@@ -255,6 +245,17 @@ impl Renderer<'_, '_> {
             )
         };
         let body = Rect::from_min_max(Pos2::new(rect.left(), strip.bottom()), rect.max);
+        if !has_tabs && self.only_group {
+            let mut empty = child.new_child(egui::UiBuilder::new().max_rect(body));
+            empty_state::show(&mut empty, self.kit, self.core, self.actions);
+            self.areas.push(GroupArea {
+                group,
+                strip,
+                body,
+                tabs: tab_rects,
+            });
+            return;
+        }
         let body_full = body;
         let active = self
             .core
@@ -364,7 +365,7 @@ impl Renderer<'_, '_> {
                 use notoir_core::view::ViewKind as VK;
                 let view_kind = kind.unwrap_or(VK::Text);
                 let is_md = doc.is_some_and(|d| self.core.is_markdown(d));
-                let is_json = doc.is_some_and(|d| self.core.is_json(d));
+                let is_json = doc.is_some_and(|d| self.core.is_structured(d));
                 let mode = match view_kind {
                     VK::MarkdownPreview | VK::MarkdownSplit if is_md => view_kind,
                     VK::JsonTree | VK::JsonSplit if is_json => view_kind,

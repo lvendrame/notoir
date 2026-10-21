@@ -13,7 +13,8 @@
     "json": "JSON",
     "compare": "比较",
     "mcp": "MCP",
-    "preferences": "首选项"
+    "preferences": "首选项",
+    "yaml": "YAML"
   },
   "view": {
     "togglePrimarySidebar": "切换主侧边栏",
@@ -414,5 +415,14 @@
     "complete": "补全链接",
     "findUnlinked": "查找未链接的提及",
     "openLine": "在行处打开笔记"
+  },
+  "yaml": {
+    "showText": "显示文本",
+    "showSplit": "显示文本和树",
+    "showTree": "显示树",
+    "format": "格式化文档",
+    "goToParent": "转到父级",
+    "selectRange": "选择节点",
+    "treeEdit": "编辑 YAML 树"
   }
 }

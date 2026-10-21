@@ -946,3 +946,20 @@ fn plugin_manager_snapshot() {
         img.save(out_dir().join("plugin-manager.png")).unwrap();
     }
 }
+
+#[test]
+fn yaml_split_snapshot() {
+    let dir = tempfile::tempdir().unwrap();
+    let p = dir.path().join("settings.yaml");
+    std::fs::write(&p, "# Workspace settings\nname: Notoir\nversion: '0.1.4'\nprivate: true\nuser:\n  name: Ana\n  age: 42\n  address:\n    city: Porto\n    zip: null\ntags: [editor, native, fast]\n").unwrap();
+    let mut app = common::start(move |o| {
+        o.language_override = Some(Language::En);
+        o.theme_override = Some(ThemeId::Midnight);
+        o.open_paths = vec![(p, None)];
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "yaml.showSplit", serde_json::Value::Null);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("yaml-split.png")).unwrap();
+    }
+}

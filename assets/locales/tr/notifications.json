@@ -61,5 +61,6 @@
   "updateReady": "Notoir {{version}} indirildi ve doğrulandı.",
   "updateInstallOnQuit": "Çıkışta yükle",
   "updateDownloadFailed": "Güncelleme indirilemedi.",
-  "updateWillInstall": "Yükleyici, Notoir kapandıktan sonra açılır."
+  "updateWillInstall": "Yükleyici, Notoir kapandıktan sonra açılır.",
+  "yamlInvalid": "{{line}}. satır, {{column}}. sütunda geçersiz YAML: {{message}}"
 }

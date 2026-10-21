@@ -13,7 +13,8 @@
     "json": "JSON",
     "compare": "Porównaj",
     "mcp": "MCP",
-    "preferences": "Preferencje"
+    "preferences": "Preferencje",
+    "yaml": "YAML"
   },
   "view": {
     "togglePrimarySidebar": "Przełącz główny pasek boczny",
@@ -414,5 +415,14 @@
     "complete": "Uzupełnij link",
     "findUnlinked": "Znajdź wzmianki bez linku",
     "openLine": "Otwórz notatkę w wierszu"
+  },
+  "yaml": {
+    "showText": "Pokaż tekst",
+    "showSplit": "Pokaż tekst i drzewo",
+    "showTree": "Pokaż drzewo",
+    "format": "Formatuj dokument",
+    "goToParent": "Przejdź do elementu nadrzędnego",
+    "selectRange": "Zaznacz węzeł",
+    "treeEdit": "Edytuj drzewo YAML"
   }
 }

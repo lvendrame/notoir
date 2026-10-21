@@ -39,6 +39,9 @@
       "null": "Null",
       "object": "オブジェクト",
       "array": "配列"
-    }
-  }
+    },
+    "invalidYaml": "ツリーで編集する前に YAML のエラーを修正してください。",
+    "unsafeYaml": "この変更は無効なYAMLを作成するか、エイリアスを壊します。ソーステキストを編集してください。"
+  },
+  "invalidYaml": "{{line}} 行 {{column}} 列の YAML が無効です: {{message}}"
 }

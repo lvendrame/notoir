@@ -39,6 +39,9 @@
       "null": "Null",
       "object": "Obiekt",
       "array": "Tablica"
-    }
-  }
+    },
+    "invalidYaml": "Popraw błędy YAML przed edycją w drzewie.",
+    "unsafeYaml": "Ta zmiana utworzyłaby nieprawidłowy YAML lub uszkodziła alias. Edytuj tekst źródłowy."
+  },
+  "invalidYaml": "Nieprawidłowy YAML w wierszu {{line}}, kolumnie {{column}}: {{message}}"
 }

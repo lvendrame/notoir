@@ -61,5 +61,6 @@
   "updateReady": "Notoir {{version}} wurde heruntergeladen und geprüft.",
   "updateInstallOnQuit": "Beim Beenden installieren",
   "updateDownloadFailed": "Das Update konnte nicht heruntergeladen werden.",
-  "updateWillInstall": "Das Installationsprogramm öffnet sich nach dem Beenden von Notoir."
+  "updateWillInstall": "Das Installationsprogramm öffnet sich nach dem Beenden von Notoir.",
+  "yamlInvalid": "Ungültiges YAML in Zeile {{line}}, Spalte {{column}}: {{message}}"
 }

@@ -28,3 +28,6 @@ pub fn reveal_label_key() -> &'static str {
         "common:reveal.fileManager"
     }
 }
+
+mod console;
+pub use console::attach_parent_console;

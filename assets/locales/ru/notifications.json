@@ -61,5 +61,6 @@
   "updateReady": "Notoir {{version}} скачан и проверен.",
   "updateInstallOnQuit": "Установить при выходе",
   "updateDownloadFailed": "Не удалось скачать обновление.",
-  "updateWillInstall": "Установщик откроется после выхода из Notoir."
+  "updateWillInstall": "Установщик откроется после выхода из Notoir.",
+  "yamlInvalid": "Недопустимый YAML в строке {{line}}, столбце {{column}}: {{message}}"
 }

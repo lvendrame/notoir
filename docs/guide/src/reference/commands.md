@@ -360,6 +360,18 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Show Tree | `json.showTree` |  |  |
 | Sort Keys | `json.sortKeys` |  |  |
 
+## YAML
+
+| Command | Id | macOS | Windows / Linux |
+|---|---|---|---|
+| Edit YAML Tree *(hidden)* | `yaml.treeEdit` |  |  |
+| Format Document | `yaml.format` |  |  |
+| Go to Parent | `yaml.goToParent` |  |  |
+| Select Node *(hidden)* | `yaml.selectRange` |  |  |
+| Show Text | `yaml.showText` |  |  |
+| Show Text and Tree | `yaml.showSplit` |  |  |
+| Show Tree | `yaml.showTree` |  |  |
+
 ## Compare
 
 | Command | Id | macOS | Windows / Linux |

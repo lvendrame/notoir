@@ -11,7 +11,7 @@ use notoir_core::ids::{DocumentId, GroupId, ViewId};
 use notoir_core::layout::LayoutShape;
 use notoir_core::notifications::{Notification, Severity, Translatable};
 use notoir_core::panels::PanelLayout;
-use notoir_core::view::ScrollPosition;
+use notoir_core::view::{ScrollPosition, ViewKind};
 use notoir_core::workbench::TabPosition;
 use notoir_editor::{Range, Selection};
 use notoir_storage::state_db::StateDb;
@@ -66,6 +66,11 @@ pub struct TabData {
     /// Folded regions as (header char, end char).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub folds: Vec<(usize, usize)>,
+    /// JSON/YAML presentation. Optional for compatibility with session v1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tree_mode: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tree_ratio: Option<f32>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -244,6 +249,13 @@ impl AppCore {
                         wrap: view.wrap_override,
                         zoom: view.zoom,
                         folds: view.folds.iter().map(|f| (f.header, f.end)).collect(),
+                        tree_mode: match view.kind {
+                            ViewKind::JsonTree => Some("tree".into()),
+                            ViewKind::JsonSplit => Some("split".into()),
+                            _ => None,
+                        },
+                        tree_ratio: matches!(view.kind, ViewKind::JsonTree | ViewKind::JsonSplit)
+                            .then_some(view.preview_ratio),
                     });
                 }
                 GroupData { tabs, active }
@@ -521,6 +533,15 @@ impl AppCore {
                     .workbench
                     .set_selection(v, Selection::new(ranges, primary));
             }
+            let tree_kind = if self.is_structured(doc) {
+                match tab.tree_mode.as_deref() {
+                    Some("tree") => ViewKind::JsonTree,
+                    Some("split") => ViewKind::JsonSplit,
+                    _ => ViewKind::Text,
+                }
+            } else {
+                ViewKind::Text
+            };
             if let Some(view) = self.workbench.views.get_mut(v) {
                 view.scroll = ScrollPosition {
                     top_line: tab.top_line,
@@ -529,6 +550,12 @@ impl AppCore {
                 view.wrap_override = tab.wrap;
                 view.zoom = tab.zoom;
                 view.preview = tab.preview;
+                view.kind = tree_kind;
+                view.preview_ratio = tab
+                    .tree_ratio
+                    .filter(|r| r.is_finite())
+                    .unwrap_or(0.5)
+                    .clamp(0.2, 0.8);
                 view.folds = tab
                     .folds
                     .iter()

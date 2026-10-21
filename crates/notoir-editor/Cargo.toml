@@ -19,6 +19,8 @@ regex.workspace = true
 syntect = { workspace = true, features = ["yaml-load"] }
 pulldown-cmark.workspace = true
 similar.workspace = true
+yaml-edit.workspace = true
+rowan.workspace = true
 
 [build-dependencies]
 syntect = { workspace = true, features = ["yaml-load", "dump-create"] }

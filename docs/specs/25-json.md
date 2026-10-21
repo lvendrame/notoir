@@ -1,6 +1,6 @@
 # 25 — JSON
 
-**Status:** Done — M14 (hand-written span parser for JSON/JSONC/JSON Lines; Text/Split/Tree with virtualized tree, filter, context menu, both-way selection sync; error banner over the greyed last valid tree + editor squiggle; Format (keeps comments) / Minify / Sort Keys / Go to Parent. Deferred: JSON Tree secondary-sidebar panel, worker parse for >1 MB (small docs parse per change, large ones debounce 100 ms on the UI thread), `json.format.indent`, breadcrumbs/outline (M15).) M26: tree editing — `notoir-editor::json_edit` turns set value (type-aware: strings quoted and escaped, JSON number grammar, `true`/`false`), rename key (duplicates refused), add property / element of a chosen type (indented like the siblings, inline containers stay inline, empty ones open a line one level deeper; new properties get a free `newKey…` name and open for renaming), delete (with its separating comma) and move up/down (swapping the members' text, separators and comments in between stay) into minimal text edits applied as one undo step; inline editors in the tree (double-click a value, context menu Edit Value / Rename Key) validate before applying; edits are refused with a notice while the text does not parse. Deviation: reordering uses Move Up / Move Down instead of drag.
+**Status:** Done — YAML extension: shared Text/Split/Tree UI, lossless source adapter and tree editing, selection sync, diagnostics and formatting. YAML aliases/tags stay literal; unsafe structural edits are refused. — M14 (hand-written span parser for JSON/JSONC/JSON Lines; Text/Split/Tree with virtualized tree, filter, context menu, both-way selection sync; error banner over the greyed last valid tree + editor squiggle; Format (keeps comments) / Minify / Sort Keys / Go to Parent. Deferred: JSON Tree secondary-sidebar panel, worker parse for >1 MB (small docs parse per change, large ones debounce 100 ms on the UI thread), `json.format.indent`, breadcrumbs/outline (M15).) M26: tree editing — `notoir-editor::json_edit` turns set value (type-aware: strings quoted and escaped, JSON number grammar, `true`/`false`), rename key (duplicates refused), add property / element of a chosen type (indented like the siblings, inline containers stay inline, empty ones open a line one level deeper; new properties get a free `newKey…` name and open for renaming), delete (with its separating comma) and move up/down (swapping the members' text, separators and comments in between stay) into minimal text edits applied as one undo step; inline editors in the tree (double-click a value, context menu Edit Value / Rename Key) validate before applying; edits are refused with a notice while the text does not parse. Deviation: reordering uses Move Up / Move Down instead of drag.
 
 ## Purpose
 
@@ -18,6 +18,17 @@ Text|Tree) with bidirectional selection sync. The raw text is always the source 
 - Error recovery: on syntax error the tree keeps the last valid structure greyed out with a banner "Invalid JSON at line
   12, column 5: expected ',' or '}'" (click to jump). Errors also underline in the editor (squiggle in `danger`).
 - Large-file mode: tree disabled beyond `json.tree.maxSize` (default 20 MiB) with an explanation.
+
+## YAML
+
+Both `.yaml` and `.yml` use the same Text / Split / Tree controls and tree interactions as JSON.
+The YAML source is authoritative: comments, scalar quoting, line endings and unrelated formatting survive tree edits.
+YAML commands use the `yaml.*` namespace, with the same arguments as corresponding JSON tree commands.
+Multiple documents appear as separate roots. Anchors are preserved; aliases and tagged values remain literal rather than
+being recursively expanded. Complex keys are displayed as written and edited in the text editor. Edits that introduce
+invalid syntax, duplicate keys or dangling aliases are refused. YAML Format Document normalizes block indentation and
+separator spacing using spaces while preserving comments and key order. JSON minify and sort commands stay JSON-only.
+The existing `json.syncSelection` and `json.tree.maxSize` settings also govern YAML trees.
 
 ## Display Modes
 
@@ -117,4 +128,27 @@ Feature: JSONC
   Scenario: Comments allowed in tsconfig.json
     Given "tsconfig.json" containing a // comment
     Then no syntax error is reported and the tree is shown
+Feature: YAML tree
+
+  Scenario: YAML supports split and tree views
+    Given a YAML document with nested mappings in a .yaml or .yml file
+    When the user switches between Text, Split and Tree
+    Then the tree shows the mapping keys and typed values
+    And selecting a node selects its source text
+    And moving the editor cursor selects the corresponding tree node
+    And changing view modes leaves the source unchanged
+
+  Scenario: YAML tree edits preserve source and undo
+    Given a valid YAML document with comments, quoted values and a sequence
+    When the user edits a value, renames a key, adds, deletes or reorders a node
+    Then the source remains valid YAML and retains unrelated comments
+    And each operation can be undone in one step and redone
+
+  Scenario: Invalid YAML keeps the last valid tree
+    Given valid YAML displayed in Split mode
+    When a text edit introduces a syntax error
+    Then the last valid tree remains visible with a YAML error banner
+    And tree edits do not modify the invalid source
+    And undoing the text edit restores the valid source and removes the error banner
+
 ```

@@ -39,6 +39,9 @@
       "null": "Null",
       "object": "Oggetto",
       "array": "Array"
-    }
-  }
+    },
+    "invalidYaml": "Correggi gli errori YAML prima di modificare nell’albero.",
+    "unsafeYaml": "Questa modifica creerebbe YAML non valido o interromperebbe un alias. Modifica il testo sorgente."
+  },
+  "invalidYaml": "YAML non valido alla riga {{line}}, colonna {{column}}: {{message}}"
 }

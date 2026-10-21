@@ -61,5 +61,6 @@
   "updateReady": "Notoir {{version}} is gedownload en geverifieerd.",
   "updateInstallOnQuit": "Installeren bij afsluiten",
   "updateDownloadFailed": "De update kon niet worden gedownload.",
-  "updateWillInstall": "Het installatieprogramma wordt geopend nadat Notoir is afgesloten."
+  "updateWillInstall": "Het installatieprogramma wordt geopend nadat Notoir is afgesloten.",
+  "yamlInvalid": "Ongeldige YAML op regel {{line}}, kolom {{column}}: {{message}}"
 }

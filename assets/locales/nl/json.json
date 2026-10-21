@@ -39,6 +39,9 @@
       "null": "Null",
       "object": "Object",
       "array": "Array"
-    }
-  }
+    },
+    "invalidYaml": "Herstel de YAML-fouten voordat u in de boom bewerkt.",
+    "unsafeYaml": "Deze wijziging zou ongeldige YAML maken of een alias verbreken. Bewerk de brontekst."
+  },
+  "invalidYaml": "Ongeldige YAML op regel {{line}}, kolom {{column}}: {{message}}"
 }

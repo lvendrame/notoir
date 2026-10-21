@@ -13,7 +13,8 @@
     "json": "JSON",
     "compare": "比較",
     "mcp": "MCP",
-    "preferences": "設定"
+    "preferences": "設定",
+    "yaml": "YAML"
   },
   "view": {
     "togglePrimarySidebar": "プライマリ サイドバーの切り替え",
@@ -414,5 +415,14 @@
     "complete": "リンクを補完",
     "findUnlinked": "リンクされていない言及を検索",
     "openLine": "ノートを行で開く"
+  },
+  "yaml": {
+    "showText": "テキストを表示",
+    "showSplit": "テキストとツリーを表示",
+    "showTree": "ツリーを表示",
+    "format": "ドキュメントのフォーマット",
+    "goToParent": "親へ移動",
+    "selectRange": "ノードを選択",
+    "treeEdit": "YAML ツリーを編集"
   }
 }

@@ -22,9 +22,31 @@ pub(super) fn specs(out: &mut Specs) {
     out.push(spec("json.goToParent", go_to_parent));
     out.push(
         CommandSpec::new("editor.formatDocument", Category::Edit, format_document)
-            .when(&format!("({json}) || pluginFormatter"))
+            .when(&format!(
+                "({json}) || (hasActiveEditor && languageId == 'yaml') || pluginFormatter"
+            ))
             .expect("valid"),
     );
+    let yaml = "hasActiveEditor && languageId == 'yaml'";
+    for (id, handler) in [
+        (
+            "yaml.showText",
+            (|c: &mut AppCore, _: &CommandInvocation| mode(c, "text"))
+                as fn(&mut AppCore, &CommandInvocation) -> CommandOutcome,
+        ),
+        ("yaml.showSplit", |c, _| mode(c, "split")),
+        ("yaml.showTree", |c, _| mode(c, "tree")),
+        ("yaml.format", |c, _| transform(c, "format")),
+        ("yaml.goToParent", go_to_parent),
+    ] {
+        out.push(
+            CommandSpec::new(id, Category::Yaml, handler)
+                .when(yaml)
+                .expect("valid"),
+        );
+    }
+    out.push(CommandSpec::new("yaml.selectRange", Category::Yaml, select_range).hidden());
+    out.push(CommandSpec::new("yaml.treeEdit", Category::Yaml, tree_edit).hidden());
     out.push(CommandSpec::new("json.selectRange", Category::Json, select_range).hidden());
     out.push(CommandSpec::new("json.treeEdit", Category::Json, tree_edit).hidden());
 }
@@ -105,7 +127,8 @@ fn select_range(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     let end = inv.args.get("end").and_then(|v| v.as_u64());
     match (doc, start, end) {
         (Some(d), Some(a), Some(b)) => {
-            core.select_json_range(d, (a as usize, b as usize));
+            let view = inv.args.get("view").and_then(|v| v.as_u64()).map(ViewId);
+            core.select_json_range(d, view, (a as usize, b as usize));
             CommandOutcome::Done
         }
         _ => bad_args(inv),

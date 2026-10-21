@@ -1,6 +1,6 @@
-# JSON
+# JSON and YAML
 
-Notoir understands JSON, JSON with comments (JSONC) and JSON Lines.
+Notoir understands JSON, JSON with comments (JSONC), JSON Lines, and YAML (`.yaml` and `.yml`).
 
 ## Text, Split and Tree
 
@@ -43,3 +43,15 @@ and the tree keeps showing the last valid version, greyed out:
 | Go to Parent | moves the cursor to the enclosing object or array |
 
 The [Outline](navigation.md#outline) and breadcrumbs show the key path at the cursor, down to `outline.depth` levels.
+
+## YAML
+
+YAML has the same **Text / Split / Tree** controls and tree editing actions. Comments, quotes and line endings are
+preserved when you edit a node, and each operation is one undo step. A YAML stream with multiple documents shows one
+root per document. Aliases and tagged values stay literal; complex keys can be changed in the text editor. Changes
+that would break an alias or make the YAML invalid are refused.
+
+**Format** normalizes YAML indentation and separator spacing while keeping comments and key order. The YAML palette
+also includes **Go to Parent**. Minify and Sort Keys remain JSON commands.
+
+![A YAML file in split mode](images/yaml-split.png)

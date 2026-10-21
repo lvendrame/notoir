@@ -39,6 +39,9 @@
       "null": "Null",
       "object": "Nesne",
       "array": "Dizi"
-    }
-  }
+    },
+    "invalidYaml": "Ağaçta düzenlemeden önce YAML hatalarını düzeltin.",
+    "unsafeYaml": "Bu değişiklik geçersiz YAML oluşturur veya bir takma adı bozar. Kaynak metni düzenleyin."
+  },
+  "invalidYaml": "{{line}}. satır, {{column}}. sütunda geçersiz YAML: {{message}}"
 }

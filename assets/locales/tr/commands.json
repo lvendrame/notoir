@@ -13,7 +13,8 @@
     "json": "JSON",
     "compare": "Karşılaştır",
     "mcp": "MCP",
-    "preferences": "Tercihler"
+    "preferences": "Tercihler",
+    "yaml": "YAML"
   },
   "view": {
     "togglePrimarySidebar": "Birincil Kenar Çubuğunu Aç/Kapat",
@@ -414,5 +415,14 @@
     "complete": "Bağlantıyı Tamamla",
     "findUnlinked": "Bağlantısız Anmaları Bul",
     "openLine": "Notu Satırda Aç"
+  },
+  "yaml": {
+    "showText": "Metni Göster",
+    "showSplit": "Metni ve Ağacı Göster",
+    "showTree": "Ağacı Göster",
+    "format": "Belgeyi Biçimlendir",
+    "goToParent": "Üst Öğeye Git",
+    "selectRange": "Düğümü Seç",
+    "treeEdit": "YAML ağacını düzenle"
   }
 }

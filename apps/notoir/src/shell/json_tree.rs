@@ -35,6 +35,7 @@ pub struct TreeView {
     /// A key or value being edited in place.
     pub editing: Option<InlineField>,
     initialized: bool,
+    language: String,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -216,6 +217,12 @@ pub fn show(
     trees: &mut JsonTrees,
     actions: &mut Actions,
 ) {
+    let is_yaml = core.is_yaml(doc);
+    let select_command = if is_yaml {
+        "yaml.selectRange"
+    } else {
+        "json.selectRange"
+    };
     let rect = ui.max_rect();
     ui.painter()
         .rect_filled(rect, 0.0, kit.color(Tok::BgEditor));
@@ -225,6 +232,16 @@ pub fn show(
             .layout(egui::Layout::top_down(egui::Align::Min)),
     );
     let st = trees.views.entry(view).or_default();
+    let language = core
+        .workbench
+        .document(doc)
+        .map_or("", |d| d.language.as_str());
+    if st.language != language {
+        *st = TreeView {
+            language: language.to_owned(),
+            ..Default::default()
+        };
+    }
     if !st.initialized && !roots.is_empty() {
         // Roots and their first level start expanded.
         for (i, r) in roots.iter().enumerate() {
@@ -240,9 +257,7 @@ pub fn show(
     // Cursor sync: the deepest node at the caret.
     let caret = core
         .workbench
-        .views
-        .of_document(doc)
-        .next()
+        .view(view)
         .map(|v| v.selection.primary().head);
     // Offsets of a stale tree no longer match the text: no sync while invalid.
     if core.settings.bool("json.syncSelection", None)
@@ -262,7 +277,11 @@ pub fn show(
     // Error banner (click to jump).
     if let Some(e) = error {
         let text = t!(
-            "json:invalid",
+            if is_yaml {
+                "json:invalidYaml"
+            } else {
+                "json:invalid"
+            },
             line = e.line,
             column = e.column,
             message = &e.message
@@ -287,8 +306,8 @@ pub fn show(
         if resp.clicked() {
             cmd(
                 actions,
-                "json.selectRange",
-                json!({ "doc": doc.0, "start": e.offset, "end": e.offset }),
+                select_command,
+                json!({ "doc": doc.0, "view": view.0, "start": e.offset, "end": e.offset }),
             );
         }
         ui.add_space(4.0);
@@ -301,7 +320,7 @@ pub fn show(
     );
     ui.add_space(4.0);
     let large = core.workbench.document(doc).is_some_and(|d| {
-        d.buffer.len_chars() as i64 > core.settings.int("json.tree.maxSize", None)
+        d.buffer.rope().len_bytes() as i64 > core.settings.int("json.tree.maxSize", None)
     });
     if large {
         ui.label(RichText::new(t!("json:tooLarge")).color(kit.color(Tok::TextTertiary)));
@@ -310,8 +329,12 @@ pub fn show(
     let mut rows = Vec::new();
     flatten(roots, st, &mut rows);
     let dim = error.is_some();
-    let editable = !dim
-        && core
+    let editable =
+        !dim && core.json.parsed.get(&doc).is_some_and(|p| {
+            core.workbench
+                .document(doc)
+                .is_some_and(|d| p.revision == d.revision && p.language == d.language.as_str())
+        }) && core
             .workbench
             .document(doc)
             .is_some_and(|d| !d.is_read_only());
@@ -446,7 +469,16 @@ pub fn show(
                     )
                 });
                 if te.lost_focus() && enter {
-                    let ok = if f.key {
+                    let ok = if is_yaml {
+                        let op = if f.key {
+                            crate::json::TreeOp::Key(f.text.clone())
+                        } else {
+                            crate::json::TreeOp::Value(f.text.clone())
+                        };
+                        core.workbench.document(doc).is_some_and(|d| {
+                            notoir_editor::yaml::can_edit(&d.buffer.text(), &f.path, &op)
+                        })
+                    } else if f.key {
                         json_edit::rename_key(roots, &f.path, &f.text).is_ok()
                     } else {
                         json_edit::set_value(roots, &f.path, &f.text).is_ok()
@@ -631,7 +663,15 @@ pub fn show(
     let st = trees.views.entry(view).or_default();
     st.editing = editing.filter(|f| !f.path.is_empty());
     if let Some(a) = tree_action {
-        cmd(actions, "json.treeEdit", a.args);
+        cmd(
+            actions,
+            if is_yaml {
+                "yaml.treeEdit"
+            } else {
+                "json.treeEdit"
+            },
+            a.args,
+        );
         if let Some(p) = a.select {
             for k in 1..p.len() {
                 st.expanded.insert(p[..k].to_vec());
@@ -682,8 +722,8 @@ pub fn show(
         };
         cmd(
             actions,
-            "json.selectRange",
-            json!({ "doc": doc.0, "start": start, "end": n.range.1 }),
+            select_command,
+            json!({ "doc": doc.0, "view": view.0, "start": start, "end": n.range.1 }),
         );
         // Selecting in the tree must not bounce back through cursor sync.
         st.last_caret = Some(n.range.1);

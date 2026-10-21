@@ -39,6 +39,9 @@
       "null": "Null",
       "object": "개체",
       "array": "배열"
-    }
-  }
+    },
+    "invalidYaml": "트리에서 편집하기 전에 YAML 오류를 수정하세요.",
+    "unsafeYaml": "이 변경은 잘못된 YAML을 만들거나 별칭을 손상시킵니다. 원본 텍스트를 편집하세요."
+  },
+  "invalidYaml": "{{line}}줄 {{column}}열의 YAML이 잘못됨: {{message}}"
 }

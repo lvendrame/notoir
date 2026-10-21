@@ -39,6 +39,9 @@
       "null": "Null",
       "object": "Object",
       "array": "Array"
-    }
-  }
+    },
+    "invalidYaml": "Fix the YAML errors before editing in the tree.",
+    "unsafeYaml": "This change would create invalid YAML or break an alias. Edit the source text instead."
+  },
+  "invalidYaml": "Invalid YAML at line {{line}}, column {{column}}: {{message}}"
 }

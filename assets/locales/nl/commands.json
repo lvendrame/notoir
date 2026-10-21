@@ -13,7 +13,8 @@
     "json": "JSON",
     "compare": "Vergelijken",
     "mcp": "MCP",
-    "preferences": "Voorkeuren"
+    "preferences": "Voorkeuren",
+    "yaml": "YAML"
   },
   "view": {
     "togglePrimarySidebar": "Primaire zijbalk in-/uitschakelen",
@@ -414,5 +415,14 @@
     "complete": "Link aanvullen",
     "findUnlinked": "Ongelinkte vermeldingen zoeken",
     "openLine": "Notitie op regel openen"
+  },
+  "yaml": {
+    "showText": "Tekst tonen",
+    "showSplit": "Tekst en boom tonen",
+    "showTree": "Boom tonen",
+    "format": "Document opmaken",
+    "goToParent": "Naar bovenliggend element",
+    "selectRange": "Knooppunt selecteren",
+    "treeEdit": "YAML-boom bewerken"
   }
 }

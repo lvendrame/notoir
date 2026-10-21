@@ -35,6 +35,13 @@ State indicators use vector icons (lucide), colour **and** shape (spec 21 access
 Active tab: `--bg-editor` background, accent top border (2 px). Inactive tabs: `--bg-panel`. Focused group's active tab
 uses full accent; unfocused group's active tab uses muted accent.
 
+## Scratchpad shortcut
+
+Each editor group's tab strip has a plus button after its tabs. Its tooltip and accessible name are the translated
+New Scratchpad command title. With overflow it stays accessible beside the scrolling tabs. It is also available in
+empty groups. Clicking it activates that group, runs `file.newScratchpad`, and focuses the new editor using the existing
+Scratchpad insertion, numbering, default-language and persistence behavior.
+
 ## Behaviour
 
 - Click activates; middle-click closes; double-click on empty strip area creates a new Untitled file.
@@ -175,4 +182,12 @@ Feature: Reopen closed tab
     Given "notes.md" is open at line 120 and the user closes it
     When the user presses Ctrl/Cmd+Shift+T
     Then "notes.md" reopens in the same group with the cursor on line 120
+Feature: Scratchpad shortcut
+
+  Scenario: Tab plus creates a Scratchpad in its group
+    Given two editor groups with tabs
+    When the user clicks the plus button in an inactive group
+    Then a new Scratchpad is created in that group
+    And that group becomes active and the Scratchpad editor is focused
+
 ```

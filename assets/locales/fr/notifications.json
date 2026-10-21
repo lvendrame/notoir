@@ -61,5 +61,6 @@
   "updateReady": "Notoir {{version}} a été téléchargé et vérifié.",
   "updateInstallOnQuit": "Installer en quittant",
   "updateDownloadFailed": "Impossible de télécharger la mise à jour.",
-  "updateWillInstall": "Le programme d’installation s’ouvrira après la fermeture de Notoir."
+  "updateWillInstall": "Le programme d’installation s’ouvrira après la fermeture de Notoir.",
+  "yamlInvalid": "YAML non valide à la ligne {{line}}, colonne {{column}} : {{message}}"
 }

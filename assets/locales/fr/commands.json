@@ -13,7 +13,8 @@
     "json": "JSON",
     "compare": "Comparer",
     "mcp": "MCP",
-    "preferences": "Préférences"
+    "preferences": "Préférences",
+    "yaml": "YAML"
   },
   "view": {
     "togglePrimarySidebar": "Afficher/masquer la barre latérale principale",
@@ -414,5 +415,14 @@
     "complete": "Compléter le lien",
     "findUnlinked": "Trouver les mentions sans lien",
     "openLine": "Ouvrir la note à la ligne"
+  },
+  "yaml": {
+    "showText": "Afficher le texte",
+    "showSplit": "Afficher le texte et l'arbre",
+    "showTree": "Afficher l'arbre",
+    "format": "Mettre en forme le document",
+    "goToParent": "Aller au parent",
+    "selectRange": "Sélectionner le nœud",
+    "treeEdit": "Modifier l’arbre YAML"
   }
 }

@@ -226,3 +226,78 @@ fn wait_exits_after_opened_tabs_close() {
     }
     assert!(terminal.join().unwrap());
 }
+
+#[test]
+fn real_mcp_bridge_preserves_piped_stdio() {
+    use std::io::Write;
+    use std::process::Stdio;
+    use std::sync::{Arc, mpsc::channel};
+
+    use notoir_core::permissions::ClientId;
+    use notoir_mcp::auth::{generate_token, hash_token};
+    use notoir_mcp::{ClientAuth, ClientRegistry, McpServer};
+
+    let clients = ClientRegistry::default();
+    let token = generate_token();
+    clients.add(ClientAuth {
+        id: ClientId("stdio-test".into()),
+        token_hash: hash_token(&token),
+        revoked: false,
+    });
+    let (tx, _events) = channel();
+    let server = McpServer::start(0, clients, tx, Arc::new(|| {})).unwrap();
+    let home = tempfile::tempdir().unwrap();
+    let mut child = Command::new(env!("CARGO_BIN_EXE_notoir"))
+        .args([
+            "mcp-bridge",
+            "--token",
+            &token,
+            "--port",
+            &server.port().to_string(),
+        ])
+        .env("NOTOIR_HOME", home.path())
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    writeln!(
+        child.stdin.take().unwrap(),
+        "{}",
+        serde_json::json!({
+            "jsonrpc":"2.0", "id":1, "method":"initialize", "params":{
+                "protocolVersion":"2025-06-18", "capabilities":{},
+                "clientInfo":{"name":"stdio-test","version":"1"}
+            }
+        })
+    )
+    .unwrap();
+    let output = child.wait_with_output().unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let response: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(response["id"], 1);
+    assert_eq!(response["result"]["serverInfo"]["name"], "notoir");
+}
+
+#[cfg(windows)]
+#[test]
+fn windows_executable_uses_gui_subsystem() {
+    let exe = std::fs::read(env!("CARGO_BIN_EXE_notoir")).unwrap();
+    assert_eq!(&exe[..2], b"MZ");
+    let pe = u32::from_le_bytes(exe[0x3c..0x40].try_into().unwrap()) as usize;
+    assert_eq!(&exe[pe..pe + 4], b"PE\0\0");
+    let optional_header = pe + 4 + 20;
+    let subsystem = u16::from_le_bytes(
+        exe[optional_header + 68..optional_header + 70]
+            .try_into()
+            .unwrap(),
+    );
+    assert_eq!(
+        subsystem, 2,
+        "Windows GUI subsystem must not allocate a console"
+    );
+}

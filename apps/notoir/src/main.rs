@@ -1,5 +1,7 @@
 //! Notoir — a fast native text editor and workspace.
 
+#![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
+
 use std::sync::mpsc::channel;
 use std::sync::{Arc, OnceLock};
 
@@ -35,11 +37,15 @@ fn main() -> eframe::Result {
     let cli = match cli::parse(&args, &cwd) {
         Ok(cli) => cli,
         Err(e) => {
+            notoir_platform::attach_parent_console();
             eprintln!("notoir: {}", e.message(lang));
             eprintln!("{}", notoir::i18n::t_in(lang, "cli:seeHelp"));
             std::process::exit(2);
         }
     };
+    if cli.help || cli.version || (cli.wait && !cli.new_window) {
+        notoir_platform::attach_parent_console();
+    }
     if cli.help {
         print!("{}", cli::usage(lang));
         return Ok(());

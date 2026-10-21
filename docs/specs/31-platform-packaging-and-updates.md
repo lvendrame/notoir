@@ -61,6 +61,12 @@ change after the first release**, otherwise user data is orphaned — a migratio
 
 ### Windows (10/11)
 
+The GUI executable uses the Windows GUI subsystem in all build profiles, so opening it from Explorer creates no console.
+CLI-only invocations attach to an existing parent terminal without allocating one. Inherited stdin/stdout/stderr
+redirections are preserved, including MCP bridge pipes. The GUI does not attach to the launching terminal and survives
+its closure. Verify Explorer startup and terminal closure manually on Windows; CLI output and bridge pipes are covered
+by process integration tests.
+
 Standard file pickers; Explorer integration (reveal, "Open with Notoir" registration by installer); path semantics
 (drive letters, UNC, `\\?\` long paths, case-insensitive identity, reserved names); CRLF awareness (default EOL for new
 files, `files.eol = auto`); per-monitor DPI scaling (eframe/winit); native window behaviours (snap, title bar via winit

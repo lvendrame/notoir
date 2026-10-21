@@ -39,6 +39,9 @@
       "null": "Null",
       "object": "Objekt",
       "array": "Array"
-    }
-  }
+    },
+    "invalidYaml": "Beheben Sie die YAML-Fehler, bevor Sie im Baum bearbeiten.",
+    "unsafeYaml": "Diese Änderung würde ungültiges YAML erzeugen oder einen Alias beschädigen. Bearbeiten Sie den Quelltext."
+  },
+  "invalidYaml": "Ungültiges YAML in Zeile {{line}}, Spalte {{column}}: {{message}}"
 }

@@ -505,3 +505,75 @@ fn revert_reloads_from_disk_and_is_undoable() {
     app.harness.run_steps(2);
     assert_eq!(active_text(&app), "edit disk");
 }
+
+// spec 04: "Tab plus creates a Scratchpad in its group"
+#[test]
+fn tab_plus_creates_scratchpad_in_clicked_group() {
+    let mut app = common::start(|_| {});
+    common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
+    let first_group = app.harness.state().core.workbench.layout.active_group;
+    common::run(&mut app, "view.splitRight", serde_json::Value::Null);
+    let second_group = app.harness.state().core.workbench.layout.active_group;
+    assert_ne!(first_group, second_group);
+    let buttons: Vec<_> = app.harness.get_all_by_label("New Scratchpad").collect();
+    assert_eq!(buttons.len(), 2);
+    buttons[0].click();
+    app.harness.run_steps(4);
+    let core = &app.harness.state().core;
+    assert_eq!(core.workbench.layout.active_group, first_group);
+    let doc = core
+        .workbench
+        .document(core.workbench.active_document().unwrap())
+        .unwrap();
+    assert!(matches!(
+        doc.origin,
+        notoir_core::document::DocumentOrigin::Scratchpad { .. }
+    ));
+    assert_eq!(
+        core.workbench
+            .layout
+            .group(second_group)
+            .unwrap()
+            .tabs
+            .len(),
+        1
+    );
+    assert!(core.editor_focused);
+}
+
+#[test]
+fn tab_plus_is_accessible_with_overflow_and_in_empty_group() {
+    let mut app = common::start(|_| {});
+    // The empty-state action also has this label; the tab-strip button is first.
+    app.harness
+        .get_all_by_label("New Scratchpad")
+        .next()
+        .unwrap()
+        .click();
+    app.harness.run_steps(3);
+    for _ in 0..12 {
+        common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
+    }
+    app.harness.set_size(egui::vec2(640.0, 400.0));
+    app.harness.run_steps(3);
+    let before = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .layout
+        .active()
+        .tabs
+        .len();
+    app.harness.get_by_label("New Scratchpad").click();
+    app.harness.run_steps(3);
+    let core = &app.harness.state().core;
+    assert_eq!(core.workbench.layout.active().tabs.len(), before + 1);
+    assert!(matches!(
+        core.workbench
+            .document(core.workbench.active_document().unwrap())
+            .unwrap()
+            .origin,
+        notoir_core::document::DocumentOrigin::Scratchpad { .. }
+    ));
+}

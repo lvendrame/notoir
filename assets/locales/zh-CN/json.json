@@ -39,6 +39,9 @@
       "null": "Null",
       "object": "对象",
       "array": "数组"
-    }
-  }
+    },
+    "invalidYaml": "请先修复 YAML 错误再在树中编辑。",
+    "unsafeYaml": "此更改会生成无效的 YAML 或破坏别名。请编辑源文本。"
+  },
+  "invalidYaml": "第 {{line}} 行第 {{column}} 列的 YAML 无效:{{message}}"
 }

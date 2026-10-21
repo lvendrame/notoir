@@ -54,6 +54,8 @@ xxhash-rust = { version = "0.8.19", features = ["xxh3"] }
 notify = "8.2.0"
 regex = "1.13.1"
 similar = "3.2.0"
+yaml-edit = { version = "0.3.2", default-features = false }
+rowan = "0.16"
 git2 = { version = "0.21.0", default-features = false, features = ["vendored-libgit2"] }
 pulldown-cmark = { version = "0.13.4", default-features = false, features = ["html"] }
 open = "5.4.4"

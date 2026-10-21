@@ -61,5 +61,6 @@
   "updateReady": "Notoir {{version}} をダウンロードして検証しました。",
   "updateInstallOnQuit": "終了時にインストール",
   "updateDownloadFailed": "アップデートをダウンロードできませんでした。",
-  "updateWillInstall": "Notoir の終了後にインストーラーが開きます。"
+  "updateWillInstall": "Notoir の終了後にインストーラーが開きます。",
+  "yamlInvalid": "{{line}} 行 {{column}} 列の YAML が無効です: {{message}}"
 }

@@ -10,7 +10,8 @@ use notoir_core::ids::{DocumentId, ViewId};
 use notoir_core::notifications::{Notification, Severity, Translatable};
 use notoir_core::view::ViewKind;
 use notoir_editor::json::{self, Dialect, JsonError, JsonNode};
-use notoir_editor::json_edit::{self, NewValue, TreeEditError};
+use notoir_editor::json_edit::{self, TreeEditError};
+use notoir_editor::yaml;
 use notoir_editor::{ChangeSet, EditKind, Range, Selection};
 
 use crate::core::AppCore;
@@ -22,23 +23,14 @@ const DEBOUNCE_ABOVE_CHARS: usize = 256 * 1024;
 
 pub struct JsonParsed {
     pub revision: u64,
+    pub language: String,
     /// Last valid structure (kept, greyed out, while the text is invalid).
     pub roots: Arc<Vec<JsonNode>>,
     pub error: Option<JsonError>,
     pub at_ms: u64,
 }
 
-/// An edit made in the JSON tree.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum TreeOp {
-    /// A scalar's new value as typed (strings unquoted).
-    Value(String),
-    Key(String),
-    /// A new member at the end (objects get a fresh `newKey…` name).
-    Add(NewValue),
-    Delete,
-    Move(isize),
-}
+pub use notoir_editor::yaml::TreeOp;
 
 /// Translation key for a refused tree edit.
 pub fn tree_error_key(e: &TreeEditError) -> &'static str {
@@ -65,6 +57,16 @@ impl AppCore {
         self.json_dialect(doc).is_some()
     }
 
+    pub fn is_yaml(&self, doc: DocumentId) -> bool {
+        self.workbench
+            .document(doc)
+            .is_some_and(|d| d.language.as_str() == "yaml")
+    }
+
+    pub fn is_structured(&self, doc: DocumentId) -> bool {
+        self.is_json(doc) || self.is_yaml(doc)
+    }
+
     pub fn set_json_mode(&mut self, view: ViewId, mode: &str) {
         let kind = match mode {
             "split" => ViewKind::JsonSplit,
@@ -84,11 +86,24 @@ impl AppCore {
         &mut self,
         doc: DocumentId,
     ) -> Option<(Arc<Vec<JsonNode>>, Option<JsonError>, bool)> {
-        let dialect = self.json_dialect(doc)?;
+        let dialect = self.json_dialect(doc);
+        let is_yaml = self.is_yaml(doc);
+        if dialect.is_none() && !is_yaml {
+            return None;
+        }
         let d = self.workbench.document(doc)?;
+        if d.buffer.rope().len_bytes() as i64 > self.settings.int("json.tree.maxSize", None) {
+            return Some((Arc::new(Vec::new()), None, false));
+        }
         let revision = d.revision;
+        let language = d.language.as_str().to_owned();
         let now = self.now_ms;
-        if let Some(p) = self.json.parsed.get(&doc) {
+        if let Some(p) = self
+            .json
+            .parsed
+            .get(&doc)
+            .filter(|p| p.language == language)
+        {
             if p.revision == revision {
                 return Some((p.roots.clone(), p.error.clone(), false));
             }
@@ -98,16 +113,23 @@ impl AppCore {
                 return Some((p.roots.clone(), p.error.clone(), true));
             }
         }
-        let parsed = json::parse(&d.buffer.text(), dialect);
+        let parsed = if is_yaml {
+            yaml::parse(&d.buffer.text())
+        } else {
+            json::parse(&d.buffer.text(), dialect?)
+        };
         let roots = match (&parsed.error, self.json.parsed.get(&doc)) {
             // Invalid: keep the last good tree.
-            (Some(_), Some(prev)) if parsed.roots.is_empty() => prev.roots.clone(),
+            (Some(_), Some(prev)) if prev.language == language && parsed.roots.is_empty() => {
+                prev.roots.clone()
+            }
             _ => Arc::new(parsed.roots),
         };
         self.json.parsed.insert(
             doc,
             JsonParsed {
                 revision,
+                language,
                 roots: roots.clone(),
                 error: parsed.error.clone(),
                 at_ms: now,
@@ -118,7 +140,17 @@ impl AppCore {
 
     /// Error diagnostics for the editor squiggle (char ranges).
     pub fn json_diagnostics(&self, doc: DocumentId) -> Vec<(usize, usize)> {
-        match self.json.parsed.get(&doc).and_then(|p| p.error.as_ref()) {
+        match self
+            .json
+            .parsed
+            .get(&doc)
+            .filter(|p| {
+                self.workbench
+                    .document(doc)
+                    .is_some_and(|d| d.language.as_str() == p.language && d.revision == p.revision)
+            })
+            .and_then(|p| p.error.as_ref())
+        {
             Some(e) => {
                 let len = self
                     .workbench
@@ -146,9 +178,11 @@ impl AppCore {
         let Some(doc) = self.workbench.view(view).map(|v| v.document_id) else {
             return;
         };
-        let Some(dialect) = self.json_dialect(doc) else {
+        let dialect = self.json_dialect(doc);
+        let is_yaml = self.is_yaml(doc);
+        if dialect.is_none() && !is_yaml {
             return;
-        };
+        }
         let Some(d) = self.workbench.document(doc) else {
             return;
         };
@@ -168,10 +202,20 @@ impl AppCore {
             );
             return;
         }
-        let result = match op {
-            "minify" => json::minify(&src, dialect),
-            "sort" => json::sort_keys(&src, dialect, &indent),
-            _ => json::format(&src, dialect, &indent),
+        let result = if is_yaml {
+            if op != "format" {
+                return;
+            }
+            yaml::format(&src, self.indent_style(doc).tab_size)
+        } else {
+            let Some(dialect) = dialect else {
+                return;
+            };
+            match op {
+                "minify" => json::minify(&src, dialect),
+                "sort" => json::sort_keys(&src, dialect, &indent),
+                _ => json::format(&src, dialect, &indent),
+            }
         };
         match result {
             Ok(text) if text != src => {
@@ -188,10 +232,14 @@ impl AppCore {
                 self.notifications.notify(
                     Notification::new(
                         Severity::Error,
-                        Translatable::new("notifications:jsonInvalid")
-                            .arg("line", e.line)
-                            .arg("column", e.column)
-                            .arg("message", &e.message),
+                        Translatable::new(if is_yaml {
+                            "notifications:yamlInvalid"
+                        } else {
+                            "notifications:jsonInvalid"
+                        })
+                        .arg("line", e.line)
+                        .arg("column", e.column)
+                        .arg("message", &e.message),
                     )
                     .dedupe("json-invalid"),
                     now,
@@ -205,8 +253,20 @@ impl AppCore {
     }
 
     /// Tree click: the node's value (or key and value) selected in the text.
-    pub fn select_json_range(&mut self, doc: DocumentId, range: (usize, usize)) {
-        let Some(view) = self.workbench.views.of_document(doc).next().map(|v| v.id) else {
+    pub fn select_json_range(
+        &mut self,
+        doc: DocumentId,
+        view: Option<ViewId>,
+        range: (usize, usize),
+    ) {
+        let Some(view) = view
+            .filter(|v| {
+                self.workbench
+                    .view(*v)
+                    .is_some_and(|v| v.document_id == doc)
+            })
+            .or_else(|| self.workbench.views.of_document(doc).next().map(|v| v.id))
+        else {
             return;
         };
         let len = self
@@ -263,18 +323,55 @@ impl AppCore {
             .json
             .parsed
             .get(&doc)
-            .filter(|p| p.revision == revision && p.error.is_none())
+            .filter(|p| {
+                p.revision == revision
+                    && p.error.is_none()
+                    && self
+                        .workbench
+                        .document(doc)
+                        .is_some_and(|d| d.language.as_str() == p.language)
+            })
             .map(|p| p.roots.clone());
         let d = self.workbench.document(doc)?;
         if d.is_read_only() {
             return None;
         }
         let Some(roots) = current else {
-            self.json_tree_refused("json:edit.invalidJson");
+            self.json_tree_refused(if self.is_yaml(doc) {
+                "json:edit.invalidYaml"
+            } else {
+                "json:edit.invalidJson"
+            });
             return None;
         };
         let src = d.buffer.text();
         let unit = self.indent_text(doc);
+        if self.is_yaml(doc) {
+            let (edits, next) = match yaml::edit(&src, path, &op) {
+                Ok(result) => result,
+                Err(e) => {
+                    self.json_tree_refused(if e == TreeEditError::NotAllowed {
+                        "json:edit.unsafeYaml"
+                    } else {
+                        tree_error_key(&e)
+                    });
+                    return None;
+                }
+            };
+            if let Some(first) = edits.first() {
+                let caret = first.start;
+                self.workbench
+                    .edit(
+                        view,
+                        ChangeSet::new(edits).ok()?,
+                        Selection::caret(caret),
+                        EditKind::Other,
+                        self.now_ms,
+                    )
+                    .ok()?;
+            }
+            return Some(next);
+        }
         let result = match op {
             TreeOp::Value(v) => {
                 json_edit::set_value(&roots, path, &v).map(|e| (e, path.to_vec(), None))

@@ -61,5 +61,6 @@
   "updateReady": "O Notoir {{version}} foi baixado e verificado.",
   "updateInstallOnQuit": "Instalar ao sair",
   "updateDownloadFailed": "Não foi possível baixar a atualização.",
-  "updateWillInstall": "O instalador será aberto depois que o Notoir for fechado."
+  "updateWillInstall": "O instalador será aberto depois que o Notoir for fechado.",
+  "yamlInvalid": "YAML inválido na linha {{line}}, coluna {{column}}: {{message}}"
 }

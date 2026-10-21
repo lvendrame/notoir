@@ -61,5 +61,6 @@
   "updateReady": "Notoir {{version}} 已下载并验证。",
   "updateInstallOnQuit": "退出时安装",
   "updateDownloadFailed": "无法下载更新。",
-  "updateWillInstall": "Notoir 退出后将打开安装程序。"
+  "updateWillInstall": "Notoir 退出后将打开安装程序。",
+  "yamlInvalid": "第 {{line}} 行第 {{column}} 列的 YAML 无效:{{message}}"
 }

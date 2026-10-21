@@ -194,7 +194,13 @@ fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
                 "markdown.showPreview",
             ),
         ]
-    } else if core.is_json(view.document_id) {
+    } else if core.is_yaml(view.document_id) {
+        [
+            (ViewKind::Text, "json:text", "yaml.showText"),
+            (ViewKind::JsonSplit, "json:split", "yaml.showSplit"),
+            (ViewKind::JsonTree, "json:tree", "yaml.showTree"),
+        ]
+    } else if core.is_structured(view.document_id) {
         [
             (ViewKind::Text, "json:text", "json.showText"),
             (ViewKind::JsonSplit, "json:split", "json.showSplit"),
@@ -221,13 +227,17 @@ fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
         }
     }
     ui.spacing_mut().item_spacing.x = 2.0;
-    if core.is_json(view.document_id) {
+    if core.is_structured(view.document_id) {
         ui.add_space(8.0);
         let format = egui::Button::new(RichText::new(t!("json:format")).size(12.0))
             .min_size(egui::vec2(56.0, 24.0));
         if ui.add(format).clicked() {
             actions.push(CommandInvocation::new(
-                "json.format",
+                if core.is_yaml(view.document_id) {
+                    "yaml.format"
+                } else {
+                    "json.format"
+                },
                 InvocationSource::Toolbar,
             ));
         }

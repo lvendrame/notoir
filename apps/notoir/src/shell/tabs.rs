@@ -208,9 +208,11 @@ pub fn strip(
     }
     let labels = labels(core, &tabs);
     let overflow_w = 30.0;
+    let plus_w = 30.0;
+    let mut tabs_right = rect.left();
     let strip_rect = Rect::from_min_max(
         rect.min,
-        Pos2::new(rect.right() - overflow_w, rect.bottom()),
+        Pos2::new(rect.right() - overflow_w - plus_w, rect.bottom()),
     );
     let mut child = ui.new_child(
         egui::UiBuilder::new()
@@ -237,10 +239,39 @@ pub fn strip(
                         drag,
                         group_id,
                     );
+                    tabs_right = tab_rect.right();
                     tab_rects.push((view, tab_rect));
                 }
             });
         });
+    let plus_x = tabs_right.min(strip_rect.right()).max(rect.left());
+    let mut plus = ui.new_child(
+        egui::UiBuilder::new()
+            .max_rect(Rect::from_min_size(
+                Pos2::new(plus_x, rect.top()),
+                Vec2::new(plus_w, TAB_STRIP_HEIGHT),
+            ))
+            .layout(egui::Layout::left_to_right(egui::Align::Center)),
+    );
+    if icon_button(
+        &mut plus,
+        kit,
+        Icon::Plus,
+        &t!("commands:file.newScratchpad"),
+        false,
+        true,
+    )
+    .clicked()
+    {
+        actions.push(
+            CommandInvocation::new("workbench.focusGroup", InvocationSource::Internal)
+                .with_args(json!({ "group": group_id.0 })),
+        );
+        actions.push(CommandInvocation::new(
+            "file.newScratchpad",
+            InvocationSource::Toolbar,
+        ));
+    }
     // Overflow: list of every tab.
     let mut over = ui.new_child(
         egui::UiBuilder::new()

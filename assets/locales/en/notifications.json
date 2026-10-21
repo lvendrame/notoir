@@ -61,5 +61,6 @@
   "updateReady": "Notoir {{version}} is downloaded and verified.",
   "updateInstallOnQuit": "Install on Quit",
   "updateDownloadFailed": "The update could not be downloaded.",
-  "updateWillInstall": "The installer opens after Notoir quits."
+  "updateWillInstall": "The installer opens after Notoir quits.",
+  "yamlInvalid": "Invalid YAML at line {{line}}, column {{column}}: {{message}}"
 }

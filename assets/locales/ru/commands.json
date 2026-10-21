@@ -13,7 +13,8 @@
     "json": "JSON",
     "compare": "Сравнение",
     "mcp": "MCP",
-    "preferences": "Параметры"
+    "preferences": "Параметры",
+    "yaml": "YAML"
   },
   "view": {
     "togglePrimarySidebar": "Показать или скрыть основную боковую панель",
@@ -414,5 +415,14 @@
     "complete": "Дополнить ссылку",
     "findUnlinked": "Найти упоминания без ссылки",
     "openLine": "Открыть заметку на строке"
+  },
+  "yaml": {
+    "showText": "Показать текст",
+    "showSplit": "Показать текст и дерево",
+    "showTree": "Показать дерево",
+    "format": "Форматировать документ",
+    "goToParent": "Перейти к родителю",
+    "selectRange": "Выбрать узел",
+    "treeEdit": "Изменить дерево YAML"
   }
 }

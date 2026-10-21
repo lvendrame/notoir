@@ -145,3 +145,7 @@ Feature: Storage robustness
     When both update their sessions at the same time
     Then both sessions are stored without error
 ```
+
+JSON/YAML Text / Split / Tree presentation is stored per tab using optional `tree_mode` (`split` / `tree`) and
+`tree_ratio` fields in session v1. Older sessions default to Text; unknown modes and non-structured languages fall back
+to Text. Ratios are restored within 0.2–0.8. No database migration is required.

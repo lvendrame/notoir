@@ -61,5 +61,6 @@
   "updateReady": "Notoir {{version}} è stato scaricato e verificato.",
   "updateInstallOnQuit": "Installa all’uscita",
   "updateDownloadFailed": "Impossibile scaricare l’aggiornamento.",
-  "updateWillInstall": "Il programma di installazione si aprirà dopo l’uscita da Notoir."
+  "updateWillInstall": "Il programma di installazione si aprirà dopo l’uscita da Notoir.",
+  "yamlInvalid": "YAML non valido alla riga {{line}}, colonna {{column}}: {{message}}"
 }

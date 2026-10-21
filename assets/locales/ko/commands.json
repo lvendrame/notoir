@@ -13,7 +13,8 @@
     "json": "JSON",
     "compare": "비교",
     "mcp": "MCP",
-    "preferences": "기본 설정"
+    "preferences": "기본 설정",
+    "yaml": "YAML"
   },
   "view": {
     "togglePrimarySidebar": "기본 사이드바 전환",
@@ -414,5 +415,14 @@
     "complete": "링크 완성",
     "findUnlinked": "링크되지 않은 언급 찾기",
     "openLine": "줄에서 노트 열기"
+  },
+  "yaml": {
+    "showText": "텍스트 표시",
+    "showSplit": "텍스트와 트리 표시",
+    "showTree": "트리 표시",
+    "format": "문서 서식 지정",
+    "goToParent": "부모로 이동",
+    "selectRange": "노드 선택",
+    "treeEdit": "YAML 트리 편집"
   }
 }
