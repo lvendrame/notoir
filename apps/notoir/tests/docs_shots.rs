@@ -633,3 +633,68 @@ fn plugins() {
     );
     shot(&mut app, "plugin-review");
 }
+
+/// CSV documentation uses the same Paper-theme screenshot workflow as JSON and Markdown.
+#[test]
+fn csv_guide() {
+    let (_d, root) = workspace();
+    std::fs::write(
+        root.join("data/contacts.csv"),
+        "Name,City,Status\nAna,Porto,Ready\nBen,Lisbon,Needs review\nChen,Porto,Needs review\nDina,Lisbon,Ready\n",
+    ).unwrap();
+    let mut app = start(&root, &["data/contacts.csv"]);
+    common::run(&mut app, "view.togglePrimarySidebar", Value::Null);
+    common::run(&mut app, "csv.showSplit", Value::Null);
+    assert!(wait(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .csv
+        .views
+        .values()
+        .any(|s| s.parsed.is_some() && s.pending.is_none())));
+    if !shot(&mut app, "csv-split") {
+        return;
+    }
+
+    common::run(&mut app, "csv.showPreview", Value::Null);
+    common::run(
+        &mut app,
+        "csv.action",
+        json!({"op":"filter","column":1,"value":"porto"}),
+    );
+    common::run(
+        &mut app,
+        "csv.action",
+        json!({"op":"filter","column":2,"value":"review"}),
+    );
+    common::run(
+        &mut app,
+        "csv.action",
+        json!({"op":"search","value":"review"}),
+    );
+    common::settle(&mut app);
+    app.harness.get_by_label("Filter Status").click();
+    shot(&mut app, "csv-filter");
+    app.harness.key_press(egui::Key::Escape);
+    app.harness.run_steps(3);
+
+    common::run(
+        &mut app,
+        "csv.action",
+        json!({"op":"filter","column":1,"value":""}),
+    );
+    common::run(
+        &mut app,
+        "csv.action",
+        json!({"op":"filter","column":2,"value":""}),
+    );
+    common::run(&mut app, "csv.action", json!({"op":"search","value":""}));
+    common::settle(&mut app);
+    common::run(
+        &mut app,
+        "csv.action",
+        json!({"op":"edit","row":1,"column":2}),
+    );
+    shot(&mut app, "csv-edit");
+}
