@@ -79,7 +79,13 @@
     "uninstallShellCommand": "从 PATH 中移除 'notoir' 命令",
     "checkForUpdates": "检查更新…",
     "downloadUpdate": "下载更新",
-    "installUpdateOnQuit": "退出时安装更新"
+    "installUpdateOnQuit": "退出时安装更新",
+    "contextMenu": "文件管理器集成",
+    "addContextMenu": "添加“用 Notoir 打开”…",
+    "removeContextMenu": "移除“用 Notoir 打开”",
+    "closeContextMenu": "关闭",
+    "closeUpdates": "稍后",
+    "quitAndInstall": "退出并安装…"
   },
   "workbench": {
     "showNotifications": "显示通知",

@@ -1,0 +1,13 @@
+{
+  "label": "Notoir로 열기",
+  "title": "파일 관리자 통합",
+  "add": "“Notoir로 열기” 추가…",
+  "remove": "“Notoir로 열기” 제거",
+  "close": "닫기",
+  "installed": "설치됨.",
+  "removed": "설치되지 않음.",
+  "failed": "통합을 변경할 수 없습니다.",
+  "mac": "Finder에서 파일이나 폴더를 선택한 후 서비스 → Notoir로 열기를 선택하세요.",
+  "windows": "탐색기에서 파일, 폴더 또는 배경을 오른쪽 클릭하세요. Windows 11: 더 많은 옵션 표시 → Notoir로 열기.",
+  "linux": "지원: Nautilus(스크립트), Dolphin(작업). 다른 파일 관리자는 지원하지 않습니다."
+}

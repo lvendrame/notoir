@@ -1,0 +1,13 @@
+{
+  "label": "Ouvrir avec Notoir",
+  "title": "Intégration au gestionnaire de fichiers",
+  "add": "Ajouter « Ouvrir avec Notoir »…",
+  "remove": "Supprimer « Ouvrir avec Notoir »",
+  "close": "Fermer",
+  "installed": "Installé.",
+  "removed": "Non installé.",
+  "failed": "Impossible de modifier l’intégration.",
+  "mac": "Dans le Finder, sélectionnez des fichiers ou dossiers, puis Services → Ouvrir avec Notoir.",
+  "windows": "Dans l’Explorateur, faites un clic droit sur les fichiers, dossiers ou l’arrière-plan. Windows 11 : Afficher plus d’options → Ouvrir avec Notoir.",
+  "linux": "Pris en charge : Nautilus (Scripts) et Dolphin (Actions). Les autres gestionnaires ne sont pas pris en charge."
+}

@@ -79,7 +79,13 @@
     "uninstallShellCommand": "Retirer la commande 'notoir' du PATH",
     "checkForUpdates": "Rechercher des mises à jour…",
     "downloadUpdate": "Télécharger la mise à jour",
-    "installUpdateOnQuit": "Installer la mise à jour en quittant"
+    "installUpdateOnQuit": "Installer la mise à jour en quittant",
+    "contextMenu": "Intégration au gestionnaire de fichiers",
+    "addContextMenu": "Ajouter « Ouvrir avec Notoir »…",
+    "removeContextMenu": "Supprimer « Ouvrir avec Notoir »",
+    "closeContextMenu": "Fermer",
+    "closeUpdates": "Plus tard",
+    "quitAndInstall": "Quitter et installer…"
   },
   "workbench": {
     "showNotifications": "Afficher les notifications",

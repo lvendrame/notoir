@@ -832,6 +832,19 @@ impl AppCore {
         }
     }
 
+    /// A cancelled/failed save also cancels any update-driven shutdown.
+    fn cancel_pending_saves(&mut self, doc: DocumentId) {
+        if self
+            .files
+            .pending
+            .iter()
+            .any(|p| p.waiting.contains(&doc) && matches!(p.then, Then::Quit))
+        {
+            self.updates.install_on_quit = false;
+        }
+        self.files.pending.retain(|p| !p.waiting.contains(&doc));
+    }
+
     pub fn handle_save_as_picked(&mut self, doc: DocumentId, path: Option<PathBuf>) {
         if self.workbench.document(doc).is_none() {
             self.auto_save_cancelled(doc);
@@ -839,7 +852,7 @@ impl AppCore {
         }
         let Some(path) = path else {
             // Cancelled: anything waiting on this save is abandoned.
-            self.files.pending.retain(|p| !p.waiting.contains(&doc));
+            self.cancel_pending_saves(doc);
             self.auto_save_cancelled(doc);
             return;
         };
@@ -852,6 +865,7 @@ impl AppCore {
                         .arg("name", file_name(&path)),
                 ));
                 self.auto_save_cancelled(doc);
+                self.cancel_pending_saves(doc);
                 return;
             }
             let views: Vec<ViewId> = self
@@ -1084,7 +1098,7 @@ impl AppCore {
             }
             Err(SaveError::ElevationCancelled) => {
                 // Edits and the recovery snapshot stay; Save As stays offered.
-                self.files.pending.retain(|p| !p.waiting.contains(&doc));
+                self.cancel_pending_saves(doc);
                 let n = Notification::new(
                     Severity::Info,
                     Translatable::new("notifications:adminSaveCancelled")
@@ -1099,7 +1113,7 @@ impl AppCore {
                 self.notify(n);
             }
             Err(e) => {
-                self.files.pending.retain(|p| !p.waiting.contains(&doc));
+                self.cancel_pending_saves(doc);
                 let key = match e {
                     SaveError::Elevation(_) => "notifications:adminSaveFailed",
                     SaveError::PermissionDenied => "notifications:saveDenied",
@@ -1281,7 +1295,10 @@ impl AppCore {
             return true;
         }
         // Hot exit: unsaved work stays in the recovery store (spec 09).
-        if self.settings.bool("app.hotExit", None) && self.recovery.session.is_some() {
+        if self.settings.bool("app.hotExit", None)
+            && self.recovery.session.is_some()
+            && !self.updates.install_on_quit
+        {
             return true;
         }
         let dirty: Vec<DocumentId> = self
@@ -1321,7 +1338,15 @@ impl AppCore {
             (Prompt::Notes(p), a) => self.notes_answer(p, a),
             (Prompt::SaveConflict { doc }, Answer::Cancel) => {
                 self.auto_save_cancelled(doc);
-                self.files.pending.retain(|p| !p.waiting.contains(&doc));
+                self.cancel_pending_saves(doc);
+            }
+            (
+                Prompt::Unsaved {
+                    then: Then::Quit, ..
+                },
+                Answer::Cancel,
+            ) => {
+                self.updates.install_on_quit = false;
             }
             (_, Answer::Cancel) => {}
             (Prompt::Unsaved { docs, then }, Answer::Primary) => {
@@ -1384,7 +1409,7 @@ impl AppCore {
             }
             (Prompt::SaveConflict { doc }, _) => {
                 self.auto_save_cancelled(doc);
-                self.files.pending.retain(|p| !p.waiting.contains(&doc))
+                self.cancel_pending_saves(doc)
             }
             (Prompt::Revert { doc }, Answer::Primary) => {
                 if let Some(path) = self

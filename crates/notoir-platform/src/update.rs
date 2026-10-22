@@ -105,7 +105,7 @@ pub fn verify_manifest(
         .map_err(|e| UpdateError::Manifest(e.to_string()))?;
     let running =
         semver::Version::parse(current).map_err(|e| UpdateError::Manifest(e.to_string()))?;
-    if version <= running {
+    if version <= running || !version.pre.is_empty() {
         return Ok(None);
     }
     let Some(artifact) = file.artifacts.get(platform).cloned() else {
@@ -215,9 +215,46 @@ pub fn hand_off(installer: &Path) -> std::io::Result<()> {
             use std::os::unix::fs::PermissionsExt;
             std::fs::set_permissions(installer, std::fs::Permissions::from_mode(0o755))?;
         }
-        return std::fs::rename(installer, current);
+        return replace_appimage(installer, &current);
     }
     open::that_detached(installer)
+}
+
+/// Stage on the destination filesystem before the atomic rename. A failed copy
+/// leaves the existing AppImage untouched (cache and app can be on different disks).
+pub fn replace_appimage(installer: &Path, current: &Path) -> std::io::Result<()> {
+    let parent = current
+        .parent()
+        .ok_or_else(|| std::io::Error::other("AppImage has no parent"))?;
+    let staged = parent.join(format!(".notoir-update-{}.AppImage", std::process::id()));
+    let result = (|| {
+        let mut dest = std::fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&staged)?;
+        let mut source = std::fs::File::open(installer)?;
+        std::io::copy(&mut source, &mut dest)?;
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            dest.set_permissions(std::fs::Permissions::from_mode(0o755))?;
+        }
+        dest.sync_all()?;
+        drop(dest);
+        std::fs::rename(&staged, current)
+    })();
+    // Only remove a staged file we successfully created.
+    if result.is_err() && staged.exists() {
+        // A collision must not remove another process's staging file.
+        if result
+            .as_ref()
+            .err()
+            .is_some_and(|e| e.kind() != std::io::ErrorKind::AlreadyExists)
+        {
+            let _ = std::fs::remove_file(&staged);
+        }
+    }
+    result
 }
 
 #[cfg(test)]
@@ -262,11 +299,28 @@ pub(crate) mod tests {
     }
 
     #[test]
+    fn appimage_replacement_preserves_current_on_failure() {
+        let root = tempfile::tempdir().unwrap();
+        let current = root.path().join("current.AppImage");
+        let next = root.path().join("new.AppImage");
+        std::fs::write(&current, b"old").unwrap();
+        assert!(replace_appimage(&next, &current).is_err());
+        assert_eq!(std::fs::read(&current).unwrap(), b"old");
+        std::fs::write(&next, b"new").unwrap();
+        replace_appimage(&next, &current).unwrap();
+        assert_eq!(std::fs::read(&current).unwrap(), b"new");
+    }
+    #[test]
     fn signed_newer_manifests_are_offered() {
         let (key, sign) = test_key(1);
         let m = manifest("1.2.0");
         let offer = verify_manifest(&m, &sign(&m), &key, "1.1.9", "macos").unwrap();
         assert_eq!(offer.as_ref().map(|o| o.version.as_str()), Some("1.2.0"));
+        let prerelease = manifest("99.0.0-beta.1");
+        assert_eq!(
+            verify_manifest(&prerelease, &sign(&prerelease), &key, "1.1.9", "macos"),
+            Ok(None)
+        );
         // Not newer, or nothing for this platform: no offer.
         assert_eq!(
             verify_manifest(&m, &sign(&m), &key, "1.2.0", "macos"),

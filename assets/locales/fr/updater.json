@@ -1,0 +1,19 @@
+{
+  "title": "Rechercher des mises à jour…",
+  "current": "Version actuelle : {{version}}",
+  "checking": "Recherche des mises à jour…",
+  "downloading": "Téléchargement et vérification…",
+  "available": "Notoir {{version}} est disponible.",
+  "currentVersion": "Notoir est à jour.",
+  "ready": "La mise à jour est téléchargée et vérifiée.",
+  "download": "Télécharger la mise à jour",
+  "install": "Quitter et installer…",
+  "later": "Plus tard",
+  "check": "Vérifier à nouveau",
+  "failed": "Impossible de terminer la mise à jour.",
+  "unavailable": "Mises à jour indisponibles dans cette version.",
+  "managed": "Mettez Notoir à jour avec votre gestionnaire de paquets.",
+  "macInstaller": "L’image disque s’ouvre après la fermeture. Glissez Notoir dans Applications pour terminer.",
+  "windowsInstaller": "Le programme d’installation s’ouvre après la fermeture. Suivez ses étapes.",
+  "appimageInstaller": "L’AppImage sera remplacée après la fermeture. Relancez-la pour utiliser la mise à jour."
+}

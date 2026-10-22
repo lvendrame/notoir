@@ -1,0 +1,13 @@
+{
+  "label": "Openen met Notoir",
+  "title": "Integratie met bestandsbeheer",
+  "add": "“Openen met Notoir” toevoegen…",
+  "remove": "“Openen met Notoir” verwijderen",
+  "close": "Sluiten",
+  "installed": "Geïnstalleerd.",
+  "removed": "Niet geïnstalleerd.",
+  "failed": "Integratie kon niet worden gewijzigd.",
+  "mac": "Selecteer bestanden of mappen in Finder en kies Voorzieningen → Openen met Notoir.",
+  "windows": "Klik rechts op bestanden, mappen of de mapachtergrond in Verkenner. Windows 11: Meer opties weergeven → Openen met Notoir.",
+  "linux": "Ondersteund: Nautilus (Scripts) en Dolphin (Acties). Andere bestandsbeheerders worden niet ondersteund."
+}

@@ -4,6 +4,7 @@
 pub mod dialogs;
 pub mod download;
 pub mod elevation;
+pub mod file_manager;
 pub mod paths;
 pub mod reveal;
 pub mod shell_command;

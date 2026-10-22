@@ -23,6 +23,8 @@ pub const CURRENT: &str = env!("CARGO_PKG_VERSION");
 pub struct UpdatesState {
     /// Manifest URL and key (built in for release builds).
     pub config: Option<UpdateConfig>,
+    pub open: bool,
+    pub checked: bool,
     /// The installer kind this build updates with (`update::platform_key`).
     pub platform: Option<&'static str>,
     /// The last check time (ms since epoch) has been read from the cache.
@@ -62,6 +64,7 @@ impl AppCore {
 
     /// Reads the last check time (startup).
     pub fn updates_init(&mut self) {
+        self.desktop_change(None);
         let file = stamp_file(self);
         self.fs.submit(move || {
             let ms = std::fs::read_to_string(file)
@@ -95,6 +98,13 @@ impl AppCore {
 
     /// Checks now; `manual` (Help → Check for Updates…) reports every outcome.
     pub fn updates_check(&mut self, manual: bool) {
+        if manual {
+            self.updates.open = true;
+        }
+        if self.updates.downloading || self.updates.ready.is_some() {
+            return;
+        }
+
         let (Some(cfg), Some(platform)) = (self.updates.config.clone(), self.updates.platform)
         else {
             if manual {
@@ -109,6 +119,9 @@ impl AppCore {
             return;
         }
         self.updates.checking = true;
+        self.updates.checked = false;
+        self.updates.offer = None;
+        self.updates.last_error = None;
         let now = epoch_ms();
         self.updates.last_check_ms = Some(now);
         let stamp = stamp_file(self);
@@ -123,22 +136,23 @@ impl AppCore {
                 let result = update::check(&cfg, CURRENT, platform);
                 poster.post(IoResult::UpdateChecked(Box::new((result, manual))));
             });
-        if spawned.is_err() {
-            self.updates.checking = false;
+        if let Err(e) = spawned {
+            self.updates_checked(Err(UpdateError::Network(e.to_string())), manual);
         }
     }
 
     pub fn updates_checked(&mut self, result: Result<Option<Offer>, UpdateError>, manual: bool) {
         self.updates.checking = false;
+        self.updates.checked = true;
         match result {
             Ok(Some(offer)) => {
                 let version = offer.version.clone();
                 tracing::info!(%version, "update available");
                 self.updates.offer = Some(offer);
                 self.updates.last_error = None;
-                if self.update_mode() == "download" {
+                if !manual && self.update_mode() == "download" {
                     self.updates_download();
-                } else {
+                } else if !self.updates.open {
                     self.notify(
                         Notification::new(
                             Severity::Info,
@@ -157,7 +171,7 @@ impl AppCore {
             }
             Ok(None) => {
                 self.updates.last_error = None;
-                if manual {
+                if manual && !self.updates.open {
                     self.notify(
                         Notification::new(
                             Severity::Info,
@@ -170,7 +184,7 @@ impl AppCore {
             Err(e) => {
                 // A bad signature offers nothing (spec 31) and is logged.
                 tracing::warn!(error = %e, "update check failed; nothing offered");
-                if manual {
+                if manual && !self.updates.open {
                     self.notify(
                         Notification::new(
                             Severity::Warning,
@@ -193,6 +207,7 @@ impl AppCore {
             return;
         }
         self.updates.downloading = true;
+        self.updates.last_error = None;
         let dir = self.paths.cache.join("update");
         let poster = self.fs.poster();
         let spawned = std::thread::Builder::new()
@@ -201,8 +216,8 @@ impl AppCore {
                 let result = update::download(&offer, &dir);
                 poster.post(IoResult::UpdateDownloaded(Box::new(result)));
             });
-        if spawned.is_err() {
-            self.updates.downloading = false;
+        if let Err(e) = spawned {
+            self.updates_downloaded(Err(UpdateError::Download(e.to_string())));
         }
     }
 
@@ -218,29 +233,33 @@ impl AppCore {
             Ok(path) => {
                 tracing::info!(path = %path.display(), "update downloaded and verified");
                 self.updates.ready = Some(path);
-                self.notify(
-                    Notification::new(
-                        Severity::Info,
-                        Translatable::new("notifications:updateReady").arg("version", version),
-                    )
-                    .action(
-                        "notifications:updateInstallOnQuit",
-                        CommandInvocation::new(
-                            "app.installUpdateOnQuit",
-                            InvocationSource::Internal,
+                if !self.updates.open {
+                    self.notify(
+                        Notification::new(
+                            Severity::Info,
+                            Translatable::new("notifications:updateReady").arg("version", version),
+                        )
+                        .action(
+                            "notifications:updateInstallOnQuit",
+                            CommandInvocation::new(
+                                "app.installUpdateOnQuit",
+                                InvocationSource::Internal,
+                            ),
                         ),
-                    ),
-                );
+                    );
+                }
             }
             Err(e) => {
                 tracing::warn!(error = %e, "update download failed");
-                self.notify(
-                    Notification::new(
-                        Severity::Error,
-                        Translatable::new("notifications:updateDownloadFailed"),
-                    )
-                    .detail(e.to_string()),
-                );
+                if !self.updates.open {
+                    self.notify(
+                        Notification::new(
+                            Severity::Error,
+                            Translatable::new("notifications:updateDownloadFailed"),
+                        )
+                        .detail(e.to_string()),
+                    );
+                }
                 self.updates.last_error = Some(e);
             }
         }
@@ -267,4 +286,79 @@ impl AppCore {
             self.files.dialogs.install_update(&path);
         }
     }
+}
+
+/// All buttons use the same commands as menus and notifications.
+pub fn dialog(ctx: &egui::Context, core: &mut AppCore, actions: &mut crate::shell::Actions) {
+    use crate::t;
+    if !core.updates.open {
+        return;
+    }
+    egui::Modal::new(egui::Id::new("updates")).show(ctx, |ui| {
+        ui.set_width(440.0);
+        ui.heading(t!("updater:title"));
+        ui.label(t!("updater:current", version = CURRENT));
+        let u = &core.updates;
+        let unavailable = u.config.is_none();
+        let managed = u.platform.is_none();
+        if managed {
+            ui.label(t!("updater:managed"));
+        } else if unavailable {
+            ui.label(t!("updater:unavailable"));
+        } else if u.checking {
+            ui.horizontal(|ui| {
+                ui.spinner();
+                ui.label(t!("updater:checking"));
+            });
+        } else if u.downloading {
+            ui.horizontal(|ui| {
+                ui.spinner();
+                ui.label(t!("updater:downloading"));
+            });
+        } else if let Some(e) = &u.last_error {
+            ui.colored_label(ui.visuals().error_fg_color, t!("updater:failed"));
+            ui.label(e.to_string());
+        } else if u.ready.is_some() {
+            ui.label(t!(
+                "notifications:updateReady",
+                version = u
+                    .offer
+                    .as_ref()
+                    .map(|o| o.version.as_str())
+                    .unwrap_or(CURRENT)
+            ));
+            ui.label(if cfg!(target_os = "macos") {
+                t!("updater:macInstaller")
+            } else if cfg!(windows) {
+                t!("updater:windowsInstaller")
+            } else {
+                t!("updater:appimageInstaller")
+            });
+        } else if let Some(offer) = &u.offer {
+            ui.label(t!("updater:available", version = &offer.version));
+            if let Some(notes) = &offer.notes {
+                ui.label(notes);
+            }
+        } else if u.checked {
+            ui.label(t!("updater:currentVersion"));
+        }
+        ui.horizontal(|ui| {
+            let mut button = |key, id| {
+                let r = ui.button(t!(key));
+                crate::live::track(&r, id);
+                if r.clicked() {
+                    actions.push(CommandInvocation::new(id, InvocationSource::Menu));
+                }
+            };
+            if u.ready.is_some() {
+                button("updater:install", "app.quitAndInstall");
+            } else if !u.checking && !u.downloading && !unavailable && !managed {
+                if u.offer.is_some() {
+                    button("updater:download", "app.downloadUpdate");
+                }
+                button("updater:check", "app.checkForUpdates");
+            }
+            button("updater:later", "app.closeUpdates");
+        });
+    });
 }

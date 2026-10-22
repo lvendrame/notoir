@@ -79,7 +79,13 @@
     "uninstallShellCommand": "'notoir' コマンドを PATH から削除",
     "checkForUpdates": "アップデートを確認…",
     "downloadUpdate": "アップデートをダウンロード",
-    "installUpdateOnQuit": "終了時にアップデートをインストール"
+    "installUpdateOnQuit": "終了時にアップデートをインストール",
+    "contextMenu": "ファイルマネージャーとの連携",
+    "addContextMenu": "「Notoirで開く」を追加…",
+    "removeContextMenu": "「Notoirで開く」を削除",
+    "closeContextMenu": "閉じる",
+    "closeUpdates": "後で",
+    "quitAndInstall": "終了してインストール…"
   },
   "workbench": {
     "showNotifications": "通知を表示",

@@ -246,6 +246,7 @@ pub struct AppCore {
     pub text_index: crate::text_index::TextIndexState,
     pub templates: crate::templates::TemplatesState,
     pub updates: crate::updates::UpdatesState,
+    pub desktop: crate::desktop::DesktopState,
 }
 
 /// A `notoir --wait` request (spec 38).
@@ -445,6 +446,7 @@ impl AppCore {
             text_index: Default::default(),
             templates: Default::default(),
             updates: crate::updates::UpdatesState::new(opts.update.clone()),
+            desktop: Default::default(),
             language,
             theme_choice,
             custom_themes: Vec::new(),
@@ -702,6 +704,8 @@ impl AppCore {
             )
             .set_bool("autoPush", self.settings.bool("git.autoPush", None))
             .set_bool("gitRepo", self.git.repo.is_some())
+            .set_bool("contextMenuBusy", self.desktop.busy)
+            .set_bool("contextMenuInstalled", self.desktop.installed == Some(true))
             .set_bool("gitBusy", self.git_busy())
             .set_bool("gitNetwork", self.git.net.is_some())
             .set_bool("gitPeek", self.git.peek.is_some())
@@ -926,6 +930,7 @@ impl AppCore {
                 IoResult::TextIndex(done) => self.text_index_done(*done),
                 IoResult::TemplatesListed(list) => self.templates_listed(list),
                 IoResult::CustomThemes(list) => self.custom_themes_loaded(list),
+                IoResult::DesktopIntegration(result) => self.desktop_done(result),
                 IoResult::UpdateStamp(ms) => self.updates_stamp(ms),
                 IoResult::UpdateChecked(r) => {
                     let (result, manual) = *r;

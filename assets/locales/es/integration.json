@@ -1,0 +1,13 @@
+{
+  "label": "Abrir con Notoir",
+  "title": "Integración con el gestor de archivos",
+  "add": "Añadir “Abrir con Notoir”…",
+  "remove": "Quitar “Abrir con Notoir”",
+  "close": "Cerrar",
+  "installed": "Instalado.",
+  "removed": "No instalado.",
+  "failed": "No se pudo cambiar la integración.",
+  "mac": "En Finder, selecciona archivos o carpetas y usa Servicios → Abrir con Notoir.",
+  "windows": "En el Explorador, haz clic derecho en archivos, carpetas o el fondo. Windows 11: Mostrar más opciones → Abrir con Notoir.",
+  "linux": "Compatibles: Nautilus (Scripts) y Dolphin (Acciones). Otros gestores no son compatibles."
+}

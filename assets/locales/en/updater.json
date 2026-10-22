@@ -1,0 +1,19 @@
+{
+  "title": "Check for Updates…",
+  "current": "Current version: {{version}}",
+  "checking": "Checking for updates…",
+  "downloading": "Downloading and verifying…",
+  "available": "Notoir {{version}} is available.",
+  "currentVersion": "Notoir is up to date.",
+  "ready": "The update is downloaded and verified.",
+  "download": "Download Update",
+  "install": "Quit and Install…",
+  "later": "Later",
+  "check": "Check Again",
+  "failed": "Could not complete the update.",
+  "unavailable": "Updates are unavailable in this build.",
+  "managed": "Update Notoir using your package manager.",
+  "macInstaller": "The disk image opens after quitting. Drag Notoir into Applications to finish installing.",
+  "windowsInstaller": "The installer opens after quitting. Follow its steps to finish installing.",
+  "appimageInstaller": "The AppImage is replaced after quitting. Launch it again to use the update."
+}

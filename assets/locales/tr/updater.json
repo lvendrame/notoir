@@ -1,0 +1,19 @@
+{
+  "title": "Güncellemeleri denetle…",
+  "current": "Geçerli sürüm: {{version}}",
+  "checking": "Güncellemeler denetleniyor…",
+  "downloading": "İndiriliyor ve doğrulanıyor…",
+  "available": "Notoir {{version}} kullanılabilir.",
+  "currentVersion": "Notoir güncel.",
+  "ready": "Güncelleme indirildi ve doğrulandı.",
+  "download": "Güncellemeyi indir",
+  "install": "Çık ve yükle…",
+  "later": "Daha sonra",
+  "check": "Yeniden denetle",
+  "failed": "Güncelleme tamamlanamadı.",
+  "unavailable": "Bu derlemede güncellemeler kullanılamaz.",
+  "managed": "Notoir’i paket yöneticinizle güncelleyin.",
+  "macInstaller": "Çıkıştan sonra disk görüntüsü açılır. Tamamlamak için Notoir’i Uygulamalar’a sürükleyin.",
+  "windowsInstaller": "Çıkıştan sonra yükleyici açılır. Adımları izleyin.",
+  "appimageInstaller": "Çıkıştan sonra AppImage değiştirilir. Güncelleme için yeniden başlatın."
+}

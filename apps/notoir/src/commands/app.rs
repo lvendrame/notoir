@@ -20,6 +20,7 @@ pub(super) fn specs(out: &mut Specs, platform: Platform) {
             "app.downloadUpdate",
             Category::Help,
             |c: &mut AppCore, _: &CommandInvocation| {
+                c.updates.open = true;
                 c.updates_download();
                 CommandOutcome::Done
             },
@@ -32,6 +33,62 @@ pub(super) fn specs(out: &mut Specs, platform: Platform) {
             Category::Help,
             |c: &mut AppCore, _: &CommandInvocation| {
                 c.updates_install_on_quit();
+                CommandOutcome::Done
+            },
+        )
+        .hidden(),
+    );
+    for (id, condition, handler) in [
+        (
+            "app.addContextMenu",
+            "!contextMenuBusy && !contextMenuInstalled",
+            add_context as notoir_core::command::HandlerFn<AppCore>,
+        ),
+        (
+            "app.removeContextMenu",
+            "!contextMenuBusy && contextMenuInstalled",
+            remove_context,
+        ),
+        ("app.contextMenu", "!contextMenuBusy", show_context),
+    ] {
+        out.push(
+            CommandSpec::new(id, Category::Help, handler)
+                .when(condition)
+                .expect("valid condition"),
+        );
+    }
+    out.push(
+        CommandSpec::new(
+            "app.closeContextMenu",
+            Category::Help,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.desktop.open = false;
+                CommandOutcome::Done
+            },
+        )
+        .hidden(),
+    );
+    out.push(
+        CommandSpec::new(
+            "app.closeUpdates",
+            Category::Help,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.updates.open = false;
+                CommandOutcome::Done
+            },
+        )
+        .hidden(),
+    );
+    out.push(
+        CommandSpec::new(
+            "app.quitAndInstall",
+            Category::Help,
+            |c: &mut AppCore, _: &CommandInvocation| {
+                if c.updates.ready.is_some() {
+                    c.updates.install_on_quit = true;
+                    c.updates.open = false;
+                    c.effects.push(Effect::Quit);
+                }
                 CommandOutcome::Done
             },
         )
@@ -105,5 +162,21 @@ fn show_notifications(core: &mut AppCore, _: &CommandInvocation) -> CommandOutco
 
 fn clear_notifications(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
     core.notifications.clear();
+    CommandOutcome::Done
+}
+
+fn add_context(c: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    c.desktop.open = true;
+    c.desktop_change(Some(true));
+    CommandOutcome::Done
+}
+fn remove_context(c: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    c.desktop.open = true;
+    c.desktop_change(Some(false));
+    CommandOutcome::Done
+}
+fn show_context(c: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    c.desktop.open = true;
+    c.desktop_change(None);
     CommandOutcome::Done
 }

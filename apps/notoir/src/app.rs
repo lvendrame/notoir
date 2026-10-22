@@ -579,6 +579,8 @@ impl eframe::App for NotoirApp {
             shell::recovery_ui::show(&ctx, &mut kit, &self.core, top_offset, &mut actions);
             overlays::about(&ctx, &mut kit, &mut self.ui);
             crate::url_document::dialog(&ctx, &mut self.core, &mut actions);
+            crate::desktop::dialog(&ctx, &mut self.core, &mut actions);
+            crate::updates::dialog(&ctx, &mut self.core, &mut actions);
             shell::notes_ui::completion(&ctx, &mut kit, &self.core, &self.ui.editors, &mut actions);
             shell::mcp_ui::popover(&ctx, &mut kit, &self.core, bottom_offset, &mut actions);
             shell::mcp_ui::dialogs(

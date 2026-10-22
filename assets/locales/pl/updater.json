@@ -1,0 +1,19 @@
+{
+  "title": "Sprawdź aktualizacje…",
+  "current": "Aktualna wersja: {{version}}",
+  "checking": "Sprawdzanie aktualizacji…",
+  "downloading": "Pobieranie i weryfikacja…",
+  "available": "Notoir {{version}} jest dostępny.",
+  "currentVersion": "Notoir jest aktualny.",
+  "ready": "Aktualizacja została pobrana i zweryfikowana.",
+  "download": "Pobierz aktualizację",
+  "install": "Zakończ i zainstaluj…",
+  "later": "Później",
+  "check": "Sprawdź ponownie",
+  "failed": "Nie udało się ukończyć aktualizacji.",
+  "unavailable": "Aktualizacje są niedostępne w tej kompilacji.",
+  "managed": "Zaktualizuj Notoir przez menedżera pakietów.",
+  "macInstaller": "Obraz dysku otworzy się po zamknięciu. Przeciągnij Notoir do Aplikacji, aby zakończyć.",
+  "windowsInstaller": "Instalator otworzy się po zamknięciu. Wykonaj jego kroki.",
+  "appimageInstaller": "AppImage zostanie zastąpiony po zamknięciu. Uruchom ponownie, aby korzystać z aktualizacji."
+}

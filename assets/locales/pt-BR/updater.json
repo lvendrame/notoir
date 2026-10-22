@@ -1,0 +1,19 @@
+{
+  "title": "Verificar atualizações…",
+  "current": "Versão atual: {{version}}",
+  "checking": "Verificando atualizações…",
+  "downloading": "Baixando e verificando…",
+  "available": "Notoir {{version}} está disponível.",
+  "currentVersion": "Notoir está atualizado.",
+  "ready": "A atualização foi baixada e verificada.",
+  "download": "Baixar atualização",
+  "install": "Sair e instalar…",
+  "later": "Mais tarde",
+  "check": "Verificar novamente",
+  "failed": "Não foi possível concluir a atualização.",
+  "unavailable": "Atualizações indisponíveis nesta compilação.",
+  "managed": "Atualize o Notoir pelo gerenciador de pacotes.",
+  "macInstaller": "A imagem de disco abre após sair. Arraste o Notoir para Aplicativos para concluir.",
+  "windowsInstaller": "O instalador abre após sair. Siga as etapas para concluir.",
+  "appimageInstaller": "O AppImage será substituído após sair. Abra novamente para usar a atualização."
+}

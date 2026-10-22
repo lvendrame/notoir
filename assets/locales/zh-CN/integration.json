@@ -1,0 +1,13 @@
+{
+  "label": "用 Notoir 打开",
+  "title": "文件管理器集成",
+  "add": "添加“用 Notoir 打开”…",
+  "remove": "移除“用 Notoir 打开”",
+  "close": "关闭",
+  "installed": "已安装。",
+  "removed": "未安装。",
+  "failed": "无法更改集成。",
+  "mac": "在访达中选择文件或文件夹，然后选择服务 → 用 Notoir 打开。",
+  "windows": "在资源管理器中右键单击文件、文件夹或背景。Windows 11：显示更多选项 → 用 Notoir 打开。",
+  "linux": "支持 Nautilus（脚本）和 Dolphin（操作）。不支持其他文件管理器。"
+}

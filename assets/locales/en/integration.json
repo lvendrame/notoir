@@ -1,0 +1,13 @@
+{
+  "label": "Open with Notoir",
+  "title": "File-manager integration",
+  "add": "Add “Open with Notoir”…",
+  "remove": "Remove “Open with Notoir”",
+  "close": "Close",
+  "installed": "Installed.",
+  "removed": "Not installed.",
+  "failed": "Could not change the integration.",
+  "mac": "In Finder, select files or folders, then use Services → Open with Notoir.",
+  "windows": "In Explorer, right-click files, folders, or a folder background. Windows 11: Show more options → Open with Notoir.",
+  "linux": "Supported: Nautilus (Scripts) and Dolphin (Actions). Other file managers are not supported."
+}

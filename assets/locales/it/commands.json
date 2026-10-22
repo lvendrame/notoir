@@ -79,7 +79,13 @@
     "uninstallShellCommand": "Rimuovi il comando 'notoir' dal PATH",
     "checkForUpdates": "Controlla aggiornamenti…",
     "downloadUpdate": "Scarica aggiornamento",
-    "installUpdateOnQuit": "Installa aggiornamento all’uscita"
+    "installUpdateOnQuit": "Installa aggiornamento all’uscita",
+    "contextMenu": "Integrazione con il gestore file",
+    "addContextMenu": "Aggiungi “Apri con Notoir”…",
+    "removeContextMenu": "Rimuovi “Apri con Notoir”",
+    "closeContextMenu": "Chiudi",
+    "closeUpdates": "Più tardi",
+    "quitAndInstall": "Esci e installa…"
   },
   "workbench": {
     "showNotifications": "Mostra notifiche",

@@ -211,10 +211,13 @@ fn verified_update_is_offered_downloaded_and_handed_off_at_exit() {
         &dialogs,
     );
     common::run(&mut app, "app.checkForUpdates", Value::Null);
-    assert!(wait_for(&mut app, |a| has_notice(
-        a,
-        "notifications:updateAvailable"
-    )));
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .updates
+        .offer
+        .is_some()));
     assert_eq!(
         app.harness
             .state()
@@ -275,10 +278,13 @@ fn a_tampered_download_is_discarded() {
         .offer
         .is_some()));
     common::run(&mut app, "app.downloadUpdate", Value::Null);
-    assert!(wait_for(&mut app, |a| has_notice(
-        a,
-        "notifications:updateDownloadFailed"
-    )));
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .updates
+        .last_error
+        .is_some()));
     let core = &app.harness.state().core;
     assert!(core.updates.ready.is_none());
     let dir = core.paths.cache.join("update");
@@ -288,4 +294,74 @@ fn a_tampered_download_is_discarded() {
     assert!(leftovers.iter().all(|n| n == "last-check"), "{leftovers:?}");
     app.harness.state_mut().core.shutdown();
     assert!(dialogs.installed.lock().unwrap().is_empty());
+}
+
+// spec 31: "Quit and Install preserves unsaved documents when cancelled"
+#[test]
+fn cancelling_quit_keeps_verified_update_and_unsaved_text() {
+    use notoir_core::settings::SettingValue;
+    let dialogs = notoir::files::ScriptedDialogs::default();
+    let d = dialogs.clone();
+    let mut app = common::start(move |o| o.dialogs = Some(Arc::new(d)));
+    common::run(&mut app, "file.newUntitled", Value::Null);
+    common::run(
+        &mut app,
+        "editor.type",
+        serde_json::json!({"text":"keep this"}),
+    );
+    let core = &mut app.harness.state_mut().core;
+    core.set_user_setting("app.hotExit", Some(SettingValue::Bool(true)));
+    let path = core.paths.cache.join("verified.dmg");
+    core.updates.ready = Some(path.clone());
+    core.updates.open = true;
+    core.enqueue(notoir_core::command::CommandInvocation::new(
+        "app.quitAndInstall",
+        notoir_core::command::InvocationSource::Menu,
+    ));
+    core.run_queued(&core.context(false));
+    assert!(core.updates.install_on_quit);
+    assert!(!core.request_quit());
+    core.answer_prompt(notoir::files::Answer::Cancel);
+    assert!(!core.updates.install_on_quit);
+    assert_eq!(core.updates.ready, Some(path));
+    let doc = core
+        .workbench
+        .document(core.workbench.active_document().unwrap())
+        .unwrap();
+    assert_eq!(doc.buffer.text(), "keep this");
+    assert!(doc.is_dirty());
+    core.shutdown();
+    assert!(dialogs.installed.lock().unwrap().is_empty());
+}
+
+#[test]
+fn cancelling_save_as_cancels_update_shutdown() {
+    let mut app = common::start(|_| {});
+    common::run(&mut app, "file.newUntitled", Value::Null);
+    common::run(
+        &mut app,
+        "editor.type",
+        serde_json::json!({"text":"keep draft"}),
+    );
+    {
+        let core = &mut app.harness.state_mut().core;
+        core.updates.ready = Some(core.paths.cache.join("verified.dmg"));
+        core.enqueue(notoir_core::command::CommandInvocation::new(
+            "app.quitAndInstall",
+            notoir_core::command::InvocationSource::Menu,
+        ));
+        core.run_queued(&core.context(false));
+        assert!(!core.request_quit());
+        core.answer_prompt(notoir::files::Answer::Primary);
+    }
+    common::settle(&mut app);
+    let core = &app.harness.state().core;
+    assert!(!core.updates.install_on_quit);
+    assert!(core.updates.ready.is_some());
+    let doc = core
+        .workbench
+        .document(core.workbench.active_document().unwrap())
+        .unwrap();
+    assert_eq!(doc.buffer.text(), "keep draft");
+    assert!(doc.is_dirty());
 }

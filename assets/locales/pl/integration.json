@@ -1,0 +1,13 @@
+{
+  "label": "Otwórz w Notoir",
+  "title": "Integracja z menedżerem plików",
+  "add": "Dodaj „Otwórz w Notoir”…",
+  "remove": "Usuń „Otwórz w Notoir”",
+  "close": "Zamknij",
+  "installed": "Zainstalowano.",
+  "removed": "Nie zainstalowano.",
+  "failed": "Nie udało się zmienić integracji.",
+  "mac": "W Finderze zaznacz pliki lub foldery, następnie Usługi → Otwórz w Notoir.",
+  "windows": "W Eksploratorze kliknij prawym przyciskiem pliki, foldery lub tło. Windows 11: Pokaż więcej opcji → Otwórz w Notoir.",
+  "linux": "Obsługiwane: Nautilus (Skrypty) i Dolphin (Działania). Inne menedżery nie są obsługiwane."
+}

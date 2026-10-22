@@ -1,0 +1,13 @@
+{
+  "label": "Mit Notoir öffnen",
+  "title": "Dateimanager-Integration",
+  "add": "„Mit Notoir öffnen“ hinzufügen…",
+  "remove": "„Mit Notoir öffnen“ entfernen",
+  "close": "Schließen",
+  "installed": "Installiert.",
+  "removed": "Nicht installiert.",
+  "failed": "Integration konnte nicht geändert werden.",
+  "mac": "Im Finder Dateien oder Ordner auswählen, dann Dienste → Mit Notoir öffnen.",
+  "windows": "Im Explorer Dateien, Ordner oder den Ordnerhintergrund rechtsklicken. Windows 11: Weitere Optionen anzeigen → Mit Notoir öffnen.",
+  "linux": "Unterstützt: Nautilus (Skripte) und Dolphin (Aktionen). Andere Dateimanager werden nicht unterstützt."
+}

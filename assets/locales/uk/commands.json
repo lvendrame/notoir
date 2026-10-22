@@ -79,7 +79,13 @@
     "uninstallShellCommand": "Видалити команду 'notoir' з PATH",
     "checkForUpdates": "Перевірити оновлення…",
     "downloadUpdate": "Завантажити оновлення",
-    "installUpdateOnQuit": "Встановити оновлення під час виходу"
+    "installUpdateOnQuit": "Встановити оновлення під час виходу",
+    "contextMenu": "Інтеграція з файловим менеджером",
+    "addContextMenu": "Додати «Відкрити в Notoir»…",
+    "removeContextMenu": "Видалити «Відкрити в Notoir»",
+    "closeContextMenu": "Закрити",
+    "closeUpdates": "Пізніше",
+    "quitAndInstall": "Вийти та встановити…"
   },
   "workbench": {
     "showNotifications": "Показати сповіщення",

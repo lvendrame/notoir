@@ -79,7 +79,13 @@
     "uninstallShellCommand": "PATH에서 'notoir' 명령 제거",
     "checkForUpdates": "업데이트 확인…",
     "downloadUpdate": "업데이트 다운로드",
-    "installUpdateOnQuit": "종료 시 업데이트 설치"
+    "installUpdateOnQuit": "종료 시 업데이트 설치",
+    "contextMenu": "파일 관리자 통합",
+    "addContextMenu": "“Notoir로 열기” 추가…",
+    "removeContextMenu": "“Notoir로 열기” 제거",
+    "closeContextMenu": "닫기",
+    "closeUpdates": "나중에",
+    "quitAndInstall": "종료 후 설치…"
   },
   "workbench": {
     "showNotifications": "알림 표시",

@@ -26,6 +26,36 @@ pub fn input(core: &mut crate::core::AppCore, _ctx: &egui::Context, raw: &mut eg
     }
     for request in std::mem::take(&mut core.live_requests) {
         let op = request["op"].as_str().unwrap_or("");
+        if op == "configureHelp" {
+            core.set_user_setting(
+                "update.mode",
+                Some(notoir_core::settings::SettingValue::Str("off".into())),
+            );
+            if let Some(url) = request["updateUrl"].as_str() {
+                core.updates.config = Some(notoir_platform::update::UpdateConfig {
+                    manifest_url: url.into(),
+                    public_key: request["publicKey"].as_str().unwrap_or("").into(),
+                });
+                core.updates.platform = Some("macos");
+            }
+            if let Some(home) = request["integrationHome"].as_str() {
+                core.desktop.integration = Some(notoir_platform::file_manager::Integration {
+                    home: home.into(),
+                    target: request["integrationTarget"]
+                        .as_str()
+                        .map(std::path::PathBuf::from)
+                        .unwrap_or_else(|| std::env::current_exe().unwrap()),
+                    label: crate::t!("integration:label"),
+                    platform: if cfg!(target_os = "macos") {
+                        notoir_platform::file_manager::Platform::Mac
+                    } else {
+                        notoir_platform::file_manager::Platform::Linux
+                    },
+                });
+                core.desktop_change(None);
+            }
+            continue;
+        }
         if op == "savePath" {
             if let Some(path) = request["path"].as_str() {
                 let dialogs = std::sync::Arc::new(crate::files::ScriptedDialogs::default());
@@ -133,7 +163,7 @@ pub fn finish(core: &mut crate::core::AppCore, ctx: &egui::Context) {
             json!({"header":s.header,"separator":s.detected.to_string(),"hidden":s.hidden,"filters":s.filters,"rows":rows,"matches":matches,"editing":s.editing.is_some(),"error":s.error.is_some(),"pending":s.pending.is_some()})
         });
         let widgets = WIDGETS.with(|w| w.borrow().clone());
-        let value = json!({"documents":docs,"view":view.map(|v|v.0),"mode":view.and_then(|v|core.workbench.view(v)).map(|v|format!("{:?}",v.kind)),"csv":csv,"url_open":core.url.open,"url_busy":core.url.cancellation.is_some(),"url_error":core.url.error,"widgets":widgets});
+        let value = json!({"documents":docs,"workspace":core.workspace.as_ref().map(|w|&w.root),"install_on_quit":core.updates.install_on_quit,"prompt_count":core.files.prompts.len(),"view":view.map(|v|v.0),"mode":view.and_then(|v|core.workbench.view(v)).map(|v|format!("{:?}",v.kind)),"csv":csv,"updates_open":core.updates.open,"update_ready":core.updates.ready,"update_error":core.updates.last_error.as_ref().map(ToString::to_string),"integration_installed":core.desktop.installed,"integration_busy":core.desktop.busy,"integration_error":core.desktop.error,"url_open":core.url.open,"url_busy":core.url.cancellation.is_some(),"url_error":core.url.error,"widgets":widgets});
         core.io.submit(move || {
             let _ = std::fs::write(path, serde_json::to_vec_pretty(&value).unwrap_or_default());
             None

@@ -1,0 +1,19 @@
+{
+  "title": "Controleren op updates…",
+  "current": "Huidige versie: {{version}}",
+  "checking": "Zoeken naar updates…",
+  "downloading": "Downloaden en controleren…",
+  "available": "Notoir {{version}} is beschikbaar.",
+  "currentVersion": "Notoir is bijgewerkt.",
+  "ready": "De update is gedownload en gecontroleerd.",
+  "download": "Update downloaden",
+  "install": "Afsluiten en installeren…",
+  "later": "Later",
+  "check": "Opnieuw controleren",
+  "failed": "De update kon niet worden voltooid.",
+  "unavailable": "Updates zijn niet beschikbaar in deze build.",
+  "managed": "Werk Notoir bij met uw pakketbeheerder.",
+  "macInstaller": "De schijfkopie opent na afsluiten. Sleep Notoir naar Apps om te voltooien.",
+  "windowsInstaller": "Het installatieprogramma opent na afsluiten. Volg de stappen.",
+  "appimageInstaller": "De AppImage wordt na afsluiten vervangen. Start opnieuw voor de update."
+}

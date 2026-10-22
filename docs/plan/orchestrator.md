@@ -98,3 +98,20 @@ injects pointer/keyboard input and captures actual window screenshots. `python3 
 https://example.com/` passed 23 live desktop checks with an isolated profile, real file saves, HTTP redirects, cancellation
 and verified HTTPS. The OS Save As destination is supplied by ScriptedDialogs. References: `docs/design/csv-preview.png`,
 `docs/design/open-from-url.png`. No osascript or Accessibility permission is required.
+
+## Help integration follow-up
+
+Per-user Add / Remove Open with Notoir in Help (Finder Service + native Open With events, Explorer verbs,
+Nautilus scripts and Dolphin actions), async status and ownership checks. Manual update dialog reuses signed
+checks and downloads; Quit and Install uses save/discard/cancel, cancelled installs keep the verified download.
+AppImage staging handles separate cache/application filesystems. Published releases require matching signing
+credentials and manifest verification. Windows/Linux native shell UI checks require those operating systems.
+
+Live verification on macOS: `python3 scripts/live-help.py --native-service --artifacts target/live-help-native`
+passed 19 checks using the running desktop app, pointer input, real Automator execution, native Apple Events
+(cold launch, running app, multiple documents), folder/workspace opening, actual Finder Services cache
+registration and removal, current/newer versions, HTTP failure, invalid signatures, checksum rejection,
+verified downloads, unsaved-document cancellation, and a harmless real DMG handed to macOS after shutdown.
+Automatic checks are disabled in the test profile, verifying that manual checks still work. Temporary
+registration and mounted disk images are cleaned up. The script needs Python `cryptography`; `--native-service`
+refuses to replace an existing workflow. Save As cancellation is also covered by a targeted app regression.

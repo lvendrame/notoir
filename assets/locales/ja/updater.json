@@ -1,0 +1,19 @@
+{
+  "title": "更新を確認…",
+  "current": "現在のバージョン: {{version}}",
+  "checking": "更新を確認中…",
+  "downloading": "ダウンロードして検証中…",
+  "available": "Notoir {{version}} が利用できます。",
+  "currentVersion": "Notoirは最新です。",
+  "ready": "更新をダウンロードして検証しました。",
+  "download": "更新をダウンロード",
+  "install": "終了してインストール…",
+  "later": "後で",
+  "check": "再確認",
+  "failed": "更新を完了できませんでした。",
+  "unavailable": "このビルドでは更新を利用できません。",
+  "managed": "パッケージマネージャーでNotoirを更新してください。",
+  "macInstaller": "終了後にディスクイメージが開きます。Notoirをアプリケーションにドラッグしてください。",
+  "windowsInstaller": "終了後にインストーラーが開きます。手順に従ってください。",
+  "appimageInstaller": "終了後にAppImageを置き換えます。再起動して更新を使用してください。"
+}

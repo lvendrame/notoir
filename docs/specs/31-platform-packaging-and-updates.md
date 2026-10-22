@@ -1,6 +1,6 @@
 # 31 — Platform Abstraction, Packaging & Updates
 
-**Status:** Partial — app paths, system fonts (M0); async file dialogs, reveal in file manager, single instance (M5); folder picker, move to trash (M7); packaging: cargo-packager config (identifier, icons, document types), `dist` profile with split debug info, `scripts/package.sh` (universal macOS .app/.dmg, .msi + NSIS, .deb + AppImage, checksums, debug-symbol archives, optional signing/notarization/GPG), tag-triggered release workflow (M11). macOS packaging verified locally; Windows and Linux formats are exercised by the release workflow. Finder "Open With" (Apple Events) not handled yet. M26 updates: `update.mode` off / notify (default) / download; the manifest URL and minisign public key are built in at compile time (`NOTOIR_UPDATE_URL`, `NOTOIR_UPDATE_PUBKEY`, set by the release workflow from repository variables; without them Help → Check for Updates… reports updates unavailable); checks at most daily (last check in `<cache>/update/`) and on demand, over HTTPS (rustls with the Mozilla roots) on their own thread; `update.json` must verify against `update.json.minisig` and name a greater semver and an installer for this platform (macos .dmg, windows .msi, linux-appimage; distro packages are left to the package manager) before anything is offered; the installer downloads into the cache and must match the SHA-256 in the signed manifest (a mismatch is deleted); Install on Quit hands it to the OS (dmg / msi open; an AppImage replaces the running one) after the session, recovery and IO are flushed — never silently. The release workflow writes `update.json` (`scripts/update-manifest.py`) and signs it when the `MINISIGN_SECRET_KEY` secret exists. Deviation: the hand-off and the release signing were exercised only in tests / locally (not on a published release)
+**Status:** Partial — app paths, system fonts (M0); async file dialogs, reveal in file manager, single instance (M5); folder picker, move to trash (M7); packaging: cargo-packager config (identifier, icons, document types), `dist` profile with split debug info, `scripts/package.sh` (universal macOS .app/.dmg, .msi + NSIS, .deb + AppImage, checksums, debug-symbol archives, optional signing/notarization/GPG), tag-triggered release workflow (M11). macOS packaging verified locally; Windows and Linux formats are exercised by the release workflow. Finder Open With Apple Events now handled by a native Apple Event handler. M26 updates: `update.mode` off / notify (default) / download; the manifest URL and minisign public key are built in at compile time (`NOTOIR_UPDATE_URL`, `NOTOIR_UPDATE_PUBKEY`, set by the release workflow from repository variables; without them Help → Check for Updates… reports updates unavailable); checks at most daily (last check in `<cache>/update/`) and on demand, over HTTPS (rustls with the Mozilla roots) on their own thread; `update.json` must verify against `update.json.minisig` and name a greater semver and an installer for this platform (macos .dmg, windows .msi, linux-appimage; distro packages are left to the package manager) before anything is offered; the installer downloads into the cache and must match the SHA-256 in the signed manifest (a mismatch is deleted); Install on Quit hands it to the OS (dmg / msi open; an AppImage replaces the running one) after the session, recovery and IO are flushed — never silently. The release workflow requires signing configuration for publishing, writes `update.json` (`scripts/update-manifest.py`), signs it and verifies against the embedded public key. Deviation: the hand-off and the release signing were exercised only in tests / locally (not on a published release)
 
 ## Purpose
 
@@ -147,4 +147,44 @@ Feature: Updates
     Given an update manifest with an invalid signature
     When Notoir checks for updates
     Then no update is offered and a warning is logged
+```
+
+## Help actions: file managers and updates
+
+Help offers Add / Remove “Open with Notoir” for the current user without changing default handlers.
+Files open as documents; folders use the existing workspace-opening flow. macOS uses a Finder Service
+and native Open With Apple Events; Windows uses per-user Explorer verbs (Show more options on Windows 11);
+Linux provides Nautilus Scripts and Dolphin Actions. Registration is asynchronous, repeatable, and refuses
+foreign files, symlinks or registry entries. Removal only removes owned registrations.
+
+Manual Check for Updates opens a status dialog even when automatic checks are off. A newer stable signed
+release offers Download Update, then Quit and Install… or Later. Quit and Install uses unsaved-document
+prompts even with hot exit enabled; cancelling keeps both the buffer and verified download. Package-managed
+Linux installs show package-manager guidance. Missing build configuration and failures are explained.
+Installers run only after normal shutdown: DMG/MSI require user completion; AppImages are staged on the
+application filesystem before atomic replacement. Publishing requires signing configuration and verifies
+that the generated manifest signature matches the public key embedded in installers.
+
+```gherkin
+Feature: Help integration
+  Scenario: File-manager integration can be added and removed
+    Given an unregistered per-user file-manager integration
+    When the user adds Open with Notoir from Help
+    Then the owned integration is installed and its status is shown
+    When the user removes it
+    Then its files are removed
+    And a foreign registration is never overwritten
+
+  Scenario: Manual update check reports unavailable builds
+    Given a build without update configuration
+    When the user checks for updates from Help
+    Then a dialog explains that updates are unavailable
+    And the dialog can be dismissed
+
+  Scenario: Quit and Install preserves unsaved documents when cancelled
+    Given a verified update and an unsaved document
+    When the user chooses Quit and Install and cancels the unsaved-document prompt
+    Then the document remains unsaved with its contents intact
+    And the verified update remains ready
+    And no installer is started
 ```

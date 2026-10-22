@@ -79,7 +79,13 @@
     "uninstallShellCommand": "'notoir' Komutunu PATH'ten Kaldır",
     "checkForUpdates": "Güncellemeleri denetle…",
     "downloadUpdate": "Güncellemeyi indir",
-    "installUpdateOnQuit": "Çıkışta güncellemeyi yükle"
+    "installUpdateOnQuit": "Çıkışta güncellemeyi yükle",
+    "contextMenu": "Dosya yöneticisi entegrasyonu",
+    "addContextMenu": "“Notoir ile aç” ekle…",
+    "removeContextMenu": "“Notoir ile aç” kaldır",
+    "closeContextMenu": "Kapat",
+    "closeUpdates": "Daha sonra",
+    "quitAndInstall": "Çık ve yükle…"
   },
   "workbench": {
     "showNotifications": "Bildirimleri Göster",

@@ -1,0 +1,19 @@
+{
+  "title": "업데이트 확인…",
+  "current": "현재 버전: {{version}}",
+  "checking": "업데이트 확인 중…",
+  "downloading": "다운로드 및 검증 중…",
+  "available": "Notoir {{version}}을 사용할 수 있습니다.",
+  "currentVersion": "Notoir가 최신 버전입니다.",
+  "ready": "업데이트를 다운로드하고 검증했습니다.",
+  "download": "업데이트 다운로드",
+  "install": "종료 후 설치…",
+  "later": "나중에",
+  "check": "다시 확인",
+  "failed": "업데이트를 완료할 수 없습니다.",
+  "unavailable": "이 빌드에서는 업데이트를 사용할 수 없습니다.",
+  "managed": "패키지 관리자로 Notoir를 업데이트하세요.",
+  "macInstaller": "종료 후 디스크 이미지가 열립니다. Notoir를 응용 프로그램으로 드래그하여 완료하세요.",
+  "windowsInstaller": "종료 후 설치 프로그램이 열립니다. 안내를 따라 완료하세요.",
+  "appimageInstaller": "종료 후 AppImage가 교체됩니다. 업데이트를 사용하려면 다시 실행하세요."
+}

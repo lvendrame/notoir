@@ -10,6 +10,7 @@ pub mod compare;
 pub mod config;
 pub mod core;
 pub mod csv;
+pub mod desktop;
 #[doc(hidden)]
 pub mod docs_ref;
 pub mod editor_widget;

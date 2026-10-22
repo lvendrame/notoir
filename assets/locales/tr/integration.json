@@ -1,0 +1,13 @@
+{
+  "label": "Notoir ile aç",
+  "title": "Dosya yöneticisi entegrasyonu",
+  "add": "“Notoir ile aç” ekle…",
+  "remove": "“Notoir ile aç” kaldır",
+  "close": "Kapat",
+  "installed": "Yüklendi.",
+  "removed": "Yüklü değil.",
+  "failed": "Entegrasyon değiştirilemedi.",
+  "mac": "Finder’da dosya veya klasör seçin, ardından Servisler → Notoir ile aç.",
+  "windows": "Gezgin’de dosya, klasör veya arka plana sağ tıklayın. Windows 11: Daha fazla seçenek göster → Notoir ile aç.",
+  "linux": "Desteklenenler: Nautilus (Betikler), Dolphin (Eylemler). Diğer dosya yöneticileri desteklenmez."
+}

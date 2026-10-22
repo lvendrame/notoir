@@ -373,7 +373,9 @@ pub fn show(ctx: &egui::Context, kit: &mut Kit, core: &AppCore) -> Option<Answer
                 } else {
                     RichText::new(label)
                 };
-                if ui.button(text).clicked() {
+                let response = ui.button(text);
+                crate::live::track(&response, &format!("prompt.{a:?}"));
+                if response.clicked() {
                     answer = Some(*a);
                 }
             }

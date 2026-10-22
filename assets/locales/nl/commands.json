@@ -79,7 +79,13 @@
     "uninstallShellCommand": "Opdracht 'notoir' uit PATH verwijderen",
     "checkForUpdates": "Controleren op updates…",
     "downloadUpdate": "Update downloaden",
-    "installUpdateOnQuit": "Update installeren bij afsluiten"
+    "installUpdateOnQuit": "Update installeren bij afsluiten",
+    "contextMenu": "Integratie met bestandsbeheer",
+    "addContextMenu": "“Openen met Notoir” toevoegen…",
+    "removeContextMenu": "“Openen met Notoir” verwijderen",
+    "closeContextMenu": "Sluiten",
+    "closeUpdates": "Later",
+    "quitAndInstall": "Afsluiten en installeren…"
   },
   "workbench": {
     "showNotifications": "Meldingen tonen",

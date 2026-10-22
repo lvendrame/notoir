@@ -79,7 +79,13 @@
     "uninstallShellCommand": "Удалить команду 'notoir' из PATH",
     "checkForUpdates": "Проверить обновления…",
     "downloadUpdate": "Скачать обновление",
-    "installUpdateOnQuit": "Установить обновление при выходе"
+    "installUpdateOnQuit": "Установить обновление при выходе",
+    "contextMenu": "Интеграция с файловым менеджером",
+    "addContextMenu": "Добавить «Открыть в Notoir»…",
+    "removeContextMenu": "Удалить «Открыть в Notoir»",
+    "closeContextMenu": "Закрыть",
+    "closeUpdates": "Позже",
+    "quitAndInstall": "Выйти и установить…"
   },
   "workbench": {
     "showNotifications": "Показать уведомления",

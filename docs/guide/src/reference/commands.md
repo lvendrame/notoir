@@ -310,17 +310,23 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Command | Id | macOS | Windows / Linux |
 |---|---|---|---|
 | About Notoir | `help.about` |  |  |
+| Add “Open with Notoir”… | `app.addContextMenu` |  |  |
 | Check for Updates… | `app.checkForUpdates` |  |  |
+| Close *(hidden)* | `app.closeContextMenu` |  |  |
 | Discard Unsaved Document *(hidden)* | `recovery.discardEntry` |  |  |
 | Discard Unsaved Documents *(hidden)* | `recovery.discard` |  |  |
 | Documentation | `help.documentation` |  |  |
 | Download Update *(hidden)* | `app.downloadUpdate` |  |  |
+| File-manager integration | `app.contextMenu` |  |  |
 | Finish Welcome *(hidden)* | `welcome.finish` |  |  |
 | Help for Current Context | `help.contextHelp` | `F1` | `F1` |
 | Install 'notoir' Command in PATH | `app.installShellCommand` |  |  |
 | Install Update on Quit *(hidden)* | `app.installUpdateOnQuit` |  |  |
 | Keyboard Shortcut Reference | `help.keyboardReference` |  |  |
+| Later *(hidden)* | `app.closeUpdates` |  |  |
+| Quit and Install… *(hidden)* | `app.quitAndInstall` |  |  |
 | Recover Unsaved Documents… | `recovery.show` |  |  |
+| Remove “Open with Notoir” | `app.removeContextMenu` |  |  |
 | Restore All Unsaved Documents *(hidden)* | `recovery.restoreAll` |  |  |
 | Restore Unsaved Document *(hidden)* | `recovery.restoreEntry` |  |  |
 | Review Unsaved Documents *(hidden)* | `recovery.review` |  |  |

@@ -102,6 +102,7 @@ pub enum IoResult {
     TextIndex(Box<crate::text_index::IndexDone>),
     /// The last update check time (ms since epoch), from the cache.
     UpdateStamp(Option<i64>),
+    DesktopIntegration(Result<bool, String>),
     /// An update check finished: (result, started from the menu).
     UpdateChecked(
         Box<(
