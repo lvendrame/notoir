@@ -1,0 +1,13 @@
+{
+  "title": "URLから開く",
+  "placeholder": "https://example.com/document.csv",
+  "address": "ドキュメントのURL",
+  "open": "開く",
+  "cancel": "キャンセル",
+  "loading": "ダウンロード中…",
+  "invalidUrl": "有効なHTTPまたはHTTPS URLを入力してください。",
+  "tooLarge": "ダウンロードが20 MiBを超えています。",
+  "binary": "このURLはバイナリを返しました。テキスト文書を開いてください。",
+  "decode": "データを失わずにテキストをデコードできませんでした。",
+  "failed": "ダウンロード失敗: {{error}}"
+}

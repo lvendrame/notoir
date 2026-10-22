@@ -120,7 +120,10 @@
     "autoSave": "Activer/désactiver l'enregistrement automatique",
     "saveAsAdmin": "Enregistrer en tant qu’administrateur…",
     "newFromTemplate": "Nouveau fichier à partir d’un modèle…",
-    "pickTemplate": "Utiliser le modèle"
+    "pickTemplate": "Utiliser le modèle",
+    "openFromUrl": "Ouvrir depuis une URL…",
+    "downloadUrl": "Ouvrir",
+    "cancelUrl": "Annuler"
   },
   "edit": {
     "undo": "Annuler",
@@ -427,5 +430,11 @@
     "goToParent": "Aller au parent",
     "selectRange": "Sélectionner le nœud",
     "treeEdit": "Modifier l’arbre YAML"
+  },
+  "csv": {
+    "showEditor": "Afficher l'éditeur",
+    "showSplit": "Afficher l'éditeur et l'aperçu",
+    "showPreview": "Afficher l'aperçu",
+    "action": "Modifier le CSV"
   }
 }

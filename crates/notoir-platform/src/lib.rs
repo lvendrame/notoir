@@ -2,6 +2,7 @@
 //! application directories, OS locale, platform labels and system fonts.
 
 pub mod dialogs;
+pub mod download;
 pub mod elevation;
 pub mod paths;
 pub mod reveal;

@@ -120,7 +120,10 @@
     "autoSave": "Toggle Auto Save",
     "saveAsAdmin": "Save as Administrator…",
     "newFromTemplate": "New File from Template…",
-    "pickTemplate": "Use Template"
+    "pickTemplate": "Use Template",
+    "openFromUrl": "Open from URL…",
+    "downloadUrl": "Open",
+    "cancelUrl": "Cancel"
   },
   "edit": {
     "undo": "Undo",
@@ -427,5 +430,11 @@
     "goToParent": "Go to Parent",
     "selectRange": "Select Node",
     "treeEdit": "Edit YAML Tree"
+  },
+  "csv": {
+    "showEditor": "Show Editor",
+    "showSplit": "Show Editor and Preview",
+    "showPreview": "Show Preview",
+    "action": "Edit CSV"
   }
 }

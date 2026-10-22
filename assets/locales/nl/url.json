@@ -1,0 +1,13 @@
+{
+  "title": "Openen vanaf URL",
+  "placeholder": "https://example.com/document.csv",
+  "address": "Document-URL",
+  "open": "Openen",
+  "cancel": "Annuleren",
+  "loading": "Downloaden…",
+  "invalidUrl": "Voer een geldige HTTP- of HTTPS-URL in.",
+  "tooLarge": "De download overschrijdt 20 MiB.",
+  "binary": "Deze URL gaf binaire inhoud terug. Open een tekstdocument.",
+  "decode": "De tekst kon niet zonder gegevensverlies worden gedecodeerd.",
+  "failed": "Download mislukt: {{error}}"
+}

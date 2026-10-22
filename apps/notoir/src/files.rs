@@ -809,7 +809,11 @@ impl AppCore {
         let opts = FileDialogOptions {
             title: Some(t!("dialogs:saveAs.title")),
             directory: dir,
-            file_name: name,
+            file_name: d
+                .suggested_name
+                .clone()
+                .filter(|_| d.path().is_none())
+                .or(name),
         };
         self.files.dialogs.save_file(opts, doc, self.io.poster());
     }
@@ -1723,6 +1727,12 @@ impl AppCore {
     pub fn document_title(&self, doc: DocumentId) -> String {
         if let Some(title) = self.compare_title(doc) {
             return title;
+        }
+        if let Some(d) = self.workbench.document(doc)
+            && d.path().is_none()
+            && let Some(name) = &d.suggested_name
+        {
+            return name.clone();
         }
         match self.workbench.document(doc).map(|d| &d.origin) {
             Some(DocumentOrigin::File { path, .. }) => file_name(path),

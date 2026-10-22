@@ -118,3 +118,12 @@ Closing a document with unsaved changes asks **Save**, **Don't Save** or **Cance
 
 **File › Close Others**, **Close All** and the tab context menu close several tabs at once and ask once for all of
 them. **View › Reopen Closed Tab** (`Ctrl+Shift+T`, ⇧⌘T) brings back the last closed tab.
+
+## Open from URL
+
+Choose **File → Open from URL…**, enter an HTTP or HTTPS address, and choose **Open**. Notoir downloads the text in the
+background and opens an editable, unsaved copy named from the final URL. CSV downloads support the same table preview
+and cell editing as local files. **Save** asks for a local destination; it does not upload changes to the URL.
+
+Cancel stops the open operation. Download errors stay in the dialog so you can correct the address and retry. Binary
+content is refused, downloads are limited to 20 MiB, and requests time out after 30 seconds.

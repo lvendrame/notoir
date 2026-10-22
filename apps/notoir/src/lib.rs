@@ -9,6 +9,7 @@ pub mod commands;
 pub mod compare;
 pub mod config;
 pub mod core;
+pub mod csv;
 #[doc(hidden)]
 pub mod docs_ref;
 pub mod editor_widget;
@@ -25,6 +26,8 @@ pub mod icons;
 pub mod input;
 pub mod io;
 pub mod json;
+#[doc(hidden)]
+pub mod live;
 pub mod logging;
 pub mod markdown;
 pub mod mcp;
@@ -45,4 +48,5 @@ pub mod templates;
 pub mod text_index;
 pub mod theme;
 pub mod updates;
+pub mod url_document;
 pub mod workspace;

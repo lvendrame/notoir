@@ -1,0 +1,22 @@
+{
+  "header": "First row is header",
+  "auto": "Auto-detect separator",
+  "semicolon": "Semicolon",
+  "tab": "Tab",
+  "comma": "Comma",
+  "columns": "Columns",
+  "showAll": "Show all",
+  "search": "Find in table",
+  "previous": "Previous",
+  "next": "Next",
+  "filter": "Filter {{column}}",
+  "clear": "Clear",
+  "invalid": "Invalid CSV at line {{line}}, column {{column}}. Showing the last valid table.",
+  "loading": "Updating table…",
+  "matches": "Matches: {{count}}",
+  "noColumns": "All columns are hidden. Use Columns to show them.",
+  "column": "Column {{number}}",
+  "editCell": "Edit row {{row}}, column {{column}}",
+  "tooLarge": "CSV preview is limited to 20 MiB.",
+  "hideColumn": "Hide column"
+}

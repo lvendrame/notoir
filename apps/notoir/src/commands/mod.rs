@@ -10,6 +10,7 @@ use crate::core::AppCore;
 
 mod app;
 mod compare;
+mod csv;
 mod editor;
 mod file;
 mod git;
@@ -40,6 +41,7 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     settings_ui::specs(&mut specs);
     markdown::specs(&mut specs);
     json::specs(&mut specs);
+    csv::specs(&mut specs);
     structure::specs(&mut specs);
     search::specs(&mut specs);
     compare::specs(&mut specs);

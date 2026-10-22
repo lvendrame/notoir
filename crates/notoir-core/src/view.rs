@@ -14,6 +14,8 @@ pub enum ViewKind {
     MarkdownSplit,
     JsonTree,
     JsonSplit,
+    CsvPreview,
+    CsvSplit,
     Settings,
     /// First-run / Help → Welcome page.
     Welcome,

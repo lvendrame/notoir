@@ -1,6 +1,6 @@
 # 08 — Opening Files, Scratchpads & Recent
 
-**Status:** Partial — Open File, New File, Scratchpads (create, persist, keep, Save As), recent files with pins, Open Recent, New Window, CLI and single-instance forwarding (M2, M5); Open Workspace, folder drops and CLI folders, recent workspaces with pins (M7); Quick Open recent (M9), OS recent-documents integration (M11)
+**Status:** Partial — Open File, New File, Scratchpads (create, persist, keep, Save As), recent files with pins, Open Recent, New Window, CLI and single-instance forwarding (M2, M5); Open Workspace, folder drops and CLI folders, recent workspaces with pins (M7); Quick Open recent (M9), OS recent-documents integration (M11); Open from URL editable local copies with bounded background HTTP(S) downloads
 
 ## Purpose
 
@@ -132,4 +132,32 @@ Feature: Recent
     Given recent file "gone.md" was deleted from disk
     When the user selects it in Open Recent
     Then a notice offers to remove it from the list
+```
+
+## Open from URL
+
+File → Open from URL… (`file.openFromUrl`) opens a URL input modal. HTTP and HTTPS text downloads run on a background
+thread with loading feedback and Cancel. Follow at most five HTTP(S) redirects, time out after 30 seconds and cap the
+response at 20 MiB (including responses without a Content-Length). Failures are displayed in the modal. Cancellation
+invalidates the request; a late result cannot open a tab. Binary and lossy-decoded content is refused.
+
+Successful downloads open editable Untitled documents with a suggested filename from the final URL, a Content-Type
+fallback extension, language detection, and source URL metadata. They are unsaved local copies: Save opens Save As
+with the suggested name, and all writes use the normal save pipeline. No content is uploaded. Downloaded CSV supports
+all CSV view modes. Requests require no workspace and do not inherit URLs as file paths.
+
+```gherkin
+Feature: Open from URL
+  Scenario: Open a URL as an editable local copy
+    Given an HTTP URL redirecting to a CSV document
+    When the user downloads it using the URL dialog
+    Then an editable unsaved CSV is opened with its final filename and source URL
+    And a table edit can be saved locally with original line endings
+
+  Scenario: Failed or cancelled URL downloads create no document
+    Given the URL dialog
+    When a download fails, returns binary content, or is cancelled
+    Then no downloaded document is opened
+    And failures display an error and cancellation ignores late results
+    And non-HTTP URLs are rejected
 ```

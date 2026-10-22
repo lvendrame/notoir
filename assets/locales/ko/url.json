@@ -1,0 +1,13 @@
+{
+  "title": "URL에서 열기",
+  "placeholder": "https://example.com/document.csv",
+  "address": "문서 URL",
+  "open": "열기",
+  "cancel": "취소",
+  "loading": "다운로드 중…",
+  "invalidUrl": "유효한 HTTP 또는 HTTPS URL을 입력하세요.",
+  "tooLarge": "다운로드가 20 MiB를 초과합니다.",
+  "binary": "이 URL은 바이너리 콘텐츠를 반환했습니다. 텍스트 문서를 여세요.",
+  "decode": "데이터 손실 없이 텍스트를 디코딩할 수 없습니다.",
+  "failed": "다운로드 실패: {{error}}"
+}

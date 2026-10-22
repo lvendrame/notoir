@@ -11,6 +11,7 @@ The menu bar as it appears on Windows and Linux, with default shortcuts. On macO
 - New File from Template…
 - New Window — `Ctrl+Shift+N`
 - Open File… — `Ctrl+O`
+- Open from URL…
 - Open Workspace… — `Ctrl+K Ctrl+O`
 - **Open Recent** ›
   - *(recent workspaces)*

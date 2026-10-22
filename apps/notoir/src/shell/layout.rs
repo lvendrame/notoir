@@ -365,15 +365,17 @@ impl Renderer<'_, '_> {
                 use notoir_core::view::ViewKind as VK;
                 let view_kind = kind.unwrap_or(VK::Text);
                 let is_md = doc.is_some_and(|d| self.core.is_markdown(d));
+                let is_csv = doc.is_some_and(|d| self.core.is_csv(d));
                 let is_json = doc.is_some_and(|d| self.core.is_structured(d));
                 let mode = match view_kind {
                     VK::MarkdownPreview | VK::MarkdownSplit if is_md => view_kind,
                     VK::JsonTree | VK::JsonSplit if is_json => view_kind,
+                    VK::CsvPreview | VK::CsvSplit if is_csv => view_kind,
                     _ => VK::Text,
                 };
                 let (editor_rect, preview_rect) = match mode {
-                    VK::MarkdownPreview | VK::JsonTree => (None, Some(body)),
-                    VK::MarkdownSplit | VK::JsonSplit => {
+                    VK::MarkdownPreview | VK::JsonTree | VK::CsvPreview => (None, Some(body)),
+                    VK::MarkdownSplit | VK::JsonSplit | VK::CsvSplit => {
                         let ratio = self
                             .core
                             .workbench
@@ -450,7 +452,14 @@ impl Renderer<'_, '_> {
                     }
                     _ => (Some(body), None),
                 };
-                if let (Some(rect), Some(doc), true) = (preview_rect, doc, is_json) {
+                if let (Some(rect), true) = (preview_rect, is_csv) {
+                    let mut tui = child.new_child(egui::UiBuilder::new().max_rect(rect));
+                    tui.set_clip_rect(rect);
+                    super::csv_table::show(&mut tui, self.kit, self.core, view, self.actions);
+                    if tui.ui_contains_pointer() && tui.input(|i| i.pointer.any_pressed()) {
+                        self.out.activate = Some(view);
+                    }
+                } else if let (Some(rect), Some(doc), true) = (preview_rect, doc, is_json) {
                     if let Some((roots, error, pending)) = self.core.json_doc(doc) {
                         let mut tui = child.new_child(egui::UiBuilder::new().max_rect(rect));
                         tui.set_clip_rect(rect);

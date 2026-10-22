@@ -120,7 +120,10 @@
     "autoSave": "자동 저장 전환",
     "saveAsAdmin": "관리자 권한으로 저장…",
     "newFromTemplate": "템플릿에서 새 파일…",
-    "pickTemplate": "템플릿 사용"
+    "pickTemplate": "템플릿 사용",
+    "openFromUrl": "URL에서 열기…",
+    "downloadUrl": "열기",
+    "cancelUrl": "취소"
   },
   "edit": {
     "undo": "실행 취소",
@@ -427,5 +430,11 @@
     "goToParent": "부모로 이동",
     "selectRange": "노드 선택",
     "treeEdit": "YAML 트리 편집"
+  },
+  "csv": {
+    "showEditor": "편집기 표시",
+    "showSplit": "편집기와 미리 보기 표시",
+    "showPreview": "미리 보기 표시",
+    "action": "CSV 편집"
   }
 }

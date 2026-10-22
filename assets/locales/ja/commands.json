@@ -120,7 +120,10 @@
     "autoSave": "自動保存の切り替え",
     "saveAsAdmin": "管理者として保存…",
     "newFromTemplate": "テンプレートから新規ファイル…",
-    "pickTemplate": "テンプレートを使用"
+    "pickTemplate": "テンプレートを使用",
+    "openFromUrl": "URLから開く…",
+    "downloadUrl": "開く",
+    "cancelUrl": "キャンセル"
   },
   "edit": {
     "undo": "元に戻す",
@@ -427,5 +430,11 @@
     "goToParent": "親へ移動",
     "selectRange": "ノードを選択",
     "treeEdit": "YAML ツリーを編集"
+  },
+  "csv": {
+    "showEditor": "エディターを表示",
+    "showSplit": "エディターとプレビューを表示",
+    "showPreview": "プレビューを表示",
+    "action": "CSVを編集"
   }
 }

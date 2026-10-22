@@ -209,6 +209,11 @@ pub struct AppCore {
     pub settings_ui: crate::settings_tab::SettingsUi,
     pub markdown: crate::markdown::MarkdownState,
     pub json: crate::json::JsonState,
+    pub csv: crate::csv::CsvState,
+    pub url: crate::url_document::UrlState,
+    pub live_requests: Vec<serde_json::Value>,
+    pub live_output: Option<String>,
+    pub live_capture: Option<String>,
     pub structure: crate::structure::StructureState,
     pub nav: crate::navigation::NavState,
     pub search: crate::search::SearchState,
@@ -415,6 +420,11 @@ impl AppCore {
             settings_ui: Default::default(),
             markdown: Default::default(),
             json: Default::default(),
+            csv: Default::default(),
+            url: Default::default(),
+            live_requests: Vec::new(),
+            live_output: None,
+            live_capture: None,
             structure: Default::default(),
             nav: Default::default(),
             search: Default::default(),
@@ -872,6 +882,17 @@ impl AppCore {
                 }
                 IoResult::SaveAsPicked { doc, path } => self.handle_save_as_picked(doc, path),
                 IoResult::ExportPicked { doc, path } => self.markdown_export_to(doc, path),
+                IoResult::UrlDownloaded { request, result } => {
+                    self.url_downloaded(request, *result)
+                }
+                IoResult::CsvFiltered {
+                    view,
+                    generation,
+                    revision,
+                    rows,
+                    matches,
+                } => self.csv_filtered(view, generation, revision, rows, matches),
+                IoResult::CsvParsed(result) => self.csv_parsed(*result),
                 IoResult::Exported { path, result } => self.markdown_exported(path, result),
                 IoResult::Loaded(outcome) => self.handle_loaded(*outcome),
                 IoResult::Saved(outcome) => self.handle_saved(*outcome),

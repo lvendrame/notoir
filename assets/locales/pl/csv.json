@@ -1,0 +1,22 @@
+{
+  "header": "Pierwszy wiersz jest nagłówkiem",
+  "auto": "Wykryj separator",
+  "semicolon": "Średnik",
+  "tab": "Tabulator",
+  "comma": "Przecinek",
+  "columns": "Kolumny",
+  "showAll": "Pokaż wszystkie",
+  "search": "Znajdź w tabeli",
+  "previous": "Poprzedni",
+  "next": "Następny",
+  "filter": "Filtruj {{column}}",
+  "clear": "Wyczyść",
+  "invalid": "Nieprawidłowy CSV w wierszu {{line}}, kolumnie {{column}}. Wyświetlono ostatnią poprawną tabelę.",
+  "loading": "Aktualizowanie tabeli…",
+  "matches": "Wyniki: {{count}}",
+  "noColumns": "Wszystkie kolumny są ukryte. Użyj opcji Kolumny, aby je pokazać.",
+  "column": "Kolumna {{number}}",
+  "editCell": "Edytuj wiersz {{row}}, kolumnę {{column}}",
+  "tooLarge": "Podgląd CSV jest ograniczony do 20 MiB.",
+  "hideColumn": "Ukryj kolumnę"
+}

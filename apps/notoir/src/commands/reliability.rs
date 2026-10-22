@@ -10,6 +10,15 @@ use crate::core::AppCore;
 use crate::files::Prompt;
 
 pub(super) fn specs(out: &mut Specs) {
+    if crate::live::enabled() {
+        out.push(
+            CommandSpec::new("test.ui", Category::Help, |c: &mut AppCore, i| {
+                c.live_requests.push(i.args.clone());
+                CommandOutcome::Done
+            })
+            .hidden(),
+        );
+    }
     out.push(CommandSpec::new("file.reloadFromDisk", Category::File, reload).hidden());
     out.push(CommandSpec::new("file.keepMine", Category::File, keep_mine).hidden());
     out.push(CommandSpec::new("file.useDiskVersion", Category::File, use_disk).hidden());

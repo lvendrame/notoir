@@ -14,6 +14,29 @@ use crate::files::Prompt;
 use crate::shell::overlays::PickerKind;
 
 pub(super) fn specs(out: &mut Specs) {
+    out.push(CommandSpec::new(
+        "file.openFromUrl",
+        Category::File,
+        |c: &mut AppCore, _| {
+            c.url.open = true;
+            c.url.error = None;
+            CommandOutcome::Done
+        },
+    ));
+    out.push(
+        CommandSpec::new("file.downloadUrl", Category::File, |c: &mut AppCore, _| {
+            c.url_start(c.url.input.clone());
+            CommandOutcome::Done
+        })
+        .hidden(),
+    );
+    out.push(
+        CommandSpec::new("file.cancelUrl", Category::File, |c: &mut AppCore, _| {
+            c.url_cancel();
+            CommandOutcome::Done
+        })
+        .hidden(),
+    );
     let editor = "hasActiveEditor";
     let k = KeyBindingDef::new;
     out.push(

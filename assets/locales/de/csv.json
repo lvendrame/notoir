@@ -1,0 +1,22 @@
+{
+  "header": "Erste Zeile ist die Kopfzeile",
+  "auto": "Trennzeichen erkennen",
+  "semicolon": "Semikolon",
+  "tab": "Tabulator",
+  "comma": "Komma",
+  "columns": "Spalten",
+  "showAll": "Alle anzeigen",
+  "search": "In Tabelle suchen",
+  "previous": "Zurück",
+  "next": "Weiter",
+  "filter": "{{column}} filtern",
+  "clear": "Leeren",
+  "invalid": "Ungültiges CSV in Zeile {{line}}, Spalte {{column}}. Letzte gültige Tabelle wird angezeigt.",
+  "loading": "Tabelle wird aktualisiert…",
+  "matches": "Treffer: {{count}}",
+  "noColumns": "Alle Spalten sind ausgeblendet. Über Spalten wieder einblenden.",
+  "column": "Spalte {{number}}",
+  "editCell": "Zeile {{row}}, Spalte {{column}} bearbeiten",
+  "tooLarge": "CSV-Vorschau ist auf 20 MiB begrenzt.",
+  "hideColumn": "Spalte ausblenden"
+}

@@ -1,0 +1,22 @@
+{
+  "header": "La première ligne est un en-tête",
+  "auto": "Détecter le séparateur",
+  "semicolon": "Point-virgule",
+  "tab": "Tabulation",
+  "comma": "Virgule",
+  "columns": "Colonnes",
+  "showAll": "Tout afficher",
+  "search": "Rechercher dans le tableau",
+  "previous": "Précédent",
+  "next": "Suivant",
+  "filter": "Filtrer {{column}}",
+  "clear": "Effacer",
+  "invalid": "CSV invalide à la ligne {{line}}, colonne {{column}}. Dernier tableau valide affiché.",
+  "loading": "Mise à jour du tableau…",
+  "matches": "Résultats : {{count}}",
+  "noColumns": "Toutes les colonnes sont masquées. Utilisez Colonnes pour les afficher.",
+  "column": "Colonne {{number}}",
+  "editCell": "Modifier ligne {{row}}, colonne {{column}}",
+  "tooLarge": "L’aperçu CSV est limité à 20 Mio.",
+  "hideColumn": "Masquer la colonne"
+}

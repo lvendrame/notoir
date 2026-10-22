@@ -1,0 +1,22 @@
+{
+  "header": "先頭行を見出しにする",
+  "auto": "区切り文字を自動検出",
+  "semicolon": "セミコロン",
+  "tab": "タブ",
+  "comma": "カンマ",
+  "columns": "列",
+  "showAll": "すべて表示",
+  "search": "表内を検索",
+  "previous": "前へ",
+  "next": "次へ",
+  "filter": "{{column}}を絞り込み",
+  "clear": "クリア",
+  "invalid": "{{line}}行{{column}}列でCSVエラー。最後の有効な表を表示しています。",
+  "loading": "表を更新中…",
+  "matches": "一致数: {{count}}",
+  "noColumns": "すべての列が非表示です。「列」から表示してください。",
+  "column": "列 {{number}}",
+  "editCell": "{{row}}行{{column}}列を編集",
+  "tooLarge": "CSVプレビューの上限は20 MiBです。",
+  "hideColumn": "列を非表示"
+}

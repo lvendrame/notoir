@@ -27,6 +27,7 @@
 
 - [Markdown](markdown.md)
 - [JSON](json.md)
+- [CSV](csv.md)
 - [Comparing files](compare.md)
 - [Git](git.md)
 

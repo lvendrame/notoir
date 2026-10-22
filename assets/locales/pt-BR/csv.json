@@ -1,0 +1,22 @@
+{
+  "header": "Primeira linha é o cabeçalho",
+  "auto": "Detectar separador",
+  "semicolon": "Ponto e vírgula",
+  "tab": "Tabulação",
+  "comma": "Vírgula",
+  "columns": "Colunas",
+  "showAll": "Mostrar todas",
+  "search": "Localizar na tabela",
+  "previous": "Anterior",
+  "next": "Próximo",
+  "filter": "Filtrar {{column}}",
+  "clear": "Limpar",
+  "invalid": "CSV inválido na linha {{line}}, coluna {{column}}. Exibindo a última tabela válida.",
+  "loading": "Atualizando tabela…",
+  "matches": "Ocorrências: {{count}}",
+  "noColumns": "Todas as colunas estão ocultas. Use Colunas para exibi-las.",
+  "column": "Coluna {{number}}",
+  "editCell": "Editar linha {{row}}, coluna {{column}}",
+  "tooLarge": "A prévia CSV é limitada a 20 MiB.",
+  "hideColumn": "Ocultar coluna"
+}

@@ -1,0 +1,22 @@
+{
+  "header": "İlk satır başlıktır",
+  "auto": "Ayırıcıyı algıla",
+  "semicolon": "Noktalı virgül",
+  "tab": "Sekme",
+  "comma": "Virgül",
+  "columns": "Sütunlar",
+  "showAll": "Tümünü göster",
+  "search": "Tabloda bul",
+  "previous": "Önceki",
+  "next": "Sonraki",
+  "filter": "{{column}} filtresi",
+  "clear": "Temizle",
+  "invalid": "{{line}}. satır, {{column}}. sütunda geçersiz CSV. Son geçerli tablo gösteriliyor.",
+  "loading": "Tablo güncelleniyor…",
+  "matches": "Eşleşmeler: {{count}}",
+  "noColumns": "Tüm sütunlar gizli. Göstermek için Sütunlar menüsünü kullanın.",
+  "column": "Sütun {{number}}",
+  "editCell": "{{row}}. satır, {{column}}. sütunu düzenle",
+  "tooLarge": "CSV önizlemesi 20 MiB ile sınırlıdır.",
+  "hideColumn": "Sütunu gizle"
+}

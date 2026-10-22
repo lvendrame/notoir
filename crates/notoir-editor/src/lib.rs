@@ -6,6 +6,7 @@
 
 pub mod buffer;
 pub mod change;
+pub mod csv;
 pub mod diff;
 pub mod display_map;
 pub mod edit_ops;

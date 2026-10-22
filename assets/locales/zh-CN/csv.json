@@ -1,0 +1,22 @@
+{
+  "header": "首行为表头",
+  "auto": "自动检测分隔符",
+  "semicolon": "分号",
+  "tab": "制表符",
+  "comma": "逗号",
+  "columns": "列",
+  "showAll": "显示全部",
+  "search": "在表格中查找",
+  "previous": "上一个",
+  "next": "下一个",
+  "filter": "筛选{{column}}",
+  "clear": "清除",
+  "invalid": "CSV在第{{line}}行第{{column}}列无效。显示最后有效的表格。",
+  "loading": "正在更新表格…",
+  "matches": "匹配数：{{count}}",
+  "noColumns": "所有列均已隐藏。请使用“列”菜单显示。",
+  "column": "列 {{number}}",
+  "editCell": "编辑第{{row}}行第{{column}}列",
+  "tooLarge": "CSV预览上限为20 MiB。",
+  "hideColumn": "隐藏列"
+}

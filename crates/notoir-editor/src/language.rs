@@ -101,6 +101,7 @@ pub static LANGUAGES: &[LanguageDef] = &[
         None,
         None
     ),
+    lang!("csv", "CSV", ["csv", "tsv"], [], [], None, None),
     lang!("yaml", "YAML", ["yaml", "yml"], [], [], Some("#"), None),
     lang!(
         "toml",

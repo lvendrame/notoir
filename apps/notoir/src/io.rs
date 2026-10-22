@@ -15,6 +15,18 @@ use std::time::{Duration, Instant};
 /// other Notoir processes.
 #[derive(Debug)]
 pub enum IoResult {
+    UrlDownloaded {
+        request: u64,
+        result: Box<Result<notoir_platform::download::Download, String>>,
+    },
+    CsvParsed(Box<crate::csv::Parsed>),
+    CsvFiltered {
+        view: notoir_core::ids::ViewId,
+        generation: u64,
+        revision: u64,
+        rows: Vec<usize>,
+        matches: Vec<(usize, usize)>,
+    },
     SettingsWriteFailed {
         path: String,
         error: String,

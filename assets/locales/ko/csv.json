@@ -1,0 +1,22 @@
+{
+  "header": "첫 행을 머리글로 사용",
+  "auto": "구분 기호 자동 감지",
+  "semicolon": "세미콜론",
+  "tab": "탭",
+  "comma": "쉼표",
+  "columns": "열",
+  "showAll": "모두 표시",
+  "search": "표에서 찾기",
+  "previous": "이전",
+  "next": "다음",
+  "filter": "{{column}} 필터",
+  "clear": "지우기",
+  "invalid": "{{line}}행 {{column}}열에 CSV 오류가 있습니다. 마지막 유효한 표를 표시합니다.",
+  "loading": "표 업데이트 중…",
+  "matches": "일치: {{count}}",
+  "noColumns": "모든 열이 숨겨져 있습니다. 열 메뉴에서 표시하세요.",
+  "column": "열 {{number}}",
+  "editCell": "{{row}}행 {{column}}열 편집",
+  "tooLarge": "CSV 미리보기는 20 MiB로 제한됩니다.",
+  "hideColumn": "열 숨기기"
+}

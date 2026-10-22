@@ -1,0 +1,22 @@
+{
+  "header": "La primera fila es la cabecera",
+  "auto": "Detectar separador",
+  "semicolon": "Punto y coma",
+  "tab": "Tabulación",
+  "comma": "Coma",
+  "columns": "Columnas",
+  "showAll": "Mostrar todas",
+  "search": "Buscar en tabla",
+  "previous": "Anterior",
+  "next": "Siguiente",
+  "filter": "Filtrar {{column}}",
+  "clear": "Borrar",
+  "invalid": "CSV no válido en línea {{line}}, columna {{column}}. Se muestra la última tabla válida.",
+  "loading": "Actualizando tabla…",
+  "matches": "Coincidencias: {{count}}",
+  "noColumns": "Todas las columnas están ocultas. Usa Columnas para mostrarlas.",
+  "column": "Columna {{number}}",
+  "editCell": "Editar fila {{row}}, columna {{column}}",
+  "tooLarge": "La vista previa CSV está limitada a 20 MiB.",
+  "hideColumn": "Ocultar columna"
+}

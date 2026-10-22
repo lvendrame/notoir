@@ -120,7 +120,10 @@
     "autoSave": "切换自动保存",
     "saveAsAdmin": "以管理员身份保存…",
     "newFromTemplate": "从模板新建文件…",
-    "pickTemplate": "使用模板"
+    "pickTemplate": "使用模板",
+    "openFromUrl": "从URL打开…",
+    "downloadUrl": "打开",
+    "cancelUrl": "取消"
   },
   "edit": {
     "undo": "撤销",
@@ -427,5 +430,11 @@
     "goToParent": "转到父级",
     "selectRange": "选择节点",
     "treeEdit": "编辑 YAML 树"
+  },
+  "csv": {
+    "showEditor": "显示编辑器",
+    "showSplit": "显示编辑器和预览",
+    "showPreview": "显示预览",
+    "action": "编辑CSV"
   }
 }

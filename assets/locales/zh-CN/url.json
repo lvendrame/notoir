@@ -1,0 +1,13 @@
+{
+  "title": "从URL打开",
+  "placeholder": "https://example.com/document.csv",
+  "address": "文档URL",
+  "open": "打开",
+  "cancel": "取消",
+  "loading": "正在下载…",
+  "invalidUrl": "请输入有效的HTTP或HTTPS URL。",
+  "tooLarge": "下载内容超过20 MiB。",
+  "binary": "此URL返回二进制内容。请打开文本文档。",
+  "decode": "无法在不丢失数据的情况下解码文本。",
+  "failed": "下载失败：{{error}}"
+}

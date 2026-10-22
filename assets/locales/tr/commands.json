@@ -120,7 +120,10 @@
     "autoSave": "Otomatik Kaydetmeyi Aç/Kapat",
     "saveAsAdmin": "Yönetici Olarak Kaydet…",
     "newFromTemplate": "Şablondan yeni dosya…",
-    "pickTemplate": "Şablonu kullan"
+    "pickTemplate": "Şablonu kullan",
+    "openFromUrl": "URL’den aç…",
+    "downloadUrl": "Aç",
+    "cancelUrl": "İptal"
   },
   "edit": {
     "undo": "Geri Al",
@@ -427,5 +430,11 @@
     "goToParent": "Üst Öğeye Git",
     "selectRange": "Düğümü Seç",
     "treeEdit": "YAML ağacını düzenle"
+  },
+  "csv": {
+    "showEditor": "Düzenleyiciyi Göster",
+    "showSplit": "Düzenleyiciyi ve Önizlemeyi Göster",
+    "showPreview": "Önizlemeyi Göster",
+    "action": "CSV düzenle"
   }
 }

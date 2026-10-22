@@ -115,6 +115,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         cmd("file.newWindow"),
         SEP,
         cmd("file.open"),
+        cmd("file.openFromUrl"),
         cmd("workspace.open"),
         sub(
             "menus:sub.openRecent",

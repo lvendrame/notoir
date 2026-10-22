@@ -1,0 +1,13 @@
+{
+  "title": "Abrir da URL",
+  "placeholder": "https://example.com/document.csv",
+  "address": "URL do documento",
+  "open": "Abrir",
+  "cancel": "Cancelar",
+  "loading": "Baixando…",
+  "invalidUrl": "Insira uma URL HTTP ou HTTPS válida.",
+  "tooLarge": "O download excede 20 MiB.",
+  "binary": "Esta URL retornou conteúdo binário. Abra um documento de texto.",
+  "decode": "Não foi possível decodificar o texto sem perda de dados.",
+  "failed": "Falha no download: {{error}}"
+}

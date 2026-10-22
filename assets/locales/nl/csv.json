@@ -1,0 +1,22 @@
+{
+  "header": "Eerste rij is koptekst",
+  "auto": "Scheidingsteken detecteren",
+  "semicolon": "Puntkomma",
+  "tab": "Tab",
+  "comma": "Komma",
+  "columns": "Kolommen",
+  "showAll": "Alles tonen",
+  "search": "Zoeken in tabel",
+  "previous": "Vorige",
+  "next": "Volgende",
+  "filter": "{{column}} filteren",
+  "clear": "Wissen",
+  "invalid": "Ongeldige CSV op regel {{line}}, kolom {{column}}. Laatste geldige tabel wordt getoond.",
+  "loading": "Tabel bijwerken…",
+  "matches": "Resultaten: {{count}}",
+  "noColumns": "Alle kolommen zijn verborgen. Gebruik Kolommen om ze te tonen.",
+  "column": "Kolom {{number}}",
+  "editCell": "Rij {{row}}, kolom {{column}} bewerken",
+  "tooLarge": "CSV-voorbeeld is beperkt tot 20 MiB.",
+  "hideColumn": "Kolom verbergen"
+}

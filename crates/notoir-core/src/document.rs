@@ -132,6 +132,9 @@ impl LoadedText {
 pub struct Document {
     pub id: DocumentId,
     pub origin: DocumentOrigin,
+    /// Remote source and local Save As suggestion, when opened from a URL.
+    pub source_url: Option<String>,
+    pub suggested_name: Option<String>,
     pub buffer: TextBuffer,
     /// +1 on every applied change, including undo/redo.
     pub revision: u64,
@@ -174,6 +177,8 @@ impl Document {
         Self {
             id,
             origin,
+            source_url: None,
+            suggested_name: None,
             buffer,
             revision: 0,
             saved_state,

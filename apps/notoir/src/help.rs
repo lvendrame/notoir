@@ -71,7 +71,7 @@ pub fn topic(core: &AppCore) -> Option<&'static str> {
             ViewKind::PluginManager => Some(PLUGINS),
             ViewKind::MarkdownPreview | ViewKind::MarkdownSplit => Some(MARKDOWN),
             ViewKind::JsonTree | ViewKind::JsonSplit => Some(JSON),
-            ViewKind::Text => None,
+            ViewKind::Text | ViewKind::CsvPreview | ViewKind::CsvSplit => None,
         };
         if page.is_some() {
             return page;

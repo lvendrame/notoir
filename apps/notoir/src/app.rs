@@ -317,10 +317,15 @@ fn system_dark(ctx: &egui::Context) -> bool {
 
 impl eframe::App for NotoirApp {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        crate::live::begin();
         let ctx = ui.ctx().clone();
         self.core.now_ms = self.started.elapsed().as_millis() as u64;
         let now = self.core.now_ms;
         self.core.pump_io();
+        self.core
+            .csv
+            .views
+            .retain(|view, _| self.core.workbench.view(*view).is_some());
         let forwarded: Vec<_> = self
             .instance_rx
             .as_ref()
@@ -456,7 +461,8 @@ impl eframe::App for NotoirApp {
         }
         let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
         let context = self.core.context(fullscreen);
-        if !(self.ui.about_open
+        if !(self.core.url.open
+            || self.ui.about_open
             || self.ui.picker.is_some()
             || self.core.find.goto.is_some()
             || self.core.settings_ui.recording.is_some()
@@ -572,6 +578,7 @@ impl eframe::App for NotoirApp {
             );
             shell::recovery_ui::show(&ctx, &mut kit, &self.core, top_offset, &mut actions);
             overlays::about(&ctx, &mut kit, &mut self.ui);
+            crate::url_document::dialog(&ctx, &mut self.core, &mut actions);
             shell::notes_ui::completion(&ctx, &mut kit, &self.core, &self.ui.editors, &mut actions);
             shell::mcp_ui::popover(&ctx, &mut kit, &self.core, bottom_offset, &mut actions);
             shell::mcp_ui::dialogs(
@@ -639,6 +646,7 @@ impl eframe::App for NotoirApp {
         self.core.run_queued(&context);
         self.apply_effects(&ctx, centre_was_open);
         self.core.nav_track();
+        crate::live::finish(&mut self.core, &ctx);
         // Typing on the empty state starts a Scratchpad (spec 17).
         if self.core.workbench.active_view().is_none()
             && !ctx.egui_wants_keyboard_input()
@@ -738,7 +746,8 @@ impl eframe::App for NotoirApp {
         }
     }
 
-    fn raw_input_hook(&mut self, _ctx: &egui::Context, raw_input: &mut egui::RawInput) {
+    fn raw_input_hook(&mut self, ctx: &egui::Context, raw_input: &mut egui::RawInput) {
+        crate::live::input(&mut self.core, ctx, raw_input);
         if cfg!(target_os = "macos") {
             self.ctrl_click.apply(raw_input);
         }

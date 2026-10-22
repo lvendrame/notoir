@@ -1,0 +1,22 @@
+{
+  "header": "La prima riga è l’intestazione",
+  "auto": "Rileva separatore",
+  "semicolon": "Punto e virgola",
+  "tab": "Tabulazione",
+  "comma": "Virgola",
+  "columns": "Colonne",
+  "showAll": "Mostra tutte",
+  "search": "Trova nella tabella",
+  "previous": "Precedente",
+  "next": "Successivo",
+  "filter": "Filtra {{column}}",
+  "clear": "Cancella",
+  "invalid": "CSV non valido alla riga {{line}}, colonna {{column}}. Ultima tabella valida visualizzata.",
+  "loading": "Aggiornamento tabella…",
+  "matches": "Risultati: {{count}}",
+  "noColumns": "Tutte le colonne sono nascoste. Usa Colonne per mostrarle.",
+  "column": "Colonna {{number}}",
+  "editCell": "Modifica riga {{row}}, colonna {{column}}",
+  "tooLarge": "L’anteprima CSV è limitata a 20 MiB.",
+  "hideColumn": "Nascondi colonna"
+}

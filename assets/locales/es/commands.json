@@ -120,7 +120,10 @@
     "autoSave": "Alternar guardado automático",
     "saveAsAdmin": "Guardar como Administrador…",
     "newFromTemplate": "Nuevo archivo desde plantilla…",
-    "pickTemplate": "Usar plantilla"
+    "pickTemplate": "Usar plantilla",
+    "openFromUrl": "Abrir desde URL…",
+    "downloadUrl": "Abrir",
+    "cancelUrl": "Cancelar"
   },
   "edit": {
     "undo": "Deshacer",
@@ -427,5 +430,11 @@
     "goToParent": "Ir al padre",
     "selectRange": "Seleccionar nodo",
     "treeEdit": "Editar árbol YAML"
+  },
+  "csv": {
+    "showEditor": "Mostrar editor",
+    "showSplit": "Mostrar editor y vista previa",
+    "showPreview": "Mostrar vista previa",
+    "action": "Editar CSV"
   }
 }

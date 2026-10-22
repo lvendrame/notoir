@@ -48,7 +48,7 @@ pub fn menu_bar(
                 for menu in menus::menu_bar(core.platform) {
                     let items =
                         menus::visible_items(&menus::expand(&menu.items, core), &core.commands);
-                    ui.menu_button(t!(menu.label), |ui| {
+                    let menu_response = ui.menu_button(t!(menu.label), |ui| {
                         ui.set_min_width(220.0);
                         if items.is_empty() {
                             ui.add_enabled(false, egui::Button::new(t!("menus:comingSoon")));
@@ -56,6 +56,7 @@ pub fn menu_bar(
                             menu_items(ui, kit, core, context, &items, actions);
                         }
                     });
+                    crate::live::track(&menu_response.response, menu.label);
                 }
             });
         });
@@ -120,6 +121,7 @@ pub(crate) fn menu_items(
                 let button = egui::Button::new((check, text)).shortcut_text(shortcut_for(core, id));
                 let enabled = spec.enablement.eval(context);
                 let response = ui.add_enabled(enabled, button);
+                crate::live::track(&response, id);
                 let response = if *id == "git.autoPush" {
                     response.on_hover_text(t!("git:autoPushHelp"))
                 } else {
@@ -200,6 +202,12 @@ fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
                 "markdown.showPreview",
             ),
         ]
+    } else if core.is_csv(view.document_id) {
+        [
+            (ViewKind::Text, "markdown:edit", "csv.showEditor"),
+            (ViewKind::CsvSplit, "markdown:split", "csv.showSplit"),
+            (ViewKind::CsvPreview, "markdown:preview", "csv.showPreview"),
+        ]
     } else if core.is_yaml(view.document_id) {
         [
             (ViewKind::Text, "json:text", "yaml.showText"),
@@ -224,11 +232,10 @@ fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
         } else {
             kit.color(Tok::TextSecondary)
         });
-        if ui
-            .add(egui::Button::selectable(selected, text).min_size(egui::vec2(56.0, 24.0)))
-            .clicked()
-            && !selected
-        {
+        let response =
+            ui.add(egui::Button::selectable(selected, text).min_size(egui::vec2(56.0, 24.0)));
+        crate::live::track(&response, id);
+        if response.clicked() && !selected {
             actions.push(CommandInvocation::new(id, InvocationSource::Toolbar));
         }
     }

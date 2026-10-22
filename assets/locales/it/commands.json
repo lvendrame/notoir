@@ -120,7 +120,10 @@
     "autoSave": "Attiva/disattiva salvataggio automatico",
     "saveAsAdmin": "Salva come amministratore…",
     "newFromTemplate": "Nuovo file da modello…",
-    "pickTemplate": "Usa modello"
+    "pickTemplate": "Usa modello",
+    "openFromUrl": "Apri da URL…",
+    "downloadUrl": "Apri",
+    "cancelUrl": "Annulla"
   },
   "edit": {
     "undo": "Annulla",
@@ -427,5 +430,11 @@
     "goToParent": "Vai al padre",
     "selectRange": "Seleziona nodo",
     "treeEdit": "Modifica albero YAML"
+  },
+  "csv": {
+    "showEditor": "Mostra editor",
+    "showSplit": "Mostra editor e anteprima",
+    "showPreview": "Mostra anteprima",
+    "action": "Modifica CSV"
   }
 }

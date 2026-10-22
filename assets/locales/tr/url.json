@@ -1,0 +1,13 @@
+{
+  "title": "URL’den aç",
+  "placeholder": "https://example.com/document.csv",
+  "address": "Belge URL’si",
+  "open": "Aç",
+  "cancel": "İptal",
+  "loading": "İndiriliyor…",
+  "invalidUrl": "Geçerli bir HTTP veya HTTPS URL’si girin.",
+  "tooLarge": "İndirme 20 MiB sınırını aşıyor.",
+  "binary": "Bu URL ikili içerik döndürdü. Bir metin belgesi açın.",
+  "decode": "İndirilen metin veri kaybı olmadan çözülemedi.",
+  "failed": "İndirme başarısız: {{error}}"
+}

@@ -8,6 +8,7 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 
 | Command | Id | macOS | Windows / Linux |
 |---|---|---|---|
+| Cancel *(hidden)* | `file.cancelUrl` |  |  |
 | Clear Recently Opened | `file.clearRecent` |  |  |
 | Close | `file.close` | `⌘W` | `Ctrl+W` |
 | Close All | `file.closeAll` |  |  |
@@ -35,11 +36,13 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | New Window | `file.newWindow` | `⇧⌘N` | `Ctrl+Shift+N` |
 | Not Now *(hidden)* | `workspace.trustLater` |  |  |
 | Open *(hidden)* | `explorer.open` |  |  |
+| Open *(hidden)* | `file.downloadUrl` |  |  |
 | Open File… | `file.open` | `⌘O` | `Ctrl+O` |
 | Open Recent File *(hidden)* | `file.openRecent` |  |  |
 | Open Recent Workspace *(hidden)* | `workspace.openRecent` |  |  |
 | Open Scratchpad *(hidden)* | `file.openScratchpad` |  |  |
 | Open Workspace… | `workspace.open` | `⌘K ⌘O` | `Ctrl+K Ctrl+O` |
+| Open from URL… | `file.openFromUrl` |  |  |
 | Open to the Side | `explorer.openToSide` |  |  |
 | Paste | `explorer.paste` |  |  |
 | Pin Recent Item *(hidden)* | `file.pinRecent` |  |  |
@@ -78,6 +81,7 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Delete Line | `edit.deleteLine` | `⇧⌘K` | `Ctrl+Shift+K` |
 | Dismiss Search Result *(hidden)* | `search.dismiss` |  |  |
 | Duplicate Line | `edit.duplicateLine` | `⇧⌘D` | `Ctrl+Shift+D` |
+| Edit CSV *(hidden)* | `csv.action` |  |  |
 | Find | `edit.find` | `⌘F` | `Ctrl+F` |
 | Find Next | `edit.findNext` | `⌘G` | `F3` |
 | Find Previous | `edit.findPrevious` | `⇧⌘G` | `Shift+F3` |
@@ -162,12 +166,15 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Reset Zoom | `view.zoomReset` | `⌘0` | `Ctrl+0` |
 | Reveal Active File in Explorer | `explorer.revealActive` |  |  |
 | Show All Commands | `workbench.commandPalette` | `⇧⌘P` | `Ctrl+Shift+P` |
+| Show Editor | `csv.showEditor` |  |  |
+| Show Editor and Preview | `csv.showSplit` |  |  |
 | Show Explorer | `view.showExplorer` | `⇧⌘E` | `Ctrl+Shift+E` |
 | Show Git-Ignored Files | `explorer.toggleGitIgnored` |  |  |
 | Show Hidden Files | `explorer.toggleHidden` |  |  |
 | Show Notifications | `workbench.showNotifications` |  |  |
 | Show Outline | `view.showOutline` |  |  |
 | Show Output | `view.showOutput` | `⇧⌘U` | `Ctrl+Shift+U` |
+| Show Preview | `csv.showPreview` |  |  |
 | Single Editor | `view.singleEditor` |  |  |
 | Split Down | `view.splitDown` |  |  |
 | Split Left | `view.splitLeft` |  |  |

@@ -87,3 +87,14 @@ External initialization is rediscovered from watcher changes, focus, and Refresh
 control manual-save auto-commit and dependent auto-push. Save All groups exact saved snapshots per repository,
 preserves unrelated staging, and uses single-file or multi-file messages. Targeted pushes preserve publish prompts
 and existing trust restrictions. See spec 28 and `tests/git_write.rs`.
+
+### CSV and URL documents follow-up
+
+CSV/TSV now support Edit/Split/Preview, background source-preserving parsing, undoable cell edits, separator/header
+choices, column visibility (including Hide column in each filter popover), highlight search and combined column filters.
+Display choices reset on reopen. Open from URL downloads bounded HTTP(S) text into editable local copies with background
+loading, cancellation and Save As. Specs 39 and 08, with native UI, file and HTTP/TLS tests. The opt-in desktop test bridge
+injects pointer/keyboard input and captures actual window screenshots. `python3 scripts/live-documents.py --https-url
+https://example.com/` passed 23 live desktop checks with an isolated profile, real file saves, HTTP redirects, cancellation
+and verified HTTPS. The OS Save As destination is supplied by ScriptedDialogs. References: `docs/design/csv-preview.png`,
+`docs/design/open-from-url.png`. No osascript or Accessibility permission is required.
