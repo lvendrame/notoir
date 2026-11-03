@@ -13,7 +13,7 @@ use std::sync::mpsc::{Receiver, channel};
 
 use notoir_core::document::{DocumentOrigin, LoadedText, ReadOnly};
 use notoir_core::events::ChangeOrigin;
-use notoir_core::ids::{DocumentId, ViewId};
+use notoir_core::ids::{DocumentId, GroupId, ViewId};
 use notoir_core::notifications::{Notification, Severity, Translatable};
 use notoir_core::view::ViewKind;
 use notoir_core::workbench::TabPosition;
@@ -68,12 +68,37 @@ enum Slot {
     Failed,
 }
 
+/// Source Control identity and opening intent, preserved while sources load.
+#[derive(Clone, Debug)]
+pub(crate) struct ChangeOpen {
+    pub repository: PathBuf,
+    pub path: PathBuf,
+    pub staged: bool,
+    pub group: GroupId,
+    pub preview: bool,
+}
+
+impl ChangeOpen {
+    fn same_source(&self, other: &Self) -> bool {
+        self.repository == other.repository
+            && self.path == other.path
+            && self.staged == other.staged
+    }
+
+    fn same_target(&self, other: &Self) -> bool {
+        self.same_source(other) && self.group == other.group
+    }
+}
+
 #[derive(Debug)]
 struct PendingCompare {
     id: u64,
     left: Slot,
     right: Slot,
     current_changes: bool,
+    change: Option<ChangeOpen>,
+    /// Keep ready sources alive if their ordinary preview is replaced during loading.
+    source_views: Vec<ViewId>,
 }
 
 /// One side of a diff tab.
@@ -86,6 +111,7 @@ pub struct Pane {
 type DiffJob = Receiver<(u64, u64, DiffOptions, Diff)>;
 
 pub struct DiffSession {
+    change: Option<ChangeOpen>,
     /// The tab's virtual document.
     pub doc: DocumentId,
     pub left: Pane,
@@ -373,6 +399,11 @@ impl AppCore {
 
     fn set_slot(&mut self, id: u64, left: bool, slot: Slot) {
         if let Some(p) = self.compare.pending.iter_mut().find(|p| p.id == id) {
+            if let Slot::Ready(doc) = slot
+                && let Ok(view) = self.workbench.open_detached_view(doc)
+            {
+                p.source_views.push(view);
+            }
             if left {
                 p.left = slot;
             } else {
@@ -386,15 +417,113 @@ impl AppCore {
 
     /// Opens a diff tab of `left` ↔ `right` once both sides are available.
     pub fn compare(&mut self, left: CompareSource, right: CompareSource, current_changes: bool) {
+        self.compare_open(left, right, current_changes, None);
+    }
+
+    /// Discard obsolete Source Control preview requests; late replies are cleaned up.
+    pub(crate) fn cancel_change_previews(&mut self, group: GroupId) {
+        self.cancel_other_change_previews(group, None);
+    }
+
+    fn cancel_other_change_previews(&mut self, group: GroupId, keep: Option<u64>) {
+        let mut discarded = Vec::new();
+        let mut source_views = Vec::new();
+        self.compare.pending.retain_mut(|p| {
+            let cancel = Some(p.id) != keep
+                && p.change
+                    .as_ref()
+                    .is_some_and(|c| c.group == group && c.preview);
+            if cancel {
+                source_views.append(&mut p.source_views);
+                for slot in [p.left, p.right] {
+                    if let Slot::Ready(doc) = slot {
+                        discarded.push(doc);
+                    }
+                }
+            }
+            !cancel
+        });
+        self.release_compare_sources(source_views);
+        for doc in discarded {
+            self.drop_compare_doc(doc);
+        }
+    }
+
+    fn release_compare_sources(&mut self, views: Vec<ViewId>) {
+        for view in views {
+            if let Some(doc) = self.workbench.close_detached_view(view) {
+                // Keep unsaved edits visible when a loading comparison is cancelled.
+                let group = self.workbench.layout.active_group;
+                let _ = self
+                    .workbench
+                    .open_view(doc, group, TabPosition::AfterActive);
+            }
+        }
+    }
+
+    /// Reuse a loaded or loading Source Control diff, retaining double-click intent.
+    pub(crate) fn reuse_change(&mut self, change: &ChangeOpen) -> bool {
+        if let Some(tab) = self.compare.sessions.iter().find_map(|(tab, s)| {
+            (self.workbench.view(*tab).is_some()
+                && self.workbench.layout.group_of(*tab) == Some(change.group)
+                && s.change.as_ref().is_some_and(|c| c.same_source(change)))
+            .then_some(*tab)
+        }) {
+            self.cancel_change_previews(change.group);
+            let _ = self.workbench.activate_view(tab);
+            if !change.preview {
+                self.workbench.keep_open(tab);
+            }
+            if let Some(pane) = self.workbench.pane_focus.get(&tab) {
+                self.effects.push(Effect::FocusEditor(*pane));
+            }
+            return true;
+        }
+        if let Some(p) = self
+            .compare
+            .pending
+            .iter_mut()
+            .find(|p| p.change.as_ref().is_some_and(|c| c.same_target(change)))
+        {
+            if !change.preview {
+                p.change.as_mut().unwrap().preview = false;
+            }
+            let id = p.id;
+            self.cancel_other_change_previews(change.group, Some(id));
+            return true;
+        }
+        self.cancel_change_previews(change.group);
+        false
+    }
+
+    pub(crate) fn compare_open(
+        &mut self,
+        left: CompareSource,
+        right: CompareSource,
+        current_changes: bool,
+        change: Option<ChangeOpen>,
+    ) {
         self.compare.next_id += 1;
         let id = self.compare.next_id;
         let l = self.resolve(left, id, true);
         let r = self.resolve(right, id, false);
+        let source_views = [l, r]
+            .into_iter()
+            .filter_map(|slot| {
+                if let Slot::Ready(doc) = slot {
+                    self.workbench.open_detached_view(doc).ok()
+                } else {
+                    None
+                }
+            })
+            .collect();
         self.compare.pending.push(PendingCompare {
             id,
             left: l,
             right: r,
             current_changes,
+            change,
+            source_views,
         });
         self.finish_pending(id);
     }
@@ -469,12 +598,14 @@ impl AppCore {
         match (p.left, p.right) {
             (Slot::Ready(l), Slot::Ready(r)) => {
                 let cc = p.current_changes;
-                self.compare.pending.remove(i);
-                self.open_diff_tab(l, r, cc);
+                let p = self.compare.pending.remove(i);
+                self.open_diff_tab(l, r, cc, p.change);
+                self.release_compare_sources(p.source_views);
             }
             (Slot::Failed, other) | (other, Slot::Failed) => {
                 // A side still loading is dropped when it arrives.
-                self.compare.pending.remove(i);
+                let p = self.compare.pending.remove(i);
+                self.release_compare_sources(p.source_views);
                 if let Slot::Ready(d) = other {
                     self.drop_compare_doc(d);
                 }
@@ -483,31 +614,55 @@ impl AppCore {
         }
     }
 
-    fn open_diff_tab(&mut self, left: DocumentId, right: DocumentId, current_changes: bool) {
-        let doc = self.workbench.open_document(
-            DocumentOrigin::Virtual {
-                title: DIFF_DOC_TITLE.into(),
-            },
-            LoadedText::empty(LanguageId::PLAINTEXT),
-        );
-        let group = self.workbench.layout.active_group;
-        let Ok(tab) = self
-            .workbench
-            .open_view(doc, group, TabPosition::AfterActive)
-        else {
+    fn open_diff_tab(
+        &mut self,
+        left: DocumentId,
+        right: DocumentId,
+        current_changes: bool,
+        change: Option<ChangeOpen>,
+    ) {
+        if change
+            .as_ref()
+            .is_some_and(|c| self.workbench.layout.group(c.group).is_none())
+        {
+            self.drop_compare_doc(left);
+            self.drop_compare_doc(right);
             return;
-        };
-        if let Some(v) = self.workbench.views.get_mut(tab) {
-            v.kind = ViewKind::Diff;
         }
+        // Protect both sources before replacing the group's old preview: it
+        // may be the last ordinary view of the same live document.
         let (Ok(lv), Ok(rv)) = (
             self.workbench.open_detached_view(left),
             self.workbench.open_detached_view(right),
         ) else {
             return;
         };
+        let doc = self.workbench.open_document(
+            DocumentOrigin::Virtual {
+                title: DIFF_DOC_TITLE.into(),
+            },
+            LoadedText::empty(LanguageId::PLAINTEXT),
+        );
+        let group = change
+            .as_ref()
+            .map_or(self.workbench.layout.active_group, |c| c.group);
+        let opened = if change.as_ref().is_some_and(|c| c.preview) {
+            self.workbench.open_preview(doc, group)
+        } else {
+            self.workbench
+                .open_view(doc, group, TabPosition::AfterActive)
+        };
+        let Ok(tab) = opened else {
+            return;
+        };
+        if let Some(v) = self.workbench.views.get_mut(tab) {
+            v.kind = ViewKind::Diff;
+        }
         self.workbench.pane_focus.insert(tab, rv);
+        self.workbench.pane_tabs.insert(lv, tab);
+        self.workbench.pane_tabs.insert(rv, tab);
         let mut s = DiffSession {
+            change,
             doc,
             left: Pane {
                 doc: left,
@@ -639,6 +794,7 @@ impl AppCore {
         };
         self.workbench.pane_focus.remove(&tab);
         for pane in [s.left, s.right] {
+            self.workbench.pane_tabs.remove(&pane.view);
             // A dirty document no other view shows stays open in a tab.
             if let Some(doc) = self.workbench.close_detached_view(pane.view) {
                 let group = self.workbench.layout.active_group;

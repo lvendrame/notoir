@@ -124,7 +124,10 @@ SOURCE CONTROL                              [✓ commit] [⟳ refresh] ⋯
 Sync Changes ↑2 ↓1
 ```
 
-- Click a row: opens a diff (index/HEAD vs work tree) via spec 27. Double-click: opens the file.
+- Click a row: previews a diff (index/HEAD vs work tree) via spec 27 in the shared preview slot (spec 04).
+  Double-click keeps that diff open. Editing either editable pane also keeps it open; existing Git modifications
+  alone do not. Repeated selections reuse the same diff per repository, path, staged/unstaged side and group.
+  Untracked and conflicted files preview the editable file. Disabling `workbench.tabs.previewMode` opens normal tabs.
 - Row hover actions: Open File, Stage `+` / Unstage `−`, Discard (`undo-2` icon).
 - Discard always confirms with the file name and "This cannot be undone" (untracked files are moved to trash, not
   deleted). Discard All shows the number of affected files and a confirmation button in `danger` colour.
@@ -301,3 +304,24 @@ Feature: Manual-save automation
     Then Auto Push becomes unchecked
 
 ```
+
+Feature: Source Control preview tabs
+
+  Scenario: Source Control selection replaces the preview
+    Given two modified tracked files in Source Control
+    When the user single-clicks each file in turn
+    Then only the second diff remains as a preview tab
+    And the replaced diff panes and snapshots are released
+
+  Scenario: Double-click keeps a Source Control diff open
+    Given two modified tracked files in Source Control
+    When the user double-clicks the first file and selects the second
+    And selects the first file again
+    Then the same first diff is active as a normal tab
+    And the second diff remains open as a preview
+
+  Scenario: Editing a Source Control preview keeps it open
+    Given a modified tracked file open as a diff preview
+    When the user edits its work tree pane and selects another file
+    Then the edited diff remains open as a normal tab
+    And the second diff opens in a preview tab

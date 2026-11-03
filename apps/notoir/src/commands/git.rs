@@ -479,7 +479,7 @@ fn checkout(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     }
 }
 
-/// `{ "path": rel, "staged": bool }`.
+/// `{ "path": rel, "staged": bool, "preview"?: bool }`.
 fn open_change(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
     let Some(rel) = arg(inv, "path").map(str::to_owned) else {
         return bad_args(inv);
@@ -489,7 +489,12 @@ fn open_change(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
         .get("staged")
         .and_then(|v| v.as_bool())
         .unwrap_or(false);
-    core.git_open_change(&rel, staged);
+    let preview = inv
+        .args
+        .get("preview")
+        .and_then(|v| v.as_bool())
+        .unwrap_or(false);
+    core.git_open_change_at(&rel, staged, preview);
     CommandOutcome::Done
 }
 

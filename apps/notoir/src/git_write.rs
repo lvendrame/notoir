@@ -22,7 +22,7 @@ use notoir_git::{
 };
 use serde_json::json;
 
-use crate::compare::CompareSource;
+use crate::compare::{ChangeOpen, CompareSource};
 use crate::core::{AppCore, Effect};
 use crate::files::{Answer, Pending, Prompt, Then};
 use crate::git::GitResult;
@@ -1019,30 +1019,57 @@ impl AppCore {
 
     /// Open Changes: index vs work tree (or HEAD vs index when staged).
     pub fn git_open_change(&mut self, rel: &str, staged: bool) {
+        self.git_open_change_at(rel, staged, false);
+    }
+
+    pub fn git_open_change_at(&mut self, rel: &str, staged: bool, preview: bool) {
         let Some(repo) = self.git.repo.clone() else {
             return;
         };
         let path = repo.absolute(rel);
+        let preview = preview && self.settings.bool("workbench.tabs.previewMode", None);
+        let change = ChangeOpen {
+            repository: repo.git_dir.clone(),
+            path: path.clone(),
+            staged,
+            group: self.workbench.layout.active_group,
+            preview,
+        };
+        self.files.preview_paths.remove(&change.group);
+        if self.reuse_change(&change) {
+            return;
+        }
         let index = || CompareSource::GitRevision(path.clone(), crate::git::INDEX_REV.into());
         if staged {
             let right = index();
-            self.compare(CompareSource::GitHead(path.clone()), right, false);
+            self.compare_open(
+                CompareSource::GitHead(path.clone()),
+                right,
+                false,
+                Some(change),
+            );
             return;
         }
         match self.git.status.unstaged.get(rel) {
             Some(FileStatus::Untracked) | Some(FileStatus::Conflicted) => {
-                self.open_path(&path, crate::files::OpenAt::default());
+                self.open_path(
+                    &path,
+                    crate::files::OpenAt {
+                        preview,
+                        ..Default::default()
+                    },
+                );
             }
             Some(FileStatus::Deleted) => {
                 let right = CompareSource::Text {
                     title: t!("git:deletedSide", name = rel),
                     text: Arc::from(""),
                 };
-                self.compare(index(), right, false);
+                self.compare_open(index(), right, false, Some(change));
             }
             _ => {
                 let right = self.git_current_source(&path);
-                self.compare(index(), right, false);
+                self.compare_open(index(), right, false, Some(change));
             }
         }
     }

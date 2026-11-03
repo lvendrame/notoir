@@ -472,11 +472,14 @@ fn row(
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &label));
     let paths = json!({ "paths": [rel] });
     if resp.double_clicked() {
-        actions.push(inv("explorer.open", json!({ "path": abs })));
-    } else if resp.clicked() {
         actions.push(inv(
             "git.openChange",
             json!({ "path": rel, "staged": staged }),
+        ));
+    } else if resp.clicked() {
+        actions.push(inv(
+            "git.openChange",
+            json!({ "path": rel, "staged": staged, "preview": true }),
         ));
     }
     // Hover actions: Open File, Stage / Unstage, Discard.

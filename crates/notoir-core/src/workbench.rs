@@ -55,6 +55,8 @@ pub struct Workbench {
     pub events: EventOutbox,
     /// Diff tab → the pane that last had focus (edit commands act on it).
     pub pane_focus: std::collections::HashMap<ViewId, ViewId>,
+    /// Detached diff pane → owning tab (edits retain the tab).
+    pub pane_tabs: std::collections::HashMap<ViewId, ViewId>,
 }
 
 impl Default for Workbench {
@@ -74,6 +76,7 @@ impl Workbench {
             layout: LayoutTree::new(first),
             events: EventOutbox::default(),
             pane_focus: std::collections::HashMap::new(),
+            pane_tabs: std::collections::HashMap::new(),
         }
     }
 
@@ -293,6 +296,12 @@ impl Workbench {
             .of_document(doc)
             .filter(|v| v.preview)
             .map(|v| v.id)
+            .chain(self.pane_tabs.iter().filter_map(|(pane, tab)| {
+                self.views
+                    .get(*pane)
+                    .filter(|v| v.document_id == doc)
+                    .map(|_| *tab)
+            }))
             .collect();
         for v in views {
             self.keep_open(v);
@@ -1256,6 +1265,28 @@ mod tests {
         wb.set_pinned(b, true).unwrap();
         assert!(!wb.view(b).unwrap().preview);
         assert_eq!(wb.layout.active().tabs.len(), 2);
+    }
+
+    #[test]
+    fn editing_either_diff_document_retains_its_owner_even_from_another_view() {
+        for edit_left in [true, false] {
+            let mut wb = Workbench::new();
+            let (_, tab) = preview(&mut wb, "diff");
+            let left = wb.open_document(file("left.md"), loaded(""));
+            let right = wb.open_document(file("right.md"), loaded(""));
+            let lv = wb.open_detached_view(left).unwrap();
+            let rv = wb.open_detached_view(right).unwrap();
+            wb.pane_tabs.insert(lv, tab);
+            wb.pane_tabs.insert(rv, tab);
+            let doc = if edit_left { left } else { right };
+            let other = wb
+                .open_view(doc, wb.layout.active_group, TabPosition::AfterActive)
+                .unwrap();
+            type_at(&mut wb, other, 0, "!", 0);
+            assert!(!wb.view(tab).unwrap().preview);
+            preview(&mut wb, "next.md");
+            assert!(wb.view(tab).is_some());
+        }
     }
 
     #[test]

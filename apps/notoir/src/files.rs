@@ -369,6 +369,8 @@ pub struct FileState {
     pub prompts: VecDeque<Prompt>,
     pub pending: Vec<Pending>,
     pub closed_tabs: Vec<ClosedTab>,
+    /// Most recent file selection per group; obsolete preview loads are ignored.
+    pub(crate) preview_paths: std::collections::HashMap<GroupId, PathBuf>,
     pub recent_files: Vec<RecentEntry>,
     pub recent_workspaces: Vec<RecentEntry>,
     pub scratchpads: ScratchpadStore,
@@ -386,6 +388,7 @@ impl FileState {
             prompts: VecDeque::new(),
             pending: Vec::new(),
             closed_tabs: Vec::new(),
+            preview_paths: std::collections::HashMap::new(),
             recent_files: Vec::new(),
             recent_workspaces: Vec::new(),
             scratchpads: ScratchpadStore::new(scratch_dir),
@@ -440,6 +443,8 @@ impl AppCore {
         } else {
             self.workbench.layout.active_group
         };
+        self.cancel_change_previews(group);
+        self.files.preview_paths.insert(group, path.to_path_buf());
         let (_, key) = fs_io::identity(path);
         if let Some(doc) = self.workbench.find_by_key(&key) {
             self.show_open_document(doc, group, &at);
@@ -470,13 +475,17 @@ impl AppCore {
             };
             let view = match existing {
                 Some(v) => v,
-                None => match self
-                    .workbench
-                    .open_view(doc, group, TabPosition::AfterActive)
-                {
-                    Ok(v) => v,
-                    Err(_) => return,
-                },
+                None => {
+                    match if at.preview && self.settings.bool("workbench.tabs.previewMode", None) {
+                        self.workbench.open_preview(doc, group)
+                    } else {
+                        self.workbench
+                            .open_view(doc, group, TabPosition::AfterActive)
+                    } {
+                        Ok(v) => v,
+                        Err(_) => return,
+                    }
+                }
             };
             let _ = self.workbench.activate_view(view);
             if !at.preview {
@@ -521,6 +530,13 @@ impl AppCore {
             purpose,
             result,
         } = outcome;
+        if let LoadPurpose::Open { group, ref at, .. } = purpose
+            && at.preview
+            && self.settings.bool("workbench.tabs.previewMode", None)
+            && self.files.preview_paths.get(&group) != Some(&path)
+        {
+            return;
+        }
         if let LoadPurpose::Compare { id, left, saved_of } = purpose {
             self.compare_loaded(id, left, saved_of, result);
             return;

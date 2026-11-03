@@ -2125,3 +2125,558 @@ fn auto_push_is_inside_auto_commit_and_checks_in_an_untrusted_workspace() {
     common::run(&mut app, "git.autoPush", Value::Null);
     assert!(!app.harness.state().core.settings.bool("git.autoPush", None));
 }
+
+fn preview_repo() -> (
+    tempfile::TempDir,
+    PathBuf,
+    git2::Repository,
+    common::TestApp,
+) {
+    let (d, root, r) = repo();
+    std::fs::write(root.join("README.md"), "# Changed\n").unwrap();
+    std::fs::write(root.join("notes.md"), "two\n").unwrap();
+    let app = open(&root, vec![]);
+    (d, root, r, app)
+}
+
+fn scm_select(app: &mut common::TestApp, name: &str, clicks: usize) {
+    let rect = app.harness.query_by_label(name).unwrap().rect();
+    // Keep clear of the hover action buttons at the right edge.
+    let pos = egui::pos2(rect.left() + 30.0, rect.center().y);
+    app.harness.event(egui::Event::PointerMoved(pos));
+    app.harness.step();
+    for _ in 0..clicks {
+        for pressed in [true, false] {
+            app.harness
+                .input_mut()
+                .events
+                .push(egui::Event::PointerButton {
+                    pos,
+                    button: egui::PointerButton::Primary,
+                    pressed,
+                    modifiers: Modifiers::default(),
+                });
+        }
+    }
+    app.harness.run_steps(3);
+    common::settle(app);
+}
+
+fn selected_diff(app: &common::TestApp) -> notoir_core::ids::ViewId {
+    let core = &app.harness.state().core;
+    let tab = core.workbench.layout.active().active.unwrap();
+    assert!(core.compare.sessions.contains_key(&tab));
+    tab
+}
+
+fn preview_change(app: &mut common::TestApp, path: &str, staged: bool) {
+    common::run(
+        app,
+        "git.openChange",
+        json!({"path": path, "staged": staged, "preview": true}),
+    );
+    assert!(wait_for(app, |a| !a
+        .harness
+        .state()
+        .core
+        .compare
+        .sessions
+        .is_empty()));
+}
+
+// spec 28: "Source Control selection replaces the preview"
+#[test]
+fn scm_selection_replaces_preview_and_cleans_up_panes() {
+    let (_d, _root, _r, mut app) = preview_repo();
+    scm_select(&mut app, "README.md, Modified (Changes)", 1);
+    assert!(wait_for(&mut app, |a| !a
+        .harness
+        .state()
+        .core
+        .compare
+        .sessions
+        .is_empty()));
+    let first = selected_diff(&app);
+    assert!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .view(first)
+            .unwrap()
+            .preview
+    );
+    let old_pane = app.harness.state().core.compare.sessions[&first].left;
+    scm_select(&mut app, "notes.md, Modified (Changes)", 1);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .workbench
+        .view(first)
+        .is_none()));
+    let core = &app.harness.state().core;
+    let tab = selected_diff(&app);
+    assert!(core.workbench.view(tab).unwrap().preview);
+    assert_eq!(core.workbench.layout.active().tabs, vec![tab]);
+    assert_eq!(core.compare.sessions.len(), 1);
+    assert!(core.workbench.view(old_pane.view).is_none());
+    assert!(core.workbench.document(old_pane.doc).is_none());
+    assert!(!core.workbench.pane_tabs.contains_key(&old_pane.view));
+}
+
+// spec 28: "Double-click keeps a Source Control diff open"
+#[test]
+fn scm_double_click_keeps_diff_and_reselection_reuses_it() {
+    let (_d, _root, _r, mut app) = preview_repo();
+    scm_select(&mut app, "README.md, Modified (Changes)", 2);
+    assert!(wait_for(&mut app, |a| !a
+        .harness
+        .state()
+        .core
+        .compare
+        .sessions
+        .is_empty()));
+    let first = selected_diff(&app);
+    assert!(
+        !app.harness
+            .state()
+            .core
+            .workbench
+            .view(first)
+            .unwrap()
+            .preview
+    );
+    preview_change(&mut app, "notes.md", false);
+    let second = selected_diff(&app);
+    assert!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .view(second)
+            .unwrap()
+            .preview
+    );
+    preview_change(&mut app, "README.md", false);
+    assert_eq!(selected_diff(&app), first);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .layout
+            .active()
+            .tabs
+            .len(),
+        2
+    );
+    assert!(
+        !app.harness
+            .state()
+            .core
+            .workbench
+            .view(first)
+            .unwrap()
+            .preview
+    );
+}
+
+// spec 28: "Editing a Source Control preview keeps it open"
+#[test]
+fn scm_edit_keeps_diff_before_another_selection() {
+    let (_d, _root, _r, mut app) = preview_repo();
+    preview_change(&mut app, "README.md", false);
+    let first = selected_diff(&app);
+    {
+        let core = &mut app.harness.state_mut().core;
+        let pane = core.compare.sessions[&first].right;
+        core.workbench
+            .edit(
+                pane.view,
+                notoir_editor::ChangeSet::insert(0, "!"),
+                notoir_editor::Selection::caret(1),
+                notoir_editor::EditKind::Insert,
+                core.now_ms,
+            )
+            .unwrap();
+        assert!(
+            core.workbench
+                .document(pane.doc)
+                .unwrap()
+                .buffer
+                .text()
+                .starts_with('!')
+        );
+    }
+    assert!(
+        !app.harness
+            .state()
+            .core
+            .workbench
+            .view(first)
+            .unwrap()
+            .preview
+    );
+    preview_change(&mut app, "notes.md", false);
+    let second = selected_diff(&app);
+    assert!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .view(second)
+            .unwrap()
+            .preview
+    );
+    assert!(app.harness.state().core.workbench.view(first).is_some());
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .layout
+            .active()
+            .tabs
+            .len(),
+        2
+    );
+}
+
+#[test]
+fn scm_loading_requests_are_superseded_or_promoted() {
+    let (_d, root, _r, mut app) = preview_repo();
+    {
+        let core = &mut app.harness.state_mut().core;
+        core.git_open_change_at("README.md", false, true);
+        core.git_open_change_at("notes.md", false, true);
+        core.git_open_change_at("notes.md", false, false);
+    }
+    assert!(wait_for(&mut app, |a| !a
+        .harness
+        .state()
+        .core
+        .compare
+        .sessions
+        .is_empty()));
+    let core = &app.harness.state().core;
+    let tab = selected_diff(&app);
+    assert_eq!(core.compare.sessions.len(), 1);
+    assert_eq!(
+        core.workbench
+            .document(core.compare.sessions[&tab].right.doc)
+            .unwrap()
+            .path(),
+        Some(root.join("notes.md").as_path())
+    );
+    assert!(!core.workbench.view(tab).unwrap().preview);
+}
+
+#[test]
+fn scm_and_explorer_share_preview_in_both_directions() {
+    let (_d, root, _r, mut app) = preview_repo();
+    preview_change(&mut app, "README.md", false);
+    let diff = selected_diff(&app);
+    // The same live document already exists as a detached diff pane.
+    common::run(
+        &mut app,
+        "explorer.open",
+        json!({"path": root.join("README.md"), "preview": true}),
+    );
+    let file = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .layout
+        .active()
+        .active
+        .unwrap();
+    assert!(app.harness.state().core.workbench.view(diff).is_none());
+    assert!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .view(file)
+            .unwrap()
+            .preview
+    );
+    preview_change(&mut app, "README.md", false);
+    assert!(app.harness.state().core.workbench.view(file).is_none());
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .layout
+            .active()
+            .tabs
+            .len(),
+        1
+    );
+    // An Explorer selection also cancels a Source Control request still loading.
+    {
+        let core = &mut app.harness.state_mut().core;
+        core.git_open_change_at("README.md", false, true);
+        core.open_path(
+            &root.join("notes.md"),
+            notoir::files::OpenAt {
+                preview: true,
+                ..Default::default()
+            },
+        );
+    }
+    common::settle(&mut app);
+    assert!(app.harness.state().core.compare.sessions.is_empty());
+}
+
+#[test]
+fn scm_preview_mode_off_keeps_normal_diff_tabs() {
+    let (_d, _root, _r, mut app) = preview_repo();
+    app.harness.state_mut().core.set_setting_in_scope(
+        "workbench.tabs.previewMode",
+        Some(SettingValue::Bool(false)),
+    );
+    preview_change(&mut app, "README.md", false);
+    preview_change(&mut app, "notes.md", false);
+    let core = &app.harness.state().core;
+    assert_eq!(core.compare.sessions.len(), 2);
+    assert!(
+        core.workbench.layout.active().tabs.iter().all(|v| !core
+            .workbench
+            .view(*v)
+            .unwrap()
+            .preview)
+    );
+}
+
+#[test]
+fn scm_staged_deleted_and_untracked_selections_preview() {
+    let (_d, root, r, mut app) = preview_repo();
+    let mut index = r.index().unwrap();
+    index.add_path(Path::new("README.md")).unwrap();
+    index.write().unwrap();
+    std::fs::remove_file(root.join("notes.md")).unwrap();
+    std::fs::write(root.join("new.md"), "new\n").unwrap();
+    common::run(&mut app, "git.refresh", Value::Null);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .status
+        .unstaged
+        .get("notes.md")
+        == Some(&notoir_git::FileStatus::Deleted)));
+    preview_change(&mut app, "README.md", true);
+    let staged = selected_diff(&app);
+    assert!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .view(staged)
+            .unwrap()
+            .preview
+    );
+    preview_change(&mut app, "notes.md", false);
+    assert!(app.harness.state().core.workbench.view(staged).is_none());
+    let deleted = selected_diff(&app);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .document(
+                app.harness.state().core.compare.sessions[&deleted]
+                    .right
+                    .doc
+            )
+            .unwrap()
+            .buffer
+            .len_chars(),
+        0
+    );
+    common::run(
+        &mut app,
+        "git.openChange",
+        json!({"path": "new.md", "preview": true}),
+    );
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .compare
+        .sessions
+        .is_empty()));
+    let core = &app.harness.state().core;
+    let tab = core.workbench.layout.active().active.unwrap();
+    assert!(core.workbench.view(tab).unwrap().preview);
+    assert_eq!(
+        core.workbench
+            .document(core.workbench.view(tab).unwrap().document_id)
+            .unwrap()
+            .path(),
+        Some(root.join("new.md").as_path())
+    );
+}
+
+#[test]
+fn scm_preview_requests_keep_their_original_groups() {
+    let (_d, _root, _r, mut app) = preview_repo();
+    let (left, right) = {
+        let core = &mut app.harness.state_mut().core;
+        let left = core.workbench.layout.active_group;
+        core.git_open_change_at("README.md", false, true);
+        let right = core.workbench.side_group();
+        core.workbench.layout.active_group = right;
+        core.git_open_change_at("README.md", false, true);
+        (left, right)
+    };
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .compare
+        .sessions
+        .len()
+        == 2));
+    let core = &app.harness.state().core;
+    for group in [left, right] {
+        let tab = core.workbench.preview_view(group).unwrap();
+        assert!(core.compare.sessions.contains_key(&tab));
+        assert_eq!(core.workbench.layout.group(group).unwrap().tabs, vec![tab]);
+    }
+}
+
+#[test]
+fn scm_selection_supersedes_an_explorer_load() {
+    let (_d, root, _r, mut app) = preview_repo();
+    {
+        let core = &mut app.harness.state_mut().core;
+        core.open_path(
+            &root.join("README.md"),
+            notoir::files::OpenAt {
+                preview: true,
+                ..Default::default()
+            },
+        );
+        core.git_open_change_at("notes.md", false, true);
+    }
+    assert!(wait_for(&mut app, |a| !a
+        .harness
+        .state()
+        .core
+        .compare
+        .sessions
+        .is_empty()));
+    let core = &app.harness.state().core;
+    let tab = selected_diff(&app);
+    assert_eq!(core.workbench.layout.active().tabs, vec![tab]);
+    assert_eq!(
+        core.workbench
+            .document(core.compare.sessions[&tab].right.doc)
+            .unwrap()
+            .path(),
+        Some(root.join("notes.md").as_path())
+    );
+}
+
+#[test]
+fn scm_conflicted_files_use_editable_preview() {
+    let (_d, root, r) = repo();
+    let base = r.head().unwrap().peel_to_commit().unwrap();
+    let mut conflict = r
+        .index()
+        .unwrap()
+        .get_path(Path::new("notes.md"), 0)
+        .unwrap();
+    std::fs::write(
+        root.join("notes.md"),
+        "<<<<<<< ours\none\n=======\ntwo\n>>>>>>> theirs\n",
+    )
+    .unwrap();
+    let ours = r.blob(b"one\n").unwrap();
+    let theirs = r.blob(b"two\n").unwrap();
+    let mut idx = r.index().unwrap();
+    idx.remove_path(Path::new("notes.md")).unwrap();
+    for (stage, oid) in [
+        (
+            1,
+            base.tree()
+                .unwrap()
+                .get_path(Path::new("notes.md"))
+                .unwrap()
+                .id(),
+        ),
+        (2, ours),
+        (3, theirs),
+    ] {
+        conflict.id = oid;
+        conflict.flags = (conflict.flags & !0x3000) | (stage << 12);
+        idx.add(&conflict).unwrap();
+    }
+    idx.write().unwrap();
+    let mut app = open(&root, vec![]);
+    assert!(wait_for(&mut app, |a| a
+        .harness
+        .state()
+        .core
+        .git
+        .status
+        .unstaged
+        .get("notes.md")
+        == Some(&notoir_git::FileStatus::Conflicted)));
+    common::run(
+        &mut app,
+        "git.openChange",
+        json!({"path": "notes.md", "preview": true}),
+    );
+    let core = &app.harness.state().core;
+    let tab = core.workbench.layout.active().active.unwrap();
+    assert!(core.workbench.view(tab).unwrap().preview);
+    let doc = core
+        .workbench
+        .document(core.workbench.view(tab).unwrap().document_id)
+        .unwrap();
+    assert_eq!(doc.path(), Some(root.join("notes.md").as_path()));
+    assert!(!doc.is_read_only());
+}
+
+#[test]
+fn scm_kept_loading_diff_retains_its_live_source() {
+    let (_d, root, _r, mut app) = preview_repo();
+    common::run(
+        &mut app,
+        "explorer.open",
+        json!({"path": root.join("README.md"), "preview": true}),
+    );
+    {
+        let core = &mut app.harness.state_mut().core;
+        core.git_open_change_at("README.md", false, true);
+        core.git_open_change_at("README.md", false, false);
+        core.open_path(
+            &root.join("notes.md"),
+            notoir::files::OpenAt {
+                preview: true,
+                ..Default::default()
+            },
+        );
+    }
+    assert!(wait_for(&mut app, |a| !a
+        .harness
+        .state()
+        .core
+        .compare
+        .sessions
+        .is_empty()));
+    let core = &app.harness.state().core;
+    let (&tab, session) = core.compare.sessions.iter().next().unwrap();
+    assert!(!core.workbench.view(tab).unwrap().preview);
+    assert_eq!(
+        core.workbench.document(session.right.doc).unwrap().path(),
+        Some(root.join("README.md").as_path())
+    );
+    assert_eq!(core.workbench.layout.active().tabs.len(), 2);
+}

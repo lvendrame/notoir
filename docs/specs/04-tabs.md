@@ -1,6 +1,6 @@
 # 04 — Tabs
 
-**Status:** Partial — tab strip with states, disambiguation, pin, close/close others/to the right/saved/all, context menu, reopen closed tab, overflow list (M5); drag reorder and split/move-group items (M6), compare items (M17); preview tabs (Explorer single-click, `workbench.tabs.previewMode`, default on)
+**Status:** Partial — tab strip with states, disambiguation, pin, close/close others/to the right/saved/all, context menu, reopen closed tab, overflow list (M5); drag reorder and split/move-group items (M6), compare items (M17); preview tabs (Explorer and Source Control single-click, `workbench.tabs.previewMode`, default on)
 
 ## Purpose
 
@@ -51,12 +51,13 @@ Scratchpad insertion, numbering, default-language and persistence behavior.
   confirming dirty ones).
 - New tabs open to the right of the active tab (`workbench.tabs.openPosition`: `right` default | `end`).
 - Tab density: `workbench.tabs.density = compact | default` (spec 21).
-- Opening a file from Explorer single-click opens a **preview tab** (italic label) when
+- Opening a file from Explorer or Source Control single-click opens a **preview tab** (italic label) when
   `workbench.tabs.previewMode = true` (default). Each group has at most one; the next single-click in the same group
   replaces it in its slot. A file already open in any tab is just activated. A preview tab becomes a normal tab when
-  the file is double-clicked (or opened with Enter) in the Explorer, its tab is double-clicked, its document is edited
+  the file is double-clicked in Explorer or Source Control (or opened with Enter in Explorer), its tab is double-clicked, its document is edited
   (undo/redo included, reloads from disk excluded), it is pinned, or "Keep Open" is chosen in the tab context menu.
-  Other ways of opening (Quick Open, search, Source Control, breadcrumbs, MCP) open normal tabs. Preview state is kept
+  Source Control previews the changes view; editing an editable diff pane keeps its tab open.
+  Other ways of opening (Quick Open, search, breadcrumbs, MCP) open normal tabs. Preview state is kept
   in the session.
 
 ## Context Menu
