@@ -138,7 +138,12 @@ impl AppCore {
         let root = self.recovery.root.clone();
         let now = epoch_ms();
         match RecoverySession::create(&root, env!("CARGO_PKG_VERSION"), None, now) {
-            Ok(s) => self.recovery.session = Some(Arc::new(Mutex::new(s))),
+            Ok(mut s) => {
+                if let Err(e) = s.set_window_id(self.window_id.clone()) {
+                    tracing::error!(error = %e, "could not associate recovery with editor window");
+                }
+                self.recovery.session = Some(Arc::new(Mutex::new(s)));
+            }
             Err(e) => {
                 tracing::error!(error = %e, "recovery session unavailable");
                 let n = self.now_ms;
@@ -158,7 +163,7 @@ impl AppCore {
         self.scan_orphans();
     }
 
-    fn own_session_id(&self) -> Option<String> {
+    pub(crate) fn own_session_id(&self) -> Option<String> {
         self.recovery
             .session
             .as_ref()
@@ -169,7 +174,16 @@ impl AppCore {
     pub fn scan_orphans(&mut self) {
         let own = self.own_session_id();
         let found = recovery::scan(&self.recovery.root, own.as_deref()).unwrap_or_default();
-        let (hot, crashed): (Vec<_>, Vec<_>) = found.into_iter().partition(|s| s.clean_exit());
+        let found = found.into_iter().filter(|s| {
+            self.window_id.is_none()
+                || s.manifest.as_ref().is_some_and(|m| {
+                    m.window_id.as_ref() == self.window_id.as_ref()
+                        || self.recovery_source.as_ref() == Some(&m.session_id)
+                        || (self.recovery_source.as_deref() == Some("legacy")
+                            && m.window_id.is_none())
+                })
+        });
+        let (hot, crashed): (Vec<_>, Vec<_>) = found.partition(|s| s.clean_exit());
         self.recovery.other_hot = hot;
         self.recovery.prompt = crashed;
         self.recovery.handled.clear();

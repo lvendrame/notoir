@@ -229,15 +229,10 @@ fn new_scratchpad(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
     CommandOutcome::Done
 }
 
-fn new_window(_: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
-    match std::env::current_exe() {
-        Ok(exe) => {
-            if let Err(e) = std::process::Command::new(exe).arg("--new-window").spawn() {
-                tracing::error!(error = %e, "could not start a new window");
-            }
-        }
-        Err(e) => tracing::error!(error = %e, "no executable path"),
-    }
+fn new_window(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    core.effects.push(crate::core::Effect::Application(
+        crate::application::ApplicationRequest::NewWindow(None),
+    ));
     CommandOutcome::Done
 }
 

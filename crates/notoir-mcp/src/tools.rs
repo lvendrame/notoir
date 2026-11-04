@@ -18,7 +18,11 @@ pub struct ToolDef {
 
 impl ToolDef {
     pub fn input_schema(&self) -> Value {
-        (self.schema)()
+        let mut schema = (self.schema)();
+        if self.name != "window_list" {
+            schema["properties"]["window_id"] = json!({ "type": "string", "description": "Target Notoir window ID from window_list. Defaults to the last active window at request dispatch." });
+        }
+        schema
     }
 }
 
@@ -235,10 +239,10 @@ fn fs_write_args() -> Value {
 }
 
 macro_rules! tool {
-    ($name:literal, [$($cap:expr),+], $read_only:expr, $destructive:expr, $schema:ident, $desc:literal) => {
+    ($name:literal, [$($cap:expr),*], $read_only:expr, $destructive:expr, $schema:ident, $desc:literal) => {
         ToolDef {
             name: $name,
-            capabilities: &[$($cap),+],
+            capabilities: &[$($cap),*],
             description: $desc,
             read_only: $read_only,
             destructive: $destructive,
@@ -250,6 +254,14 @@ macro_rules! tool {
 use Capability as C;
 
 pub const TOOLS: &[ToolDef] = &[
+    tool!(
+        "window_list",
+        [],
+        true,
+        false,
+        no_args,
+        "List Notoir editor windows, their IDs, titles, workspace roots and active state."
+    ),
     tool!(
         "workspace_get",
         [C::WorkspaceRead],
@@ -461,7 +473,7 @@ mod tests {
                 t.name
             );
             assert_eq!(t.input_schema()["type"], "object");
-            assert!(!t.capabilities.is_empty());
+            assert!(t.name == "window_list" || !t.capabilities.is_empty());
         }
         assert!(find("document_read").is_some());
         assert!(find("document.read").is_none());

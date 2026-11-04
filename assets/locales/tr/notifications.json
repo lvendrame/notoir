@@ -62,5 +62,6 @@
   "updateInstallOnQuit": "Çıkışta yükle",
   "updateDownloadFailed": "Güncelleme indirilemedi.",
   "updateWillInstall": "Yükleyici, Notoir kapandıktan sonra açılır.",
-  "yamlInvalid": "{{line}}. satır, {{column}}. sütunda geçersiz YAML: {{message}}"
+  "yamlInvalid": "{{line}}. satır, {{column}}. sütunda geçersiz YAML: {{message}}",
+  "sessionWriteFailed": "Uygulama oturumu kaydedilemedi. Notoir açık kalır."
 }

@@ -39,6 +39,7 @@ pub enum MenuItem {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DynamicMenu {
+    Windows,
     RecentWorkspaces,
     RecentFiles,
     KeptScratchpads,
@@ -466,6 +467,17 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         ],
     });
 
+    menus.push(Menu {
+        label: "menus:top.window",
+        items: vec![
+            cmd("window.minimize"),
+            cmd("window.bringAllToFront"),
+            cmd("window.close"),
+            SEP,
+            MenuItem::Dynamic(DynamicMenu::Windows),
+        ],
+    });
+
     let mut help = vec![
         cmd("help.welcome"),
         cmd("help.documentation"),
@@ -552,6 +564,15 @@ pub fn expand(items: &[MenuItem], core: &AppCore) -> Vec<MenuItem> {
                     });
                 }
             }
+            MenuItem::Dynamic(DynamicMenu::Windows) => {
+                for window in &core.window_list {
+                    out.push(MenuItem::Entry {
+                        id: "window.activate",
+                        args: json!({ "id": window.id }),
+                        text: window.title.clone(),
+                    });
+                }
+            }
             MenuItem::Dynamic(DynamicMenu::KeptScratchpads) => {
                 for s in core.kept_scratchpads() {
                     out.push(MenuItem::Entry {
@@ -631,6 +652,7 @@ mod tests {
             "menus:top.git",
             "menus:top.tools",
             "menus:top.plugins",
+            "menus:top.window",
             "menus:top.help",
         ];
         assert_eq!(labels(Platform::Windows), common);

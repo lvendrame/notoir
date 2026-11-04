@@ -442,5 +442,11 @@
     "showSplit": "Düzenleyiciyi ve Önizlemeyi Göster",
     "showPreview": "Önizlemeyi Göster",
     "action": "CSV düzenle"
+  },
+  "window": {
+    "minimize": "Simge durumuna küçült",
+    "bringAllToFront": "Tümünü öne getir",
+    "close": "Pencereyi kapat",
+    "activate": "Pencereyi etkinleştir"
   }
 }

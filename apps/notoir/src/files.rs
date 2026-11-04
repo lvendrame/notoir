@@ -856,6 +856,7 @@ impl AppCore {
             .iter()
             .any(|p| p.waiting.contains(&doc) && matches!(p.then, Then::Quit))
         {
+            self.close_cancelled = true;
             self.updates.install_on_quit = false;
         }
         self.files.pending.retain(|p| !p.waiting.contains(&doc));
@@ -1192,7 +1193,11 @@ impl AppCore {
             }
             Then::Quit => {
                 self.files.quit_confirmed = true;
-                self.effects.push(Effect::Quit);
+                if self.window_id.is_some() {
+                    self.close_ready = true;
+                } else {
+                    self.effects.push(Effect::Quit);
+                }
             }
             Then::CloseWorkspace { views, next } => self.finish_close_workspace(views, next),
             Then::GitCheckout(branch) => {
@@ -1362,6 +1367,7 @@ impl AppCore {
                 },
                 Answer::Cancel,
             ) => {
+                self.close_cancelled = true;
                 self.updates.install_on_quit = false;
             }
             (_, Answer::Cancel) => {}

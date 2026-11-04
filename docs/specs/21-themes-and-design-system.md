@@ -1,6 +1,6 @@
 # 21 — Themes, Design System & Accessibility
 
-**Status:** Done — tokens, built-in themes, icons, contrast, theme switching incl. auto (M0, M3); custom themes (M26: `<config>/themes/*.toml` read in the background at startup and again whenever that folder changes; tokens a theme leaves out — and `base` names it does not define — come from Notoir Midnight / Notoir Paper by `kind`; ids of built-in themes and `auto` are rejected; invalid files raise a warning naming the file; custom themes are listed in the theme picker and the Settings dropdown and selected by id in `workbench.theme`). Deviation: `workbench.autoThemeLight` / `autoThemeDark` are not implemented — auto always uses Midnight / Paper
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  tokens, built-in themes, icons, contrast, theme switching incl. auto (M0, M3); custom themes (M26: `<config>/themes/*.toml` read in the background at startup and again whenever that folder changes; tokens a theme leaves out — and `base` names it does not define — come from Notoir Midnight / Notoir Paper by `kind`; ids of built-in themes and `auto` are rejected; invalid files raise a warning naming the file; custom themes are listed in the theme picker and the Settings dropdown and selected by id in `workbench.theme`). Deviation: `workbench.autoThemeLight` / `autoThemeDark` are not implemented — auto always uses Midnight / Paper
 
 ## Purpose
 
@@ -225,3 +225,7 @@ Feature: Icons
   Scenario: Every icon asset exists
     Then every Icon enum variant has an SVG file that rasterizes without error
 ```
+
+## Application and window ownership (spec 40)
+
+Workspace themes and rendering caches resolve per window. Rendering a sibling must not leak style or widget state. Shared fonts cover the union of scripts in open windows. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

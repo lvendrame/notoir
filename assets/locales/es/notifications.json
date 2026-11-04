@@ -62,5 +62,6 @@
   "updateInstallOnQuit": "Instalar al salir",
   "updateDownloadFailed": "No se pudo descargar la actualización.",
   "updateWillInstall": "El instalador se abrirá cuando salgas de Notoir.",
-  "yamlInvalid": "YAML no válido en la línea {{line}}, columna {{column}}: {{message}}"
+  "yamlInvalid": "YAML no válido en la línea {{line}}, columna {{column}}: {{message}}",
+  "sessionWriteFailed": "No se pudo guardar la sesión de la aplicación. Notoir permanece abierto."
 }

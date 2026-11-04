@@ -442,5 +442,11 @@
     "showSplit": "Mostra editor e anteprima",
     "showPreview": "Mostra anteprima",
     "action": "Modifica CSV"
+  },
+  "window": {
+    "minimize": "Riduci a icona",
+    "bringAllToFront": "Porta tutto in primo piano",
+    "close": "Chiudi finestra",
+    "activate": "Attiva finestra"
   }
 }

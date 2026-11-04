@@ -1,6 +1,6 @@
 //! Single-instance forwarding (spec 31 §Single Instance, AD-10): the first
 //! process listens on a per-user local socket; later launches forward their
-//! arguments to it and exit (unless `--new-window`).
+//! arguments to it and exit; `--new-window` is a host request.
 //!
 //! Protocol: the working directory, then one argument per line, then an empty
 //! line; the primary answers `ok`. With `--wait` among the arguments the
@@ -39,7 +39,9 @@ impl Waiter {
 
 /// Whether a request asks to wait (`--wait`).
 pub fn wants_wait(args: &[String]) -> bool {
-    args.iter().any(|a| a == "--wait" || a == "-w")
+    args.iter()
+        .take_while(|a| a.as_str() != "--")
+        .any(|a| a == "--wait" || a == "-w")
 }
 
 pub enum Claim {
@@ -60,7 +62,15 @@ pub fn socket_name() -> String {
         Ok(home) if !home.is_empty() => {
             use std::hash::{Hash, Hasher};
             let mut h = std::collections::hash_map::DefaultHasher::new();
-            home.hash(&mut h);
+            let home_path = std::path::PathBuf::from(&home);
+            let home_path = home_path.canonicalize().unwrap_or_else(|_| {
+                if home_path.is_absolute() {
+                    home_path.clone()
+                } else {
+                    std::env::current_dir().unwrap_or_default().join(&home_path)
+                }
+            });
+            home_path.hash(&mut h);
             format!("{}-{}-{:x}.sock", crate::paths::BUNDLE_ID, user, h.finish())
         }
         _ => format!("{}-{}.sock", crate::paths::BUNDLE_ID, user),
@@ -104,8 +114,50 @@ pub fn claim(
     request: &InstanceRequest,
     on_request: impl Fn(InstanceRequest, Option<Waiter>) + Send + 'static,
 ) -> io::Result<Claim> {
+    claim_with_gate(
+        name,
+        request,
+        std::sync::Arc::new(std::sync::atomic::AtomicBool::new(true)),
+        on_request,
+    )
+}
+
+/// Like claim, with a lifecycle gate that rejects launches during coordinated Quit.
+pub fn claim_with_gate(
+    name: &str,
+    request: &InstanceRequest,
+    accepting: std::sync::Arc<std::sync::atomic::AtomicBool>,
+    on_request: impl Fn(InstanceRequest, Option<Waiter>) + Send + 'static,
+) -> io::Result<Claim> {
     if forward(name, request)? {
         return Ok(Claim::Forwarded);
+    }
+    // Serialize simultaneous first launches before reclaiming a stale socket.
+    use std::hash::{Hash, Hasher};
+    let paths = crate::paths::AppPaths::resolve().map_err(io::Error::other)?;
+    paths.ensure_dirs().map_err(io::Error::other)?;
+    let mut hash = std::collections::hash_map::DefaultHasher::new();
+    name.hash(&mut hash);
+    let lock = std::fs::OpenOptions::new()
+        .create(true)
+        .truncate(false)
+        .write(true)
+        .open(
+            paths
+                .data
+                .join(format!("instance-{:x}.lock", hash.finish())),
+        )?;
+    if lock.try_lock().is_err() {
+        for _ in 0..100 {
+            if forward(name, request)? {
+                return Ok(Claim::Forwarded);
+            }
+            std::thread::sleep(std::time::Duration::from_millis(50));
+        }
+        return Err(io::Error::new(
+            io::ErrorKind::TimedOut,
+            "Notoir host did not accept launch",
+        ));
     }
     let ns = name.to_ns_name::<GenericNamespaced>()?;
     let listener = ListenerOptions::new()
@@ -115,10 +167,15 @@ pub fn claim(
     std::thread::Builder::new()
         .name("notoir-instance".into())
         .spawn(move || {
+            let _instance_lock = lock;
             for conn in listener.incoming().filter_map(Result::ok) {
                 let mut conn = BufReader::new(conn);
                 match decode(&mut conn) {
                     Ok(req) => {
+                        if !accepting.load(std::sync::atomic::Ordering::Acquire) {
+                            let _ = conn.get_mut().write_all(b"busy\n");
+                            continue;
+                        }
                         let _ = conn.get_mut().write_all(b"ok\n");
                         let waiter = wants_wait(&req.args).then(|| Waiter(Some(conn.into_inner())));
                         on_request(req, waiter);
@@ -141,6 +198,12 @@ pub fn forward(name: &str, request: &InstanceRequest) -> io::Result<bool> {
     stream.get_mut().write_all(encode(request).as_bytes())?;
     let mut answer = String::new();
     stream.read_line(&mut answer)?;
+    if answer.trim() == "busy" {
+        return Err(io::Error::new(
+            io::ErrorKind::WouldBlock,
+            "Notoir is quitting; retry after cancelling Quit or after it exits",
+        ));
+    }
     if answer.trim() != "ok" {
         return Ok(false);
     }
@@ -180,6 +243,32 @@ mod tests {
         let forwarded = claim(&name, &second, |_, _| panic!("not primary")).unwrap();
         assert!(matches!(forwarded, Claim::Forwarded));
         assert_eq!(rx.recv_timeout(Duration::from_secs(5)).unwrap(), second);
+    }
+
+    #[test]
+    fn quitting_host_rejects_launch_without_delivering_it() {
+        let name = format!("notoir-gated-{}.sock", std::process::id());
+        let gate = std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false));
+        let (tx, rx) = channel();
+        let request = InstanceRequest {
+            cwd: "/".into(),
+            args: vec![],
+        };
+        assert!(matches!(
+            claim_with_gate(&name, &request, gate.clone(), move |r, _| {
+                let _ = tx.send(r);
+            })
+            .unwrap(),
+            Claim::Primary
+        ));
+        assert_eq!(
+            forward(&name, &request).unwrap_err().kind(),
+            io::ErrorKind::WouldBlock
+        );
+        assert!(rx.try_recv().is_err());
+        gate.store(true, std::sync::atomic::Ordering::Release);
+        assert!(forward(&name, &request).unwrap());
+        assert_eq!(rx.recv_timeout(Duration::from_secs(2)).unwrap(), request);
     }
 
     #[test]

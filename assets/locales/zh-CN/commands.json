@@ -442,5 +442,11 @@
     "showSplit": "显示编辑器和预览",
     "showPreview": "显示预览",
     "action": "编辑CSV"
+  },
+  "window": {
+    "minimize": "最小化",
+    "bringAllToFront": "全部置于顶层",
+    "close": "关闭窗口",
+    "activate": "激活窗口"
   }
 }

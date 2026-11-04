@@ -442,5 +442,11 @@
     "showSplit": "Show Editor and Preview",
     "showPreview": "Show Preview",
     "action": "Edit CSV"
+  },
+  "window": {
+    "minimize": "Minimize",
+    "bringAllToFront": "Bring All to Front",
+    "close": "Close Window",
+    "activate": "Activate Window"
   }
 }

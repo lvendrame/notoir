@@ -256,6 +256,8 @@ pub fn write_setting_file(
     language: Option<&str>,
     value: Option<&SettingValue>,
 ) -> Result<(), SettingsFileError> {
+    let coordinator = crate::coordinator::for_path(path);
+    let _guard = coordinator.lock().unwrap_or_else(|e| e.into_inner());
     let text = match std::fs::read_to_string(path) {
         Ok(t) => t,
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => {

@@ -62,5 +62,6 @@
   "updateInstallOnQuit": "退出时安装",
   "updateDownloadFailed": "无法下载更新。",
   "updateWillInstall": "Notoir 退出后将打开安装程序。",
-  "yamlInvalid": "第 {{line}} 行第 {{column}} 列的 YAML 无效:{{message}}"
+  "yamlInvalid": "第 {{line}} 行第 {{column}} 列的 YAML 无效:{{message}}",
+  "sessionWriteFailed": "无法保存应用会话。Notoir 将保持打开。"
 }

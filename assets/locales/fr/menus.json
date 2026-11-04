@@ -9,7 +9,8 @@
     "git": "Git",
     "tools": "Outils",
     "plugins": "Extensions",
-    "help": "Aide"
+    "help": "Aide",
+    "window": "Fenêtre"
   },
   "comingSoon": "Bientôt disponible",
   "sub": {

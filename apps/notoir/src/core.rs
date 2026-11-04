@@ -81,6 +81,8 @@ impl ThemeChoice {
 /// Requests that need the egui context.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Effect {
+    Application(crate::application::ApplicationRequest),
+    CloseWindow,
     ApplyTheme,
     ApplyLanguage,
     ToggleFullScreen,
@@ -99,6 +101,8 @@ pub enum Effect {
 /// How the app starts (resolved by `main`, or by tests).
 #[derive(Clone)]
 pub struct StartOptions {
+    pub window_id: Option<String>,
+    pub recovery_source: Option<String>,
     pub paths: AppPaths,
     pub os_locale: Option<String>,
     pub platform: Platform,
@@ -126,11 +130,14 @@ pub struct StartOptions {
     /// Update manifest URL and key (built in for release builds; tests set
     /// their own).
     pub update: Option<notoir_platform::update::UpdateConfig>,
+    pub update_poster: Option<crate::io::Poster>,
 }
 
 impl StartOptions {
     pub fn new(paths: AppPaths) -> Self {
         Self {
+            window_id: None,
+            recovery_source: None,
             paths,
             os_locale: None,
             platform: Platform::current(),
@@ -145,11 +152,21 @@ impl StartOptions {
             restore_session: false,
             first_run: false,
             update: notoir_platform::update::UpdateConfig::built_in(),
+            update_poster: None,
         }
     }
 }
 
 pub struct AppCore {
+    pub session_override: Option<crate::session::SessionData>,
+    pub window_id: Option<String>,
+    pub recovery_source: Option<String>,
+    pub application_requests: Vec<crate::application::ApplicationRequest>,
+    pub window_list: Vec<crate::application::WindowInfo>,
+    pub close_ready: bool,
+    pub is_closing: bool,
+    pub close_cancelled: bool,
+    pub native_menu: bool,
     pub paths: AppPaths,
     pub platform: Platform,
     pub workbench: Workbench,
@@ -246,6 +263,7 @@ pub struct AppCore {
     pub text_index: crate::text_index::TextIndexState,
     pub templates: crate::templates::TemplatesState,
     pub updates: crate::updates::UpdatesState,
+    pub update_poster: Option<crate::io::Poster>,
     pub desktop: crate::desktop::DesktopState,
 }
 
@@ -373,6 +391,15 @@ impl AppCore {
         );
 
         Self {
+            window_id: opts.window_id.clone(),
+            recovery_source: opts.recovery_source.clone(),
+            session_override: None,
+            application_requests: Vec::new(),
+            window_list: Vec::new(),
+            close_ready: false,
+            is_closing: false,
+            close_cancelled: false,
+            native_menu: false,
             paths,
             platform: opts.platform,
             workbench: Workbench::new(),
@@ -446,6 +473,7 @@ impl AppCore {
             text_index: Default::default(),
             templates: Default::default(),
             updates: crate::updates::UpdatesState::new(opts.update.clone()),
+            update_poster: opts.update_poster.clone(),
             desktop: Default::default(),
             language,
             theme_choice,
@@ -813,6 +841,12 @@ impl AppCore {
                     None => break,
                 },
             };
+            if self.is_closing
+                && !inv.id.as_str().starts_with("window.")
+                && !matches!(inv.id.as_str(), "app.quit" | "test.ui")
+            {
+                continue;
+            }
             let ctx = own.as_ref().unwrap_or(ctx);
             let before = self.current_location();
             let outcome = match self.commands.resolve(&inv, ctx) {
@@ -857,6 +891,14 @@ impl AppCore {
             self.workbench
                 .events
                 .emit(notoir_core::AppEvent::SettingsChanged { keys: changed });
+        }
+        if self.window_id.is_some() {
+            self.effects.push(Effect::Application(
+                crate::application::ApplicationRequest::UserSetting {
+                    key: key.to_owned(),
+                    value: value.clone(),
+                },
+            ));
         }
         let path: PathBuf = self.paths.user_settings_file();
         let key = key.to_owned();
@@ -1116,7 +1158,9 @@ impl AppCore {
         self.reload_custom_themes();
         self.updates_init();
         self.recovery_start();
-        self.restore_scratchpads();
+        if self.window_id.is_none() {
+            self.restore_scratchpads();
+        }
         let restore = restore_session
             && open_paths.is_empty()
             && self.settings.str("workbench.startup", None) == "restoreSession";
@@ -1131,14 +1175,16 @@ impl AppCore {
         if self.first_run_check {
             self.maybe_first_run();
         }
-        self.mcp_autostart();
+        if self.window_id.is_none() {
+            self.mcp_autostart();
+        }
         self.plugins_scan();
     }
 
     /// Exit: Scratchpads, session and recovery are written before the
     /// process ends.
     pub fn shutdown(&mut self) {
-        self.mcp_stop();
+        self.mcp_stop_local();
         // Plugin VMs stop when their handles drop.
         self.plugins.entries.clear();
         self.text_index_shutdown();
@@ -1146,7 +1192,9 @@ impl AppCore {
         self.write_session(false);
         self.recovery_shutdown();
         self.flush_io();
-        self.updates_hand_off();
+        if self.window_id.is_none() {
+            self.updates_hand_off();
+        }
     }
 
     /// Command-line paths: files open as tabs; the first folder becomes this

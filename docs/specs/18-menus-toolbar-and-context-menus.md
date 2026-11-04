@@ -10,7 +10,7 @@ contribute.
 
 ## Menu Bar Conventions
 
-- In-window menu bar on all platforms (AD-11). On macOS the first menu is **Notoir** (About Notoir, Settings… `Cmd+,`,
+- Native global menu bar on macOS; in-window menu bar on Windows/Linux (AD-11). On macOS the first menu is **Notoir** (About Notoir, Settings… `Cmd+,`,
   Hide/Quit are OS-level where available) and "Exit" is "Quit Notoir"; Settings lives under Notoir instead of Tools.
 - Items show translated labels, platform-formatted shortcuts, checkmarks for toggles, `›` for submenus, `…` when the
   item asks for more input.
@@ -245,4 +245,22 @@ Feature: Toolbar
     Given the toolbar is hidden
     And a JSON document is active
     Then the Text | Split | Tree control is shown in the editor group header
+```
+
+## Application and window ownership (spec 40)
+
+macOS uses a native application menu bar generated from the same menu definitions and registry. Other platforms keep in-window menus. Window navigation lists editor windows, checks active state and restores minimized selections. With no editor, application commands remain available. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.
+
+## Native menu lifetime
+
+The native macOS menu bar and submenu objects persist across editor frames. Resolve menu properties from command/context values; never compare debug formatting or iteration order of context maps. Update labels, enablement, checkmarks and accelerators in place. Real dynamic entry changes affect only their owning submenu. Opening a menu must not close it as editor focus, cursor position, timers or background work update. The zero-window menu uses the same persistent bar and continues to expose application commands.
+
+```gherkin
+Feature: Native menu stability
+  Scenario: Native menus survive editor context updates
+    Given an editor window has native menu items
+    When equivalent command contexts are rebuilt in different insertion orders
+    And cursor and command enablement change
+    Then menu item identities and structure remain stable
+    And enabled state changes without replacing the menu structure
 ```

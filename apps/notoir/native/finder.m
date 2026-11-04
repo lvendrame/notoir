@@ -3,8 +3,16 @@
 #import <Cocoa/Cocoa.h>
 @interface NotoirFinderEvents : NSObject
 - (void)openDocuments:(NSAppleEventDescriptor *)event reply:(NSAppleEventDescriptor *)reply;
+- (void)reopen:(NSAppleEventDescriptor *)event reply:(NSAppleEventDescriptor *)reply;
 @end
 @implementation NotoirFinderEvents
+- (void)reopen:(NSAppleEventDescriptor *)event reply:(NSAppleEventDescriptor *)reply {
+    NSTask *task = [[NSTask alloc] init];
+    task.executableURL = [NSURL fileURLWithPath:NSProcessInfo.processInfo.arguments[0]];
+    task.arguments = @[];
+    NSError *error = nil;
+    if (![task launchAndReturnError:&error]) NSLog(@"Notoir: reopen failed: %@", error);
+}
 - (void)openDocuments:(NSAppleEventDescriptor *)event reply:(NSAppleEventDescriptor *)reply {
     NSAppleEventDescriptor *items = [event paramDescriptorForKeyword:keyDirectObject];
     NSMutableArray<NSString *> *arguments = [NSMutableArray arrayWithObject:@"--"];
@@ -31,6 +39,9 @@ __attribute__((constructor)) static void registerFinderEvents(void) {
                 [NSAppleEventManager.sharedAppleEventManager setEventHandler:handler
                     andSelector:@selector(openDocuments:reply:) forEventClass:kCoreEventClass
                     andEventID:kAEOpenDocuments];
+                [NSAppleEventManager.sharedAppleEventManager setEventHandler:handler
+                    andSelector:@selector(reopen:reply:) forEventClass:kCoreEventClass
+                    andEventID:kAEReopenApplication];
             }];
     }
 }

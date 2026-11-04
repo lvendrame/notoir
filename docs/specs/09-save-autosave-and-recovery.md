@@ -1,6 +1,6 @@
 # 09 — Save, Autosave & Recovery
 
-**Status:** Done — atomic writes and recovery store (M2); save pipeline, prompts (M5); recovery snapshots (1.5 s debounce, 10 s max, focus loss, quit), recovery prompt with Restore All / Review / Discard (7-day retention), damaged entries opened as raw content, conflicting snapshots with Keep Recovered / Use Disk Version, hot exit, autosave modes, Help → Recover Unsaved Documents (M8). Compare buttons on conflict banners (M17). Deferred: per-entry Save As in Review, `recovery.maxSizeMb` warning, suspend/resume detection, backup-before-in-place fallback for hard-linked files
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  atomic writes and recovery store (M2); save pipeline, prompts (M5); recovery snapshots (1.5 s debounce, 10 s max, focus loss, quit), recovery prompt with Restore All / Review / Discard (7-day retention), damaged entries opened as raw content, conflicting snapshots with Keep Recovered / Use Disk Version, hot exit, autosave modes, Help → Recover Unsaved Documents (M8). Compare buttons on conflict banners (M17). Deferred: per-entry Save As in Review, `recovery.maxSizeMb` warning, suspend/resume detection, backup-before-in-place fallback for hard-linked files
 
 ## Purpose
 
@@ -95,8 +95,8 @@ can override (spec 20).
 
 ```text
 <data>/recovery/
-└── <session-id>/                      # one per running window process (UUID v4)
-    ├── session.lock                   # held with File::try_lock while the process runs
+└── <session-id>/                      # one per editor window within the application process (UUID v4)
+    ├── session.lock                   # held with File::try_lock while the owning window runs
     ├── manifest.json                  # atomically replaced; lists entries
     └── docs/
         ├── <entry-id>.json            # metadata
@@ -268,3 +268,7 @@ Feature: Recovery
     When the user saves "a.md"
     Then the recovery entry for "a.md" is deleted
 ```
+
+## Application and window ownership (spec 40)
+
+Recovery sessions belong to windows within the one GUI process. Window/session identity and file locks establish ownership; PID is diagnostic. Window closure flushes only its owner; Quit coordinates all owners before destruction. Cancellation/save failure aborts Quit. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

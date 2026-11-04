@@ -442,5 +442,11 @@
     "showSplit": "Afficher l'éditeur et l'aperçu",
     "showPreview": "Afficher l'aperçu",
     "action": "Modifier le CSV"
+  },
+  "window": {
+    "minimize": "Réduire",
+    "bringAllToFront": "Tout ramener au premier plan",
+    "close": "Fermer la fenêtre",
+    "activate": "Activer la fenêtre"
   }
 }

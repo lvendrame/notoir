@@ -35,6 +35,8 @@ pub struct Manifest {
     pub session_id: String,
     pub app_version: String,
     pub pid: u32,
+    #[serde(default)]
+    pub window_id: Option<String>,
     pub workspace: Option<String>,
     pub updated_at_ms: i64,
     pub clean_exit: bool,
@@ -107,6 +109,7 @@ impl RecoverySession {
                 session_id: id,
                 app_version: app_version.to_owned(),
                 pid: std::process::id(),
+                window_id: None,
                 workspace: workspace.map(str::to_owned),
                 updated_at_ms: now_ms,
                 clean_exit: false,
@@ -115,6 +118,11 @@ impl RecoverySession {
         };
         session.write_manifest()?;
         Ok(session)
+    }
+
+    pub fn set_window_id(&mut self, id: Option<String>) -> Result<(), StorageError> {
+        self.manifest.window_id = id;
+        self.write_manifest()
     }
 
     pub fn id(&self) -> &str {

@@ -1,6 +1,6 @@
 # 32 — Permissions & Security
 
-**Status:** Done — M20: `PermissionGate` in notoir-core (principals, capabilities, risk classes, MCP defaults, evaluation order, Once/Session/Persistent grants, revocation), per-client matrix persisted in `mcp_grant`, non-modal Ask prompt above the status bar (F6, coalesced identical requests, 120 s timeout, dangerous Always Allow confirms), path boundary with canonicalised symlinks. M22: plugin principals get exactly their approved manifest permissions (unrequested → Deny without prompt), `process` asks per call unless always allowed (stored in `plugin_grant`). Later: "Preview changes" diff in the Ask prompt
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  M20: `PermissionGate` in notoir-core (principals, capabilities, risk classes, MCP defaults, evaluation order, Once/Session/Persistent grants, revocation), per-client matrix persisted in `mcp_grant`, non-modal Ask prompt above the status bar (F6, coalesced identical requests, 120 s timeout, dangerous Always Allow confirms), path boundary with canonicalised symlinks. M22: plugin principals get exactly their approved manifest permissions (unrequested → Deny without prompt), `process` asks per call unless always allowed (stored in `plugin_grant`). Later: "Preview changes" diff in the Ask prompt
 
 ## Purpose
 
@@ -183,3 +183,7 @@ Feature: Plugin capabilities
     When it calls notoir.clipboard.get
     Then the call fails with a permission error and no prompt is shown
 ```
+
+## Application and window ownership (spec 40)
+
+Resolve window/workspace before authorization; pin both through prompts and IO. Session permissions belong to that context. Persistent workspace grants keep existing scope. Closing a target cannot authorize a sibling. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

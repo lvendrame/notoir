@@ -177,7 +177,14 @@ pub enum CommandOutcome {
 
 pub type HandlerFn<C> = fn(&mut C, &CommandInvocation) -> CommandOutcome;
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum CommandScope {
+    Application,
+    Window,
+}
+
 pub struct CommandSpec<C> {
+    pub scope: CommandScope,
     pub id: CommandId,
     /// i18n key of the title (`commands:file.save`).
     pub title_key: String,
@@ -196,6 +203,7 @@ impl<C> CommandSpec<C> {
     /// A palette command titled `commands:<id>`, always enabled, safe.
     pub fn new(id: &'static str, category: Category, handler: HandlerFn<C>) -> Self {
         Self {
+            scope: CommandScope::Window,
             id: CommandId::from_static(id),
             title_key: format!("commands:{id}"),
             category,
@@ -206,6 +214,11 @@ impl<C> CommandSpec<C> {
             risk: Risk::Safe,
             handler,
         }
+    }
+
+    pub fn application(mut self) -> Self {
+        self.scope = CommandScope::Application;
+        self
     }
 
     pub fn when(mut self, expr: &str) -> Result<Self, WhenError> {

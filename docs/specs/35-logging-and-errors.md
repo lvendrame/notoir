@@ -93,3 +93,7 @@ Feature: Panic resilience
     When a panic occurs on the UI thread
     Then the next launch offers to restore "a.md"
 ```
+
+## Application and window ownership (spec 40)
+
+Relevant logs include WindowId, workspace generation and operation identity. Application startup/shutdown are logged once; window creation/closure is distinct. Do not log document contents or credentials. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

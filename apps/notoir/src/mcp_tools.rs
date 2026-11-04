@@ -462,6 +462,13 @@ impl AppCore {
 
     /// Continues a call after its IO.
     pub(crate) fn mcp_after(&mut self, mut w: Waiting, result: Result<AfterIo, ToolReply>) {
+        if self.is_closing || w.generation != self.ws_generation {
+            w.call.respond(ToolReply::error(
+                "workspace_changed",
+                "The target workspace changed",
+            ));
+            return;
+        }
         let label = self.mcp_target_label(&w.target);
         let io = match result {
             Ok(io) => io,

@@ -64,6 +64,7 @@ pub struct Waiting {
     pub(crate) started: u64,
     /// Ran again after loading its document (no second load).
     pub(crate) retried: bool,
+    pub(crate) generation: u64,
 }
 
 /// "Local Agent (MCP) wants to save notes.md."
@@ -135,6 +136,7 @@ pub(crate) struct PendingSave {
 
 pub struct McpState {
     pub server: Option<McpServer>,
+    remote_url: Option<String>,
     events_tx: Sender<ServerEvent>,
     events_rx: Receiver<ServerEvent>,
     pub(crate) wake: Arc<dyn Fn() + Send + Sync>,
@@ -195,6 +197,7 @@ impl McpState {
             done_tx,
             done_rx,
             server: None,
+            remote_url: None,
             events_tx,
             events_rx,
             wake,
@@ -219,17 +222,72 @@ impl McpState {
         }
     }
 
+    pub(crate) fn start_transport(&mut self, port: u16) {
+        if self.server.is_none() {
+            match McpServer::start(
+                port,
+                self.registry.clone(),
+                self.events_tx.clone(),
+                self.wake.clone(),
+            ) {
+                Ok(server) => self.server = Some(server),
+                Err(e) => tracing::error!(error = %e, "MCP transport failed to start"),
+            }
+        }
+    }
+
+    pub(crate) fn stop_transport(&mut self) {
+        if let Some(server) = self.server.take() {
+            server.stop();
+        }
+        for event in self.take_events() {
+            if let ServerEvent::Call(call) = event {
+                call.respond(ToolReply::error(
+                    "server_stopped",
+                    "The Notoir MCP server stopped",
+                ));
+            }
+        }
+        self.connected.clear();
+    }
+
+    pub(crate) fn take_events(&self) -> Vec<ServerEvent> {
+        self.events_rx.try_iter().collect()
+    }
+
+    pub(crate) fn receive_status(&mut self, event: ServerEvent) {
+        match event {
+            ServerEvent::Connected { client, .. } => {
+                *self.connected.entry(client).or_default() += 1
+            }
+            ServerEvent::Disconnected { client } => {
+                if let Some(count) = self.connected.get_mut(&client) {
+                    *count = count.saturating_sub(1);
+                }
+            }
+            _ => {}
+        }
+    }
+
+    pub(crate) fn set_transport_status(&mut self, url: Option<String>, host: &Self) {
+        self.remote_url = url;
+        self.connected.clone_from(&host.connected);
+    }
+
     /// Delivers a server event as if it came from the server (tests).
     pub fn inject(&self, e: ServerEvent) {
         let _ = self.events_tx.send(e);
     }
 
     pub fn running(&self) -> bool {
-        self.server.is_some()
+        self.server.is_some() || self.remote_url.is_some()
     }
 
     pub fn url(&self) -> Option<String> {
-        self.server.as_ref().map(McpServer::url)
+        self.server
+            .as_ref()
+            .map(McpServer::url)
+            .or_else(|| self.remote_url.clone())
     }
 
     /// Clients with at least one open session.
@@ -265,10 +323,15 @@ impl McpState {
     /// The setup snippet for `target` (`token` is a placeholder once the
     /// one-time display is gone).
     pub fn snippet(&self, target: McpTarget, token: &str) -> String {
-        let port = self
-            .server
-            .as_ref()
-            .map_or(notoir_mcp::DEFAULT_PORT, McpServer::port);
+        let port = self.server.as_ref().map_or_else(
+            || {
+                self.remote_url
+                    .as_deref()
+                    .and_then(|url| url.rsplit(':').next()?.split('/').next()?.parse().ok())
+                    .unwrap_or(notoir_mcp::DEFAULT_PORT)
+            },
+            McpServer::port,
+        );
         let url = format!("http://127.0.0.1:{port}/mcp");
         let bearer = format!("Authorization: Bearer {token}");
         let exe = self.bridge_command.clone().unwrap_or_else(|| {
@@ -470,6 +533,12 @@ impl AppCore {
     }
 
     pub fn mcp_start(&mut self) {
+        if self.window_id.is_some() {
+            self.effects.push(crate::core::Effect::Application(
+                crate::application::ApplicationRequest::StartMcp,
+            ));
+            return;
+        }
         let port = self.settings.int("mcp.port", None).clamp(0, 65535) as u16;
         self.mcp_start_on(port);
     }
@@ -512,10 +581,20 @@ impl AppCore {
 
     /// Disconnects every client; waiting requests are rejected.
     pub fn mcp_stop(&mut self) {
-        let Some(server) = self.mcp.server.take() else {
+        if self.window_id.is_some() {
+            self.effects.push(crate::core::Effect::Application(
+                crate::application::ApplicationRequest::StopMcp,
+            ));
             return;
-        };
-        server.stop();
+        }
+        self.mcp_stop_local();
+    }
+
+    pub(crate) fn mcp_stop_local(&mut self) {
+        if let Some(server) = self.mcp.server.take() {
+            server.stop();
+        }
+        self.mcp.remote_url = None;
         let stopped = || ToolReply::error("server_stopped", "The Notoir MCP server stopped");
         for p in std::mem::take(&mut self.mcp.prompts) {
             for w in p.waiters {
@@ -729,6 +808,13 @@ impl AppCore {
 
     /// Gate, then run (or ask).
     fn mcp_call(&mut self, call: McpCall) {
+        if self.is_closing {
+            call.respond(ToolReply::error(
+                "window_closing",
+                "The target window is closing",
+            ));
+            return;
+        }
         let started = self.now_ms;
         self.mcp_seen(&call.client);
         let Some(def) = tools::find(&call.tool) else {
@@ -754,6 +840,7 @@ impl AppCore {
                 target,
                 started,
                 retried: false,
+                generation: self.ws_generation,
             },
             def,
         );
@@ -762,6 +849,13 @@ impl AppCore {
     /// Re-evaluates the gate (also after a prompt answer, so changes made
     /// meanwhile apply).
     fn mcp_gate(&mut self, w: Waiting, def: &'static ToolDef) {
+        if w.generation != self.ws_generation {
+            w.call.respond(ToolReply::error(
+                "workspace_changed",
+                "The target workspace changed",
+            ));
+            return;
+        }
         let p = principal(&w.call.client);
         let mut ask = None;
         for cap in &crate::mcp_tools::capabilities(def, &w) {
@@ -854,6 +948,13 @@ impl AppCore {
     }
 
     fn mcp_gate_except(&mut self, w: Waiting, def: &'static ToolDef, granted: &Capability) {
+        if w.generation != self.ws_generation {
+            w.call.respond(ToolReply::error(
+                "workspace_changed",
+                "The target workspace changed",
+            ));
+            return;
+        }
         let p = principal(&w.call.client);
         let caps = crate::mcp_tools::capabilities(def, &w);
         for cap in caps.iter().filter(|c| *c != granted) {
@@ -902,6 +1003,7 @@ impl AppCore {
             }
         }
         self.mcp.prompts = keep;
+        self.mcp_broadcast();
     }
 
     // ── tools ────────────────────────────────────────────────────────────
@@ -972,6 +1074,7 @@ impl AppCore {
             name: name.to_owned(),
             token,
         };
+        self.mcp_broadcast();
         self.mcp.new_client = Some(created.clone());
         created
     }
@@ -1024,7 +1127,16 @@ impl AppCore {
         self.mcp_persist(id);
     }
 
+    fn mcp_broadcast(&mut self) {
+        if self.window_id.is_some() {
+            self.effects.push(crate::core::Effect::Application(
+                crate::application::ApplicationRequest::RefreshMcp,
+            ));
+        }
+    }
+
     fn mcp_persist(&mut self, id: &ClientId) {
+        self.mcp_broadcast();
         let grants: Vec<(String, String)> = self
             .mcp
             .gate

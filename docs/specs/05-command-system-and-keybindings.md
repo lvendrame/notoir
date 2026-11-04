@@ -1,6 +1,6 @@
 # 05 — Command System & Keybindings
 
-**Status:** Done — command registry, when-expressions, keymap (M1); keyboard dispatch, menu/toolbar wiring (M3); Command Palette, keybindings.toml applied on save or external change, Preferences: Open Keyboard Shortcuts File (M9); shortcuts editor (M10); plugin commands (`plugin.<id>.<command>`, titles from the manifest and plugin locales) and plugin keybindings between user and default bindings, invalid plugin when-expressions rejected into Plugin Output (M22)
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  command registry, when-expressions, keymap (M1); keyboard dispatch, menu/toolbar wiring (M3); Command Palette, keybindings.toml applied on save or external change, Preferences: Open Keyboard Shortcuts File (M9); shortcuts editor (M10); plugin commands (`plugin.<id>.<command>`, titles from the manifest and plugin locales) and plugin keybindings between user and default bindings, invalid plugin when-expressions rejected into Plugin Output (M22)
 
 ## Purpose
 
@@ -187,3 +187,7 @@ Feature: When expressions
     Then that keybinding is not registered
     And Plugin Output shows a parse error naming the plugin
 ```
+
+## Application and window ownership (spec 40)
+
+Commands have application or window scope. Window context is captured at dispatch; application actions go through typed host requests. Keyboard/native-menu shortcuts execute once. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

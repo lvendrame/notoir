@@ -62,5 +62,6 @@
   "updateInstallOnQuit": "종료 시 설치",
   "updateDownloadFailed": "업데이트를 다운로드할 수 없습니다.",
   "updateWillInstall": "Notoir가 종료되면 설치 프로그램이 열립니다.",
-  "yamlInvalid": "{{line}}줄 {{column}}열의 YAML이 잘못됨: {{message}}"
+  "yamlInvalid": "{{line}}줄 {{column}}열의 YAML이 잘못됨: {{message}}",
+  "sessionWriteFailed": "앱 세션을 저장할 수 없습니다. Notoir가 열린 상태로 유지됩니다."
 }

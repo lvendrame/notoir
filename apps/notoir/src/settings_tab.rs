@@ -224,6 +224,8 @@ impl AppCore {
         let command = command.to_owned();
         let fs_poster = self.fs.poster();
         self.io.submit(move || {
+            let coordinator = notoir_storage::coordinator::for_path(&path);
+            let _guard = coordinator.lock().unwrap_or_else(|e| e.into_inner());
             let text = std::fs::read_to_string(&path).unwrap_or_default();
             let result = settings_file::append_keybinding(&text, key.as_deref(), &command, None)
                 .map_err(|e| e.to_string())

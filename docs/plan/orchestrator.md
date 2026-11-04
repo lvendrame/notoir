@@ -115,3 +115,16 @@ verified downloads, unsaved-document cancellation, and a harmless real DMG hande
 Automatic checks are disabled in the test profile, verifying that manual checks still work. Temporary
 registration and mounted disk images are cleaned up. The script needs Python `cryptography`; `--native-service`
 refuses to replace an existing workflow. Save As cancellation is also covered by a targeted app regression.
+
+## Single-process application migration (spec 40)
+
+| Phase | Work | Status | Gate |
+|---|---|---|---|
+| W0 | Normative lifecycle spec, architecture decisions, affected contracts and scenarios | Done | No contradictory process/window ownership rules |
+| W1 | Host, persistent window identity, typed effects and window controllers | Done | Single-window regressions pass through host |
+| W2 | Native peer viewports, focus, close and coordinated Quit | Done | Closing first editor preserves siblings |
+| W3 | Launch forwarding, canonical workspace ownership, CLI waiters | Done | Repeated launches share GUI PID |
+| W4 | Restore manifest, independent session keys, legacy migration and recovery claims | Done | Multi-window Quit/crash restore |
+| W5 | Native macOS menus and cross-platform window navigation | Done | Persistent native objects; context changes patch state in place. Real AppKit tracking/New Window/zero-window Quit verified by scripts/live-native-menus.py. |
+| W6 | Shared services, MCP targeting, plugin isolation and repository coordination | Done | No duplicate listeners/cross-window mutation |
+| W7 | Scenario coverage, required checks and native acceptance | In progress | fmt, workspace Clippy and full workspace tests pass; macOS native lifecycle passes (scripts/live-windows.py). Native Windows/Linux verification remains for their CI/runners. See window-migration-verification.md. |

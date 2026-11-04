@@ -49,7 +49,7 @@ Rationale:
 | Inspectability / debugging | Any SQLite tool | Text editor | Custom tooling |
 | Footprint | ~1 MB code; fast open | Minimal | Small |
 
-Multi-process access (one process per window, AD-10) and append-heavy data (MCP activity) decide it for SQLite.
+Transactional shared metadata and append-heavy data (MCP activity) decide it for SQLite. AD-10 now specifies one process with independent editor windows.
 Session blobs (layout trees, view states) are stored as versioned JSON in a column to keep the schema small and evolve
 with serde defaults.
 
@@ -151,3 +151,7 @@ Feature: Storage robustness
 JSON/YAML Text / Split / Tree presentation is stored per tab using optional `tree_mode` (`split` / `tree`) and
 `tree_ratio` fields in session v1. Older sessions default to Text; unknown modes and non-structured languages fall back
 to Text. Ratios are restored within 0.2–0.8. No database migration is required.
+
+## Application and window ownership (spec 40)
+
+Spec 40 replaces process-per-window assumptions. Add a versioned application restore manifest with ordered WindowIds, active identity, snapshots, geometry and recovery associations. Use distinct workspace-free keys; import legacy slot zero transactionally without deleting history. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

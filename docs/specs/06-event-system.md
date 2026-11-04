@@ -91,3 +91,7 @@ Feature: Event delivery
     When the user types 20 characters within 100 ms
     Then the plugin receives one on_file_change call for that burst
 ```
+
+## Application and window ownership (spec 40)
+
+Application events describe window creation, activation, closure and quitting. Published window events carry WindowId; local document events remain local. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

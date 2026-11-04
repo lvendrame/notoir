@@ -48,6 +48,9 @@ ed25519-dalek = "3.0.0"
 base64 = "0.23"
 sha2 = "0.11.1"
 
+[target.'cfg(target_os = "macos")'.dependencies]
+muda = { version = "0.21.2", default-features = false }
+
 # `scripts/package.sh` (cargo-packager 0.11): .app/.dmg (universal), .msi and
 # NSIS, .deb and AppImage. The bundle identifier must never change after the
 # first release (spec 31).

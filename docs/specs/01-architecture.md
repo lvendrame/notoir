@@ -71,7 +71,7 @@ consumer of domain state and a producer of commands; it is never the authoritati
 
 ## Application State Ownership
 
-The UI thread owns all mutable application state in a single `AppCore` value, held by `NotoirApp`:
+The UI thread owns one `ApplicationHost` and a separate mutable `AppCore` for each editor window. Each window controller (`NotoirApp`) holds its own core and UI state:
 
 ```rust
 pub struct AppCore {
@@ -164,7 +164,7 @@ Versions are pinned at scaffold time (M0) to the latest stable, mutually compati
 
 | Concern | Crate | Notes |
 |---|---|---|
-| UI | `eframe`, `egui`, `egui_kittest` | glow backend, x11 + wayland features, `persistence` off (own persistence) |
+| UI | `eframe`, `egui`, `egui_kittest` | wgpu backend (Metal on macOS), x11 + wayland features, `persistence` off (own persistence) |
 | Text buffer | `ropey` | O(log n) edits, cheap clones for snapshots |
 | Grapheme / width | `unicode-segmentation`, `unicode-width` | cursor movement by grapheme |
 | Encodings | `encoding_rs`, `chardetng` | detect + decode + re-encode, BOM handling |
@@ -209,8 +209,8 @@ Lints: `unsafe_code = "forbid"` workspace-wide; clippy `all` as warnings, CI den
 | AD-7 | `git2` for local ops, system `git` CLI for network ops (git2 fallback) | System git honours the user's credential helpers, SSH config, proxies, LFS hooks; libgit2 auth is a known pain point | git2 only; `gix` (push support still maturing) |
 | AD-8 | MCP over Streamable HTTP on 127.0.0.1 with per-client bearer tokens + a `notoir mcp-bridge` stdio subcommand | Works with HTTP-capable clients and stdio-only clients; tokens give real per-client identity for permissions | stdio only (one client, needs separate process), unauthenticated HTTP |
 | AD-9 | One Lua VM per plugin on its own host thread, restricted stdlib | Plugin crash/timeout isolates to that plugin; UI never blocks on Lua | Shared VM on UI thread |
-| AD-10 | "New Window" launches a new process; a single-instance socket routes "open file" from the OS to the most recent window | Simple and robust with eframe; each window has independent recovery session | egui multi-viewport for full windows (immature for this use) |
-| AD-11 | In-window menu bar on all platforms for Phases 1–3; native macOS global menu evaluated as a later milestone (`muda`) | eframe has no native menu integration; consistency first | Native menus from day one |
+| AD-10 | One application host owns one native event loop and independent editor windows; every launch forwards to it | Independent editing contexts and recovery sessions without multiple GUI processes | Process per window (superseded by spec 40) |
+| AD-11 | Native application menu on macOS; in-window menus on Windows/Linux; all actions target the command registry | One application owns menu lifetime and routes commands to the captured window | Separate per-process menu/window ownership |
 | AD-12 | Zoom is global for all editor views by default (`editor.zoomScope = "global"`), optional per-view | Matches user expectation of "make text bigger"; per-view as power option | Per-view only |
 | AD-13 | Line endings normalized to `\n` in the buffer; original style remembered and restored on save | Simplifies every algorithm; style is a document property shown in the status bar | Keeping raw `\r\n` in rope |
 
@@ -258,3 +258,26 @@ Feature: Worker results
 - The layer-boundary test is implemented with `cargo metadata` in an integration test under `tests/` at workspace level.
 - `AppCore` services expose `&mut self` methods only; there are no interior-mutability types in `notoir-core` except
   `Arc` for immutable shared data.
+
+## Application host and window controllers (spec 40)
+
+```text
+ApplicationHost (one process / event loop / hidden root viewport)
+  ├─ Window registry: WindowId -> viewport + window controller
+  ├─ Launch IPC, application requests, active-window order
+  ├─ Shared configuration, fonts, native menus, MCP transport, updates
+  ├─ Restore manifest and ordered shared metadata writes
+  └─ WindowController × N
+       ├─ AppCore: workbench, workspace, IO, plugins, recovery, settings
+       └─ UiState: focus, layout widgets, palettes, dialogs, caches
+```
+
+AppCore is a **window** core, not the process singleton. All mutable cores remain owned by the UI thread, with immutable worker snapshots and window-qualified results. Local document/view/group IDs are never used as application-wide identities. Application commands produce typed host effects; window commands keep the target captured at dispatch. Window events remain local unless published with WindowId.
+
+The host uses an invisible root viewport and peer immediate editor viewports. The root owns no editing context and never appears in menus or restore manifests. Render/async state is isolated per window. Application language is shared; workspace settings/themes are local. The repaint and font lifecycle is coordinated by the host.
+
+AD-12: persistent opaque WindowId separates window identity from PID and viewport implementation. AD-13: one MCP listener routes requests to a pinned window before permissions. AD-14: transactional application restore manifest and per-window recovery claims replace slot-zero/process ownership. See [spec 40](./40-application-and-window-lifecycle.md) for lifecycle, compatibility and acceptance contracts.
+
+AD-15: use wgpu for native multi-window rendering. macOS acceptance exposed OpenGL context/texture failures when new editor viewports were materialized. New native viewports are declared before immediate editor rendering; the hidden root has a logic-only wake path for zero-window reopening.
+
+The versioned application manifest is stored atomically under a reserved `workspace_session` key using the existing SQLite schema. This additive format requires no destructive schema migration: legacy slot-zero rows are imported on first restore and retained as historical data. Manifest write acknowledgements gate application Quit; write failure aborts Quit and leaves windows open.

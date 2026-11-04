@@ -25,6 +25,7 @@ pub const THEME_ENV: &str = "NOTOIR_THEME";
 
 /// What `main` hands the app: command-line files and forwarded launches.
 pub struct Launch {
+    pub accepting_launches: Option<std::sync::Arc<std::sync::atomic::AtomicBool>>,
     pub open_paths: Vec<(std::path::PathBuf, Option<(usize, usize)>)>,
     /// No paths and not `--new-window`: restore the last session.
     pub restore_session: bool,
@@ -131,7 +132,16 @@ impl NotoirApp {
     /// Installs fonts: bundled faces plus system CJK faces for the UI
     /// language and any CJK text the editor showed. Faces load in the
     /// background and are added when ready.
+    pub(crate) fn required_scripts(&self) -> Vec<Script> {
+        let mut scripts = self.cjk_seen.scripts(self.core.language);
+        scripts.extend(fonts::script_for(self.core.language));
+        scripts
+    }
+
     fn ensure_fonts(&mut self, ctx: &egui::Context) {
+        if self.core.window_id.is_some() {
+            return;
+        }
         let mut scripts: Vec<Script> = fonts::script_for(self.core.language).into_iter().collect();
         scripts.extend(self.cjk_seen.scripts(self.core.language));
         scripts.sort();
@@ -178,6 +188,16 @@ impl NotoirApp {
     fn apply_effects(&mut self, ctx: &egui::Context, centre_was_open: bool) {
         for effect in std::mem::take(&mut self.core.effects) {
             match effect {
+                Effect::Application(request) => self.core.application_requests.push(request),
+                Effect::CloseWindow => {
+                    if self.core.window_id.is_some() {
+                        self.core
+                            .application_requests
+                            .push(crate::application::ApplicationRequest::Close);
+                    } else {
+                        ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                    }
+                }
                 Effect::ApplyTheme => {
                     let id = self.core.theme(system_dark(ctx));
                     self.set_theme(ctx, id);
@@ -198,7 +218,15 @@ impl NotoirApp {
                     ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(on));
                     self.ui.fullscreen_requested = Some(on);
                 }
-                Effect::Quit => ctx.send_viewport_cmd(egui::ViewportCommand::Close),
+                Effect::Quit => {
+                    if self.core.window_id.is_some() {
+                        self.core
+                            .application_requests
+                            .push(crate::application::ApplicationRequest::Quit);
+                    } else {
+                        ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                    }
+                }
                 Effect::OpenPicker(kind) => {
                     if kind == crate::shell::overlays::PickerKind::Symbols
                         && let Some(d) = self.core.workbench.active_document()
@@ -334,6 +362,9 @@ impl eframe::App for NotoirApp {
         for (req, waiter) in forwarded {
             self.core.handle_instance_request(req, waiter);
         }
+        if self.core.window_id.is_some() {
+            self.theme.apply(&ctx);
+        }
         self.ensure_fonts(&ctx);
         if self.ui.picker.is_none() {
             // Theme "auto" follows the OS.
@@ -438,7 +469,12 @@ impl eframe::App for NotoirApp {
         }
         self.ui.window_focused = focused;
         if ctx.input(|i| i.viewport().close_requested()) {
-            if self.core.request_quit() {
+            if self.core.window_id.is_some() {
+                ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
+                self.core
+                    .application_requests
+                    .push(crate::application::ApplicationRequest::Close);
+            } else if self.core.request_quit() {
                 self.core.shutdown();
             } else {
                 ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
@@ -487,7 +523,7 @@ impl eframe::App for NotoirApp {
             };
             let zen = self.core.zen.is_some();
             // Zen Mode: the menu bar shows only while Alt is held (Win/Linux).
-            if !zen || ctx.input(|i| i.modifiers.alt) {
+            if !self.core.native_menu && (!zen || ctx.input(|i| i.modifiers.alt)) {
                 chrome::menu_bar(ui, &mut kit, &self.core, &context, &mut actions);
             } else {
                 top_offset = 0.0;
@@ -649,6 +685,16 @@ impl eframe::App for NotoirApp {
         self.apply_effects(&ctx, centre_was_open);
         self.core.nav_track();
         crate::live::finish(&mut self.core, &ctx);
+        if self.core.window_id.is_some() && crate::live::enabled() {
+            let mut raw = egui::RawInput::default();
+            crate::live::input(&mut self.core, &ctx, &mut raw);
+            if !raw.events.is_empty() {
+                ctx.plugin::<crate::input::WindowInput>()
+                    .lock()
+                    .queue(ctx.viewport_id(), raw.events);
+                ctx.request_repaint();
+            }
+        }
         // Typing on the empty state starts a Scratchpad (spec 17).
         if self.core.workbench.active_view().is_none()
             && !ctx.egui_wants_keyboard_input()

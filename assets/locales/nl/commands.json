@@ -442,5 +442,11 @@
     "showSplit": "Editor en voorbeeld tonen",
     "showPreview": "Voorbeeld tonen",
     "action": "CSV bewerken"
+  },
+  "window": {
+    "minimize": "Minimaliseren",
+    "bringAllToFront": "Alles naar voren brengen",
+    "close": "Venster sluiten",
+    "activate": "Venster activeren"
   }
 }

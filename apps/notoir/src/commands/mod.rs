@@ -53,7 +53,18 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     workspace::specs(&mut specs);
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);
-    for spec in specs {
+    for mut spec in specs {
+        if matches!(
+            spec.id.as_str(),
+            "file.newWindow"
+                | "app.quit"
+                | "help.about"
+                | "app.settings"
+                | "app.checkForUpdates"
+                | "window.bringAllToFront"
+        ) {
+            spec.scope = notoir_core::command::CommandScope::Application;
+        }
         if let Err(e) = registry.register(spec) {
             tracing::error!(error = %e, "duplicate built-in command");
         }

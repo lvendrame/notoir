@@ -442,5 +442,11 @@
     "showSplit": "エディターとプレビューを表示",
     "showPreview": "プレビューを表示",
     "action": "CSVを編集"
+  },
+  "window": {
+    "minimize": "しまう",
+    "bringAllToFront": "すべてを手前に移動",
+    "close": "ウインドウを閉じる",
+    "activate": "ウインドウを表示"
   }
 }

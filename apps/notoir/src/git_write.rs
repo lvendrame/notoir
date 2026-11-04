@@ -437,6 +437,15 @@ impl AppCore {
         let generation = self.git.generation;
         self.git.busy += 1;
         self.git_queue.submit(move || {
+            let lock_path = repo
+                .as_ref()
+                .map(|r| r.git_dir.clone())
+                .unwrap_or_else(|| match &op {
+                    LocalOp::Init(path) => path.clone(),
+                    _ => PathBuf::new(),
+                });
+            let coordinator = notoir_storage::coordinator::for_path(&lock_path);
+            let _guard = coordinator.lock().unwrap_or_else(|e| e.into_inner());
             let result = run_local(&*backend, &*dialogs, repo.as_ref(), &op);
             Some(IoResult::Git(Box::new(GitResult::Op {
                 generation,
@@ -615,6 +624,15 @@ impl AppCore {
         let spawned = std::thread::Builder::new()
             .name("notoir-git-net".into())
             .spawn(move || {
+                let lock_path =
+                    repo.as_ref()
+                        .map(|r| r.git_dir.clone())
+                        .unwrap_or_else(|| match &op {
+                            NetOp::Clone { dest, .. } => dest.clone(),
+                            _ => PathBuf::new(),
+                        });
+                let coordinator = notoir_storage::coordinator::for_path(&lock_path);
+                let _guard = coordinator.lock().unwrap_or_else(|e| e.into_inner());
                 let sink: OutputSink = {
                     let poster = poster.clone();
                     Arc::new(move |o| poster.post(IoResult::Git(Box::new(GitResult::Output(o)))))

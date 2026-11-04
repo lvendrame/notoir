@@ -100,3 +100,7 @@ Feature: External modification
     Then the tab is marked deleted and the content remains
     And Save recreates the file
 ```
+
+## Application and window ownership (spec 40)
+
+Independent buffers for the same file in different windows observe peer saves through external-change handling. A dirty peer is never silently overwritten. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

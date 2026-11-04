@@ -18,6 +18,12 @@ clients; click it for a popover with the address, the connected clients, recent 
 The server uses port 47823 (`mcp.port`), or the next free port if that one is taken. Set `mcp.autoStart` to start it
 with Notoir. **Stop MCP Server** disconnects every client.
 
+## Choose a window
+
+One server serves all Notoir windows. Call `window_list` to discover window IDs, titles, workspace roots and the active window. Pass `window_id` to a document, editor, workspace, filesystem or Git tool to select its context. Without it, the request uses the last active window when it arrives.
+
+The destination stays fixed while permission prompts and background work finish. Switching windows does not redirect a pending request. Closing the destination returns `window_closed`; an unknown ID returns `window_not_found`. When no editor window is open, context tools return `no_active_window`.
+
 ## Connect a client in one step
 
 **Tools › MCP › Copy Setup Command** has an entry per client. Choosing one creates a client in Notoir named after it

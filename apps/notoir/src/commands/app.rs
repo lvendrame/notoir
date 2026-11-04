@@ -123,6 +123,38 @@ pub(super) fn specs(out: &mut Specs, platform: Platform) {
             CommandOutcome::Done
         },
     ));
+    for id in ["window.minimize", "window.bringAllToFront", "window.close"] {
+        out.push(CommandSpec::new(
+            id,
+            Category::View,
+            |c: &mut AppCore, invocation: &CommandInvocation| {
+                let request = match invocation.id.as_str() {
+                    "window.minimize" => crate::application::ApplicationRequest::Minimize,
+                    "window.bringAllToFront" => {
+                        crate::application::ApplicationRequest::BringAllToFront
+                    }
+                    _ => crate::application::ApplicationRequest::Close,
+                };
+                c.effects.push(Effect::Application(request));
+                CommandOutcome::Done
+            },
+        ));
+    }
+    out.push(
+        CommandSpec::new(
+            "window.activate",
+            Category::View,
+            |c: &mut AppCore, invocation: &CommandInvocation| {
+                if let Some(id) = invocation.args["id"].as_str() {
+                    c.effects.push(Effect::Application(
+                        crate::application::ApplicationRequest::Activate(id.to_owned()),
+                    ));
+                }
+                CommandOutcome::Done
+            },
+        )
+        .hidden(),
+    );
     let mut quit =
         CommandSpec::new("app.quit", Category::File, quit).keys([KeyBindingDef::new("Mod+Q")]);
     if platform == Platform::Mac {

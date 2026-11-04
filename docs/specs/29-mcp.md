@@ -1,6 +1,6 @@
 # 29 — MCP Server
 
-**Status:** Done — M20: transport (rmcp Streamable HTTP on 127.0.0.1, `mcp.port` or the next free port, Host/Origin allow-lists, bearer tokens stored as SHA-256 hashes, per-client rate limit), `notoir mcp-bridge`, lifecycle and `mcp.autoStart` (restricted), client identity (Add Client, one-time token, config snippets, revoke), status bar `MCP ●N` with popover, Connections, Permissions, Activity panel (`mcp_activity` with retention). M21: the full tool catalogue plus `editor_get_selection`; Copy Setup Command submenu (8 client platforms); documents load into memory without a tab and get a background tab when edited; `document_write` / `document_apply_edits` as one undoable `ChangeOrigin::Mcp` transaction with `expected_revision` → `revision_conflict`; fading edit highlight (`mcp.highlightEdits`); `filesystem_write` atomic, then external-change handling with a banner naming the client; `filesystem.outsideWorkspace` for absolute paths of `filesystem_*`; `mcp.maxReadBytes`; activity targets with `(+a −b)` line counts. Later: resources (`notoir://document/{id}`), `git_commit` / `git_push` (Phase 6), plugin-contributed tools (spec 30). Deviations: activity times are UTC; open SSE streams of a revoked client end with their session keep-alive
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  M20: transport (rmcp Streamable HTTP on 127.0.0.1, `mcp.port` or the next free port, Host/Origin allow-lists, bearer tokens stored as SHA-256 hashes, per-client rate limit), `notoir mcp-bridge`, lifecycle and `mcp.autoStart` (restricted), client identity (Add Client, one-time token, config snippets, revoke), status bar `MCP ●N` with popover, Connections, Permissions, Activity panel (`mcp_activity` with retention). M21: the full tool catalogue plus `editor_get_selection`; Copy Setup Command submenu (8 client platforms); documents load into memory without a tab and get a background tab when edited; `document_write` / `document_apply_edits` as one undoable `ChangeOrigin::Mcp` transaction with `expected_revision` → `revision_conflict`; fading edit highlight (`mcp.highlightEdits`); `filesystem_write` atomic, then external-change handling with a banner naming the client; `filesystem.outsideWorkspace` for absolute paths of `filesystem_*`; `mcp.maxReadBytes`; activity targets with `(+a −b)` line counts. Later: resources (`notoir://document/{id}`), `git_commit` / `git_push` (Phase 6), plugin-contributed tools (spec 30). Deviations: activity times are UTC; open SSE streams of a revoked client end with their session keep-alive
 
 ## Purpose
 
@@ -27,8 +27,7 @@ Permission semantics are in spec 32.
   over stdio and proxies to the running app's HTTP endpoint. Used by stdio-only clients (e.g. Claude Desktop config).
   If Notoir is not running, the bridge returns an MCP error "Notoir is not running" (it never launches a hidden
   instance).
-- One MCP session per client connection; the server is one per Notoir process (each window process can run its own on
-  a different port; the Connections UI shows which).
+- One MCP session per client connection; one server serves all editor windows in the application process. Context-dependent calls accept `window_id`; `window_list` discovers destinations.
 
 ## Client Identity
 
@@ -213,3 +212,7 @@ Feature: Activity
     Given two clients are connected
     Then the status bar shows "MCP ●2"
 ```
+
+## Application and window ownership (spec 40)
+
+One MCP listener/client registry serves the application. Add window_list and optional window_id on context tools. Omission pins the last active open window when dequeued. Errors are window_not_found, no_active_window and window_closed. Pending prompts/work never follow focus changes. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

@@ -197,6 +197,13 @@ The menu bar as it appears on Windows and Linux, with default shortcuts. On macO
 - Open Plugins Folder
 - Plugin Developer Tools
 
+## Window
+
+- Minimize
+- Bring All to Front
+- Close Window
+- *(open windows)*
+
 ## Help
 
 - Welcome

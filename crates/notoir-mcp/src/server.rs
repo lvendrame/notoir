@@ -126,7 +126,7 @@ pub struct McpCall {
     pub client: ClientId,
     pub tool: String,
     pub args: Value,
-    reply: oneshot::Sender<ToolReply>,
+    reply: ReplyHandle,
 }
 
 impl McpCall {
@@ -142,19 +142,43 @@ impl McpCall {
                 client,
                 tool: tool.to_owned(),
                 args,
-                reply,
+                reply: ReplyHandle(std::sync::Arc::new(std::sync::Mutex::new(Some(reply)))),
             },
             rx,
         )
     }
 
+    /// Lets the application finish an in-flight request if its owning window closes.
+    pub fn reply_handle(&self) -> ReplyHandle {
+        self.reply.clone()
+    }
+
     pub fn respond(self, reply: ToolReply) {
-        let _ = self.reply.send(reply);
+        self.reply.respond(reply);
     }
 
     /// The client stopped waiting (timeout, disconnect).
     pub fn abandoned(&self) -> bool {
-        self.reply.is_closed()
+        self.reply.finished()
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct ReplyHandle(std::sync::Arc<std::sync::Mutex<Option<oneshot::Sender<ToolReply>>>>);
+
+impl ReplyHandle {
+    pub fn respond(&self, reply: ToolReply) {
+        if let Some(sender) = self.0.lock().unwrap_or_else(|e| e.into_inner()).take() {
+            let _ = sender.send(reply);
+        }
+    }
+
+    pub fn finished(&self) -> bool {
+        self.0
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .as_ref()
+            .is_none_or(|s| s.is_closed())
     }
 }
 

@@ -1,6 +1,6 @@
 # 38 — Command-Line Interface
 
-**Status:** Partial — M23a: `notoir --help` (translated to the OS language) and `--version` (`Notoir <version>`) print and exit without a window; unknown options and missing values print the error and a `notoir --help` hint and exit 2; `--` ends options; paths resolve against the terminal's directory (files as documents, folders as workspaces, `notoir .`), several per call, `--goto file:line[:col]` keeping colon paths whole; no paths restores the session; single-instance forwarding with `--new-window` to bypass it; `--wait` keeps the terminal until the files of that call have no tabs (the instance keeps the socket connection and writes `done`; with no instance running the command starts one and waits as a forwarder; released when the app exits). Command availability: Linux packages install `/usr/bin/notoir`; the macOS app, the AppImage and Windows installs get it from Help › Install 'notoir' Command in PATH (`/usr/local/bin` link with administrator authorization when needed, `~/.local/bin` link to the AppImage, or the install folder on the user PATH) and Help › Uninstall 'notoir' Command. Not covered by automated tests: the command on PATH after installing a real package, and `--new-window` opening a second window (needs a display); both need a manual check. Deviations: the DMG and AppImage cannot install the command or remove it on their own — the in-app commands do; `--new-window --wait` waits for that window to close
+**Status:** Partial — M23a: `notoir --help` (translated to the OS language) and `--version` (`Notoir <version>`) print and exit without a window; unknown options and missing values print the error and a `notoir --help` hint and exit 2; `--` ends options; paths resolve against the terminal's directory (files as documents, folders as workspaces, `notoir .`), several per call, `--goto file:line[:col]` keeping colon paths whole; no paths restores the session; single-instance forwarding, including `--new-window`; `--wait` keeps the terminal until the files of that call have no tabs (the instance keeps the socket connection and writes `done`; with no instance running the command starts one and waits as a forwarder; released when the app exits). Command availability: Linux packages install `/usr/bin/notoir`; the macOS app, the AppImage and Windows installs get it from Help › Install 'notoir' Command in PATH (`/usr/local/bin` link with administrator authorization when needed, `~/.local/bin` link to the AppImage, or the install folder on the user PATH) and Help › Uninstall 'notoir' Command. Not covered by automated tests: the command on PATH after installing a real package, and `--new-window` opening a second window (needs a display); both need a manual check. Deviations: the DMG and AppImage cannot install the command or remove it on their own — the in-app commands do; `--new-window --wait` waits for the opened documents to close
 
 ## Purpose
 
@@ -27,7 +27,7 @@ notoir [paths…] [--new-window] [--goto file:line[:col]] [--wait]
   and takes precedence over restoring the previous session.
 - Multiple file and folder paths may be supplied in one invocation.
 - With the default single-instance behavior, arguments are forwarded to the running instance and the new process exits.
-  `--new-window` opens a separate window instead.
+  `--new-window` forwards to that same instance and opens a separate native window.
 - `--goto file:line[:col]` opens the file and positions the caret at the one-based line and optional column. Paths
   containing colons remain valid when the suffix does not match the line/column form.
 - `--wait` keeps the terminal process alive until the files opened by that invocation have no remaining tabs in Notoir.
@@ -72,7 +72,7 @@ Feature: Terminal command
     When the user runs "notoir --goto src/main.rs:12:4"
     Then "src/main.rs" opens with the caret at line 12, column 4
 
-  Scenario: New window bypasses the running instance
+  Scenario: New window uses the running application process
     Given Notoir is already running
     When the user runs "notoir --new-window ."
     Then a separate Notoir window opens with the current directory as workspace
@@ -82,3 +82,7 @@ Feature: Terminal command
     Then the terminal process remains active while "notes.md" is open in Notoir
     And it exits after the last tab for "notes.md" closes
 ```
+
+## Application and window ownership (spec 40)
+
+--new-window requests a window in the one host instead of bypassing single-instance forwarding. Workspace deduplication takes priority. --wait works with --new-window and tracks actual destinations. Explicit paths suppress unrelated startup restoration. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

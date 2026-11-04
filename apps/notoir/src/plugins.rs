@@ -282,6 +282,21 @@ fn run_plugin_command(core: &mut AppCore, inv: &CommandInvocation) -> CommandOut
 }
 
 impl AppCore {
+    fn plugin_locale_prefix(&self, id: &str) -> String {
+        self.window_id.as_ref().map_or_else(
+            || format!("@plugin/{id}/"),
+            |window| format!("@plugin/{window}/{id}/"),
+        )
+    }
+
+    fn plugins_broadcast(&mut self) {
+        if self.window_id.is_some() {
+            self.effects.push(crate::core::Effect::Application(
+                crate::application::ApplicationRequest::RefreshPlugins,
+            ));
+        }
+    }
+
     pub fn plugins_dir(&self) -> PathBuf {
         let custom = self.settings.str("plugins.directory", None);
         if custom.is_empty() {
@@ -466,9 +481,10 @@ impl AppCore {
         let mut contributed = Vec::new();
         for c in &m.contributes.commands {
             let full = command_id(id, &c.id);
-            let title_key = format!("@plugin/{id}/{}", c.id);
+            let title_key = format!("{}{}", self.plugin_locale_prefix(id), c.id);
             crate::i18n::set_dynamic(&title_key, &resolve_title(&c.title, &table));
             let spec = CommandSpec {
+                scope: notoir_core::command::CommandScope::Window,
                 id: CommandId::from(full.clone()),
                 title_key,
                 category: Category::Plugins,
@@ -557,7 +573,7 @@ impl AppCore {
         self.plugins
             .menu_items
             .retain(|m| !m.command.starts_with(&prefix));
-        crate::i18n::clear_dynamic(&format!("@plugin/{id}/"));
+        crate::i18n::clear_dynamic(&self.plugin_locale_prefix(id));
         self.mcp.gate.reset(&principal(id));
         self.plugin_unload_more(id);
     }
@@ -787,6 +803,7 @@ impl AppCore {
             self.plugins.log(id, "info", "Disabled");
         }
         self.plugins_rebuild_keymap();
+        self.plugins_broadcast();
     }
 
     // ── approval ─────────────────────────────────────────────────────────
@@ -863,6 +880,9 @@ impl AppCore {
 
     /// The user answered the approval prompt.
     pub fn plugins_review_answer(&mut self, approve: bool) {
+        if approve {
+            self.plugins_broadcast();
+        }
         let Some(review) = self.plugins.review.take() else {
             return;
         };
@@ -905,6 +925,7 @@ impl AppCore {
     }
 
     pub fn plugins_installed(&mut self, id: String, error: Option<String>) {
+        self.plugins_broadcast();
         match error {
             None => {
                 self.plugins.log(&id, "info", "Installed");
@@ -1057,6 +1078,13 @@ impl AppCore {
     }
 
     fn plugin_request(&mut self, r: PluginRequest) {
+        if self.is_closing {
+            r.respond(Err(ApiError::new(
+                "window_closing",
+                "The editor window is closing",
+            )));
+            return;
+        }
         let active = self
             .plugins
             .entry(&r.plugin)

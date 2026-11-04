@@ -80,3 +80,9 @@ repository could contain settings that affect plugins, MCP or Git, a few *restri
 
 A workspace can also recommend plugins in `.notoir/plugins.toml`. They appear in the Plugin Manager under
 **Recommended by workspace** and are never installed automatically. See [Using plugins](plugins.md).
+
+## Multiple windows
+
+**File › New Window** creates an independent editor window in the same Notoir application. Each window has its own workspace, tabs, undo history, panels and navigation. Opening an already-open workspace activates its existing window. Use the **Window** menu to switch windows, minimize one or bring them all forward.
+
+Quit restores the open set of windows on the next normal startup. Closing one window removes it from that set without closing the others. On macOS, closing the last window leaves Notoir running; use New Window or reopen it from the Dock. Quit ends the application on every platform.

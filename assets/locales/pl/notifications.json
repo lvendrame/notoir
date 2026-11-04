@@ -62,5 +62,6 @@
   "updateInstallOnQuit": "Zainstaluj przy zamykaniu",
   "updateDownloadFailed": "Nie można pobrać aktualizacji.",
   "updateWillInstall": "Instalator otworzy się po zamknięciu Notoir.",
-  "yamlInvalid": "Nieprawidłowy YAML w wierszu {{line}}, kolumnie {{column}}: {{message}}"
+  "yamlInvalid": "Nieprawidłowy YAML w wierszu {{line}}, kolumnie {{column}}: {{message}}",
+  "sessionWriteFailed": "Nie można zapisać sesji aplikacji. Notoir pozostaje otwarty."
 }

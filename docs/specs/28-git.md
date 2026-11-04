@@ -325,3 +325,7 @@ Feature: Source Control preview tabs
     When the user edits its work tree pane and selects another file
     Then the edited diff remains open as a normal tab
     And the second diff opens in a preview tab
+
+## Application and window ownership (spec 40)
+
+Git UI belongs to each window. Mutating operations coordinate by canonical repository across all windows, including nested workspace roots. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

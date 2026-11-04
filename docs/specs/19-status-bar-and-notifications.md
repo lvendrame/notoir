@@ -102,3 +102,7 @@ Feature: Notifications
     Given the same autosave failure occurs three times
     Then one toast shows the message with "×3"
 ```
+
+## Application and window ownership (spec 40)
+
+Window notifications and status belong to their owner. Process-service status may be mirrored, but clicking actions preserves the originating target. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

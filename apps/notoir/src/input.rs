@@ -196,3 +196,45 @@ mod tests {
         );
     }
 }
+
+/// eframe does not call App::raw_input_hook for immediate child viewports.
+/// Register at the egui input boundary so native Ctrl-click and test input stay window-local.
+#[derive(Default)]
+pub(crate) struct WindowInput {
+    pub(crate) blocked: std::collections::HashSet<egui::ViewportId>,
+    clicks: std::collections::HashMap<egui::ViewportId, CtrlClick>,
+    queued: std::collections::HashMap<egui::ViewportId, Vec<egui::Event>>,
+}
+
+impl WindowInput {
+    pub(crate) fn queue(&mut self, viewport: egui::ViewportId, events: Vec<egui::Event>) {
+        self.queued.entry(viewport).or_default().extend(events);
+    }
+}
+
+impl egui::plugin::Plugin for WindowInput {
+    fn debug_name(&self) -> &'static str {
+        "Notoir window input"
+    }
+    fn input_hook(&mut self, _: &egui::Context, input: &mut egui::RawInput) {
+        if let Some(events) = self.queued.remove(&input.viewport_id) {
+            input.events.extend(events);
+        }
+        if self.blocked.contains(&input.viewport_id) {
+            input.events.retain(|event| {
+                matches!(
+                    event,
+                    egui::Event::Key { pressed: false, .. }
+                        | egui::Event::PointerButton { pressed: false, .. }
+                        | egui::Event::Screenshot { .. }
+                )
+            });
+        }
+        if cfg!(target_os = "macos") {
+            self.clicks
+                .entry(input.viewport_id)
+                .or_default()
+                .apply(input);
+        }
+    }
+}

@@ -202,3 +202,7 @@ Feature: First run
     When the user selects "Notoir Paper" on the welcome page
     Then the whole UI switches to the light theme immediately
 ```
+
+## Application and window ownership (spec 40)
+
+Shell layout, panels, focus, overlays and first-run presentation belong to the editor window. The hidden application viewport is never user-facing. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

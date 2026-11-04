@@ -62,5 +62,6 @@
   "updateInstallOnQuit": "Установить при выходе",
   "updateDownloadFailed": "Не удалось скачать обновление.",
   "updateWillInstall": "Установщик откроется после выхода из Notoir.",
-  "yamlInvalid": "Недопустимый YAML в строке {{line}}, столбце {{column}}: {{message}}"
+  "yamlInvalid": "Недопустимый YAML в строке {{line}}, столбце {{column}}: {{message}}",
+  "sessionWriteFailed": "Не удалось сохранить сеанс приложения. Notoir остаётся открытым."
 }

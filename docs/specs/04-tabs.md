@@ -192,3 +192,7 @@ Feature: Scratchpad shortcut
     And that group becomes active and the Scratchpad editor is focused
 
 ```
+
+## Application and window ownership (spec 40)
+
+Tab ordering, active tabs, previews and closed-tab history are independent per window. No cross-window tab transfer is introduced. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

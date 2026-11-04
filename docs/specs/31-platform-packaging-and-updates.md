@@ -88,7 +88,7 @@ as reported by winit.
 
 A per-user local socket (`interprocess` crate: named pipe on Windows, Unix domain socket elsewhere) at
 `<data>/notoir.sock`. Launching `notoir file.md` while an instance runs forwards the request and exits; `--new-window`
-bypasses forwarding. Stale sockets (no listener) are replaced.
+forwards a request to create a native editor window in that same process. Stale sockets (no listener) are replaced.
 
 ## Packaging
 
@@ -188,3 +188,7 @@ Feature: Help integration
     And the verified update remains ready
     And no installer is started
 ```
+
+## Application and window ownership (spec 40)
+
+Every GUI launch forwards to the host, including --new-window. macOS remains running without editor windows and handles Dock reopen/Open Documents. Windows/Linux exit after last close. Update installation uses coordinated application Quit and hands off once. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

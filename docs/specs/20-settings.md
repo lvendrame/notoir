@@ -1,6 +1,6 @@
 # 20 — Settings
 
-**Status:** Done — schema, scope resolution, settings files (M1, M2); files applied live (M9); Settings tab (search in UI language and English with `@modified`, User/Workspace scope, categories, controls per type, modified/overridden/restricted markers, per-row Reset / Copy ID / Copy as TOML, unknown settings, Open settings.toml), Keyboard Shortcuts editor (search, chord recording, removal, conflict warnings, writes keybindings.toml) (M10). Later: descriptions per setting, font picker, colour swatches, `@lang:` / `@plugin:` filters and Apply to Language…
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  schema, scope resolution, settings files (M1, M2); files applied live (M9); Settings tab (search in UI language and English with `@modified`, User/Workspace scope, categories, controls per type, modified/overridden/restricted markers, per-row Reset / Copy ID / Copy as TOML, unknown settings, Open settings.toml), Keyboard Shortcuts editor (search, chord recording, removal, conflict warnings, writes keybindings.toml) (M10). Later: descriptions per setting, font picker, colour swatches, `@lang:` / `@plugin:` filters and Apply to Language…
 
 ## Purpose
 
@@ -195,3 +195,7 @@ Feature: Settings UI
     When the user presses Ctrl/Cmd+,
     Then a "Settings" tab opens in the active group
 ```
+
+## Application and window ownership (spec 40)
+
+User settings/keybindings persist at application scope and changes broadcast to all windows. Workspace overrides resolve per window. Shared writes must not race or overwrite unrelated changes. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

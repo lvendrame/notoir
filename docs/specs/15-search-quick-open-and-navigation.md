@@ -1,6 +1,6 @@
 # 15 — Workspace Search, Quick Open & Navigation
 
-**Status:** Done — Go to Line with preview and Esc restore (M9); workspace search, Quick Open and navigation history (M16): `notoir-workspace::search` walks with `ignore` (gitignore, `files.exclude`, `search.exclude`, include/exclude globs), skips binary and oversized files, searches open documents in memory, streams batches every 50 ms on its own thread with generation-based cancellation and a 300 ms debounce; Search panel with case/word/regex, Replace All (confirmation; open documents as one undoable edit each, closed files through the save writer with the conflict check; notification with Undo), per-file/per-match replace and dismiss, Next/Previous Search Result (falls back to the find widget). Quick Open lists index files, open documents (MRU) and recent files with fuzzy ranking, bold matched characters, `file:line[:col]`, `Mod+Enter` to the side, `>` `:` `@` `?` `#` prefixes and an Indexing hint. Navigation history records document switches and command jumps (> `navigation.minLineDistance` lines, Go to Line), Back/Forward reopen closed files and skip deleted ones, mouse X1/X2. Deviations: sequential walker (no parallel walk); own fuzzy matcher instead of `nucleo-matcher`; no file icons or Git letters in Quick Open rows.
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  Go to Line with preview and Esc restore (M9); workspace search, Quick Open and navigation history (M16): `notoir-workspace::search` walks with `ignore` (gitignore, `files.exclude`, `search.exclude`, include/exclude globs), skips binary and oversized files, searches open documents in memory, streams batches every 50 ms on its own thread with generation-based cancellation and a 300 ms debounce; Search panel with case/word/regex, Replace All (confirmation; open documents as one undoable edit each, closed files through the save writer with the conflict check; notification with Undo), per-file/per-match replace and dismiss, Next/Previous Search Result (falls back to the find widget). Quick Open lists index files, open documents (MRU) and recent files with fuzzy ranking, bold matched characters, `file:line[:col]`, `Mod+Enter` to the side, `>` `:` `@` `?` `#` prefixes and an Indexing hint. Navigation history records document switches and command jumps (> `navigation.minLineDistance` lines, Go to Line), Back/Forward reopen closed files and skip deleted ones, mouse X1/X2. Deviations: sequential walker (no parallel walk); own fuzzy matcher instead of `nucleo-matcher`; no file icons or Git letters in Quick Open rows.
 
 ## Purpose
 
@@ -132,3 +132,7 @@ Feature: Navigation history
     When the user runs Forward
     Then the cursor is in config.json on line 44
 ```
+
+## Application and window ownership (spec 40)
+
+Search jobs, Quick Open and navigation history target the originating window and workspace generation. Stale results do not reach a sibling window. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

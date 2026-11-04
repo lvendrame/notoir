@@ -4,6 +4,7 @@
 pub const BRAND: &str = "Notoir";
 
 pub mod app;
+pub mod application;
 pub mod cli;
 pub mod commands;
 pub mod compare;
@@ -34,6 +35,8 @@ pub mod markdown;
 pub mod mcp;
 pub mod mcp_tools;
 pub mod menus;
+#[cfg(target_os = "macos")]
+mod native_menu;
 pub mod navigation;
 pub mod notes;
 pub mod plugin_contrib;

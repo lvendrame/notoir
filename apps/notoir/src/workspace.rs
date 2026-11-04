@@ -234,6 +234,16 @@ impl AppCore {
 
     /// Opens `path` as the workspace; asks first when one is already open.
     pub fn open_workspace(&mut self, path: &Path) {
+        if self.window_id.is_some() {
+            self.effects.push(crate::core::Effect::Application(
+                crate::application::ApplicationRequest::OpenWorkspace(path.to_path_buf()),
+            ));
+            return;
+        }
+        self.open_workspace_local(path);
+    }
+
+    pub(crate) fn open_workspace_local(&mut self, path: &Path) {
         let root = match path.canonicalize() {
             Ok(p) if p.is_dir() => p,
             _ => {
@@ -265,22 +275,20 @@ impl AppCore {
 
     /// Opens a folder in a new Notoir window.
     pub fn open_workspace_in_new_window(&mut self, path: &Path) {
-        match std::env::current_exe() {
-            Ok(exe) => {
-                if let Err(e) = std::process::Command::new(exe)
-                    .arg("--new-window")
-                    .arg(path)
-                    .spawn()
-                {
-                    tracing::error!(error = %e, "could not start a new window");
-                }
-            }
-            Err(e) => tracing::error!(error = %e, "no executable path"),
-        }
+        self.effects.push(crate::core::Effect::Application(
+            crate::application::ApplicationRequest::NewWindow(Some(path.to_path_buf())),
+        ));
     }
 
     fn set_workspace(&mut self, root: PathBuf) {
         self.ws_generation += 1;
+        for client in &self.mcp.clients {
+            self.mcp
+                .gate
+                .clear_session(&notoir_core::permissions::Principal::McpClient(
+                    client.id.clone(),
+                ));
+        }
         let generation = self.ws_generation;
         let (_, key) = notoir_workspace::fs_io::identity(&root);
         let key = key.as_str().to_owned();
@@ -353,7 +361,11 @@ impl AppCore {
         // Unsaved work kept at the last exit, then the saved tabs and layout.
         self.restore_hot_exit();
         let key = self.session_key();
-        if let Some(data) = self.load_session_data(&key) {
+        if let Some(data) = self
+            .session_override
+            .take()
+            .or_else(|| self.load_session_data(&key))
+        {
             self.apply_session(data);
         }
         self.session.last_written = None;
@@ -367,7 +379,7 @@ impl AppCore {
     pub fn close_workspace(&mut self, next: Option<PathBuf>) {
         let Some(ws) = &self.workspace else {
             if let Some(n) = next {
-                self.set_workspace(n);
+                self.open_workspace(&n);
             }
             return;
         };
@@ -405,6 +417,14 @@ impl AppCore {
             }
         }
         if self.workspace.take().is_some() {
+            self.ws_generation += 1;
+            for client in &self.mcp.clients {
+                self.mcp
+                    .gate
+                    .clear_session(&notoir_core::permissions::Principal::McpClient(
+                        client.id.clone(),
+                    ));
+            }
             tracing::info!("workspace closed");
             if let Some(session) = self.recovery.session.clone() {
                 let _ = session
@@ -416,7 +436,7 @@ impl AppCore {
             self.apply_resolved_settings();
         }
         if let Some(n) = next {
-            self.set_workspace(n);
+            self.open_workspace(&n);
         }
     }
 
@@ -712,7 +732,7 @@ impl AppCore {
         }
     }
 
-    fn active_file_path(&self) -> Option<PathBuf> {
+    pub(crate) fn active_file_path(&self) -> Option<PathBuf> {
         let doc = self.workbench.active_document()?;
         self.workbench.document(doc)?.path().map(Path::to_path_buf)
     }

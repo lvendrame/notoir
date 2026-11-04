@@ -62,5 +62,6 @@
   "updateInstallOnQuit": "Beim Beenden installieren",
   "updateDownloadFailed": "Das Update konnte nicht heruntergeladen werden.",
   "updateWillInstall": "Das Installationsprogramm öffnet sich nach dem Beenden von Notoir.",
-  "yamlInvalid": "Ungültiges YAML in Zeile {{line}}, Spalte {{column}}: {{message}}"
+  "yamlInvalid": "Ungültiges YAML in Zeile {{line}}, Spalte {{column}}: {{message}}",
+  "sessionWriteFailed": "Die Anwendungssitzung konnte nicht gespeichert werden. Notoir bleibt geöffnet."
 }

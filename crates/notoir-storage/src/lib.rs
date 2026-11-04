@@ -3,6 +3,7 @@
 //! crash-safe file writes. Paths come from `notoir-platform::AppPaths`.
 
 pub mod atomic;
+pub mod coordinator;
 pub mod recovery;
 pub mod scratchpad;
 pub mod settings_file;

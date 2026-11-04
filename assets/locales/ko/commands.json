@@ -442,5 +442,11 @@
     "showSplit": "편집기와 미리 보기 표시",
     "showPreview": "미리 보기 표시",
     "action": "CSV 편집"
+  },
+  "window": {
+    "minimize": "최소화",
+    "bringAllToFront": "모두 앞으로 가져오기",
+    "close": "윈도우 닫기",
+    "activate": "윈도우 활성화"
   }
 }

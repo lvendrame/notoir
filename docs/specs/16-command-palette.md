@@ -1,6 +1,6 @@
 # 16 — Command Palette
 
-**Status:** Done — second-step pickers with live theme preview (M3); Command Palette with translated and English fuzzy matching, recently used (persisted), shortcuts per row, show-all toggle with dimmed disabled commands, commands run with the context captured at open (M9). Uses Notoir's own fuzzy matcher instead of nucleo-matcher; plugin commands are listed as "Plugins: <title>" (M22)
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  second-step pickers with live theme preview (M3); Command Palette with translated and English fuzzy matching, recently used (persisted), shortcuts per row, show-all toggle with dimmed disabled commands, commands run with the context captured at open (M9). Uses Notoir's own fuzzy matcher instead of nucleo-matcher; plugin commands are listed as "Plugins: <title>" (M22)
 
 ## Purpose
 
@@ -79,3 +79,7 @@ Feature: Command Palette
     When the palette is opened with an empty query
     Then "View: Toggle Word Wrap" is listed under "recently used"
 ```
+
+## Application and window ownership (spec 40)
+
+The command palette captures its originating window and context. Application commands request host actions through the same command registry. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

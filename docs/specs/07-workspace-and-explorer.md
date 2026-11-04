@@ -197,3 +197,7 @@ Feature: Explorer
     When another program creates "inbox/today.md"
     Then "today.md" appears under "inbox" within one second when "inbox" is expanded
 ```
+
+## Application and window ownership (spec 40)
+
+The host deduplicates canonical workspace identities across windows, including explicit new-window requests. Opening an owned workspace activates its owner. New workspace ownership is updated on replacement and closure. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

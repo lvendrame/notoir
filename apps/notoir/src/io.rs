@@ -221,6 +221,10 @@ impl IoQueue {
         self.results.try_iter().collect()
     }
 
+    pub fn is_idle(&self) -> bool {
+        self.pending.load(Ordering::SeqCst) == 0
+    }
+
     /// Blocks until queued jobs finished (tests, shutdown). Returns false on timeout.
     pub fn wait_idle(&self, timeout: Duration) -> bool {
         let start = Instant::now();

@@ -11,4 +11,6 @@ mod server;
 pub mod tools;
 
 pub use auth::{ClientAuth, ClientRegistry};
-pub use server::{DEFAULT_PORT, McpCall, McpServer, RejectReason, ServerEvent, ToolReply, Wake};
+pub use server::{
+    DEFAULT_PORT, McpCall, McpServer, RejectReason, ReplyHandle, ServerEvent, ToolReply, Wake,
+};

@@ -70,3 +70,7 @@ Feature: CI gates
     Then fmt, clippy, test, deny, and audit run on Windows, macOS, and Linux
     And the pull request cannot merge while any of them fails
 ```
+
+## Application and window ownership (spec 40)
+
+Add spec 40 coverage for process identity, native windows, target isolation, coordinated Quit, multi-window restore/crash recovery, legacy migration, native menus, CLI waiters, MCP and plugins. Test native focus/lifecycle on macOS, Windows and Linux. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

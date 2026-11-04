@@ -62,5 +62,6 @@
   "updateInstallOnQuit": "終了時にインストール",
   "updateDownloadFailed": "アップデートをダウンロードできませんでした。",
   "updateWillInstall": "Notoir の終了後にインストーラーが開きます。",
-  "yamlInvalid": "{{line}} 行 {{column}} 列の YAML が無効です: {{message}}"
+  "yamlInvalid": "{{line}} 行 {{column}} 列の YAML が無効です: {{message}}",
+  "sessionWriteFailed": "アプリケーションのセッションを保存できませんでした。Notoir は開いたままです。"
 }

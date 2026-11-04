@@ -164,3 +164,7 @@ Feature: Large files
     Then syntax highlighting and the minimap are off for that document
     And an info bar explains large-file mode
 ```
+
+## Application and window ownership (spec 40)
+
+Document registries, revisions and undo histories belong to windows. Document IDs are local; cross-window targets include WindowId. The same path in two windows has independent buffers. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

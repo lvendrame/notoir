@@ -1,6 +1,6 @@
 # 14 — View Options & Zen Mode
 
-**Status:** Done — global and per-view zoom, word wrap toggle, whitespace and current-line rendering (M4); Zen Mode (hides chrome, panels, other groups, tabs and line numbers per settings, full screen, centred column, Esc Esc / Mod+K Z restore) (M10). The menu bar reappears while Alt is held instead of on hover; success toasts are not quieter yet
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  global and per-view zoom, word wrap toggle, whitespace and current-line rendering (M4); Zen Mode (hides chrome, panels, other groups, tabs and line numbers per settings, full screen, centred column, Esc Esc / Mod+K Z restore) (M10). The menu bar reappears while Alt is held instead of on hover; success toasts are not quieter yet
 
 ## Purpose
 
@@ -103,3 +103,7 @@ Feature: Zen Mode
     When the user presses Esc twice
     Then the Explorer and Outline panels are visible again and the window leaves full screen
 ```
+
+## Application and window ownership (spec 40)
+
+Zoom, wrap, fullscreen and Zen state are window-local. The global editor zoom setting means all editor views in that window. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

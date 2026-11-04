@@ -191,3 +191,7 @@ Feature: Typed error translation
 - String extraction discipline: no string literals in UI code except brand names, symbols, and debug-only text; a CI
   lint (simple grep-based test over `apps/notoir/src/**/*.rs` for `ui.label("` / `.button("` with alphabetic literals)
   catches regressions.
+
+## Application and window ownership (spec 40)
+
+Language remains an application-level User preference and updates all windows plus native menus. Plugin translations must not collide across independently executing window instances. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

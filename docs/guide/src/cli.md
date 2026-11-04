@@ -55,3 +55,5 @@ export EDITOR="notoir --wait"     # in your shell profile
 A stdio-to-HTTP bridge for MCP clients that can only start a local program, such as Claude Desktop and Codex. It
 forwards to the MCP server of the running Notoir and fails with *Notoir is not running* otherwise. You normally do not
 type it yourself: **Tools › MCP › Copy Setup Command** writes the right configuration. See [MCP](mcp.md).
+
+`--new-window` creates another native window inside the existing application process. An already-open workspace is focused instead of duplicated. `--wait` also works with `--new-window` and waits for the requested documents to close. While Notoir is quitting, new launch requests report that it is busy; retry after cancelling Quit or after the application exits.

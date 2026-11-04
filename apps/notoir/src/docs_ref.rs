@@ -138,6 +138,7 @@ fn menu_items(items: &[MenuItem], r: &CommandRegistry<AppCore>, depth: usize, ou
             }
             MenuItem::Dynamic(d) => {
                 let what = match d {
+                    DynamicMenu::Windows => "open windows",
                     DynamicMenu::RecentWorkspaces => "recent workspaces",
                     DynamicMenu::RecentFiles => "recent files",
                     DynamicMenu::KeptScratchpads => "kept scratchpads",
@@ -298,7 +299,12 @@ fn mcp_tools() -> String {
         if t.destructive {
             flags.push("destructive");
         }
-        let _ = writeln!(s, "- Capabilities: {}", caps.join(", "));
+        let capabilities = if caps.is_empty() {
+            "authenticated window discovery".to_owned()
+        } else {
+            caps.join(", ")
+        };
+        let _ = writeln!(s, "- Capabilities: {capabilities}");
         if !flags.is_empty() {
             let _ = writeln!(s, "- {}", flags.join(", "));
         }

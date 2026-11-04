@@ -175,9 +175,15 @@ pub fn load_geometry(data_dir: &Path) -> Option<WindowGeometry> {
 impl AppCore {
     /// The DB key of this window's session.
     pub fn session_key(&self) -> String {
-        self.workspace
-            .as_ref()
-            .map_or_else(|| NO_WORKSPACE_KEY.to_owned(), |w| w.key.clone())
+        self.workspace.as_ref().map_or_else(
+            || {
+                self.window_id.as_ref().map_or_else(
+                    || NO_WORKSPACE_KEY.to_owned(),
+                    |id| format!("::no-workspace::{id}"),
+                )
+            },
+            |w| w.key.clone(),
+        )
     }
 
     /// Sort key of a tab for restore ordering.
@@ -323,13 +329,16 @@ impl AppCore {
         self.session.last_geometry = geometry.clone();
         let path = self.paths.data.join("state.db");
         let ws_key = self.workspace.as_ref().map(|w| w.key.clone());
+        let managed = self.window_id.is_some();
         self.io.submit(move || {
             with_io_db(&path, |db| {
                 if changed && let Err(e) = db.save_session(&key, &json, epoch_ms()) {
                     tracing::warn!(error = %e, "could not save session");
                 }
                 let geometry = geometry.unwrap_or_else(|| "{}".to_owned());
-                if let Err(e) = db.save_window(0, ws_key.as_deref(), &geometry, epoch_ms()) {
+                if !managed
+                    && let Err(e) = db.save_window(0, ws_key.as_deref(), &geometry, epoch_ms())
+                {
                     tracing::warn!(error = %e, "could not save window state");
                 }
             });

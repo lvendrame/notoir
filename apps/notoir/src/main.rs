@@ -5,7 +5,7 @@
 use std::sync::mpsc::channel;
 use std::sync::{Arc, OnceLock};
 
-use notoir::{app, cli, icons, logging, session};
+use notoir::{app, application, cli, logging};
 use notoir_platform::AppPaths;
 use notoir_platform::single_instance::{self, Claim, InstanceRequest};
 
@@ -43,7 +43,7 @@ fn main() -> eframe::Result {
             std::process::exit(2);
         }
     };
-    if cli.help || cli.version || (cli.wait && !cli.new_window) {
+    if cli.help || cli.version || cli.wait {
         notoir_platform::attach_parent_console();
     }
     if cli.help {
@@ -56,7 +56,7 @@ fn main() -> eframe::Result {
     }
     // `--wait` (spec 38): this process only forwards and waits; the window
     // lives in the running instance, started here when there is none.
-    if cli.wait && !cli.new_window {
+    if cli.wait {
         std::process::exit(wait_for_instance(&args, &cwd));
     }
     let paths = AppPaths::resolve().and_then(|p| p.ensure_dirs().map(|()| p));
@@ -71,25 +71,31 @@ fn main() -> eframe::Result {
     // Single instance: hand the command line to a running window (spec 31).
     let (tx, rx) = channel::<(InstanceRequest, Option<single_instance::Waiter>)>();
     let repaint: Arc<OnceLock<egui::Context>> = Arc::new(OnceLock::new());
-    let mut instance_rx = None;
-    if !cli.new_window {
+    let instance_rx;
+    let accepting_launches = Arc::new(std::sync::atomic::AtomicBool::new(true));
+    {
         let request = InstanceRequest {
             cwd: cwd.clone(),
             args: args.clone(),
         };
         let waker = repaint.clone();
-        match single_instance::claim(&single_instance::socket_name(), &request, move |req, w| {
-            let _ = tx.send((req, w));
-            if let Some(ctx) = waker.get() {
-                ctx.request_repaint();
-            }
-        }) {
+        match single_instance::claim_with_gate(
+            &single_instance::socket_name(),
+            &request,
+            accepting_launches.clone(),
+            move |req, w| {
+                let _ = tx.send((req, w));
+                if let Some(ctx) = waker.get() {
+                    ctx.request_repaint();
+                }
+            },
+        ) {
             Ok(Claim::Forwarded) => {
                 tracing::info!("forwarded to the running Notoir");
                 return Ok(());
             }
             Ok(Claim::Primary) => instance_rx = Some(rx),
-            Err(e) => tracing::warn!(error = %e, "single-instance socket unavailable"),
+            Err(e) => return Err(eframe::Error::AppCreation(Box::new(e))),
         }
     }
 
@@ -100,25 +106,16 @@ fn main() -> eframe::Result {
         paths = ?paths.as_ref().ok(),
         "starting Notoir"
     );
-    let mut viewport = egui::ViewportBuilder::default()
+    let viewport = egui::ViewportBuilder::default()
         .with_title("Notoir")
         .with_app_id(notoir_platform::paths::BUNDLE_ID)
-        .with_inner_size([1280.0, 800.0])
-        .with_min_inner_size([640.0, 400.0])
-        .with_icon(icons::app_icon());
-    // The last window's geometry (spec 23); new windows cascade from it.
-    if let Some(g) = paths
-        .as_ref()
-        .ok()
-        .and_then(|p| session::load_geometry(&p.data))
-    {
-        let offset = if cli.new_window { 24.0 } else { 0.0 };
-        viewport = viewport
-            .with_inner_size([g.width.max(640.0), g.height.max(400.0)])
-            .with_position([g.x + offset, g.y + offset])
-            .with_maximized(g.maximized);
-    }
+        .with_visible(false)
+        .with_inner_size([1.0, 1.0])
+        .with_position([-10000.0, -10000.0])
+        .with_decorations(false)
+        .with_taskbar(false);
     let options = eframe::NativeOptions {
+        renderer: eframe::Renderer::Wgpu,
         viewport,
         ..Default::default()
     };
@@ -126,13 +123,14 @@ fn main() -> eframe::Result {
         restore_session: cli.paths.is_empty() && !cli.new_window,
         open_paths: cli.paths,
         instance_rx,
+        accepting_launches: Some(accepting_launches),
     };
     let result = eframe::run_native(
         "Notoir",
         options,
         Box::new(move |cc| {
             let _ = repaint.set(cc.egui_ctx.clone());
-            Ok(Box::new(app::NotoirApp::new(cc, launch)))
+            Ok(Box::new(application::ApplicationHost::new(cc, launch)))
         }),
     );
     tracing::info!("exiting Notoir");
@@ -142,8 +140,12 @@ fn main() -> eframe::Result {
 /// `--wait`: forwards to the running instance (starting one without
 /// `--wait` if needed) and returns once the files are closed there.
 fn wait_for_instance(args: &[String], cwd: &std::path::Path) -> i32 {
+    if let Err(e) = AppPaths::resolve().and_then(|paths| paths.ensure_dirs()) {
+        eprintln!("notoir: {e}");
+        return 1;
+    }
     let name = single_instance::socket_name();
-    let request = InstanceRequest {
+    let mut request = InstanceRequest {
         cwd: cwd.to_path_buf(),
         args: args.to_vec(),
     };
@@ -155,8 +157,8 @@ fn wait_for_instance(args: &[String], cwd: &std::path::Path) -> i32 {
             return 1;
         }
     }
-    // No instance: start one with the same session behaviour (no paths, so
-    // it restores the session), then hand it the request.
+    // No instance: open the requested paths without restoring unrelated windows,
+    // then attach the waiter to those already-open documents.
     let exe = match std::env::current_exe() {
         Ok(e) => e,
         Err(e) => {
@@ -165,6 +167,7 @@ fn wait_for_instance(args: &[String], cwd: &std::path::Path) -> i32 {
         }
     };
     if let Err(e) = std::process::Command::new(exe)
+        .args(without_flags(args, &["--wait", "-w"]))
         .current_dir(cwd)
         .stdin(std::process::Stdio::null())
         .stdout(std::process::Stdio::null())
@@ -174,6 +177,7 @@ fn wait_for_instance(args: &[String], cwd: &std::path::Path) -> i32 {
         eprintln!("notoir: {e}");
         return 1;
     }
+    request.args = without_flags(&request.args, &["--new-window", "-n"]);
     let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
     while std::time::Instant::now() < deadline {
         std::thread::sleep(std::time::Duration::from_millis(100));
@@ -183,4 +187,18 @@ fn wait_for_instance(args: &[String], cwd: &std::path::Path) -> i32 {
     }
     eprintln!("notoir: Notoir did not start");
     1
+}
+
+/// Remove launch-control switches while preserving literal paths after `--`.
+fn without_flags(args: &[String], flags: &[&str]) -> Vec<String> {
+    let mut positional = false;
+    args.iter()
+        .filter(|arg| {
+            if arg.as_str() == "--" {
+                positional = true;
+            }
+            positional || !flags.contains(&arg.as_str())
+        })
+        .cloned()
+        .collect()
 }

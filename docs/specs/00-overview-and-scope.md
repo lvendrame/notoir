@@ -176,3 +176,7 @@ Feature: Minimal first impression
     When the user toggles each of them off from the View menu
     Then only the editor groups, toolbar, and status bar remain
 ```
+
+## Application and window ownership (spec 40)
+
+The application has one persistent GUI process and independently owned editor windows. The lifecycle contract is spec 40. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

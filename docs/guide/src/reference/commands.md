@@ -134,9 +134,12 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Command | Id | macOS | Windows / Linux |
 |---|---|---|---|
 | Activate Tab *(hidden)* | `view.activate` |  |  |
+| Activate Window *(hidden)* | `window.activate` |  |  |
+| Bring All to Front | `window.bringAllToFront` |  |  |
 | Change Indentation | `editor.changeIndentation` |  |  |
 | Change Tab Size *(hidden)* | `editor.changeTabSize` |  |  |
 | Clear All Notifications | `workbench.clearNotifications` |  |  |
+| Close Window | `window.close` |  |  |
 | Dock Tab *(hidden)* | `view.dockTab` |  |  |
 | Duplicate View | `view.duplicate` |  |  |
 | Exit Zen Mode | `view.exitZenMode` | `⎋ ⎋` | `Escape Escape` |
@@ -157,6 +160,7 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Maximize Editor Group | `workbench.maximizeGroup` |  |  |
 | Minimap Position *(hidden)* | `view.minimapSide` |  |  |
 | Minimap Scale *(hidden)* | `view.minimapScale` |  |  |
+| Minimize | `window.minimize` |  |  |
 | Move Panel *(hidden)* | `view.movePanel` |  |  |
 | Move Tab *(hidden)* | `view.moveTab` |  |  |
 | Move Tab to Next Group | `workbench.moveTabToNextGroup` |  |  |

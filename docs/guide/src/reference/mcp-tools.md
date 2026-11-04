@@ -4,6 +4,15 @@
 
 The tools Notoir's [MCP server](../mcp.md) offers to AI clients. Each call is checked against the client's permissions for the listed capabilities; *read-only* tools never change anything, and *destructive* tools always ask for approval unless the client is allowed to skip it.
 
+## `window_list`
+
+List Notoir editor windows, their IDs, titles, workspace roots and active state.
+
+- Capabilities: authenticated window discovery
+- read-only
+
+No parameters.
+
 ## `workspace_get`
 
 Describe the open workspace: root path, name, whether it is a Git repository, and how many documents are open in Notoir.
@@ -11,7 +20,9 @@ Describe the open workspace: root path, name, whether it is a Git repository, an
 - Capabilities: `workspace.read`
 - read-only
 
-No parameters.
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `workspace_list_files`
 
@@ -26,6 +37,7 @@ List workspace files (paged, optional glob). Respects .gitignore and files.exclu
 | `glob` | string | no | Only paths matching this glob (e.g. "docs/**/*.md"). |
 | `include_ignored` | boolean | no | Also list files excluded by .gitignore / files.exclude (default false). |
 | `limit` | integer | no | Page size (default 500). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `workspace_search`
 
@@ -44,6 +56,7 @@ Search text or a regex across the workspace. Open documents are searched as Noto
 | `query` | string | yes |  |
 | `regex` | boolean | no |  |
 | `whole_word` | boolean | no |  |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `document_open`
 
@@ -56,6 +69,7 @@ Load a document into Notoir's memory (no tab unless show is true). Returns its m
 |---|---|---|---|
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
 | `show` | boolean | no | Also open it in an editor tab (needs editor control). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `document_read`
 
@@ -69,6 +83,7 @@ Read a document as Notoir holds it in memory: for an open file with unsaved edit
 | `end_line` | integer | no | Last line to return (inclusive). |
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
 | `start_line` | integer | no | First line to return (1-based). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `document_create`
 
@@ -81,6 +96,7 @@ Create a new file (written to disk immediately) or a Scratchpad, and open it in 
 | `content` | string | no | Initial content (default empty). |
 | `path` | string | no | New file to create (must not exist). Omit with scratchpad: true. |
 | `scratchpad` | boolean | no | Create a Scratchpad instead of a file. |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `document_write`
 
@@ -93,6 +109,7 @@ Replace the whole buffer of a document in Notoir's memory. The change is undoabl
 | `content` | string | yes | The complete new content of the buffer. |
 | `expected_revision` | integer | no | Fail with revision_conflict if the document changed since this revision. |
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `document_apply_edits`
 
@@ -105,6 +122,7 @@ Apply range edits to a document in Notoir's memory atomically (one undoable step
 | `edits` | array | yes | Non-overlapping replacements, in coordinates of the current revision; applied as one undoable step. |
 | `expected_revision` | integer | no |  |
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `document_save`
 
@@ -115,6 +133,7 @@ Save an open document to disk through Notoir's normal save pipeline (conflict ch
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `document_rename`
 
@@ -126,6 +145,7 @@ Rename or move a workspace file; open documents follow it.
 |---|---|---|---|
 | `new_path` | string | yes | Destination inside the workspace (must not exist). |
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `document_delete`
 
@@ -137,6 +157,7 @@ Move a workspace file to the system trash.
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `editor_get_open_tabs`
 
@@ -145,7 +166,9 @@ List editor groups and their tabs (view id, path or title, dirty, pinned, active
 - Capabilities: `editor.read`
 - read-only
 
-No parameters.
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `editor_get_active_document`
 
@@ -154,7 +177,9 @@ The active editor's document (path, view, revision, dirty) and its selections.
 - Capabilities: `editor.read`
 - read-only
 
-No parameters.
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `editor_get_selection`
 
@@ -166,6 +191,7 @@ The text the user has selected in the active editor (or the given view), with th
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `view` | integer | no | View id from editor_get_open_tabs (default: the active editor). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `editor_open_document`
 
@@ -178,6 +204,7 @@ Open or focus a document in an editor tab, optionally at a line and column. Visi
 | `column` | integer | no |  |
 | `line` | integer | no |  |
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `editor_select_range`
 
@@ -190,6 +217,7 @@ Set the selection in the active editor (or the document's editor). Visible to th
 | `end` | object | yes | A position: {line, column} (1-based, column in characters) or {offset} (0-based character offset). |
 | `path` | string | no | Document to select in (default: the active editor). |
 | `start` | object | yes | A position: {line, column} (1-based, column in characters) or {offset} (0-based character offset). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `editor_insert`
 
@@ -200,6 +228,7 @@ Insert text at every cursor of the active editor (selected text is kept). Undoab
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `text` | string | yes |  |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `editor_replace`
 
@@ -210,6 +239,7 @@ Replace the current selection(s) of the active editor with text. Undoable; not s
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `text` | string | yes |  |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `settings_get`
 
@@ -221,6 +251,7 @@ Effective Notoir settings (machine paths are left out).
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `prefix` | string | no | Only keys starting with this (e.g. "editor."). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `settings_update`
 
@@ -233,6 +264,7 @@ Change a User or Workspace setting. Restricted settings can never be changed by 
 | `key` | string | yes |  |
 | `scope` | string | no | Default user. One of `"user"`, `"workspace"`. |
 | `value` | any | yes | New value (boolean, number, string or string list); null resets it. |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `git_status`
 
@@ -241,7 +273,9 @@ Git state of the workspace: branch, upstream, ahead/behind, staged changes, chan
 - Capabilities: `git.read`
 - read-only
 
-No parameters.
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `git_diff`
 
@@ -254,6 +288,7 @@ Unified diff of the work tree (disk) against the index or HEAD, for one file or 
 |---|---|---|---|
 | `base` | string | no | Compare the work tree with the index (default) or HEAD. One of `"index"`, `"head"`. |
 | `path` | string | no | One file (default: every changed file). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `filesystem_read`
 
@@ -267,6 +302,7 @@ Read a file from disk directly, ignoring Notoir's unsaved buffers (use document_
 | `end_line` | integer | no | Last line to return (inclusive). |
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
 | `start_line` | integer | no | First line to return (1-based). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |
 
 ## `filesystem_write`
 
@@ -280,3 +316,4 @@ Write a file on disk directly (atomic write). Open documents are not changed: No
 | `content` | string | yes |  |
 | `create` | boolean | no | Allow creating a new file (default true). |
 | `path` | string | yes | Path relative to the workspace root (or absolute inside it). |
+| `window_id` | string | no | Target Notoir window ID from window_list. Defaults to the last active window at request dispatch. |

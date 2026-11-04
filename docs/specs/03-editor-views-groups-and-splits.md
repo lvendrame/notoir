@@ -1,6 +1,6 @@
 # 03 — Editor Views, Groups & Splits
 
-**Status:** Done — layout tree and operations (M1); rendering with splitters, per-group tab strips, tab drag reorder/move/dock with preview, Alt/Option copy, Esc cancel, Maximize with exact panel restore (M6). OS file drops open in the group under the pointer as a tab (edge docking for file drops and Explorer drags arrive with the Explorer, M7)
+**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  layout tree and operations (M1); rendering with splitters, per-group tab strips, tab drag reorder/move/dock with preview, Alt/Option copy, Esc cancel, Maximize with exact panel restore (M6). OS file drops open in the group under the pointer as a tab (edge docking for file drops and Explorer drags arrive with the Explorer, M7)
 
 ## Purpose
 
@@ -159,3 +159,7 @@ Feature: Maximize group
     When the user toggles it again
     Then both groups, the Explorer at 260 px, and the bottom panel are restored
 ```
+
+## Application and window ownership (spec 40)
+
+Views, groups, layout and selection belong to their editor window; view/group IDs are local to that window. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.

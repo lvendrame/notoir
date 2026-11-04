@@ -19,7 +19,7 @@ pub const CHECK_INTERVAL_MS: i64 = 24 * 60 * 60 * 1000;
 /// The running version, compared with the manifest's.
 pub const CURRENT: &str = env!("CARGO_PKG_VERSION");
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct UpdatesState {
     /// Manifest URL and key (built in for release builds).
     pub config: Option<UpdateConfig>,
@@ -65,6 +65,9 @@ impl AppCore {
     /// Reads the last check time (startup).
     pub fn updates_init(&mut self) {
         self.desktop_change(None);
+        if self.window_id.is_some() {
+            return;
+        }
         let file = stamp_file(self);
         self.fs.submit(move || {
             let ms = std::fs::read_to_string(file)
@@ -125,7 +128,10 @@ impl AppCore {
         let now = epoch_ms();
         self.updates.last_check_ms = Some(now);
         let stamp = stamp_file(self);
-        let poster = self.fs.poster();
+        let poster = self
+            .update_poster
+            .clone()
+            .unwrap_or_else(|| self.fs.poster());
         let spawned = std::thread::Builder::new()
             .name("notoir-update".into())
             .spawn(move || {
@@ -209,7 +215,10 @@ impl AppCore {
         self.updates.downloading = true;
         self.updates.last_error = None;
         let dir = self.paths.cache.join("update");
-        let poster = self.fs.poster();
+        let poster = self
+            .update_poster
+            .clone()
+            .unwrap_or_else(|| self.fs.poster());
         let spawned = std::thread::Builder::new()
             .name("notoir-update-download".into())
             .spawn(move || {
