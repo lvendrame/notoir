@@ -16,6 +16,8 @@ use super::{
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DragMode {
+    /// Existing selection; true once the drag threshold has been crossed.
+    Text(bool),
     Char,
     Word,
     Line,
@@ -372,7 +374,11 @@ pub(super) fn pointer(
     now: f64,
     commands: &mut Vec<CommandInvocation>,
 ) {
-    if !ui.input(|i| i.pointer.any_down()) {
+    if ui.input(|i| i.key_pressed(Key::Escape)) {
+        cache.drag = None;
+        return;
+    }
+    if !ui.input(|i| i.pointer.any_down() || i.pointer.any_released()) {
         cache.drag = None;
     }
     let Some(pointer) = response.interact_pointer_pos() else {
@@ -436,6 +442,60 @@ pub(super) fn pointer(
         return;
     }
     let pos = pos_at(cache, m, pointer, tab);
+    if let Some(drag) = cache.drag.clone()
+        && let DragMode::Text(started) = drag.mode
+        && !response.double_clicked()
+        && !response.triple_clicked()
+    {
+        let started = started || response.dragged() || response.drag_stopped();
+        let copy = ui.input(|i| i.modifiers.alt);
+        if ui.input(|i| i.pointer.button_released(egui::PointerButton::Primary)) {
+            cache.drag = None;
+            if started {
+                if m.text.contains(pointer)
+                    && let Some(edit) = edit_ops::drop_text(&cache.rope, drag.origin, pos, copy)
+                {
+                    apply_edit(wb, view, edit, now);
+                }
+            } else {
+                set_selection(wb, view, Selection::caret(pos));
+            }
+        } else {
+            cache.drag.as_mut().unwrap().mode = DragMode::Text(started);
+            if started {
+                ui.ctx().set_cursor_icon(if copy {
+                    egui::CursorIcon::Copy
+                } else {
+                    egui::CursorIcon::Move
+                });
+                let caret = super::caret_rect(cache, m, pos, tab);
+                ui.ctx()
+                    .layer_painter(egui::LayerId::new(
+                        egui::Order::Foreground,
+                        response.id.with("text-drop"),
+                    ))
+                    .with_clip_rect(m.text)
+                    .line_segment(
+                        [caret.left_top(), caret.left_bottom()],
+                        egui::Stroke::new(2.0, ui.visuals().selection.stroke.color),
+                    );
+                let edge = if pointer.y < m.text.top() + m.row_h {
+                    -m.row_h
+                } else if pointer.y > m.text.bottom() - m.row_h {
+                    m.row_h
+                } else {
+                    0.0
+                };
+                if edge != 0.0 {
+                    let y = scroll_y(cache, m) + edge;
+                    set_scroll_y(cache, m, y);
+                    ui.ctx().request_repaint();
+                }
+            }
+        }
+        cache.blink_epoch = now;
+        return;
+    }
     // Ctrl/Cmd+click follows a link (wiki links, spec 34).
     let command_click = ui.input(|i| {
         i.modifiers.command
@@ -471,6 +531,19 @@ pub(super) fn pointer(
             // Column selection (Shift+Alt drag, or column mode).
             let (line, col) = line_col_at(cache, m, pointer);
             start(DragMode::Column(line, col), Range::caret(pos), cache, wb);
+        } else if !shift
+            && !ui.input(|i| i.modifiers.command)
+            && let Some(source) = selection(wb, view)
+                .ranges()
+                .iter()
+                .copied()
+                .find(|r| !r.is_empty() && (r.from()..r.to()).contains(&pos))
+        {
+            cache.drag = Some(Drag {
+                origin: source,
+                mode: DragMode::Text(false),
+                keep: Vec::new(),
+            });
         } else if alt {
             // Alt/Option+click adds a caret.
             let before = selection(wb, view).ranges().to_vec();

@@ -175,3 +175,118 @@ fn column_mode_toggle_is_checked_in_the_menu() {
         Some(&notoir_core::when::Value::Bool(true))
     );
 }
+
+fn point_at(app: &mut common::TestApp, offset: usize) -> Pos2 {
+    set_sel(app, Selection::caret(offset));
+    app.harness
+        .state()
+        .ui
+        .editors
+        .caret_rect(view(app))
+        .unwrap()
+        .center()
+}
+
+fn pointer_button(app: &mut common::TestApp, pos: Pos2, pressed: bool) {
+    app.harness.event(Event::PointerButton {
+        pos,
+        button: PointerButton::Primary,
+        pressed,
+        modifiers: Modifiers::NONE,
+    });
+    app.harness.run_steps(1);
+}
+
+// spec 11: "Drag selected text to move or copy"
+#[test]
+fn selected_text_drag_move_copy_and_undo() {
+    for (source, target, copy, expected, result) in [
+        (
+            Range::new(0, 3),
+            11,
+            false,
+            " bar bazfoo",
+            Range::new(8, 11),
+        ),
+        (Range::new(8, 11), 0, false, "bazfoo bar ", Range::new(0, 3)),
+        (
+            Range::new(0, 3),
+            11,
+            true,
+            "foo bar bazfoo",
+            Range::new(11, 14),
+        ),
+        (Range::new(0, 3), 2, false, "foo bar baz", Range::new(0, 3)),
+    ] {
+        let mut app = editor("foo bar baz");
+        let from = point_at(&mut app, source.from() + 1);
+        let to = point_at(&mut app, target);
+        set_sel(&mut app, Selection::single(source));
+        app.harness.hover_at(from);
+        app.harness.run_steps(1);
+        pointer_button(&mut app, from, true);
+        assert_eq!(sel(&app).primary(), source, "press preserves selection");
+        app.harness.hover_at(to);
+        app.harness.run_steps(2);
+        if copy {
+            app.harness.event(Event::ModifiersChanged(Modifiers::ALT));
+            app.harness.run_steps(1);
+        }
+        assert_eq!(text(&app), "foo bar baz", "drag waits for release");
+        pointer_button(&mut app, to, false);
+        app.harness.event(Event::ModifiersChanged(Modifiers::NONE));
+        app.harness.run_steps(2);
+        assert_eq!(text(&app), expected);
+        assert_eq!(sel(&app).primary(), result);
+        if expected != "foo bar baz" {
+            app.harness.key_press_modifiers(ctrl(), Key::Z);
+            app.harness.run_steps(2);
+            assert_eq!(text(&app), "foo bar baz");
+            assert_eq!(sel(&app).primary(), source);
+            app.harness
+                .key_press_modifiers(ctrl() | Modifiers::SHIFT, Key::Z);
+            app.harness.run_steps(2);
+            assert_eq!(text(&app), expected);
+        }
+    }
+}
+
+#[test]
+fn selected_text_click_and_read_only_drop() {
+    let mut app = editor("foo bar baz");
+    let from = point_at(&mut app, 1);
+    let to = point_at(&mut app, 11);
+    set_sel(&mut app, Selection::single(Range::new(0, 3)));
+    app.harness.hover_at(from);
+    app.harness.run_steps(1);
+    pointer_button(&mut app, from, true);
+    pointer_button(&mut app, from, false);
+    assert_eq!(sel(&app), Selection::caret(1));
+    set_sel(&mut app, Selection::single(Range::new(0, 3)));
+    let core = &mut app.harness.state_mut().core;
+    let doc = core.workbench.active_document().unwrap();
+    core.workbench.document_mut(doc).unwrap().read_only = notoir_core::document::ReadOnly::User;
+    pointer_button(&mut app, from, true);
+    app.harness.hover_at(to);
+    app.harness.run_steps(2);
+    pointer_button(&mut app, to, false);
+    assert_eq!(text(&app), "foo bar baz");
+    assert_eq!(sel(&app).primary(), Range::new(0, 3));
+}
+
+#[test]
+fn escape_cancels_selected_text_drag() {
+    let mut app = editor("foo bar baz");
+    let from = point_at(&mut app, 1);
+    let to = point_at(&mut app, 11);
+    set_sel(&mut app, Selection::single(Range::new(0, 3)));
+    app.harness.hover_at(from);
+    app.harness.run_steps(1);
+    pointer_button(&mut app, from, true);
+    app.harness.hover_at(to);
+    app.harness.run_steps(2);
+    app.harness.key_press(Key::Escape);
+    pointer_button(&mut app, to, false);
+    assert_eq!(text(&app), "foo bar baz");
+    assert_eq!(sel(&app).primary(), Range::new(0, 3));
+}

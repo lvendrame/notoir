@@ -17,6 +17,33 @@ pub struct EditResult {
     pub kind: EditKind,
 }
 
+/// Moves or copies selected text to a pre-change character offset as one edit.
+/// Dropping onto the source (including its edges) leaves it unchanged.
+pub fn drop_text(rope: &Rope, source: Range, target: usize, copy: bool) -> Option<EditResult> {
+    if source.is_empty() || (source.from()..=source.to()).contains(&target) {
+        return None;
+    }
+    if source.to() > rope.len_chars() || target > rope.len_chars() {
+        return None;
+    }
+    let text = rope.slice(source.from()..source.to()).to_string();
+    let len = source.to() - source.from();
+    let start = if !copy && target > source.to() {
+        target - len
+    } else {
+        target
+    };
+    let mut edits = vec![Edit::new(target, target, text)];
+    if !copy {
+        edits.push(Edit::new(source.from(), source.to(), ""));
+    }
+    Some(EditResult {
+        changes: ChangeSet::new(edits).ok()?,
+        selection: Selection::single(Range::new(start, start + len)),
+        kind: EditKind::Other,
+    })
+}
+
 /// `editor.tabSize` / `editor.insertSpaces`.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct IndentStyle {
@@ -340,6 +367,21 @@ mod tests {
         tab_size: 4,
         insert_spaces: true,
     };
+
+    #[test]
+    fn drop_multiline_unicode_selection_uses_character_offsets() {
+        let text = "a👍🏽\n世界z";
+        let rope = Rope::from_str(text);
+        let source = Range::new(6, 1);
+        let moved = drop_text(&rope, source, 7, false).unwrap();
+        assert_eq!(apply(text, &moved), "az👍🏽\n世界");
+        assert_eq!(moved.selection.primary(), Range::new(2, 7));
+        let copied = drop_text(&rope, source, 0, true).unwrap();
+        assert_eq!(apply(text, &copied), "👍🏽\n世界a👍🏽\n世界z");
+        for offset in 1..=6 {
+            assert!(drop_text(&rope, source, offset, false).is_none());
+        }
+    }
 
     #[test]
     fn typing_replaces_selections_and_moves_carets() {

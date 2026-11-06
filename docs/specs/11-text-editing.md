@@ -1,6 +1,6 @@
 # 11 — Text Editing
 
-**Status:** Partial — transactions, undo coalescing, selections (M1); editor widget: typing, grapheme/word editing, Enter with indent and Markdown lists, Tab indent/outdent, clipboard, select all, mouse selection, IME, read-only (M4); line operations (duplicate, delete, move, sort, trim, case, insert line, join, toggle read-only), find/replace widget (case, whole word, regex with captures, find in selection, wrap hint, Replace All as one step), Go to Line, editor context menu (M9). multi-cursor (Add Cursor Above/Below, Select Next/All Occurrences, Alt+click, Esc collapses, per-cursor paste), column selection (Shift+Alt drag, column mode), Expand/Shrink Selection (M17). Later: toggle comment and case-preserving replace (Phase 2), Paste as Plain Text, worker-thread search for documents over 5 MiB
+**Status:** Partial — transactions, undo coalescing, selections (M1); editor widget: typing, grapheme/word editing, Enter with indent and Markdown lists, Tab indent/outdent, clipboard, select all, mouse selection, IME, read-only (M4); selected-text drag/drop with move, Alt/Option copy, drop indicator, edge scrolling and atomic undo; line operations (duplicate, delete, move, sort, trim, case, insert line, join, toggle read-only), find/replace widget (case, whole word, regex with captures, find in selection, wrap hint, Replace All as one step), Go to Line, editor context menu (M9). multi-cursor (Add Cursor Above/Below, Select Next/All Occurrences, Alt+click, Esc collapses, per-cursor paste), column selection (Shift+Alt drag, column mode), Expand/Shrink Selection (M17). Later: toggle comment and case-preserving replace (Phase 2), Paste as Plain Text, worker-thread search for documents over 5 MiB
 
 ## Purpose
 
@@ -207,6 +207,17 @@ Feature: Markdown list continuation
     Given the line "- [ ] buy milk" with the cursor at its end
     When the user presses Enter
     Then a new line "- [ ] " is inserted with the cursor after it
+
+Feature: Selected text drag and drop
+
+  Scenario: Drag selected text to move or copy
+    Given selected text in an editable document
+    When the user drags the selection to another position in the editor and releases
+    Then the selected text moves to that position and remains selected
+    And holding Alt/Option at release copies the text instead
+    And undo restores the text and selection in one step
+    And redo restores the drop
+    And dropping inside the source leaves the text and selection unchanged
 
 Feature: Grapheme handling
 
