@@ -1,6 +1,6 @@
 # 33 — Testing & CI
 
-**Status:** Partial — CI workflow, kittest and render snapshots (M0); crash suite (`apps/notoir/tests/crash.rs`, real binary + `kill -9`, nightly job) and in-process crash simulation (M8); performance budgets not measured yet; crash during save, disk full and workspace disappearing cases still to add
+**Status:** Partial — CI workflow, kittest and render snapshots (M0); crash suite (`apps/notoir/tests/crash.rs`, real binary + `kill -9`, nightly/manual jobs) and in-process crash simulation (M8); native tests synchronize on the current process's first rendered frame, loaded files, persisted tab ownership and recovery state; performance budgets not measured yet; crash during save, disk full and workspace disappearing cases still to add
 
 ## Purpose
 
@@ -51,7 +51,7 @@ snapshot · suspend/resume (simulated frame-time gap).
 - Linux CI installs: `libxkbcommon-dev`, `libgtk-3-dev` (rfd), `libwayland-dev`, fontconfig; Git installed for Git tests.
 - Caching via `Swatinem/rust-cache`.
 - Release workflow on tags (spec 31).
-- Nightly job: reliability/crash suite + performance smoke tests on all three OSes.
+- Nightly job: reliability/crash suite on all three OSes. A manual CI workflow run also includes the crash suite; performance smoke tests remain pending.
 
 ## Test Conventions
 

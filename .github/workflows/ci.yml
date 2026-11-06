@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
   schedule:
     # Nightly reliability suite (docs/specs/33).
     - cron: "0 3 * * *"
@@ -50,7 +51,7 @@ jobs:
 
   crash-suite:
     name: crash suite (${{ matrix.os }})
-    if: github.event_name == 'schedule'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
       matrix:
