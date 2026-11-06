@@ -25,8 +25,15 @@ Each release also has `SHA256SUMS.txt` with the checksum of every file.
 
 ## Windows
 
-Run the `.msi` or the `-setup.exe` (which installs for the current user only, without administrator rights). If SmartScreen says
-*"Windows protected your PC"*, click **More info › Run anyway**. The builds are not code-signed yet.
+Run the `.msi` or the `-setup.exe` (which installs for the current user only, without administrator rights).
+
+Existing unsigned releases display **Unknown publisher**. Future Authenticode-signed installers show the verified
+publisher, although SmartScreen may still warn while a new release builds download reputation. Check the installer's
+**Properties → Digital Signatures** and verify the publisher and download source before deciding to run it.
+The updater's signed manifest and SHA-256 checksums are separate from the installer's Windows signature.
+For a download you have verified and chosen to trust, SmartScreen's **More info › Run anyway** option may
+allow installation. Signing and publisher reputation are the publisher's responsibility; disabling SmartScreen
+is not part of installing Notoir.
 
 ## Linux
 

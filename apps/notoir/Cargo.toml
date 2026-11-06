@@ -93,5 +93,10 @@ priority = "optional"
 [package.metadata.packager.wix]
 languages = ["en-US"]
 
+[package.metadata.packager.windows]
+# scripts/package.sh puts the wrapper on PATH so NSIS can also sign its
+# generated uninstaller from its own working directory.
+sign-command = "notoir-sign.cmd %1"
+
 [package.metadata.packager.nsis]
 installer-mode = "currentUser"

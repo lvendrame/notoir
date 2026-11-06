@@ -79,4 +79,6 @@ matrix, a packaging preview, signing configuration and verification of the publi
 
 Both the manual CI run (including all three native crash suites) and the packaging preview must pass
 on the exact release commit before tagging. The Release workflow publishes independently of CI.
-Updater signing requires `MINISIGN_SECRET_KEY` and `NOTOIR_UPDATE_PUBKEY`; OS code signing is optional.
+Updater signing requires `MINISIGN_SECRET_KEY` and `NOTOIR_UPDATE_PUBKEY`. Published Windows installers also
+require a trusted Authenticode identity; see [Windows signing setup](docs/windows-signing.md).
+macOS and Linux OS signing remain optional. Existing unsigned Windows releases may still show SmartScreen warnings.

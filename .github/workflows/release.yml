@@ -30,6 +30,15 @@ env:
   # defaults to the latest (non-prerelease) release's update.json.
   NOTOIR_UPDATE_URL: ${{ vars.NOTOIR_UPDATE_URL || format('https://github.com/{0}/releases/latest/download/update.json', github.repository) }}
   NOTOIR_UPDATE_PUBKEY: ${{ vars.NOTOIR_UPDATE_PUBKEY }}
+  WINDOWS_SIGNING_PROVIDER: ${{ vars.WINDOWS_SIGNING_PROVIDER }}
+  WINDOWS_EXPECTED_PUBLISHER: ${{ vars.WINDOWS_EXPECTED_PUBLISHER }}
+  WINDOWS_SIGNING_REQUIRED: ${{ startsWith(github.ref, 'refs/tags/v') || inputs.publish }}
+  AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+  AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+  AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+  AZURE_SIGNING_ENDPOINT: ${{ vars.AZURE_SIGNING_ENDPOINT }}
+  AZURE_SIGNING_ACCOUNT: ${{ vars.AZURE_SIGNING_ACCOUNT }}
+  AZURE_SIGNING_PROFILE: ${{ vars.AZURE_SIGNING_PROFILE }}
 
 jobs:
   # Installers carry the Cargo version and update.json the tag's: they must
@@ -39,8 +48,22 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
+      windows_signing: ${{ steps.windows-signing.outputs.provider }}
     steps:
       - uses: actions/checkout@v5
+      - name: Validate Windows signing configuration
+        id: windows-signing
+        shell: pwsh
+        env:
+          HAS_WINDOWS_CERT: ${{ secrets.WINDOWS_CERTIFICATE != '' }}
+          HAS_WINDOWS_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD != '' }}
+        run: |
+          . ./scripts/windows-signing.ps1
+          $provider = Assert-NotoirWindowsSigningConfiguration `
+            -Required:($env:WINDOWS_SIGNING_REQUIRED -eq 'true') `
+            -CertificateAvailable:($env:HAS_WINDOWS_CERT -eq 'true') `
+            -PasswordAvailable:($env:HAS_WINDOWS_PASSWORD -eq 'true')
+          "provider=$provider" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
       - name: Require update signing for published releases
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
         env:
@@ -76,12 +99,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, windows-latest, macos-latest]
+        os: [ubuntu-22.04, macos-latest]
     runs-on: ${{ matrix.os }}
     env:
       # Secrets cannot be tested in `if:` directly.
       HAS_APPLE_CERT: ${{ secrets.APPLE_CERTIFICATE != '' }}
-      HAS_WINDOWS_CERT: ${{ secrets.WINDOWS_CERTIFICATE != '' }}
       HAS_GPG_KEY: ${{ secrets.GPG_PRIVATE_KEY != '' }}
     steps:
       - uses: actions/checkout@v5
@@ -107,14 +129,6 @@ jobs:
           security import cert.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k ci build.keychain
           rm cert.p12
-      - name: Import Windows signing certificate
-        if: runner.os == 'Windows' && env.HAS_WINDOWS_CERT == 'true'
-        shell: bash
-        env:
-          WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
-        run: |
-          echo "$WINDOWS_CERTIFICATE" | base64 --decode > "$RUNNER_TEMP/cert.pfx"
-          echo "WINDOWS_CERTIFICATE_PATH=$RUNNER_TEMP/cert.pfx" >> "$GITHUB_ENV"
       - name: Import GPG key
         if: runner.os == 'Linux' && env.HAS_GPG_KEY == 'true'
         env:
@@ -127,7 +141,6 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
         run: scripts/package.sh
       - uses: actions/upload-artifact@v4
@@ -145,8 +158,64 @@ jobs:
             target/packages/SHA256SUMS-*.txt
           if-no-files-found: error
 
+  package-windows:
+    name: package (windows-latest)
+    needs: version
+    runs-on: windows-latest
+    environment: windows-signing
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo-packager
+        run: cargo install cargo-packager --version 0.11.8 --locked
+      - name: Azure signing login (OIDC)
+        if: needs.version.outputs.windows_signing == 'azure'
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Install Artifact Signing module
+        if: needs.version.outputs.windows_signing == 'azure'
+        shell: pwsh
+        run: |
+          . ./scripts/windows-signing.ps1
+          Install-Module ArtifactSigning -RequiredVersion $script:ArtifactSigningModuleVersion `
+            -Scope CurrentUser -Repository PSGallery -Force
+      - name: Import PFX signing certificate
+        if: needs.version.outputs.windows_signing == 'pfx'
+        shell: pwsh
+        env:
+          WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+        run: |
+          $path = Join-Path $env:RUNNER_TEMP 'notoir-signing.pfx'
+          [IO.File]::WriteAllBytes($path, [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE))
+          "WINDOWS_CERTIFICATE_PATH=$path" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+      - name: Package and verify Windows signatures
+        shell: bash
+        env:
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+        run: scripts/package.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages-windows-latest
+          path: |
+            target/packages/*.msi
+            target/packages/*-setup.exe
+            target/packages/*.zip
+            target/packages/SHA256SUMS-windows.txt
+          if-no-files-found: error
+      - name: Remove temporary signing certificate
+        if: always()
+        shell: pwsh
+        run: Remove-Item -LiteralPath (Join-Path $env:RUNNER_TEMP 'notoir-signing.pfx') -ErrorAction SilentlyContinue
+
   release:
-    needs: [version, package]
+    needs: [version, package, package-windows]
     if: needs.version.outputs.tag != ''
     runs-on: ubuntu-latest
     env:

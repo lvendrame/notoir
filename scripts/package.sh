@@ -7,7 +7,9 @@
 # plus SHA256SUMS.txt and a debug-symbols archive. Signing runs only when the
 # matching secrets are present in the environment:
 #   macOS:   APPLE_SIGNING_IDENTITY (+ APPLE_ID, APPLE_TEAM_ID, APPLE_PASSWORD for notarization)
-#   Windows: WINDOWS_CERTIFICATE_PATH + WINDOWS_CERTIFICATE_PASSWORD (signtool)
+#   Windows: WINDOWS_SIGNING_PROVIDER=azure|pfx + WINDOWS_EXPECTED_PUBLISHER
+#            (see docs/windows-signing.md). WINDOWS_SIGNING_REQUIRED=true
+#            rejects unsigned output; it is set for published CI releases.
 #   Linux:   GPG_KEY_ID (detached signature for the AppImage)
 # Requires cargo-packager 0.11 (`cargo install cargo-packager --locked`).
 set -euo pipefail
@@ -75,14 +77,16 @@ case "$(uname -s)" in
     ;;
   MINGW*|MSYS*|CYGWIN*)
     OS=windows
+    export PATH="$PWD/scripts:$PATH"
+    pwsh -NoProfile -NonInteractive -File scripts/sign-windows.ps1 -ValidateOnly
     cargo build --profile dist -p notoir
+    # The packager's hook signs the application before embedding it, both
+    # installers, and the NSIS uninstaller. Each hook verifies trust/timestamp.
     cargo packager -p notoir --profile dist -f wix,nsis
-    if [[ -n "${WINDOWS_CERTIFICATE_PATH:-}" ]]; then
-      for f in "$OUT"/*.msi "$OUT"/*-setup.exe; do
-        signtool sign /f "$WINDOWS_CERTIFICATE_PATH" /p "$WINDOWS_CERTIFICATE_PASSWORD" /fd sha256 /tr http://timestamp.digicert.com /td sha256 "$f"
+    if [[ -n "${WINDOWS_SIGNING_PROVIDER:-}" && "$WINDOWS_SIGNING_PROVIDER" != none ]]; then
+      for f in target/dist/notoir.exe "$OUT"/*.msi "$OUT"/*-setup.exe; do
+        pwsh -NoProfile -NonInteractive -File scripts/sign-windows.ps1 -VerifyOnly -Path "$f"
       done
-    else
-      echo "Authenticode signing skipped (no certificate): preview build"
     fi
     if [[ -f target/dist/notoir.pdb ]]; then
       (cd target/dist && 7z a "../packages/notoir-$VERSION-windows-x86_64-pdb.zip" notoir.pdb >/dev/null)

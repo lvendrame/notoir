@@ -36,7 +36,8 @@ reason.
 
 ## Common problems
 
-**macOS says "Notoir" Not Opened, or Windows says it protected your PC.** Release builds are not code-signed yet. See
+**macOS says "Notoir" Not Opened, or Windows says it protected your PC.** Unsigned releases can trigger these warnings;
+SmartScreen can also warn about a newly signed Windows release while its reputation builds. See
 [Installing Notoir](install.md).
 
 **My settings change does nothing.** Check the warning notification: a syntax error in `settings.toml` keeps the last

@@ -99,12 +99,13 @@ gh run watch "$ci_run_id" --repo lvendrame/notoir --exit-status
 ```
 
 - [ ] Its `headSha` is exactly `candidate_sha`, and its event is `workflow_dispatch`.
-- [ ] The run is **completed**, its conclusion is **success**, and all eight jobs below succeeded:
+- [ ] The run is **completed**, its conclusion is **success**, and all nine jobs below succeeded:
 
 | Required job | Platform |
 |---|---|
 | `fmt` | Ubuntu |
 | `deny` | Ubuntu |
+| `Windows signing checks` | Windows |
 | `clippy + test` | Windows, macOS and Ubuntu (three jobs) |
 | `crash suite` | Windows, macOS and Ubuntu (three jobs) |
 
@@ -124,9 +125,15 @@ gh secret list --repo lvendrame/notoir
 gh variable list --repo lvendrame/notoir
 ```
 
-`NOTOIR_UPDATE_URL` defaults to the latest release's `update.json`. Optional OS-signing credentials are
-documented at the top of [scripts/package.sh](../scripts/package.sh); missing OS-signing credentials
-produce unsigned installers. They are separate from the required updater signature.
+`NOTOIR_UPDATE_URL` defaults to the latest release's `update.json`.
+
+- [ ] Configure a publicly trusted Windows Authenticode identity and `WINDOWS_EXPECTED_PUBLISHER`, following
+  [Windows signing setup](windows-signing.md). Windows code signing is required for publication; the
+  minisign updater key does not replace it. Azure Artifact Signing uses OIDC and a Public Trust profile;
+  the existing PFX provider remains supported for compatible certificates.
+
+macOS and Linux OS-signing credentials remain optional and are documented at the top of
+[scripts/package.sh](../scripts/package.sh). They are separate from the required updater signature.
 
 - [ ] Start a packaging preview on the same candidate, with publication explicitly disabled:
 
@@ -151,6 +158,8 @@ gh run download "$package_run_id" --repo lvendrame/notoir --dir "target/release-
   its artifact directory (`sha256sum -c` on Linux, or `shasum -a 256 -c` on macOS).
 - [ ] Install and launch preview packages on available test systems and check the changed flows.
   Record which packages/platforms were exercised and any limitations.
+- [ ] The Windows preview is actually signed with the expected trusted publisher and timestamp, including
+  the application and NSIS uninstaller. An allowed unsigned preview does not satisfy the publication gate.
 
 The CI and packaging-preview runs may run concurrently once the candidate is pushed. Both must pass
 on the same SHA before publication. If `main` moves or any candidate file changes, stop and validate the
