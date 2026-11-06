@@ -31,6 +31,7 @@ $certificate | Add-Member -MemberType ScriptMethod -Name GetNameInfo -Value { pa
 
 try {
     $names = @('WINDOWS_SIGNING_PROVIDER', 'WINDOWS_SIGNING_REQUIRED', 'WINDOWS_EXPECTED_PUBLISHER',
+        'WINDOWS_SIGNING_RECEIPTS', 'WINDOWS_SIGNING_PHASE',
         'WINDOWS_CERTIFICATE_PATH', 'WINDOWS_CERTIFICATE_PASSWORD', 'AZURE_CLIENT_ID', 'AZURE_TENANT_ID',
         'AZURE_SUBSCRIPTION_ID', 'AZURE_SIGNING_ENDPOINT', 'AZURE_SIGNING_ACCOUNT', 'AZURE_SIGNING_PROFILE')
     $previous = @{}
@@ -105,6 +106,28 @@ try {
     Invoke-NotoirWindowsSign -Path $file
     Assert-True ($script:pfxArguments[-1] -eq $file) 'SignTool receives the full file path as one argument'
     Assert-True ($script:pfxArguments -contains '/fd' -and $script:pfxArguments -contains 'SHA256' -and $script:pfxArguments -contains '/tr') 'PFX signing requests SHA256 and RFC3161 timestamping'
+
+    $env:WINDOWS_SIGNING_PROVIDER = 'none'
+    $env:WINDOWS_SIGNING_PHASE = 'nsis'
+    $env:WINDOWS_SIGNING_RECEIPTS = Join-Path $fixture 'receipts'
+    $null = New-Item -ItemType Directory -Path $env:WINDOWS_SIGNING_RECEIPTS
+    foreach ($name in @('notoir.exe', 'build.msi', 'release-setup.exe', 'temporary-uninstaller.exe')) {
+        $path = Join-Path $fixture $name
+        Set-Content -LiteralPath $path -Value 'packaging fixture'
+        Write-NotoirWindowsSigningReceipt -Path $path -Signed $false
+    }
+    Remove-Item -LiteralPath (Join-Path $fixture 'temporary-uninstaller.exe')
+    Test-NotoirWindowsSigningReceipts
+    Assert-True $true 'all four hook receipts are required even when NSIS removes its temporary uninstaller'
+    $uninstallerReceipt = Join-Path $env:WINDOWS_SIGNING_RECEIPTS 'uninstaller.json'
+    $savedReceipt = Get-Content -LiteralPath $uninstallerReceipt -Raw
+    Remove-Item -LiteralPath $uninstallerReceipt
+    Assert-Throws { Test-NotoirWindowsSigningReceipts } 'Missing uninstaller signing receipt'
+    Set-Content -LiteralPath $uninstallerReceipt -Value $savedReceipt
+    Set-Content -LiteralPath (Join-Path $fixture 'build.msi') -Value 'tampered after signing'
+    Assert-Throws { Test-NotoirWindowsSigningReceipts } 'Changed signing output'
+    $env:WINDOWS_SIGNING_PROVIDER = 'pfx'
+    Assert-Throws { Test-NotoirWindowsSigningReceipts } 'does not match the configured signing identity'
 
     # Exercise the actual batch entry point on Windows, including exit-code
     # propagation and a working directory different from the repository.

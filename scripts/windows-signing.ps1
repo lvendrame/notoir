@@ -71,9 +71,54 @@ function Test-NotoirWindowsSignature {
         [System.Security.Cryptography.X509Certificates.X509NameType]::SimpleName, $false)
     if ([string]::IsNullOrWhiteSpace($env:WINDOWS_EXPECTED_PUBLISHER) -or
         $publisher -cne $env:WINDOWS_EXPECTED_PUBLISHER) {
-        throw "Unexpected Authenticode publisher for $Path"
+        throw "Unexpected Authenticode publisher '$publisher' for $Path; expected '$env:WINDOWS_EXPECTED_PUBLISHER'."
     }
     Write-Host "Verified Authenticode publisher '$publisher': $Path"
+}
+
+function Write-NotoirWindowsSigningReceipt {
+    param([Parameter(Mandatory)][string]$Path, [Parameter(Mandatory)][bool]$Signed)
+    if ([string]::IsNullOrWhiteSpace($env:WINDOWS_SIGNING_RECEIPTS)) { return }
+    $file = (Resolve-Path -LiteralPath $Path).Path
+    $name = [IO.Path]::GetFileName($file)
+    $kind = if ($name -eq 'notoir.exe') { 'app' }
+        elseif ($name.EndsWith('.msi', [StringComparison]::OrdinalIgnoreCase)) { 'msi' }
+        elseif ($name.EndsWith('-setup.exe', [StringComparison]::OrdinalIgnoreCase)) { 'nsis' }
+        elseif ($env:WINDOWS_SIGNING_PHASE -eq 'nsis') { 'uninstaller' }
+        else { throw "Unexpected file in signing hook: $Path" }
+    $receipt = @{
+        Kind = $kind
+        Path = $file
+        Sha256 = (Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash
+        Signed = $Signed
+        Publisher = $(if ($Signed) { $env:WINDOWS_EXPECTED_PUBLISHER } else { $null })
+    }
+    $receipt | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $env:WINDOWS_SIGNING_RECEIPTS "$kind.json") -Encoding utf8
+}
+
+function Test-NotoirWindowsSigningReceipts {
+    $provider = Assert-NotoirWindowsSigningConfiguration -Required:($env:WINDOWS_SIGNING_REQUIRED -eq 'true')
+    if ([string]::IsNullOrWhiteSpace($env:WINDOWS_SIGNING_RECEIPTS)) { throw 'Missing Windows signing receipt directory.' }
+    $signed = $provider -ne 'none'
+    foreach ($kind in @('app', 'msi', 'nsis', 'uninstaller')) {
+        $path = Join-Path $env:WINDOWS_SIGNING_RECEIPTS "$kind.json"
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Missing $kind signing receipt." }
+        $receipt = Get-Content -LiteralPath $path -Raw | ConvertFrom-Json
+        if ($receipt.Kind -ne $kind -or $receipt.Signed -isnot [bool] -or $receipt.Signed -ne $signed -or
+            ($signed -and $receipt.Publisher -cne $env:WINDOWS_EXPECTED_PUBLISHER)) {
+            throw "$kind receipt does not match the configured signing identity."
+        }
+        # NSIS deletes its temporary uninstaller after embedding it. Its
+        # receipt exists only if that file passed verification in the hook.
+        if ($kind -ne 'uninstaller') {
+            if (-not (Test-Path -LiteralPath $receipt.Path -PathType Leaf) -or
+                (Get-FileHash -LiteralPath $receipt.Path -Algorithm SHA256).Hash -ne $receipt.Sha256) {
+                throw "Changed signing output: $($receipt.Path)"
+            }
+            if ($signed) { Test-NotoirWindowsSignature -Path $receipt.Path }
+        }
+    }
+    Write-Host "All packaging hooks completed: app, MSI, NSIS installer and uninstaller (signed=$signed)."
 }
 
 function Invoke-NotoirWindowsSign {
@@ -113,4 +158,5 @@ function Invoke-NotoirWindowsSign {
         if ($LASTEXITCODE -ne 0) { throw "SignTool failed for $Path (exit $LASTEXITCODE)." }
     }
     Test-NotoirWindowsSignature -Path $file
+    Write-NotoirWindowsSigningReceipt -Path $file -Signed $true
 }

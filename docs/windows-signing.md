@@ -113,6 +113,11 @@ installers are checked again before checksums are calculated and artifacts uploa
 certificates make timestamping particularly important; see the
 [signing integration documentation](https://learn.microsoft.com/en-us/azure/artifact-signing/how-to-signing-integrations).
 
+NSIS can ignore an uninstaller signing command's failure, so packaging also requires fresh per-build
+receipts for all four hook targets. A missing uninstaller receipt blocks upload even if NSIS produced
+an outer installer. Unsigned preview receipts cannot satisfy signed-release validation, and changed
+application/installer bytes invalidate their receipts before checksums are generated.
+
 The existing minisign updater key is still required separately. It authenticates update metadata; it
 cannot replace Authenticode or provide the Windows publisher identity.
 

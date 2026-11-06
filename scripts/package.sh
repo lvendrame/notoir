@@ -79,15 +79,20 @@ case "$(uname -s)" in
     OS=windows
     export PATH="$PWD/scripts:$PATH"
     pwsh -NoProfile -NonInteractive -File scripts/sign-windows.ps1 -ValidateOnly
+    rm -rf target/windows-signing-receipts
+    mkdir -p target/windows-signing-receipts
+    export WINDOWS_SIGNING_RECEIPTS
+    WINDOWS_SIGNING_RECEIPTS=$(cygpath -w "$PWD/target/windows-signing-receipts")
     cargo build --profile dist -p notoir
     # The packager's hook signs the application before embedding it, both
     # installers, and the NSIS uninstaller. Each hook verifies trust/timestamp.
-    cargo packager -p notoir --profile dist -f wix,nsis
-    if [[ -n "${WINDOWS_SIGNING_PROVIDER:-}" && "$WINDOWS_SIGNING_PROVIDER" != none ]]; then
-      for f in target/dist/notoir.exe "$OUT"/*.msi "$OUT"/*-setup.exe; do
-        pwsh -NoProfile -NonInteractive -File scripts/sign-windows.ps1 -VerifyOnly -Path "$f"
-      done
-    fi
+    export WINDOWS_SIGNING_PHASE=wix
+    cargo packager -p notoir --profile dist -f wix
+    export WINDOWS_SIGNING_PHASE=nsis
+    cargo packager -p notoir --profile dist -f nsis
+    # NSIS !uninstfinalize does not enforce the hook's exit status. Fresh
+    # receipts prove every hook completed, including the embedded uninstaller.
+    pwsh -NoProfile -NonInteractive -File scripts/sign-windows.ps1 -VerifyPackage
     if [[ -f target/dist/notoir.pdb ]]; then
       (cd target/dist && 7z a "../packages/notoir-$VERSION-windows-x86_64-pdb.zip" notoir.pdb >/dev/null)
     fi

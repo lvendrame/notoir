@@ -1,14 +1,16 @@
-param([string]$Path, [switch]$ValidateOnly, [switch]$VerifyOnly)
+param([string]$Path, [switch]$ValidateOnly, [switch]$VerifyOnly, [switch]$VerifyPackage)
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/windows-signing.ps1"
 $required = $env:WINDOWS_SIGNING_REQUIRED -eq 'true'
 $provider = Assert-NotoirWindowsSigningConfiguration -Required:$required
 if ($ValidateOnly) { return }
+if ($VerifyPackage) { Test-NotoirWindowsSigningReceipts; return }
 if ([string]::IsNullOrWhiteSpace($Path) -or -not (Test-Path -LiteralPath $Path -PathType Leaf)) {
     throw "Missing file for Windows signing: $Path"
 }
 if ($provider -eq 'none') {
     Write-Host "Unsigned Windows preview (no signing identity configured): $Path"
+    if (-not $VerifyOnly) { Write-NotoirWindowsSigningReceipt -Path $Path -Signed $false }
     return
 }
 if ($VerifyOnly) { Test-NotoirWindowsSignature -Path $Path }
