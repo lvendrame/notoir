@@ -67,28 +67,16 @@ Release packages are built per OS with [cargo-packager](https://github.com/crabn
 scripts/package.sh   # macOS: universal .app + .dmg · Windows (Git Bash): .msi + NSIS · Linux: .deb + AppImage
 ```
 
-Output, `SHA256SUMS-<os>.txt` and debug symbols land in `target/packages`. Signing runs only when the secrets named at
-the top of the script are set; unsigned builds are previews. The crash suite runs nightly
-(`cargo test -p notoir --test crash -- --ignored`).
+Output, `SHA256SUMS-<os>.txt` and debug symbols land in `target/packages`. OS signing runs only when the credentials
+named at the top of the script are set. The native crash suite runs nightly and on manual CI runs; ordinary
+`cargo test --workspace` skips it. Run it locally with `cargo test -p notoir --test crash -- --ignored --test-threads=1`.
 
 ## Releasing
 
-1. Set `version` in the root `Cargo.toml` (e.g. `0.2.0`), commit, push.
-2. Either push a tag (`git tag v0.2.0 && git push origin v0.2.0`), or run Actions → Release → Run workflow with
-   **publish** ticked: it tags the chosen commit `v<Cargo version>` (refusing an existing tag).
+Follow the [release checklist](docs/releasing.md) before creating a release tag or enabling **publish**.
+It covers version/lockfile preparation, dependency audits, local and native crash tests, the complete CI
+matrix, a packaging preview, signing configuration and verification of the published artifacts.
 
-`.github/workflows/release.yml` then checks that the tag matches the Cargo version, packages on all three OSes and
-publishes a GitHub release with every installer, `SHA256SUMS.txt`, debug symbols and, when signing is set up, a signed
-`update.json`. Tags containing `-` become prereleases; the part after `-` must be a number (`v0.2.0-1`), because MSI
-versions are numeric. A manual run without **publish** only builds the packages as workflow artifacts.
-
-Optional repository secrets (each step is skipped without them):
-
-| Secrets | Effect |
-|---|---|
-| `APPLE_CERTIFICATE` (base64 .p12), `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`; `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_PASSWORD` | macOS signing; notarization |
-| `WINDOWS_CERTIFICATE` (base64 .pfx), `WINDOWS_CERTIFICATE_PASSWORD` | Authenticode for .msi and setup .exe |
-| `GPG_PRIVATE_KEY`, `GPG_KEY_ID` | AppImage `.asc` signature |
-| `MINISIGN_SECRET_KEY` (password-less, `minisign -G -W`) + variable `NOTOIR_UPDATE_PUBKEY` | Signed `update.json`; enables the in-app updater |
-
-`NOTOIR_UPDATE_URL` (variable) defaults to the latest release's `update.json`.
+Both the manual CI run (including all three native crash suites) and the packaging preview must pass
+on the exact release commit before tagging. The Release workflow publishes independently of CI.
+Updater signing requires `MINISIGN_SECRET_KEY` and `NOTOIR_UPDATE_PUBKEY`; OS code signing is optional.

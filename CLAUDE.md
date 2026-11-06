@@ -66,3 +66,10 @@ cargo fmt --check
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 ```
+
+## Before creating a release
+
+Follow [`docs/releasing.md`](docs/releasing.md). Do not create/push a `v*` tag or run Release with
+`publish=true` until a fresh manual CI run (including the native crash suite on Windows, macOS and Linux)
+and a packaging preview both complete successfully on the exact candidate SHA. Local checks or an older
+green CI run do not replace this gate. The release workflow does not enforce the CI dependency itself.
