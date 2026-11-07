@@ -117,6 +117,8 @@ NSIS can ignore an uninstaller signing command's failure, so packaging also requ
 receipts for all four hook targets. A missing uninstaller receipt blocks upload even if NSIS produced
 an outer installer. Unsigned preview receipts cannot satisfy signed-release validation, and changed
 application/installer bytes invalidate their receipts before checksums are generated.
+The pinned [NSIS template](../scripts/templates/README.md) invokes the batch hook directly and enforces its
+exit status; this avoids the upstream template's command-formatting problem exposed by the preview.
 
 The existing minisign updater key is still required separately. It authenticates update metadata; it
 cannot replace Authenticode or provide the Windows publisher identity.

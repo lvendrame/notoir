@@ -100,3 +100,4 @@ sign-command = "notoir-sign.cmd %1"
 
 [package.metadata.packager.nsis]
 installer-mode = "currentUser"
+template = "../../scripts/templates/windows-installer.nsi"
