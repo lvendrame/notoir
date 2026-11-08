@@ -62,3 +62,4 @@
 - [Updates and file-manager integration](updates.md)
 
 - [Troubleshooting and data locations](troubleshooting.md)
+- [Privacy policy](privacy.md)
