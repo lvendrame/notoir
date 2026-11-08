@@ -29,13 +29,22 @@ jobs:
       - uses: EmbarkStudios/cargo-deny-action@v2
 
   windows-signing:
-    name: Windows signing checks
+    name: Windows packaging checks
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v5
       - name: Signing configuration, provider and verification regressions
         shell: pwsh
         run: ./scripts/tests/windows-signing.Tests.ps1
+      - name: MSIX identity, manifest and version regressions
+        shell: pwsh
+        run: ./scripts/tests/msix.Tests.ps1
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: store-policy-tests
+      - name: Store-managed update and integration policy
+        run: cargo test --locked -p notoir --features microsoft-store --test microsoft_store
 
   check:
     name: clippy + test (${{ matrix.os }})

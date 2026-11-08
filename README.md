@@ -73,6 +73,9 @@ named at the top of the script are set. The native crash suite runs nightly and 
 
 ## Releasing
 
+For the Microsoft Store distribution, follow [Store submission](docs/microsoft-store.md). Its dedicated
+workflow builds the reserved MSIX product for Microsoft-managed signing after certification.
+
 Follow the [release checklist](docs/releasing.md) before creating a release tag or enabling **publish**.
 It covers version/lockfile preparation, dependency audits, local and native crash tests, the complete CI
 matrix, a packaging preview, signing configuration and verification of the published artifacts.

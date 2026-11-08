@@ -1,5 +1,9 @@
 # Windows signing setup (issue #1)
 
+For the **Microsoft Store MSIX** distribution, follow [Store submission](microsoft-store.md) instead.
+Microsoft signs those packages after certification. The Azure/PFX setup below applies to direct-download
+MSI/EXE installers and is not needed for the reserved MSIX product.
+
 [Issue #1](https://github.com/lvendrame/notoir/issues/1) reports SmartScreen displaying **Unknown publisher**
 for an unsigned MSI. Fixing the publisher identity requires a publicly trusted Authenticode signing
 identity. Changing installer metadata or signing `update.json` with minisign does not sign Windows code.

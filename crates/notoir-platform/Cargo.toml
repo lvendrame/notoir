@@ -8,6 +8,9 @@ publish.workspace = true
 [lints]
 workspace = true
 
+[features]
+microsoft-store = []
+
 [dependencies]
 open.workspace = true
 trash.workspace = true

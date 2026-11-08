@@ -14,6 +14,10 @@ If you move Notoir, remove and add the integration again to refresh its applicat
 
 ## Checking for updates
 
+For a Microsoft Store installation, use **Microsoft Store → Library → Get updates**. The Store manages
+updates and package registrations; Notoir's standalone update and manual PATH/context-menu commands are
+unavailable in that edition. The following instructions apply to direct-download installations.
+
 **Help → Check for Updates…** reports your current version and checks for a newer stable release.
 Choose **Download Update** to download and verify it, then **Quit and Install…** when ready. **Later**
 keeps the download ready while this session remains open. Unsaved files are prompted before installation;

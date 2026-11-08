@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+         xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+         xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+         xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+         IgnorableNamespaces="uap uap3 desktop rescap">
+  <!-- Identity is filled from identity.json; the source template is never shipped directly. -->
+  <Identity Name="Notoir.Template" Publisher="CN=Template" Version="1.0.0.0" ProcessorArchitecture="x64" />
+  <Properties>
+    <DisplayName>Notoir</DisplayName>
+    <PublisherDisplayName>Template</PublisherDisplayName>
+    <Description>A native text editor and workspace for plain files, Markdown, JSON and Git.</Description>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+  <Applications>
+    <Application Id="Notoir" Executable="notoir.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements DisplayName="Notoir" Description="Notoir text editor"
+                          Square150x150Logo="Assets\Square150x150Logo.png"
+                          Square44x44Logo="Assets\Square44x44Logo.png" BackgroundColor="transparent" />
+      <Extensions>
+        <uap3:Extension Category="windows.appExecutionAlias" Executable="notoir.exe" EntryPoint="Windows.FullTrustApplication">
+          <uap3:AppExecutionAlias><desktop:ExecutionAlias Alias="notoir.exe" /></uap3:AppExecutionAlias>
+        </uap3:Extension>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="notoir.text" Parameters="&quot;%1&quot;">
+            <uap:DisplayName>Notoir text document</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.txt</uap:FileType><uap:FileType>.text</uap:FileType><uap:FileType>.log</uap:FileType>
+              <uap:FileType>.md</uap:FileType><uap:FileType>.markdown</uap:FileType>
+              <uap:FileType>.json</uap:FileType><uap:FileType>.jsonc</uap:FileType><uap:FileType>.toml</uap:FileType>
+              <uap:FileType>.yaml</uap:FileType><uap:FileType>.yml</uap:FileType>
+              <uap:FileType>.csv</uap:FileType><uap:FileType>.tsv</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap3:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities><rescap:Capability Name="runFullTrust" /></Capabilities>
+</Package>

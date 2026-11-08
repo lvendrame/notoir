@@ -54,6 +54,9 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);
     for mut spec in specs {
+        if !crate::distribution::command_available(spec.id.as_str()) {
+            continue;
+        }
         if matches!(
             spec.id.as_str(),
             "file.newWindow"

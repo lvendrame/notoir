@@ -54,6 +54,13 @@ pub enum Claim {
 
 /// Per-user socket name.
 pub fn socket_name() -> String {
+    // A Store launch must not forward into a separately installed MSI/NSIS
+    // process, which has a different updater and package-owned integrations.
+    let app = if cfg!(feature = "microsoft-store") {
+        format!("{}.store", crate::paths::BUNDLE_ID)
+    } else {
+        crate::paths::BUNDLE_ID.to_owned()
+    };
     let user = std::env::var("USER")
         .or_else(|_| std::env::var("USERNAME"))
         .unwrap_or_default();
@@ -71,9 +78,9 @@ pub fn socket_name() -> String {
                 }
             });
             home_path.hash(&mut h);
-            format!("{}-{}-{:x}.sock", crate::paths::BUNDLE_ID, user, h.finish())
+            format!("{app}-{user}-{:x}.sock", h.finish())
         }
-        _ => format!("{}-{}.sock", crate::paths::BUNDLE_ID, user),
+        _ => format!("{app}-{user}.sock"),
     }
 }
 

@@ -12,6 +12,7 @@ pub mod config;
 pub mod core;
 pub mod csv;
 pub mod desktop;
+pub mod distribution;
 #[doc(hidden)]
 pub mod docs_ref;
 pub mod editor_widget;

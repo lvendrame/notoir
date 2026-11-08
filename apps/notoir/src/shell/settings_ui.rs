@@ -188,6 +188,9 @@ pub fn show(ui: &mut egui::Ui, kit: &mut Kit, core: &mut AppCore, actions: &mut 
         .schema
         .iter()
         .filter(|d| {
+            if !crate::distribution::setting_available(d.key) {
+                return false;
+            }
             if searching {
                 matches(core, d, &core.settings_ui.search)
             } else {

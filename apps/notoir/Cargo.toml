@@ -9,6 +9,9 @@ description = "Notoir — a fast native text editor and workspace"
 [lints]
 workspace = true
 
+[features]
+microsoft-store = ["notoir-platform/microsoft-store"]
+
 [dependencies]
 notoir-core.workspace = true
 notoir-platform.workspace = true

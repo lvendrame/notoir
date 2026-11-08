@@ -1,0 +1,44 @@
+name: Microsoft Store package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  msix:
+    name: Build and validate Store MSIX
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: store-msix
+      - name: Manifest and version regression checks
+        shell: pwsh
+        run: ./scripts/tests/msix.Tests.ps1
+      - name: Build unsigned Store submission
+        shell: pwsh
+        run: ./scripts/package-store.ps1
+      - name: Register development package and test native activation
+        shell: pwsh
+        run: ./scripts/test-store-install.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: notoir-microsoft-store-x64
+          path: |
+            target/store-msix/*.msix
+            target/store-msix/SHA256SUMS.txt
+            target/store-msix/submission-info.json
+            target/store-msix/runtime-dependencies.txt
+            target/store-msix/native-acceptance.json
+          if-no-files-found: error
+      - name: Native test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: store-native-diagnostics
+          path: target/store-msix/*.log
+          if-no-files-found: ignore

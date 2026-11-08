@@ -1,5 +1,6 @@
 # Shared by the release preflight, cargo-packager signing hook and offline tests.
 $ErrorActionPreference = 'Stop'
+. "$PSScriptRoot/windows-sdk.ps1"
 $script:ArtifactSigningModuleVersion = '0.1.20'
 
 function Assert-NotoirWindowsSigningConfiguration {
@@ -48,13 +49,7 @@ function Assert-NotoirWindowsSigningConfiguration {
 }
 
 function Get-NotoirSignTool {
-    $command = Get-Command signtool.exe -ErrorAction SilentlyContinue
-    if ($command) { return $command.Source }
-    $root = Join-Path ([Environment]::GetFolderPath('ProgramFilesX86')) 'Windows Kits/10/bin'
-    $tools = @(Get-ChildItem -Path "$root/*/x64/signtool.exe" -ErrorAction SilentlyContinue |
-        Sort-Object { [version]$_.Directory.Parent.Name } -Descending)
-    if ($tools.Count -eq 0) { throw 'Install the Windows SDK containing x64 signtool.exe.' }
-    return $tools[0].FullName
+    return Get-NotoirWindowsSdkTool -Name signtool.exe
 }
 
 function Test-NotoirWindowsSignature {

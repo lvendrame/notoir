@@ -1,5 +1,8 @@
 # Release checklist
 
+This checklist covers standalone GitHub installer releases. For Microsoft Store MSIX submissions, use
+the [Store submission procedure](microsoft-store.md), including its Store-specific package validation.
+
 Follow this checklist before creating any `v*` tag or running the Release workflow with `publish=true`.
 The release workflow currently publishes independently of CI: its version and signing checks do **not**
 require a green CI run. The checks below are a maintainer gate, not an automatic workflow dependency.
@@ -105,7 +108,7 @@ gh run watch "$ci_run_id" --repo lvendrame/notoir --exit-status
 |---|---|
 | `fmt` | Ubuntu |
 | `deny` | Ubuntu |
-| `Windows signing checks` | Windows |
+| `Windows packaging checks` | Windows |
 | `clippy + test` | Windows, macOS and Ubuntu (three jobs) |
 | `crash suite` | Windows, macOS and Ubuntu (three jobs) |
 

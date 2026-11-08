@@ -42,7 +42,7 @@ pub struct UpdatesState {
 impl UpdatesState {
     pub fn new(config: Option<UpdateConfig>) -> Self {
         Self {
-            config,
+            config: config.filter(|_| !crate::distribution::MICROSOFT_STORE),
             platform: update::platform_key(),
             ..Default::default()
         }
@@ -101,6 +101,9 @@ impl AppCore {
 
     /// Checks now; `manual` (Help → Check for Updates…) reports every outcome.
     pub fn updates_check(&mut self, manual: bool) {
+        if crate::distribution::MICROSOFT_STORE {
+            return;
+        }
         if manual {
             self.updates.open = true;
         }
@@ -206,6 +209,9 @@ impl AppCore {
 
     /// Downloads the offered installer into the cache and verifies it.
     pub fn updates_download(&mut self) {
+        if crate::distribution::MICROSOFT_STORE {
+            return;
+        }
         let Some(offer) = self.updates.offer.clone() else {
             return;
         };
@@ -275,6 +281,9 @@ impl AppCore {
     }
 
     pub fn updates_install_on_quit(&mut self) {
+        if crate::distribution::MICROSOFT_STORE {
+            return;
+        }
         if self.updates.ready.is_none() {
             return;
         }

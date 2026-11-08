@@ -11,6 +11,9 @@ pub struct DesktopState {
 }
 impl AppCore {
     pub fn desktop_change(&mut self, install: Option<bool>) {
+        if crate::distribution::MICROSOFT_STORE {
+            return;
+        }
         if self.desktop.busy {
             return;
         }
