@@ -7,7 +7,7 @@ publish.workspace = true
 
 [dependencies]
 notoir-core.workspace = true
-rmcp = { version = "3.5.1", default-features = false, features = ["server", "transport-streamable-http-server"] }
+rmcp = { version = "3.9.0", default-features = false, features = ["server", "transport-streamable-http-server"] }
 axum = { version = "0.8.9", default-features = false, features = ["http1", "tokio"] }
 tokio = { version = "1.53.3", features = ["rt-multi-thread", "net", "sync", "time", "macros"] }
 tokio-util = "0.7.20"

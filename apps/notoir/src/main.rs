@@ -5,7 +5,7 @@
 use std::sync::mpsc::channel;
 use std::sync::{Arc, OnceLock};
 
-use notoir::{app, application, cli, logging};
+use notoir::{app, application, cli, icons, logging};
 use notoir_platform::AppPaths;
 use notoir_platform::single_instance::{self, Claim, InstanceRequest};
 
@@ -109,6 +109,7 @@ fn main() -> eframe::Result {
     let viewport = egui::ViewportBuilder::default()
         .with_title("Notoir")
         .with_app_id(notoir_platform::paths::BUNDLE_ID)
+        .with_icon(icons::app_icon())
         .with_visible(false)
         .with_inner_size([1.0, 1.0])
         .with_position([-10000.0, -10000.0])
