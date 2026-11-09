@@ -2,6 +2,10 @@
 
 This checklist covers standalone GitHub installer releases. For Microsoft Store MSIX submissions, use
 the [Store submission procedure](microsoft-store.md), including its Store-specific package validation.
+Successful stable GitHub releases also invoke that Store workflow automatically. It requires the
+Store publishing secrets, a green manual CI run on the same commit, and fresh MSIX/native validation.
+Store submission failure does not remove the already-published GitHub release; inspect Partner Center
+before retrying. Preview runs and prereleases do not submit Store updates.
 
 Follow this checklist before creating any `v*` tag or running the Release workflow with `publish=true`.
 The release workflow currently publishes independently of CI: its version and signing checks do **not**

@@ -1,6 +1,6 @@
 # Microsoft Store submission
 
-This is the MSIX route for the product already reserved in Partner Center. Microsoft signs the package
+This is the MSIX route for the [published Notoir product](https://apps.microsoft.com/detail/9P1JPTK7G5PX). Microsoft signs the package
 after certification; no Azure Artifact Signing account, PFX certificate or minisign key is required for
 this workflow. Direct-download MSI/EXE releases use the separate [Authenticode setup](windows-signing.md).
 
@@ -43,6 +43,64 @@ The runner restores its developer-mode setting and unregisters the test package 
 
 This package is deliberately unsigned for **Partner Center submission**. It is not a ready-to-install
 direct-download MSIX. Successful SDK and native checks do not replace Microsoft's certification.
+
+## Automated Store updates
+
+The **Microsoft Store package** workflow has three modes:
+
+- **package** (default): build, validate and upload the unsigned artifact for manual submission.
+- **verify-access**: authenticate and read product `9P1JPTK7G5PX`. No build, draft or submission is created.
+- **publish**: require a successful manual CI run on this exact commit, build and test the Store edition,
+  verify its artifact hash and source commit, then submit it for Microsoft certification.
+
+After a successful stable GitHub release, the **Release** workflow calls **publish** automatically.
+Prereleases and packaging previews do not submit to the Store. This is a reusable workflow call:
+it also works for GitHub releases created with the workflow's `GITHUB_TOKEN`, which would not trigger
+a separate `release` event workflow. A failed Store submission leaves the GitHub release in place;
+inspect Partner Center before retrying **publish** manually on the same candidate.
+
+The Store gate checks the newest manual CI run for the candidate and all nine required jobs,
+including the native crash suite on each platform. Ordinary push CI does not satisfy this gate.
+The freshly built MSIX must also pass the Windows SDK and native installation tests before upload.
+Complete the release checklist before publishing the standalone installers: their existing workflow
+still requires Authenticode credentials independently of the Store secrets.
+
+### Credentials and first access check
+
+Use an Entra application associated with the developer account in Partner Center under
+**Account settings → User management → Microsoft Entra applications**, with the **Manager** role.
+Configure these repository secrets under **GitHub → Settings → Secrets and variables → Actions**:
+
+| Secret | Value to use |
+|---|---|
+| `AZURE_AD_TENANT_ID` | Entra tenant's GUID, not its `onmicrosoft.com` domain |
+| `AZURE_AD_APPLICATION_CLIENT_ID` | Application (client) ID of the registered publisher application |
+| `AZURE_AD_APPLICATION_SECRET` | Client secret **Value**, not Secret ID |
+| `SELLER_ID` | Developer account's Seller ID, not Windows/Windows Phone publisher ID or Store product ID |
+
+Find Seller ID under **Partner Center → Account settings → Organization profile → Legal info →
+Developer → Publisher IDs** (the Developer tab is shown when applicable). See Microsoft's
+[account settings documentation](https://learn.microsoft.com/en-us/partner-center/account-settings/manage-account).
+Rotate the client secret in Entra and replace the GitHub secret before its expiration. Never commit it
+or paste its value into issue comments, chat, or logs. The workflow resets saved CLI credentials after
+use and does not cache the profile. The access check proves the application can read this product;
+actual submission permissions and certification can only be established by a real submission.
+
+Before the first automated update, run **Microsoft Store package → Run workflow → mode: verify-access**:
+
+```sh
+gh workflow run store.yml --repo lvendrame/notoir --ref main -f mode=verify-access
+```
+
+Wait for **Verify Microsoft Store access** to pass. This does not resubmit the already-published
+`1.1.11.0` package. Bump the Cargo version for the next update; the Store requires increasing versions.
+No additional credential information needs to be sent in chat.
+
+Submission uses Microsoft's `msstore publish <package.msix> -id <StoreId>` package-update command,
+carrying forward the current listing rather than sending replacement listing JSON. Review the existing
+Store listings before the first update. Avoid editing a pending automated submission in Partner Center
+or launching another publisher against it. A successful upload/commit means submitted for certification,
+not already available to customers; check its progress in Partner Center.
 
 ### Store version numbering
 
@@ -123,3 +181,5 @@ preview is required separately when also making a direct-download release.
 - [MSIX submission requirements and Store signing](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/app-package-requirements)
 - [Package version rules](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/package-version-numbering)
 - [Manual Win32 MSIX packaging](https://learn.microsoft.com/en-us/windows/msix/desktop/desktop-to-uwp-manual-conversion)
+- [GitHub Actions publishing setup](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/github-actions)
+- [Store CLI MSIX commands](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/commands)

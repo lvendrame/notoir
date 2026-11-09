@@ -17,7 +17,12 @@ screenshots, plus reference pages for shortcuts, settings, commands, the MCP too
 
 ## Install
 
-Download the installer for your system from the [latest release](https://github.com/lvendrame/notoir/releases/latest):
+Install Notoir for Windows from the [Microsoft Store](https://apps.microsoft.com/detail/9P1JPTK7G5PX):
+
+[![Get it from Microsoft Store](https://get.microsoft.com/images/en-us%20dark.svg)](https://get.microsoft.com/installer/download/9p1jptk7g5px?referrer=appbadge)
+
+For macOS, Linux, or standalone Windows installers, download the
+[latest release](https://github.com/lvendrame/notoir/releases/latest):
 
 | System | File |
 |---|---|
@@ -25,14 +30,15 @@ Download the installer for your system from the [latest release](https://github.
 | Windows | `notoir_<version>_x64_en-US.msi` or `notoir_<version>_x64-setup.exe` |
 | Linux | `notoir_<version>_amd64.deb` or `notoir_<version>_x86_64.AppImage` |
 
-Release builds are not code-signed yet, so the first launch needs one extra step:
+Standalone downloads may require these first-launch steps:
 
 - **macOS** says "Notoir" Not Opened. Drag Notoir to Applications, then run:
   ```sh
   xattr -dr com.apple.quarantine /Applications/Notoir.app
   ```
   (or click **Open Anyway** in System Settings → Privacy & Security).
-- **Windows** SmartScreen says "Windows protected your PC": click **More info** → **Run anyway**.
+- **Windows MSI/EXE downloads** may show a SmartScreen warning: click **More info** → **Run anyway** after
+  verifying the download source.
 - **Linux** AppImage: `chmod +x notoir_*.AppImage` before running it.
 
 `SHA256SUMS.txt` in each release lists the checksum of every file. See
@@ -42,7 +48,7 @@ Release builds are not code-signed yet, so the first launch needs one extra step
 
 Early releases (0.1.x). Every planned milestone is built: files, workspaces, splits, crash recovery, find/replace and
 workspace search, settings, Markdown preview, JSON tree view, file comparison, Git, the MCP server, Lua plugins, themes
-and updates. Builds are not code-signed yet (see [Install](#install)). See:
+and updates. See [Install](#install) for Microsoft Store and standalone downloads. Project documentation:
 
 - [`docs/specs/`](docs/specs/): functional and technical specifications (start with
   [`00-overview-and-scope.md`](docs/specs/00-overview-and-scope.md))

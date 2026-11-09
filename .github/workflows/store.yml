@@ -2,13 +2,69 @@ name: Microsoft Store package
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Build a package, verify Store access, or submit an update"
+        type: choice
+        options: [package, verify-access, publish]
+        default: package
+  workflow_call:
+    inputs:
+      mode:
+        type: string
+        default: package
+    secrets:
+      AZURE_AD_TENANT_ID:
+        required: false
+      AZURE_AD_APPLICATION_CLIENT_ID:
+        required: false
+      AZURE_AD_APPLICATION_SECRET:
+        required: false
+      SELLER_ID:
+        required: false
 
 permissions:
   contents: read
+  actions: read
+
+# Serialize submissions across release and manual runs for this single product.
+concurrency:
+  group: microsoft-store-notoir
+  cancel-in-progress: false
 
 jobs:
+  access:
+    name: Verify Microsoft Store access
+    if: inputs.mode == 'verify-access'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: microsoft/microsoft-store-apppublisher@v1.1
+      - name: Read product using publishing credentials
+        shell: pwsh
+        env:
+          AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+          AZURE_AD_APPLICATION_CLIENT_ID: ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
+          AZURE_AD_APPLICATION_SECRET: ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+          SELLER_ID: ${{ secrets.SELLER_ID }}
+        run: ./scripts/store-client.ps1 -Mode VerifyAccess
+
+  gate:
+    name: Require candidate CI
+    if: inputs.mode != 'verify-access'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Require manual CI including native crash suites before submission
+        if: inputs.mode == 'publish'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const gate = require('./scripts/store-ci-gate.cjs');
+            await gate({github, context, core});
   msix:
     name: Build and validate Store MSIX
+    needs: gate
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v5
@@ -42,3 +98,24 @@ jobs:
           name: store-native-diagnostics
           path: target/store-msix/*.log
           if-no-files-found: ignore
+
+  publish:
+    name: Submit MSIX to Microsoft Store
+    if: inputs.mode == 'publish'
+    needs: msix
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: notoir-microsoft-store-x64
+          path: target/store-msix
+      - uses: microsoft/microsoft-store-apppublisher@v1.1
+      - name: Submit validated package for certification
+        shell: pwsh
+        env:
+          AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+          AZURE_AD_APPLICATION_CLIENT_ID: ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
+          AZURE_AD_APPLICATION_SECRET: ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+          SELLER_ID: ${{ secrets.SELLER_ID }}
+        run: ./scripts/store-client.ps1 -Mode Publish

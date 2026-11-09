@@ -33,6 +33,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Store submission CI gate regressions
+        run: node --test scripts/tests/store-ci-gate.test.cjs
+      - name: Store client access and failure regressions
+        shell: pwsh
+        run: ./scripts/tests/store-client.Tests.ps1
       - name: Signing configuration, provider and verification regressions
         shell: pwsh
         run: ./scripts/tests/windows-signing.Tests.ps1
