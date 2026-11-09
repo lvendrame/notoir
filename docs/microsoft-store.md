@@ -62,8 +62,9 @@ inspect Partner Center before retrying **publish** manually on the same candidat
 The Store gate checks the newest manual CI run for the candidate and all nine required jobs,
 including the native crash suite on each platform. Ordinary push CI does not satisfy this gate.
 The freshly built MSIX must also pass the Windows SDK and native installation tests before upload.
-Complete the release checklist before publishing the standalone installers: their existing workflow
-still requires Authenticode credentials independently of the Store secrets.
+Complete the release checklist before publishing installers. Without a configured Authenticode provider,
+Windows uses the Store and GitHub publishes macOS/Linux installers with a Store link. If a provider is
+configured, separate Windows MSI/EXE installers are also built and must be Authenticode signed.
 
 ### Credentials and first access check
 
@@ -82,8 +83,8 @@ Find Seller ID under **Partner Center → Account settings → Organization prof
 Developer → Publisher IDs** (the Developer tab is shown when applicable). See Microsoft's
 [account settings documentation](https://learn.microsoft.com/en-us/partner-center/account-settings/manage-account).
 Rotate the client secret in Entra and replace the GitHub secret before its expiration. Never commit it
-or paste its value into issue comments, chat, or logs. The workflow resets saved CLI credentials after
-use and does not cache the profile. The access check proves the application can read this product;
+or paste its value into issue comments, chat, or logs. The workflow deletes its Windows Credential Manager
+entry and CLI profile after use; it does not cache the profile. The access check proves the application can read this product;
 actual submission permissions and certification can only be established by a real submission.
 
 Before the first automated update, run **Microsoft Store package → Run workflow → mode: verify-access**:

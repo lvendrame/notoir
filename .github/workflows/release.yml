@@ -1,8 +1,7 @@
 name: Release
 
-# Tag push (v1.2.3) builds every package format on its OS, signs when the
-# secrets exist, and attaches packages, checksums and debug symbols to a
-# GitHub release (docs/specs/31 §Packaging).
+# Tag push builds macOS/Linux installers and submits Windows to Microsoft Store.
+# Signed standalone Windows installers are also built when a provider is configured.
 # A manual run (Actions → Release → Run workflow) builds the packages as
 # workflow artifacts; with "publish" ticked it also tags the commit
 # v<Cargo version> and publishes the release.
@@ -60,10 +59,23 @@ jobs:
         run: |
           . ./scripts/windows-signing.ps1
           $provider = Assert-NotoirWindowsSigningConfiguration `
-            -Required:($env:WINDOWS_SIGNING_REQUIRED -eq 'true') `
             -CertificateAvailable:($env:HAS_WINDOWS_CERT -eq 'true') `
             -PasswordAvailable:($env:HAS_WINDOWS_PASSWORD -eq 'true')
           "provider=$provider" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+      - name: Require Store publishing credentials for Store-only Windows releases
+        if: (startsWith(github.ref, 'refs/tags/v') || inputs.publish) && steps.windows-signing.outputs.provider == 'none'
+        shell: pwsh
+        env:
+          STORE_TENANT: ${{ secrets.AZURE_AD_TENANT_ID }}
+          STORE_CLIENT: ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
+          STORE_SECRET: ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+          STORE_SELLER: ${{ secrets.SELLER_ID }}
+        run: |
+          foreach ($name in @('STORE_TENANT', 'STORE_CLIENT', 'STORE_SECRET', 'STORE_SELLER')) {
+            if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($name))) {
+              throw 'Windows requires either Store publishing credentials or standalone Authenticode signing.'
+            }
+          }
       - name: Require update signing for published releases
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
         env:
@@ -161,6 +173,7 @@ jobs:
   package-windows:
     name: package (windows-latest)
     needs: version
+    if: needs.version.outputs.windows_signing != 'none'
     runs-on: windows-latest
     environment: windows-signing
     permissions:
@@ -216,7 +229,12 @@ jobs:
 
   release:
     needs: [version, package, package-windows]
-    if: needs.version.outputs.tag != ''
+    if: >-
+      always() && !cancelled() &&
+      needs.version.result == 'success' && needs.version.outputs.tag != '' &&
+      needs.package.result == 'success' &&
+      (needs.package-windows.result == 'success' ||
+       (needs.package-windows.result == 'skipped' && needs.version.outputs.windows_signing == 'none'))
     runs-on: ubuntu-latest
     env:
       TAG: ${{ needs.version.outputs.tag }}
@@ -250,6 +268,7 @@ jobs:
           target_commitish: ${{ github.sha }}
           files: dist/*
           generate_release_notes: true
+          body: 'Windows: [Install Notoir from Microsoft Store](https://apps.microsoft.com/detail/9P1JPTK7G5PX).'
           prerelease: ${{ contains(env.TAG, '-') }}
 
   microsoft-store:

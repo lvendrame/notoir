@@ -11,6 +11,7 @@ foreach ($name in @('AZURE_AD_TENANT_ID', 'AZURE_AD_APPLICATION_CLIENT_ID', 'AZU
 }
 $identity = Get-Content -Raw "$PSScriptRoot/../packaging/windows-store/identity.json" | ConvertFrom-Json
 $package = $null
+$configured = $false
 if ($Mode -eq 'Publish') {
     $out = $PackageDirectory
     $info = Get-Content -Raw (Join-Path $out 'submission-info.json') | ConvertFrom-Json
@@ -30,6 +31,7 @@ try {
     & msstore reconfigure --tenantId $env:AZURE_AD_TENANT_ID --sellerId $env:SELLER_ID `
         --clientId $env:AZURE_AD_APPLICATION_CLIENT_ID --clientSecret $env:AZURE_AD_APPLICATION_SECRET
     if ($LASTEXITCODE -ne 0) { throw 'Microsoft Store CLI configuration failed.' }
+    $configured = $true
     # This is read-only: it verifies actual product access, not just secret presence.
     & msstore apps get $identity.StoreId
     if ($LASTEXITCODE -ne 0) { throw 'Microsoft Store product access failed; check the tenant association and Manager role.' }
@@ -42,7 +44,10 @@ try {
             Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
     }
 } finally {
-    # Never cache the CLI profile or leave its saved credentials for later steps.
-    & msstore reconfigure --reset
-    if ($LASTEXITCODE -ne 0) { Write-Warning 'Store CLI credential reset failed; discard this disposable runner.' }
+    & cmdkey.exe "/delete:MicrosoftStoreCli:user=$env:AZURE_AD_APPLICATION_CLIENT_ID" | Out-Null
+    $credentialRemoved = $LASTEXITCODE -eq 0
+    $cliProfilePath = Join-Path $env:LOCALAPPDATA 'Microsoft/MSStore.CLI'
+    if (Test-Path -LiteralPath $cliProfilePath) { Remove-Item -LiteralPath $cliProfilePath -Recurse -Force }
+    if ($configured -and -not $credentialRemoved) { throw 'Could not remove the saved Microsoft Store CLI credential.' }
+    $global:LASTEXITCODE = 0
 }
