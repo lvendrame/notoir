@@ -99,9 +99,9 @@ material outside the repository and build caches. A self-signed test certificate
 
 ## What the pipeline verifies
 
-Before building a published release, configuration validation rejects missing/unknown providers,
-incomplete credentials and a missing expected publisher. A tag or `publish=true` cannot publish unsigned
-Windows packages. A manual `publish=false` preview may remain unsigned when the provider is empty or `none`.
+When a signing provider is configured, validation rejects unknown providers, incomplete credentials
+and a missing expected publisher. With an empty or `none` provider, Windows MSI/EXE downloads continue
+to be built and published unsigned. Microsoft Store publishing is a separate, additional channel.
 An explicitly configured provider must be valid even for a preview; signing failures are never ignored.
 
 The cargo-packager hook invokes `scripts/notoir-sign.cmd` from `PATH`, which locates its PowerShell script
@@ -156,5 +156,6 @@ cannot replace Authenticode or provide the Windows publisher identity.
    Do not replace historical release installers under the same tag: signatures change the bytes and hashes.
    Close issue #1 only after a signed public release and Windows verification, not just after this code lands.
 
-If setup is incomplete, use `publish=false` to test unsigned packaging. Missing external signing credentials
-are an intentional publication blocker until a trusted identity is ready.
+Use `publish=false` for packaging previews. To publish signed standalone installers, complete the selected
+provider's configuration; a partially configured provider blocks packaging rather than silently falling
+back to unsigned output. An empty or `none` provider preserves unsigned GitHub downloads.

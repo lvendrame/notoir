@@ -62,9 +62,9 @@ inspect Partner Center before retrying **publish** manually on the same candidat
 The Store gate checks the newest manual CI run for the candidate and all nine required jobs,
 including the native crash suite on each platform. Ordinary push CI does not satisfy this gate.
 The freshly built MSIX must also pass the Windows SDK and native installation tests before upload.
-Complete the release checklist before publishing installers. Without a configured Authenticode provider,
-Windows uses the Store and GitHub publishes macOS/Linux installers with a Store link. If a provider is
-configured, separate Windows MSI/EXE installers are also built and must be Authenticode signed.
+GitHub releases continue to include Windows MSI/EXE installers, alongside macOS/Linux downloads.
+Store publishing is an additional distribution channel. When an Authenticode provider is configured,
+the standalone Windows installers are signed and verified; otherwise they retain their unsigned status.
 
 ### Credentials and first access check
 

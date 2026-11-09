@@ -134,13 +134,12 @@ gh variable list --repo lvendrame/notoir
 
 `NOTOIR_UPDATE_URL` defaults to the latest release's `update.json`.
 
-- [ ] Windows is distributed through Microsoft Store when `WINDOWS_SIGNING_PROVIDER` is unset or `none`.
-  Configure the four [Store publishing secrets](microsoft-store.md#credentials-and-first-access-check)
-  and verify product access. No Windows signing certificate is needed for this route. The GitHub release
-  contains macOS/Linux installers and a Store link; it does not include unsigned MSI/EXE files.
-- [ ] If also distributing standalone Windows MSI/EXE installers, configure a publicly trusted
-  Authenticode identity and `WINDOWS_EXPECTED_PUBLISHER`, following [Windows signing setup](windows-signing.md).
-  These installers require signing; the minisign updater key does not replace it.
+- [ ] GitHub releases include Windows MSI/EXE downloads as well as macOS/Linux installers.
+  Store publishing is additional: configure the four [Store publishing secrets](microsoft-store.md#credentials-and-first-access-check)
+  and verify product access. Microsoft signs the Store package after certification.
+- [ ] When `WINDOWS_SIGNING_PROVIDER` is unset or `none`, standalone Windows installers remain unsigned.
+  If a provider is configured, require the expected trusted publisher and timestamp on every installer,
+  executable and uninstaller, following [Windows signing setup](windows-signing.md).
 
 macOS and Linux OS-signing credentials remain optional and are documented at the top of
 [scripts/package.sh](../scripts/package.sh). They are separate from the required updater signature.
@@ -161,18 +160,18 @@ gh run watch "$package_run_id" --repo lvendrame/notoir --exit-status
 gh run download "$package_run_id" --repo lvendrame/notoir --dir "target/release-preview/$release_tag"
 ```
 
-- [ ] The preview run's `headSha` equals `candidate_sha`. Its version and macOS/Linux packaging jobs
-  succeed. Windows installer packaging is skipped for Store-only distribution; otherwise it must pass.
-  The publishing job is intentionally skipped for this preview; it does not test minisign signing.
-- [ ] Artifacts contain the expected versioned macOS universal DMG, Linux DEB and AppImage, per-OS
-  checksums and debug symbols. Standalone Windows releases also contain signed MSI and NSIS installers.
+- [ ] The preview run's `headSha` equals `candidate_sha`. Its version job and all three packaging jobs
+  succeed, including Windows. The publishing job is intentionally skipped for this preview;
+  it does not test minisign signing.
+- [ ] Artifacts contain the expected versioned macOS universal DMG, Windows MSI and NSIS installer,
+  Linux DEB and AppImage, per-OS checksums and debug symbols.
   Verify each `SHA256SUMS-<os>.txt` from
   its artifact directory (`sha256sum -c` on Linux, or `shasum -a 256 -c` on macOS).
 - [ ] Install and launch preview packages on available test systems and check the changed flows.
   Record which packages/platforms were exercised and any limitations.
-- [ ] For standalone Windows releases, the preview is signed with the expected trusted publisher and
-  timestamp, including the application and NSIS uninstaller. For Store-only releases, require a successful
-  Store package/native validation run on the candidate instead.
+- [ ] When Windows signing is configured, verify the expected trusted publisher and timestamp,
+  including the application and NSIS uninstaller. Without a provider, verify the unsigned signing-hook
+  receipts. Require a successful Store package/native validation run on the candidate too.
 
 The CI and packaging-preview runs may run concurrently once the candidate is pushed. Both must pass
 on the same SHA before publication. If `main` moves or any candidate file changes, stop and validate the
@@ -212,7 +211,7 @@ a new version and the same checklist.
   and `update.json.minisig`, and that their versions match the tag.
 - [ ] Confirm the publishing job verified the minisign signature against `NOTOIR_UPDATE_PUBKEY`.
   Check the manifest has `macos` and `linux-appimage` artifacts with the correct download URLs and
-  checksums, plus `windows` when publishing signed standalone installers. Store updates are managed
+  checksums, plus `windows` for the standalone MSI. Store updates are managed
   by Microsoft. Smoke-test downloading and checking for updates from an installed app.
 - [ ] Publish release notes describing the changes and any installer/signing limitations. Retain the
   candidate SHA, CI and preview run URLs, release run URL and verification results for the next maintainer.

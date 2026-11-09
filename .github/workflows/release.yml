@@ -1,7 +1,6 @@
 name: Release
 
-# Tag push builds macOS/Linux installers and submits Windows to Microsoft Store.
-# Signed standalone Windows installers are also built when a provider is configured.
+# Tag push builds installers for every platform and also submits Windows to Microsoft Store.
 # A manual run (Actions → Release → Run workflow) builds the packages as
 # workflow artifacts; with "publish" ticked it also tags the commit
 # v<Cargo version> and publishes the release.
@@ -31,7 +30,7 @@ env:
   NOTOIR_UPDATE_PUBKEY: ${{ vars.NOTOIR_UPDATE_PUBKEY }}
   WINDOWS_SIGNING_PROVIDER: ${{ vars.WINDOWS_SIGNING_PROVIDER }}
   WINDOWS_EXPECTED_PUBLISHER: ${{ vars.WINDOWS_EXPECTED_PUBLISHER }}
-  WINDOWS_SIGNING_REQUIRED: ${{ startsWith(github.ref, 'refs/tags/v') || inputs.publish }}
+  WINDOWS_SIGNING_REQUIRED: ${{ (startsWith(github.ref, 'refs/tags/v') || inputs.publish) && vars.WINDOWS_SIGNING_PROVIDER != '' && vars.WINDOWS_SIGNING_PROVIDER != 'none' }}
   AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
   AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
   AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
@@ -62,8 +61,8 @@ jobs:
             -CertificateAvailable:($env:HAS_WINDOWS_CERT -eq 'true') `
             -PasswordAvailable:($env:HAS_WINDOWS_PASSWORD -eq 'true')
           "provider=$provider" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-      - name: Require Store publishing credentials for Store-only Windows releases
-        if: (startsWith(github.ref, 'refs/tags/v') || inputs.publish) && steps.windows-signing.outputs.provider == 'none'
+      - name: Require Store publishing credentials
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
         shell: pwsh
         env:
           STORE_TENANT: ${{ secrets.AZURE_AD_TENANT_ID }}
@@ -73,7 +72,7 @@ jobs:
         run: |
           foreach ($name in @('STORE_TENANT', 'STORE_CLIENT', 'STORE_SECRET', 'STORE_SELLER')) {
             if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($name))) {
-              throw 'Windows requires either Store publishing credentials or standalone Authenticode signing.'
+              throw 'Automatic Store publishing requires the four Store publishing secrets.'
             }
           }
       - name: Require update signing for published releases
@@ -173,7 +172,6 @@ jobs:
   package-windows:
     name: package (windows-latest)
     needs: version
-    if: needs.version.outputs.windows_signing != 'none'
     runs-on: windows-latest
     environment: windows-signing
     permissions:
@@ -229,12 +227,7 @@ jobs:
 
   release:
     needs: [version, package, package-windows]
-    if: >-
-      always() && !cancelled() &&
-      needs.version.result == 'success' && needs.version.outputs.tag != '' &&
-      needs.package.result == 'success' &&
-      (needs.package-windows.result == 'success' ||
-       (needs.package-windows.result == 'skipped' && needs.version.outputs.windows_signing == 'none'))
+    if: needs.version.outputs.tag != ''
     runs-on: ubuntu-latest
     env:
       TAG: ${{ needs.version.outputs.tag }}
@@ -268,7 +261,7 @@ jobs:
           target_commitish: ${{ github.sha }}
           files: dist/*
           generate_release_notes: true
-          body: 'Windows: [Install Notoir from Microsoft Store](https://apps.microsoft.com/detail/9P1JPTK7G5PX).'
+          body: 'Windows MSI/EXE downloads are in the release assets below. Notoir is also available from [Microsoft Store](https://apps.microsoft.com/detail/9P1JPTK7G5PX).'
           prerelease: ${{ contains(env.TAG, '-') }}
 
   microsoft-store:
