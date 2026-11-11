@@ -16,7 +16,7 @@ struct Action {
     invocation: CommandInvocation,
     text: String,
     enabled: bool,
-    checked: bool,
+    checked: Option<bool>,
     accelerator: Option<&'static str>,
 }
 
@@ -36,7 +36,9 @@ enum Item {
 fn same_structure(before: &[Item], after: &[Item]) -> bool {
     before.len() == after.len()
         && before.iter().zip(after).all(|(a, b)| match (a, b) {
-            (Item::Action(a), Item::Action(b)) => a.invocation == b.invocation,
+            (Item::Action(a), Item::Action(b)) => {
+                a.invocation == b.invocation && a.checked.is_some() == b.checked.is_some()
+            }
             (Item::Submenu { key: a, .. }, Item::Submenu { key: b, .. }) => a == b,
             (Item::Separator, Item::Separator) => true,
             _ => false,
@@ -78,7 +80,7 @@ fn resolve_items(
                     },
                     checked: checked
                         .as_deref()
-                        .is_some_and(|key| matches!(context.get(key), Some(Value::Bool(true)))),
+                        .map(|key| matches!(context.get(key), Some(Value::Bool(true)))),
                     // Editor shortcuts remain in egui; only the zero-window app
                     // needs native accelerators because no editor receives input.
                     accelerator: if window.is_none() {
@@ -99,7 +101,7 @@ fn resolve_items(
                         .with_args(args.clone()),
                     text: text.clone(),
                     enabled: window.is_some() && spec.enablement.eval(context),
-                    checked: *id == "window.activate" && window == args["id"].as_str(),
+                    checked: (*id == "window.activate").then(|| window == args["id"].as_str()),
                     accelerator: None,
                 }))
             }
@@ -117,7 +119,8 @@ struct NativeSubmenu {
 }
 
 enum NativeItem {
-    Action(CheckMenuItem),
+    Action(muda::MenuItem),
+    Check(CheckMenuItem),
     Submenu(NativeSubmenu),
     Separator,
 }
@@ -126,6 +129,9 @@ impl NativeItem {
     fn remove_actions(&self, actions: &mut HashMap<MenuId, CommandInvocation>) {
         match self {
             Self::Action(item) => {
+                actions.remove(item.id());
+            }
+            Self::Check(item) => {
                 actions.remove(item.id());
             }
             Self::Submenu(menu) => {
@@ -171,15 +177,24 @@ impl NativeSubmenu {
                         NativeItem::Submenu(menu)
                     }
                     Item::Action(action) => {
-                        let item = CheckMenuItem::new(
-                            &action.text,
-                            action.enabled,
-                            action.checked,
-                            action.accelerator.and_then(|s| s.parse().ok()),
-                        );
-                        actions.insert(item.id().clone(), action.invocation.clone());
-                        let _ = self.handle.append(&item);
-                        NativeItem::Action(item)
+                        let accelerator = action.accelerator.and_then(|s| s.parse().ok());
+                        if let Some(checked) = action.checked {
+                            let item = CheckMenuItem::new(
+                                &action.text,
+                                action.enabled,
+                                checked,
+                                accelerator,
+                            );
+                            actions.insert(item.id().clone(), action.invocation.clone());
+                            let _ = self.handle.append(&item);
+                            NativeItem::Check(item)
+                        } else {
+                            let item =
+                                muda::MenuItem::new(&action.text, action.enabled, accelerator);
+                            actions.insert(item.id().clone(), action.invocation.clone());
+                            let _ = self.handle.append(&item);
+                            NativeItem::Action(item)
+                        }
                     }
                 })
                 .collect();
@@ -193,8 +208,23 @@ impl NativeSubmenu {
                         if before.enabled != after.enabled {
                             item.set_enabled(after.enabled);
                         }
-                        if before.checked != after.checked {
-                            item.set_checked(after.checked);
+                        if before.accelerator != after.accelerator {
+                            let _ = item
+                                .set_accelerator(after.accelerator.and_then(|s| s.parse().ok()));
+                        }
+                    }
+                    (NativeItem::Check(item), Item::Action(before), Item::Action(after)) => {
+                        if before.text != after.text {
+                            item.set_text(&after.text);
+                        }
+                        if before.enabled != after.enabled {
+                            item.set_enabled(after.enabled);
+                        }
+                        // Native check items toggle themselves on activation. Restore
+                        // authoritative state even when a command is cancelled or a no-op.
+                        let checked = after.checked.expect("checkable action");
+                        if item.is_checked() != checked {
+                            item.set_checked(checked);
                         }
                         if before.accelerator != after.accelerator {
                             let _ = item
@@ -356,12 +386,12 @@ mod tests {
                 .with_args(json!({"id":"first"})),
             text: "First".into(),
             enabled: true,
-            checked: false,
+            checked: Some(false),
             accelerator: None,
         });
         let mut after = before.clone();
         if let Item::Action(action) = &mut after {
-            action.checked = true;
+            action.checked = Some(true);
             action.text = "Premier".into();
         }
         assert!(same_structure(
@@ -372,6 +402,39 @@ mod tests {
             action.invocation.args = json!({"id":"second"});
         }
         assert!(!same_structure(&[before], &[after]));
+    }
+
+    #[test]
+    fn ordinary_actions_are_not_checkable_but_toggles_are() {
+        let registry = registry();
+        let mut context = ContextSnapshot::default();
+        context
+            .set_bool("editorFocus", true)
+            .set_bool("readOnly", false);
+        let definitions = vec![
+            MenuItem::Command {
+                id: "test.action",
+                args: json!({}),
+                label: None,
+                checked: None,
+            },
+            MenuItem::Command {
+                id: "test.action",
+                args: json!({}),
+                label: None,
+                checked: Some("readOnly".into()),
+            },
+            items().remove(0),
+        ];
+        let resolved = resolve_items(&definitions, &registry, &context, Some("first"));
+        assert!(matches!(&resolved[0], Item::Action(action) if action.checked.is_none()));
+        assert!(matches!(&resolved[1], Item::Action(action) if action.checked == Some(false)));
+        assert!(matches!(&resolved[2], Item::Action(action) if action.checked.is_none()));
+        context.set_bool("readOnly", true);
+        let checked = resolve_items(&definitions, &registry, &context, Some("first"));
+        assert!(matches!(&checked[1], Item::Action(action) if action.checked == Some(true)));
+        assert!(same_structure(&resolved, &checked));
+        assert!(!same_structure(&resolved[..1], &resolved[1..2]));
     }
 
     #[test]
