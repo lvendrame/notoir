@@ -17,6 +17,7 @@ pub enum ViewKind {
     CsvPreview,
     CsvSplit,
     Settings,
+    ThemeManager,
     /// First-run / Help → Welcome page.
     Welcome,
     /// Compare tab (spec 27); its panes are detached views.

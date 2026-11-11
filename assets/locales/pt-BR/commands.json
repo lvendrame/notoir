@@ -62,7 +62,8 @@
     "changeLanguage": "Alterar Idioma de Exibição…",
     "openKeybindingsFile": "Abrir Arquivo de Atalhos de Teclado",
     "openSettingsFile": "Abrir Arquivo de Configurações do Usuário",
-    "keyboardShortcuts": "Atalhos de Teclado"
+    "keyboardShortcuts": "Atalhos de Teclado",
+    "manageThemes": "Gerenciar temas…"
   },
   "help": {
     "documentation": "Documentação",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Trazer Todas para Frente",
     "close": "Fechar Janela",
     "activate": "Ativar Janela"
+  },
+  "themes": {
+    "action": "Gerenciar temas"
   }
 }

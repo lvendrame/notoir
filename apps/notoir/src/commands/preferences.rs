@@ -10,6 +10,15 @@ use crate::i18n::Language;
 pub(super) fn specs(out: &mut Specs) {
     out.push(
         CommandSpec::new(
+            "preferences.manageThemes",
+            Category::Preferences,
+            manage_themes,
+        )
+        .icon("palette"),
+    );
+    out.push(CommandSpec::new("themes.action", Category::Preferences, theme_action).hidden());
+    out.push(
+        CommandSpec::new(
             "preferences.changeTheme",
             Category::Preferences,
             change_theme,
@@ -62,5 +71,20 @@ fn change_language(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcom
         Some(SettingValue::Str(language.code().to_owned())),
     );
     core.effects.push(Effect::ApplyLanguage);
+    CommandOutcome::Done
+}
+
+fn manage_themes(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    core.open_virtual("tabs:themes", notoir_core::view::ViewKind::ThemeManager);
+    if core.theme_manager.draft.is_none() {
+        let id = core.theme(core.appearance_dark);
+        core.select_theme_draft(&id);
+    }
+    core.request_theme_fonts();
+    CommandOutcome::Done
+}
+
+fn theme_action(core: &mut AppCore, inv: &CommandInvocation) -> CommandOutcome {
+    core.theme_action(&inv.args);
     CommandOutcome::Done
 }

@@ -62,7 +62,8 @@
     "changeLanguage": "Сменить язык интерфейса…",
     "openKeybindingsFile": "Открыть файл сочетаний клавиш",
     "openSettingsFile": "Открыть файл пользовательских настроек",
-    "keyboardShortcuts": "Сочетания клавиш"
+    "keyboardShortcuts": "Сочетания клавиш",
+    "manageThemes": "Управление темами…"
   },
   "help": {
     "documentation": "Документация",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Все окна на передний план",
     "close": "Закрыть окно",
     "activate": "Активировать окно"
+  },
+  "themes": {
+    "action": "Управление темами"
   }
 }

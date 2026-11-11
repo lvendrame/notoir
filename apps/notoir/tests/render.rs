@@ -978,3 +978,48 @@ fn print_file_menu_snapshot() {
         img.save(out_dir().join("print-file-menu.png")).unwrap();
     }
 }
+
+#[test]
+fn theme_manager_snapshots() {
+    let mut app = common::start(common::with_language(Language::En, ThemeId::Midnight));
+    common::run(
+        &mut app,
+        "preferences.manageThemes",
+        serde_json::Value::Null,
+    );
+    common::settle(&mut app);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("theme-manager.png")).unwrap();
+    }
+    app.harness.state_mut().core.theme_manager.page = 3;
+    common::run(
+        &mut app,
+        "themes.action",
+        serde_json::json!({"action":"addRule","key":"yml"}),
+    );
+    assert!(
+        app.harness
+            .state()
+            .core
+            .theme_manager
+            .draft
+            .as_ref()
+            .unwrap()
+            .theme()
+            .unwrap()
+            .appearance
+            .extensions
+            .contains_key("yml")
+    );
+    app.harness.state_mut().core.theme_manager.preview_extension = "yml".into();
+    app.harness.run_steps(2);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("theme-manager-rules.png")).unwrap();
+    }
+    app.harness.set_size(egui::vec2(760.0, 720.0));
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("theme-manager-narrow.png"))
+            .unwrap();
+    }
+}

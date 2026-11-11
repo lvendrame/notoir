@@ -8,5 +8,6 @@
   "dropHere": "Drop a file here",
   "settings": "Settings",
   "welcome": "Welcome",
-  "pluginManager": "Plugins"
+  "pluginManager": "Plugins",
+  "themes": "Manage Themes"
 }

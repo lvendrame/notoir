@@ -156,6 +156,22 @@ impl AppCore {
             }
         }
         self.custom_themes = themes;
+        if let Some(draft) = &self.theme_manager.draft {
+            let id = draft.id.clone();
+            if !draft.new && !draft.dirty() {
+                self.select_theme_draft(&id);
+            } else if draft.path.is_some()
+                && self
+                    .custom_themes
+                    .iter()
+                    .find(|t| t.id == id)
+                    .is_none_or(|t| t.source != draft.original)
+            {
+                self.theme_manager.conflict = true;
+                self.theme_manager.error = Some(crate::t!("themes:conflict"));
+            }
+        }
+        self.apply_resolved_settings();
         self.themes_generation += 1;
         self.effects.push(Effect::ApplyTheme);
     }

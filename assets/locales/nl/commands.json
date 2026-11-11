@@ -62,7 +62,8 @@
     "changeLanguage": "Weergavetaal wijzigen…",
     "openKeybindingsFile": "Bestand met sneltoetsen openen",
     "openSettingsFile": "Bestand met gebruikersinstellingen openen",
-    "keyboardShortcuts": "Sneltoetsen"
+    "keyboardShortcuts": "Sneltoetsen",
+    "manageThemes": "Thema’s beheren…"
   },
   "help": {
     "documentation": "Documentatie",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Alles naar voren brengen",
     "close": "Venster sluiten",
     "activate": "Venster activeren"
+  },
+  "themes": {
+    "action": "Thema’s beheren"
   }
 }

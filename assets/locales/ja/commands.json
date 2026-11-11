@@ -62,7 +62,8 @@
     "changeLanguage": "表示言語の変更…",
     "openKeybindingsFile": "キーボード ショートカット ファイルを開く",
     "openSettingsFile": "ユーザー設定ファイルを開く",
-    "keyboardShortcuts": "キーボード ショートカット"
+    "keyboardShortcuts": "キーボード ショートカット",
+    "manageThemes": "テーマの管理…"
   },
   "help": {
     "documentation": "ドキュメント",
@@ -449,5 +450,8 @@
     "bringAllToFront": "すべてを手前に移動",
     "close": "ウインドウを閉じる",
     "activate": "ウインドウを表示"
+  },
+  "themes": {
+    "action": "テーマの管理"
   }
 }

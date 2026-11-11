@@ -62,7 +62,8 @@
     "changeLanguage": "Anzeigesprache ändern…",
     "openKeybindingsFile": "Tastenkürzel-Datei öffnen",
     "openSettingsFile": "Benutzereinstellungsdatei öffnen",
-    "keyboardShortcuts": "Tastenkürzel"
+    "keyboardShortcuts": "Tastenkürzel",
+    "manageThemes": "Themes verwalten…"
   },
   "help": {
     "documentation": "Dokumentation",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Alle nach vorne bringen",
     "close": "Fenster schließen",
     "activate": "Fenster aktivieren"
+  },
+  "themes": {
+    "action": "Themes verwalten"
   }
 }

@@ -48,6 +48,7 @@ pub struct NotoirApp {
     started: Instant,
     /// System CJK scripts included in the last font install.
     fonts_installed: Option<Vec<Script>>,
+    family_generation: u64,
     /// CJK scripts seen in editor text this session.
     cjk_seen: fonts::CjkUse,
     wait_for_fonts: bool,
@@ -103,6 +104,7 @@ impl NotoirApp {
             icons: IconCache::default(),
             started: Instant::now(),
             fonts_installed: None,
+            family_generation: u64::MAX,
             cjk_seen: fonts::CjkUse::default(),
             wait_for_fonts: opts.wait_for_fonts,
             ctrl_click: Default::default(),
@@ -163,15 +165,20 @@ impl NotoirApp {
             }
         }
         let want: Vec<Script> = faces.iter().map(|f| f.script).collect();
-        if self.fonts_installed.as_ref() != Some(&want) {
+        if self.fonts_installed.as_ref() != Some(&want)
+            || self.family_generation != system_fonts::family_generation()
+        {
             fonts::install(ctx, &faces);
             self.fonts_installed = Some(want);
+            self.family_generation = system_fonts::family_generation();
         }
     }
 
     fn set_theme(&mut self, ctx: &egui::Context, id: String) {
+        self.core.appearance_dark = system_dark(ctx);
         let key = (id, self.core.themes_generation);
         if key != self.theme_key {
+            self.core.apply_resolved_settings();
             self.theme = self.core.load_theme(&key.0);
             self.theme.apply(ctx);
             tracing::debug!(requested = %key.0, applied = %self.theme.id, "theme applied");
@@ -371,6 +378,7 @@ impl eframe::App for NotoirApp {
             let id = self.core.theme(system_dark(&ctx));
             self.set_theme(&ctx, id);
         }
+        crate::fonts::apply_ui(&ctx, &self.core.settings);
         self.core.notifications.tick(now);
         self.core.flush_scratchpads(false);
         self.core.workspace_tick();

@@ -23,6 +23,7 @@ pub struct RowRef {
 #[derive(Clone, Debug)]
 pub struct DisplayMap {
     wrap: Option<WrapConfig>,
+    measured: Option<Vec<Option<Vec<usize>>>>,
     /// Rows per buffer line (only when wrapping).
     rows: Vec<u32>,
     /// `prefix[i]` = rows before line `i`; len = lines + 1. Valid up to
@@ -59,6 +60,7 @@ impl DisplayMap {
         };
         let mut map = Self {
             wrap,
+            measured: None,
             rows,
             prefix: vec![0],
             prefix_valid: 1,
@@ -68,6 +70,38 @@ impl DisplayMap {
         };
         map.ensure_prefix(lines);
         map
+    }
+
+    /// Renderer-supplied character boundaries for measured font wrapping.
+    pub fn set_measured_rows(&mut self, starts: Vec<Vec<usize>>) {
+        assert_eq!(starts.len(), self.lines);
+        self.rows = starts.iter().map(|s| s.len().max(1) as u32).collect();
+        self.measured = Some(starts.into_iter().map(Some).collect());
+        self.prefix_valid = 1;
+    }
+
+    /// Refresh only edited lines unless font/wrap metrics changed.
+    pub fn refresh_measured_rows(
+        &mut self,
+        rope: &Rope,
+        reset: bool,
+        mut measure: impl FnMut(&str) -> Vec<usize>,
+    ) {
+        if self.wrap.is_none() {
+            return;
+        }
+        if reset || self.measured.as_ref().is_none_or(|m| m.len() != self.lines) {
+            self.measured = Some(vec![None; self.lines]);
+        }
+        let measured = self.measured.as_mut().expect("initialized measurements");
+        for (line, starts) in measured.iter_mut().enumerate() {
+            if starts.is_none() {
+                let value = measure(&line_text(rope, line));
+                self.rows[line] = value.len().max(1) as u32;
+                *starts = Some(value);
+                self.prefix_valid = self.prefix_valid.min(line + 1);
+            }
+        }
     }
 
     pub fn wrap(&self) -> Option<WrapConfig> {
@@ -219,6 +253,9 @@ impl DisplayMap {
             let replaced = old_l1 - old_l0 + 1;
             let fresh: Vec<u32> = (new_l0..=new_l1).map(|l| rows_of(after, l, cfg)).collect();
             let end = (new_l0 + replaced).min(self.rows.len());
+            if let Some(measured) = &mut self.measured {
+                measured.splice(new_l0..end, std::iter::repeat_n(None, fresh.len()));
+            }
             self.rows.splice(new_l0..end, fresh);
             first_dirty = first_dirty.min(new_l0);
         }
@@ -315,6 +352,14 @@ impl DisplayMap {
 
     /// Char offsets (within the line) where the line's rows start.
     pub fn row_starts(&self, rope: &Rope, line: usize) -> Vec<usize> {
+        if let Some(starts) = self
+            .measured
+            .as_ref()
+            .and_then(|lines| lines.get(line))
+            .and_then(Option::as_ref)
+        {
+            return starts.clone();
+        }
         match self.wrap {
             None => vec![0],
             Some(cfg) => wrap_line(&line_text(rope, line), cfg.cols, cfg.tab),
@@ -468,5 +513,31 @@ mod tests {
                 prop_assert_eq!(m.line_to_row(l), fresh.line_to_row(l));
             }
         }
+    }
+    #[test]
+    fn measured_wrap_reuses_unchanged_lines_and_invalidates_edited_lines() {
+        let mut rope = Rope::from_str("first\nsecond\nthird");
+        let mut map = DisplayMap::new(&rope, cfg(5));
+        let mut measured = Vec::new();
+        map.refresh_measured_rows(&rope, true, |text| {
+            measured.push(text.to_owned());
+            vec![0, 2]
+        });
+        assert_eq!(measured.len(), 3);
+        assert_eq!(map.total_rows(), 6);
+        let before = rope.clone();
+        let edit = ChangeSet::replace(6, 12, "middle");
+        edit.apply(&mut rope);
+        map.apply(&before, &rope, &edit);
+        measured.clear();
+        map.refresh_measured_rows(&rope, false, |text| {
+            measured.push(text.to_owned());
+            vec![0]
+        });
+        assert_eq!(measured, vec!["middle"]);
+        assert_eq!(map.total_rows(), 5);
+        assert_eq!(map.row_starts(&rope, 0), vec![0, 2]);
+        assert_eq!(map.row_starts(&rope, 1), vec![0]);
+        assert_eq!(map.row_starts(&rope, 2), vec![0, 2]);
     }
 }

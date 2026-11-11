@@ -62,7 +62,8 @@
     "changeLanguage": "Changer la langue d'affichage…",
     "openKeybindingsFile": "Ouvrir le fichier des raccourcis clavier",
     "openSettingsFile": "Ouvrir le fichier des paramètres utilisateur",
-    "keyboardShortcuts": "Raccourcis clavier"
+    "keyboardShortcuts": "Raccourcis clavier",
+    "manageThemes": "Gérer les thèmes…"
   },
   "help": {
     "documentation": "Documentation",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Tout ramener au premier plan",
     "close": "Fermer la fenêtre",
     "activate": "Activer la fenêtre"
+  },
+  "themes": {
+    "action": "Gérer les thèmes"
   }
 }

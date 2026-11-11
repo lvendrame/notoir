@@ -35,10 +35,16 @@ pub struct Drag {
 }
 
 /// Line and display column under a point (columns past the line end count).
-fn line_col_at(cache: &mut ViewCache, m: &Metrics, p: egui::Pos2) -> (usize, usize) {
+fn line_col_at(cache: &mut ViewCache, m: &Metrics, p: egui::Pos2, tab: usize) -> (usize, usize) {
     let line = super::line_at_y(cache, m, p.y);
     let x = p.x - m.text.left() + cache.scroll_x;
-    (line, (x / m.char_w).round().max(0.0) as usize)
+    let text = notoir_editor::display_map::line_text(&cache.rope, line);
+    let chars = m.char_at_x(&text, x, tab);
+    let col = notoir_editor::wrap::col_of(&text, chars, tab);
+    let extra = ((x - m.x_of(&text, text.chars().count(), tab)) / m.char_w)
+        .round()
+        .max(0.0) as usize;
+    (line, col + extra)
 }
 
 fn selection(wb: &Workbench, view: ViewId) -> Selection {
@@ -213,16 +219,57 @@ pub(super) fn handle(
                                 1
                             };
                             let delta = if up { -(rows as isize) } else { rows as isize };
+                            let head = sel.primary().head;
+                            let row = cache.map.row_of_char(&rope, head);
+                            let rr = cache.map.row_to_line(row);
+                            let starts = cache.map.row_starts(&rope, rr.line);
+                            let row_start = rope.line_to_char(rr.line) + starts[rr.sub_row];
+                            let text: String = rope
+                                .slice(
+                                    row_start
+                                        ..rope.line_to_char(rr.line)
+                                            + rope.line(rr.line).len_chars(),
+                                )
+                                .chars()
+                                .collect();
                             let col = *cache.desired_col.get_or_insert_with(|| {
-                                motion::row_col(&rope, &mut cache.map, sel.primary().head, tab)
+                                m.x_of(&text, head - row_start, tab).round().max(0.0) as usize
                             });
                             let map = &mut cache.map;
                             let ranges: Vec<Range> = sel
                                 .ranges()
                                 .iter()
                                 .map(|r| {
-                                    let head =
-                                        motion::move_rows(&rope, map, r.head, delta, col, tab);
+                                    let source_row = map.row_of_char(&rope, r.head);
+                                    let target_row = source_row
+                                        .saturating_add_signed(delta)
+                                        .min(map.total_rows().saturating_sub(1));
+                                    let rr = map.row_to_line(target_row);
+                                    let starts = map.row_starts(&rope, rr.line);
+                                    let start = starts[rr.sub_row];
+                                    let end =
+                                        starts.get(rr.sub_row + 1).copied().unwrap_or_else(|| {
+                                            notoir_editor::display_map::line_text(&rope, rr.line)
+                                                .chars()
+                                                .count()
+                                        });
+                                    let text: String =
+                                        notoir_editor::display_map::line_text(&rope, rr.line)
+                                            .chars()
+                                            .skip(start)
+                                            .take(end - start)
+                                            .collect();
+                                    let rel = m.char_at_x(&text, col as f32, tab);
+                                    let rel = if rr.sub_row + 1 < starts.len() {
+                                        let line_start = rope.line_to_char(rr.line);
+                                        rel.min(
+                                            motion::prev_grapheme(&rope, line_start + end)
+                                                .saturating_sub(line_start + start),
+                                        )
+                                    } else {
+                                        rel
+                                    };
+                                    let head = rope.line_to_char(rr.line) + start + rel;
                                     if extend {
                                         Range::new(r.anchor, head)
                                     } else {
@@ -529,7 +576,7 @@ pub(super) fn pointer(
             start(DragMode::Line, line_at(&rope, pos), cache, wb);
         } else if (alt && shift) || column_mode {
             // Column selection (Shift+Alt drag, or column mode).
-            let (line, col) = line_col_at(cache, m, pointer);
+            let (line, col) = line_col_at(cache, m, pointer, tab);
             start(DragMode::Column(line, col), Range::caret(pos), cache, wb);
         } else if !shift
             && !ui.input(|i| i.modifiers.command)
@@ -571,7 +618,7 @@ pub(super) fn pointer(
         && let Some(drag) = cache.drag.clone()
     {
         if let DragMode::Column(line, col) = drag.mode {
-            let head = line_col_at(cache, m, pointer);
+            let head = line_col_at(cache, m, pointer, tab);
             let sel = notoir_editor::multi_cursor::column_selection(&rope, (line, col), head, tab);
             set_selection(wb, view, sel);
         } else {

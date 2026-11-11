@@ -446,6 +446,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
     tools.extend([
         cmd("app.keyboardShortcuts"),
         cmd("preferences.changeTheme"),
+        cmd("preferences.manageThemes"),
         cmd("preferences.changeLanguage"),
     ]);
     menus.push(Menu {

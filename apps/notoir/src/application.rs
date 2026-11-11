@@ -28,6 +28,7 @@ pub enum ApplicationRequest {
     StopMcp,
     RefreshMcp,
     RefreshPlugins,
+    RefreshThemes,
     UserSetting {
         key: String,
         value: Option<notoir_core::settings::SettingValue>,
@@ -112,6 +113,7 @@ pub struct ApplicationHost {
     updates: crate::updates::UpdatesState,
     update_results: Vec<crate::io::IoResult>,
     fonts_installed: Option<Vec<notoir_platform::system_fonts::Script>>,
+    family_generation: u64,
     config_stamp: Option<(std::time::SystemTime, u64)>,
     next_config_check: Instant,
     config_rx: std::sync::mpsc::Receiver<Option<(std::time::SystemTime, u64)>>,
@@ -180,6 +182,7 @@ impl ApplicationHost {
             waits: Vec::new(),
             mcp: crate::mcp::McpState::new(std::sync::Arc::new(move || repaint.request_repaint())),
             fonts_installed: None,
+            family_generation: u64::MAX,
             config_stamp: None,
             next_config_check: Instant::now(),
             config_tx,
@@ -509,6 +512,11 @@ impl ApplicationHost {
                         );
                         core.effects.push(crate::core::Effect::ApplyLanguage);
                     }
+                }
+            }
+            ApplicationRequest::RefreshThemes => {
+                for window in self.windows.iter_mut().filter(|w| w.id != source) {
+                    window.app.core.reload_custom_themes();
                 }
             }
             ApplicationRequest::RefreshPlugins => {
@@ -848,9 +856,12 @@ impl ApplicationHost {
             }
         }
         let installed = faces.iter().map(|f| f.script).collect();
-        if self.fonts_installed.as_ref() != Some(&installed) {
+        if self.fonts_installed.as_ref() != Some(&installed)
+            || self.family_generation != system_fonts::family_generation()
+        {
             crate::fonts::install(ctx, &faces);
             self.fonts_installed = Some(installed);
+            self.family_generation = system_fonts::family_generation();
         }
     }
 

@@ -204,3 +204,119 @@ fn explicit_close_removes_only_that_window_from_manifest() {
     assert_eq!(manifest["windows"].as_array().unwrap().len(), 1);
     assert_eq!(manifest["windows"][0]["id"], second);
 }
+
+#[test]
+fn theme_drafts_are_local_and_saved_presets_refresh_siblings() {
+    let home = tempfile::tempdir().unwrap();
+    let (ctx, mut host) = make_host(home.path(), false);
+    host.create_window(&ctx, None, None);
+    for _ in 0..3 {
+        settle(&mut host);
+    }
+    for index in 0..2 {
+        command(&mut host, index, "preferences.manageThemes");
+    }
+    host.windows[0].app.core.theme_action(
+        &serde_json::json!({"action":"edit","path":["ui","accent"],"value":"#123456"}),
+    );
+    assert_ne!(
+        host.windows[0]
+            .app
+            .core
+            .theme_manager
+            .draft
+            .as_ref()
+            .unwrap()
+            .theme()
+            .unwrap()
+            .color(notoir::theme::Tok::Accent),
+        host.windows[1]
+            .app
+            .core
+            .theme_manager
+            .draft
+            .as_ref()
+            .unwrap()
+            .theme()
+            .unwrap()
+            .color(notoir::theme::Tok::Accent)
+    );
+    host.windows[0]
+        .app
+        .core
+        .theme_action(&serde_json::json!({"action":"save"}));
+    for _ in 0..3 {
+        settle(&mut host);
+    }
+    assert!(
+        host.windows[0]
+            .app
+            .core
+            .effects
+            .iter()
+            .any(|effect| matches!(
+                effect,
+                notoir::core::Effect::Application(ApplicationRequest::RefreshThemes)
+            ))
+    );
+    let source = host.windows[0].id.clone();
+    host.request(&ctx, &source, ApplicationRequest::RefreshThemes);
+    for _ in 0..3 {
+        settle(&mut host);
+    }
+    assert_eq!(
+        host.windows[1]
+            .app
+            .core
+            .theme_manager
+            .draft
+            .as_ref()
+            .unwrap()
+            .theme()
+            .unwrap()
+            .color(notoir::theme::Tok::Accent),
+        egui::Color32::from_rgb(18, 52, 86)
+    );
+    assert!(
+        !host.windows[1]
+            .app
+            .core
+            .theme_manager
+            .draft
+            .as_ref()
+            .unwrap()
+            .dirty()
+    );
+}
+
+#[test]
+fn cancelling_a_dirty_theme_close_cancels_window_shutdown() {
+    let home = tempfile::tempdir().unwrap();
+    let (ctx, mut host) = make_host(home.path(), false);
+    command(&mut host, 0, "preferences.manageThemes");
+    host.windows[0].app.core.theme_action(
+        &serde_json::json!({"action":"edit","path":["ui","accent"],"value":"#123456"}),
+    );
+    let id = host.windows[0].id.clone();
+    host.request(&ctx, &id, ApplicationRequest::Close);
+    host.lifecycle(&ctx);
+    assert!(host.windows[0].app.core.theme_manager.pending.is_some());
+    host.windows[0]
+        .app
+        .core
+        .theme_action(&serde_json::json!({"action":"cancelPending"}));
+    host.lifecycle(&ctx);
+    assert_eq!(host.windows.len(), 1);
+    assert!(!host.windows[0].app.core.is_closing);
+    assert!(host.windows[0].app.core.theme_manager.pending.is_none());
+    assert!(
+        host.windows[0]
+            .app
+            .core
+            .theme_manager
+            .draft
+            .as_ref()
+            .unwrap()
+            .dirty()
+    );
+}

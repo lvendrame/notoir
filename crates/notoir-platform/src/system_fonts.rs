@@ -215,3 +215,102 @@ mod tests {
         }
     }
 }
+
+/// Installed family names, enumerated on the caller's worker thread.
+pub fn families() -> Vec<String> {
+    let mut names: Vec<_> = database()
+        .faces()
+        .flat_map(|f| f.families.iter().map(|(name, _)| name.clone()))
+        .collect();
+    names.extend(["Manrope".to_owned(), "JetBrains Mono".to_owned()]);
+    names.sort_by_key(|s| s.to_lowercase());
+    names.dedup();
+    names
+}
+
+#[derive(Clone)]
+pub struct FamilyFace {
+    pub family: String,
+    pub bold: bool,
+    pub italic: bool,
+    pub bytes: std::sync::Arc<[u8]>,
+    pub index: u32,
+}
+
+#[derive(Default)]
+struct FamilyCache {
+    requested: std::collections::HashSet<String>,
+    faces: Vec<FamilyFace>,
+    generation: u64,
+}
+
+fn family_cache() -> &'static Mutex<FamilyCache> {
+    static CACHE: OnceLock<Mutex<FamilyCache>> = OnceLock::new();
+    CACHE.get_or_init(Default::default)
+}
+
+/// Request a family once; font discovery and file reads never block rendering.
+pub fn request_family(family: &str, wake: impl FnOnce() + Send + 'static) {
+    if matches!(family, "Manrope" | "JetBrains Mono") {
+        return;
+    }
+    if !family_cache()
+        .lock()
+        .unwrap_or_else(|e| e.into_inner())
+        .requested
+        .insert(family.to_owned())
+    {
+        return;
+    }
+    let family = family.to_owned();
+    std::thread::spawn(move || {
+        let db = database();
+        let mut faces = Vec::new();
+        for (bold, italic) in [(false, false), (true, false), (false, true), (true, true)] {
+            let query = fontdb::Query {
+                families: &[fontdb::Family::Name(&family)],
+                weight: if bold {
+                    fontdb::Weight::BOLD
+                } else {
+                    fontdb::Weight::NORMAL
+                },
+                style: if italic {
+                    fontdb::Style::Italic
+                } else {
+                    fontdb::Style::Normal
+                },
+                ..Default::default()
+            };
+            if let Some(id) = db.query(&query)
+                && let Some(face) = db.with_face_data(id, |bytes, index| FamilyFace {
+                    family: family.clone(),
+                    bold,
+                    italic,
+                    bytes: std::sync::Arc::from(bytes),
+                    index,
+                })
+            {
+                faces.push(face);
+            }
+        }
+        let mut cache = family_cache().lock().unwrap_or_else(|e| e.into_inner());
+        cache.faces.extend(faces);
+        cache.generation += 1;
+        drop(cache);
+        wake();
+    });
+}
+
+pub fn family_generation() -> u64 {
+    family_cache()
+        .lock()
+        .unwrap_or_else(|e| e.into_inner())
+        .generation
+}
+pub fn family_faces() -> Vec<FamilyFace> {
+    family_cache()
+        .lock()
+        .unwrap_or_else(|e| e.into_inner())
+        .faces
+        .clone()
+}

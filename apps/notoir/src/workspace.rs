@@ -204,6 +204,11 @@ impl AppCore {
             trusted,
         )
         .with_workspace_user_overrides(overrides)
+        .with_theme_defaults(
+            self.load_theme(&self.theme(self.appearance_dark))
+                .appearance
+                .defaults_layer(),
+        )
     }
 
     pub(crate) fn apply_resolved_settings(&mut self) {

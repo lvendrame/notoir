@@ -187,8 +187,10 @@ pub struct AppCore {
     pub theme_choice: ThemeChoice,
     /// Valid themes from `<config>/themes/` (spec 21).
     pub custom_themes: Vec<crate::theme::Theme>,
+    pub theme_manager: crate::theme_manager::Manager,
     /// Bumped whenever `custom_themes` is reloaded.
     pub themes_generation: u64,
+    pub appearance_dark: bool,
     /// Theme override from the environment (wins over the setting).
     pub theme_override: Option<ThemeId>,
     pub effects: Vec<Effect>,
@@ -482,7 +484,9 @@ impl AppCore {
             language,
             theme_choice,
             custom_themes: Vec::new(),
+            theme_manager: Default::default(),
             themes_generation: 0,
+            appearance_dark: true,
             theme_override: opts.theme_override,
             effects: Vec::new(),
             now_ms: 0,
@@ -510,9 +514,11 @@ impl AppCore {
     /// A theme by id: built-in, or a loaded custom theme; an unknown id
     /// falls back to Notoir Midnight.
     pub fn load_theme(&self, id: &str) -> crate::theme::Theme {
-        ThemeId::from_id(id)
-            .map(ThemeId::load)
-            .or_else(|| self.custom_themes.iter().find(|t| t.id == id).cloned())
+        self.custom_themes
+            .iter()
+            .find(|t| t.id == id)
+            .cloned()
+            .or_else(|| ThemeId::from_id(id).map(ThemeId::load))
             .unwrap_or_else(|| ThemeId::Midnight.load())
     }
 
@@ -598,14 +604,32 @@ impl AppCore {
         &self,
         view: notoir_core::ids::ViewId,
     ) -> crate::editor_widget::EditorOptions {
+        let appearance_settings = self.appearance_settings(view);
+        let lang = self
+            .workbench
+            .view(view)
+            .and_then(|v| self.workbench.document(v.document_id))
+            .map(|d| d.language.as_str());
+        self.editor_options_from_settings(view, &appearance_settings, lang)
+    }
+
+    pub fn editor_options_from_settings(
+        &self,
+        view: notoir_core::ids::ViewId,
+        s: &ResolvedSettings,
+        lang: Option<&str>,
+    ) -> crate::editor_widget::EditorOptions {
         use crate::editor_widget::{CursorStyle, EditorOptions, LineNumbers, Whitespace, WrapMode};
         let doc = self
             .workbench
             .view(view)
             .and_then(|v| self.workbench.document(v.document_id));
-        let lang = doc.map(|d| d.language.as_str());
-        let s = &self.settings;
-        let wrap = if !self.wrap_enabled(view) {
+        let wrap = if !self
+            .workbench
+            .view(view)
+            .and_then(|v| v.wrap_override)
+            .unwrap_or_else(|| s.str("editor.wordWrap", lang) != "off")
+        {
             WrapMode::Off
         } else if s.str("editor.wordWrap", lang) == "column" {
             WrapMode::Column(s.int("editor.wordWrapColumn", lang).max(10) as usize)
@@ -614,6 +638,8 @@ impl AppCore {
         };
         let highlight = s.str("editor.highlightCurrentLine", lang);
         EditorOptions {
+            id_namespace: None,
+            font_family: s.str("editor.fontFamily", lang).to_owned(),
             font_size: s.int("editor.fontSize", lang) as f32,
             line_height: s.float("editor.lineHeight", lang) as f32,
             zoom: self.zoom_for(view),
@@ -640,6 +666,13 @@ impl AppCore {
                 "all" => Whitespace::All,
                 _ => Whitespace::Selection,
             },
+            rulers: s
+                .str_list("editor.rulers", lang)
+                .iter()
+                .filter_map(|value| value.parse::<usize>().ok())
+                .filter(|v| *v > 0)
+                .collect(),
+            indent_guides: s.bool("editor.indentGuides", lang),
             highlight_line: matches!(highlight, "line" | "all"),
             highlight_gutter: matches!(highlight, "gutter" | "all"),
             cursor: match s.str("editor.cursorStyle", lang) {
@@ -978,6 +1011,7 @@ impl AppCore {
                 IoResult::TextIndex(done) => self.text_index_done(*done),
                 IoResult::TemplatesListed(list) => self.templates_listed(list),
                 IoResult::CustomThemes(list) => self.custom_themes_loaded(list),
+                IoResult::ThemeManager(result) => self.theme_manager_done(*result),
                 IoResult::DesktopIntegration(result) => self.desktop_done(result),
                 IoResult::UpdateStamp(ms) => self.updates_stamp(ms),
                 IoResult::UpdateChecked(r) => {

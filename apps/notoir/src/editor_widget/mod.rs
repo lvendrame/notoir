@@ -13,11 +13,12 @@ use notoir_core::ids::ViewId;
 use notoir_core::workbench::Workbench;
 use notoir_editor::display_map::{DisplayMap, WrapConfig, line_text};
 use notoir_editor::edit_ops::{EditResult, IndentStyle};
-use notoir_editor::wrap::char_at_col;
+
 use notoir_editor::{Rope, Selection};
 
 use crate::shell::Kit;
 
+mod geometry;
 mod keys;
 pub mod minimap;
 mod paint;
@@ -75,6 +76,9 @@ pub enum CursorStyle {
 /// Effective settings for one view this frame.
 #[derive(Clone, Debug, PartialEq)]
 pub struct EditorOptions {
+    /// Independent previews must not share the real editor’s widget IDs.
+    pub id_namespace: Option<egui::Id>,
+    pub font_family: String,
     pub font_size: f32,
     pub line_height: f32,
     pub zoom: f32,
@@ -82,6 +86,8 @@ pub struct EditorOptions {
     pub wrap: WrapMode,
     pub line_numbers: LineNumbers,
     pub whitespace: Whitespace,
+    pub rulers: Vec<usize>,
+    pub indent_guides: bool,
     pub highlight_line: bool,
     pub highlight_gutter: bool,
     pub cursor: CursorStyle,
@@ -181,6 +187,7 @@ pub struct ViewCache {
     last_scroll: (f32, f32),
     last_row_h: f32,
     last_text_top: f32,
+    measured_key: Option<(u64, egui::FontId, usize, usize, u64)>,
 }
 
 impl ViewCache {
@@ -217,6 +224,7 @@ impl ViewCache {
             last_scroll: (0.0, 0.0),
             last_row_h: 0.0,
             last_text_top: 0.0,
+            measured_key: None,
         }
     }
 
@@ -387,6 +395,9 @@ pub struct EditorOutput {
 }
 
 /// Geometry of the editor for one frame.
+type GeometryCache =
+    std::cell::RefCell<std::collections::HashMap<(String, usize), std::sync::Arc<Vec<f32>>>>;
+
 #[derive(Clone)]
 struct Metrics {
     rect: Rect,
@@ -399,6 +410,8 @@ struct Metrics {
     row_h: f32,
     char_w: f32,
     font: egui::FontId,
+    ctx: egui::Context,
+    geometry: GeometryCache,
 }
 
 impl Metrics {
@@ -431,8 +444,24 @@ pub fn show(
     let Some(doc_id) = wb.view(view).map(|v| v.document_id) else {
         return out;
     };
+    let document = wb.document(doc_id).expect("view document");
+    let filename = document
+        .path()
+        .and_then(|p| p.file_name())
+        .map(|s| s.to_string_lossy());
+    let document_theme = kit
+        .theme
+        .for_document(Some(document.language.as_str()), filename.as_deref());
+    let mut document_kit = Kit {
+        theme: &document_theme,
+        icons: kit.icons,
+    };
+    let kit = &mut document_kit;
     let rect = ui.available_rect_before_wrap();
-    let id = egui::Id::new(("editor", view));
+    let id = opts.id_namespace.map_or_else(
+        || egui::Id::new(("editor", view)),
+        |scope| scope.with(("editor", view)),
+    );
     let response = ui.interact(rect, id, Sense::click_and_drag());
     ui.advance_cursor_after_rect(rect);
     if request_focus || response.clicked() || response.drag_started() {
@@ -457,8 +486,12 @@ pub fn show(
 
     // Metrics.
     let font_size = (opts.font_size * opts.zoom).max(4.0);
-    let font = egui::FontId::monospace(font_size);
-    let char_w = ui.ctx().fonts_mut(|f| f.glyph_width(&font, 'M')).max(1.0);
+    crate::fonts::request_family(ui.ctx(), &opts.font_family);
+    let font = egui::FontId::new(
+        font_size,
+        crate::fonts::available_family(ui.ctx(), &opts.font_family, false, false),
+    );
+    let char_w = ui.ctx().fonts_mut(|f| f.glyph_width(&font, ' ')).max(1.0);
     let row_h = (font_size * opts.line_height).round().max(1.0);
     let doc = wb.document(doc_id).expect("view's document");
     let lines = doc.buffer.rope().len_lines();
@@ -535,6 +568,8 @@ pub fn show(
         row_h,
         char_w,
         font,
+        ctx: ui.ctx().clone(),
+        geometry: Default::default(),
     };
     let max_cols = (text.width() / char_w).floor().max(10.0) as usize;
     let wrap = match opts.wrap {
@@ -558,6 +593,7 @@ pub fn show(
         .entry(view)
         .or_insert_with(|| ViewCache::new(doc, wrap, saved_scroll, head));
     cache.sync(doc, wrap);
+    measure_wrap(cache, &m, wrap);
     apply_folds(wb, cache, view);
     cache
         .map
@@ -596,6 +632,7 @@ pub fn show(
         .and_then(|d| wb.document(d))
     {
         cache.sync(d, wrap);
+        measure_wrap(cache, &m, wrap);
     }
     apply_folds(wb, cache, view);
     cache
@@ -813,8 +850,7 @@ fn reveal_caret(
     if !wrapped {
         let line = cache.rope.char_to_line(head);
         let rel = head - cache.rope.line_to_char(line);
-        let x =
-            notoir_editor::wrap::col_of(&line_text(&cache.rope, line), rel, tab) as f32 * m.char_w;
+        let x = m.x_of(&line_text(&cache.rope, line), rel, tab);
         if x < cache.scroll_x {
             cache.scroll_x = (x - 4.0 * m.char_w).max(0.0);
         } else if x > cache.scroll_x + m.text.width() - m.char_w {
@@ -840,12 +876,14 @@ fn pos_at(cache: &mut ViewCache, m: &Metrics, p: Pos2, tab: usize) -> usize {
         None => text.chars().skip(start).collect(),
     };
     let x = p.x - m.text.left() + cache.scroll_x;
-    let col = (x / m.char_w).round().max(0.0) as usize;
-    let mut rel = start + char_at_col(&row_text, col, tab);
+    let mut rel = start + m.char_at_x(&row_text, x, tab);
     if let Some(e) = end
         && rel >= e
     {
-        rel = e.saturating_sub(1).max(start);
+        let line_start = cache.rope.line_to_char(r.line);
+        rel = notoir_editor::motion::prev_grapheme(&cache.rope, line_start + e)
+            .saturating_sub(line_start)
+            .max(start);
     }
     cache.rope.line_to_char(r.line) + rel
 }
@@ -860,9 +898,9 @@ fn caret_rect(cache: &mut ViewCache, m: &Metrics, pos: usize, tab: usize) -> Rec
         .chars()
         .skip(starts[sub])
         .collect();
-    let col = notoir_editor::wrap::col_of(&text, rel - starts[sub], tab);
+    let pixel_x = m.x_of(&text, rel - starts[sub], tab);
     let y = m.text.top() + row as f32 * m.row_h - scroll_y(cache, m);
-    let x = m.text.left() + col as f32 * m.char_w - cache.scroll_x;
+    let x = m.text.left() + pixel_x - cache.scroll_x;
     Rect::from_min_size(Pos2::new(x, y), Vec2::new(2.0, m.row_h))
 }
 
@@ -900,6 +938,31 @@ fn apply_edit(wb: &mut Workbench, view: ViewId, res: EditResult, now: f64) -> bo
             false
         }
     }
+}
+
+fn measure_wrap(cache: &mut ViewCache, m: &Metrics, wrap: Option<WrapConfig>) {
+    let Some(cfg) = wrap else {
+        cache.measured_key = None;
+        return;
+    };
+    let key = (
+        cache.revision,
+        m.font.clone(),
+        cfg.cols,
+        cfg.tab,
+        crate::fonts::revision(&m.ctx),
+    );
+    if cache.measured_key.as_ref() == Some(&key) {
+        return;
+    }
+    let reset = cache
+        .measured_key
+        .as_ref()
+        .is_none_or(|old| old.1 != key.1 || old.2 != key.2 || old.3 != key.3 || old.4 != key.4);
+    cache.map.refresh_measured_rows(&cache.rope, reset, |text| {
+        m.wrap_starts(text, cfg.cols as f32 * m.char_w, cfg.tab)
+    });
+    cache.measured_key = Some(key);
 }
 
 #[cfg(test)]

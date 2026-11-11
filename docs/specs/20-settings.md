@@ -88,8 +88,9 @@ settings under `plugins.<id>.*` with the same structure via their manifest (spec
 2. Workspace
 3. User language-specific
 4. User
-5. Built-in language default (e.g. Markdown wordWrap on)
-6. Schema default
+5. Theme defaults (extension rule → language rule → theme-wide appearance; spec 21)
+6. Built-in language default (e.g. Markdown wordWrap on)
+7. Schema default
 
 Restricted settings skip workspace levels when untrusted. Invalid values (wrong type/out of range) are ignored at that
 level with a warning, falling through to the next level. `SettingsChanged` events list the keys whose **effective**

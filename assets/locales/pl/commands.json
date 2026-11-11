@@ -62,7 +62,8 @@
     "changeLanguage": "Zmień język interfejsu…",
     "openKeybindingsFile": "Otwórz plik skrótów klawiszowych",
     "openSettingsFile": "Otwórz plik ustawień użytkownika",
-    "keyboardShortcuts": "Skróty klawiszowe"
+    "keyboardShortcuts": "Skróty klawiszowe",
+    "manageThemes": "Zarządzaj motywami…"
   },
   "help": {
     "documentation": "Dokumentacja",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Przenieś wszystkie na wierzch",
     "close": "Zamknij okno",
     "activate": "Aktywuj okno"
+  },
+  "themes": {
+    "action": "Zarządzaj motywami"
   }
 }

@@ -62,7 +62,8 @@
     "changeLanguage": "Change Display Language…",
     "openKeybindingsFile": "Open Keyboard Shortcuts File",
     "openSettingsFile": "Open User Settings File",
-    "keyboardShortcuts": "Keyboard Shortcuts"
+    "keyboardShortcuts": "Keyboard Shortcuts",
+    "manageThemes": "Manage Themes…"
   },
   "help": {
     "documentation": "Documentation",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Bring All to Front",
     "close": "Close Window",
     "activate": "Activate Window"
+  },
+  "themes": {
+    "action": "Manage Themes"
   }
 }

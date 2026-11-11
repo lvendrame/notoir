@@ -34,6 +34,16 @@ use crate::t;
 /// File dialogs, swappable for tests.
 pub trait Dialogs: Send + Sync {
     fn pick_files(&self, opts: FileDialogOptions, poster: Poster);
+    fn import_theme(&self, opts: FileDialogOptions, poster: Poster) {
+        notoir_platform::dialogs::pick_files(opts, move |paths| {
+            import_theme_file(paths.into_iter().next(), poster)
+        });
+    }
+    fn export_theme(&self, opts: FileDialogOptions, source: String, poster: Poster) {
+        notoir_platform::dialogs::save_file(opts, move |path| {
+            export_theme_file(path, source, poster)
+        });
+    }
     fn save_file(&self, opts: FileDialogOptions, doc: DocumentId, poster: Poster);
     /// Export target for a document (Markdown → HTML, spec 24).
     fn export_file(&self, opts: FileDialogOptions, doc: DocumentId, poster: Poster);
@@ -138,6 +148,27 @@ impl ScriptedDialogs {
 }
 
 impl Dialogs for ScriptedDialogs {
+    fn import_theme(&self, _: FileDialogOptions, poster: Poster) {
+        let path = self
+            .opens
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .pop_front()
+            .unwrap_or_default()
+            .into_iter()
+            .next();
+        import_theme_file(path, poster);
+    }
+    fn export_theme(&self, _: FileDialogOptions, source: String, poster: Poster) {
+        let path = self
+            .saves
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .pop_front()
+            .flatten();
+        export_theme_file(path, source, poster);
+    }
+
     fn pick_files(&self, _: FileDialogOptions, poster: Poster) {
         let files = self
             .opens
@@ -1211,6 +1242,20 @@ impl AppCore {
 
     /// Close a tab: prompts for unsaved changes / non-empty Scratchpads.
     pub fn request_close(&mut self, view: ViewId) {
+        if self
+            .workbench
+            .view(view)
+            .is_some_and(|v| v.kind == notoir_core::view::ViewKind::ThemeManager)
+            && self
+                .theme_manager
+                .draft
+                .as_ref()
+                .is_some_and(crate::theme_manager::Draft::dirty)
+        {
+            let _ = self.workbench.activate_view(view);
+            self.theme_manager.pending = Some(json!({"action":"close", "view":view.0}));
+            return;
+        }
         let Some(doc) = self.workbench.view(view).map(|v| v.document_id) else {
             return;
         };
@@ -1312,6 +1357,18 @@ impl AppCore {
     /// Window close / Quit: prompts when documents are unsaved.
     /// Returns true when the app may exit now.
     pub fn request_quit(&mut self) -> bool {
+        if self
+            .theme_manager
+            .draft
+            .as_ref()
+            .is_some_and(crate::theme_manager::Draft::dirty)
+        {
+            self.open_virtual("tabs:themes", notoir_core::view::ViewKind::ThemeManager);
+            if self.theme_manager.pending.is_none() {
+                self.theme_manager.pending = Some(json!({"action":"quit"}));
+            }
+            return false;
+        }
         if self.files.quit_confirmed {
             return true;
         }
@@ -1790,4 +1847,37 @@ impl AppCore {
             None => String::new(),
         }
     }
+}
+
+fn import_theme_file(path: Option<PathBuf>, poster: Poster) {
+    std::thread::spawn(move || {
+        let result = (|| {
+            let Some(path) = path else {
+                return Ok(crate::theme_manager::Done::Cancelled);
+            };
+            let source = std::fs::read_to_string(path).map_err(|e| e.to_string())?;
+            let parsed = crate::theme::Theme::parse(&source)
+                .or_else(|_| crate::theme::Theme::parse_custom(&source))
+                .map_err(|e| e.to_string())?;
+            let source = crate::theme_manager::standalone(&parsed, &parsed.name)
+                .map_err(|e| e.to_string())?;
+            Ok(crate::theme_manager::Done::Imported(
+                crate::theme::Theme::parse_custom(&source).map_err(|e| e.to_string())?,
+            ))
+        })();
+        poster.post(IoResult::ThemeManager(Box::new(result)));
+    });
+}
+fn export_theme_file(path: Option<PathBuf>, source: String, poster: Poster) {
+    std::thread::spawn(move || {
+        let result = (|| {
+            let Some(path) = path else {
+                return Ok(crate::theme_manager::Done::Cancelled);
+            };
+            notoir_storage::atomic::write(&path, source.as_bytes(), Default::default())
+                .map_err(|e| e.to_string())?;
+            Ok(crate::theme_manager::Done::Exported)
+        })();
+        poster.post(IoResult::ThemeManager(Box::new(result)));
+    });
 }

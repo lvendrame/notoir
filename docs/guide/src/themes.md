@@ -20,6 +20,23 @@
 
 ![Dracula](images/themes/syntax-dracula.png)
 
+## Manage themes
+
+Open **Tools › Manage Themes…** to edit colors, fonts, display settings and file rules in an editor tab.
+Changes appear in the live code preview. **Save** keeps the preset; **Use Theme** activates it. Saving the active
+theme updates open editors immediately. Leaving an unsaved draft offers Save, Discard and Cancel.
+
+- **New Theme** creates an editable preset. Edit its name to rename it.
+- **Duplicate** copies a saved theme, including customized built-ins, fonts and file rules, into an independent preset.
+- **Export…** saves a complete native TOML preset. **Import…** installs a TOML preset with a new ID so existing themes remain intact.
+- **Reset to Default…** restores the selected built-in theme’s original appearance. Built-ins cannot be deleted or renamed;
+  their customizations are stored separately from the bundled files. Custom themes can be deleted.
+
+In **File Rules**, add a language ID or an extension such as `jsx`, `yml` or `d.ts`. Extensions are case-insensitive;
+for compound extensions the longest match wins. Language defaults apply before extension overrides. Unset controls
+inherit from the theme. Explicit User/Workspace preferences in Settings take precedence; reset those preferences to
+use the theme’s values. Use the preview’s extension field to try a rule without changing a real file.
+
 ## Fonts and size
 
 The interface uses Manrope and the editor uses JetBrains Mono, both bundled. Change the editor font with

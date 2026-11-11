@@ -101,7 +101,20 @@ pub fn install(ctx: &egui::Context, cjk: &[system_fonts::SystemFont]) {
             .families
             .insert(FontFamily::Name(weight.into()), chain);
     }
+    for face in system_fonts::family_faces() {
+        let key = family_key(&face.family, face.bold, face.italic);
+        let mut data = FontData::from_owned(face.bytes.to_vec());
+        data.index = face.index;
+        fonts.font_data.insert(key.clone(), Arc::new(data));
+        let mut chain = vec![key.clone()];
+        chain.extend(fonts.families[&FontFamily::Monospace].iter().cloned());
+        fonts.families.insert(FontFamily::Name(key.into()), chain);
+    }
     ctx.set_fonts(fonts);
+    ctx.data_mut(|data| {
+        let generation = data.get_temp_mut_or_default::<u64>(egui::Id::new("notoir-font-revision"));
+        *generation += 1;
+    });
 }
 
 /// CJK scripts whose glyphs appear in `text`. Han ideographs without kana or
@@ -169,6 +182,90 @@ pub fn extrabold(size: f32) -> egui::FontId {
 
 pub fn mono(size: f32) -> egui::FontId {
     egui::FontId::monospace(size)
+}
+
+pub fn family_key(family: &str, bold: bool, italic: bool) -> String {
+    format!("user:{family}:{bold}:{italic}")
+}
+
+pub fn family(family: &str, bold: bool, italic: bool) -> FontFamily {
+    if family == "JetBrains Mono" {
+        return if bold {
+            FontFamily::Name(MONO_SEMIBOLD.into())
+        } else {
+            FontFamily::Monospace
+        };
+    }
+    if family == "Manrope" {
+        return if bold {
+            FontFamily::Name(MANROPE_SEMIBOLD.into())
+        } else {
+            FontFamily::Proportional
+        };
+    }
+    if system_fonts::family_faces()
+        .iter()
+        .any(|f| f.family == family)
+    {
+        FontFamily::Name(family_key(family, bold, italic).into())
+    } else {
+        FontFamily::Monospace
+    }
+}
+
+/// The process-wide font cache is a union, preserving families used by siblings.
+pub fn request_family(ctx: &egui::Context, family: &str) {
+    let repaint = ctx.clone();
+    system_fonts::request_family(family, move || repaint.request_repaint());
+}
+
+/// Apply typography locally before rendering each window.
+pub fn apply_ui(ctx: &egui::Context, settings: &notoir_core::settings::ResolvedSettings) {
+    let selected = settings.str("workbench.fontFamily", None);
+    request_family(ctx, selected);
+    let font = egui::FontId::new(
+        settings.int("workbench.fontSize", None) as f32,
+        available_family(ctx, selected, false, false),
+    );
+    ctx.all_styles_mut(|style| {
+        style.override_font_id = None;
+        for (role, extra) in [
+            (egui::TextStyle::Body, 0.0),
+            (egui::TextStyle::Button, 0.0),
+            (egui::TextStyle::Heading, 5.0),
+            (egui::TextStyle::Small, -2.0),
+        ] {
+            style.text_styles.insert(
+                role,
+                egui::FontId::new(font.size + extra, font.family.clone()),
+            );
+        }
+    });
+    let zoom = settings.float("workbench.uiScale", None) as f32;
+    if (ctx.zoom_factor() - zoom).abs() > 0.001 {
+        ctx.set_zoom_factor(zoom);
+    }
+}
+
+pub fn available_family(
+    ctx: &egui::Context,
+    selected: &str,
+    bold: bool,
+    italic: bool,
+) -> FontFamily {
+    let wanted = family(selected, bold, italic);
+    if ctx.fonts_mut(|f| f.families().contains(&wanted)) {
+        wanted
+    } else {
+        FontFamily::Monospace
+    }
+}
+
+pub fn revision(ctx: &egui::Context) -> u64 {
+    ctx.data_mut(|data| {
+        data.get_temp::<u64>(egui::Id::new("notoir-font-revision"))
+            .unwrap_or(0)
+    })
 }
 
 #[cfg(test)]

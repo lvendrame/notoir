@@ -204,5 +204,8 @@
   },
   "update": {
     "mode": "업데이트: 끄기, 사용 가능 시 알림 또는 자동 다운로드"
-  }
+  },
+  "workbench.fontFamily": "Interface font family",
+  "workbench.fontSize": "Interface font size",
+  "editor.indentGuides": "Indent guides"
 }

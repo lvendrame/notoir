@@ -53,6 +53,7 @@ pub mod structure;
 pub mod templates;
 pub mod text_index;
 pub mod theme;
+pub mod theme_manager;
 pub mod updates;
 pub mod url_document;
 pub mod workspace;

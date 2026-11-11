@@ -130,7 +130,7 @@ impl ThemeId {
         ThemeId::ALL.into_iter().find(|t| t.id() == id)
     }
 
-    fn source(self) -> &'static str {
+    pub fn source(self) -> &'static str {
         match self {
             ThemeId::Midnight => include_str!("../../../assets/themes/notoir-midnight.toml"),
             ThemeId::Paper => include_str!("../../../assets/themes/notoir-paper.toml"),
@@ -148,7 +148,19 @@ impl ThemeId {
     }
 
     pub fn load(self) -> Theme {
-        Theme::parse(self.source()).unwrap_or_else(|e| panic!("built-in theme {}: {e}", self.id()))
+        static BUILTINS: std::sync::OnceLock<[Theme; 3]> = std::sync::OnceLock::new();
+        let themes = BUILTINS.get_or_init(|| {
+            ThemeId::ALL.map(|id| {
+                Theme::parse(id.source())
+                    .unwrap_or_else(|e| panic!("built-in theme {}: {e}", id.id()))
+            })
+        });
+        themes[match self {
+            Self::Midnight => 0,
+            Self::Paper => 1,
+            Self::Dracula => 2,
+        }]
+        .clone()
     }
 
     /// The built-in theme custom themes of `kind` inherit from.
@@ -174,6 +186,15 @@ pub fn load_custom_dir(dir: &std::path::Path) -> Vec<Result<Theme, (String, Stri
                 .is_some_and(|x| x.eq_ignore_ascii_case("toml"))
         })
         .collect();
+    // Managed built-in overrides are kept separate from ordinary custom themes.
+    if let Ok(overrides) = std::fs::read_dir(dir.join("defaults")) {
+        files.extend(
+            overrides
+                .flatten()
+                .map(|e| e.path())
+                .filter(|p| p.extension().is_some_and(|e| e == "toml")),
+        );
+    }
     files.sort();
     files
         .into_iter()
@@ -184,7 +205,19 @@ pub fn load_custom_dir(dir: &std::path::Path) -> Vec<Result<Theme, (String, Stri
                 .unwrap_or_default();
             std::fs::read_to_string(&p)
                 .map_err(|e| e.to_string())
-                .and_then(|s| Theme::parse_custom(&s).map_err(|e| e.to_string()))
+                .and_then(|s| {
+                    let mut theme = if p.parent() == Some(dir.join("defaults").as_path()) {
+                        let meta: MetaOnly = toml::from_str(&s).map_err(|e| e.to_string())?;
+                        let id = ThemeId::from_id(&meta.meta.id)
+                            .ok_or_else(|| "invalid built-in override".to_owned())?;
+                        Theme::parse_over(&s, Some(&id.load()))
+                    } else {
+                        Theme::parse_custom(&s)
+                    }
+                    .map_err(|e| e.to_string())?;
+                    theme.path = Some(p.clone());
+                    Ok(theme)
+                })
                 .map_err(|e| (name, e))
         })
         .collect()
@@ -269,6 +302,10 @@ pub struct Theme {
     pub name: String,
     pub kind: ThemeKind,
     styles: HashMap<&'static str, Style>,
+    /// Original editable source, including comments and extension fields.
+    pub source: String,
+    pub path: Option<std::path::PathBuf>,
+    pub appearance: crate::theme_manager::Appearance,
 }
 
 impl Theme {
@@ -292,7 +329,7 @@ impl Theme {
         Ok(theme)
     }
 
-    fn parse_over(source: &str, base: Option<&Theme>) -> Result<Theme, ThemeError> {
+    pub(crate) fn parse_over(source: &str, base: Option<&Theme>) -> Result<Theme, ThemeError> {
         let file: ThemeFile =
             toml::from_str(source).map_err(|e| ThemeError::Toml(e.to_string()))?;
         let mut raw: HashMap<String, RawValue> = file.ui;
@@ -322,11 +359,18 @@ impl Theme {
             name: file.meta.name,
             kind: file.meta.kind,
             styles,
+            source: source.to_owned(),
+            path: None,
+            appearance: crate::theme_manager::Appearance::parse(source)?,
         })
     }
 
     pub fn style(&self, tok: Tok) -> Style {
         self.styles[tok.name()]
+    }
+
+    pub fn set_style(&mut self, tok: Tok, style: Style) {
+        self.styles.insert(tok.name(), style);
     }
 
     pub fn color(&self, tok: Tok) -> Color32 {
@@ -408,7 +452,7 @@ impl Theme {
     }
 }
 
-fn parse_hex(token: &str, value: &str) -> Result<Color32, ThemeError> {
+pub(crate) fn parse_hex(token: &str, value: &str) -> Result<Color32, ThemeError> {
     let bad = || ThemeError::BadColor {
         token: token.to_owned(),
         value: value.to_owned(),

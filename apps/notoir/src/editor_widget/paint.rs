@@ -73,38 +73,6 @@ fn token_color(kit: &Kit, kind: notoir_editor::syntax::TokenKind, plain: Color32
     crate::theme::syntax_token(kind).map_or(plain, |t| kit.color(t))
 }
 
-/// Tabs expanded for text that starts at grid column `start`.
-fn display_from(text: &str, start: usize, tab: usize) -> String {
-    let mut out = String::with_capacity(text.len());
-    let mut col = start;
-    for c in text.chars() {
-        let w = char_cols(c, col, tab);
-        if c == '\t' {
-            out.extend(std::iter::repeat_n(' ', w));
-        } else {
-            out.push(c);
-        }
-        col += w;
-    }
-    out
-}
-
-/// Expands tabs to spaces so text columns line up with the grid.
-fn display_text(text: &str, tab: usize) -> String {
-    let mut out = String::with_capacity(text.len());
-    let mut col = 0;
-    for c in text.chars() {
-        let w = char_cols(c, col, tab);
-        if c == '\t' {
-            out.extend(std::iter::repeat_n(' ', w));
-        } else {
-            out.push(c);
-        }
-        col += w;
-    }
-    out
-}
-
 #[allow(clippy::too_many_arguments)]
 pub(super) fn paint(
     ui: &egui::Ui,
@@ -163,8 +131,8 @@ pub(super) fn paint(
                 let ca = col_of(&row.text, a - off, tab);
                 let cb = col_of(&row.text, b - off, tab);
                 let rect = Rect::from_min_max(
-                    Pos2::new(x0 + ca as f32 * m.char_w, row.y),
-                    Pos2::new(x0 + cb as f32 * m.char_w, row.y + m.row_h),
+                    Pos2::new(x0 + m.x_at_col(&row.text, ca, tab), row.y),
+                    Pos2::new(x0 + m.x_at_col(&row.text, cb, tab), row.y + m.row_h),
                 );
                 painter
                     .with_clip_rect(m.text.intersect(m.rect))
@@ -199,9 +167,37 @@ pub(super) fn paint(
     };
     let text_color = kit.color(Tok::EditorForeground);
     let ws_color = kit.color(Tok::EditorWhitespace);
+    for column in &opts.rulers {
+        let x = x0 + *column as f32 * m.char_w;
+        text_painter.line_segment(
+            [Pos2::new(x, m.text.top()), Pos2::new(x, m.text.bottom())],
+            Stroke::new(1.0, kit.color(Tok::EditorRuler)),
+        );
+    }
+    let syntax_fonts =
+        [(false, false), (true, false), (false, true), (true, true)].map(|(bold, italic)| {
+            egui::FontId::new(
+                m.font.size,
+                crate::fonts::available_family(ui.ctx(), &opts.font_family, bold, italic),
+            )
+        });
     let matches = &opts.find_matches;
     for row in &rows {
+        let col_x = |col: usize| x0 + m.x_at_col(&row.text, col, tab);
         let row_end = row.start + row.len;
+        if opts.indent_guides {
+            let leading: String = row.text.chars().take_while(|c| c.is_whitespace()).collect();
+            let width = m.x_of(&leading, leading.chars().count(), tab);
+            let step = (tab.max(1) as f32 * m.char_w).max(1.0);
+            let mut x = step;
+            while x < width - 0.5 {
+                text_painter.line_segment(
+                    [Pos2::new(x0 + x, row.y), Pos2::new(x0 + x, row.y + m.row_h)],
+                    Stroke::new(1.0, kit.color(Tok::EditorIndentGuide)),
+                );
+                x += step;
+            }
+        }
         // Find matches (the current one stronger).
         if !matches.is_empty() {
             let first = matches.partition_point(|m| m.1 <= row.start);
@@ -315,7 +311,7 @@ pub(super) fn paint(
         }
         // Text.
         cjk.scan(&row.text);
-        let shown = display_text(&row.text, tab);
+
         let row_offset = row.start - cache.rope.line_to_char(row.line);
         let spans = cache
             .highlighter
@@ -329,69 +325,41 @@ pub(super) fn paint(
                 .and_then(|sp| sp.iter().find(|s| s.start <= at && at < s.end))
                 .map_or(text_color, |s| token_color(kit, s.kind, text_color))
         };
-        if let Some(sp) = spans.as_ref().filter(|_| shown.is_ascii()) {
-            // Coloured runs on the column grid.
-            let chars: Vec<char> = row.text.chars().collect();
-            let mut bounds: Vec<usize> = vec![0, chars.len()];
-            for s in sp.iter() {
-                for b in [s.start, s.end] {
-                    if b > row_offset && b < row_offset + chars.len() {
-                        bounds.push(b - row_offset);
-                    }
-                }
-            }
-            bounds.sort_unstable();
-            bounds.dedup();
-            for w in bounds.windows(2) {
-                let (a, b) = (w[0], w[1]);
-                let piece: String = chars[a..b].iter().collect();
-                let col = col_of(&row.text, a, tab);
-                let text = display_from(&piece, col, tab);
-                if text.trim().is_empty() {
-                    continue;
-                }
-                text_painter.text(
-                    Pos2::new(col_x(col), row.y + m.row_h / 2.0),
-                    Align2::LEFT_CENTER,
-                    text,
-                    m.font.clone(),
-                    color_at(a),
+        let positions = m.positions(&row.text, tab);
+        let mut char_idx = 0;
+        for grapheme in row.text.graphemes(true) {
+            if !grapheme.chars().all(char::is_whitespace) {
+                let at = row_offset + char_idx;
+                let style = spans
+                    .as_ref()
+                    .and_then(|sp| sp.iter().find(|s| s.start <= at && at < s.end))
+                    .and_then(|s| crate::theme::syntax_token(s.kind))
+                    .map(|t| kit.theme.style(t));
+                let bold = style.is_some_and(|s| s.bold);
+                let italic = style.is_some_and(|s| s.italic);
+                let font = syntax_fonts[usize::from(bold) + 2 * usize::from(italic)].clone();
+                let mut job = egui::text::LayoutJob::default();
+                job.append(
+                    grapheme,
+                    0.0,
+                    egui::TextFormat {
+                        font_id: font,
+                        color: color_at(char_idx),
+                        italics: italic,
+                        ..Default::default()
+                    },
+                );
+                let galley = ui.ctx().fonts_mut(|f| f.layout_job(job));
+                text_painter.galley(
+                    Pos2::new(
+                        x0 + positions[char_idx],
+                        row.y + (m.row_h - galley.size().y) * 0.5,
+                    ),
+                    galley,
+                    text_color,
                 );
             }
-        } else if shown.is_ascii() {
-            text_painter.text(
-                Pos2::new(x0, row.y + m.row_h / 2.0),
-                Align2::LEFT_CENTER,
-                &shown,
-                m.font.clone(),
-                text_color,
-            );
-        } else {
-            // Place each grapheme on its grid column so wide/fallback glyphs stay aligned.
-            let mut col = 0;
-            let mut char_idx = 0;
-            for g in row.text.graphemes(true) {
-                let first = g.chars().next().unwrap_or(' ');
-                let w: usize = if first == '\t' {
-                    char_cols('\t', col, tab)
-                } else {
-                    g.chars()
-                        .map(|c| char_cols(c, col, tab))
-                        .sum::<usize>()
-                        .max(1)
-                };
-                if first != '\t' && first != ' ' {
-                    text_painter.text(
-                        Pos2::new(col_x(col), row.y + m.row_h / 2.0),
-                        Align2::LEFT_CENTER,
-                        g,
-                        m.font.clone(),
-                        color_at(char_idx),
-                    );
-                }
-                col += w;
-                char_idx += g.chars().count();
-            }
+            char_idx += grapheme.chars().count();
         }
         // Whitespace markers.
         paint_whitespace(
@@ -464,7 +432,7 @@ pub(super) fn paint(
             && cache.map.is_hidden(row.line + 1)
             && !cache.map.is_hidden(row.line)
         {
-            let x = col_x(col_of(&row.text, row.len, tab)) + m.char_w * 0.6;
+            let x = x0 + m.x_of(&row.text, row.len, tab) + m.char_w * 0.6;
             let chip = Rect::from_min_size(
                 Pos2::new(x, row.y + m.row_h * 0.18),
                 Vec2::new(m.char_w * 2.6, m.row_h * 0.64),
@@ -663,9 +631,9 @@ fn caret_rect_in(
     let row = rows.iter().find(|r| {
         r.start <= pos && (pos < r.start + r.len || (r.last && pos == r.start + r.len))
     })?;
-    let col = col_of(&row.text, pos - row.start, tab);
+    let pixel_x = m.x_of(&row.text, pos - row.start, tab);
     Some(Rect::from_min_size(
-        Pos2::new(col_x(col), row.y),
+        Pos2::new(col_x(0) + pixel_x, row.y),
         Vec2::new(2.0, m.row_h),
     ))
 }

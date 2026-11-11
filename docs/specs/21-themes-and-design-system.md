@@ -1,6 +1,6 @@
 # 21 — Themes, Design System & Accessibility
 
-**Status:** Partial — Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  tokens, built-in themes, icons, contrast, theme switching incl. auto (M0, M3); custom themes (M26: `<config>/themes/*.toml` read in the background at startup and again whenever that folder changes; tokens a theme leaves out — and `base` names it does not define — come from Notoir Midnight / Notoir Paper by `kind`; ids of built-in themes and `auto` are rejected; invalid files raise a warning naming the file; custom themes are listed in the theme picker and the Settings dropdown and selected by id in `workbench.theme`). Deviation: `workbench.autoThemeLight` / `autoThemeDark` are not implemented — auto always uses Midnight / Paper
+**Status:** Partial — Theme Manager, editable built-ins/reset, portable presets, file rules and measured font rendering implemented (M26 follow-up); Single-process/window ownership implemented; cross-platform native acceptance pending (spec 40). Previously:  tokens, built-in themes, icons, contrast, theme switching incl. auto (M0, M3); custom themes (M26: `<config>/themes/*.toml` read in the background at startup and again whenever that folder changes; tokens a theme leaves out — and `base` names it does not define — come from Notoir Midnight / Notoir Paper by `kind`; ids of built-in themes and `auto` are rejected; invalid files raise a warning naming the file; custom themes are listed in the theme picker and the Settings dropdown and selected by id in `workbench.theme`). Deviation: `workbench.autoThemeLight` / `autoThemeDark` are not implemented — auto always uses Midnight / Paper
 
 ## Purpose
 
@@ -229,3 +229,83 @@ Feature: Icons
 ## Application and window ownership (spec 40)
 
 Workspace themes and rendering caches resolve per window. Rendering a sibling must not leak style or widget state. Shared fonts cover the union of scripts in open windows. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.
+
+## Theme Manager
+
+Tools → Manage Themes… (`preferences.manageThemes`) opens a dedicated editor tab with a searchable theme list,
+grouped color/font/display controls, file rules and a real editor preview. Settings links to the same manager.
+Edits affect the preview until Save; saving an active theme updates it immediately. Use Theme selects a saved preset.
+Dirty drafts prompt Save / Discard / Cancel before changing presets, importing/exporting, resetting, deleting or closing.
+IO failures retain the draft. An external edit requires reloading or explicitly overwriting the file.
+
+Built-ins can be customized, with overrides stored separately in `<config>/themes/defaults/<built-in-id>.toml`.
+Reset to Default confirms and removes only the selected built-in override, restoring its bundled appearance.
+Explicit User/Workspace preferences remain. Built-in IDs/names cannot be renamed or deleted.
+Custom themes can be renamed/deleted. Deleting an active custom theme selects Midnight/Paper according to kind.
+Duplicate captures the saved appearance with a new ID; native TOML import/export includes the complete preset and
+never silently overwrites an installed theme. Font names are portable references; fonts are not embedded.
+
+Optional `[appearance.settings]` uses quoted existing setting IDs. `[appearance.languages.<id>.settings]` and
+`[appearance.extensions.<suffix>.settings]` provide editor defaults; their `.colors` tables use full editor/syntax token
+names with the existing color/style syntax. Missing fields inherit. Legacy color-only files remain valid.
+Extensions are case-insensitive, accept an optional leading dot, and support compound suffixes; longest suffix wins.
+Duplicate normalized suffixes and invalid types/ranges are rejected. Filename/glob rules are outside this feature.
+
+Resolution: schema/language defaults → theme defaults → theme language rule → theme extension rule → explicit
+User/Workspace settings in spec 20 order. Rules never change application chrome. Untitled files use language rules;
+save/rename/language changes recompute the applicable appearance. Saved changes propagate to sibling windows;
+drafts and previews are local. System font discovery is asynchronous and the shared font cache keeps all requested
+families. Missing fonts fall back to bundled faces. Editor fonts may be proportional; rendering, wrapping, carets,
+selection, hit testing and IME share measured geometry while document positions remain character offsets.
+
+```gherkin
+Feature: Theme management
+
+  Scenario: Manage themes in an editor tab
+    When the user chooses Tools Manage Themes
+    Then a Theme Manager editor tab opens with preview and duplicate, import and export actions
+    And the active theme is unchanged
+
+  Scenario: Theme drafts preview until saved
+    Given the Theme Manager is editing the active built-in theme
+    When the user edits the accent color
+    Then only the draft preview changes until Save
+    And after Save and restart the customized accent is restored
+
+  Scenario: Duplicate a customized theme
+    Given a customized Dracula theme with fonts and extension rules
+    When the user duplicates it and saves the copy
+    Then the copy has an independent ID and the same colors, fonts and rules
+    And resetting Dracula leaves the copy unchanged
+
+  Scenario: Reset built-in themes to bundled defaults
+    Given built-in themes have customized colors, font sizes and extension rules
+    When the user confirms Reset to Default for each built-in
+    Then each built-in has its exact bundled appearance with no saved rules
+    And explicit User settings remain unchanged
+
+  Scenario: Export and import complete theme presets
+    Given a saved theme with font, language and extension settings
+    When the user exports and imports it twice
+    Then both imports have independent IDs and preserve the exported appearance
+    And the original installed theme remains unchanged
+
+  Scenario: Language and extension rules resolve independently
+    Given YAML language colors and a different yml extension rule
+    Then yml and yaml use their respective colors
+    And the longest compound extension wins
+    And explicit settings override preset defaults
+    And untitled YAML uses the language rule
+
+  Scenario: Protect dirty drafts and external theme edits
+    Given a theme draft has unsaved changes
+    When the user closes its tab
+    Then the tab remains open pending a decision
+    And a conflicting disk edit is preserved until an explicit overwrite
+
+  Scenario: Proportional fonts preserve caret and click geometry
+    Given an editor using a proportional font
+    Then caret advances reflect wide and narrow glyph widths
+    And clicking a measured caret position selects that character boundary
+    And vertical navigation preserves the measured horizontal position
+```

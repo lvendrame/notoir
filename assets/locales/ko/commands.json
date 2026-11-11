@@ -62,7 +62,8 @@
     "changeLanguage": "표시 언어 변경…",
     "openKeybindingsFile": "키보드 바로 가기 파일 열기",
     "openSettingsFile": "사용자 설정 파일 열기",
-    "keyboardShortcuts": "키보드 바로 가기"
+    "keyboardShortcuts": "키보드 바로 가기",
+    "manageThemes": "테마 관리…"
   },
   "help": {
     "documentation": "문서",
@@ -449,5 +450,8 @@
     "bringAllToFront": "모두 앞으로 가져오기",
     "close": "윈도우 닫기",
     "activate": "윈도우 활성화"
+  },
+  "themes": {
+    "action": "테마 관리"
   }
 }

@@ -85,7 +85,7 @@ impl AppCore {
             let _ = w.unwatch(gone);
         }
         for new in wanted.difference(&self.doc_watch.dirs) {
-            if let Err(e) = w.watch(new, false) {
+            if let Err(e) = w.watch(new, *new == self.paths.themes) {
                 tracing::debug!(dir = %new.display(), error = %e, "could not watch folder");
             }
         }

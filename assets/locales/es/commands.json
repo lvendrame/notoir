@@ -62,7 +62,8 @@
     "changeLanguage": "Cambiar idioma de la interfaz…",
     "openKeybindingsFile": "Abrir archivo de atajos de teclado",
     "openSettingsFile": "Abrir archivo de ajustes de usuario",
-    "keyboardShortcuts": "Atajos de teclado"
+    "keyboardShortcuts": "Atajos de teclado",
+    "manageThemes": "Administrar temas…"
   },
   "help": {
     "documentation": "Documentación",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Traer todas al frente",
     "close": "Cerrar ventana",
     "activate": "Activar ventana"
+  },
+  "themes": {
+    "action": "Administrar temas"
   }
 }

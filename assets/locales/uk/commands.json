@@ -62,7 +62,8 @@
     "changeLanguage": "Змінити мову інтерфейсу…",
     "openKeybindingsFile": "Відкрити файл сполучень клавіш",
     "openSettingsFile": "Відкрити файл налаштувань користувача",
-    "keyboardShortcuts": "Сполучення клавіш"
+    "keyboardShortcuts": "Сполучення клавіш",
+    "manageThemes": "Керування темами…"
   },
   "help": {
     "documentation": "Документація",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Усі вікна на передній план",
     "close": "Закрити вікно",
     "activate": "Активувати вікно"
+  },
+  "themes": {
+    "action": "Керування темами"
   }
 }

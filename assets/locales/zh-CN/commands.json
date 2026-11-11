@@ -62,7 +62,8 @@
     "changeLanguage": "更改显示语言…",
     "openKeybindingsFile": "打开键盘快捷方式文件",
     "openSettingsFile": "打开用户设置文件",
-    "keyboardShortcuts": "键盘快捷方式"
+    "keyboardShortcuts": "键盘快捷方式",
+    "manageThemes": "管理主题…"
   },
   "help": {
     "documentation": "文档",
@@ -449,5 +450,8 @@
     "bringAllToFront": "全部置于顶层",
     "close": "关闭窗口",
     "activate": "激活窗口"
+  },
+  "themes": {
+    "action": "管理主题"
   }
 }

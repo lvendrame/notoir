@@ -445,6 +445,8 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Change Display Language… | `preferences.changeLanguage` |  |  |
 | Change Theme… | `preferences.changeTheme` |  |  |
 | Keyboard Shortcuts | `preferences.keyboardShortcuts` |  |  |
+| Manage Themes *(hidden)* | `themes.action` |  |  |
+| Manage Themes… | `preferences.manageThemes` |  |  |
 | Open Keyboard Shortcuts File | `preferences.openKeybindingsFile` |  |  |
 | Open Settings | `app.settings` | `⌘,` | `Ctrl+,` |
 | Open User Settings File | `preferences.openSettingsFile` |  |  |

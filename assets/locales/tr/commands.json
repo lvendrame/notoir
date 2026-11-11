@@ -62,7 +62,8 @@
     "changeLanguage": "Görüntüleme Dilini Değiştir…",
     "openKeybindingsFile": "Klavye Kısayolları Dosyasını Aç",
     "openSettingsFile": "Kullanıcı Ayarları Dosyasını Aç",
-    "keyboardShortcuts": "Klavye Kısayolları"
+    "keyboardShortcuts": "Klavye Kısayolları",
+    "manageThemes": "Temaları Yönet…"
   },
   "help": {
     "documentation": "Belgeler",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Tümünü öne getir",
     "close": "Pencereyi kapat",
     "activate": "Pencereyi etkinleştir"
+  },
+  "themes": {
+    "action": "Temaları Yönet"
   }
 }

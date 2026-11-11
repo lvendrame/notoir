@@ -204,5 +204,8 @@
   },
   "update": {
     "mode": "Atualizações: desativadas, avisar quando houver uma ou baixar automaticamente"
-  }
+  },
+  "workbench.fontFamily": "Interface font family",
+  "workbench.fontSize": "Interface font size",
+  "editor.indentGuides": "Indent guides"
 }

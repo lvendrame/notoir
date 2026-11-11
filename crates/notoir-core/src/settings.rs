@@ -327,6 +327,13 @@ impl Schema {
             C::Editor,
         );
         def(
+            "editor.indentGuides",
+            T::Bool,
+            V::Bool(true),
+            Scopes::ALL,
+            C::Editor,
+        );
+        def(
             "editor.rulers",
             T::StrList,
             V::List(vec![]),
@@ -390,6 +397,20 @@ impl Schema {
             C::Editor,
         );
         // Appearance
+        def(
+            "workbench.fontFamily",
+            T::Str,
+            s_("Manrope"),
+            Scopes::USER_ONLY,
+            C::Appearance,
+        );
+        def(
+            "workbench.fontSize",
+            T::Int { min: 10, max: 24 },
+            V::Int(13),
+            Scopes::USER_ONLY,
+            C::Appearance,
+        );
         def(
             "workbench.theme",
             T::Str,
@@ -1050,6 +1071,7 @@ pub struct ResolvedSettings {
     workspace_trusted: bool,
     workspace_user_overrides: SettingsLayer,
     warnings: Vec<SettingsWarning>,
+    theme_defaults: SettingsLayer,
 }
 
 impl ResolvedSettings {
@@ -1066,6 +1088,7 @@ impl ResolvedSettings {
             workspace_trusted,
             workspace_user_overrides: SettingsLayer::default(),
             warnings: Vec::new(),
+            theme_defaults: SettingsLayer::default(),
         };
         r.warnings = r.validate();
         r
@@ -1074,6 +1097,12 @@ impl ResolvedSettings {
     /// Local user choices for this workspace, never loaded from repository files.
     pub fn with_workspace_user_overrides(mut self, overrides: SettingsLayer) -> Self {
         self.workspace_user_overrides = overrides;
+        self
+    }
+
+    /// Theme defaults are below explicit preferences and above language/schema defaults.
+    pub fn with_theme_defaults(mut self, defaults: SettingsLayer) -> Self {
+        self.theme_defaults = defaults;
         self
     }
 
@@ -1130,6 +1159,32 @@ impl ResolvedSettings {
         out
     }
 
+    /// The explicit preference layer supplying the effective value, if any.
+    pub fn explicit_source(&self, key: &str, language: Option<&str>) -> Option<SettingScope> {
+        let effective = self.get(key, language)?;
+        for (scope, layer) in [
+            (
+                SettingScope::Workspace,
+                Some(&self.workspace_user_overrides),
+            ),
+            (SettingScope::Workspace, self.workspace.as_ref()),
+            (SettingScope::User, Some(&self.user)),
+        ] {
+            let Some(layer) = layer else {
+                continue;
+            };
+            let values = layer.values.get(key).into_iter().chain(
+                language
+                    .and_then(|l| layer.languages.get(l))
+                    .and_then(|m| m.get(key)),
+            );
+            if values.into_iter().any(|v| std::ptr::eq(v, effective)) {
+                return Some(scope);
+            }
+        }
+        None
+    }
+
     /// Effective value of `key` for documents of `language` (or language-agnostic).
     pub fn get(&self, key: &str, language: Option<&str>) -> Option<&SettingValue> {
         let def = self.schema.get(key)?;
@@ -1164,6 +1219,16 @@ impl ResolvedSettings {
             return Some(v);
         }
         if let Some(v) = self.user.values.get(key).filter(ok) {
+            return Some(v);
+        }
+        if let Some(v) = language
+            .and_then(|l| self.theme_defaults.languages.get(l))
+            .and_then(|m| m.get(key))
+            .filter(ok)
+        {
+            return Some(v);
+        }
+        if let Some(v) = self.theme_defaults.values.get(key).filter(ok) {
             return Some(v);
         }
         if let Some(v) = language

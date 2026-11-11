@@ -22,9 +22,10 @@ EditorWidget (apps/notoir/editor_widget)
 - Only visible rows (+ 1 screen overscan) are laid out each frame. Scrolling uses `DisplayMap` row counts; wrapped
   heights outside the viewport are estimated and corrected as they become visible (scroll anchoring keeps the top
   visible line stable).
-- Monospace default font (JetBrains Mono, configurable; proportional fonts supported but column-based features assume
-  monospace). Word wrap is computed by `notoir-editor::wrap` on the column grid (tabs to tab stops, East-Asian wide
-  characters as two columns) and each display row is painted on that grid, so row math and pixels always agree.
+- Monospace default font (JetBrains Mono), with selectable installed proportional or monospace families. The renderer
+  supplies measured character boundaries to the editor display map for wrapping. Painting, hit testing, carets,
+  selections and IME use the same grapheme advances. Logical column operations keep tab/CJK column semantics;
+  visual tab stops and column-wrap widths use multiples of the selected font’s space width.
 - Caret blinks (configurable `editor.cursorBlinking = blink | solid`), styles `line | block | underline`.
 - IME: preedit text rendered inline with underline; candidate window positioned via `egui::output.ime` cursor rect.
 - Tabs render at `editor.tabSize` columns; grapheme clusters (emoji, combining marks) move and delete as one unit;

@@ -65,7 +65,7 @@ pub fn topic(core: &AppCore) -> Option<&'static str> {
             ViewKind::Settings if core.settings_ui.category == Some(SettingCategory::Keyboard) => {
                 Some(KEYBINDINGS)
             }
-            ViewKind::Settings => Some(SETTINGS),
+            ViewKind::Settings | ViewKind::ThemeManager => Some(SETTINGS),
             ViewKind::Welcome => Some(FIRST_STEPS),
             ViewKind::Diff => Some(COMPARE),
             ViewKind::PluginManager => Some(PLUGINS),

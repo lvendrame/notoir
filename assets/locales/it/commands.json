@@ -62,7 +62,8 @@
     "changeLanguage": "Cambia lingua di visualizzazione…",
     "openKeybindingsFile": "Apri file delle scorciatoie da tastiera",
     "openSettingsFile": "Apri file delle impostazioni utente",
-    "keyboardShortcuts": "Scorciatoie da tastiera"
+    "keyboardShortcuts": "Scorciatoie da tastiera",
+    "manageThemes": "Gestisci temi…"
   },
   "help": {
     "documentation": "Documentazione",
@@ -449,5 +450,8 @@
     "bringAllToFront": "Porta tutto in primo piano",
     "close": "Chiudi finestra",
     "activate": "Attiva finestra"
+  },
+  "themes": {
+    "action": "Gestisci temi"
   }
 }

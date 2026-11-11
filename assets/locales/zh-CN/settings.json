@@ -204,5 +204,8 @@
   },
   "update": {
     "mode": "更新：关闭、有可用更新时通知，或自动下载"
-  }
+  },
+  "workbench.fontFamily": "Interface font family",
+  "workbench.fontSize": "Interface font size",
+  "editor.indentGuides": "Indent guides"
 }

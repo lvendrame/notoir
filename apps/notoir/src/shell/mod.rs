@@ -31,6 +31,7 @@ pub mod scm_panel;
 pub mod search_panel;
 pub mod settings_ui;
 pub mod tabs;
+pub mod themes_ui;
 pub mod welcome;
 
 /// Theme + icon cache passed to every rendering function.

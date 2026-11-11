@@ -35,6 +35,7 @@ Every built-in setting with its type, default value and the scopes it can be set
 | `editor.fontFamily` | Font family | string | `"JetBrains Mono"` | user, workspace, language |
 | `editor.fontSize` | Font size | integer 6–72 | `14` | user, workspace, language |
 | `editor.highlightCurrentLine` | Highlight current line | `"none"` \| `"gutter"` \| `"line"` \| `"all"` | `"all"` | user, workspace, language |
+| `editor.indentGuides` | Indent guides | boolean | `true` | user, workspace, language |
 | `editor.insertSpaces` | Insert spaces | boolean | `true` | user, workspace, language |
 | `editor.lineHeight` | Line height | number 1.0–3.0 | `1.5` | user, workspace, language |
 | `editor.lineNumbers` | Line numbers | `"on"` \| `"off"` \| `"relative"` | `"on"` | user, workspace, language |
@@ -71,6 +72,8 @@ Every built-in setting with its type, default value and the scopes it can be set
 | Setting | Description | Type | Default | Scopes |
 |---|---|---|---|---|
 | `workbench.breadcrumbs.enabled` | Show breadcrumbs under the tab strip | boolean | `true` | user, workspace |
+| `workbench.fontFamily` | Interface font family | string | `"Manrope"` | user |
+| `workbench.fontSize` | Interface font size | integer 10–24 | `13` | user |
 | `workbench.statusBar.visible` | Status bar | boolean | `true` | user |
 | `workbench.tabs.closeAllKeepsPinned` | Close All keeps pinned tabs | boolean | `false` | user |
 | `workbench.tabs.density` | Tab density | `"default"` \| `"compact"` | `"default"` | user |

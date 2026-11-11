@@ -314,6 +314,9 @@ fn row(
             }
         });
     });
+    if key == "workbench.theme" && ui.button(t!("themes:title")).clicked() {
+        cmd(actions, "preferences.manageThemes", json!({}));
+    }
     let scope_ok = !ws_scope || def.scopes.workspace;
     let new_value = ui
         .add_enabled_ui(scope_ok, |ui| control(ui, core, def, &shown))
@@ -410,7 +413,11 @@ fn control(
                     for t in crate::theme::ThemeId::ALL {
                         ui.selectable_value(&mut v, t.id().to_owned(), t.load().name);
                     }
-                    for t in &core.custom_themes {
+                    for t in core
+                        .custom_themes
+                        .iter()
+                        .filter(|t| crate::theme::ThemeId::from_id(&t.id).is_none())
+                    {
                         ui.selectable_value(&mut v, t.id.clone(), &t.name);
                     }
                     ui.selectable_value(&mut v, "auto".to_owned(), t!("dialogs:picker.themeAuto"));

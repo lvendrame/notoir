@@ -15,6 +15,7 @@ use std::time::{Duration, Instant};
 /// other Notoir processes.
 #[derive(Debug)]
 pub enum IoResult {
+    ThemeManager(Box<Result<crate::theme_manager::Done, String>>),
     Printed(Result<notoir_platform::printing::PrintOutcome, String>),
     UrlDownloaded {
         request: u64,

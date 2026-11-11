@@ -457,6 +457,7 @@ impl Picker {
             PickerKind::Theme => core
                 .custom_themes
                 .iter()
+                .filter(|t| crate::theme::ThemeId::from_id(&t.id).is_none())
                 .map(|t| PickerItem {
                     value: t.id.clone(),
                     label: t.name.clone(),

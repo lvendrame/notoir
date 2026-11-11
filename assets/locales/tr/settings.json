@@ -204,5 +204,8 @@
   },
   "update": {
     "mode": "Güncellemeler: kapalı, mevcut olduğunda bildir veya otomatik indir"
-  }
+  },
+  "workbench.fontFamily": "Interface font family",
+  "workbench.fontSize": "Interface font size",
+  "editor.indentGuides": "Indent guides"
 }

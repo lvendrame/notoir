@@ -267,6 +267,17 @@ impl Renderer<'_, '_> {
             .and_then(|v| self.core.workbench.view(v))
             .map(|v| v.kind);
         match (active, kind) {
+            (Some(view), Some(notoir_core::view::ViewKind::ThemeManager)) => {
+                let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
+                body_ui.set_clip_rect(body);
+                super::themes_ui::show(&mut body_ui, self.kit, self.core, self.actions);
+                if body_ui.ui_contains_pointer()
+                    && body_ui.input(|i| i.pointer.any_pressed())
+                    && self.core.workbench.active_view() != Some(view)
+                {
+                    self.out.activate = Some(view);
+                }
+            }
             (Some(view), Some(notoir_core::view::ViewKind::Settings)) => {
                 let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
                 body_ui.set_clip_rect(body);
