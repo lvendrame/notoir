@@ -2758,7 +2758,7 @@ dependencies = [
 
 [[package]]
 name = "notoir"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "arboard",
  "base64",
@@ -2800,7 +2800,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-core"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "notoir-editor",
  "proptest",
@@ -2812,7 +2812,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-editor"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "chardetng",
  "encoding_rs",
@@ -2832,7 +2832,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-git"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "git2",
  "tempfile",
@@ -2842,7 +2842,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-mcp"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "axum",
  "getrandom 0.4.3",
@@ -2859,7 +2859,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-platform"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "base64",
  "cc",
@@ -2888,7 +2888,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-plugins"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "arboard",
  "globset",
@@ -2905,7 +2905,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-storage"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "notoir-core",
  "rusqlite",
@@ -2922,7 +2922,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-workspace"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "encoding_rs",
  "globset",
@@ -4502,7 +4502,7 @@ dependencies = [
 
 [[package]]
 name = "spec-check"
-version = "0.1.12"
+version = "0.1.13"
 
 [[package]]
 name = "spirv"

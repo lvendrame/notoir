@@ -138,6 +138,41 @@ fn language_picker_lists_every_language() {
     }
 }
 
+#[test]
+fn language_submenu_applies_without_a_picker_and_updates_checks() {
+    let mut app = common::start(|_| {});
+    let assert_checked = |app: &common::TestApp, selected: Language| {
+        let context = app.harness.state().core.context(false);
+        for language in Language::ALL {
+            assert_eq!(
+                context.get(&format!("language.{}", language.code())),
+                Some(&notoir_core::when::Value::Bool(language == selected)),
+            );
+        }
+    };
+    assert_checked(&app, Language::En);
+    app.harness.get_by_label("Tools").click();
+    app.harness.run_steps(3);
+    app.harness.get_by_label_contains("Language").hover();
+    app.harness.run_steps(3);
+    for language in Language::ALL {
+        assert!(
+            app.harness
+                .query_by_label_contains(language.native_label())
+                .is_some()
+        );
+    }
+    app.harness.get_by_label_contains("Deutsch").click();
+    app.harness.run_steps(3);
+    assert_eq!(app.harness.state().core.language, Language::De);
+    assert!(app.harness.state().ui.picker.is_none());
+    assert!(app.harness.query_by_label("Datei").is_some());
+    assert_checked(&app, Language::De);
+    let app = common::restart(app, |_| {});
+    assert_eq!(app.harness.state().core.language, Language::De);
+    assert_checked(&app, Language::De);
+}
+
 // spec 22: "Switching applies immediately"
 #[test]
 fn switching_language_applies_immediately() {

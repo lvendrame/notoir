@@ -844,6 +844,12 @@ impl AppCore {
             "minimapVisible",
             self.settings.bool("editor.minimap.enabled", None),
         );
+        for language in Language::ALL {
+            c.set_bool(
+                format!("language.{}", language.code()),
+                self.language == language,
+            );
+        }
         let auto = self.settings.str("files.autoSave", None).to_owned();
         for m in ["off", "afterDelay", "onFocusChange", "onWindowFocusLoss"] {
             c.set_bool(format!("autoSave.{m}"), auto == m);

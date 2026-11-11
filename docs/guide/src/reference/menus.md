@@ -186,7 +186,21 @@ The menu bar as it appears on Windows and Linux, with default shortcuts. On macO
 - Open Settings — `Ctrl+,`
 - Change Theme…
 - Manage Themes…
-- Change Display Language…
+- **Language** ›
+  - English
+  - Português (BR)
+  - Español
+  - Français
+  - Deutsch
+  - Italiano
+  - Nederlands
+  - Polski
+  - 日本語
+  - Русский
+  - Українська
+  - Türkçe
+  - 简体中文
+  - 한국어
 
 ## Plugins
 

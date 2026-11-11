@@ -438,6 +438,52 @@ mod tests {
     }
 
     #[test]
+    fn language_selection_updates_checks_without_replacing_native_items() {
+        let mut registry = CommandRegistry::default();
+        crate::commands::register_all(&mut registry, Platform::Mac);
+        let tools = menus::menu_bar(Platform::Mac)
+            .into_iter()
+            .find(|menu| menu.label == "menus:top.tools")
+            .unwrap();
+        let definitions = tools
+            .items
+            .iter()
+            .find_map(|item| match item {
+                MenuItem::Submenu {
+                    label: "common:language",
+                    items,
+                } => Some(items),
+                _ => None,
+            })
+            .unwrap();
+        let resolve = |selected| {
+            let mut context = ContextSnapshot::default();
+            for language in crate::i18n::Language::ALL {
+                context.set_bool(
+                    format!("language.{}", language.code()),
+                    language == selected,
+                );
+            }
+            resolve_items(definitions, &registry, &context, Some("first"))
+        };
+        let before = resolve(crate::i18n::Language::En);
+        let after = resolve(crate::i18n::Language::De);
+        assert!(same_structure(&before, &after));
+        for (items, selected) in [(&before, "en"), (&after, "de")] {
+            let mut checked_count = 0;
+            for item in items {
+                let Item::Action(action) = item else {
+                    panic!("expected language action")
+                };
+                let checked = action.invocation.args["language"] == selected;
+                assert_eq!(action.checked, Some(checked));
+                checked_count += usize::from(checked);
+            }
+            assert_eq!(checked_count, 1);
+        }
+    }
+
+    #[test]
     fn dynamic_submenus_do_not_replace_their_parent() {
         let before = Item::Submenu {
             key: "menus:top.window",

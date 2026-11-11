@@ -447,7 +447,18 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         cmd("app.keyboardShortcuts"),
         cmd("preferences.changeTheme"),
         cmd("preferences.manageThemes"),
-        cmd("preferences.changeLanguage"),
+        sub(
+            "common:language",
+            crate::i18n::Language::ALL
+                .into_iter()
+                .map(|language| MenuItem::Command {
+                    id: "preferences.changeLanguage",
+                    args: json!({ "language": language.code() }),
+                    label: Some(format!("menus:languageNames.{}", language.code())),
+                    checked: Some(format!("language.{}", language.code())),
+                })
+                .collect(),
+        ),
     ]);
     menus.push(Menu {
         label: "menus:top.tools",
@@ -661,6 +672,59 @@ mod tests {
         assert_eq!(labels(Platform::Windows), common);
         assert_eq!(labels(Platform::Mac)[0], "menus:top.app");
         assert_eq!(labels(Platform::Mac)[1..], common);
+    }
+
+    #[test]
+    fn language_submenu_lists_all_languages_on_every_platform() {
+        for platform in [Platform::Mac, Platform::Windows, Platform::Linux] {
+            let registry = registry(platform);
+            let tools = menu_bar(platform)
+                .into_iter()
+                .find(|menu| menu.label == "menus:top.tools")
+                .unwrap();
+            let visible = visible_items(&tools.items, &registry);
+            let items = visible
+                .iter()
+                .find_map(|item| match item {
+                    MenuItem::Submenu {
+                        label: "common:language",
+                        items,
+                    } => Some(items),
+                    _ => None,
+                })
+                .expect("language submenu");
+            assert_eq!(items.len(), crate::i18n::Language::ALL.len());
+            assert!(!visible.iter().any(|item| matches!(
+                item,
+                MenuItem::Command {
+                    id: "preferences.changeLanguage",
+                    ..
+                }
+            )));
+            for (item, language) in items.iter().zip(crate::i18n::Language::ALL) {
+                let MenuItem::Command {
+                    id,
+                    args,
+                    label,
+                    checked,
+                } = item
+                else {
+                    panic!("expected language command");
+                };
+                assert_eq!(*id, "preferences.changeLanguage");
+                assert_eq!(*args, json!({ "language": language.code() }));
+                assert_eq!(
+                    checked.as_deref(),
+                    Some(format!("language.{}", language.code()).as_str())
+                );
+                for locale in crate::i18n::Language::ALL {
+                    assert_eq!(
+                        crate::i18n::t_in(locale, label.as_deref().unwrap()),
+                        language.native_label()
+                    );
+                }
+            }
+        }
     }
 
     #[test]

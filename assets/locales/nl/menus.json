@@ -53,5 +53,21 @@
   "autoCommit": {
     "off": "Uit",
     "manual": "Bij handmatig opslaan"
+  },
+  "languageNames": {
+    "en": "English",
+    "pt-BR": "Português (BR)",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "nl": "Nederlands",
+    "pl": "Polski",
+    "ja": "日本語",
+    "ru": "Русский",
+    "uk": "Українська",
+    "tr": "Türkçe",
+    "zh-CN": "简体中文",
+    "ko": "한국어"
   }
 }

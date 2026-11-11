@@ -47,7 +47,7 @@ Detection is never written to settings; only an explicit choice is persisted. Im
 - First-run page (spec 17), pre-selected with the detected language.
 - Settings → General → Language (dropdown with native labels).
 - Command Palette: "Preferences: Change Language…" (picker with native labels and English names).
-- Tools → Change Language….
+- Tools → Language submenu lists all supported languages with native labels and a checkmark on the current language. Selecting an entry applies and persists it immediately without opening a picker.
 
 Switching applies immediately to the whole UI (menus, palette, panels, notifications, settings UI) without restart and
 emits `LanguageChanged`.
