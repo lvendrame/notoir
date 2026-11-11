@@ -42,6 +42,7 @@ pub mod navigation;
 pub mod notes;
 pub mod plugin_contrib;
 pub mod plugins;
+pub mod printing;
 pub mod quick_open;
 pub mod recovery;
 pub mod search;

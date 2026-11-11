@@ -173,6 +173,8 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         ),
         cmd("file.revert"),
         SEP,
+        cmd("file.print"),
+        SEP,
         cmd("file.close"),
         cmd("file.closeOthers"),
         cmd("file.closeAll"),

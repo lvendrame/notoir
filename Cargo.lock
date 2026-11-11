@@ -2861,12 +2861,14 @@ name = "notoir-platform"
 version = "0.1.12"
 dependencies = [
  "base64",
+ "cc",
  "directories",
  "ed25519-dalek",
  "fontdb",
  "interprocess",
  "minisign-verify",
  "open",
+ "pkg-config",
  "pollster 1.0.1",
  "rfd",
  "semver",

@@ -129,7 +129,8 @@
     "pickTemplate": "Usar plantilla",
     "openFromUrl": "Abrir desde URL…",
     "downloadUrl": "Abrir",
-    "cancelUrl": "Cancelar"
+    "cancelUrl": "Cancelar",
+    "print": "Imprimir…"
   },
   "edit": {
     "undo": "Deshacer",

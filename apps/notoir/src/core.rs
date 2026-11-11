@@ -112,6 +112,8 @@ pub struct StartOptions {
     /// Tests: block on the CJK system font lookup instead of loading it in the
     /// background.
     pub wait_for_fonts: bool,
+    /// Native printing unless a test replaces the adapter.
+    pub printer: Option<Arc<dyn notoir_platform::printing::Printer>>,
     /// File dialogs (native unless a test scripts them).
     pub dialogs: Option<std::sync::Arc<dyn crate::files::Dialogs>>,
     /// Git backend (git2 unless a test replaces it).
@@ -145,6 +147,7 @@ impl StartOptions {
             theme_override: None,
             wait_for_fonts: false,
             dialogs: None,
+            printer: None,
             elevation: None,
             git_backend: None,
             git_remote: None,
@@ -196,6 +199,7 @@ pub struct AppCore {
     /// The editor widget had keyboard focus last frame.
     pub editor_focused: bool,
     pub files: crate::files::FileState,
+    pub printing: crate::printing::PrintState,
     /// Panels as they were before Maximize Editor Group (restored exactly).
     pub maximize_saved: Option<PanelLayout>,
     /// The open workspace (one per window).
@@ -485,6 +489,7 @@ impl AppCore {
             zoom: 100,
             editor_focused: false,
             maximize_saved: None,
+            printing: crate::printing::PrintState::new(opts.printer.clone()),
             files: crate::files::FileState::new(
                 opts.dialogs
                     .clone()
@@ -920,6 +925,7 @@ impl AppCore {
         results.extend(self.git_queue.drain());
         for result in results {
             match result {
+                IoResult::Printed(result) => self.print_finished(result),
                 IoResult::FilesPicked(paths) if self.plugins_files_picked(&paths) => {}
                 IoResult::FilesPicked(paths) => {
                     for p in paths {

@@ -129,7 +129,8 @@
     "pickTemplate": "Використати шаблон",
     "openFromUrl": "Відкрити за URL…",
     "downloadUrl": "Відкрити",
-    "cancelUrl": "Скасувати"
+    "cancelUrl": "Скасувати",
+    "print": "Друк…"
   },
   "edit": {
     "undo": "Скасувати дію",

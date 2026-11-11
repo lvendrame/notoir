@@ -129,7 +129,8 @@
     "pickTemplate": "Şablonu kullan",
     "openFromUrl": "URL’den aç…",
     "downloadUrl": "Aç",
-    "cancelUrl": "İptal"
+    "cancelUrl": "İptal",
+    "print": "Yazdır…"
   },
   "edit": {
     "undo": "Geri Al",

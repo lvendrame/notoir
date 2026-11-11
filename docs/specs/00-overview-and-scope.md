@@ -89,6 +89,7 @@ When requirements conflict, resolve in this order:
 | Permissions & security | [32-permissions-and-security.md](./32-permissions-and-security.md) |
 | Testing & CI | [33-testing-and-ci.md](./33-testing-and-ci.md) |
 | Future note features | [34-future-note-features.md](./34-future-note-features.md) |
+| Printing | [41-printing.md](./41-printing.md) |
 | Logging & error handling | [35-logging-and-errors.md](./35-logging-and-errors.md) |
 
 ## Phases

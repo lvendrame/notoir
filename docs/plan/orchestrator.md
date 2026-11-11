@@ -128,3 +128,9 @@ refuses to replace an existing workflow. Save As cancellation is also covered by
 | W5 | Native macOS menus and cross-platform window navigation | Done | Persistent native objects; context changes patch state in place. Real AppKit tracking/New Window/zero-window Quit verified by scripts/live-native-menus.py. |
 | W6 | Shared services, MCP targeting, plugin isolation and repository coordination | Done | No duplicate listeners/cross-window mutation |
 | W7 | Scenario coverage, required checks and native acceptance | In progress | fmt, workspace Clippy and full workspace tests pass; macOS native lifecycle passes (scripts/live-windows.py). Native Windows/Linux verification remains for their CI/runners. See window-migration-verification.md. |
+
+## Printing follow-up
+
+Spec 41 — In progress: File → Print… / `file.print`, source and selection snapshots, native system dialogs
+and scripted adapter coverage. Native printer/PDF acceptance on Windows, macOS and Linux remains pending.
+`Mod+P` stays Quick Open; rendered printing and a dedicated PDF exporter are deferred.

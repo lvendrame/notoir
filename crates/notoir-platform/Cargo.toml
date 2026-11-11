@@ -21,6 +21,7 @@ skrifa.workspace = true
 thiserror.workspace = true
 tracing.workspace = true
 rfd.workspace = true
+tempfile.workspace = true
 pollster.workspace = true
 interprocess.workspace = true
 ureq.workspace = true
@@ -29,6 +30,10 @@ semver.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sha2 = "0.11.1"
+
+[build-dependencies]
+cc = "1"
+pkg-config = "0.3"
 
 [dev-dependencies]
 tempfile.workspace = true

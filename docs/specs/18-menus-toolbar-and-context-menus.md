@@ -41,6 +41,8 @@ Auto Commit › ◉ Off  ○ On Manual Save
               Auto Push (checkbox; enabled only when Auto Commit is on)
 Revert File
 ─────
+Print…                            (spec 41; no default shortcut)
+─────
 Close                             Mod+W
 Close Others
 Close All

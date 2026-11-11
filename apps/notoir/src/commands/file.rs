@@ -37,6 +37,14 @@ pub(super) fn specs(out: &mut Specs) {
         })
         .hidden(),
     );
+    out.push(
+        CommandSpec::new("file.print", Category::File, |c: &mut AppCore, _| {
+            c.print_document();
+            CommandOutcome::Done
+        })
+        .when("hasActiveEditor")
+        .expect("valid"),
+    );
     let editor = "hasActiveEditor";
     let k = KeyBindingDef::new;
     out.push(

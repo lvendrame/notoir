@@ -129,7 +129,8 @@
     "pickTemplate": "Utiliser le modèle",
     "openFromUrl": "Ouvrir depuis une URL…",
     "downloadUrl": "Ouvrir",
-    "cancelUrl": "Annuler"
+    "cancelUrl": "Annuler",
+    "print": "Imprimer…"
   },
   "edit": {
     "undo": "Annuler",

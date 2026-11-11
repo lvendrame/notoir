@@ -127,3 +127,17 @@ and cell editing as local files. **Save** asks for a local destination; it does 
 
 Cancel stops the open operation. Download errors stay in the dialog so you can correct the address and retry. Binary
 content is refused, downloads are limited to 20 MiB, and requests time out after 30 seconds.
+
+## Printing
+
+Choose **File › Print…** or **Print…** in the Command Palette to open the system print dialog.
+Notoir prints the current document text, including unsaved edits, without saving it. Markdown, JSON
+and CSV print their source, including when a preview is displayed.
+
+The dialog offers installed printers, page ranges and copies. Paper size, orientation, duplex, color
+and PDF destinations depend on your system and printer. If text is selected, choose selection printing
+to print only that text. Multiple selections print in document order.
+
+Printed text uses a monochrome monospaced font and wraps long lines. Editor line numbers, syntax colors
+and other controls are excluded. Cancelling leaves the document unchanged. `Ctrl+P` / `Cmd+P` continues
+to open Quick Open; Print has no default shortcut.

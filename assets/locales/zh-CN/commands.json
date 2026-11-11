@@ -129,7 +129,8 @@
     "pickTemplate": "使用模板",
     "openFromUrl": "从URL打开…",
     "downloadUrl": "打开",
-    "cancelUrl": "取消"
+    "cancelUrl": "取消",
+    "print": "打印…"
   },
   "edit": {
     "undo": "撤销",

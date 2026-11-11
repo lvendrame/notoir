@@ -129,7 +129,8 @@
     "pickTemplate": "テンプレートを使用",
     "openFromUrl": "URLから開く…",
     "downloadUrl": "開く",
-    "cancelUrl": "キャンセル"
+    "cancelUrl": "キャンセル",
+    "print": "印刷…"
   },
   "edit": {
     "undo": "元に戻す",

@@ -129,7 +129,8 @@
     "pickTemplate": "템플릿 사용",
     "openFromUrl": "URL에서 열기…",
     "downloadUrl": "열기",
-    "cancelUrl": "취소"
+    "cancelUrl": "취소",
+    "print": "인쇄…"
   },
   "edit": {
     "undo": "실행 취소",

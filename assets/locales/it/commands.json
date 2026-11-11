@@ -129,7 +129,8 @@
     "pickTemplate": "Usa modello",
     "openFromUrl": "Apri da URL…",
     "downloadUrl": "Apri",
-    "cancelUrl": "Annulla"
+    "cancelUrl": "Annulla",
+    "print": "Stampa…"
   },
   "edit": {
     "undo": "Annulla",

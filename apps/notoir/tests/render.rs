@@ -963,3 +963,18 @@ fn yaml_split_snapshot() {
         img.save(out_dir().join("yaml-split.png")).unwrap();
     }
 }
+
+#[test]
+fn print_file_menu_snapshot() {
+    use egui_kittest::kittest::Queryable;
+    let mut app = common::start(common::with_language(Language::En, ThemeId::Midnight));
+    common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
+    app.harness
+        .event(egui::Event::Text("Notes ready to print.\n".into()));
+    app.harness.run_steps(2);
+    app.harness.get_by_label("File").click();
+    app.harness.run_steps(3);
+    if let Ok(img) = app.harness.render() {
+        img.save(out_dir().join("print-file-menu.png")).unwrap();
+    }
+}

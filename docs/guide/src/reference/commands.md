@@ -47,6 +47,7 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Paste | `explorer.paste` |  |  |
 | Pin Recent Item *(hidden)* | `file.pinRecent` |  |  |
 | Pin Recent Workspace *(hidden)* | `workspace.pinRecent` |  |  |
+| Print… | `file.print` |  |  |
 | Quit Notoir | `app.quit` | `⌘Q` | `Ctrl+Q` |
 | Refresh Explorer | `explorer.refresh` |  |  |
 | Reload from Disk *(hidden)* | `file.reloadFromDisk` |  |  |

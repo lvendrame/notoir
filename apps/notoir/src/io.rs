@@ -15,6 +15,7 @@ use std::time::{Duration, Instant};
 /// other Notoir processes.
 #[derive(Debug)]
 pub enum IoResult {
+    Printed(Result<notoir_platform::printing::PrintOutcome, String>),
     UrlDownloaded {
         request: u64,
         result: Box<Result<notoir_platform::download::Download, String>>,

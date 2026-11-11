@@ -33,6 +33,7 @@ The menu bar as it appears on Windows and Linux, with default shortcuts. On macO
   - On Manual Save
   - Auto Push
 - Revert File
+- Print…
 - Close — `Ctrl+W`
 - Close Others
 - Close All

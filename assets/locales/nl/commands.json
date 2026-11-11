@@ -129,7 +129,8 @@
     "pickTemplate": "Sjabloon gebruiken",
     "openFromUrl": "Openen vanaf URL…",
     "downloadUrl": "Openen",
-    "cancelUrl": "Annuleren"
+    "cancelUrl": "Annuleren",
+    "print": "Afdrukken…"
   },
   "edit": {
     "undo": "Ongedaan maken",

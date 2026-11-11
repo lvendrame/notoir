@@ -129,7 +129,8 @@
     "pickTemplate": "Użyj szablonu",
     "openFromUrl": "Otwórz z URL…",
     "downloadUrl": "Otwórz",
-    "cancelUrl": "Anuluj"
+    "cancelUrl": "Anuluj",
+    "print": "Drukuj…"
   },
   "edit": {
     "undo": "Cofnij",

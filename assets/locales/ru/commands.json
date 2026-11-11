@@ -129,7 +129,8 @@
     "pickTemplate": "Использовать шаблон",
     "openFromUrl": "Открыть по URL…",
     "downloadUrl": "Открыть",
-    "cancelUrl": "Отмена"
+    "cancelUrl": "Отмена",
+    "print": "Печать…"
   },
   "edit": {
     "undo": "Отменить",
