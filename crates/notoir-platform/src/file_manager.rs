@@ -146,7 +146,7 @@ impl Integration {
         ];
         let mut installed = true;
         for root in roots {
-            let existing = Command::new("reg.exe")
+            let existing = crate::process::background_command("reg.exe")
                 .args(["query", root, "/v", "NotoirOwner"])
                 .output()
                 .map_err(|e| e.to_string())?;
@@ -155,7 +155,7 @@ impl Integration {
                     return Err("Foreign context-menu registration".into());
                 }
             } else {
-                let exists = Command::new("reg.exe")
+                let exists = crate::process::background_command("reg.exe")
                     .args(["query", root])
                     .output()
                     .map_err(|e| e.to_string())?;
@@ -168,7 +168,7 @@ impl Integration {
         if let Some(add) = change {
             for root in roots {
                 let run = |args: &[&str]| -> Result<(), String> {
-                    let o = Command::new("reg.exe")
+                    let o = crate::process::background_command("reg.exe")
                         .args(args)
                         .output()
                         .map_err(|e| e.to_string())?;
@@ -212,7 +212,7 @@ impl Integration {
                         "/f",
                     ])?;
                 } else {
-                    let exists = Command::new("reg.exe")
+                    let exists = crate::process::background_command("reg.exe")
                         .args(["query", root])
                         .output()
                         .map_err(|e| e.to_string())?;

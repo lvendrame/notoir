@@ -125,7 +125,7 @@ impl Elevation for NativeElevation {
                 q(tmp.path()),
                 q(path)
             );
-            let mut cmd = Command::new("powershell");
+            let mut cmd = crate::process::background_command("powershell");
             cmd.args([
                 "-NoProfile",
                 "-Command",

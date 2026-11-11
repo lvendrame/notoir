@@ -725,7 +725,13 @@ fn fs_op(lua: &Lua, op: &str, path: &Path, text: Option<String>) -> mlua::Result
 
 fn run_process(cmd: &str, args: &[String], cwd: Option<&Path>) -> std::io::Result<Value> {
     use std::io::Read;
+    tracing::debug!(program = cmd, "starting background plugin helper");
     let mut c = std::process::Command::new(cmd);
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        c.creation_flags(0x08000000); // CREATE_NO_WINDOW; process API captures both pipes.
+    }
     c.args(args)
         .stdin(std::process::Stdio::null())
         .stdout(std::process::Stdio::piped())
@@ -768,4 +774,26 @@ fn run_process(cmd: &str, args: &[String], cwd: Option<&Path>) -> std::io::Resul
         "stderr": err_t.join().unwrap_or_default(),
         "timed_out": status.is_none(),
     }))
+}
+
+#[cfg(all(test, windows))]
+mod windows_process_tests {
+    #[test]
+    fn plugin_processes_have_no_console_and_keep_output_and_exit_status() {
+        let args = [
+            "-NoProfile",
+            "-NonInteractive",
+            "-Command",
+            include_str!("../../../scripts/tests/windows-console-probe.ps1"),
+        ]
+        .map(str::to_owned);
+        let result = super::run_process("powershell.exe", &args, None).unwrap();
+        assert_eq!(result["code"], 7);
+        assert_eq!(
+            result["stdout"].as_str().unwrap().replace("\r\n", "\n"),
+            "0\n\n"
+        );
+        assert!(result["stderr"].as_str().unwrap().contains("helper stderr"));
+        assert_eq!(result["timed_out"], false);
+    }
 }

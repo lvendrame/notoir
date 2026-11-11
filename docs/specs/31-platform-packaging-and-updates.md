@@ -35,6 +35,11 @@ A `FakePlatform` implementation (temp dirs, scripted dialog answers) is used in 
 Dialogs use `rfd::AsyncFileDialog` driven on the Tokio runtime so the UI thread is never blocked (macOS requires
 dialogs on the main thread: rfd handles this by dispatching; verified in M0).
 
+Background console helpers on Windows (Git, registry queries, PowerShell and plugin processes) must use
+`CREATE_NO_WINDOW`: redirecting stdout/stderr alone does not prevent terminal flashes. Preserve piped input/output,
+exit status and cancellation. Explicit GUI launches, native dialogs and UAC authorization retain their normal UI.
+Debug logging records helper program names without command arguments or document content.
+
 ## Paths
 
 Via `directories::ProjectDirs` with a bundle identifier fixed in M0 (placeholder `dev.notoir.Notoir`; **must never

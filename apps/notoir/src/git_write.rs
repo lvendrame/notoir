@@ -246,7 +246,7 @@ fn hostname() -> String {
             return h.trim().to_owned();
         }
     }
-    std::process::Command::new("hostname")
+    notoir_platform::process::background_command("hostname")
         .output()
         .ok()
         .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())

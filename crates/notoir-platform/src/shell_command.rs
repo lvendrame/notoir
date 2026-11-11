@@ -153,7 +153,7 @@ fn windows_path(target: &Path, add: bool) -> Result<PathBuf, String> {
              [Environment]::SetEnvironmentVariable('Path',(($p -split ';') | Where-Object {{ $_ -ne '{dir}' -and $_ -ne '' }}) -join ';','User')}}"
         )
     };
-    let out = std::process::Command::new("powershell")
+    let out = crate::process::background_command("powershell")
         .args(["-NoProfile", "-NonInteractive", "-Command", &script])
         .output()
         .map_err(|e| e.to_string())?;

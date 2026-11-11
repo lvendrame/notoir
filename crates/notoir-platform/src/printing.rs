@@ -31,6 +31,7 @@ impl Printer for NativePrinter {
 }
 
 fn native_print(request: PrintRequest) -> std::io::Result<PrintOutcome> {
+    #[cfg(not(target_os = "windows"))]
     use std::process::Command;
     let dir = tempfile::Builder::new().prefix("notoir-print-").tempdir()?;
     // Do not pass document text through shell arguments, logs or shared paths.
@@ -48,7 +49,7 @@ fn native_print(request: PrintRequest) -> std::io::Result<PrintOutcome> {
     let mut command = {
         let script = dir.path().join("print.ps1");
         std::fs::write(&script, include_str!("../native/print.ps1"))?;
-        let mut c = Command::new("powershell.exe");
+        let mut c = crate::process::background_command("powershell.exe");
         c.args([
             "-NoProfile",
             "-NonInteractive",
@@ -67,11 +68,6 @@ fn native_print(request: PrintRequest) -> std::io::Result<PrintOutcome> {
         c.arg("--notoir-internal-print").arg(dir.path());
         c
     };
-    #[cfg(target_os = "windows")]
-    {
-        use std::os::windows::process::CommandExt;
-        command.creation_flags(0x08000000); // CREATE_NO_WINDOW: keep PowerShell hidden.
-    }
     let output = command.output()?;
     match output.status.code() {
         Some(0) => Ok(PrintOutcome::Submitted),

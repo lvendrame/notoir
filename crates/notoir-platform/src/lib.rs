@@ -7,6 +7,7 @@ pub mod elevation;
 pub mod file_manager;
 pub mod paths;
 pub mod printing;
+pub mod process;
 pub mod reveal;
 pub mod shell_command;
 pub mod single_instance;

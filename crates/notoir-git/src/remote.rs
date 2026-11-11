@@ -174,11 +174,25 @@ struct Run {
     stderr: String,
 }
 
+// Git probes and operations are console processes even when both output pipes
+// are redirected. Keep them invisible when launched by the Windows GUI.
+fn background_command(program: &std::ffi::OsStr) -> Command {
+    tracing::debug!(?program, "preparing background Git helper");
+    #[allow(unused_mut)]
+    let mut command = Command::new(program);
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        command.creation_flags(0x08000000); // CREATE_NO_WINDOW
+    }
+    command
+}
+
 impl SystemGit {
     /// `configured` (setting `git.path`) or `git` on PATH, if it runs.
     pub fn find(configured: Option<&str>) -> Option<Self> {
         let program = PathBuf::from(configured.filter(|s| !s.is_empty()).unwrap_or("git"));
-        let ok = Command::new(&program)
+        let ok = background_command(program.as_os_str())
             .arg("--version")
             .stdin(Stdio::null())
             .stdout(Stdio::null())
@@ -189,7 +203,7 @@ impl SystemGit {
     }
 
     fn command(&self, cwd: &Path, args: &[&str]) -> Command {
-        let mut cmd = Command::new(&self.program);
+        let mut cmd = background_command(self.program.as_os_str());
         cmd.current_dir(plain(cwd))
             .args(["-c", "color.ui=false", "-c", "core.quotepath=false"])
             .args(args)
@@ -445,6 +459,27 @@ impl GitRemote for SystemGit {
 mod tests {
     use super::*;
     use crate::{Git2Backend, GitBackend, StatusOpts};
+
+    #[cfg(windows)]
+    #[test]
+    fn git_helpers_have_no_console_and_preserve_captured_output() {
+        let output = background_command(std::ffi::OsStr::new("powershell.exe"))
+            .args([
+                "-NoProfile",
+                "-NonInteractive",
+                "-Command",
+                include_str!("../../../scripts/tests/windows-console-probe.ps1"),
+            ])
+            .stdin(Stdio::null())
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(7));
+        assert_eq!(
+            String::from_utf8_lossy(&output.stdout).replace("\r\n", "\n"),
+            "0\n\n"
+        );
+        assert!(String::from_utf8_lossy(&output.stderr).contains("helper stderr"));
+    }
 
     #[test]
     fn verbatim_drive_paths_are_made_plain() {
