@@ -75,6 +75,9 @@ completes successfully on the exact candidate SHA. Local checks or an older gree
 this gate. Publish first, then verify the generated installers and Store package/native validation.
 Packaging previews and separate Store package runs are optional diagnostics, not publication gates.
 The release workflow does not enforce the CI dependency itself.
+Stable releases publish GitHub installer downloads, then automatically build/validate and submit the Store
+MSIX for Microsoft certification. Submission success does not mean the update is already live in the Store.
+Manual Release runs default to `publish=false`: they create Actions artifacts only, not a GitHub release.
 
 For Microsoft Store MSIX submissions, follow [`docs/microsoft-store.md`](docs/microsoft-store.md).
 Use the `microsoft-store` build feature and the dedicated Store workflow; Microsoft signs after certification.

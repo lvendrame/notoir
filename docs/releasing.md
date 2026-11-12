@@ -14,6 +14,33 @@ require a green CI run. The checks below are a maintainer gate, not an automatic
 Run commands from the repository root. Examples use Bash/zsh and the GitHub CLI authenticated for
 `lvendrame/notoir`. Keep the candidate variables in the same terminal throughout the procedure.
 
+## What the Release workflow publishes
+
+The [Release workflow](../.github/workflows/release.yml) distributes both GitHub downloads and stable
+Microsoft Store updates. A successful run is not necessarily a published release: its trigger determines
+whether publication is enabled.
+
+| Trigger | GitHub downloads | Microsoft Store |
+|---|---|---|
+| Push a stable tag, e.g. `v0.1.13` | Build installers and publish the release | Build, validate and submit an MSIX for certification after GitHub publication |
+| Manual run with `publish=true`, stable Cargo version | Create the version tag and publish installers | Same automatic Store submission |
+| Prerelease tag or `publish=true` with a prerelease Cargo version | Publish a GitHub prerelease with installers | Skipped |
+| Manual run with `publish=false` (the default) | Actions artifacts only; no release or downloads on the Releases page | Skipped |
+
+For a normal stable release, build the installers once through the publishing run. Do not start a
+preview or separate Store package workflow as a prerequisite. The publishing run performs these steps:
+
+1. Build Windows MSI/EXE, macOS DMG and Linux DEB/AppImage installers, plus debug symbols and checksums.
+2. Sign and verify the update manifest, then publish the files to the GitHub Releases page.
+3. Call [store.yml](../.github/workflows/store.yml) with `mode: publish`. It builds the separate Store
+   edition, validates the MSIX and native activation, then runs `store-client.ps1 -Mode Publish` to submit
+   the package to Microsoft Store for certification.
+
+Check GitHub assets after publication. The Store stage follows GitHub publication and does not delay
+the availability of GitHub downloads. A successful Store submission means the package was submitted
+for certification; it does not establish that the update is already approved or available to Store users.
+Check Partner Center for that status. Store failure leaves the GitHub release and its downloads intact.
+
 ## 1. Prepare the candidate
 
 - [ ] Start from an up-to-date `main` with no unrelated local changes. Fetch remote branches and tags.

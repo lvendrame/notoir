@@ -54,6 +54,10 @@ The **Microsoft Store package** workflow has three modes:
   verify its artifact hash and source commit, then submit it for Microsoft certification.
 
 After a successful stable GitHub release, the **Release** workflow calls **publish** automatically.
+This submits an update to Microsoft Store for certification; it does not only create an installer artifact.
+Submission success is distinct from certification approval and availability to users; check Partner Center
+for those states. GitHub downloads are published before this Store stage starts and remain available if
+the Store stage fails. Do not run a separate Store package build before a normal stable release.
 Prereleases and packaging previews do not submit to the Store. This is a reusable workflow call:
 it also works for GitHub releases created with the workflow's `GITHUB_TOKEN`, which would not trigger
 a separate `release` event workflow. A failed Store submission leaves the GitHub release in place;
