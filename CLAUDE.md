@@ -71,8 +71,10 @@ cargo test --workspace
 
 Follow [`docs/releasing.md`](docs/releasing.md). Do not create/push a `v*` tag or run Release with
 `publish=true` until a fresh manual CI run (including the native crash suite on Windows, macOS and Linux)
-and a packaging preview both complete successfully on the exact candidate SHA. Local checks or an older
-green CI run do not replace this gate. The release workflow does not enforce the CI dependency itself.
+completes successfully on the exact candidate SHA. Local checks or an older green CI run do not replace
+this gate. Publish first, then verify the generated installers and Store package/native validation.
+Packaging previews and separate Store package runs are optional diagnostics, not publication gates.
+The release workflow does not enforce the CI dependency itself.
 
 For Microsoft Store MSIX submissions, follow [`docs/microsoft-store.md`](docs/microsoft-store.md).
 Use the `microsoft-store` build feature and the dedicated Store workflow; Microsoft signs after certification.

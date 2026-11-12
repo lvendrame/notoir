@@ -121,10 +121,10 @@ test run, or green test steps in a still-running job do not satisfy this gate. W
 and cache uploads too. Any failure, cancellation, skipped required job or candidate change blocks tagging.
 Fix the cause, commit the fix, and repeat validation on the new SHA.
 
-## 4. Verify packaging and signing before publishing
+## 4. Check publication credentials
 
 - [ ] The repository secret `MINISIGN_SECRET_KEY` and variable `NOTOIR_UPDATE_PUBKEY` are present and
-  contain a matching minisign key pair. They are **required** for publication, including prereleases.
+  contain a matching minisign key pair. They are required for publication, including prereleases.
   See [signing setup](guide/src/updates.md#release-signing-setup). Check names without printing secrets:
 
 ```sh
@@ -134,55 +134,23 @@ gh variable list --repo lvendrame/notoir
 
 `NOTOIR_UPDATE_URL` defaults to the latest release's `update.json`.
 
-- [ ] GitHub releases include Windows MSI/EXE downloads as well as macOS/Linux installers.
-  Store publishing is additional: configure the four [Store publishing secrets](microsoft-store.md#credentials-and-first-access-check)
-  and verify product access. Microsoft signs the Store package after certification.
+- [ ] Stable releases require the four [Store publishing secrets](microsoft-store.md#credentials-and-first-access-check).
+  Store packaging, native validation and submission run automatically after GitHub publication.
 - [ ] When `WINDOWS_SIGNING_PROVIDER` is unset or `none`, standalone Windows installers remain unsigned.
-  If a provider is configured, require the expected trusted publisher and timestamp on every installer,
-  executable and uninstaller, following [Windows signing setup](windows-signing.md).
+  If a provider is configured, verify the expected trusted publisher and timestamp after packaging,
+  following [Windows signing setup](windows-signing.md).
 
-macOS and Linux OS-signing credentials remain optional and are documented at the top of
-[scripts/package.sh](../scripts/package.sh). They are separate from the required updater signature.
-
-- [ ] Start a packaging preview on the same candidate, with publication explicitly disabled:
-
-```sh
-gh workflow run release.yml --repo lvendrame/notoir --ref main -f publish=false
-gh run list --repo lvendrame/notoir --workflow release.yml --event workflow_dispatch \
-  --commit "$candidate_sha" --limit 5 --json databaseId,headSha,status,conclusion,url
-```
-
-Replace `REPLACE_WITH_NEW_RUN_ID` with this preview's run ID:
-
-```sh
-package_run_id=REPLACE_WITH_NEW_RUN_ID
-gh run watch "$package_run_id" --repo lvendrame/notoir --exit-status
-gh run download "$package_run_id" --repo lvendrame/notoir --dir "target/release-preview/$release_tag"
-```
-
-- [ ] The preview run's `headSha` equals `candidate_sha`. Its version job and all three packaging jobs
-  succeed, including Windows. The publishing job is intentionally skipped for this preview;
-  it does not test minisign signing.
-- [ ] Artifacts contain the expected versioned macOS universal DMG, Windows MSI and NSIS installer,
-  Linux DEB and AppImage, per-OS checksums and debug symbols.
-  Verify each `SHA256SUMS-<os>.txt` from
-  its artifact directory (`sha256sum -c` on Linux, or `shasum -a 256 -c` on macOS).
-- [ ] Install and launch preview packages on available test systems and check the changed flows.
-  Record which packages/platforms were exercised and any limitations.
-- [ ] When Windows signing is configured, verify the expected trusted publisher and timestamp,
-  including the application and NSIS uninstaller. Without a provider, verify the unsigned signing-hook
-  receipts. Require a successful Store package/native validation run on the candidate too.
-
-The CI and packaging-preview runs may run concurrently once the candidate is pushed. Both must pass
-on the same SHA before publication. If `main` moves or any candidate file changes, stop and validate the
-new candidate; do not silently publish a different commit.
+Publish after candidate CI passes, then verify the generated packages in section 6. A packaging preview
+(`release.yml` with `publish=false`) or separate Store package run (`store.yml` with `mode=package`) is
+optional for diagnosis. Neither is a publication gate. A preview creates Actions artifacts only; it does
+not create a downloadable GitHub release.
 
 ## 5. Create and push the release tag
 
-- [ ] Record the candidate SHA, version, successful CI URL, packaging-preview URL and smoke-test results
+- [ ] Record the candidate SHA, version, successful CI URL and smoke-test results
   in the release preparation notes. Re-run the dependency audit immediately before tagging, especially
   if validation was performed on an earlier day.
-- [ ] After all gates above pass, fetch again, confirm the candidate has not changed and the tag is
+- [ ] After candidate CI and credential checks pass, fetch again, confirm the candidate has not changed and the tag is
   unused, then tag the recorded SHA and push that tag only. The `&&` chain stops on the first failure:
 
 ```sh
@@ -214,11 +182,24 @@ a new version and the same checklist.
   checksums, plus `windows` for the standalone MSI. Store updates are managed
   by Microsoft. Smoke-test downloading and checking for updates from an installed app.
 - [ ] Publish release notes describing the changes and any installer/signing limitations. Retain the
-  candidate SHA, CI and preview run URLs, release run URL and verification results for the next maintainer.
+  candidate SHA, CI run URL, release run URL and verification results for the next maintainer.
 
-## Why these gates exist
+- [ ] Download the published installers and debug symbols. Require the versioned macOS universal DMG,
+  Windows MSI and NSIS installer, Linux DEB and AppImage, plus per-OS checksums. Verify each checksum
+  from its artifact directory (`sha256sum -c` on Linux or `shasum -a 256 -c` on macOS).
+- [ ] Install and launch packages on available test systems and check the changed flows. Record the
+  packages/platforms exercised and any limitations. Without a Windows signing provider, verify the
+  unsigned signing-hook receipts; with a provider, verify publisher and timestamp on the application,
+  installers and NSIS uninstaller.
+- [ ] Check the automatic Microsoft Store package/native validation and submission after GitHub
+  publication. A Store failure does not remove or block the GitHub release. Inspect Partner Center
+  before retrying a submission.
+- [ ] If generated packages fail verification, stop recommending the affected downloads, report the
+  failure and prepare a fixed version. Never move or force-push a published tag.
 
-The November 2026 releases exposed two independent gaps: new RustSec/yank metadata made `deny` fail
-despite passing editor tests, and ignored native crash tests failed on startup/recovery timing across
-platforms. The Release workflow still published because it has no CI dependency. Fresh dependency
-audits and an exact-commit manual CI run, including all crash jobs, must therefore precede every tag.
+## Why candidate CI remains required
+
+The November 2026 releases exposed dependency advisory/yank failures and ignored native crash tests
+that ordinary workspace tests did not detect. A fresh dependency audit and exact-commit manual CI run,
+including all crash jobs, precede tagging. Installer generation and Store validation are checked after
+publication; separate preview workflows are optional.
