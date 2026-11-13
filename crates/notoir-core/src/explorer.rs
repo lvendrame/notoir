@@ -309,7 +309,14 @@ impl ExplorerTree {
             let Some(mut n) = self.nodes.remove(&p) else {
                 continue;
             };
-            let np = new.join(p.strip_prefix(old).expect("prefix"));
+            let rest = p.strip_prefix(old).expect("prefix");
+            // Joining an empty suffix adds a trailing separator. For files
+            // that changes an otherwise valid path into an ENOTDIR error.
+            let np = if rest.as_os_str().is_empty() {
+                new.to_path_buf()
+            } else {
+                new.join(rest)
+            };
             if p == old {
                 n.info.name = new
                     .file_name()
@@ -330,7 +337,31 @@ impl ExplorerTree {
         if let Some(sel) = &self.selected
             && let Ok(rest) = sel.strip_prefix(old)
         {
-            self.selected = Some(new.join(rest));
+            self.selected = Some(if rest.as_os_str().is_empty() {
+                new.to_path_buf()
+            } else {
+                new.join(rest)
+            });
+        }
+        // Keep the parent links valid immediately, including moves between
+        // folders; rendering must not depend on a later disk listing.
+        if let Some(parent) = old.parent()
+            && let Some(ExplorerNode {
+                children: Children::Loaded(children),
+                ..
+            }) = self.nodes.get_mut(parent)
+        {
+            children.retain(|p| p != old);
+        }
+        if self.nodes.contains_key(new)
+            && let Some(parent) = new.parent()
+            && let Some(ExplorerNode {
+                children: Children::Loaded(children),
+                ..
+            }) = self.nodes.get_mut(parent)
+            && !children.iter().any(|p| p == new)
+        {
+            children.push(new.to_path_buf());
         }
     }
 
@@ -577,12 +608,43 @@ mod tests {
         t.set_children(&root.join("a"), vec![file("n.md")]);
         t.selected = Some(root.join("a/n.md"));
         t.rename(&root.join("a"), &root.join("b"));
+        assert_eq!(
+            names(&t.rows(&RowOptions::default())),
+            ["ws", "  b", "    n.md"]
+        );
         t.set_children(&root, vec![dir("b")]);
         assert_eq!(
             names(&t.rows(&RowOptions::default())),
             ["ws", "  b", "    n.md"]
         );
         assert_eq!(t.selected, Some(root.join("b/n.md")));
+    }
+
+    #[test]
+    fn renamed_file_paths_have_no_trailing_separator() {
+        let root = PathBuf::from("/ws");
+        let mut t = ExplorerTree::new(root.clone());
+        t.set_children(&root, vec![file("a.md"), dir("archive")]);
+        t.expand(&root.join("archive"));
+        t.set_children(&root.join("archive"), vec![]);
+        t.selected = Some(root.join("a.md"));
+        let target = root.join("archive/b.md");
+        t.rename(&root.join("a.md"), &target);
+        // Path equality normalizes trailing separators; compare the actual
+        // OS strings to catch paths that would fail when opened on disk.
+        assert_eq!(t.selected.as_ref().unwrap().as_os_str(), target.as_os_str());
+        assert_eq!(
+            t.node(&target).unwrap().path.as_os_str(),
+            target.as_os_str()
+        );
+        let rows = t.rows(&RowOptions::default());
+        assert_eq!(names(&rows), ["ws", "  archive", "    b.md"]);
+        assert_eq!(rows[2].path.as_os_str(), target.as_os_str());
+        t.set_children(&root, vec![dir("archive")]);
+        assert!(
+            t.node(&target).is_some(),
+            "relisting preserves the moved file"
+        );
     }
 
     #[test]

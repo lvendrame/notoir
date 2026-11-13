@@ -174,6 +174,24 @@ fn renaming_an_open_dirty_file_keeps_the_editor() {
     assert!(!draft.exists());
     assert!(listed(&app, "final.md ●"), "tab renamed and still dirty");
     assert_eq!(active_text(&app), "unsaved text");
+    let core = &mut app.harness.state_mut().core;
+    let doc = core.workbench.active_document().unwrap();
+    let path = core
+        .workspace
+        .as_ref()
+        .unwrap()
+        .tree
+        .selected
+        .clone()
+        .unwrap();
+    assert_eq!(std::fs::read_to_string(&path).unwrap(), "text");
+    core.open_path(&path, Default::default());
+    common::settle(&mut app);
+    assert_eq!(
+        app.harness.state().core.workbench.active_document(),
+        Some(doc)
+    );
+    assert_eq!(active_text(&app), "unsaved text");
 }
 
 #[test]
@@ -194,6 +212,74 @@ fn explorer_undo_reverts_a_rename() {
     common::run(&mut app, "explorer.undo", Value::Null);
     common::settle(&mut app);
     assert!(a.exists() && !root.join("b.md").exists());
+}
+
+#[test]
+fn renamed_and_moved_folder_keeps_open_files_and_refreshes_explorer() {
+    let (_d, root) = folder();
+    let file = write(&root, "issues/nested/bugs.md", "original");
+    std::fs::create_dir(root.join("archive")).unwrap();
+    let mut app = open_ws(&ScriptedDialogs::default(), &root, vec![file]);
+    let doc = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .active_document()
+        .unwrap();
+    common::run(&mut app, "editor.type", json!({ "text": "unsaved " }));
+    let text = active_text(&app);
+    common::run(
+        &mut app,
+        "explorer.rename",
+        json!({ "path": root.join("issues") }),
+    );
+    app.harness.state_mut().core.set_edit_text("fixed".into());
+    app.harness.state_mut().core.commit_edit();
+    common::settle(&mut app);
+    assert!(listed(&app, "fixed"));
+    assert!(!listed(&app, "issues"));
+
+    app.harness.state_mut().core.transfer_into(
+        vec![root.join("fixed")],
+        root.join("archive"),
+        false,
+    );
+    common::settle(&mut app);
+    let target = root.join("archive/fixed/nested/bugs.md");
+    {
+        let core = &mut app.harness.state_mut().core;
+        core.reveal_in_explorer(&target, true);
+    }
+    common::settle(&mut app);
+    {
+        let core = &mut app.harness.state_mut().core;
+        let d = core.workbench.document(doc).unwrap();
+        assert_eq!(d.path().unwrap().as_os_str(), target.as_os_str());
+        assert!(d.is_dirty());
+        assert_eq!(d.buffer.text(), text);
+        let row = core
+            .workspace
+            .as_ref()
+            .unwrap()
+            .tree
+            .rows(&Default::default())
+            .into_iter()
+            .find(|r| r.name == "bugs.md")
+            .expect("file visible in moved folder");
+        assert_eq!(std::fs::read_to_string(&row.path).unwrap(), "original");
+        core.open_path(&row.path, Default::default());
+    }
+    common::settle(&mut app);
+    assert_eq!(
+        app.harness.state().core.workbench.active_document(),
+        Some(doc)
+    );
+    common::run(&mut app, "file.save", Value::Null);
+    common::settle(&mut app);
+    assert_eq!(std::fs::read_to_string(&target).unwrap(), text);
+    assert!(!root.join("issues").exists());
+    assert!(!root.join("fixed").exists());
 }
 
 // spec 07: "Delete moves to trash and keeps open buffer"
