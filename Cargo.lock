@@ -2420,9 +2420,9 @@ dependencies = [
 
 [[package]]
 name = "libz-sys"
-version = "1.1.31"
+version = "1.1.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff20308ecabd635a2dc1dd5834a86c462cca20efba1d5d3ddab1f8aea3455cb2"
+checksum = "fee3f59f4321dab0c78d828942e7aa09d0bd8ad6e78a501977e6bf3d02938045"
 dependencies = [
  "cc",
  "libc",
@@ -2758,7 +2758,7 @@ dependencies = [
 
 [[package]]
 name = "notoir"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "arboard",
  "base64",
@@ -2800,7 +2800,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-core"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "notoir-editor",
  "proptest",
@@ -2812,7 +2812,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-editor"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "chardetng",
  "encoding_rs",
@@ -2832,7 +2832,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-git"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "git2",
  "tempfile",
@@ -2842,7 +2842,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-mcp"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "axum",
  "getrandom 0.4.3",
@@ -2859,7 +2859,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-platform"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "base64",
  "cc",
@@ -2888,7 +2888,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-plugins"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "arboard",
  "globset",
@@ -2905,7 +2905,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-storage"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "notoir-core",
  "rusqlite",
@@ -2922,7 +2922,7 @@ dependencies = [
 
 [[package]]
 name = "notoir-workspace"
-version = "0.1.13"
+version = "0.1.14"
 dependencies = [
  "encoding_rs",
  "globset",
@@ -4502,7 +4502,7 @@ dependencies = [
 
 [[package]]
 name = "spec-check"
-version = "0.1.13"
+version = "0.1.14"
 
 [[package]]
 name = "spirv"
@@ -6356,9 +6356,9 @@ checksum = "e13084392c5e4bc371903e2935a5eaeed24905a7511356b883835e18a78f6879"
 
 [[package]]
 name = "zip"
-version = "9.0.3"
+version = "9.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2d98561b612a84ae525331a7a094429ef8a5772514ed507ff6db5f54badc971"
+checksum = "6e04976da629d3b04204ba8105b396a193af8ad2583b2c79bfb3ab8af580a11e"
 dependencies = [
  "crc32fast",
  "flate2",

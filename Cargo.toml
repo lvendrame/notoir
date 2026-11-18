@@ -3,7 +3,7 @@ members = ["crates/*", "apps/*", "tools/*"]
 resolver = "3"
 
 [workspace.package]
-version = "0.1.13"
+version = "0.1.14"
 edition = "2024"
 rust-version = "1.97"
 publish = false
@@ -70,7 +70,7 @@ trash = "5.2.9"
 ureq = { version = "3.4.2", default-features = false, features = ["rustls"] }
 minisign-verify = "0.3.0"
 semver = "1.0.28"
-zip = { version = "9.0.3", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+zip = { version = "9.0.5", default-features = false, features = ["deflate-flate2-zlib-rs"] }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
