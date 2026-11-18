@@ -18,6 +18,7 @@ pub mod find_widget;
 pub mod git_peek;
 pub mod json_tree;
 pub mod layout;
+pub mod markdown_insert;
 pub mod mcp_ui;
 pub mod md_preview;
 pub mod notes_ui;

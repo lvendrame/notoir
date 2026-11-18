@@ -20,6 +20,7 @@ pub mod language;
 pub mod line_ending;
 pub mod line_ops;
 pub mod markdown;
+pub mod markdown_edit;
 pub mod motion;
 pub mod multi_cursor;
 pub mod natural;

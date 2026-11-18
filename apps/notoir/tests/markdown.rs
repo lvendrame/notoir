@@ -133,14 +133,14 @@ fn remote_images_are_placeholders() {
 #[test]
 fn local_images_load_in_the_background() {
     let dir = tempfile::tempdir().unwrap();
-    let png = dir.path().join("dot.png");
+    let png = dir.path().join("dot #%25(1).png");
     image::RgbaImage::from_pixel(4, 3, image::Rgba([255, 0, 0, 255]))
         .save(&png)
         .unwrap();
     let mut app = open(vec![write(
         dir.path(),
         "img.md",
-        "![dot](dot.png) and ![gone](missing.png)\n",
+        "![dot](dot%20%23%2525%281%29.png) and ![gone](missing.png)\n",
     )]);
     common::run(&mut app, "markdown.showPreview", Value::Null);
     common::settle(&mut app);
@@ -435,4 +435,662 @@ fn narrow_preview_scrolls_sideways_instead_of_squeezing() {
     app.harness.run_steps(30);
     let after = app.harness.get_by_label("Narrow").rect();
     assert!(after.left() < before.left(), "{before:?} → {after:?}");
+}
+
+fn select_md(app: &mut common::TestApp, a: usize, b: usize) {
+    let core = &mut app.harness.state_mut().core;
+    let view = core.workbench.active_view().unwrap();
+    core.workbench
+        .set_selection(
+            view,
+            notoir_editor::Selection::single(notoir_editor::Range::new(a, b)),
+        )
+        .unwrap();
+    app.harness.run_steps(2);
+}
+
+// spec 24: "Insert Markdown blocks as undoable edits"
+#[test]
+fn insert_blocks_and_undo() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![write(dir.path(), "a.md", "café\nnext\n")]);
+    for (args, expected) in [
+        (json!({"kind":"heading","level":3}), "### café\n### next\n"),
+        (json!({"kind":"quote"}), "> café\n> next\n"),
+        (json!({"kind":"bullet"}), "- café\n- next\n"),
+        (json!({"kind":"numbered"}), "1. café\n2. next\n"),
+        (json!({"kind":"task"}), "- [ ] café\n- [ ] next\n"),
+        (
+            json!({"kind":"code","language":"typescript"}),
+            "```typescript\ncafé\nnext\n```\n\n",
+        ),
+        (
+            json!({"kind":"code","language":"shellscript"}),
+            "```sh\ncafé\nnext\n```\n\n",
+        ),
+    ] {
+        select_md(&mut app, 0, 10);
+        common::run(&mut app, "markdown.insertBlock", args);
+        assert_eq!(text(&app), expected);
+        common::run(&mut app, "edit.undo", Value::Null);
+        assert_eq!(text(&app), "café\nnext\n");
+        common::run(&mut app, "edit.redo", Value::Null);
+        assert_eq!(text(&app), expected);
+        common::run(&mut app, "edit.undo", Value::Null);
+    }
+}
+
+// spec 24: "Insert link through a dialog"
+#[test]
+fn link_dialog_confirm_cancel_and_undo() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![write(dir.path(), "a.md", "café")]);
+    select_md(&mut app, 0, 4);
+    common::run(&mut app, "markdown.insertLink", Value::Null);
+    assert_eq!(text(&app), "café");
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .markdown
+            .insert_dialog
+            .as_ref()
+            .unwrap()
+            .caption,
+        "café"
+    );
+    app.harness.key_press(Key::Escape);
+    app.harness.run_steps(3);
+    assert!(app.harness.state().core.markdown.insert_dialog.is_none());
+    assert_eq!(text(&app), "café");
+    common::run(&mut app, "markdown.insertLink", Value::Null);
+    app.harness
+        .state_mut()
+        .core
+        .markdown
+        .insert_dialog
+        .as_mut()
+        .unwrap()
+        .destination = "https://example.com/a(b)".into();
+    app.harness.run_steps(2);
+    app.harness
+        .get_by_role_and_label(Role::Button, "Insert")
+        .click();
+    app.harness.run_steps(4);
+    assert_eq!(text(&app), "[café](https://example.com/a%28b%29)");
+    common::run(&mut app, "edit.undo", Value::Null);
+    assert_eq!(text(&app), "café");
+}
+
+// spec 24: "Complete workspace files in link destinations"
+#[test]
+fn workspace_link_completion_keyboard_and_relative_path() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::create_dir_all(dir.path().join("docs")).unwrap();
+    let source = write(dir.path(), "docs/source.md", "caption");
+    write(dir.path(), "target #1.md", "# Target");
+    write(dir.path(), "other.txt", "other");
+    let mut app = open(vec![dir.path().to_owned(), source]);
+    for _ in 0..100 {
+        if app
+            .harness
+            .state()
+            .core
+            .workspace
+            .as_ref()
+            .is_some_and(|w| w.index_ready)
+        {
+            break;
+        }
+        common::settle(&mut app);
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    select_md(&mut app, 0, 7);
+    common::run(&mut app, "markdown.insertLink", Value::Null);
+    app.harness
+        .get_by_role_and_label(Role::TextInput, "URL or file")
+        .click();
+    app.harness.event(Event::Text("@target".into()));
+    app.harness.run_steps(3);
+    assert!(
+        app.harness
+            .query_all_by_label("target #1.md")
+            .next()
+            .is_some()
+    );
+    app.harness.key_press(Key::Enter);
+    app.harness.run_steps(3);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .markdown
+            .insert_dialog
+            .as_ref()
+            .unwrap()
+            .destination,
+        "../target %231.md"
+    );
+    assert_eq!(text(&app), "caption", "choosing a file does not submit");
+    app.harness.key_press(Key::Enter);
+    app.harness.run_steps(4);
+    assert_eq!(text(&app), "[caption](../target%20%231.md)");
+    let source = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .active_document()
+        .unwrap();
+    common::run(
+        &mut app,
+        "markdown.openLink",
+        json!({"doc": source.0, "url":"../target%20%231.md"}),
+    );
+    common::settle(&mut app);
+    assert_eq!(text(&app), "# Target");
+}
+
+// spec 24: "Reject a stale Markdown insertion dialog"
+#[test]
+fn stale_link_dialog_does_not_edit_document() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![write(dir.path(), "a.md", "hello")]);
+    common::run(&mut app, "markdown.insertLink", Value::Null);
+    app.harness
+        .state_mut()
+        .core
+        .markdown
+        .insert_dialog
+        .as_mut()
+        .unwrap()
+        .destination = "https://example.com".into();
+    common::run(
+        &mut app,
+        "markdown.insertBlock",
+        json!({"kind":"heading","level":1}),
+    );
+    let before = text(&app);
+    common::run(&mut app, "markdown.confirmInsert", Value::Null);
+    assert_eq!(text(&app), before);
+    assert!(
+        app.harness
+            .state()
+            .core
+            .markdown
+            .insert_dialog
+            .as_ref()
+            .unwrap()
+            .error
+    );
+    assert!(
+        app.harness
+            .query_by_label(
+                "The original document changed or is no longer editable. Cancel and try again."
+            )
+            .is_some()
+    );
+}
+
+#[test]
+fn image_and_language_picker() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![write(dir.path(), "a.md", "")]);
+    common::run(&mut app, "markdown.insertImage", Value::Null);
+    let d = app
+        .harness
+        .state_mut()
+        .core
+        .markdown
+        .insert_dialog
+        .as_mut()
+        .unwrap();
+    d.destination = "image.png".into();
+    common::run(&mut app, "markdown.confirmInsert", Value::Null);
+    assert_eq!(text(&app), "![](image.png)");
+    common::run(&mut app, "edit.undo", Value::Null);
+    common::run(&mut app, "markdown.insertCodePicker", Value::Null);
+    app.harness.event(Event::Text("Python".into()));
+    app.harness.run_steps(3);
+    app.harness.key_press(Key::Enter);
+    app.harness.run_steps(4);
+    assert_eq!(text(&app), "```python\n\n```\n\n");
+}
+
+#[test]
+fn markdown_actions_target_view_and_respect_read_only() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![
+        write(dir.path(), "a.md", "a"),
+        write(dir.path(), "b.md", "b"),
+    ]);
+    let core = &mut app.harness.state_mut().core;
+    let target = core
+        .workbench
+        .views
+        .iter()
+        .find(|v| {
+            core.workbench
+                .document(v.document_id)
+                .unwrap()
+                .buffer
+                .text()
+                == "a"
+        })
+        .unwrap()
+        .id;
+    let doc = core.workbench.view(target).unwrap().document_id;
+    common::run(
+        &mut app,
+        "markdown.insertBlock",
+        json!({"view":target.0,"kind":"quote"}),
+    );
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .document(doc)
+            .unwrap()
+            .buffer
+            .text(),
+        "> a"
+    );
+    assert_eq!(text(&app), "b");
+    app.harness
+        .state_mut()
+        .core
+        .workbench
+        .document_mut(doc)
+        .unwrap()
+        .read_only = notoir_core::document::ReadOnly::User;
+    common::run(
+        &mut app,
+        "markdown.insertBlock",
+        json!({"view":target.0,"kind":"quote"}),
+    );
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .document(doc)
+            .unwrap()
+            .buffer
+            .text(),
+        "> a"
+    );
+}
+
+fn md_right_click(app: &mut common::TestApp, point: egui::Pos2) {
+    app.harness.hover_at(point);
+    app.harness.run_steps(1);
+    for pressed in [true, false] {
+        app.harness.event(Event::PointerButton {
+            pos: point,
+            button: egui::PointerButton::Secondary,
+            pressed,
+            modifiers: Modifiers::NONE,
+        });
+    }
+    app.harness.run_steps(3);
+}
+
+// spec 18: "Markdown Insert context menu"
+#[test]
+fn markdown_context_insert_menu() {
+    use egui_kittest::kittest::NodeT;
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![write(dir.path(), "a.md", "hello world")]);
+    select_md(&mut app, 0, 0);
+    let v = app.harness.state().core.workbench.active_view().unwrap();
+    let point = app
+        .harness
+        .state()
+        .ui
+        .editors
+        .caret_rect(v)
+        .unwrap()
+        .center();
+    select_md(&mut app, 0, 5);
+    md_right_click(&mut app, point + egui::vec2(8.0, 0.0));
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .view(v)
+            .unwrap()
+            .selection
+            .primary(),
+        notoir_editor::Range::new(0, 5)
+    );
+    app.harness.get_by_label_contains("Insert").hover();
+    app.harness.run_steps(3);
+    assert!(app.harness.query_by_label_contains("Link…").is_some());
+    assert!(app.harness.query_by_label_contains("Quote").is_some());
+    app.harness.get_by_label_contains("Heading").hover();
+    app.harness.run_steps(3);
+    for level in 1..=6 {
+        assert!(
+            app.harness
+                .query_by_label_contains(&format!("H{level}"))
+                .is_some()
+        );
+    }
+    assert!(app.harness.query_by_label_contains("H7").is_none());
+    app.harness.get_by_label_contains("H2").click();
+    app.harness.run_steps(4);
+    assert_eq!(text(&app), "## hello world");
+    // Read-only Markdown retains the menu with disabled insertions.
+    let core = &mut app.harness.state_mut().core;
+    let doc = core.workbench.active_document().unwrap();
+    core.workbench.document_mut(doc).unwrap().read_only = notoir_core::document::ReadOnly::User;
+    md_right_click(&mut app, point);
+    app.harness.get_by_label_contains("Insert").hover();
+    app.harness.run_steps(3);
+    assert!(
+        app.harness
+            .get_by_label_contains("Link…")
+            .accesskit_node()
+            .is_disabled()
+    );
+    app.harness.key_press(Key::Escape);
+    app.harness.run_steps(3);
+    common::run(
+        &mut app,
+        "editor.changeLanguageMode",
+        json!({"language":"plaintext"}),
+    );
+    md_right_click(&mut app, point);
+    assert!(app.harness.query_by_label_contains("Insert").is_none());
+}
+
+#[test]
+fn markdown_right_click_outside_selection_moves_caret() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![write(dir.path(), "a.md", "hello world")]);
+    select_md(&mut app, 8, 8);
+    let v = app.harness.state().core.workbench.active_view().unwrap();
+    let point = app
+        .harness
+        .state()
+        .ui
+        .editors
+        .caret_rect(v)
+        .unwrap()
+        .center();
+    select_md(&mut app, 0, 5);
+    md_right_click(&mut app, point);
+    let range = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .view(v)
+        .unwrap()
+        .selection
+        .primary();
+    assert!(range.is_empty());
+    assert!((7..=9).contains(&range.head));
+    app.harness.get_by_label_contains("Insert").hover();
+    app.harness.run_steps(3);
+    app.harness.get_by_label_contains("Quote").click();
+    app.harness.run_steps(4);
+    assert_eq!(text(&app), "> hello world");
+}
+
+#[test]
+fn unsaved_file_links_and_completion_empty_states() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![]);
+    common::run(&mut app, "file.newUntitled", Value::Null);
+    common::run(
+        &mut app,
+        "editor.changeLanguageMode",
+        json!({"language":"markdown"}),
+    );
+    common::run(&mut app, "markdown.insertLink", Value::Null);
+    app.harness
+        .state_mut()
+        .core
+        .markdown
+        .insert_dialog
+        .as_mut()
+        .unwrap()
+        .destination = "@".into();
+    app.harness.run_steps(3);
+    assert!(
+        app.harness
+            .query_by_label("Open a workspace to search files.")
+            .is_some()
+    );
+    assert!(
+        app.harness
+            .state()
+            .core
+            .md_file_candidates("", false)
+            .is_empty()
+    );
+    app.harness.key_press(Key::Escape);
+    app.harness.run_steps(3);
+    let file = write(dir.path(), "target.md", "target");
+    app.harness.state_mut().core.open_workspace(dir.path());
+    for _ in 0..100 {
+        common::settle(&mut app);
+        if app
+            .harness
+            .state()
+            .core
+            .workspace
+            .as_ref()
+            .is_some_and(|w| w.index_ready)
+        {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    common::run(&mut app, "markdown.insertLink", Value::Null);
+    app.harness.state_mut().core.choose_md_file("target.md");
+    let dialog = app
+        .harness
+        .state()
+        .core
+        .markdown
+        .insert_dialog
+        .as_ref()
+        .unwrap();
+    assert_eq!(dialog.destination, "target.md");
+    assert_eq!(dialog.caption, "target.md");
+    common::run(&mut app, "markdown.confirmInsert", Value::Null);
+    assert_eq!(text(&app), "[target.md](target.md)");
+    assert!(file.exists());
+}
+
+#[test]
+fn dialog_refuses_language_readonly_and_closed_target() {
+    use notoir_core::document::ReadOnly;
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![write(dir.path(), "a.md", "hello")]);
+    for reason in ["language", "readonly", "closed"] {
+        common::run(&mut app, "markdown.insertLink", Value::Null);
+        let core = &mut app.harness.state_mut().core;
+        let dialog = core.markdown.insert_dialog.as_mut().unwrap();
+        dialog.destination = "https://example.com".into();
+        let (view, doc) = (dialog.view, dialog.document);
+        match reason {
+            "language" => {
+                core.workbench.document_mut(doc).unwrap().language =
+                    notoir_editor::LanguageId::PLAINTEXT
+            }
+            "readonly" => core.workbench.document_mut(doc).unwrap().read_only = ReadOnly::User,
+            _ => {
+                core.workbench.close_view(view, true).unwrap();
+            }
+        }
+        core.confirm_md_insert(None);
+        assert!(core.markdown.insert_dialog.as_ref().unwrap().error);
+        if let Some(d) = core.workbench.document_mut(doc) {
+            assert_eq!(d.buffer.text(), "hello");
+            d.language = notoir_editor::LanguageId::MARKDOWN;
+            d.read_only = ReadOnly::No;
+        }
+        core.markdown.insert_dialog = None;
+    }
+}
+
+// spec 24: "Filename matches rank ahead of fuzzy path matches"
+#[test]
+fn filename_search_prioritizes_exact_names_in_link_and_image_dialogs() {
+    use notoir_core::explorer::{IndexEntry, NodeKind};
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![
+        dir.path().to_owned(),
+        write(dir.path(), "notes.md", ""),
+    ]);
+    common::settle(&mut app);
+    let core = &mut app.harness.state_mut().core;
+    let mut entries: Vec<_> = (0..300)
+        .map(|i| IndexEntry {
+            rel: format!("src/{i}/application_results.rs"),
+            kind: NodeKind::File,
+            hidden: false,
+            ignored: false,
+        })
+        .collect();
+    for path in [
+        "apps/notoir/src/app.rs",
+        "assets/app.png",
+        "assets/application.png",
+        "assets/app.png.rs",
+    ] {
+        entries.push(IndexEntry {
+            rel: path.into(),
+            kind: NodeKind::File,
+            hidden: false,
+            ignored: false,
+        });
+    }
+    core.workspace.as_mut().unwrap().index = std::sync::Arc::new(entries);
+    core.workspace.as_mut().unwrap().index_ready = true;
+    common::run(&mut app, "markdown.insertLink", Value::Null);
+    app.harness
+        .get_by_role_and_label(Role::TextInput, "URL or file")
+        .click();
+    app.harness.event(Event::Text("@app.rs".into()));
+    app.harness.run_steps(3);
+    assert!(
+        app.harness
+            .query_by_label("apps/notoir/src/app.rs")
+            .is_some()
+    );
+    app.harness.key_press(Key::Enter);
+    app.harness.run_steps(3);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .markdown
+            .insert_dialog
+            .as_ref()
+            .unwrap()
+            .destination,
+        "apps/notoir/src/app.rs"
+    );
+    app.harness.key_press(Key::Escape);
+    app.harness.run_steps(3);
+    common::run(&mut app, "markdown.insertImage", Value::Null);
+    app.harness
+        .get_by_role_and_label(Role::TextInput, "URL or file")
+        .click();
+    app.harness.event(Event::Text("@app".into()));
+    app.harness.run_steps(3);
+    assert!(app.harness.query_by_label("assets/app.png").is_some());
+    assert!(
+        app.harness
+            .query_by_label("apps/notoir/src/app.rs")
+            .is_none()
+    );
+    assert!(app.harness.query_by_label("assets/app.png.rs").is_none());
+    app.harness.key_press(Key::Enter);
+    app.harness.run_steps(3);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .markdown
+            .insert_dialog
+            .as_ref()
+            .unwrap()
+            .destination,
+        "assets/app.png"
+    );
+}
+
+// spec 24: "Choose table dimensions before insertion"
+#[test]
+fn table_dialog_dimensions_cancel_and_undo() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut app = open(vec![write(dir.path(), "a.md", "")]);
+    common::run(&mut app, "markdown.insertBlock", json!({"kind":"table"}));
+    assert_eq!(text(&app), "");
+    assert!(
+        app.harness
+            .query_by_role_and_label(Role::SpinButton, "Columns")
+            .is_some()
+    );
+    assert!(
+        app.harness
+            .query_by_role_and_label(Role::SpinButton, "Data rows")
+            .is_some()
+    );
+    app.harness
+        .get_by_role_and_label(Role::Button, "Cancel")
+        .click();
+    app.harness.run_steps(3);
+    assert!(app.harness.state().core.markdown.insert_dialog.is_none());
+    assert_eq!(text(&app), "");
+    common::run(&mut app, "markdown.insertBlock", json!({"kind":"table"}));
+    app.harness
+        .get_by_role_and_label(Role::SpinButton, "Columns")
+        .click();
+    app.harness.run_steps(2);
+    app.harness.key_press_modifiers(ctrl(), Key::A);
+    app.harness.event(Event::Text("3".into()));
+    app.harness.key_press(Key::Tab);
+    app.harness.run_steps(3);
+    app.harness
+        .get_by_role_and_label(Role::SpinButton, "Data rows")
+        .click();
+    app.harness.run_steps(2);
+    app.harness.key_press_modifiers(ctrl(), Key::A);
+    app.harness.event(Event::Text("4".into()));
+    app.harness.key_press(Key::Tab);
+    app.harness.run_steps(3);
+    let draft = app
+        .harness
+        .state()
+        .core
+        .markdown
+        .insert_dialog
+        .as_ref()
+        .unwrap();
+    assert_eq!((draft.columns, draft.rows), (3, 4));
+    assert_eq!(text(&app), "");
+    app.harness
+        .get_by_role_and_label(Role::Button, "Insert")
+        .click();
+    app.harness.run_steps(4);
+    let parsed = notoir_editor::markdown::parse(&text(&app));
+    let notoir_editor::markdown::BlockKind::Table { header, rows, .. } = &parsed.blocks[0].kind
+    else {
+        panic!("expected a Markdown table");
+    };
+    assert_eq!(header.len(), 3);
+    assert_eq!(rows.len(), 4);
+    assert!(rows.iter().all(|row| row.len() == 3));
+    common::run(&mut app, "edit.undo", Value::Null);
+    assert_eq!(text(&app), "");
+    common::run(&mut app, "edit.redo", Value::Null);
+    assert!(text(&app).contains("| --- | --- | --- |"));
 }

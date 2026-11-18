@@ -201,3 +201,19 @@ Feature: Explorer
 ## Application and window ownership (spec 40)
 
 The host deduplicates canonical workspace identities across windows, including explicit new-window requests. Opening an owned workspace activates its owner. New workspace ownership is updated on replacement and closure. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.
+
+### Index capacity
+
+The background index records non-ignored entries before ignored entries within its 200,000-entry cap.
+Large ignored build directories must not displace source files when the non-ignored workspace fits within the cap.
+
+```gherkin
+Feature: Workspace index capacity
+  Scenario: Source files remain indexed when ignored artifacts exceed the limit
+    Given a workspace whose non-ignored files fit within the index limit
+    And ignored build artifacts exceed the remaining capacity
+    When the workspace index is built
+    Then the source files are indexed and marked non-ignored
+    And the index reports truncation at its entry limit
+    And ignored entries follow the non-ignored entries
+```

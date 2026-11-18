@@ -58,6 +58,18 @@ Clicking a link in the preview:
 
 Pasting a URL over selected text turns the selection into a link. `Enter` continues lists and task lists.
 
+Right-click in Markdown text and open **Insert** for headings (H1–H6), code blocks, quotes, formatting,
+lists, images, tables, and horizontal rules. Select text first to format it; each insertion can be undone.
+The Code submenu includes common languages, with **More…** for a searchable language list.
+
+**Insert › Link…** opens a caption and destination dialog. Type `@` at the start of the destination to
+search workspace files. Exact filenames and filename stems appear before partial and fuzzy matches.
+Use the arrow keys and Enter, or click a result, to fill a relative file path, then confirm to insert the link.
+**Image…** works the same way, using alternative text instead of a caption and listing only supported image files.
+Cancel or Escape closes either dialog without changing the document.
+
+**Insert › Table** asks for the number of columns and data rows (1–100 each). A header row is added automatically.
+
 ## Export as HTML
 
 **File › Export as HTML…** saves the document as a standalone web page with a light, dark and print stylesheet built

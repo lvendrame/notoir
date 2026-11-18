@@ -247,7 +247,12 @@
     "toggleTask": "Alternar Tarefa",
     "openLink": "Abrir Link",
     "revealSource": "Revelar Fonte",
-    "exportHtml": "Exportar como HTML…"
+    "exportHtml": "Exportar como HTML…",
+    "toggleStrikethrough": "Tachado",
+    "insertBlock": "Inserir — Citação",
+    "insertImage": "Imagem…",
+    "insertCodePicker": "Código…",
+    "confirmInsert": "Inserir"
   },
   "json": {
     "showText": "Mostrar Texto",

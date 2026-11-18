@@ -2633,6 +2633,16 @@ fn scm_conflicted_files_use_editable_preview() {
         "git.openChange",
         json!({"path": "notes.md", "preview": true}),
     );
+    assert!(
+        wait_for(&mut app, |a| {
+            let core = &a.harness.state().core;
+            core.workbench
+                .active_document()
+                .and_then(|id| core.workbench.document(id))
+                .is_some_and(|doc| doc.path() == Some(root.join("notes.md").as_path()))
+        }),
+        "conflicted file did not finish opening"
+    );
     let core = &app.harness.state().core;
     let tab = core.workbench.layout.active().active.unwrap();
     assert!(core.workbench.view(tab).unwrap().preview);

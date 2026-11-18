@@ -134,3 +134,23 @@ refuses to replace an existing workflow. Save As cancellation is also covered by
 Spec 41 — In progress: File → Print… / `file.print`, source and selection snapshots, native system dialogs
 and scripted adapter coverage. Native printer/PDF acceptance on Windows, macOS and Linux remains pending.
 `Mod+P` stays Quick Open; rendered printing and a dedicated PDF exporter are deferred.
+
+## Markdown insertion follow-up
+
+Spec 24: Insert context submenu for Markdown Edit/Split, H1–H6, common inline/block syntax, safe code fences,
+link/image dialogs with indexed @ workspace-file completion, relative paths, stale-target checks and undo/redo.
+Menu actions target the clicked view; Markdown right-click outside a selection moves the caret. Specs 18/37
+record menu visibility and selection behavior. All 14 locales include the new UI labels.
+
+Validation: workspace tests, workspace Clippy with warnings denied, formatting and spec coverage checks pass.
+Markdown menu/link/code snapshots were reviewed in all three built-in themes and saved in `docs/design/`.
+
+Markdown insertion refinements: non-ignored workspace entries are indexed before ignored build trees so the index
+cap cannot hide source files; exact filenames rank before partial/fuzzy matches. Image completion filters to PNG,
+JPG/JPEG, GIF, WebP and SVG. Table insertion opens a columns/data-rows dialog with an automatic header and one-step undo.
+
+Follow-up validation: the real Notoir workspace index includes `apps/notoir/src/app.rs`; focused ranking, image
+filtering and table-dialog tests pass. Formatting, workspace Clippy and the serial workspace suite pass
+(858 tests, 6 ignored). The parallel run exposed Git test timing failures; the conflicted-file preview
+test now awaits file-open completion, and both sync cases pass independently and in the serial suite.
+Table dialog snapshots in all three themes are saved in `docs/design/`.

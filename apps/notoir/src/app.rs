@@ -665,6 +665,7 @@ impl eframe::App for NotoirApp {
                 icons: &mut self.icons,
             };
             shell::overlays::goto_line(&ctx, &mut kit, &mut self.core, top_offset);
+            shell::markdown_insert::show(&ctx, &mut kit, &mut self.core, &mut actions);
         }
 
         // Mouse back/forward buttons (spec 15).

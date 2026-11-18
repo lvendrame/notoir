@@ -247,7 +247,12 @@
     "toggleTask": "Переключить задачу",
     "openLink": "Открыть ссылку",
     "revealSource": "Показать исходный текст",
-    "exportHtml": "Экспорт в HTML…"
+    "exportHtml": "Экспорт в HTML…",
+    "toggleStrikethrough": "Зачёркнутый",
+    "insertBlock": "Вставить — Цитата",
+    "insertImage": "Изображение…",
+    "insertCodePicker": "Код…",
+    "confirmInsert": "Вставить"
   },
   "json": {
     "showText": "Показать текст",

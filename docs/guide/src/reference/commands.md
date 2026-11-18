@@ -343,12 +343,16 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 
 | Command | Id | macOS | Windows / Linux |
 |---|---|---|---|
+| Code… | `markdown.insertCodePicker` |  |  |
 | Complete Link *(hidden)* | `notes.complete` |  |  |
 | Export as HTML… | `markdown.exportHtml` |  |  |
 | Filter by Tag *(hidden)* | `notes.filterTag` |  |  |
 | Find Unlinked Mentions *(hidden)* | `notes.findUnlinked` |  |  |
 | Follow Link | `notes.followLink` | `⌥↩` | `Alt+Enter` |
+| Image… | `markdown.insertImage` |  |  |
+| Insert *(hidden)* | `markdown.confirmInsert` |  |  |
 | Insert Link | `markdown.insertLink` |  |  |
+| Insert — Quote | `markdown.insertBlock` |  |  |
 | Open Link *(hidden)* | `markdown.openLink` |  |  |
 | Open Note *(hidden)* | `notes.pick` |  |  |
 | Open Note at Line *(hidden)* | `notes.openLine` |  |  |
@@ -361,6 +365,7 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Show Notes with Tag *(hidden)* | `notes.pickTag` |  |  |
 | Show Preview | `markdown.showPreview` |  |  |
 | Show Tags | `notes.showTags` |  |  |
+| Strikethrough | `markdown.toggleStrikethrough` |  |  |
 | Toggle Bold | `markdown.toggleBold` | `⌘B` | `Ctrl+B` |
 | Toggle Inline Code | `markdown.toggleCode` |  |  |
 | Toggle Italic | `markdown.toggleItalic` | `⌘I` | `Ctrl+I` |

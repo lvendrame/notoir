@@ -1023,3 +1023,102 @@ fn theme_manager_snapshots() {
             .unwrap();
     }
 }
+
+#[test]
+fn markdown_insert_snapshots() {
+    use egui_kittest::kittest::Queryable;
+    for theme in ThemeId::ALL {
+        let mut app = common::start(common::with_language(Language::En, theme));
+        common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
+        common::run(
+            &mut app,
+            "editor.changeLanguageMode",
+            serde_json::json!({"language":"markdown"}),
+        );
+        app.harness.event(egui::Event::Paste(
+            "# Release notes\n\nWrite something worth sharing.\n".into(),
+        ));
+        app.harness.run_steps(3);
+        common::run(&mut app, "markdown.insertLink", serde_json::Value::Null);
+        let d = app
+            .harness
+            .state_mut()
+            .core
+            .markdown
+            .insert_dialog
+            .as_mut()
+            .unwrap();
+        d.caption = "Project documentation".into();
+        d.destination = "https://example.com/docs".into();
+        app.harness.run_steps(3);
+        if let Ok(image) = app.harness.render() {
+            image
+                .save(out_dir().join(format!("markdown-insert-link-{}.png", theme.id())))
+                .unwrap();
+        }
+        app.harness.key_press(egui::Key::Escape);
+        app.harness.run_steps(3);
+        common::run(
+            &mut app,
+            "markdown.insertCodePicker",
+            serde_json::Value::Null,
+        );
+        if let Ok(image) = app.harness.render() {
+            image
+                .save(out_dir().join(format!("markdown-insert-code-{}.png", theme.id())))
+                .unwrap();
+        }
+        app.harness.key_press(egui::Key::Escape);
+        app.harness.run_steps(3);
+        common::run(
+            &mut app,
+            "markdown.insertBlock",
+            serde_json::json!({"kind":"table"}),
+        );
+        let d = app
+            .harness
+            .state_mut()
+            .core
+            .markdown
+            .insert_dialog
+            .as_mut()
+            .unwrap();
+        d.columns = 3;
+        d.rows = 4;
+        app.harness.run_steps(3);
+        if let Ok(image) = app.harness.render() {
+            image
+                .save(out_dir().join(format!("markdown-insert-table-{}.png", theme.id())))
+                .unwrap();
+        }
+        app.harness.key_press(egui::Key::Escape);
+        app.harness.run_steps(3);
+        let view = app.harness.state().core.workbench.active_view().unwrap();
+        let point = app
+            .harness
+            .state()
+            .ui
+            .editors
+            .caret_rect(view)
+            .unwrap()
+            .center();
+        app.harness.hover_at(point);
+        app.harness.run_steps(1);
+        for pressed in [true, false] {
+            app.harness.event(egui::Event::PointerButton {
+                pos: point,
+                button: egui::PointerButton::Secondary,
+                pressed,
+                modifiers: egui::Modifiers::NONE,
+            });
+        }
+        app.harness.run_steps(3);
+        app.harness.get_by_label_contains("Insert").hover();
+        app.harness.run_steps(3);
+        if let Ok(image) = app.harness.render() {
+            image
+                .save(out_dir().join(format!("markdown-insert-menu-{}.png", theme.id())))
+                .unwrap();
+        }
+    }
+}

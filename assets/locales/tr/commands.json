@@ -247,7 +247,12 @@
     "toggleTask": "Görevi Aç/Kapat",
     "openLink": "Bağlantıyı Aç",
     "revealSource": "Kaynağı Göster",
-    "exportHtml": "HTML olarak dışa aktar…"
+    "exportHtml": "HTML olarak dışa aktar…",
+    "toggleStrikethrough": "Üstü çizili",
+    "insertBlock": "Ekle — Alıntı",
+    "insertImage": "Görsel…",
+    "insertCodePicker": "Kod…",
+    "confirmInsert": "Ekle"
   },
   "json": {
     "showText": "Metni Göster",

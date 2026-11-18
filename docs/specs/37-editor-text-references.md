@@ -1,6 +1,6 @@
 # 37 — Editor Text References
 
-**Status:** Done — right-click never moves the caret; Copy Full / Relative Reference in the editor context menu (`editor.copyFullReference`, `editor.copyRelativeReference`) with `hasFilePath` / `fileInWorkspace` enablement (M17a)
+**Status:** Done — right-click inside a selection preserves the caret and selection; Copy Full / Relative Reference in the editor context menu (`editor.copyFullReference`, `editor.copyRelativeReference`) with `hasFilePath` / `fileInWorkspace` enablement (M17a)
 
 ## Purpose
 
@@ -10,6 +10,7 @@ Define editor right-click behavior for selected text and copying references to f
 
 - Right-clicking inside an existing selection opens the editor context menu without moving the caret or changing,
   collapsing, or replacing the selection.
+- Outside a selection, Markdown right-click moves the caret to the clicked position for Insert actions (spec 24); other languages retain the existing caret.
 - When selected text belongs to a file-backed document, the context menu offers **Copy Full Reference** and
   **Copy Relative Reference**.
 - Both commands copy the file path followed by a one-based line reference. A selection wholly on line 45 produces

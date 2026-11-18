@@ -1,6 +1,6 @@
 # 24 — Markdown
 
-**Status:** Done — render tree with source ranges (`notoir-editor::markdown`: CommonMark + GFM tables, task lists, strikethrough, footnotes, heading attributes, front matter, slugs), Edit / Split / Preview per view (toolbar control, Mod+Shift+V, Mod+K V, `markdown.defaultMode`, draggable split with auto orientation), preview renderer (headings, inline styles, links, local images incl. SVG decoded off the UI thread, quotes, nested lists with clickable task boxes as undoable edits, tables with alignment, highlighted code blocks, rules, footnotes, collapsible front matter, escaped HTML), 100/250 ms debounced re-parse, two-way scroll sync, double-click to source, links (web/mail to the OS, relative files at `#anchor`, in-document anchors, other schemes confirmed), Mod+B / Mod+I / code / insert link, paste URL over selection (M13). Deviations: remote images show the placeholder but cannot be loaded yet (no HTTP client); no per-block layout cache; no Markdown Preview panel; parse runs on the UI thread for all sizes; editor Ctrl/Cmd+click on links later. M26: File → Export as HTML… (`markdown.exportHtml`): a standalone page (`notoir-editor::markdown::to_html` + `html_document`: the preview's extensions, front matter left out, raw HTML escaped, headings with the preview's slugs as ids, wiki links as links to `<Target>.html#heading`, title from the first heading or the file name, embedded light/dark/print stylesheet) written through the save writer on the IO thread; local images stay relative to the export location. Deviation: no PDF export (no PDF renderer bundled — the page prints to PDF from a browser); Mermaid and math not rendered
+**Status:** Done — render tree with source ranges (`notoir-editor::markdown`: CommonMark + GFM tables, task lists, strikethrough, footnotes, heading attributes, front matter, slugs), Edit / Split / Preview per view (toolbar control, Mod+Shift+V, Mod+K V, `markdown.defaultMode`, draggable split with auto orientation), preview renderer (headings, inline styles, links, local images incl. SVG decoded off the UI thread, quotes, nested lists with clickable task boxes as undoable edits, tables with alignment, highlighted code blocks, rules, footnotes, collapsible front matter, escaped HTML), 100/250 ms debounced re-parse, two-way scroll sync, double-click to source, links (web/mail to the OS, relative files at `#anchor`, in-document anchors, other schemes confirmed), Mod+B / Mod+I / code / insert link, paste URL over selection (M13); Markdown Insert context submenu with selection-aware blocks, link/image dialogs and workspace file completion. Deviations: remote images show the placeholder but cannot be loaded yet (no HTTP client); no per-block layout cache; no Markdown Preview panel; parse runs on the UI thread for all sizes; editor Ctrl/Cmd+click on links later. M26: File → Export as HTML… (`markdown.exportHtml`): a standalone page (`notoir-editor::markdown::to_html` + `html_document`: the preview's extensions, front matter left out, raw HTML escaped, headings with the preview's slugs as ids, wiki links as links to `<Target>.html#heading`, title from the first heading or the file name, embedded light/dark/print stylesheet) written through the save writer on the IO thread; local images stay relative to the export location. Deviation: no PDF export (no PDF renderer bundled — the page prints to PDF from a browser); Mermaid and math not rendered
 
 ## Purpose
 
@@ -82,6 +82,30 @@ block containing it (interpolated within the block); scrolling the preview maps 
 - Paste of a URL over a selection creates `[selection](url)`.
 - Outline and breadcrumbs from headings (spec 26); folding by heading (spec 12).
 
+### Insert context menu
+
+Markdown editor text (Edit mode or the editor side of Split) offers Insert: Link…, Heading (H1–H6),
+Code (General, JavaScript, TypeScript, Shell, Python, Rust, JSON, HTML, CSS, SQL, YAML, More…), Quote,
+Formatting (Bold, Italic, Strikethrough, Inline Code), List (Bulleted, Numbered, Task), Image…, Table,
+and Horizontal Rule. More… searches registered languages. General omits the fence language; Shell uses `sh`.
+Other languages and preview surfaces do not offer Insert. Read-only Markdown disables insertion commands.
+
+Actions target the clicked view and its primary selection. Right-click inside a selection preserves it;
+outside it, Markdown moves the caret to the clicked position. Inline formatting uses the selection or word
+at the caret. Headings replace an existing ATX prefix; quotes/lists prefix affected lines, excluding a final
+line selected only at its start. Empty actions create editable templates. Fenced code preserves selected
+content and uses a fence longer than embedded backtick runs. Block templates have separating blank lines;
+Table opens a dimensions dialog (1–100 columns and 1–100 data rows; defaults: two columns and one data row). A header row is added automatically; Cancel leaves the document unchanged. Each insertion is one undoable transaction.
+
+Link… opens Caption and URL or file fields, with selected text as the caption. Image… uses Alternative text
+and permits empty text. No buffer changes occur until confirmation. A destination is required. Empty link
+captions default to the chosen filename or destination. Escape/Cancel leave the buffer unchanged.
+A leading `@` in the destination searches indexed workspace files using fuzzy matching on their relative paths;
+exact filename and path matches rank first, followed by exact filename stems, filename prefixes, substrings and fuzzy matches. Mouse or arrows/Enter select a file without submitting the dialog. Image completion lists only supported image extensions (PNG, JPG/JPEG, GIF, WebP, SVG), case-insensitively. File destinations are relative to the source
+document's directory (workspace root for unsaved documents), with forward slashes and Markdown-safe encoding.
+Show no-workspace, indexing and no-results states. The captured view/document/revision must remain valid,
+Markdown, and editable at confirmation; otherwise reject insertion with a localized explanation.
+
 ## Test Cases
 
 ```gherkin
@@ -125,4 +149,65 @@ Feature: Scroll sync
     Given split mode on a long document
     When the editor scrolls to the "Roadmap" heading
     Then the preview shows the "Roadmap" heading at its top
+```
+
+```gherkin
+Feature: Markdown insertion
+
+  Scenario: Insert Markdown blocks as undoable edits
+    Given a Markdown document with selected lines
+    When a heading, quote, list or fenced code insertion is requested
+    Then the selected content is formatted with the requested Markdown syntax
+    And one undo restores the original text
+    And redo restores the formatted text
+
+  Scenario: Insert link through a dialog
+    Given selected text in a Markdown document
+    When the user chooses Insert Link
+    Then a dialog opens with the selected text as its caption
+    And the document remains unchanged until confirmation
+    When the user cancels
+    Then the document remains unchanged
+    When the user opens the dialog again and confirms a destination
+    Then the selection becomes a Markdown link
+    And one undo restores the selected text
+
+  Scenario: Complete workspace files in link destinations
+    Given a Markdown file in a workspace subdirectory
+    When the user types an @ query in the link destination
+    Then matching workspace file paths are shown
+    When the user selects a file with Enter
+    Then a relative destination replaces the query without submitting
+    When the user confirms the dialog
+    Then the inserted link uses the caption and safely encoded relative file path
+
+  Scenario: Reject a stale Markdown insertion dialog
+    Given an open link insertion dialog
+    When the source document changes before confirmation
+    Then confirmation leaves the changed document untouched
+    And the dialog explains that the original target changed
+```
+
+```gherkin
+Feature: Markdown insertion refinements
+
+  Scenario: Filename matches rank ahead of fuzzy path matches
+    Given a workspace containing "apps/notoir/src/app.rs" and many fuzzy matches
+    When the user types "@app.rs" in the link destination
+    Then the source file appears in the results
+    And Enter selects the exact filename match first
+    When the user searches for "@app" in the image destination
+    Then matching image files are listed
+    And non-image files are absent
+    And Enter selects the closest image filename match first
+
+  Scenario: Choose table dimensions before insertion
+    When the user chooses Insert Table
+    Then a dialog offers columns and data rows without changing the document
+    When the user cancels
+    Then the document remains unchanged
+    When the user opens the dialog again and chooses 3 columns and 4 data rows
+    And confirms insertion
+    Then the document contains a table with 3 columns, a header and 4 data rows
+    And one undo removes the table
 ```

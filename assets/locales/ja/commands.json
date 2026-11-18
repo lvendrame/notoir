@@ -247,7 +247,12 @@
     "toggleTask": "タスクの切り替え",
     "openLink": "リンクを開く",
     "revealSource": "ソースを表示",
-    "exportHtml": "HTML としてエクスポート…"
+    "exportHtml": "HTML としてエクスポート…",
+    "toggleStrikethrough": "取り消し線",
+    "insertBlock": "挿入 — 引用",
+    "insertImage": "画像…",
+    "insertCodePicker": "コード…",
+    "confirmInsert": "挿入"
   },
   "json": {
     "showText": "テキストを表示",

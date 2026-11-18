@@ -732,6 +732,23 @@ pub fn show(
     }
     accessibility(&response, cache, &m);
     if response.secondary_clicked() {
+        if let Some(pointer) = response
+            .interact_pointer_pos()
+            .filter(|p| m.text.contains(*p))
+            && wb
+                .view(view)
+                .and_then(|v| wb.document(v.document_id))
+                .is_some_and(|d| d.language.as_str() == "markdown")
+        {
+            let pos = pos_at(cache, &m, pointer, opts.indent.tab_size);
+            let keep = wb.view(view).is_some_and(|v| {
+                let r = v.selection.primary();
+                !r.is_empty() && (r.from()..r.to()).contains(&pos)
+            });
+            if !keep {
+                let _ = wb.set_selection(view, Selection::caret(pos));
+            }
+        }
         cache.gutter_menu_line = response
             .interact_pointer_pos()
             .filter(|p| m.gutter.contains(*p))

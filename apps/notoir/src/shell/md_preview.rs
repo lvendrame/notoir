@@ -150,6 +150,7 @@ pub fn show(
         .document(doc)
         .and_then(|d| d.path())
         .and_then(Path::parent)
+        .or_else(|| core.workspace.as_ref().map(|w| w.root.as_path()))
         .map(Path::to_path_buf);
     let size = core.settings.int("editor.fontSize", Some("markdown")) as f32;
     let max_w = core.settings.int("markdown.preview.maxWidth", None) as f32;
@@ -744,7 +745,8 @@ fn image(
         return;
     };
     let path = {
-        let p = Path::new(url);
+        let decoded = notoir_editor::markdown_edit::decode_destination(url);
+        let p = Path::new(&decoded);
         if p.is_absolute() {
             p.to_path_buf()
         } else {

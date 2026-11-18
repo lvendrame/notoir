@@ -549,20 +549,37 @@ impl Renderer<'_, '_> {
                 self.out.cjk.merge(out.cjk);
                 self.actions.0.extend(out.commands);
                 if let Some(resp) = &out.response {
+                    if resp.secondary_clicked() {
+                        self.out.activate = Some(view);
+                    }
                     let gutter_line = out.gutter_menu_line;
                     resp.context_menu(|ui| {
                         ui.set_min_width(220.0);
                         let items = match gutter_line {
                             Some(line) => gutter_context_items(line),
-                            None => editor_context_items(),
+                            None => {
+                                let mut items = editor_context_items();
+                                if doc.is_some_and(|doc| self.core.is_markdown(doc)) {
+                                    items.insert(0, crate::markdown_insert::context_items(view));
+                                    items.insert(1, menus::MenuItem::Separator);
+                                }
+                                items
+                            }
                         };
                         let items = menus::expand(&items, self.core);
                         let items = menus::visible_items(&items, &self.core.commands);
+                        let mut context = self.context.clone();
+                        if let Some(d) = doc.and_then(|id| self.core.workbench.document(id)) {
+                            context
+                                .set_str("languageId", d.language.as_str())
+                                .set_bool("hasActiveEditor", true)
+                                .set_bool("readOnly", d.is_read_only());
+                        }
                         super::chrome::menu_items(
                             ui,
                             self.kit,
                             self.core,
-                            self.context,
+                            &context,
                             &items,
                             self.actions,
                         );

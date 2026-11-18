@@ -138,64 +138,58 @@ pub fn list_dir(dir: &Path, filters: &Filters) -> std::io::Result<Vec<EntryInfo>
 /// Walks the whole workspace for the filter and Quick Open. Stops early when
 /// `cancel` is set or [`INDEX_LIMIT`] is reached (`truncated = true`).
 pub fn build_index(filters: &Filters, cancel: &AtomicBool) -> (Vec<IndexEntry>, bool) {
+    build_index_with_limit(filters, cancel, INDEX_LIMIT)
+}
+
+fn build_index_with_limit(
+    filters: &Filters,
+    cancel: &AtomicBool,
+    limit: usize,
+) -> (Vec<IndexEntry>, bool) {
     let root = filters.root.clone();
-    let excl = filters.clone();
-    // Ignored state comes from a second walker honoring .gitignore: entries
-    // it does not yield are ignored.
-    let mut not_ignored = std::collections::HashSet::new();
-    let walk_git = ignore::WalkBuilder::new(&root)
-        .standard_filters(false)
-        .git_ignore(true)
-        .git_exclude(true)
-        .require_git(false)
-        .follow_links(false)
-        .filter_entry({
-            let excl = excl.clone();
-            move |e| !excl.is_excluded(e.path())
-        })
-        .build();
-    for e in walk_git.flatten() {
-        if cancel.load(Ordering::Relaxed) || not_ignored.len() > INDEX_LIMIT {
-            break;
-        }
-        not_ignored.insert(e.into_path());
-    }
-    let walk = ignore::WalkBuilder::new(&root)
-        .standard_filters(false)
-        .follow_links(false)
-        .filter_entry(move |e| !excl.is_excluded(e.path()))
-        .build();
+    let mut seen = std::collections::HashSet::new();
     let mut out = Vec::new();
-    let mut truncated = false;
-    for e in walk.flatten() {
-        if cancel.load(Ordering::Relaxed) {
-            break;
+    // Index source files before ignored trees. Otherwise a large target/ or
+    // node_modules/ directory can consume the entire budget before source is visited.
+    for ignored in [false, true] {
+        let excl = filters.clone();
+        let walk = ignore::WalkBuilder::new(&root)
+            .standard_filters(false)
+            .git_ignore(!ignored)
+            .git_exclude(!ignored)
+            .require_git(false)
+            .follow_links(false)
+            .filter_entry(move |e| !excl.is_excluded(e.path()))
+            .build();
+        for e in walk.flatten() {
+            if cancel.load(Ordering::Relaxed) {
+                return (out, false);
+            }
+            let Ok(rel) = e.path().strip_prefix(&root) else {
+                continue;
+            };
+            if rel.as_os_str().is_empty() || seen.contains(e.path()) {
+                continue;
+            }
+            if out.len() >= limit {
+                return (out, true);
+            }
+            seen.insert(e.path().to_path_buf());
+            let rel = rel.to_string_lossy().replace('\\', "/");
+            let hidden = rel.split('/').any(|c| c.starts_with('.'));
+            out.push(IndexEntry {
+                ignored,
+                rel,
+                hidden,
+                kind: if e.file_type().is_some_and(|t| t.is_dir()) {
+                    NodeKind::Dir
+                } else {
+                    NodeKind::File
+                },
+            });
         }
-        if out.len() >= INDEX_LIMIT {
-            truncated = true;
-            break;
-        }
-        let Ok(rel) = e.path().strip_prefix(&root) else {
-            continue;
-        };
-        if rel.as_os_str().is_empty() {
-            continue;
-        }
-        let rel_s = rel.to_string_lossy().replace('\\', "/");
-        let hidden = rel_s.split('/').any(|c| c.starts_with('.'));
-        let is_dir = e.file_type().is_some_and(|t| t.is_dir());
-        out.push(IndexEntry {
-            ignored: !not_ignored.contains(e.path()),
-            rel: rel_s,
-            kind: if is_dir {
-                NodeKind::Dir
-            } else {
-                NodeKind::File
-            },
-            hidden,
-        });
     }
-    (out, truncated)
+    (out, false)
 }
 
 #[cfg(test)]
@@ -252,6 +246,28 @@ mod tests {
             "nested .gitignore"
         );
         assert!(!src.iter().find(|e| e.name == "main.rs").unwrap().ignored);
+    }
+
+    // spec 07: "Source files remain indexed when ignored artifacts exceed the limit"
+    #[test]
+    fn ignored_build_artifacts_cannot_displace_source_at_index_limit() {
+        let d = setup();
+        for i in 0..50 {
+            std::fs::write(d.path().join(format!("target/artifact-{i}")), "x").unwrap();
+        }
+        std::fs::create_dir_all(d.path().join("apps/notoir/src")).unwrap();
+        std::fs::write(d.path().join("apps/notoir/src/app.rs"), "source").unwrap();
+        let (idx, truncated) =
+            build_index_with_limit(&defaults(d.path()), &AtomicBool::new(false), 20);
+        assert!(truncated);
+        assert_eq!(idx.len(), 20);
+        assert!(
+            idx.iter()
+                .any(|e| e.rel == "apps/notoir/src/app.rs" && !e.ignored)
+        );
+        assert!(!idx.iter().find(|e| e.rel == "src/main.rs").unwrap().ignored);
+        let first_ignored = idx.iter().position(|e| e.ignored).unwrap();
+        assert!(idx[first_ignored..].iter().all(|e| e.ignored));
     }
 
     #[test]

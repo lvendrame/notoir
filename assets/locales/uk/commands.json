@@ -247,7 +247,12 @@
     "toggleTask": "Перемкнути завдання",
     "openLink": "Відкрити посилання",
     "revealSource": "Показати джерело",
-    "exportHtml": "Експортувати як HTML…"
+    "exportHtml": "Експортувати як HTML…",
+    "toggleStrikethrough": "Закреслений",
+    "insertBlock": "Вставити — Цитата",
+    "insertImage": "Зображення…",
+    "insertCodePicker": "Код…",
+    "confirmInsert": "Вставити"
   },
   "json": {
     "showText": "Показати текст",

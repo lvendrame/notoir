@@ -247,7 +247,12 @@
     "toggleTask": "Attiva/disattiva attività",
     "openLink": "Apri link",
     "revealSource": "Mostra sorgente",
-    "exportHtml": "Esporta come HTML…"
+    "exportHtml": "Esporta come HTML…",
+    "toggleStrikethrough": "Barrato",
+    "insertBlock": "Inserisci — Citazione",
+    "insertImage": "Immagine…",
+    "insertCodePicker": "Codice…",
+    "confirmInsert": "Inserisci"
   },
   "json": {
     "showText": "Mostra testo",

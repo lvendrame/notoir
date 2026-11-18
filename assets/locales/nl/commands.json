@@ -247,7 +247,12 @@
     "toggleTask": "Taak in-/uitschakelen",
     "openLink": "Link openen",
     "revealSource": "Bron tonen",
-    "exportHtml": "Exporteren als HTML…"
+    "exportHtml": "Exporteren als HTML…",
+    "toggleStrikethrough": "Doorhalen",
+    "insertBlock": "Invoegen — Citaat",
+    "insertImage": "Afbeelding…",
+    "insertCodePicker": "Code…",
+    "confirmInsert": "Invoegen"
   },
   "json": {
     "showText": "Tekst tonen",

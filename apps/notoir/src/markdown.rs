@@ -43,6 +43,7 @@ pub enum ImageData {
 
 #[derive(Default)]
 pub struct MarkdownState {
+    pub insert_dialog: Option<crate::markdown_insert::InsertDialog>,
     pub parsed: HashMap<DocumentId, Parsed>,
     /// Images requested from disk (path → mtime when requested).
     pub requested: HashMap<PathBuf, u64>,
@@ -220,10 +221,11 @@ impl AppCore {
         let base = self
             .workbench
             .document(doc)?
-            .path()?
-            .parent()?
-            .to_path_buf();
-        let p = Path::new(target);
+            .path()
+            .and_then(Path::parent)
+            .or_else(|| self.workspace.as_ref().map(|w| w.root.as_path()))?;
+        let decoded = notoir_editor::markdown_edit::decode_destination(target);
+        let p = Path::new(&decoded);
         Some(if p.is_absolute() {
             p.to_path_buf()
         } else {
@@ -269,8 +271,7 @@ impl AppCore {
             Some((p, a)) => (p, Some(a.to_owned())),
             None => (url, None),
         };
-        let decoded = path.replace("%20", " ");
-        match self.resolve_md_target(doc, &decoded) {
+        match self.resolve_md_target(doc, path) {
             Some(p) if p.exists() => self.open_path(
                 &p,
                 OpenAt {
@@ -329,7 +330,7 @@ impl AppCore {
         let Some(d) = self.workbench.document(v.document_id) else {
             return;
         };
-        if d.is_read_only() {
+        if d.is_read_only() || !self.is_markdown(d.id) {
             return;
         }
         let rope = d.buffer.rope();
@@ -372,23 +373,9 @@ impl AppCore {
         }
     }
 
-    /// Insert Link: `[selection](url)` with the caret in the URL part.
+    /// Open a link dialog without changing the buffer.
     pub fn insert_md_link(&mut self, view: ViewId) {
-        let Some(v) = self.workbench.view(view) else {
-            return;
-        };
-        let Some(d) = self.workbench.document(v.document_id) else {
-            return;
-        };
-        let p = v.selection.primary();
-        let text = d.buffer.rope().slice(p.from()..p.to()).to_string();
-        let inserted = format!("[{text}]()");
-        let caret = p.from() + inserted.chars().count() - 1;
-        let changes = ChangeSet::replace(p.from(), p.to(), inserted.as_str());
-        let now = self.now_ms;
-        let _ = self
-            .workbench
-            .edit(view, changes, Selection::caret(caret), EditKind::Other, now);
+        self.open_md_insert_dialog(view, crate::markdown_insert::InsertDialogKind::Link);
     }
 
     pub(crate) fn place_caret_at(&mut self, view: ViewId, at: &OpenAt) {

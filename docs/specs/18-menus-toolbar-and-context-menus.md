@@ -201,7 +201,8 @@ Explorer files/folders (spec 07), editor text (spec 11), gutter (spec 12), minim
 
 Rules: logically grouped with separators; destructive items last in their group and in danger colour; act on the
 right-clicked target; keyboard-accessible (`Shift+F10` / Menu key opens the context menu for the focused element);
-plugin items appended in a separate group.
+plugin items appended in a separate group. Markdown editor text additionally offers the localized Insert submenu
+(spec 24), with insertion actions disabled for read-only Markdown.
 
 ## Test Cases
 
@@ -265,4 +266,19 @@ Feature: Native menu stability
     And cursor and command enablement change
     Then menu item identities and structure remain stable
     And enabled state changes without replacing the menu structure
+```
+
+```gherkin
+Feature: Markdown context menu
+  Scenario: Markdown Insert context menu
+    Given editable Markdown text is selected
+    When the user opens the editor context menu inside the selection
+    Then the selection remains unchanged
+    And Insert offers Link, Heading H1 through H6 and Quote
+    When the user chooses Heading H2
+    Then the selected line becomes a level-two Markdown heading
+    When the document becomes read-only
+    Then Insert Link is disabled
+    When the document language becomes plain text
+    Then Insert is absent from the editor context menu
 ```
