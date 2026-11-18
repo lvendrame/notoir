@@ -76,7 +76,8 @@ pub(crate) fn menu_items(
                 ui.separator();
             }
             MenuItem::Submenu { label, items } => {
-                ui.menu_button(t!(label), |ui| {
+                let check = kit.icon(ui.ctx(), Icon::Check, ICON_SM, egui::Color32::TRANSPARENT);
+                egui::containers::menu::SubMenuButton::new((check, t!(label))).ui(ui, |ui| {
                     ui.set_min_width(200.0);
                     menu_items(ui, kit, core, context, items, actions);
                 });
@@ -85,10 +86,11 @@ pub(crate) fn menu_items(
                 let Some(spec) = core.commands.get(&(*id).into()) else {
                     continue;
                 };
+                let check = kit.icon(ui.ctx(), Icon::Check, ICON_SM, egui::Color32::TRANSPARENT);
                 if ui
                     .add_enabled(
                         spec.enablement.eval(context),
-                        egui::Button::new(text.as_str()),
+                        egui::Button::new((check, text.as_str())),
                     )
                     .clicked()
                 {
