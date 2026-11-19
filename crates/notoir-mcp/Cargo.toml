@@ -7,7 +7,9 @@ publish.workspace = true
 
 [dependencies]
 notoir-core.workspace = true
-rmcp = { version = "3.9.0", default-features = false, features = ["server", "transport-streamable-http-server"] }
+# Temporary chrono-optional patch linked from upstream issue #1469; keep pinned
+# until a published SDK supports disabling chrono (RUSTSEC-2026-0543).
+rmcp = { git = "https://github.com/andreinknv/rust-sdk", rev = "9043cdfa8694d83bf506c2f3eb0313ec173edd7e", default-features = false, features = ["server", "transport-streamable-http-server"] }
 axum = { version = "0.8.9", default-features = false, features = ["http1", "tokio"] }
 tokio = { version = "1.53.3", features = ["rt-multi-thread", "net", "sync", "time", "macros"] }
 tokio-util = "0.7.20"

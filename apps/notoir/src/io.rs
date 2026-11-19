@@ -114,7 +114,7 @@ pub enum IoResult {
     ),
     UpdateDownloaded(Box<Result<std::path::PathBuf, notoir_platform::update::UpdateError>>),
     /// Custom themes read from `<config>/themes/` (spec 21).
-    CustomThemes(Vec<Result<crate::theme::Theme, (String, String)>>),
+    CustomThemes(u64, Vec<Result<crate::theme::Theme, (String, String)>>),
     /// New File from Template…: the templates found.
     TemplatesListed(Vec<crate::templates::Template>),
     /// A chosen template's text.

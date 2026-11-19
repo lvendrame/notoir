@@ -98,6 +98,33 @@ fn draft_preview_save_and_restart() {
     );
 }
 
+#[test]
+fn stale_theme_scan_cannot_replace_a_saved_theme() {
+    let mut app = common::start(|_| {});
+    open(&mut app);
+    let generation = app.harness.state().core.themes_generation;
+    edit(&mut app, &["ui", "accent"], json!("#d15e72"));
+    save(&mut app);
+    let core = &mut app.harness.state_mut().core;
+    let saved_generation = core.themes_generation;
+    core.custom_themes_loaded(generation, Vec::new());
+    assert_eq!(core.themes_generation, saved_generation);
+    assert_eq!(
+        core.load_theme("notoir-midnight").color(Tok::Accent),
+        egui::Color32::from_rgb(209, 94, 114)
+    );
+    assert_eq!(
+        core.theme_manager
+            .draft
+            .as_ref()
+            .unwrap()
+            .theme()
+            .unwrap()
+            .color(Tok::Accent),
+        egui::Color32::from_rgb(209, 94, 114)
+    );
+}
+
 // spec 21: "Duplicate a customized theme"
 #[test]
 fn duplicate_customized_dracula_is_independent() {

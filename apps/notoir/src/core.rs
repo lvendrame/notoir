@@ -188,7 +188,7 @@ pub struct AppCore {
     /// Valid themes from `<config>/themes/` (spec 21).
     pub custom_themes: Vec<crate::theme::Theme>,
     pub theme_manager: crate::theme_manager::Manager,
-    /// Bumped whenever `custom_themes` is reloaded.
+    /// Invalidates stale theme reads and cached appearance when themes change.
     pub themes_generation: u64,
     pub appearance_dark: bool,
     /// Theme override from the environment (wins over the setting).
@@ -1016,7 +1016,9 @@ impl AppCore {
                 IoResult::NotesIndexed(generation, index) => self.notes_indexed(generation, *index),
                 IoResult::TextIndex(done) => self.text_index_done(*done),
                 IoResult::TemplatesListed(list) => self.templates_listed(list),
-                IoResult::CustomThemes(list) => self.custom_themes_loaded(list),
+                IoResult::CustomThemes(generation, list) => {
+                    self.custom_themes_loaded(generation, list);
+                }
                 IoResult::ThemeManager(result) => self.theme_manager_done(*result),
                 IoResult::DesktopIntegration(result) => self.desktop_done(result),
                 IoResult::UpdateStamp(ms) => self.updates_stamp(ms),

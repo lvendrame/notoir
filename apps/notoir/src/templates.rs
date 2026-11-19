@@ -132,10 +132,10 @@ pub fn list(root: Option<&Path>, config: &Path) -> Vec<Template> {
 }
 
 fn now_vars() -> (String, String) {
-    let now = chrono::Local::now();
+    let now = jiff::ZonedDateTime::now();
     (
-        now.format("%Y-%m-%d").to_string(),
-        now.format("%H:%M").to_string(),
+        now.strftime("%Y-%m-%d").to_string(),
+        now.strftime("%H:%M").to_string(),
     )
 }
 

@@ -178,7 +178,7 @@ fn index_follows_changes_and_rebuilds_on_request() {
 }
 
 fn today() -> String {
-    chrono::Local::now().format("%Y-%m-%d").to_string()
+    jiff::ZonedDateTime::now().strftime("%Y-%m-%d").to_string()
 }
 
 #[test]

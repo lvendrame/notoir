@@ -129,14 +129,25 @@ impl AppCore {
     /// the folder changes).
     pub fn reload_custom_themes(&mut self) {
         let dir = self.paths.themes.clone();
-        self.fs
-            .submit(move || Some(IoResult::CustomThemes(crate::theme::load_custom_dir(&dir))));
+        self.themes_generation += 1;
+        let generation = self.themes_generation;
+        self.fs.submit(move || {
+            Some(IoResult::CustomThemes(
+                generation,
+                crate::theme::load_custom_dir(&dir),
+            ))
+        });
     }
 
     pub fn custom_themes_loaded(
         &mut self,
+        generation: u64,
         list: Vec<Result<crate::theme::Theme, (String, String)>>,
     ) {
+        // A save, import, removal or newer scan may have superseded this read.
+        if generation != self.themes_generation {
+            return;
+        }
         let mut themes: Vec<crate::theme::Theme> = Vec::new();
         for item in list {
             match item {

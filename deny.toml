@@ -60,3 +60,5 @@ allow-wildcard-paths = true
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
+# Reviewed, revision-pinned chrono-optional SDK patch; upstream issue #1469.
+allow-git = ["https://github.com/andreinknv/rust-sdk"]

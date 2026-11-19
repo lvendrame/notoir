@@ -159,7 +159,9 @@ impl AppCore {
                 entry.2.push(file);
             }
             if batch.waiting.is_empty() {
-                batch.timestamp = chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
+                batch.timestamp = jiff::ZonedDateTime::now()
+                    .strftime("%Y-%m-%d %H:%M:%S")
+                    .to_string();
             }
         }
     }
