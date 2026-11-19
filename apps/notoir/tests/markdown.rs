@@ -739,8 +739,12 @@ fn md_right_click(app: &mut common::TestApp, point: egui::Pos2) {
 // spec 18: "Markdown Insert context menu"
 #[test]
 fn markdown_context_insert_menu() {
-    use egui_kittest::kittest::NodeT;
-    let dir = tempfile::tempdir().unwrap();
+    use egui_kittest::kittest::{By, NodeT};
+    // A breadcrumb containing H1-H7 must never match a heading menu item.
+    let dir = tempfile::Builder::new()
+        .prefix("H1-H2-H3-H4-H5-H6-H7-")
+        .tempdir()
+        .unwrap();
     let mut app = open(vec![write(dir.path(), "a.md", "hello world")]);
     select_md(&mut app, 0, 0);
     let v = app.harness.state().core.workbench.active_view().unwrap();
@@ -771,15 +775,17 @@ fn markdown_context_insert_menu() {
     assert!(app.harness.query_by_label_contains("Quote").is_some());
     app.harness.get_by_label_contains("Heading").hover();
     app.harness.run_steps(3);
+    let heading = |level| {
+        let label = format!("H{level}");
+        By::new()
+            .role(Role::Button)
+            .predicate(move |node| node.label().is_some_and(|text| text.trim() == label))
+    };
     for level in 1..=6 {
-        assert!(
-            app.harness
-                .query_by_label_contains(&format!("H{level}"))
-                .is_some()
-        );
+        assert!(app.harness.query(heading(level)).is_some());
     }
-    assert!(app.harness.query_by_label_contains("H7").is_none());
-    app.harness.get_by_label_contains("H2").click();
+    assert!(app.harness.query(heading(7)).is_none());
+    app.harness.get(heading(2)).click();
     app.harness.run_steps(4);
     assert_eq!(text(&app), "## hello world");
     // Read-only Markdown retains the menu with disabled insertions.

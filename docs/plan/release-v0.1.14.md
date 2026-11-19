@@ -10,6 +10,8 @@ candidate SHA and successful CI URL in the published release notes.
   and context menus; preserve native macOS menu rendering.
 - Reject stale background theme scans after save/import/remove or a newer scan,
   preventing imported styles from being replaced by an older directory snapshot.
+- Match Markdown heading menu buttons exactly in the UI regression; temporary
+  folder breadcrumbs containing H1-H7 can no longer cause ambiguous queries.
 - Upgrade zip to 9.0.5 and libz-sys to 1.1.33 for their RustSec advisories.
 - Replace direct chrono usage with jiff 1 and upgrade trash to 5.4.0.
 - Temporarily pin the chrono-optional MCP SDK patch to
@@ -39,3 +41,8 @@ candidate SHA and successful CI URL in the published release notes.
 The target directory was cleaned before rebuilding. Native Windows/Linux checks,
 Windows packaging regressions and cross-platform validation are performed by the
 required manual CI run after the candidate commit is pushed.
+
+The first manual CI candidate failed its macOS and Windows workspace jobs:
+the Markdown test's substring query for H6 also matched a random temporary folder
+breadcrumb. The revised fixture deliberately includes H1-H7 in its path and uses
+exact trimmed button labels. A fresh manual CI run is required for this revision.
