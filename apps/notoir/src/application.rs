@@ -52,6 +52,25 @@ pub struct WindowInfo {
     pub active: bool,
 }
 
+/// Hide Windows verbatim syntax in titles without changing filesystem paths.
+fn window_path_title(path: &Path) -> String {
+    let text = path.to_string_lossy();
+    if let Some(rest) = text.strip_prefix(r"\\?\") {
+        let bytes = rest.as_bytes();
+        if bytes.len() >= 3
+            && bytes[0].is_ascii_alphabetic()
+            && bytes[1] == b':'
+            && bytes[2] == b'\\'
+        {
+            return rest.to_owned();
+        }
+        if let Some(unc) = rest.strip_prefix(r"UNC\") {
+            return format!(r"\\{unc}");
+        }
+    }
+    text.into_owned()
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct WindowSnapshot {
     pub id: String,
@@ -421,13 +440,8 @@ impl ApplicationHost {
                     .core
                     .workspace
                     .as_ref()
-                    .map(|ws| ws.root.display().to_string())
-                    .or_else(|| {
-                        w.app
-                            .core
-                            .active_file_path()
-                            .map(|p| p.display().to_string())
-                    })
+                    .map(|ws| window_path_title(&ws.root))
+                    .or_else(|| w.app.core.active_file_path().map(|p| window_path_title(&p)))
                     .unwrap_or_else(|| {
                         format!("Notoir · {}", w.id.chars().take(8).collect::<String>())
                     }),
@@ -1217,6 +1231,23 @@ mod tests {
     use notoir_core::permissions::{Capability, ClientId, Decision, Principal};
     use notoir_mcp::{McpCall, ServerEvent, ToolReply};
     use serde_json::json;
+
+    #[test]
+    fn window_path_titles_hide_only_drive_and_unc_verbatim_prefixes() {
+        for (path, expected) in [
+            (r"\\?\C:\git\O11IDE", r"C:\git\O11IDE"),
+            (r"\\?\c:\", r"c:\"),
+            (r"\\?\UNC\server\share\notes", r"\\server\share\notes"),
+            (r"C:\git\O11IDE", r"C:\git\O11IDE"),
+            (r"\\server\share\notes", r"\\server\share\notes"),
+            ("/home/user/notes", "/home/user/notes"),
+            (r"\\?\Volume{123}\notes", r"\\?\Volume{123}\notes"),
+            (r"\\.\PhysicalDrive0", r"\\.\PhysicalDrive0"),
+            (r"\\?\C:relative", r"\\?\C:relative"),
+        ] {
+            assert_eq!(window_path_title(Path::new(path)), expected, "{path}");
+        }
+    }
 
     fn host(home: &Path) -> (egui::Context, ApplicationHost) {
         let ctx = egui::Context::default();

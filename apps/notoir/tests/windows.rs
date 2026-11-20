@@ -102,6 +102,50 @@ fn workspace_identity_deduplicates_new_window_requests() {
     assert_eq!(host.windows.len(), count);
 }
 
+#[cfg(windows)]
+#[test]
+fn window_titles_hide_verbatim_paths_without_changing_identity() {
+    let home = tempfile::tempdir().unwrap();
+    let root = home.path().join("workspace");
+    std::fs::create_dir(&root).unwrap();
+    let file = home.path().join("notes.txt");
+    std::fs::write(&file, "notes").unwrap();
+    let (ctx, mut host) = make_host(home.path(), false);
+    let file_window = host.windows[0].id.clone();
+    host.windows[0]
+        .app
+        .core
+        .open_path(&file, Default::default());
+    host.windows[0].app.core.flush_io();
+    host.windows[0].app.core.pump_io();
+    let workspace_window = host.create_window(&ctx, None, Some(&root));
+    let canonical = root.canonicalize().unwrap().display().to_string();
+    assert!(canonical.starts_with(r"\\?\"));
+    let info = host.window_info();
+    let workspace_info = info.iter().find(|w| w.id == workspace_window).unwrap();
+    assert_eq!(
+        workspace_info.title,
+        canonical.strip_prefix(r"\\?\").unwrap()
+    );
+    assert_eq!(
+        workspace_info.workspace.as_deref(),
+        Some(canonical.as_str())
+    );
+    let file_info = info.iter().find(|w| w.id == file_window).unwrap();
+    let canonical_file = file.canonicalize().unwrap().display().to_string();
+    assert_eq!(
+        file_info.title,
+        canonical_file.strip_prefix(r"\\?\").unwrap()
+    );
+    host.request(
+        &ctx,
+        &workspace_window,
+        ApplicationRequest::Activate(file_info.id.clone()),
+    );
+    assert_eq!(host.active.as_deref(), Some(file_window.as_str()));
+    assert_eq!(host.windows.len(), 2);
+}
+
 // spec 40: "Workspace-free windows have independent sessions"
 #[test]
 fn restore_manifest_keeps_distinct_workspace_free_tabs_and_identity() {
