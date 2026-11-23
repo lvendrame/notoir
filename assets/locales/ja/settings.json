@@ -9,7 +9,8 @@
     "mcp": "MCP",
     "plugins": "プラグイン",
     "keyboard": "キーボード",
-    "advanced": "詳細"
+    "advanced": "詳細",
+    "markdown": "Markdown"
   },
   "ui": {
     "search": "設定を検索",
@@ -139,10 +140,14 @@
     "defaultMode": "Markdown の既定モード",
     "splitOrientation": "Markdown の分割方向",
     "preview": {
-      "maxWidth": "Markdown プレビューの幅",
+      "maxWidth": "ページの最大幅（論理ピクセル）",
       "interactiveCheckboxes": "プレビューでタスク ボックスをクリック可能にする",
       "scrollSync": "エディターとプレビューのスクロールを同期",
-      "loadRemoteImages": "プレビューでリモート画像を読み込む"
+      "loadRemoteImages": "プレビューでリモート画像を読み込む",
+      "tableMaxWidth": "表の最大幅（論理ピクセル、0 はページ幅に従う）",
+      "tableWrap": "表のセル内で折り返す",
+      "codeWrap": "コードブロックを折り返す",
+      "breaks": "単一の改行を表示する"
     }
   },
   "json": {

@@ -9,7 +9,8 @@
     "mcp": "MCP",
     "plugins": "Plugins",
     "keyboard": "Tastatur",
-    "advanced": "Erweitert"
+    "advanced": "Erweitert",
+    "markdown": "Markdown"
   },
   "ui": {
     "search": "Einstellungen durchsuchen",
@@ -139,10 +140,14 @@
     "defaultMode": "Markdown-Standardmodus",
     "splitOrientation": "Ausrichtung der Markdown-Teilung",
     "preview": {
-      "maxWidth": "Breite der Markdown-Vorschau",
+      "maxWidth": "Maximale Seitenbreite (logische Pixel)",
       "interactiveCheckboxes": "Anklickbare Aufgabenkästchen in der Vorschau",
       "scrollSync": "Bildlauf von Editor und Vorschau synchronisieren",
-      "loadRemoteImages": "Externe Bilder in der Vorschau laden"
+      "loadRemoteImages": "Externe Bilder in der Vorschau laden",
+      "tableMaxWidth": "Maximale Tabellenbreite (logische Pixel; 0 folgt der Seitenbreite)",
+      "tableWrap": "Tabellenzellen umbrechen",
+      "codeWrap": "Codeblöcke umbrechen",
+      "breaks": "Einzelne Zeilenumbrüche anzeigen"
     }
   },
   "json": {

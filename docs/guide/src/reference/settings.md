@@ -58,14 +58,23 @@ Every built-in setting with its type, default value and the scopes it can be set
 | `editor.zoomScope` | Zoom scope | `"global"` \| `"view"` | `"global"` | user |
 | `json.syncSelection` | Sync tree selection with the cursor | boolean | `true` | user, workspace |
 | `json.tree.maxSize` | Largest document shown as a tree (bytes) | integer 1024–1073741824 | `20971520` | user, workspace |
-| `markdown.defaultMode` | Markdown default mode | `"edit"` \| `"split"` \| `"preview"` | `"edit"` | user, workspace, language |
-| `markdown.preview.interactiveCheckboxes` | Clickable task boxes in preview | boolean | `true` | user, workspace |
-| `markdown.preview.loadRemoteImages` | Load remote images in preview | `"never"` \| `"ask"` \| `"always"` | `"ask"` | user, workspace |
-| `markdown.preview.maxWidth` | Markdown preview width | integer 300–2000 | `760` | user, workspace |
-| `markdown.preview.scrollSync` | Sync editor and preview scrolling | boolean | `true` | user, workspace |
-| `markdown.splitOrientation` | Markdown split orientation | `"auto"` \| `"horizontal"` \| `"vertical"` | `"auto"` | user, workspace |
 | `outline.depth` | Key depth shown in the Outline (JSON, YAML, TOML) | integer 1–10 | `2` | user, workspace |
 | `outline.followCursor` | Highlight the symbol at the cursor in the Outline | boolean | `true` | user, workspace |
+
+## Markdown
+
+| Setting | Description | Type | Default | Scopes |
+|---|---|---|---|---|
+| `markdown.defaultMode` | Markdown default mode | `"edit"` \| `"split"` \| `"preview"` | `"edit"` | user, workspace, language |
+| `markdown.preview.breaks` | Display single newlines as line breaks | boolean | `false` | user, workspace |
+| `markdown.preview.codeWrap` | Wrap code blocks | boolean | `false` | user, workspace |
+| `markdown.preview.interactiveCheckboxes` | Clickable task boxes in preview | boolean | `true` | user, workspace |
+| `markdown.preview.loadRemoteImages` | Load remote images in preview | `"never"` \| `"ask"` \| `"always"` | `"ask"` | user, workspace |
+| `markdown.preview.maxWidth` | Maximum page width (logical pixels) | integer 300–2000 | `760` | user, workspace |
+| `markdown.preview.scrollSync` | Sync editor and preview scrolling | boolean | `true` | user, workspace |
+| `markdown.preview.tableMaxWidth` | Maximum table width (logical pixels; 0 follows page width) | integer 0–2000 | `0` | user, workspace |
+| `markdown.preview.tableWrap` | Wrap table cells | boolean | `true` | user, workspace |
+| `markdown.splitOrientation` | Markdown split orientation | `"auto"` \| `"horizontal"` \| `"vertical"` | `"auto"` | user, workspace |
 
 ## Appearance
 

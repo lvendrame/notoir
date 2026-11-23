@@ -1,6 +1,6 @@
 # 24 — Markdown
 
-**Status:** Done — render tree with source ranges (`notoir-editor::markdown`: CommonMark + GFM tables, task lists, strikethrough, footnotes, heading attributes, front matter, slugs), Edit / Split / Preview per view (toolbar control, Mod+Shift+V, Mod+K V, `markdown.defaultMode`, draggable split with auto orientation), preview renderer (headings, inline styles, links, local images incl. SVG decoded off the UI thread, quotes, nested lists with clickable task boxes as undoable edits, tables with alignment, highlighted code blocks, rules, footnotes, collapsible front matter, escaped HTML), 100/250 ms debounced re-parse, two-way scroll sync, double-click to source, links (web/mail to the OS, relative files at `#anchor`, in-document anchors, other schemes confirmed), Mod+B / Mod+I / code / insert link, paste URL over selection (M13); Markdown Insert context submenu with selection-aware blocks, link/image dialogs and workspace file completion. Deviations: remote images show the placeholder but cannot be loaded yet (no HTTP client); no per-block layout cache; no Markdown Preview panel; parse runs on the UI thread for all sizes; editor Ctrl/Cmd+click on links later. M26: File → Export as HTML… (`markdown.exportHtml`): a standalone page (`notoir-editor::markdown::to_html` + `html_document`: the preview's extensions, front matter left out, raw HTML escaped, headings with the preview's slugs as ids, wiki links as links to `<Target>.html#heading`, title from the first heading or the file name, embedded light/dark/print stylesheet) written through the save writer on the IO thread; local images stay relative to the export location. Deviation: no PDF export (no PDF renderer bundled — the page prints to PDF from a browser); Mermaid and math not rendered
+**Status:** Done — Markdown display preferences (page/table width, responsive table cells, code wrapping and soft breaks);  render tree with source ranges (`notoir-editor::markdown`: CommonMark + GFM tables, task lists, strikethrough, footnotes, heading attributes, front matter, slugs), Edit / Split / Preview per view (toolbar control, Mod+Shift+V, Mod+K V, `markdown.defaultMode`, draggable split with auto orientation), preview renderer (headings, inline styles, links, local images incl. SVG decoded off the UI thread, quotes, nested lists with clickable task boxes as undoable edits, tables with alignment, highlighted code blocks, rules, footnotes, collapsible front matter, escaped HTML), 100/250 ms debounced re-parse, two-way scroll sync, double-click to source, links (web/mail to the OS, relative files at `#anchor`, in-document anchors, other schemes confirmed), Mod+B / Mod+I / code / insert link, paste URL over selection (M13); Markdown Insert context submenu with selection-aware blocks, link/image dialogs and workspace file completion. Deviations: remote images show the placeholder but cannot be loaded yet (no HTTP client); no per-block layout cache; no Markdown Preview panel; parse runs on the UI thread for all sizes; editor Ctrl/Cmd+click on links later. M26: File → Export as HTML… (`markdown.exportHtml`): a standalone page (`notoir-editor::markdown::to_html` + `html_document`: the preview's extensions, front matter left out, raw HTML escaped, headings with the preview's slugs as ids, wiki links as links to `<Target>.html#heading`, title from the first heading or the file name, embedded light/dark/print stylesheet) written through the save writer on the IO thread; local images stay relative to the export location. Deviation: no PDF export (no PDF renderer bundled — the page prints to PDF from a browser); Mermaid and math not rendered
 
 ## Purpose
 
@@ -42,6 +42,31 @@ Per view (`EditorView.kind`): `Text` (Editor), `MarkdownPreview`, `MarkdownSplit
 
 Typography in preview: UI font (Manrope) for prose at `editor.fontSize × 1.0`, JetBrains Mono for code; max content
 width `markdown.preview.maxWidth` (default 760 px), centred.
+
+### Display preferences
+
+Settings → Markdown groups all `markdown.*` preferences. Layout preferences apply live in Preview and Split,
+without modifying source text or HTML export. They support User and Workspace scopes.
+
+| Key (`markdown.preview.*`) | Default | Behavior |
+|---|---|---|
+| `maxWidth` | 760 | Maximum centered page width, 300–2000 logical pixels; shrinks to fit the pane |
+| `tableMaxWidth` | 0 | Maximum table width, 0–2000 logical pixels; 0 follows the page, always capped by local available width |
+| `tableWrap` | true | Measure headers and cells, share column widths across rows, and wrap cell content |
+| `codeWrap` | false | Wrap code lines while preserving whitespace and syntax highlighting |
+| `breaks` | false | Render soft breaks as explicit newlines instead of spaces; hard breaks always remain newlines |
+
+Tables keep short columns at natural width. Under pressure each column starts at its natural width or 64 logical
+pixels, whichever is smaller; remaining space is distributed proportionally to unmet natural widths, excluding
+18-pixel column gaps. Text wraps inside cells, including long words and URLs, with Markdown column alignment.
+Tables that still cannot fit scroll horizontally within their own bounded area. Disabling table wrapping uses
+natural widths and local scrolling. Code without wrapping also scrolls locally; scrollbars appear only when needed.
+Reflow updates source-navigation and scroll-synchronization geometry.
+
+Research: [Obsidian settings](https://obsidian.md/help/settings) expose readable line length and strict line breaks;
+[VS Code Markdown preferences](https://github.com/microsoft/vscode/blob/main/extensions/markdown-language-features/package.json)
+include soft-break and typography controls. This feature covers layout and wrapping; fonts, colors and line height
+remain outside its scope.
 
 ### Task lists
 
@@ -210,4 +235,28 @@ Feature: Markdown insertion refinements
     And confirms insertion
     Then the document contains a table with 3 columns, a header and 4 data rows
     And one undo removes the table
+```
+
+```gherkin
+Feature: Markdown display preferences
+
+  Scenario: Narrow Markdown pages fit the pane
+    Given a Markdown document in Split mode with a narrow preview pane
+    Then the prose wraps within the pane
+    And the source text remains unchanged
+
+  Scenario: Markdown tables wrap within the configured width
+    Given a Markdown table with long descriptions in Preview mode
+    When the table maximum width is set to 240 logical pixels
+    Then cell text wraps within that width
+    When the maximum width increases to 600 logical pixels
+    Then the cells reflow into fewer lines without reopening the document
+    And the source text remains unchanged
+
+  Scenario: Markdown code wrapping and line breaks apply live
+    Given a Markdown preview with a soft break, a hard break and a long code line
+    Then the soft break displays as a space and the hard break displays as a newline
+    When code wrapping and single-newline display are enabled
+    Then the code wraps into multiple lines and the soft break displays as a newline
+    And the source text remains unchanged
 ```

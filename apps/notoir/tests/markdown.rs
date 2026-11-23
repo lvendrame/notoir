@@ -360,6 +360,10 @@ fn wide_content_wraps_or_scrolls_inside_the_column() {
         "# Wide\n\nSome text then {long_word} and more.\n\n| Name | Description | Owner | Status | Notes | Created | Updated | Priority |\n|---|---|---|---|---|---|---|---|\n| Recovery | Hot exit keeps unsaved buffers across restarts and crashes | core team | done | Covers scratchpads and untitled files too | 2025-01-10 | 2026-10-01 | high |\n"
     );
     let mut app = open(vec![write(dir.path(), "wide.md", &md)]);
+    app.harness.state_mut().core.set_user_setting(
+        "markdown.preview.tableWrap",
+        Some(notoir_core::settings::SettingValue::Bool(false)),
+    );
     common::run(&mut app, "markdown.showSplit", Value::Null);
     app.harness.run_steps(3);
     let column_left = app.harness.get_by_label("Wide").rect().left();
@@ -397,44 +401,106 @@ fn wide_content_wraps_or_scrolls_inside_the_column() {
     assert!(after.right() <= preview_right, "{after:?} in view");
 }
 
-/// A pane narrower than the minimum column scrolls sideways instead of
-/// squeezing the text into a sliver.
+// spec 24: "Narrow Markdown pages fit the pane"
 #[test]
-fn narrow_preview_scrolls_sideways_instead_of_squeezing() {
+fn narrow_preview_fits_the_pane() {
     let dir = tempfile::tempdir().unwrap();
     let words: Vec<String> = (0..60).map(|i| format!("w{i}")).collect();
     let md = format!("# Narrow\n\n{}\n", words.join(" "));
     let mut app = open(vec![write(dir.path(), "narrow.md", &md)]);
     common::run(&mut app, "markdown.showSplit", Value::Null);
-    // The Explorer leaves the preview about 220 px.
     app.harness.set_size(egui::vec2(520.0, 800.0));
     app.harness.run_steps(4);
-    let rects: Vec<egui::Rect> = words
-        .iter()
-        .filter_map(|w| {
-            let label = format!("{w} ");
-            app.harness.query_by_label(&label).map(|n| n.rect())
-        })
-        .collect();
-    assert!(!rects.is_empty());
-    let row = rects.iter().map(|r| r.right()).fold(f32::MIN, f32::max)
-        - rects.iter().map(|r| r.left()).fold(f32::MAX, f32::min);
-    assert!(row >= 300.0, "rows keep a readable width: {row}");
-    let before = app.harness.get_by_label("Narrow").rect();
+    let heading = app.harness.get_by_label("Narrow").rect();
+    let right = app.harness.ctx.content_rect().right();
+    for word in &words {
+        if let Some(node) = app.harness.query_by_label(&format!("{word} ")) {
+            let r = node.rect();
+            assert!(
+                r.left() >= heading.left() - 0.5 && r.right() <= right,
+                "{r:?}"
+            );
+        }
+    }
+    assert_eq!(text(&app), md);
+}
+
+// spec 24: "Markdown tables wrap within the configured width"
+#[test]
+fn tables_wrap_and_reflow_live() {
+    use notoir_core::settings::SettingValue as V;
+    let dir = tempfile::tempdir().unwrap();
+    let md = "# Tables\n\n| Item | Description |\n|---|---|\n| Sample | a lengthy description containing many words that must wrap within the table width |\n";
+    let mut app = open(vec![write(dir.path(), "table.md", md)]);
+    common::run(&mut app, "markdown.showPreview", Value::Null);
     app.harness
-        .input_mut()
-        .events
-        .push(Event::PointerMoved(before.center()));
-    app.harness.run_steps(2);
-    app.harness.input_mut().events.push(Event::MouseWheel {
-        unit: egui::MouseWheelUnit::Point,
-        delta: egui::vec2(-500.0, 0.0),
-        phase: egui::TouchPhase::Move,
-        modifiers: Modifiers::NONE,
-    });
-    app.harness.run_steps(30);
-    let after = app.harness.get_by_label("Narrow").rect();
-    assert!(after.left() < before.left(), "{before:?} → {after:?}");
+        .state_mut()
+        .core
+        .set_user_setting("markdown.preview.tableMaxWidth", Some(V::Int(240)));
+    app.harness.run_steps(4);
+    let description = app.harness.get_by_label("Description").rect();
+    let last = app
+        .harness
+        .get_by_label(
+            "a lengthy description containing many words that must wrap within the table width",
+        )
+        .rect();
+    let left = app.harness.get_by_label("Item").rect().left();
+    assert!(last.top() > description.bottom());
+    assert!(last.height() > description.height());
+    assert!(last.right() <= left + 240.5, "{last:?} from {left}");
+    app.harness
+        .state_mut()
+        .core
+        .set_user_setting("markdown.preview.tableMaxWidth", Some(V::Int(600)));
+    app.harness.run_steps(4);
+    let wider = app
+        .harness
+        .get_by_label(
+            "a lengthy description containing many words that must wrap within the table width",
+        )
+        .rect();
+    assert!(wider.height() < last.height(), "{last:?} → {wider:?}");
+    assert_eq!(text(&app), md);
+}
+
+// spec 24: "Markdown code wrapping and line breaks apply live"
+#[test]
+fn code_wrap_and_soft_breaks_apply_live() {
+    use notoir_core::settings::SettingValue as V;
+    let dir = tempfile::tempdir().unwrap();
+    let code = "let message = \"a very long line of code with many words that needs wrapping in a narrow preview column\";";
+    let md = format!("alpha\nbeta\n\ngamma  \ndelta\n\n```rust\n{code}\n```\n");
+    let mut app = open(vec![write(dir.path(), "breaks.md", &md)]);
+    common::run(&mut app, "markdown.showPreview", Value::Null);
+    app.harness
+        .state_mut()
+        .core
+        .set_user_setting("markdown.preview.maxWidth", Some(V::Int(300)));
+    app.harness.run_steps(4);
+    let alpha = app.harness.get_by_label("alpha").rect();
+    let beta = app.harness.get_by_label("beta").rect();
+    assert!((alpha.top() - beta.top()).abs() < 1.0);
+    assert!(
+        app.harness.get_by_label("delta").rect().top()
+            > app.harness.get_by_label("gamma").rect().top()
+    );
+    let before = app.harness.get_by_label(code).rect();
+    app.harness
+        .state_mut()
+        .core
+        .set_user_setting("markdown.preview.breaks", Some(V::Bool(true)));
+    app.harness
+        .state_mut()
+        .core
+        .set_user_setting("markdown.preview.codeWrap", Some(V::Bool(true)));
+    app.harness.run_steps(4);
+    assert!(
+        app.harness.get_by_label("beta").rect().top()
+            > app.harness.get_by_label("alpha").rect().top()
+    );
+    assert!(app.harness.get_by_label(code).rect().height() > before.height());
+    assert_eq!(text(&app), md);
 }
 
 fn select_md(app: &mut common::TestApp, a: usize, b: usize) {
@@ -1099,4 +1165,44 @@ fn table_dialog_dimensions_cancel_and_undo() {
     assert_eq!(text(&app), "");
     common::run(&mut app, "edit.redo", Value::Null);
     assert!(text(&app).contains("| --- | --- | --- |"));
+}
+
+#[test]
+fn wrapped_table_alignment_and_links() {
+    use notoir_core::settings::SettingValue as V;
+    let dir = tempfile::tempdir().unwrap();
+    let dialogs = notoir::files::ScriptedDialogs::default();
+    let d = dialogs.clone();
+    let f = write(
+        dir.path(),
+        "aligned.md",
+        "| Left | Center | Right |\n|:---|:---:|---:|\n| left text | centered text with many words | [clickable](https://notoir.dev) |\n",
+    );
+    let mut app = common::start(move |o| {
+        o.dialogs = Some(std::sync::Arc::new(d));
+        o.open_paths = vec![(f, None)];
+    });
+    common::settle(&mut app);
+    common::run(&mut app, "markdown.showPreview", Value::Null);
+    app.harness
+        .state_mut()
+        .core
+        .set_user_setting("markdown.preview.tableMaxWidth", Some(V::Int(260)));
+    app.harness.run_steps(4);
+    let center = app.harness.get_by_label("Center").rect();
+    let text = app
+        .harness
+        .get_by_label("centered text with many words")
+        .rect();
+    assert!((center.center().x - text.center().x).abs() < 1.0);
+    assert!(text.height() > center.height());
+    let right = app.harness.get_by_label("Right").rect();
+    let link = app.harness.get_by_label("clickable").rect();
+    assert!((right.right() - link.right()).abs() < 1.0);
+    app.harness.get_by_label("clickable").click();
+    app.harness.run_steps(2);
+    assert_eq!(
+        *dialogs.opened.lock().unwrap(),
+        vec!["https://notoir.dev".to_string()]
+    );
 }

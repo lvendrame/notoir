@@ -79,6 +79,7 @@ impl SettingType {
 pub enum SettingCategory {
     General,
     Editor,
+    Markdown,
     Appearance,
     Files,
     Workspace,
@@ -545,14 +546,14 @@ impl Schema {
             T::Enum(&["edit", "split", "preview"]),
             s_("edit"),
             Scopes::ALL,
-            C::Editor,
+            C::Markdown,
         );
         def(
             "markdown.splitOrientation",
             T::Enum(&["auto", "horizontal", "vertical"]),
             s_("auto"),
             Scopes::NO_LANGUAGE,
-            C::Editor,
+            C::Markdown,
         );
         def(
             "markdown.preview.maxWidth",
@@ -562,29 +563,49 @@ impl Schema {
             },
             V::Int(760),
             Scopes::NO_LANGUAGE,
-            C::Editor,
+            C::Markdown,
         );
         def(
             "markdown.preview.interactiveCheckboxes",
             T::Bool,
             V::Bool(true),
             Scopes::NO_LANGUAGE,
-            C::Editor,
+            C::Markdown,
         );
         def(
             "markdown.preview.scrollSync",
             T::Bool,
             V::Bool(true),
             Scopes::NO_LANGUAGE,
-            C::Editor,
+            C::Markdown,
         );
         def(
             "markdown.preview.loadRemoteImages",
             T::Enum(&["never", "ask", "always"]),
             s_("ask"),
             Scopes::NO_LANGUAGE,
-            C::Editor,
+            C::Markdown,
         );
+        def(
+            "markdown.preview.tableMaxWidth",
+            T::Int { min: 0, max: 2000 },
+            V::Int(0),
+            Scopes::NO_LANGUAGE,
+            C::Markdown,
+        );
+        for (key, default) in [
+            ("markdown.preview.tableWrap", true),
+            ("markdown.preview.codeWrap", false),
+            ("markdown.preview.breaks", false),
+        ] {
+            def(
+                key,
+                T::Bool,
+                V::Bool(default),
+                Scopes::NO_LANGUAGE,
+                C::Markdown,
+            );
+        }
         // Folding, bookmarks, outline, breadcrumbs
         def(
             "editor.folding",

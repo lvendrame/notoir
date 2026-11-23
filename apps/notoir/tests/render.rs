@@ -406,7 +406,7 @@ fn markdown_wide_content_snapshot() {
     for (name, command, width) in [
         ("markdown-wide-split", "markdown.showSplit", 1280.0),
         ("markdown-wide-preview", "markdown.showPreview", 1280.0),
-        // Narrower than the minimum column: the preview scrolls sideways.
+        // Narrow panes wrap prose; dense tables retain local scrolling.
         ("markdown-wide-narrow", "markdown.showPreview", 560.0),
     ] {
         let dir = tempfile::tempdir().unwrap();
@@ -1119,6 +1119,47 @@ fn markdown_insert_snapshots() {
             image
                 .save(out_dir().join(format!("markdown-insert-menu-{}.png", theme.id())))
                 .unwrap();
+        }
+    }
+}
+
+#[test]
+fn markdown_display_settings_snapshots() {
+    use notoir_core::settings::SettingValue as V;
+    for theme in ThemeId::ALL {
+        for (mode, command, width) in [
+            ("preview", "markdown.showPreview", 1280.0),
+            ("split", "markdown.showSplit", 1280.0),
+            ("narrow", "markdown.showPreview", 560.0),
+        ] {
+            let dir = tempfile::tempdir().unwrap();
+            let p = dir.path().join("display.md");
+            std::fs::write(&p, "# Reading layout\n\nA page with **wrapped tables**, [links](https://example.com) and code.\n\n| Left | Center | Right |\n|:---|:---:|---:|\n| Notes | centered text wraps across multiple lines | right aligned text with a [link](https://example.com) |\n| Item | a long description to demonstrate shared column widths | Supercalifragilisticexpialidociousword |\n\n```rust\nlet message = \"a long line that wraps within the preview while preserving syntax highlighting\";\nprintln!(\"{message}\");\n```\n\nSoft line break\nshown on its own line.\n").unwrap();
+            let mut app = common::start(move |o| {
+                o.language_override = Some(Language::En);
+                o.theme_override = Some(theme);
+                o.open_paths = vec![(p, None)];
+            });
+            common::settle(&mut app);
+            app.harness
+                .state_mut()
+                .core
+                .set_user_setting("markdown.preview.tableMaxWidth", Some(V::Int(440)));
+            app.harness
+                .state_mut()
+                .core
+                .set_user_setting("markdown.preview.codeWrap", Some(V::Bool(true)));
+            app.harness
+                .state_mut()
+                .core
+                .set_user_setting("markdown.preview.breaks", Some(V::Bool(true)));
+            common::run(&mut app, command, serde_json::Value::Null);
+            app.harness.set_size(egui::vec2(width, 800.0));
+            app.harness.run_steps(4);
+            if let Ok(img) = app.harness.render() {
+                img.save(out_dir().join(format!("markdown-display-{mode}-{}.png", theme.id())))
+                    .unwrap();
+            }
         }
     }
 }

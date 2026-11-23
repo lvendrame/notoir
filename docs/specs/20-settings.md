@@ -69,7 +69,7 @@ pub struct SettingDef {
     pub ty: SettingType,                   // Bool | Int{min,max} | Float{..} | Enum(&[..]) | String | StringList | Color | Font
     pub default: SettingValue,
     pub scopes: ScopeMask,                 // USER | WORKSPACE | LANGUAGE
-    pub category: SettingCategory,         // General, Editor, Appearance, Files, Workspace, Git, Mcp, Plugins, Keyboard, Advanced
+    pub category: SettingCategory,         // General, Editor, Markdown, Appearance, Files, Workspace, Git, Mcp, Plugins, Keyboard, Advanced
     pub restricted: bool,                  // ignored at Workspace scope unless workspace is trusted (spec 07)
     pub title_key: &'static str,           // "settings:editor.tabSize.title"
     pub description_key: &'static str,
@@ -137,6 +137,7 @@ Opens as an editor tab ("Settings", `settings` icon), never a blocking modal. `a
 |---|---|
 | General | language, `workbench.startup` (emptyState / restoreSession / welcome), `app.hotExit`, `window.restoreWindows`, `update.mode` |
 | Editor | fontFamily, fontSize, lineHeight, tabSize, insertSpaces, detectIndentation, wordWrap, wordWrapColumn, lineNumbers, renderWhitespace, highlightCurrentLine, cursorStyle, cursorBlinking, minimap.*, rulers, autoClosingBrackets, zoomScope, undoLimit, emptySelectionClipboard |
+| Markdown | `markdown.defaultMode`, `markdown.splitOrientation`, `markdown.preview.*` (spec 24) |
 | Appearance | workbench.theme, uiScale, tabs.density, toolbar visibility, statusBar visibility, breadcrumbs visibility, activityBar visibility, editor.padding, selection style |
 | Files | autoSave, autoSaveDelay, encoding, eol (default for new files), atomicSave, trimTrailingWhitespaceOnSave, insertFinalNewline, exclude, watcherExclude, associations, reloadCleanOnExternalChange, largeFile.* |
 | Workspace | explorer.showHidden, explorer.showGitIgnored, explorer.sortOrder, explorer.autoReveal, search.exclude, search.maxResults |
@@ -200,3 +201,18 @@ Feature: Settings UI
 ## Application and window ownership (spec 40)
 
 User settings/keybindings persist at application scope and changes broadcast to all windows. Workspace overrides resolve per window. Shared writes must not race or overwrite unrelated changes. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.
+
+```gherkin
+Feature: Markdown settings
+
+  Scenario: Markdown display settings have a dedicated category
+    When Settings opens with category "markdown"
+    Then the Markdown category contains the page width preference
+    And searching for "wrap table" finds the table wrapping preference
+    When User table maximum width is 400 and Workspace table maximum width is 500
+    Then the effective width is 500 and the workspace file records it
+    When the Workspace setting is reset
+    Then the effective width is 400
+    When the User setting is reset
+    Then the effective width is the default 0
+```

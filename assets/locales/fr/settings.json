@@ -9,7 +9,8 @@
     "mcp": "MCP",
     "plugins": "Plugins",
     "keyboard": "Clavier",
-    "advanced": "Avancé"
+    "advanced": "Avancé",
+    "markdown": "Markdown"
   },
   "ui": {
     "search": "Rechercher dans les paramètres",
@@ -139,10 +140,14 @@
     "defaultMode": "Mode par défaut de Markdown",
     "splitOrientation": "Orientation du partage Markdown",
     "preview": {
-      "maxWidth": "Largeur de l'aperçu Markdown",
+      "maxWidth": "Largeur maximale de page (pixels logiques)",
       "interactiveCheckboxes": "Cases à cocher cliquables dans l'aperçu",
       "scrollSync": "Synchroniser le défilement de l'éditeur et de l'aperçu",
-      "loadRemoteImages": "Charger les images distantes dans l'aperçu"
+      "loadRemoteImages": "Charger les images distantes dans l'aperçu",
+      "tableMaxWidth": "Largeur maximale des tableaux (pixels logiques ; 0 suit la page)",
+      "tableWrap": "Retour à la ligne dans les cellules",
+      "codeWrap": "Retour à la ligne dans les blocs de code",
+      "breaks": "Afficher les sauts de ligne simples"
     }
   },
   "json": {

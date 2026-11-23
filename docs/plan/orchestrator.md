@@ -154,3 +154,14 @@ filtering and table-dialog tests pass. Formatting, workspace Clippy and the seri
 (858 tests, 6 ignored). The parallel run exposed Git test timing failures; the conflicted-file preview
 test now awaits file-open completion, and both sync cases pass independently and in the serial suite.
 Table dialog snapshots in all three themes are saved in `docs/design/`.
+
+### Markdown display preferences follow-up
+
+Specs 20/24: dedicated Markdown settings category, live page/table width, measured shared table columns
+with wrapping and dense-table scrolling, optional code wrapping and soft-line-break display. Layout applies
+to Preview/Split; source and HTML export remain unchanged. All 14 locales include the controls.
+
+Validation: formatting, workspace Clippy with warnings denied, and the serial workspace test suite pass.
+Markdown display snapshots were reviewed in Preview, Split and narrow panes across all three built-in themes;
+references are saved in `docs/design/markdown-display-*.png`. The generated settings reference and spec coverage
+report are current.

@@ -9,7 +9,8 @@
     "mcp": "MCP",
     "plugins": "Plugins",
     "keyboard": "Keyboard",
-    "advanced": "Advanced"
+    "advanced": "Advanced",
+    "markdown": "Markdown"
   },
   "ui": {
     "search": "Search settings",
@@ -139,10 +140,14 @@
     "defaultMode": "Markdown default mode",
     "splitOrientation": "Markdown split orientation",
     "preview": {
-      "maxWidth": "Markdown preview width",
+      "maxWidth": "Maximum page width (logical pixels)",
       "interactiveCheckboxes": "Clickable task boxes in preview",
       "scrollSync": "Sync editor and preview scrolling",
-      "loadRemoteImages": "Load remote images in preview"
+      "loadRemoteImages": "Load remote images in preview",
+      "tableMaxWidth": "Maximum table width (logical pixels; 0 follows page width)",
+      "tableWrap": "Wrap table cells",
+      "codeWrap": "Wrap code blocks",
+      "breaks": "Display single newlines as line breaks"
     }
   },
   "json": {

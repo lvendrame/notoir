@@ -9,7 +9,8 @@
     "mcp": "MCP",
     "plugins": "Wtyczki",
     "keyboard": "Klawiatura",
-    "advanced": "Zaawansowane"
+    "advanced": "Zaawansowane",
+    "markdown": "Markdown"
   },
   "ui": {
     "search": "Szukaj w ustawieniach",
@@ -139,10 +140,14 @@
     "defaultMode": "Domyślny tryb Markdown",
     "splitOrientation": "Orientacja podziału Markdown",
     "preview": {
-      "maxWidth": "Szerokość podglądu Markdown",
+      "maxWidth": "Maksymalna szerokość strony (piksele logiczne)",
       "interactiveCheckboxes": "Klikalne pola zadań w podglądzie",
       "scrollSync": "Synchronizuj przewijanie edytora i podglądu",
-      "loadRemoteImages": "Wczytuj zdalne obrazy w podglądzie"
+      "loadRemoteImages": "Wczytuj zdalne obrazy w podglądzie",
+      "tableMaxWidth": "Maksymalna szerokość tabeli (piksele logiczne; 0 oznacza szerokość strony)",
+      "tableWrap": "Zawijaj tekst w komórkach tabel",
+      "codeWrap": "Zawijaj bloki kodu",
+      "breaks": "Wyświetlaj pojedyncze znaki nowego wiersza"
     }
   },
   "json": {

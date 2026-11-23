@@ -9,7 +9,8 @@
     "mcp": "MCP",
     "plugins": "插件",
     "keyboard": "键盘",
-    "advanced": "高级"
+    "advanced": "高级",
+    "markdown": "Markdown"
   },
   "ui": {
     "search": "搜索设置",
@@ -139,10 +140,14 @@
     "defaultMode": "Markdown 默认模式",
     "splitOrientation": "Markdown 拆分方向",
     "preview": {
-      "maxWidth": "Markdown 预览宽度",
+      "maxWidth": "页面最大宽度（逻辑像素）",
       "interactiveCheckboxes": "预览中可点击的任务复选框",
       "scrollSync": "同步编辑器和预览的滚动",
-      "loadRemoteImages": "在预览中加载远程图片"
+      "loadRemoteImages": "在预览中加载远程图片",
+      "tableMaxWidth": "表格最大宽度（逻辑像素；0 表示跟随页面宽度）",
+      "tableWrap": "表格单元格自动换行",
+      "codeWrap": "代码块自动换行",
+      "breaks": "显示单个换行符"
     }
   },
   "json": {

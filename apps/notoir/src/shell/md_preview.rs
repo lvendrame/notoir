@@ -60,6 +60,10 @@ struct Ctx<'a> {
     base_dir: Option<PathBuf>,
     size: f32,
     interactive: bool,
+    table_max_width: f32,
+    table_wrap: bool,
+    code_wrap: bool,
+    breaks: bool,
     remote: &'a str,
 }
 
@@ -162,9 +166,8 @@ pub fn show(
         .str("markdown.preview.loadRemoteImages", None)
         .to_owned();
     let state = previews.views.entry(view).or_default();
-    // Sideways too: a pane narrower than the minimum column scrolls instead
-    // of squeezing the text.
-    let mut scroll = egui::ScrollArea::both()
+    // Prose fits the pane; wide tables and code own their horizontal scroll.
+    let mut scroll = egui::ScrollArea::vertical()
         .id_salt(("md-preview", view))
         .auto_shrink([false, false]);
     if let Some(o) = state.set_offset.take() {
@@ -184,13 +187,16 @@ pub fn show(
         base_dir,
         size,
         interactive,
+        table_max_width: core.settings.int("markdown.preview.tableMaxWidth", None) as f32,
+        table_wrap: core.settings.bool("markdown.preview.tableWrap", None),
+        code_wrap: core.settings.bool("markdown.preview.codeWrap", None),
+        breaks: core.settings.bool("markdown.preview.breaks", None),
         remote: &remote,
     };
     let images = &previews.images;
     let out = scroll.show(ui, |ui| {
         let avail = ui.available_width();
-        let min_w = (size * 20.0).max(320.0);
-        let w = max_w.min(avail - 32.0).max(min_w);
+        let w = max_w.min((avail - 32.0).max(1.0));
         let pad = ((avail - w) / 2.0).max(16.0);
         ui.add_space(16.0);
         let top = ui.cursor().top();
@@ -283,11 +289,17 @@ fn block(
                 .inner_margin(egui::Margin::same(10))
                 .show(ui, |ui| {
                     ui.set_width(ui.available_width());
+                    if cx.code_wrap {
+                        let mut job = job.clone();
+                        job.wrap.max_width = ui.available_width();
+                        ui.add(egui::Label::new(job).wrap());
+                        return;
+                    }
                     // Long lines scroll sideways instead of being cut off.
                     egui::ScrollArea::horizontal()
                         .id_salt(("md-code", b.range.0))
                         .scroll_bar_visibility(
-                            egui::scroll_area::ScrollBarVisibility::AlwaysVisible,
+                            egui::scroll_area::ScrollBarVisibility::VisibleWhenNeeded,
                         )
                         .show(ui, |ui| {
                             ui.add(egui::Label::new(job).wrap_mode(egui::TextWrapMode::Extend));
@@ -362,46 +374,59 @@ fn block(
             header,
             rows,
         } => {
-            // A table wider than the column scrolls sideways.
+            let limit = if cx.table_max_width > 0.0 {
+                cx.table_max_width.min(ui.available_width())
+            } else {
+                ui.available_width()
+            }
+            .max(1.0);
+            let mut natural = vec![1.0_f32; header.len()];
+            for (cells, heading) in
+                std::iter::once((header, true)).chain(rows.iter().map(|row| (row, false)))
+            {
+                for (i, cell) in cells.iter().enumerate().take(natural.len()) {
+                    natural[i] = natural[i].max(cell_width(ui, cx, cell, heading, images));
+                }
+            }
+            let widths = table_widths(&natural, limit, cx.table_wrap);
+            // Only exceptionally dense tables need horizontal scrolling.
             egui::ScrollArea::horizontal()
-                .id_salt(("md-table-scroll", b.range.0))
-                .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysVisible)
+                .id_salt(("md-table-scroll", cx.doc, b.range.0))
+                .max_width(limit)
+                .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::VisibleWhenNeeded)
                 .show(ui, |ui| {
-                    egui::Grid::new(("md-table", b.range.0))
-                        .striped(true)
-                        .spacing([18.0, 6.0])
-                        .show(ui, |ui| {
-                            for (i, cell) in header.iter().enumerate() {
-                                cell_ui(
-                                    ui,
-                                    kit,
-                                    cx,
-                                    cell,
-                                    aligns.get(i).copied().unwrap_or(Align::None),
-                                    true,
-                                    images,
-                                    wanted,
-                                    actions,
-                                );
-                            }
-                            ui.end_row();
-                            for row in rows {
-                                for (i, cell) in row.iter().enumerate() {
-                                    cell_ui(
-                                        ui,
-                                        kit,
-                                        cx,
-                                        cell,
-                                        aligns.get(i).copied().unwrap_or(Align::None),
-                                        false,
-                                        images,
-                                        wanted,
-                                        actions,
-                                    );
-                                }
-                                ui.end_row();
-                            }
-                        });
+                    ui.vertical(|ui| {
+                        ui.spacing_mut().item_spacing.y = 0.0;
+                        for (row_index, cells) in
+                            std::iter::once(header).chain(rows.iter()).enumerate()
+                        {
+                            let fill = if row_index % 2 == 1 {
+                                ui.visuals().faint_bg_color
+                            } else {
+                                Color32::TRANSPARENT
+                            };
+                            egui::Frame::new().fill(fill).show(ui, |ui| {
+                                ui.spacing_mut().item_spacing.x = 18.0;
+                                ui.horizontal_top(|ui| {
+                                    for (i, cell) in cells.iter().enumerate() {
+                                        cell_ui(
+                                            ui,
+                                            kit,
+                                            cx,
+                                            cell,
+                                            widths[i],
+                                            aligns.get(i).copied().unwrap_or(Align::None),
+                                            row_index == 0,
+                                            images,
+                                            wanted,
+                                            actions,
+                                        );
+                                    }
+                                });
+                                ui.add_space(6.0);
+                            });
+                        }
+                    });
                 });
         }
         BlockKind::Rule => {
@@ -423,7 +448,9 @@ fn block(
             .show(ui, |ui| {
                 egui::ScrollArea::horizontal()
                     .id_salt(("fm-scroll", b.range.0))
-                    .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysVisible)
+                    .scroll_bar_visibility(
+                        egui::scroll_area::ScrollBarVisibility::VisibleWhenNeeded,
+                    )
                     .show(ui, |ui| {
                         egui::Grid::new(("fm", b.range.0)).show(ui, |ui| {
                             for line in src.lines().filter(|l| !l.trim().is_empty()) {
@@ -467,22 +494,252 @@ fn cell_ui(
     kit: &mut Kit,
     cx: &Ctx,
     cell: &[Inline],
+    width: f32,
     align: Align,
     header: bool,
     images: &HashMap<PathBuf, ImageTex>,
     wanted: &mut Vec<PathBuf>,
     actions: &mut Actions,
 ) {
-    let layout = match align {
-        Align::Right => egui::Layout::right_to_left(egui::Align::Center),
-        Align::Center => egui::Layout::top_down(egui::Align::Center),
-        _ => egui::Layout::left_to_right(egui::Align::Center),
+    let align = match align {
+        Align::Right => egui::Align::Max,
+        Align::Center => egui::Align::Center,
+        _ => egui::Align::Min,
     };
-    ui.with_layout(layout, |ui| {
-        // Cells size to their content instead of wrapping per character.
-        ui.style_mut().wrap_mode = Some(egui::TextWrapMode::Extend);
-        inline_flow(ui, kit, cx, cell, cx.size, header, images, wanted, actions);
-    });
+    ui.allocate_ui_with_layout(
+        egui::vec2(width, 0.0),
+        egui::Layout::top_down(align),
+        |ui| {
+            ui.set_width(width);
+            ui.style_mut().wrap_mode = Some(if cx.table_wrap {
+                egui::TextWrapMode::Wrap
+            } else {
+                egui::TextWrapMode::Extend
+            });
+            let mut runs = Vec::new();
+            flatten(
+                cell,
+                Style {
+                    strong: header,
+                    ..Default::default()
+                },
+                None,
+                cx.breaks,
+                &mut runs,
+            );
+            if runs.iter().any(|run| matches!(run, Run::Image(..))) {
+                inline_flow(ui, kit, cx, cell, cx.size, header, images, wanted, actions);
+            } else {
+                cell_text(ui, kit, cx, runs, align, actions);
+            }
+        },
+    );
+}
+
+/// A single galley aligns every wrapped line, including styled and linked runs.
+fn cell_text(
+    ui: &mut egui::Ui,
+    kit: &Kit,
+    cx: &Ctx,
+    runs: Vec<Run>,
+    align: egui::Align,
+    actions: &mut Actions,
+) {
+    let mut job = LayoutJob {
+        halign: align,
+        ..Default::default()
+    };
+    job.wrap.max_width = if cx.table_wrap {
+        ui.available_width()
+    } else {
+        f32::INFINITY
+    };
+    let mut links = Vec::new();
+    let mut chars = 0;
+    for run in runs {
+        match run {
+            Run::Text(text, style, link) => {
+                let count = text.chars().count();
+                let missing = link.as_deref().is_some_and(|url| {
+                    url.strip_prefix("wiki:").is_some_and(|target| {
+                        cx.missing.contains(
+                            &target
+                                .split('#')
+                                .next()
+                                .unwrap_or(target)
+                                .trim()
+                                .to_lowercase(),
+                        )
+                    })
+                });
+                let color = kit.color(if missing {
+                    Tok::Warning
+                } else if link.is_some() {
+                    Tok::SyntaxLink
+                } else if style.code {
+                    Tok::SyntaxCode
+                } else {
+                    Tok::TextPrimary
+                });
+                job.append(
+                    &text,
+                    0.0,
+                    TextFormat {
+                        font_id: if style.code {
+                            crate::fonts::mono(cx.size * 0.9)
+                        } else if style.strong {
+                            crate::fonts::semibold(cx.size)
+                        } else {
+                            FontId::proportional(cx.size)
+                        },
+                        color,
+                        italics: style.emphasis,
+                        strikethrough: if style.strike {
+                            Stroke::new(1.0, color)
+                        } else {
+                            Stroke::NONE
+                        },
+                        underline: if link.is_some() {
+                            Stroke::new(1.0, color)
+                        } else {
+                            Stroke::NONE
+                        },
+                        background: if style.code {
+                            kit.color(Tok::BgPanel)
+                        } else {
+                            Color32::TRANSPARENT
+                        },
+                        ..Default::default()
+                    },
+                );
+                if let Some(url) = link {
+                    links.push((chars..chars + count, url));
+                }
+                chars += count;
+            }
+            Run::Break => {
+                job.append(
+                    "\n",
+                    0.0,
+                    TextFormat {
+                        font_id: FontId::proportional(cx.size),
+                        ..Default::default()
+                    },
+                );
+                chars += 1;
+            }
+            Run::Image(..) => unreachable!("images use inline_flow"),
+        }
+    }
+    let galley = ui.fonts_mut(|fonts| fonts.layout_job(job));
+    let response = ui.add(egui::Label::new(galley.clone()).sense(Sense::click()));
+    if response.hovered()
+        && let Some(pointer) = ui.input(|i| i.pointer.hover_pos())
+    {
+        let origin = match align {
+            egui::Align::Min => response.rect.left_top(),
+            egui::Align::Center => response.rect.center_top(),
+            egui::Align::Max => response.rect.right_top(),
+        };
+        let local = pointer - origin;
+        // Do not follow a nearest-character link from blank cell space.
+        if galley
+            .rows
+            .iter()
+            .any(|row| row.rect().contains(local.to_pos2()))
+        {
+            let index = galley.cursor_from_pos(local).index.0;
+            if let Some((_, url)) = links.iter().find(|(range, _)| range.contains(&index)) {
+                let clicked = response.clicked();
+                response.on_hover_text(url);
+                ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand);
+                if clicked {
+                    cmd(
+                        actions,
+                        "markdown.openLink",
+                        json!({ "doc": cx.doc.0, "url": url }),
+                    );
+                }
+            }
+        }
+    }
+}
+
+/// Allocate a shared width per column, retaining small columns at natural size.
+fn table_widths(natural: &[f32], limit: f32, wrap: bool) -> Vec<f32> {
+    if !wrap {
+        return natural.to_vec();
+    }
+    let widths: Vec<f32> = natural.iter().map(|w| w.min(64.0)).collect();
+    let budget = (limit - 18.0 * natural.len().saturating_sub(1) as f32).max(0.0);
+    let extra = (budget - widths.iter().sum::<f32>()).max(0.0);
+    let need = natural.iter().zip(&widths).map(|(n, w)| n - w).sum::<f32>();
+    let ratio = if need > 0.0 {
+        (extra / need).min(1.0)
+    } else {
+        0.0
+    };
+    widths
+        .iter()
+        .zip(natural)
+        .map(|(w, n)| w + (n - w) * ratio)
+        .collect()
+}
+
+fn cell_width(
+    ui: &egui::Ui,
+    cx: &Ctx,
+    cell: &[Inline],
+    header: bool,
+    images: &HashMap<PathBuf, ImageTex>,
+) -> f32 {
+    let mut runs = Vec::new();
+    flatten(
+        cell,
+        Style {
+            strong: header,
+            ..Default::default()
+        },
+        None,
+        cx.breaks,
+        &mut runs,
+    );
+    let mut line = 0.0_f32;
+    let mut width = 1.0_f32;
+    for run in runs {
+        match run {
+            Run::Text(text, style, _) => {
+                let font = if style.code {
+                    crate::fonts::mono(cx.size * 0.9)
+                } else if style.strong {
+                    crate::fonts::semibold(cx.size)
+                } else {
+                    FontId::proportional(cx.size)
+                };
+                let job = LayoutJob::simple(text, font, Color32::WHITE, f32::INFINITY);
+                let mut job = job;
+                for section in &mut job.sections {
+                    section.format.italics = style.emphasis;
+                }
+                line += ui.fonts_mut(|fonts| fonts.layout_job(job)).size().x;
+            }
+            Run::Image(url, _) => {
+                let path = cx
+                    .base_dir
+                    .as_ref()
+                    .map(|base| base.join(notoir_editor::markdown_edit::decode_destination(&url)));
+                line += match path.as_ref().and_then(|p| images.get(p)) {
+                    Some(ImageTex::Ready(_, size)) => size.x,
+                    _ => 64.0,
+                };
+            }
+            Run::Break => {
+                width = width.max(line);
+                line = 0.0;
+            }
+        }
+    }
+    width.max(line)
 }
 
 /// Text with `[[wiki links]]`: plain runs and `wiki:` link runs showing the
@@ -518,7 +775,7 @@ enum Run {
     Break,
 }
 
-fn flatten(inlines: &[Inline], style: Style, link: Option<&str>, out: &mut Vec<Run>) {
+fn flatten(inlines: &[Inline], style: Style, link: Option<&str>, breaks: bool, out: &mut Vec<Run>) {
     for i in inlines {
         match i {
             Inline::Text(t) if link.is_none() && t.contains("[[") => wiki_runs(t, style, out),
@@ -546,6 +803,7 @@ fn flatten(inlines: &[Inline], style: Style, link: Option<&str>, out: &mut Vec<R
                     ..style
                 },
                 link,
+                breaks,
                 out,
             ),
             Inline::Strong(c) => flatten(
@@ -555,6 +813,7 @@ fn flatten(inlines: &[Inline], style: Style, link: Option<&str>, out: &mut Vec<R
                     ..style
                 },
                 link,
+                breaks,
                 out,
             ),
             Inline::Strike(c) => flatten(
@@ -564,13 +823,15 @@ fn flatten(inlines: &[Inline], style: Style, link: Option<&str>, out: &mut Vec<R
                     ..style
                 },
                 link,
+                breaks,
                 out,
             ),
-            Inline::Link { url, children, .. } => flatten(children, style, Some(url), out),
+            Inline::Link { url, children, .. } => flatten(children, style, Some(url), breaks, out),
             Inline::Image { url, alt } => out.push(Run::Image(url.clone(), alt.clone())),
             Inline::FootnoteRef(l) => {
                 out.push(Run::Text(format!("[{l}]"), style, Some(format!("#fn-{l}"))))
             }
+            Inline::SoftBreak if breaks => out.push(Run::Break),
             Inline::SoftBreak => out.push(Run::Text(" ".into(), style, None)),
             Inline::HardBreak => out.push(Run::Break),
         }
@@ -597,9 +858,10 @@ fn inline_flow(
             ..Default::default()
         },
         None,
+        cx.breaks,
         &mut runs,
     );
-    // Table cells (`Extend`) stay on one line; the table scrolls instead.
+    // Non-wrapping table cells retain their natural width.
     let one_line = ui.style().wrap_mode == Some(egui::TextWrapMode::Extend);
     let flow = |ui: &mut egui::Ui| {
         ui.spacing_mut().item_spacing.x = 0.0;
@@ -700,7 +962,14 @@ fn inline_flow(
     if one_line {
         ui.horizontal(flow);
     } else {
-        ui.horizontal_wrapped(flow);
+        let align = ui.layout().horizontal_align();
+        ui.allocate_ui_with_layout(
+            egui::vec2(ui.available_width(), 0.0),
+            egui::Layout::left_to_right(egui::Align::Center)
+                .with_main_wrap(true)
+                .with_main_align(align),
+            flow,
+        );
     }
 }
 
@@ -755,7 +1024,7 @@ fn image(
     };
     match images.get(&path) {
         Some(ImageTex::Ready(tex, size)) => {
-            let max = ui.available_width().max(40.0);
+            let max = ui.available_width().max(1.0);
             let scale = (max / size.x).min(1.0);
             ui.add(egui::Image::new((tex.id(), *size * scale)))
                 .on_hover_text(alt);
@@ -778,6 +1047,21 @@ fn image(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn table_column_allocation() {
+        assert_eq!(table_widths(&[30.0, 40.0], 500.0, true), vec![30.0, 40.0]);
+        let uneven = table_widths(&[30.0, 400.0, 200.0], 300.0, true);
+        assert_eq!(uneven[0], 30.0);
+        assert!(uneven[1] > uneven[2]);
+        assert!((uneven.iter().sum::<f32>() + 36.0 - 300.0).abs() < 0.01);
+        assert_eq!(table_widths(&[400.0; 8], 200.0, true), vec![64.0; 8]);
+        assert_eq!(
+            table_widths(&[40.0, 600.0], 200.0, false),
+            vec![40.0, 600.0]
+        );
+        assert!(table_widths(&[], 0.0, true).is_empty());
+    }
 
     // spec 24: "Code block highlighting"
     #[test]

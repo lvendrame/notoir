@@ -9,7 +9,8 @@
     "mcp": "MCP",
     "plugins": "Plug-ins",
     "keyboard": "Toetsenbord",
-    "advanced": "Geavanceerd"
+    "advanced": "Geavanceerd",
+    "markdown": "Markdown"
   },
   "ui": {
     "search": "Instellingen doorzoeken",
@@ -139,10 +140,14 @@
     "defaultMode": "Standaardmodus voor Markdown",
     "splitOrientation": "Splitsrichting voor Markdown",
     "preview": {
-      "maxWidth": "Breedte van Markdown-voorbeeld",
+      "maxWidth": "Maximale paginabreedte (logische pixels)",
       "interactiveCheckboxes": "Aanklikbare taakvakjes in voorbeeld",
       "scrollSync": "Scrollen van editor en voorbeeld synchroniseren",
-      "loadRemoteImages": "Externe afbeeldingen laden in voorbeeld"
+      "loadRemoteImages": "Externe afbeeldingen laden in voorbeeld",
+      "tableMaxWidth": "Maximale tabelbreedte (logische pixels; 0 volgt de pagina)",
+      "tableWrap": "Tekst in tabelcellen laten teruglopen",
+      "codeWrap": "Codeblokken laten teruglopen",
+      "breaks": "Enkele regeleinden weergeven"
     }
   },
   "json": {

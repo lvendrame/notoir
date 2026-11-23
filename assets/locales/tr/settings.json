@@ -9,7 +9,8 @@
     "mcp": "MCP",
     "plugins": "Eklentiler",
     "keyboard": "Klavye",
-    "advanced": "Gelişmiş"
+    "advanced": "Gelişmiş",
+    "markdown": "Markdown"
   },
   "ui": {
     "search": "Ayarlarda ara",
@@ -139,10 +140,14 @@
     "defaultMode": "Markdown varsayılan modu",
     "splitOrientation": "Markdown bölme yönü",
     "preview": {
-      "maxWidth": "Markdown önizleme genişliği",
+      "maxWidth": "En fazla sayfa genişliği (mantıksal piksel)",
       "interactiveCheckboxes": "Önizlemede tıklanabilir görev kutuları",
       "scrollSync": "Düzenleyici ve önizleme kaydırmasını eşitle",
-      "loadRemoteImages": "Önizlemede uzak görüntüleri yükle"
+      "loadRemoteImages": "Önizlemede uzak görüntüleri yükle",
+      "tableMaxWidth": "En fazla tablo genişliği (mantıksal piksel; 0 sayfa genişliğini kullanır)",
+      "tableWrap": "Tablo hücrelerinde satır kaydır",
+      "codeWrap": "Kod bloklarında satır kaydır",
+      "breaks": "Tek satır sonlarını göster"
     }
   },
   "json": {

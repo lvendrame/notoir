@@ -48,6 +48,7 @@ pub struct ZenState {
 pub const CATEGORIES: &[SettingCategory] = &[
     SettingCategory::General,
     SettingCategory::Editor,
+    SettingCategory::Markdown,
     SettingCategory::Appearance,
     SettingCategory::Files,
     SettingCategory::Workspace,
@@ -61,6 +62,7 @@ pub const CATEGORIES: &[SettingCategory] = &[
 pub fn category_key(c: SettingCategory) -> &'static str {
     match c {
         SettingCategory::General => "settings:category.general",
+        SettingCategory::Markdown => "settings:category.markdown",
         SettingCategory::Editor => "settings:category.editor",
         SettingCategory::Appearance => "settings:category.appearance",
         SettingCategory::Files => "settings:category.files",

@@ -305,3 +305,71 @@ fn indentation_picker_converts_and_sets_tab_size() {
     common::run(&mut app, "editor.changeTabSize", json!({ "size": 2 }));
     assert!(app.harness.query_by_label("Tab Size: 2").is_some());
 }
+
+// spec 20: "Markdown display settings have a dedicated category"
+#[test]
+fn markdown_settings_category_and_scope() {
+    use notoir_core::settings::{SettingCategory, SettingValue as V};
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path().canonicalize().unwrap();
+    let r = root.clone();
+    let mut app = common::start(move |o| o.open_paths = vec![(r, None)]);
+    common::settle(&mut app);
+    common::run(&mut app, "app.settings", json!({"category":"markdown"}));
+    assert_eq!(
+        app.harness.state().core.settings_ui.category,
+        Some(SettingCategory::Markdown)
+    );
+    assert!(
+        app.harness
+            .query_by_label("Maximum page width (logical pixels)")
+            .is_some()
+    );
+    app.harness
+        .state_mut()
+        .core
+        .set_user_setting("markdown.preview.tableMaxWidth", Some(V::Int(400)));
+    app.harness
+        .state_mut()
+        .core
+        .set_workspace_setting("markdown.preview.tableMaxWidth", Some(V::Int(500)));
+    common::settle(&mut app);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .settings
+            .int("markdown.preview.tableMaxWidth", None),
+        500
+    );
+    let saved = std::fs::read_to_string(root.join(".notoir/settings.toml")).unwrap();
+    assert!(saved.contains("tableMaxWidth = 500"));
+    app.harness
+        .state_mut()
+        .core
+        .set_workspace_setting("markdown.preview.tableMaxWidth", None);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .settings
+            .int("markdown.preview.tableMaxWidth", None),
+        400
+    );
+    app.harness
+        .state_mut()
+        .core
+        .set_user_setting("markdown.preview.tableMaxWidth", None);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .settings
+            .int("markdown.preview.tableMaxWidth", None),
+        0
+    );
+    app.harness.state_mut().core.settings_ui.search = "wrap table".into();
+    app.harness.run_steps(3);
+    assert!(app.harness.query_by_label("Wrap table cells").is_some());
+    assert!(app.harness.query_by_label("Wrap code blocks").is_none());
+}
