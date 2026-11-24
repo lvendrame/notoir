@@ -230,6 +230,7 @@ pub fn about(ctx: &egui::Context, kit: &mut Kit, ui_state: &mut UiState) {
                     .size(11.0)
                     .color(kit.color(Tok::TextTertiary)),
             );
+            ui.label(t!("media:license"));
             ui.add_space(12.0);
             if ui.button(t!("common:close")).clicked() {
                 ui.close();

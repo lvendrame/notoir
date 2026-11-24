@@ -1,0 +1,53 @@
+name: Build local media runtime
+description: Build the checksum-pinned LGPL FFmpeg libraries and expose compiler/loader paths
+runs:
+  using: composite
+  steps:
+    - name: Linux media build tools
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y nasm pkg-config libasound2-dev patchelf clang
+    - name: macOS assembler
+      if: runner.os == 'macOS'
+      shell: bash
+      run: brew list nasm >/dev/null 2>&1 || brew install nasm
+    - name: MSVC developer environment
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+    - name: Windows media build tools
+      if: runner.os == 'Windows'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        path-type: inherit
+        install: make diffutils nasm pkgconf mingw-w64-x86_64-gcc
+    - name: Cache native decoder
+      uses: actions/cache@v4
+      with:
+        path: |
+          target/native/ffmpeg
+          target/native/ffmpeg-9.1.tar.xz
+          target/native/ffmpeg-source-9.1.tar.xz
+        key: media-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/build-media-runtime.sh') }}
+    - name: Build media runtime (Unix)
+      if: runner.os != 'Windows'
+      shell: bash
+      run: |
+        bash scripts/build-media-runtime.sh
+        source target/native/media-env.sh
+        for key in FFMPEG_DIR PKG_CONFIG_PATH LD_LIBRARY_PATH DYLD_LIBRARY_PATH; do
+          echo "$key=${!key}" >> "$GITHUB_ENV"
+        done
+    - name: Build media runtime (Windows)
+      if: runner.os == 'Windows'
+      shell: msys2 {0}
+      run: |
+        bash scripts/build-media-runtime.sh x86_64-pc-windows-msvc
+        prefix="$PWD/target/native/ffmpeg/x86_64-pc-windows-msvc"
+        echo "FFMPEG_DIR=$(cygpath -m "$prefix")" >> "$GITHUB_ENV"
+        cygpath -w "$prefix/bin" >> "$GITHUB_PATH"
+        # Git Bash needs these tools when packaging invokes the build script.
+        cygpath -w /mingw64/bin >> "$GITHUB_PATH"
+        cygpath -w /usr/bin >> "$GITHUB_PATH"

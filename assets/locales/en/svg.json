@@ -1,0 +1,8 @@
+{
+  "rendering": "Rendering SVG…",
+  "invalid": "Unable to preview SVG",
+  "lastValid": "Showing the last valid SVG. Edit the source to fix the error.",
+  "tooLarge": "This SVG exceeds the preview size limits.",
+  "memoryLimit": "SVG preview memory limit reached. Close another preview and try again.",
+  "cancelled": "Preview cancelled."
+}

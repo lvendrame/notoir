@@ -1,0 +1,23 @@
+{
+  "play": "Abspielen",
+  "pause": "Pause",
+  "stop": "Stoppen",
+  "seek": "Position",
+  "mute": "Stummschalten",
+  "volume": "Lautstärke",
+  "zoom": "Zoom",
+  "zoomIn": "Vergrößern",
+  "zoomOut": "Verkleinern",
+  "fit": "An Bereich anpassen",
+  "actualSize": "Originalgröße",
+  "retry": "Erneut versuchen",
+  "loading": "Medien werden geladen…",
+  "failed": "Medium konnte nicht geöffnet werden",
+  "unknownDuration": "Unbekannt",
+  "tooLarge": "Die Abmessungen überschreiten die Grenze.",
+  "memoryLimit": "Speichergrenze erreicht. Schließen Sie einen anderen Medien-Tab.",
+  "decodeFailed": "Datei konnte nicht dekodiert werden.",
+  "noAudio": "Keine unterstützte Audiospur.",
+  "noVideo": "Keine unterstützte Videospur.",
+  "license": "FFmpeg · LGPL-2.1-or-later"
+}

@@ -31,6 +31,8 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 tracing-appender = "0.2"
 resvg = "0.48.1"
 image = { version = "0.25.10", default-features = false, features = ["png"] }
+ffmpeg-next = { version = "9.1.0", default-features = false, features = ["format", "software-resampling", "software-scaling"] }
+rodio = { version = "0.23.0", default-features = false, features = ["playback"] }
 skrifa = "0.44.0"
 fontdb = { version = "0.24.0", default-features = false, features = ["std", "fs"] }
 directories = "6.0.0"

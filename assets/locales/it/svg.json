@@ -1,0 +1,8 @@
+{
+  "rendering": "Rendering SVG…",
+  "invalid": "Impossibile visualizzare SVG",
+  "lastValid": "È mostrato l’ultimo SVG valido. Modifica il codice per correggere l’errore.",
+  "tooLarge": "Questo SVG supera i limiti di dimensione dell’anteprima.",
+  "memoryLimit": "Limite di memoria SVG raggiunto. Chiudi un’altra anteprima e riprova.",
+  "cancelled": "Anteprima annullata."
+}

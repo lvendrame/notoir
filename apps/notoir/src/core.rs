@@ -202,6 +202,7 @@ pub struct AppCore {
     pub editor_focused: bool,
     pub files: crate::files::FileState,
     pub printing: crate::printing::PrintState,
+    pub media: Option<Box<crate::media::MediaState>>,
     /// Panels as they were before Maximize Editor Group (restored exactly).
     pub maximize_saved: Option<PanelLayout>,
     /// The open workspace (one per window).
@@ -234,6 +235,7 @@ pub struct AppCore {
     pub worksheets: crate::markdown_table::Worksheets,
     pub json: crate::json::JsonState,
     pub csv: crate::csv::CsvState,
+    pub svg: Option<Box<crate::svg::SvgState>>,
     pub url: crate::url_document::UrlState,
     pub live_requests: Vec<serde_json::Value>,
     pub live_output: Option<String>,
@@ -457,6 +459,7 @@ impl AppCore {
             worksheets: Default::default(),
             json: Default::default(),
             csv: Default::default(),
+            svg: None,
             url: Default::default(),
             live_requests: Vec::new(),
             live_output: None,
@@ -495,6 +498,7 @@ impl AppCore {
             zoom: 100,
             editor_focused: false,
             maximize_saved: None,
+            media: None,
             printing: crate::printing::PrintState::new(opts.printer.clone()),
             files: crate::files::FileState::new(
                 opts.dialogs
@@ -731,6 +735,19 @@ impl AppCore {
     /// Context keys for when-expressions and menu check marks.
     pub fn context(&self, fullscreen: bool) -> ContextSnapshot {
         let mut c = ContextSnapshot::default();
+        c.set_bool(
+            "svgActive",
+            self.workbench
+                .active_document()
+                .is_some_and(|d| self.is_svg(d)),
+        );
+        c.set_bool(
+            "mediaActive",
+            self.workbench
+                .active_view()
+                .and_then(|v| self.workbench.view(v))
+                .is_some_and(|v| v.kind == notoir_core::view::ViewKind::Media),
+        );
         c.set_bool("isMac", self.platform == Platform::Mac)
             .set_bool("primarySidebarVisible", self.panels.primary.visible)
             .set_bool("secondarySidebarVisible", self.panels.secondary.visible)
@@ -810,6 +827,15 @@ impl AppCore {
                 self.settings.bool("notes.sync.enabled", None)
                     && self.workspace.as_ref().is_some_and(|w| w.trusted),
             );
+        if let Some(doc) = self
+            .workbench
+            .active_document()
+            .and_then(|id| self.workbench.document(id))
+            .filter(|d| d.media_kind().is_some())
+        {
+            c.set_bool("hasFilePath", doc.path().is_some())
+                .set_bool("readOnly", true);
+        }
         if let Some(view) = self
             .workbench
             .active_editor()
@@ -985,8 +1011,12 @@ impl AppCore {
         results.extend(self.fs.drain());
         results.extend(self.index_queue.drain());
         results.extend(self.git_queue.drain());
+        if let Some(svg) = &self.svg {
+            results.extend(svg.io.drain());
+        }
         for result in results {
             match result {
+                IoResult::SvgRendered(done) => self.svg_rendered(*done),
                 IoResult::Printed(result) => self.print_finished(result),
                 IoResult::FilesPicked(paths) if self.plugins_files_picked(&paths) => {}
                 IoResult::FilesPicked(paths) => {
@@ -1117,6 +1147,10 @@ impl AppCore {
             & self.fs.wait_idle(Duration::from_secs(5))
             & self.index_queue.wait_idle(Duration::from_secs(5))
             & self.git_queue.wait_idle(Duration::from_secs(5))
+            & self
+                .svg
+                .as_ref()
+                .is_none_or(|svg| svg.io.wait_idle(Duration::from_secs(5)))
     }
 }
 
@@ -1255,6 +1289,8 @@ impl AppCore {
     /// Exit: Scratchpads, session and recovery are written before the
     /// process ends.
     pub fn shutdown(&mut self) {
+        self.media = None;
+        self.svg = None;
         self.mcp_stop_local();
         // Plugin VMs stop when their handles drop.
         self.plugins.entries.clear();

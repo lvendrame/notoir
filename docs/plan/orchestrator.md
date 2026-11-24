@@ -165,3 +165,17 @@ Validation: formatting, workspace Clippy with warnings denied, and the serial wo
 Markdown display snapshots were reviewed in Preview, Split and narrow panes across all three built-in themes;
 references are saved in `docs/design/markdown-display-*.png`. The generated settings reference and spec coverage
 report are current.
+
+### Local media (spec 42)
+
+Read-only media documents, lazy streaming workers, Lucide controls, per-view zoom, Media settings, session restoration and surface budgets. Physical audio, installed-package acceptance and memory profiling remain cross-platform verification requirements.
+
+Media validation: real PNG/GIF/WebM/PCM WAV and H.264+AAC decoder tests pass, with a null audio output; media UI and session tests pass. Lucide control snapshots were reviewed at desktop/narrow widths in all three themes. The local LGPL FFmpeg 9.1 source build passes, and a macOS app bundle launches through its relative media-library rpath after removing the development rpath. Cross-platform physical sound and installer acceptance remain release checks.
+
+### SVG presentation (spec 43)
+
+Editable XML documents gain the shared Edit/Split/Preview selector, background revisioned resvg rendering, independent preview zoom, lazy bounded resources, error recovery and optional session presentation fields. SVG source still uses the ordinary save pipeline.
+
+SVG focused validation: raster alpha/size/budget checks and seven application tests pass (mode switching, unsaved edits/error recovery, session/zoom, normal save, rapid revision changes, plain XML exclusion, theme/layout snapshots). Snapshots in `docs/design/svg-*.png` were reviewed. Formatting and workspace Clippy pass.
+
+SVG final verification: eight SVG application tests, the raster resource/alpha test, formatting, generated references and workspace Clippy pass. The workspace run passed all targets except one intermittent custom-theme deletion assertion; all 16 theme-manager tests passed on an unchanged rerun.

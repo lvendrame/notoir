@@ -1,0 +1,23 @@
+{
+  "play": "再生",
+  "pause": "一時停止",
+  "stop": "停止",
+  "seek": "再生位置",
+  "mute": "ミュート",
+  "volume": "音量",
+  "zoom": "ズーム",
+  "zoomIn": "拡大",
+  "zoomOut": "縮小",
+  "fit": "領域に合わせる",
+  "actualSize": "実際のサイズ",
+  "retry": "再試行",
+  "loading": "メディアを読み込み中…",
+  "failed": "メディアを開けません",
+  "unknownDuration": "不明",
+  "tooLarge": "メディアの寸法が上限を超えています。",
+  "memoryLimit": "メモリ上限に達しました。他のメディアタブを閉じて再試行してください。",
+  "decodeFailed": "ファイルをデコードできません。",
+  "noAudio": "対応する音声トラックがありません。",
+  "noVideo": "対応する動画トラックがありません。",
+  "license": "FFmpeg · LGPL-2.1-or-later"
+}

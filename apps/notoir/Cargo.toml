@@ -39,7 +39,9 @@ tracing-appender.workspace = true
 arboard.workspace = true
 unicode-segmentation.workspace = true
 notoir-editor.workspace = true
-image = { workspace = true, features = ["png", "jpeg", "gif", "webp"] }
+image = { workspace = true, features = ["png", "jpeg", "gif", "webp", "bmp", "tiff", "ico"] }
+ffmpeg-next.workspace = true
+rodio.workspace = true
 
 [dev-dependencies]
 egui_kittest = { workspace = true, features = ["wgpu", "snapshot", "eframe"] }

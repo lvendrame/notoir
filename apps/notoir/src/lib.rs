@@ -37,6 +37,7 @@ pub mod markdown_insert;
 pub mod markdown_table;
 pub mod mcp;
 pub mod mcp_tools;
+pub mod media;
 pub mod menus;
 #[cfg(target_os = "macos")]
 mod native_menu;
@@ -52,6 +53,7 @@ pub mod session;
 pub mod settings_tab;
 pub mod shell;
 pub mod structure;
+pub mod svg;
 pub mod templates;
 pub mod text_index;
 pub mod theme;

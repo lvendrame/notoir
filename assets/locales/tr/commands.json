@@ -460,5 +460,30 @@
   },
   "themes": {
     "action": "Temaları Yönet"
+  },
+  "media": {
+    "playPause": "Oynat",
+    "stop": "Durdur",
+    "mute": "Sesi kapat",
+    "seek": "Konum",
+    "volume": "Ses düzeyi",
+    "zoomIn": "Yakınlaştır",
+    "zoomOut": "Uzaklaştır",
+    "fit": "Panele sığdır",
+    "actualSize": "Gerçek boyut",
+    "retry": "Yeniden dene",
+    "setZoom": "Yakınlaştırma"
+  },
+  "svg": {
+    "showEditor": "Düzenleyiciyi Göster",
+    "showSplit": "Düzenleyiciyi ve Önizlemeyi Göster",
+    "showPreview": "Önizlemeyi Göster",
+    "zoomIn": "Yakınlaştır",
+    "zoomOut": "Uzaklaştır",
+    "fit": "Panele sığdır",
+    "actualSize": "Gerçek boyut",
+    "setZoom": "Yakınlaştırma",
+    "action": "SVG düzenle",
+    "retry": "Yeniden dene"
   }
 }

@@ -451,6 +451,9 @@ fn replace_nth(f: &FileMatches, n: usize, q: &FindQuery, with: &str) -> Result<u
     use notoir_workspace::fs_io::{self, LoadOptions, SaveRequest};
     let lm = f.matches.get(n).ok_or("gone")?;
     let loaded = fs_io::load(&f.path, &LoadOptions::default()).map_err(|e| e.to_string())?;
+    if loaded.media.is_some() {
+        return Err("Media files have no editable text".into());
+    }
     let mut rope = Rope::from_str(&loaded.text.text);
     if lm.line >= rope.len_lines() {
         return Ok(0);

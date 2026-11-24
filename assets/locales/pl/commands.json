@@ -460,5 +460,30 @@
   },
   "themes": {
     "action": "Zarządzaj motywami"
+  },
+  "media": {
+    "playPause": "Odtwórz",
+    "stop": "Zatrzymaj",
+    "mute": "Wycisz",
+    "seek": "Pozycja",
+    "volume": "Głośność",
+    "zoomIn": "Powiększ",
+    "zoomOut": "Pomniejsz",
+    "fit": "Dopasuj do panelu",
+    "actualSize": "Rozmiar rzeczywisty",
+    "retry": "Ponów",
+    "setZoom": "Powiększenie"
+  },
+  "svg": {
+    "showEditor": "Pokaż edytor",
+    "showSplit": "Pokaż edytor i podgląd",
+    "showPreview": "Pokaż podgląd",
+    "zoomIn": "Powiększ",
+    "zoomOut": "Pomniejsz",
+    "fit": "Dopasuj do panelu",
+    "actualSize": "Rozmiar rzeczywisty",
+    "setZoom": "Powiększenie",
+    "action": "Edytuj SVG",
+    "retry": "Ponów"
   }
 }

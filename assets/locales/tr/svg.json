@@ -1,0 +1,8 @@
+{
+  "rendering": "SVG işleniyor…",
+  "invalid": "SVG önizlenemiyor",
+  "lastValid": "Son geçerli SVG gösteriliyor. Hatayı düzeltmek için kaynağı düzenleyin.",
+  "tooLarge": "Bu SVG önizleme boyut sınırlarını aşıyor.",
+  "memoryLimit": "SVG önizleme bellek sınırına ulaşıldı. Başka bir önizlemeyi kapatıp yeniden deneyin.",
+  "cancelled": "Önizleme iptal edildi."
+}

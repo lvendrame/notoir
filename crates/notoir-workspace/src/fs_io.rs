@@ -85,8 +85,44 @@ pub struct Loaded {
     pub path: PathBuf,
     pub key: PathKey,
     pub text: LoadedText,
+    pub media: Option<notoir_core::document::MediaKind>,
     pub size: u64,
     pub modified: Option<SystemTime>,
+}
+
+/// Recognize safe local media candidates before text decoding. Containers are
+/// probed by FFmpeg later; extension hints also allow actionable corrupt-file errors.
+pub fn media_kind(path: &Path, header: &[u8]) -> Option<notoir_core::document::MediaKind> {
+    use notoir_core::document::MediaKind as K;
+    if header.starts_with(b"GIF87a") || header.starts_with(b"GIF89a") {
+        return Some(K::Gif);
+    }
+    if header.starts_with(b"\x89PNG\r\n\x1a\n")
+        || header.starts_with(b"\xff\xd8\xff")
+        || header.starts_with(b"BM")
+        || header.starts_with(b"II*\0")
+        || header.starts_with(b"MM\0*")
+        || (header.starts_with(b"RIFF") && header.get(8..12) == Some(b"WEBP"))
+    {
+        return Some(K::Image);
+    }
+    let ext = path.extension()?.to_str()?.to_ascii_lowercase();
+    match ext.as_str() {
+        "gif" => Some(K::Gif),
+        "png" | "jpg" | "jpeg" | "webp" | "bmp" | "tif" | "tiff" | "ico" => Some(K::Image),
+        "mp4" | "mov" | "mkv" | "webm" | "m4v" => Some(K::Video),
+        "mp3" | "wav" | "flac" | "ogg" | "opus" | "aac" | "m4a" => Some(K::Audio),
+        _ if header.starts_with(b"fLaC")
+            || header.starts_with(b"ID3")
+            || header.starts_with(b"OggS") =>
+        {
+            Some(K::Audio)
+        }
+        _ if header.get(4..8) == Some(b"ftyp") || header.starts_with(b"\x1aE\xdf\xa3") => {
+            Some(K::Video)
+        }
+        _ => None,
+    }
 }
 
 pub fn load(path: &Path, opts: &LoadOptions) -> Result<Loaded, LoadError> {
@@ -95,6 +131,24 @@ pub fn load(path: &Path, opts: &LoadOptions) -> Result<Loaded, LoadError> {
         return Err(LoadError::IsDirectory);
     }
     let size = meta.len();
+    // Only inspect a small header; never read an entire movie through the text loader.
+    use std::io::Read;
+    let mut header = [0; 64];
+    let n = std::fs::File::open(path)?.read(&mut header)?;
+    if opts.forced_encoding.is_none()
+        && let Some(kind) = media_kind(path, &header[..n])
+    {
+        let (path, key) = identity(path);
+        return Ok(Loaded {
+            path,
+            key,
+            text: LoadedText::empty(notoir_editor::LanguageId::PLAINTEXT),
+            media: Some(kind),
+            size,
+            modified: meta.modified().ok(),
+        });
+    }
+
     if size > opts.max_open_bytes {
         return Err(LoadError::TooLarge {
             size,
@@ -134,6 +188,7 @@ pub fn load(path: &Path, opts: &LoadOptions) -> Result<Loaded, LoadError> {
         notoir_editor::indent_detect::detect(&text)
     };
     Ok(Loaded {
+        media: None,
         path: canonical,
         key,
         text: LoadedText {
@@ -411,5 +466,26 @@ mod tests {
             "{result:?}"
         );
         assert_eq!(std::fs::read_to_string(&p).unwrap(), "original");
+    }
+}
+
+#[cfg(test)]
+mod media_tests {
+    use super::*;
+    #[test]
+    fn large_media_bypasses_text_size_limits_and_magic_wins() {
+        use notoir_core::document::MediaKind;
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("large.mp4");
+        let file = std::fs::File::create(&path).unwrap();
+        file.set_len(3 * 1024 * 1024 * 1024).unwrap();
+        let loaded = load(&path, &LoadOptions::default()).unwrap();
+        assert_eq!(loaded.media, Some(MediaKind::Video));
+        assert!(loaded.text.text.is_empty());
+        assert_eq!(
+            media_kind(Path::new("wrong.txt"), b"GIF89a"),
+            Some(MediaKind::Gif)
+        );
+        assert_eq!(media_kind(Path::new("source.svg"), b"<svg/>"), None);
     }
 }

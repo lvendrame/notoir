@@ -460,5 +460,30 @@
   },
   "themes": {
     "action": "Thema’s beheren"
+  },
+  "media": {
+    "playPause": "Afspelen",
+    "stop": "Stoppen",
+    "mute": "Dempen",
+    "seek": "Positie",
+    "volume": "Volume",
+    "zoomIn": "Inzoomen",
+    "zoomOut": "Uitzoomen",
+    "fit": "Aan paneel aanpassen",
+    "actualSize": "Werkelijke grootte",
+    "retry": "Opnieuw proberen",
+    "setZoom": "Zoom"
+  },
+  "svg": {
+    "showEditor": "Editor tonen",
+    "showSplit": "Editor en voorbeeld tonen",
+    "showPreview": "Voorbeeld tonen",
+    "zoomIn": "Inzoomen",
+    "zoomOut": "Uitzoomen",
+    "fit": "Aan paneel aanpassen",
+    "actualSize": "Werkelijke grootte",
+    "setZoom": "Zoom",
+    "action": "SVG bewerken",
+    "retry": "Opnieuw proberen"
   }
 }

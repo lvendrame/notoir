@@ -119,6 +119,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
+      - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2
       - name: Linux system libraries
         if: runner.os == 'Linux'
@@ -166,6 +167,8 @@ jobs:
             target/packages/*.asc
             target/packages/*.zip
             target/packages/*.tar.gz
+            target/packages/*.tar.xz
+            target/packages/FFmpeg-build.sh
             target/packages/SHA256SUMS-*.txt
           if-no-files-found: error
 
@@ -180,6 +183,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
+      - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2
       - name: cargo-packager
         run: cargo install cargo-packager --version 0.11.8 --locked

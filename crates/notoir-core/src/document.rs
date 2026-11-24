@@ -10,6 +10,90 @@ use notoir_editor::{ChangeSet, LanguageId, LineEnding, TextBuffer};
 
 use crate::ids::DocumentId;
 
+/// Content classification; decoding resources belong to the application layer.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum MediaKind {
+    Image,
+    Gif,
+    Video,
+    Audio,
+}
+
+/// Text storage is absent for media. Read-only compatibility queries return
+/// empty text; callers needing real text must use `as_text`.
+#[derive(Debug)]
+pub enum DocumentContent {
+    Text(Box<TextBuffer>),
+    Media(MediaKind),
+}
+impl DocumentContent {
+    pub fn as_text(&self) -> Option<&TextBuffer> {
+        match self {
+            Self::Text(t) => Some(t),
+            _ => None,
+        }
+    }
+    pub fn as_text_mut(&mut self) -> Option<&mut TextBuffer> {
+        match self {
+            Self::Text(t) => Some(t),
+            _ => None,
+        }
+    }
+    pub fn media_kind(&self) -> Option<MediaKind> {
+        match self {
+            Self::Media(k) => Some(*k),
+            _ => None,
+        }
+    }
+    pub fn rope(&self) -> &notoir_editor::Rope {
+        // Shared sentinel for generic tab/session presentation, never file bytes.
+        static EMPTY: std::sync::OnceLock<notoir_editor::Rope> = std::sync::OnceLock::new();
+        self.as_text().map_or_else(
+            || EMPTY.get_or_init(notoir_editor::Rope::new),
+            TextBuffer::rope,
+        )
+    }
+    pub fn text(&self) -> String {
+        self.as_text().map_or_else(String::new, TextBuffer::text)
+    }
+    pub fn len_chars(&self) -> usize {
+        self.as_text().map_or(0, TextBuffer::len_chars)
+    }
+    pub fn state(&self) -> u64 {
+        self.as_text().map_or(0, TextBuffer::state)
+    }
+    pub fn can_undo(&self) -> bool {
+        self.as_text().is_some_and(TextBuffer::can_undo)
+    }
+    pub fn can_redo(&self) -> bool {
+        self.as_text().is_some_and(TextBuffer::can_redo)
+    }
+    pub fn seal(&mut self) {
+        if let Some(t) = self.as_text_mut() {
+            t.seal();
+        }
+    }
+    pub fn set_undo_limit(&mut self, n: usize) {
+        if let Some(t) = self.as_text_mut() {
+            t.set_undo_limit(n);
+        }
+    }
+    pub fn edit(
+        &mut self,
+        req: notoir_editor::EditRequest,
+    ) -> Result<(), notoir_editor::ChangeError> {
+        self.as_text_mut()
+            .ok_or(notoir_editor::ChangeError::NotText)?
+            .edit(req)
+    }
+    pub fn undo(&mut self) -> Option<notoir_editor::buffer::Applied> {
+        self.as_text_mut()?.undo()
+    }
+    pub fn redo(&mut self) -> Option<notoir_editor::buffer::Applied> {
+        self.as_text_mut()?.redo()
+    }
+}
+
 /// Identity key for a file path. Built by the caller from a canonical path
 /// (symlinks resolved); case is folded on case-insensitive file systems.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -135,7 +219,7 @@ pub struct Document {
     /// Remote source and local Save As suggestion, when opened from a URL.
     pub source_url: Option<String>,
     pub suggested_name: Option<String>,
-    pub buffer: TextBuffer,
+    pub buffer: DocumentContent,
     /// +1 on every applied change, including undo/redo.
     pub revision: u64,
     /// History state matching the disk content; `None` = never saved.
@@ -172,7 +256,19 @@ const RECENT_CHANGES: usize = 64;
 
 impl Document {
     pub fn new(id: DocumentId, origin: DocumentOrigin, loaded: LoadedText) -> Self {
-        let buffer = TextBuffer::new(&loaded.text);
+        Self::new_content(id, origin, loaded, None)
+    }
+
+    pub fn new_content(
+        id: DocumentId,
+        origin: DocumentOrigin,
+        loaded: LoadedText,
+        media: Option<MediaKind>,
+    ) -> Self {
+        let buffer = match media {
+            Some(k) => DocumentContent::Media(k),
+            None => DocumentContent::Text(Box::new(TextBuffer::new(&loaded.text))),
+        };
         let saved_state = matches!(origin, DocumentOrigin::File { .. }).then(|| buffer.state());
         Self {
             id,
@@ -228,6 +324,9 @@ impl Document {
     /// Unsaved relative to disk. Scratchpads persist themselves and are never
     /// dirty in the save-prompt sense; Untitled documents are dirty when non-empty.
     pub fn is_dirty(&self) -> bool {
+        if self.media_kind().is_some() {
+            return false;
+        }
         match &self.origin {
             DocumentOrigin::File { .. } => {
                 self.saved_state != Some(self.buffer.state())
@@ -238,8 +337,12 @@ impl Document {
         }
     }
 
+    pub fn media_kind(&self) -> Option<MediaKind> {
+        self.buffer.media_kind()
+    }
+
     pub fn is_read_only(&self) -> bool {
-        self.read_only != ReadOnly::No
+        self.media_kind().is_some() || self.read_only != ReadOnly::No
     }
 
     pub fn path(&self) -> Option<&Path> {

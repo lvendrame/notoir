@@ -67,6 +67,7 @@ Default shortcuts. Linux uses the Windows column, with `Super` in place of `Win`
 | Fold Level 6 | `⌘K ⌘6` | `Ctrl+K Ctrl+6` |  |
 | Fold Level 7 | `⌘K ⌘7` | `Ctrl+K Ctrl+7` |  |
 | Full Screen | `⌃⌘F` | `F11` |  |
+| Play | `Space` | `Space` |  |
 | Reopen Closed Tab | `⇧⌘T` | `Ctrl+Shift+T` |  |
 | Reset Zoom | `⌘0` | `Ctrl+0` |  |
 | Show All Commands | `⇧⌘P` | `Ctrl+Shift+P` |  |

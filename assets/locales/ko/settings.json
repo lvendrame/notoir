@@ -10,7 +10,8 @@
     "plugins": "플러그인",
     "keyboard": "키보드",
     "advanced": "고급",
-    "markdown": "Markdown"
+    "markdown": "Markdown",
+    "media": "미디어"
   },
   "ui": {
     "search": "설정 검색",
@@ -212,5 +213,12 @@
   },
   "workbench.fontFamily": "Interface font family",
   "workbench.fontSize": "Interface font size",
-  "editor.indentGuides": "Indent guides"
+  "editor.indentGuides": "Indent guides",
+  "media": {
+    "autoplay": "열 때 자동 재생",
+    "pauseWhenHidden": "탭이 숨겨지면 일시 정지",
+    "pauseOnFocusLoss": "창이 포커스를 잃으면 일시 정지",
+    "resumeOnReturn": "자동 일시 정지 후 다시 재생",
+    "defaultVolume": "기본 볼륨 (%)"
+  }
 }

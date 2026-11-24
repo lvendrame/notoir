@@ -10,7 +10,8 @@
     "plugins": "Плагины",
     "keyboard": "Клавиатура",
     "advanced": "Дополнительно",
-    "markdown": "Markdown"
+    "markdown": "Markdown",
+    "media": "Медиа"
   },
   "ui": {
     "search": "Поиск параметров",
@@ -212,5 +213,12 @@
   },
   "workbench.fontFamily": "Interface font family",
   "workbench.fontSize": "Interface font size",
-  "editor.indentGuides": "Indent guides"
+  "editor.indentGuides": "Indent guides",
+  "media": {
+    "autoplay": "Автовоспроизведение при открытии",
+    "pauseWhenHidden": "Пауза при скрытии вкладки",
+    "pauseOnFocusLoss": "Пауза при потере фокуса окна",
+    "resumeOnReturn": "Продолжить после автоматической паузы",
+    "defaultVolume": "Громкость по умолчанию (%)"
+  }
 }

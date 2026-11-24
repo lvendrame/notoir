@@ -1,0 +1,8 @@
+{
+  "rendering": "SVG wird gerendert…",
+  "invalid": "SVG-Vorschau nicht verfügbar",
+  "lastValid": "Die letzte gültige SVG wird angezeigt. Beheben Sie den Fehler im Quelltext.",
+  "tooLarge": "Diese SVG überschreitet die Größenlimits der Vorschau.",
+  "memoryLimit": "SVG-Speicherlimit erreicht. Schließen Sie eine andere Vorschau und versuchen Sie es erneut.",
+  "cancelled": "Vorschau abgebrochen."
+}

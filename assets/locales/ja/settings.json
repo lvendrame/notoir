@@ -10,7 +10,8 @@
     "plugins": "プラグイン",
     "keyboard": "キーボード",
     "advanced": "詳細",
-    "markdown": "Markdown"
+    "markdown": "Markdown",
+    "media": "メディア"
   },
   "ui": {
     "search": "設定を検索",
@@ -212,5 +213,12 @@
   },
   "workbench.fontFamily": "Interface font family",
   "workbench.fontSize": "Interface font size",
-  "editor.indentGuides": "Indent guides"
+  "editor.indentGuides": "Indent guides",
+  "media": {
+    "autoplay": "開いたときに自動再生",
+    "pauseWhenHidden": "タブが非表示のとき一時停止",
+    "pauseOnFocusLoss": "ウィンドウのフォーカスが外れたら一時停止",
+    "resumeOnReturn": "自動一時停止後に再開",
+    "defaultVolume": "既定の音量 (%)"
+  }
 }

@@ -281,3 +281,7 @@ AD-12: persistent opaque WindowId separates window identity from PID and viewpor
 AD-15: use wgpu for native multi-window rendering. macOS acceptance exposed OpenGL context/texture failures when new editor viewports were materialized. New native viewports are declared before immediate editor rendering; the hidden root has a logic-only wake path for zero-window reopening.
 
 The versioned application manifest is stored atomically under a reserved `workspace_session` key using the existing SQLite schema. This additive format requires no destructive schema migration: legacy slot-zero rows are imported on first restore and retained as historical data. Manifest write acknowledgements gate application Quit; write failure aborts Quit and leaves windows open.
+
+## Local media (spec 42)
+
+See [Local Media](42-media.md) for read-only media content, lazy decoder ownership, controls and playback settings. Media opening bypasses text decoding; media tabs retain normal file identity and session placement.

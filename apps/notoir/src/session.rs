@@ -71,6 +71,12 @@ pub struct TabData {
     pub tree_mode: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub tree_ratio: Option<f32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub svg_mode: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub svg_zoom: Option<f32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub svg_ratio: Option<f32>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -260,6 +266,13 @@ impl AppCore {
                         active = Some(tabs.len());
                     }
                     tabs.push(TabData {
+                        svg_mode: match view.kind {
+                            ViewKind::SvgPreview => Some("preview".into()),
+                            ViewKind::SvgSplit => Some("split".into()),
+                            _ => None,
+                        },
+                        svg_zoom: view.svg.as_ref().and_then(|s| s.zoom),
+                        svg_ratio: self.is_svg(doc.id).then_some(view.preview_ratio),
                         source,
                         pinned: view.pinned,
                         preview: view.preview,
@@ -561,7 +574,19 @@ impl AppCore {
                     .workbench
                     .set_selection(v, Selection::new(ranges, primary));
             }
-            let tree_kind = if self.is_structured(doc) {
+            let tree_kind = if self
+                .workbench
+                .document(doc)
+                .is_some_and(|d| d.media_kind().is_some())
+            {
+                ViewKind::Media
+            } else if self.is_svg(doc) {
+                match tab.svg_mode.as_deref() {
+                    Some("preview") => ViewKind::SvgPreview,
+                    Some("split") => ViewKind::SvgSplit,
+                    _ => ViewKind::Text,
+                }
+            } else if self.is_structured(doc) {
                 match tab.tree_mode.as_deref() {
                     Some("tree") => ViewKind::JsonTree,
                     Some("split") => ViewKind::JsonSplit,
@@ -570,7 +595,16 @@ impl AppCore {
             } else {
                 ViewKind::Text
             };
+            let is_svg = self.is_svg(doc);
             if let Some(view) = self.workbench.views.get_mut(v) {
+                if is_svg && (tab.svg_zoom.is_some() || tab.svg_mode.is_some()) {
+                    view.svg = Some(Box::new(notoir_core::view::SvgPresentation {
+                        zoom: tab
+                            .svg_zoom
+                            .filter(|z| z.is_finite())
+                            .map(|z| z.clamp(10.0, 800.0)),
+                    }));
+                }
                 view.scroll = ScrollPosition {
                     top_line: tab.top_line,
                     ..Default::default()
@@ -579,11 +613,14 @@ impl AppCore {
                 view.zoom = tab.zoom;
                 view.preview = tab.preview;
                 view.kind = tree_kind;
-                view.preview_ratio = tab
-                    .tree_ratio
-                    .filter(|r| r.is_finite())
-                    .unwrap_or(0.5)
-                    .clamp(0.2, 0.8);
+                view.preview_ratio = (if is_svg {
+                    tab.svg_ratio
+                } else {
+                    tab.tree_ratio
+                })
+                .filter(|r| r.is_finite())
+                .unwrap_or(0.5)
+                .clamp(0.2, 0.8);
                 view.folds = tab
                     .folds
                     .iter()

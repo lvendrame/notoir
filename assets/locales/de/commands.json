@@ -460,5 +460,30 @@
   },
   "themes": {
     "action": "Themes verwalten"
+  },
+  "media": {
+    "playPause": "Abspielen",
+    "stop": "Stoppen",
+    "mute": "Stummschalten",
+    "seek": "Position",
+    "volume": "Lautstärke",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern",
+    "fit": "An Bereich anpassen",
+    "actualSize": "Originalgröße",
+    "retry": "Erneut versuchen",
+    "setZoom": "Zoom"
+  },
+  "svg": {
+    "showEditor": "Editor anzeigen",
+    "showSplit": "Editor und Vorschau anzeigen",
+    "showPreview": "Vorschau anzeigen",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern",
+    "fit": "An Bereich anpassen",
+    "actualSize": "Originalgröße",
+    "setZoom": "Zoom",
+    "action": "SVG bearbeiten",
+    "retry": "Erneut versuchen"
   }
 }

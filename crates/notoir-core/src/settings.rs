@@ -80,6 +80,7 @@ pub enum SettingCategory {
     General,
     Editor,
     Markdown,
+    Media,
     Appearance,
     Files,
     Workspace,
@@ -539,6 +540,21 @@ impl Schema {
             V::Bool(false),
             Scopes::USER_ONLY,
             C::Appearance,
+        );
+        for key in [
+            "media.autoplay",
+            "media.pauseWhenHidden",
+            "media.pauseOnFocusLoss",
+            "media.resumeOnReturn",
+        ] {
+            def(key, T::Bool, V::Bool(true), Scopes::USER_ONLY, C::Media);
+        }
+        def(
+            "media.defaultVolume",
+            T::Int { min: 0, max: 100 },
+            V::Int(100),
+            Scopes::USER_ONLY,
+            C::Media,
         );
         // Markdown
         def(

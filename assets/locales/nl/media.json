@@ -1,0 +1,23 @@
+{
+  "play": "Afspelen",
+  "pause": "Pauzeren",
+  "stop": "Stoppen",
+  "seek": "Positie",
+  "mute": "Dempen",
+  "volume": "Volume",
+  "zoom": "Zoom",
+  "zoomIn": "Inzoomen",
+  "zoomOut": "Uitzoomen",
+  "fit": "Aan paneel aanpassen",
+  "actualSize": "Werkelijke grootte",
+  "retry": "Opnieuw proberen",
+  "loading": "Media laden…",
+  "failed": "Kan media niet openen",
+  "unknownDuration": "Onbekend",
+  "tooLarge": "De afmetingen overschrijden de limiet.",
+  "memoryLimit": "Geheugenlimiet bereikt. Sluit een ander mediatabblad en probeer opnieuw.",
+  "decodeFailed": "Kan dit bestand niet decoderen.",
+  "noAudio": "Geen ondersteund audiospoor.",
+  "noVideo": "Geen ondersteund videospoor.",
+  "license": "FFmpeg · LGPL-2.1-or-later"
+}

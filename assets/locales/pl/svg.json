@@ -1,0 +1,8 @@
+{
+  "rendering": "Renderowanie SVG…",
+  "invalid": "Nie można wyświetlić SVG",
+  "lastValid": "Wyświetlono ostatni poprawny SVG. Popraw błąd w kodzie źródłowym.",
+  "tooLarge": "Ten SVG przekracza limity rozmiaru podglądu.",
+  "memoryLimit": "Osiągnięto limit pamięci SVG. Zamknij inny podgląd i spróbuj ponownie.",
+  "cancelled": "Anulowano podgląd."
+}

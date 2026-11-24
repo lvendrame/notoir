@@ -266,13 +266,22 @@ impl AppCore {
     fn resolve(&mut self, src: CompareSource, id: u64, left: bool) -> Slot {
         match src {
             CompareSource::Document(d) => match self.workbench.document(d) {
-                Some(_) => Slot::Ready(d),
+                Some(doc) if doc.media_kind().is_none() => Slot::Ready(d),
+                Some(_) => Slot::Failed,
                 None => Slot::Failed,
             },
             CompareSource::File(path) => {
                 let (_, key) = notoir_workspace::fs_io::identity(&path);
                 if let Some(d) = self.workbench.find_by_key(&key) {
-                    return Slot::Ready(d);
+                    return if self
+                        .workbench
+                        .document(d)
+                        .is_some_and(|doc| doc.media_kind().is_none())
+                    {
+                        Slot::Ready(d)
+                    } else {
+                        Slot::Failed
+                    };
                 }
                 self.load_for(
                     path,

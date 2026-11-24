@@ -40,6 +40,8 @@ pub enum Assoc {
 
 #[derive(Debug, PartialEq, Eq, thiserror::Error)]
 pub enum ChangeError {
+    #[error("document has no text content")]
+    NotText,
     #[error("edit {start}..{end} is reversed")]
     Reversed { start: usize, end: usize },
     #[error("edits overlap at {0}")]

@@ -136,6 +136,8 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 |---|---|---|---|
 | Activate Tab *(hidden)* | `view.activate` |  |  |
 | Activate Window *(hidden)* | `window.activate` |  |  |
+| Actual size | `media.actualSize` |  |  |
+| Actual size | `svg.actualSize` |  |  |
 | Bring All to Front | `window.bringAllToFront` |  |  |
 | Change Indentation | `editor.changeIndentation` |  |  |
 | Change Tab Size *(hidden)* | `editor.changeTabSize` |  |  |
@@ -143,9 +145,12 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Close Window | `window.close` |  |  |
 | Dock Tab *(hidden)* | `view.dockTab` |  |  |
 | Duplicate View | `view.duplicate` |  |  |
+| Edit SVG *(hidden)* | `svg.action` |  |  |
 | Exit Zen Mode | `view.exitZenMode` | `⎋ ⎋` | `Escape Escape` |
 | Explorer Sort Order *(hidden)* | `explorer.sortOrder` |  |  |
 | Filter Files in Explorer | `explorer.focusFilter` | `⌥⌘F` | `Ctrl+Alt+F` |
+| Fit to pane | `media.fit` |  |  |
+| Fit to pane | `svg.fit` |  |  |
 | Fold | `fold.fold` | `⌥⌘[` | `Ctrl+Shift+[` |
 | Fold All | `fold.foldAll` | `⌘K ⌘0` | `Ctrl+K Ctrl+0` |
 | Fold All Except Current | `fold.foldAllExceptCurrent` |  |  |
@@ -166,13 +171,20 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Move Tab *(hidden)* | `view.moveTab` |  |  |
 | Move Tab to Next Group | `workbench.moveTabToNextGroup` |  |  |
 | Move Tab to Previous Group | `workbench.moveTabToPreviousGroup` |  |  |
+| Mute | `media.mute` |  |  |
 | Pin or Unpin Tab | `view.togglePin` |  |  |
+| Play | `media.playPause` | `Space` | `Space` |
 | Reopen Closed Tab | `view.reopenClosedTab` | `⇧⌘T` | `Ctrl+Shift+T` |
 | Reset Zoom | `view.zoomReset` | `⌘0` | `Ctrl+0` |
+| Retry | `media.retry` |  |  |
+| Retry | `svg.retry` |  |  |
 | Reveal Active File in Explorer | `explorer.revealActive` |  |  |
+| Seek *(hidden)* | `media.seek` |  |  |
 | Show All Commands | `workbench.commandPalette` | `⇧⌘P` | `Ctrl+Shift+P` |
 | Show Editor | `csv.showEditor` |  |  |
+| Show Editor | `svg.showEditor` |  |  |
 | Show Editor and Preview | `csv.showSplit` |  |  |
+| Show Editor and Preview | `svg.showSplit` |  |  |
 | Show Explorer | `view.showExplorer` | `⇧⌘E` | `Ctrl+Shift+E` |
 | Show Git-Ignored Files | `explorer.toggleGitIgnored` |  |  |
 | Show Hidden Files | `explorer.toggleHidden` |  |  |
@@ -180,11 +192,13 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Show Outline | `view.showOutline` |  |  |
 | Show Output | `view.showOutput` | `⇧⌘U` | `Ctrl+Shift+U` |
 | Show Preview | `csv.showPreview` |  |  |
+| Show Preview | `svg.showPreview` |  |  |
 | Single Editor | `view.singleEditor` |  |  |
 | Split Down | `view.splitDown` |  |  |
 | Split Left | `view.splitLeft` |  |  |
 | Split Right | `view.splitRight` | `⌘\` | `Ctrl+\` |
 | Split Up | `view.splitUp` |  |  |
+| Stop | `media.stop` |  |  |
 | Toggle Activity Bar | `view.toggleActivityBar` |  |  |
 | Toggle Bottom Panel | `view.toggleBottomPanel` | `⌘J` | `Ctrl+J` |
 | Toggle Breadcrumbs | `view.toggleBreadcrumbs` |  |  |
@@ -204,8 +218,15 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Toggle Zen Mode | `view.zenMode` | `⌘K Z` | `Ctrl+K Z` |
 | Unfold | `fold.unfold` | `⌥⌘]` | `Ctrl+Shift+]` |
 | Unfold All | `fold.unfoldAll` | `⌘K ⌘J` | `Ctrl+K Ctrl+J` |
+| Volume *(hidden)* | `media.volume` |  |  |
+| Zoom *(hidden)* | `media.setZoom` |  |  |
+| Zoom *(hidden)* | `svg.setZoom` |  |  |
 | Zoom In | `view.zoomIn` | `⌘+` | `Ctrl++` |
 | Zoom Out | `view.zoomOut` | `⌘-` | `Ctrl+-` |
+| Zoom in | `media.zoomIn` |  |  |
+| Zoom in | `svg.zoomIn` |  |  |
+| Zoom out | `media.zoomOut` |  |  |
+| Zoom out | `svg.zoomOut` |  |  |
 
 ## Navigate
 

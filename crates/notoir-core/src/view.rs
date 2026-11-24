@@ -9,6 +9,7 @@ use crate::ids::{DocumentId, ViewId};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ViewKind {
+    Media,
     Text,
     MarkdownPreview,
     MarkdownSplit,
@@ -17,6 +18,8 @@ pub enum ViewKind {
     JsonSplit,
     CsvPreview,
     CsvSplit,
+    SvgPreview,
+    SvgSplit,
     Settings,
     ThemeManager,
     /// First-run / Help → Welcome page.
@@ -41,6 +44,8 @@ pub struct EditorView {
     pub document_id: DocumentId,
     pub kind: ViewKind,
     pub markdown_table: Option<TableBinding>,
+    /// Allocated only for SVG views; independent of text-editor zoom.
+    pub svg: Option<Box<SvgPresentation>>,
     pub selection: Selection,
     pub scroll: ScrollPosition,
     /// Only used when `editor.zoomScope = "view"`.
@@ -56,6 +61,12 @@ pub struct EditorView {
     pub folds: Vec<Fold>,
     /// Not a tab: a pane inside another view (the sides of a diff tab).
     pub detached: bool,
+}
+
+/// SVG-specific view preferences retained when switching back to source editing.
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct SvgPresentation {
+    pub zoom: Option<f32>,
 }
 
 /// A folded region: the header line (containing `header`) stays visible; the
@@ -75,6 +86,7 @@ impl EditorView {
             document_id,
             kind: ViewKind::Text,
             markdown_table: None,
+            svg: None,
             selection: Selection::default(),
             scroll: ScrollPosition::default(),
             zoom: None,

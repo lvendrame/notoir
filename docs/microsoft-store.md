@@ -188,3 +188,7 @@ preview is required separately when also making a direct-download release.
 - [Manual Win32 MSIX packaging](https://learn.microsoft.com/en-us/windows/msix/desktop/desktop-to-uwp-manual-conversion)
 - [GitHub Actions publishing setup](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/github-actions)
 - [Store CLI MSIX commands](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/commands)
+
+## Bundled media runtime
+
+See [Media development and packaging](media-development.md). Build the pinned native runtime before compiling the app, include its shared libraries/license/build information, and distribute the matching source archive and build script alongside packages. Verify playback on a clean machine without a separately installed FFmpeg runtime.

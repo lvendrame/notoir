@@ -180,8 +180,8 @@ fn toolbar_item(
     }
 }
 
-/// `[ Edit │ Split │ Preview ]` for the active Markdown document (spec 24).
-fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Actions) {
+/// Presentation selector for supported text documents.
+fn document_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mut Actions) {
     let Some(view) = core
         .workbench
         .active_view()
@@ -206,6 +206,12 @@ fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
                 "markdown:preview",
                 "markdown.showPreview",
             ),
+        ]
+    } else if core.is_svg(view.document_id) {
+        [
+            (ViewKind::Text, "markdown:edit", "svg.showEditor"),
+            (ViewKind::SvgSplit, "markdown:split", "svg.showSplit"),
+            (ViewKind::SvgPreview, "markdown:preview", "svg.showPreview"),
         ]
     } else if core.is_csv(view.document_id) {
         [
@@ -296,7 +302,7 @@ pub fn toolbar(
                         toolbar_item(ui, kit, core, context, id, *icon, actions);
                     }
                 }
-                markdown_modes(ui, kit, core, actions);
+                document_modes(ui, kit, core, actions);
                 ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                     for (id, icon) in TOOLBAR_END {
                         toolbar_item(ui, kit, core, context, id, *icon, actions);
@@ -450,6 +456,9 @@ pub fn document_items(core: &AppCore) -> Vec<StatusItem> {
     };
     // Settings / Welcome tabs have no text readouts.
     if matches!(doc.origin, notoir_core::DocumentOrigin::Virtual { .. }) {
+        return Vec::new();
+    }
+    if doc.media_kind().is_some() {
         return Vec::new();
     }
     let indent_style = core.indent_style(doc.id);

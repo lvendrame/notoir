@@ -49,6 +49,14 @@ allow = [
 ]
 
 # Notoir crates are unpublished and no license has been chosen yet.
+[[licenses.exceptions]]
+name = "ffmpeg-next"
+allow = ["WTFPL"]
+
+[[licenses.exceptions]]
+name = "ffmpeg-sys-next"
+allow = ["WTFPL"]
+
 [licenses.private]
 ignore = true
 

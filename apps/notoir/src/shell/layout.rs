@@ -267,6 +267,15 @@ impl Renderer<'_, '_> {
             .and_then(|v| self.core.workbench.view(v))
             .map(|v| v.kind);
         match (active, kind) {
+            (Some(view), Some(notoir_core::view::ViewKind::Media)) => {
+                let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
+                body_ui.set_clip_rect(body);
+                super::media_view::show(&mut body_ui, self.kit, self.core, view, self.actions);
+                if body_ui.ui_contains_pointer() && body_ui.input(|i| i.pointer.any_pressed()) {
+                    self.out.activate = Some(view);
+                }
+            }
+
             (Some(view), Some(notoir_core::view::ViewKind::MarkdownTable)) => {
                 let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
                 body_ui.set_clip_rect(body);
@@ -386,6 +395,7 @@ impl Renderer<'_, '_> {
                 // Markdown modes: editor, preview, or both (spec 24).
                 use notoir_core::view::ViewKind as VK;
                 let view_kind = kind.unwrap_or(VK::Text);
+                let is_svg = doc.is_some_and(|d| self.core.is_svg(d));
                 let is_md = doc.is_some_and(|d| self.core.is_markdown(d));
                 let is_csv = doc.is_some_and(|d| self.core.is_csv(d));
                 let is_json = doc.is_some_and(|d| self.core.is_structured(d));
@@ -393,11 +403,14 @@ impl Renderer<'_, '_> {
                     VK::MarkdownPreview | VK::MarkdownSplit if is_md => view_kind,
                     VK::JsonTree | VK::JsonSplit if is_json => view_kind,
                     VK::CsvPreview | VK::CsvSplit if is_csv => view_kind,
+                    VK::SvgPreview | VK::SvgSplit if is_svg => view_kind,
                     _ => VK::Text,
                 };
                 let (editor_rect, preview_rect) = match mode {
-                    VK::MarkdownPreview | VK::JsonTree | VK::CsvPreview => (None, Some(body)),
-                    VK::MarkdownSplit | VK::JsonSplit | VK::CsvSplit => {
+                    VK::MarkdownPreview | VK::JsonTree | VK::CsvPreview | VK::SvgPreview => {
+                        (None, Some(body))
+                    }
+                    VK::MarkdownSplit | VK::JsonSplit | VK::CsvSplit | VK::SvgSplit => {
                         let ratio = self
                             .core
                             .workbench
@@ -474,7 +487,14 @@ impl Renderer<'_, '_> {
                     }
                     _ => (Some(body), None),
                 };
-                if let (Some(rect), true) = (preview_rect, is_csv) {
+                if let (Some(rect), true) = (preview_rect, is_svg) {
+                    let mut pui = child.new_child(egui::UiBuilder::new().max_rect(rect));
+                    pui.set_clip_rect(rect);
+                    super::svg_preview::show(&mut pui, self.kit, self.core, view, self.actions);
+                    if pui.ui_contains_pointer() && pui.input(|i| i.pointer.any_pressed()) {
+                        self.out.activate = Some(view);
+                    }
+                } else if let (Some(rect), true) = (preview_rect, is_csv) {
                     let mut tui = child.new_child(egui::UiBuilder::new().max_rect(rect));
                     tui.set_clip_rect(rect);
                     super::csv_table::show(&mut tui, self.kit, self.core, view, self.actions);

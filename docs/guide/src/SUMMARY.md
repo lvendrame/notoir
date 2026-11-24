@@ -10,6 +10,7 @@
 
 # Working with files
 
+- [Media](media.md)
 - [Files, scratchpads and recovery](files.md)
 - [Workspaces and the Explorer](workspaces.md)
 - [Notes: links, backlinks, tags and templates](notes.md)
@@ -28,6 +29,7 @@
 - [Markdown](markdown.md)
 - [JSON](json.md)
 - [CSV](csv.md)
+- [SVG](svg.md)
 - [Comparing files](compare.md)
 - [Git](git.md)
 

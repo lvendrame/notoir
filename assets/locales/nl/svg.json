@@ -1,0 +1,8 @@
+{
+  "rendering": "SVG renderen…",
+  "invalid": "Kan SVG niet weergeven",
+  "lastValid": "De laatste geldige SVG wordt getoond. Bewerk de bron om de fout te herstellen.",
+  "tooLarge": "Deze SVG overschrijdt de afmetingslimieten van het voorbeeld.",
+  "memoryLimit": "SVG-geheugenlimiet bereikt. Sluit een ander voorbeeld en probeer opnieuw.",
+  "cancelled": "Voorbeeld geannuleerd."
+}

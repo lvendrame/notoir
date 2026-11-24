@@ -1,0 +1,23 @@
+{
+  "play": "播放",
+  "pause": "暂停",
+  "stop": "停止",
+  "seek": "播放位置",
+  "mute": "静音",
+  "volume": "音量",
+  "zoom": "缩放",
+  "zoomIn": "放大",
+  "zoomOut": "缩小",
+  "fit": "适应面板",
+  "actualSize": "实际大小",
+  "retry": "重试",
+  "loading": "正在加载媒体…",
+  "failed": "无法打开媒体",
+  "unknownDuration": "未知",
+  "tooLarge": "媒体尺寸超出支持的限制。",
+  "memoryLimit": "已达到内存限制。请关闭其他媒体标签页后重试。",
+  "decodeFailed": "无法解码此文件。",
+  "noAudio": "没有支持的音轨。",
+  "noVideo": "没有支持的视频轨道。",
+  "license": "FFmpeg · LGPL-2.1-or-later"
+}

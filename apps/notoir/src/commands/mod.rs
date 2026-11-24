@@ -18,6 +18,7 @@ mod json;
 mod layout;
 mod markdown;
 mod mcp;
+mod media;
 mod notes;
 mod plugins;
 mod preferences;
@@ -26,6 +27,7 @@ mod search;
 mod selection;
 mod settings_ui;
 mod structure;
+mod svg;
 mod text;
 mod view;
 mod workspace;
@@ -40,6 +42,8 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     text::specs(&mut specs);
     settings_ui::specs(&mut specs);
     markdown::specs(&mut specs);
+    media::specs(&mut specs);
+    svg::specs(&mut specs);
     json::specs(&mut specs);
     csv::specs(&mut specs);
     structure::specs(&mut specs);
@@ -54,6 +58,22 @@ pub fn register_all(registry: &mut CommandRegistry<AppCore>, platform: Platform)
     preferences::specs(&mut specs);
     app::specs(&mut specs, platform);
     for mut spec in specs {
+        if matches!(
+            spec.id.as_str(),
+            "workbench.moveTabToNextGroup"
+                | "workbench.moveTabToPreviousGroup"
+                | "file.close"
+                | "file.closeOthers"
+                | "file.closeToRight"
+                | "file.closeSaved"
+                | "file.closeAll"
+                | "file.revealInExplorer"
+                | "file.copyPath"
+                | "file.copyRelativePath"
+        ) {
+            spec = spec.when("hasActiveEditor || mediaActive").expect("valid");
+        }
+
         if !crate::distribution::command_available(spec.id.as_str()) {
             continue;
         }

@@ -1211,6 +1211,12 @@ impl AppCore {
                     .workbench
                     .document(v.document_id)
                     .ok_or_else(|| ApiError::new("no_editor", "The document was closed"))?;
+                if d.media_kind().is_some() {
+                    return Err(ApiError::new(
+                        "not_text",
+                        "Media files have no text content",
+                    ));
+                }
                 let rope = d.buffer.rope();
                 let range = |r: &notoir_editor::selection::Range| {
                     let mut j = crate::mcp_tools::range_json(rope, r.from(), r.to());

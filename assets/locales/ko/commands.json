@@ -460,5 +460,30 @@
   },
   "themes": {
     "action": "테마 관리"
+  },
+  "media": {
+    "playPause": "재생",
+    "stop": "정지",
+    "mute": "음소거",
+    "seek": "재생 위치",
+    "volume": "볼륨",
+    "zoomIn": "확대",
+    "zoomOut": "축소",
+    "fit": "패널에 맞춤",
+    "actualSize": "실제 크기",
+    "retry": "다시 시도",
+    "setZoom": "확대/축소"
+  },
+  "svg": {
+    "showEditor": "편집기 표시",
+    "showSplit": "편집기와 미리 보기 표시",
+    "showPreview": "미리 보기 표시",
+    "zoomIn": "확대",
+    "zoomOut": "축소",
+    "fit": "패널에 맞춤",
+    "actualSize": "실제 크기",
+    "setZoom": "확대/축소",
+    "action": "SVG 편집",
+    "retry": "다시 시도"
   }
 }

@@ -168,3 +168,7 @@ Feature: Large files
 ## Application and window ownership (spec 40)
 
 Document registries, revisions and undo histories belong to windows. Document IDs are local; cross-window targets include WindowId. The same path in two windows has independent buffers. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.
+
+## Local media (spec 42)
+
+See [Local Media](42-media.md) for read-only media content, lazy decoder ownership, controls and playback settings. Media opening bypasses text decoding; media tabs retain normal file identity and session placement.

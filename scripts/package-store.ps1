@@ -6,6 +6,9 @@ if (-not $IsWindows) { throw 'Build the Store package on Windows with the Window
 $root = (Resolve-Path "$PSScriptRoot/..").Path
 Push-Location $root
 try {
+    if (-not $env:FFMPEG_DIR -or -not (Test-Path "$env:FFMPEG_DIR/bin")) {
+        throw 'Build the media runtime first (scripts/build-media-runtime.sh), then set FFMPEG_DIR.'
+    }
     $identity = Get-NotoirStoreIdentity
     $packageId = & cargo pkgid -p notoir
     if ($LASTEXITCODE -ne 0) { throw 'Could not read the application version.' }
@@ -25,6 +28,12 @@ try {
     $payload = Join-Path $out 'payload'
     $null = New-Item -ItemType Directory -Path $payload -Force
     Copy-Item -LiteralPath $exe -Destination (Join-Path $payload 'notoir.exe')
+    Get-ChildItem -LiteralPath "$env:FFMPEG_DIR/bin" -Filter '*.dll' | ForEach-Object {
+        Copy-Item -LiteralPath $_.FullName -Destination $payload
+    }
+    Copy-Item -Path "$env:FFMPEG_DIR/FFmpeg-*.txt" -Destination $payload
+    Copy-Item -LiteralPath 'target/native/ffmpeg-source-9.1.tar.xz' -Destination $out
+    Copy-Item -LiteralPath 'scripts/build-media-runtime.sh' -Destination (Join-Path $out 'FFmpeg-build.sh')
     Assert-NotoirStoreRuntime -Executable $exe -Report (Join-Path $out 'runtime-dependencies.txt')
     $languages = @(Get-ChildItem -LiteralPath 'assets/locales' -Directory | ForEach-Object {
         if ($_.Name -eq 'en') { 'en-US' } else { $_.Name }

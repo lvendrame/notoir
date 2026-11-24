@@ -1,0 +1,23 @@
+{
+  "play": "Riproduci",
+  "pause": "Pausa",
+  "stop": "Ferma",
+  "seek": "Posizione",
+  "mute": "Disattiva audio",
+  "volume": "Volume",
+  "zoom": "Zoom",
+  "zoomIn": "Ingrandisci",
+  "zoomOut": "Riduci",
+  "fit": "Adatta al pannello",
+  "actualSize": "Dimensioni reali",
+  "retry": "Riprova",
+  "loading": "Caricamento del contenuto…",
+  "failed": "Impossibile aprire il contenuto",
+  "unknownDuration": "Sconosciuta",
+  "tooLarge": "Le dimensioni superano il limite supportato.",
+  "memoryLimit": "Limite di memoria raggiunto. Chiudi un’altra scheda multimediale e riprova.",
+  "decodeFailed": "Impossibile decodificare il file.",
+  "noAudio": "Nessuna traccia audio supportata.",
+  "noVideo": "Nessuna traccia video supportata.",
+  "license": "FFmpeg · LGPL-2.1-or-later"
+}

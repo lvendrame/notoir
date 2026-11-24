@@ -378,6 +378,9 @@ fn indexed_candidates(
 /// Returns the number of replacements.
 pub fn replace_in_file(path: &Path, query: &FindQuery, with: &str) -> Result<usize, String> {
     let loaded = fs_io::load(path, &LoadOptions::default()).map_err(|e| e.to_string())?;
+    if loaded.media.is_some() {
+        return Err("Media files have no editable text".into());
+    }
     if loaded.text.read_only != notoir_core::document::ReadOnly::No {
         return Err("read-only".into());
     }

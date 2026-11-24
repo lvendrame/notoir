@@ -569,6 +569,13 @@ impl AppCore {
             return;
         }
         if let LoadPurpose::Compare { id, left, saved_of } = purpose {
+            let result = result.and_then(|l| {
+                if l.media.is_some() {
+                    Err(LoadError::Binary)
+                } else {
+                    Ok(l)
+                }
+            });
             self.compare_loaded(id, left, saved_of, result);
             return;
         }
@@ -648,13 +655,21 @@ impl AppCore {
             path: loaded.path.clone(),
             key: loaded.key.clone(),
         };
-        let doc = self.workbench.open_document(origin, loaded.text);
+        let doc = self
+            .workbench
+            .open_content(origin, loaded.text, loaded.media);
         self.restore_bookmarks(doc);
         let group = if self.workbench.layout.group(group).is_some() {
             group
         } else {
             self.workbench.layout.active_group
         };
+        if loaded.media.is_some() {
+            self.media
+                .get_or_insert_with(Default::default)
+                .restored
+                .insert(doc);
+        }
         self.place_restored(doc, group, key, tab);
     }
 
@@ -680,7 +695,9 @@ impl AppCore {
             self.show_open_document(doc, group, &at);
             return;
         }
-        let doc = self.workbench.open_document(origin, loaded.text);
+        let doc = self
+            .workbench
+            .open_content(origin, loaded.text, loaded.media);
         self.restore_bookmarks(doc);
         let opened = if at.preview && self.settings.bool("workbench.tabs.previewMode", None) {
             self.workbench.open_preview(doc, group)
@@ -714,6 +731,13 @@ impl AppCore {
     }
 
     fn place_caret(&mut self, view: ViewId, at: &OpenAt) {
+        if self
+            .workbench
+            .view(view)
+            .is_some_and(|v| v.kind == notoir_core::view::ViewKind::Media)
+        {
+            return;
+        }
         if let Some(anchor) = &at.anchor {
             let Some(doc) = self
                 .workbench
@@ -831,6 +855,9 @@ impl AppCore {
         let Some(d) = self.workbench.document(doc) else {
             return;
         };
+        if d.media_kind().is_some() {
+            return;
+        }
         match (&d.origin, d.is_read_only()) {
             (DocumentOrigin::File { path, .. }, false) => {
                 let path = path.clone();
@@ -845,6 +872,9 @@ impl AppCore {
         let Some(d) = self.workbench.document(doc) else {
             return;
         };
+        if d.media_kind().is_some() {
+            return;
+        }
         let (dir, name) = match &d.origin {
             DocumentOrigin::File { path, .. } => {
                 (path.parent().map(Path::to_path_buf), Some(file_name(path)))
@@ -966,6 +996,13 @@ impl AppCore {
         overwrite: bool,
         elevated: bool,
     ) {
+        if self
+            .workbench
+            .document(doc)
+            .is_none_or(|d| d.media_kind().is_some())
+        {
+            return;
+        }
         self.apply_save_transforms(doc);
         let Some(d) = self.workbench.document(doc) else {
             return;

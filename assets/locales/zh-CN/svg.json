@@ -1,0 +1,8 @@
+{
+  "rendering": "正在渲染 SVG…",
+  "invalid": "无法预览 SVG",
+  "lastValid": "正在显示最后一个有效的 SVG。请编辑源代码以修复错误。",
+  "tooLarge": "此 SVG 超出预览大小限制。",
+  "memoryLimit": "已达到 SVG 预览内存限制。请关闭其他预览后重试。",
+  "cancelled": "预览已取消。"
+}

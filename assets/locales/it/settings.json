@@ -10,7 +10,8 @@
     "plugins": "Plugin",
     "keyboard": "Tastiera",
     "advanced": "Avanzate",
-    "markdown": "Markdown"
+    "markdown": "Markdown",
+    "media": "Multimedia"
   },
   "ui": {
     "search": "Cerca nelle impostazioni",
@@ -212,5 +213,12 @@
   },
   "workbench.fontFamily": "Interface font family",
   "workbench.fontSize": "Interface font size",
-  "editor.indentGuides": "Indent guides"
+  "editor.indentGuides": "Indent guides",
+  "media": {
+    "autoplay": "Riproduci automaticamente all’apertura",
+    "pauseWhenHidden": "Pausa quando la scheda è nascosta",
+    "pauseOnFocusLoss": "Pausa quando la finestra perde il focus",
+    "resumeOnReturn": "Riprendi dopo una pausa automatica",
+    "defaultVolume": "Volume predefinito (%)"
+  }
 }

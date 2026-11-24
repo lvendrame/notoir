@@ -69,6 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
+      - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: store-msix
@@ -86,6 +87,8 @@ jobs:
           name: notoir-microsoft-store-x64
           path: |
             target/store-msix/*.msix
+            target/store-msix/*.tar.xz
+            target/store-msix/FFmpeg-build.sh
             target/store-msix/SHA256SUMS.txt
             target/store-msix/submission-info.json
             target/store-msix/runtime-dependencies.txt

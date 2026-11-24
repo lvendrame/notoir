@@ -3,7 +3,18 @@
 use std::path::Path;
 
 const FORBIDDEN: &[&str] = &[
-    "egui", "eframe", "tokio", "rusqlite", "notify", "git2", "rfd", "mlua", "rmcp",
+    "ffmpeg-next",
+    "rodio",
+    "image",
+    "egui",
+    "eframe",
+    "tokio",
+    "rusqlite",
+    "notify",
+    "git2",
+    "rfd",
+    "mlua",
+    "rmcp",
 ];
 
 fn dependencies(crate_dir: &str) -> Vec<String> {

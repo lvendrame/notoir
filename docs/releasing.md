@@ -230,3 +230,7 @@ The November 2026 releases exposed dependency advisory/yank failures and ignored
 that ordinary workspace tests did not detect. A fresh dependency audit and exact-commit manual CI run,
 including all crash jobs, precede tagging. Installer generation and Store validation are checked after
 publication; separate preview workflows are optional.
+
+## Bundled media runtime
+
+See [Media development and packaging](media-development.md). Build the pinned native runtime before compiling the app, include its shared libraries/license/build information, and distribute the matching source archive and build script alongside packages. Verify playback on a clean machine without a separately installed FFmpeg runtime.

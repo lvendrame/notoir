@@ -460,5 +460,30 @@
   },
   "themes": {
     "action": "管理主题"
+  },
+  "media": {
+    "playPause": "播放",
+    "stop": "停止",
+    "mute": "静音",
+    "seek": "播放位置",
+    "volume": "音量",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "fit": "适应面板",
+    "actualSize": "实际大小",
+    "retry": "重试",
+    "setZoom": "缩放"
+  },
+  "svg": {
+    "showEditor": "显示编辑器",
+    "showSplit": "显示编辑器和预览",
+    "showPreview": "显示预览",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "fit": "适应面板",
+    "actualSize": "实际大小",
+    "setZoom": "缩放",
+    "action": "编辑SVG",
+    "retry": "重试"
   }
 }

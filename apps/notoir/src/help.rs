@@ -19,6 +19,7 @@ const COMPARE: &str = "compare.html";
 const PLUGINS: &str = "plugins.html";
 const MARKDOWN: &str = "markdown.html";
 const JSON: &str = "json.html";
+const SVG: &str = "svg.html";
 const FIND: &str = "find-and-search.html";
 const FILES: &str = "files.html";
 const EDITING: &str = "editing.html";
@@ -38,6 +39,7 @@ pub const PAGES: &[&str] = &[
     PLUGINS,
     MARKDOWN,
     JSON,
+    SVG,
     FIND,
     FILES,
     EDITING,
@@ -45,6 +47,7 @@ pub const PAGES: &[&str] = &[
     NAVIGATION,
     NOTES,
     MCP,
+    "media.html",
     SHORTCUTS,
 ];
 
@@ -61,6 +64,9 @@ pub fn topic(core: &AppCore) -> Option<&'static str> {
     }
     let wb = &core.workbench;
     if let Some(view) = wb.active_view().and_then(|v| wb.view(v)) {
+        if core.is_svg(view.document_id) {
+            return Some(SVG);
+        }
         let page = match view.kind {
             ViewKind::Settings if core.settings_ui.category == Some(SettingCategory::Keyboard) => {
                 Some(KEYBINDINGS)
@@ -73,6 +79,8 @@ pub fn topic(core: &AppCore) -> Option<&'static str> {
                 Some(MARKDOWN)
             }
             ViewKind::JsonTree | ViewKind::JsonSplit => Some(JSON),
+            ViewKind::SvgPreview | ViewKind::SvgSplit => Some(SVG),
+            ViewKind::Media => Some("media.html"),
             ViewKind::Text | ViewKind::CsvPreview | ViewKind::CsvSplit => None,
         };
         if page.is_some() {

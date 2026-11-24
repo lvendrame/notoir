@@ -10,7 +10,8 @@
     "plugins": "插件",
     "keyboard": "键盘",
     "advanced": "高级",
-    "markdown": "Markdown"
+    "markdown": "Markdown",
+    "media": "媒体"
   },
   "ui": {
     "search": "搜索设置",
@@ -212,5 +213,12 @@
   },
   "workbench.fontFamily": "Interface font family",
   "workbench.fontSize": "Interface font size",
-  "editor.indentGuides": "Indent guides"
+  "editor.indentGuides": "Indent guides",
+  "media": {
+    "autoplay": "打开时自动播放",
+    "pauseWhenHidden": "标签页隐藏时暂停",
+    "pauseOnFocusLoss": "窗口失去焦点时暂停",
+    "resumeOnReturn": "自动暂停后恢复播放",
+    "defaultVolume": "默认音量 (%)"
+  }
 }

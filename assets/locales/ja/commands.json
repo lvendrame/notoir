@@ -460,5 +460,30 @@
   },
   "themes": {
     "action": "テーマの管理"
+  },
+  "media": {
+    "playPause": "再生",
+    "stop": "停止",
+    "mute": "ミュート",
+    "seek": "再生位置",
+    "volume": "音量",
+    "zoomIn": "拡大",
+    "zoomOut": "縮小",
+    "fit": "領域に合わせる",
+    "actualSize": "実際のサイズ",
+    "retry": "再試行",
+    "setZoom": "ズーム"
+  },
+  "svg": {
+    "showEditor": "エディターを表示",
+    "showSplit": "エディターとプレビューを表示",
+    "showPreview": "プレビューを表示",
+    "zoomIn": "拡大",
+    "zoomOut": "縮小",
+    "fit": "領域に合わせる",
+    "actualSize": "実際のサイズ",
+    "setZoom": "ズーム",
+    "action": "SVGを編集",
+    "retry": "再試行"
   }
 }

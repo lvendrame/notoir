@@ -357,6 +357,7 @@ impl eframe::App for NotoirApp {
         self.core.now_ms = self.started.elapsed().as_millis() as u64;
         let now = self.core.now_ms;
         self.core.pump_io();
+        self.core.tick_svg();
         self.core
             .csv
             .views
@@ -476,6 +477,7 @@ impl eframe::App for NotoirApp {
             self.core.git_rediscover_soon();
         }
         self.ui.window_focused = focused;
+        self.core.tick_media(&ctx, focused);
         if ctx.input(|i| i.viewport().close_requested()) {
             if self.core.window_id.is_some() {
                 ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);

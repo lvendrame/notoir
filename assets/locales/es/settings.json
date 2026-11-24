@@ -10,7 +10,8 @@
     "plugins": "Plugins",
     "keyboard": "Teclado",
     "advanced": "Avanzado",
-    "markdown": "Markdown"
+    "markdown": "Markdown",
+    "media": "Multimedia"
   },
   "ui": {
     "search": "Buscar en la configuración",
@@ -212,5 +213,12 @@
   },
   "workbench.fontFamily": "Interface font family",
   "workbench.fontSize": "Interface font size",
-  "editor.indentGuides": "Indent guides"
+  "editor.indentGuides": "Indent guides",
+  "media": {
+    "autoplay": "Reproducir automáticamente al abrir",
+    "pauseWhenHidden": "Pausar al ocultar la pestaña",
+    "pauseOnFocusLoss": "Pausar cuando la ventana pierda el foco",
+    "resumeOnReturn": "Reanudar tras una pausa automática",
+    "defaultVolume": "Volumen predeterminado (%)"
+  }
 }

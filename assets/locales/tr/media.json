@@ -1,0 +1,23 @@
+{
+  "play": "Oynat",
+  "pause": "Duraklat",
+  "stop": "Durdur",
+  "seek": "Konum",
+  "mute": "Sesi kapat",
+  "volume": "Ses düzeyi",
+  "zoom": "Yakınlaştırma",
+  "zoomIn": "Yakınlaştır",
+  "zoomOut": "Uzaklaştır",
+  "fit": "Panele sığdır",
+  "actualSize": "Gerçek boyut",
+  "retry": "Yeniden dene",
+  "loading": "Medya yükleniyor…",
+  "failed": "Medya açılamadı",
+  "unknownDuration": "Bilinmiyor",
+  "tooLarge": "Medya boyutları desteklenen sınırı aşıyor.",
+  "memoryLimit": "Bellek sınırına ulaşıldı. Başka bir medya sekmesini kapatıp yeniden deneyin.",
+  "decodeFailed": "Dosyanın kodu çözülemedi.",
+  "noAudio": "Desteklenen ses akışı yok.",
+  "noVideo": "Desteklenen video akışı yok.",
+  "license": "FFmpeg · LGPL-2.1-or-later"
+}

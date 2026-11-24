@@ -216,3 +216,7 @@ Feature: Markdown settings
     When the User setting is reset
     Then the effective width is the default 0
 ```
+
+## Local media (spec 42)
+
+See [Local Media](42-media.md) for read-only media content, lazy decoder ownership, controls and playback settings. Media opening bypasses text decoding; media tabs retain normal file identity and session placement.

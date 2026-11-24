@@ -112,13 +112,23 @@ impl Workbench {
     /// Registers a document. A file whose path key is already open returns the
     /// existing document; its content is never loaded twice.
     pub fn open_document(&mut self, origin: DocumentOrigin, loaded: LoadedText) -> DocumentId {
+        self.open_content(origin, loaded, None)
+    }
+
+    pub fn open_content(
+        &mut self,
+        origin: DocumentOrigin,
+        loaded: LoadedText,
+        media: Option<crate::document::MediaKind>,
+    ) -> DocumentId {
         if let DocumentOrigin::File { key, .. } = &origin
             && let Some(existing) = self.find_by_key(key)
         {
             return existing;
         }
         let id = DocumentId(self.ids.fresh());
-        self.documents.insert(id, Document::new(id, origin, loaded));
+        self.documents
+            .insert(id, Document::new_content(id, origin, loaded, media));
         self.events.emit(AppEvent::DocumentOpened { doc: id });
         id
     }
@@ -199,6 +209,7 @@ impl Workbench {
         let a = self.active_view()?;
         match self.views.get(a) {
             Some(v) if v.kind == crate::view::ViewKind::Diff => self.pane_focus.get(&a).copied(),
+            Some(v) if v.kind == crate::view::ViewKind::Media => None,
             _ => Some(a),
         }
     }
@@ -230,7 +241,11 @@ impl Workbench {
             return Err(WorkbenchError::NoSuchDocument);
         }
         let id = ViewId(self.ids.fresh());
-        self.views.insert(EditorView::new(id, doc));
+        let mut view = EditorView::new(id, doc);
+        if self.documents[&doc].media_kind().is_some() {
+            view.kind = crate::view::ViewKind::Media;
+        }
+        self.views.insert(view);
         self.add_tab(id, group, position)?;
         self.events.emit(AppEvent::EditorViewCreated {
             view: id,

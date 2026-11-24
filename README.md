@@ -91,3 +91,7 @@ on the exact release commit before tagging. The Release workflow publishes indep
 Updater signing requires `MINISIGN_SECRET_KEY` and `NOTOIR_UPDATE_PUBKEY`. Published Windows installers also
 require a trusted Authenticode identity; see [Windows signing setup](docs/windows-signing.md).
 macOS and Linux OS signing remain optional. Existing unsigned Windows releases may still show SmartScreen warnings.
+
+Local media tabs display images and animated GIFs, play video and sound, and provide Lucide playback/zoom controls. See [Media](docs/guide/src/media.md).
+
+SVG files support [Edit, Split and Preview](docs/guide/src/svg.md), including live unsaved previews and independent image zoom.

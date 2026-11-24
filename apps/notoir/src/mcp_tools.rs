@@ -201,6 +201,7 @@ fn read_from_disk(path: &Path, args: &Value, max_bytes: usize) -> ToolReply {
         ..Default::default()
     };
     match fs_io::load(path, &opts) {
+        Ok(loaded) if loaded.media.is_some() => err("binary", "Media files have no text content"),
         Ok(loaded) => read_reply(
             &loaded.text.text,
             args,
@@ -484,7 +485,9 @@ impl AppCore {
                         path: loaded.path.clone(),
                         key: loaded.key.clone(),
                     };
-                    let doc = self.workbench.open_document(origin, loaded.text);
+                    let doc = self
+                        .workbench
+                        .open_content(origin, loaded.text, loaded.media);
                     self.mcp.loaded.insert(doc, self.now_ms);
                 }
                 w.retried = true;
@@ -742,7 +745,9 @@ impl AppCore {
         // Open documents are searched as held in memory.
         let mut snapshots: HashMap<PathBuf, Rope> = HashMap::new();
         for d in self.workbench.documents.values() {
-            if let DocumentOrigin::File { path, .. } = &d.origin {
+            if d.media_kind().is_none()
+                && let DocumentOrigin::File { path, .. } = &d.origin
+            {
                 snapshots.insert(path.clone(), d.buffer.rope().clone());
             }
         }

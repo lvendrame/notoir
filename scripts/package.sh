@@ -22,27 +22,48 @@ OUT=target/packages
 rm -rf "$OUT"
 mkdir -p "$OUT"
 
+PYTHON_CMD=python3
+command -v "$PYTHON_CMD" >/dev/null || PYTHON_CMD=python
+# Every config includes the exact native libraries used by the linker.
+media_package_config() {
+    "$PYTHON_CMD" scripts/prepare-media-package.py "$1" "$2" "$3"
+}
 case "$(uname -s)" in
   Darwin)
     OS=macos
     rustup target add aarch64-apple-darwin x86_64-apple-darwin >/dev/null
     for t in aarch64-apple-darwin x86_64-apple-darwin; do
+      bash scripts/build-media-runtime.sh "$t"
+      source target/native/media-env.sh
       cargo build --profile dist -p notoir --target "$t"
+      install_name_tool -delete_rpath "$FFMPEG_DIR/lib" "target/$t/dist/notoir"
     done
     UNI=target/universal-apple-darwin/dist
     mkdir -p "$UNI"
     lipo -create -output "$UNI/notoir" \
       target/aarch64-apple-darwin/dist/notoir target/x86_64-apple-darwin/dist/notoir
-    cargo packager -p notoir --profile dist --target universal-apple-darwin -f app
+    MEDIA_UNI="$PWD/target/native/ffmpeg/universal-apple-darwin"
+    mkdir -p "$MEDIA_UNI/lib"
+    for lib in target/native/ffmpeg/aarch64-apple-darwin/lib/*.dylib; do
+      lipo -create "$lib" "target/native/ffmpeg/x86_64-apple-darwin/lib/$(basename "$lib")" -output "$MEDIA_UNI/lib/$(basename "$lib")"
+    done
+    cp target/native/ffmpeg/aarch64-apple-darwin/FFmpeg-*.txt "$MEDIA_UNI/"
+    CONFIG=$(media_package_config macos "$UNI" "$MEDIA_UNI")
+    cargo packager --config "$CONFIG" --target universal-apple-darwin -f app
     APP="$OUT/Notoir.app"
     if [[ -n "${APPLE_SIGNING_IDENTITY:-}" ]]; then
+      for lib in "$APP"/Contents/Resources/media/*.dylib; do
+        codesign --force --options runtime --timestamp --sign "$APPLE_SIGNING_IDENTITY" "$lib"
+      done
       codesign --force --deep --options runtime --timestamp --sign "$APPLE_SIGNING_IDENTITY" "$APP"
     else
       echo "macOS signing skipped (no APPLE_SIGNING_IDENTITY): preview build"
     fi
+    cp "$APP/Contents/MacOS/notoir" "$UNI/notoir"
+    cp "$APP"/Contents/Resources/media/*.dylib target/native/media-payload/
     # create-dmg styles the window through Finder (AppleScript); without
     # automation access (headless machines) fall back to a plain image.
-    if ! cargo packager -p notoir --profile dist --target universal-apple-darwin -f dmg; then
+    if ! cargo packager --config "$CONFIG" --target universal-apple-darwin -f dmg; then
       echo "styled DMG failed; building a plain DMG"
       rm -f "$OUT"/rw.*.dmg "$OUT"/*.dmg
       STAGE=$(mktemp -d)
@@ -64,8 +85,11 @@ case "$(uname -s)" in
     ;;
   Linux)
     OS=linux
+    bash scripts/build-media-runtime.sh
+    source target/native/media-env.sh
     cargo build --profile dist -p notoir
-    cargo packager -p notoir --profile dist -f deb,appimage
+    CONFIG=$(media_package_config linux target/dist "$FFMPEG_DIR")
+    cargo packager --config "$CONFIG" -f deb,appimage
     if [[ -n "${GPG_KEY_ID:-}" ]]; then
       for f in "$OUT"/*.AppImage; do gpg --batch --yes --local-user "$GPG_KEY_ID" --detach-sign --armor "$f"; done
     else
@@ -83,13 +107,16 @@ case "$(uname -s)" in
     mkdir -p target/windows-signing-receipts
     export WINDOWS_SIGNING_RECEIPTS
     WINDOWS_SIGNING_RECEIPTS=$(cygpath -w "$PWD/target/windows-signing-receipts")
+    bash scripts/build-media-runtime.sh
+    source target/native/media-env.sh
     cargo build --profile dist -p notoir
+    CONFIG=$(media_package_config windows target/dist "$FFMPEG_DIR")
     # The packager's hook signs the application before embedding it, both
     # installers, and the NSIS uninstaller. Each hook verifies trust/timestamp.
     export WINDOWS_SIGNING_PHASE=wix
-    cargo packager -p notoir --profile dist -f wix
+    cargo packager --config "$CONFIG" -f wix
     export WINDOWS_SIGNING_PHASE=nsis
-    cargo packager -p notoir --profile dist -f nsis
+    cargo packager --config "$CONFIG" -f nsis
     # NSIS !uninstfinalize does not enforce the hook's exit status. Fresh
     # receipts prove every hook completed, including the embedded uninstaller.
     pwsh -NoProfile -NonInteractive -File scripts/sign-windows.ps1 -VerifyPackage
@@ -100,6 +127,9 @@ case "$(uname -s)" in
   *) echo "unsupported OS: $(uname -s)"; exit 1 ;;
 esac
 
+# Matching source and native build recipes accompany every package set.
+cp target/native/ffmpeg-source-9.1.tar.xz "$OUT/"
+cp scripts/build-media-runtime.sh "$OUT/FFmpeg-build.sh"
 # Checksums for everything shipped (apps are directories: only archives are summed).
 (
   cd "$OUT"

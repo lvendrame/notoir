@@ -155,3 +155,9 @@ to Text. Ratios are restored within 0.2–0.8. No database migration is required
 ## Application and window ownership (spec 40)
 
 Spec 40 replaces process-per-window assumptions. Add a versioned application restore manifest with ordered WindowIds, active identity, snapshots, geometry and recovery associations. Use distinct workspace-free keys; import legacy slot zero transactionally without deleting history. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.
+
+## Local media (spec 42)
+
+See [Local Media](42-media.md) for read-only media content, lazy decoder ownership, controls and playback settings. Media opening bypasses text decoding; media tabs retain normal file identity and session placement.
+
+SVG presentation adds optional `svg_mode`, `svg_zoom` and `svg_ratio` fields to session v1; missing fields retain source-only editing. See [SVG](43-svg.md).

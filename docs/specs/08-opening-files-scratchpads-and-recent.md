@@ -165,3 +165,7 @@ Feature: Open from URL
 ## Application and window ownership (spec 40)
 
 Opening destinations follow spec 40, including multiple-folder routing and existing-owner activation. Scratchpads are a shared library; their open tabs/buffers are per-window. Creating a window does not restore all globally open Scratchpads. See [Application and Window Lifecycle](./40-application-and-window-lifecycle.md) for normative routing and lifecycle rules.
+
+## Local media (spec 42)
+
+See [Local Media](42-media.md) for read-only media content, lazy decoder ownership, controls and playback settings. Media opening bypasses text decoding; media tabs retain normal file identity and session placement.

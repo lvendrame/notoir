@@ -460,5 +460,30 @@
   },
   "themes": {
     "action": "Manage Themes"
+  },
+  "media": {
+    "playPause": "Play",
+    "stop": "Stop",
+    "mute": "Mute",
+    "seek": "Seek",
+    "volume": "Volume",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "fit": "Fit to pane",
+    "actualSize": "Actual size",
+    "retry": "Retry",
+    "setZoom": "Zoom"
+  },
+  "svg": {
+    "showEditor": "Show Editor",
+    "showSplit": "Show Editor and Preview",
+    "showPreview": "Show Preview",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "fit": "Fit to pane",
+    "actualSize": "Actual size",
+    "setZoom": "Zoom",
+    "action": "Edit SVG",
+    "retry": "Retry"
   }
 }

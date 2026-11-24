@@ -76,6 +76,16 @@ Every built-in setting with its type, default value and the scopes it can be set
 | `markdown.preview.tableWrap` | Wrap table cells | boolean | `true` | user, workspace |
 | `markdown.splitOrientation` | Markdown split orientation | `"auto"` \| `"horizontal"` \| `"vertical"` | `"auto"` | user, workspace |
 
+## Media
+
+| Setting | Description | Type | Default | Scopes |
+|---|---|---|---|---|
+| `media.autoplay` | Autoplay newly opened media | boolean | `true` | user |
+| `media.defaultVolume` | Default volume (%) | integer 0–100 | `100` | user |
+| `media.pauseOnFocusLoss` | Pause when the window loses focus | boolean | `true` | user |
+| `media.pauseWhenHidden` | Pause when the tab is hidden | boolean | `true` | user |
+| `media.resumeOnReturn` | Resume after an automatic pause | boolean | `true` | user |
+
 ## Appearance
 
 | Setting | Description | Type | Default | Scopes |

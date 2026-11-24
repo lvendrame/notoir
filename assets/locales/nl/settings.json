@@ -10,7 +10,8 @@
     "plugins": "Plug-ins",
     "keyboard": "Toetsenbord",
     "advanced": "Geavanceerd",
-    "markdown": "Markdown"
+    "markdown": "Markdown",
+    "media": "Media"
   },
   "ui": {
     "search": "Instellingen doorzoeken",
@@ -212,5 +213,12 @@
   },
   "workbench.fontFamily": "Interface font family",
   "workbench.fontSize": "Interface font size",
-  "editor.indentGuides": "Indent guides"
+  "editor.indentGuides": "Indent guides",
+  "media": {
+    "autoplay": "Automatisch afspelen bij openen",
+    "pauseWhenHidden": "Pauzeren bij verborgen tabblad",
+    "pauseOnFocusLoss": "Pauzeren als het venster focus verliest",
+    "resumeOnReturn": "Hervatten na automatisch pauzeren",
+    "defaultVolume": "Standaardvolume (%)"
+  }
 }

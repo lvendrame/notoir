@@ -119,6 +119,14 @@ impl AppCore {
     }
 
     fn check_disk(&mut self, doc: DocumentId, path: PathBuf) {
+        if self
+            .workbench
+            .document(doc)
+            .is_some_and(|d| d.media_kind().is_some())
+        {
+            self.reload_media(doc);
+            return;
+        }
         let forced = self.workbench.document(doc).map(|d| d.encoding.encoding);
         self.fs.submit(move || {
             let read = |path: &Path| {

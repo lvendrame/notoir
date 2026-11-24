@@ -4,6 +4,23 @@ use std::fmt::Write;
 use std::path::Path;
 
 fn main() {
+    println!("cargo:rerun-if-env-changed=FFMPEG_DIR");
+    match std::env::var("CARGO_CFG_TARGET_OS").as_deref() {
+        Ok("macos") => {
+            println!("cargo:rustc-link-arg=-Wl,-rpath,@executable_path/../Resources/media");
+            if let Ok(prefix) = std::env::var("FFMPEG_DIR") {
+                println!("cargo:rustc-link-arg=-Wl,-rpath,{prefix}/lib");
+            }
+        }
+        Ok("linux") => {
+            println!("cargo:rustc-link-arg=-Wl,-rpath,$ORIGIN/../lib/notoir/media");
+            if let Ok(prefix) = std::env::var("FFMPEG_DIR") {
+                println!("cargo:rustc-link-arg=-Wl,-rpath,{prefix}/lib");
+            }
+        }
+        _ => {}
+    }
+
     if std::env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("macos") {
         build_finder_events();
     }

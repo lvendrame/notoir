@@ -309,3 +309,16 @@ Feature: Theme management
     And clicking a measured caret position selects that character boundary
     And vertical navigation preserves the measured horizontal position
 ```
+
+## Media controls (spec 42)
+
+Read-only media tabs reuse the Lucide 1.48.0 icon registry, shell button sizing/stroke,
+theme colors, focus states and translated accessible labels. Playback and zoom occupy separate
+rows in narrow splits. Visual references: [Midnight](../design/media-notoir-midnight-1280.png),
+[Paper](../design/media-notoir-paper-1280.png), [Dracula](../design/media-dracula-1280.png),
+and their narrow-pane references [Midnight](../design/media-notoir-midnight-480.png),
+[Paper](../design/media-notoir-paper-480.png), [Dracula](../design/media-dracula-480.png).
+
+## SVG presentation (spec 43)
+
+SVG reuses the existing Edit/Split/Preview selector and shared split layout. Preview zoom uses Lucide zoom-in/zoom-out, expand for Fit and scan for Actual size, with the same accessible themed icon buttons as media. References: [Midnight split](../design/svg-split-notoir-midnight.png), [Paper preview](../design/svg-preview-notoir-paper.png), and [Dracula narrow split](../design/svg-narrow-dracula.png); all modes are rendered in all built-in themes.

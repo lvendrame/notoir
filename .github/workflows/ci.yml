@@ -45,6 +45,7 @@ jobs:
         shell: pwsh
         run: ./scripts/tests/msix.Tests.ps1
       - uses: dtolnay/rust-toolchain@stable
+      - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: store-policy-tests
@@ -63,6 +64,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
+      - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2
       - name: Linux system libraries
         if: runner.os == 'Linux'
@@ -83,6 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
+      - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2
       - name: Linux system libraries and virtual display
         if: runner.os == 'Linux'

@@ -1,0 +1,23 @@
+{
+  "play": "Play",
+  "pause": "Pause",
+  "stop": "Stop",
+  "seek": "Seek",
+  "mute": "Mute",
+  "volume": "Volume",
+  "zoom": "Zoom",
+  "zoomIn": "Zoom in",
+  "zoomOut": "Zoom out",
+  "fit": "Fit to pane",
+  "actualSize": "Actual size",
+  "retry": "Retry",
+  "loading": "Loading media…",
+  "failed": "Unable to open media",
+  "unknownDuration": "Unknown",
+  "tooLarge": "This media exceeds the supported dimensions.",
+  "memoryLimit": "Media memory limit reached. Close another media tab and retry.",
+  "decodeFailed": "Unable to decode this file.",
+  "noAudio": "No supported audio stream.",
+  "noVideo": "No supported video stream.",
+  "license": "FFmpeg · LGPL-2.1-or-later"
+}
