@@ -58,7 +58,14 @@ pub fn labels(core: &AppCore, views: &[ViewId]) -> HashMap<ViewId, String> {
         let Some(doc) = wb.view(v).and_then(|v| wb.document(v.document_id)) else {
             continue;
         };
-        let title = core.document_title(doc.id);
+        let mut title = core.document_title(doc.id);
+        if wb
+            .view(v)
+            .is_some_and(|v| v.kind == notoir_core::view::ViewKind::MarkdownTable)
+        {
+            let number = core.worksheets.views.get(&v).map_or(1, |s| s.number.max(1));
+            title = t!("markdown:worksheetTab", name = title, number = number);
+        }
         if let Some(p) = doc.path() {
             let entry = counts.entry(title.clone()).or_default();
             if !entry.iter().any(|q| q == p) {
@@ -80,11 +87,21 @@ pub fn labels(core: &AppCore, views: &[ViewId]) -> HashMap<ViewId, String> {
         // Duplicate views of one document in the same group: "⧉2".
         let group = wb.layout.group_of(v);
         let doc_id = wb.view(v).map(|v| v.document_id);
+        let table_id = wb
+            .view(v)
+            .and_then(|v| v.markdown_table.as_ref())
+            .map(|t| t.id);
         let same: Vec<ViewId> = views
             .iter()
             .copied()
             .filter(|o| {
-                wb.layout.group_of(*o) == group && wb.view(*o).map(|x| x.document_id) == doc_id
+                wb.layout.group_of(*o) == group
+                    && wb.view(*o).map(|x| x.document_id) == doc_id
+                    && wb
+                        .view(*o)
+                        .and_then(|v| v.markdown_table.as_ref())
+                        .map(|t| t.id)
+                        == table_id
             })
             .collect();
         if same.len() > 1

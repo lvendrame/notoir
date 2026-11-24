@@ -21,6 +21,7 @@ pub mod line_ending;
 pub mod line_ops;
 pub mod markdown;
 pub mod markdown_edit;
+pub mod markdown_table;
 pub mod motion;
 pub mod multi_cursor;
 pub mod natural;

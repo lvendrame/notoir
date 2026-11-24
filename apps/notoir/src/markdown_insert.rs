@@ -3,7 +3,7 @@ use std::path::{Component, Path};
 
 use notoir_core::explorer::NodeKind;
 use notoir_core::ids::{DocumentId, ViewId};
-use notoir_editor::{Selection, markdown_edit};
+use notoir_editor::{Range, Selection, markdown_edit};
 use serde_json::json;
 
 use crate::core::{AppCore, Effect};
@@ -15,6 +15,17 @@ pub enum InsertDialogKind {
     Image,
     Code,
     Table,
+}
+
+#[derive(Clone, Debug)]
+pub struct WorksheetLinkTarget {
+    pub table: ViewId,
+    pub range: (usize, usize),
+    pub bounds: (usize, usize, usize, usize),
+    pub rows: Vec<usize>,
+    pub columns: Vec<usize>,
+    pub text: Option<Range>,
+    pub link: Option<markdown_edit::ExistingLink>,
 }
 
 #[derive(Clone, Debug)]
@@ -31,10 +42,26 @@ pub struct InsertDialog {
     pub selected: usize,
     pub fresh: bool,
     pub error: bool,
+    pub worksheet: Option<WorksheetLinkTarget>,
 }
 
 impl AppCore {
     pub fn open_md_insert_dialog(&mut self, view: ViewId, kind: InsertDialogKind) {
+        let worksheet = if self
+            .workbench
+            .view(view)
+            .is_some_and(|v| v.kind == notoir_core::view::ViewKind::MarkdownTable)
+        {
+            if kind != InsertDialogKind::Link {
+                return;
+            }
+            let Some(target) = self.worksheet_link_target(view) else {
+                return;
+            };
+            Some(target)
+        } else {
+            None
+        };
         let Some(v) = self.workbench.view(view) else {
             return;
         };
@@ -53,21 +80,36 @@ impl AppCore {
             kind,
             columns: 2,
             rows: 1,
-            caption: d.buffer.rope().slice(r.from()..r.to()).to_string(),
-            destination: String::new(),
+            caption: worksheet.as_ref().map_or_else(
+                || d.buffer.rope().slice(r.from()..r.to()).to_string(),
+                |(_, caption)| caption.clone(),
+            ),
+            destination: worksheet
+                .as_ref()
+                .and_then(|(target, _)| target.link.as_ref())
+                .map_or_else(String::new, |link| link.destination.clone()),
             selected: 0,
             fresh: true,
             error: false,
+            worksheet: worksheet.map(|(target, _)| target),
         });
     }
 
     pub fn md_insert_target_valid(&self, dialog: &InsertDialog) -> bool {
-        self.workbench
-            .view(dialog.view)
-            .is_some_and(|v| v.document_id == dialog.document)
-            && self.workbench.document(dialog.document).is_some_and(|d| {
-                d.revision == dialog.revision && !d.is_read_only() && self.is_markdown(d.id)
-            })
+        self.workbench.view(dialog.view).is_some_and(|v| {
+            v.document_id == dialog.document
+                && match &dialog.worksheet {
+                    Some(target) => {
+                        v.kind == notoir_core::view::ViewKind::MarkdownTable
+                            && v.markdown_table
+                                .as_ref()
+                                .is_some_and(|t| t.id == target.table && t.range == target.range)
+                    }
+                    None => v.kind != notoir_core::view::ViewKind::MarkdownTable,
+                }
+        }) && self.workbench.document(dialog.document).is_some_and(|d| {
+            d.revision == dialog.revision && !d.is_read_only() && self.is_markdown(d.id)
+        })
     }
 
     pub fn confirm_md_insert(&mut self, language: Option<&str>) {
@@ -116,14 +158,27 @@ impl AppCore {
             } else {
                 &dialog.caption
             };
-            Some(markdown_edit::link(
-                dialog.selection.primary(),
-                caption,
-                url,
-                dialog.kind == InsertDialogKind::Image,
-            ))
+            if let Some(target) = &dialog.worksheet {
+                self.worksheet_link_edit(dialog.view, target, caption, url)
+            } else {
+                Some(markdown_edit::link(
+                    dialog.selection.primary(),
+                    caption,
+                    url,
+                    dialog.kind == InsertDialogKind::Image,
+                ))
+            }
         };
         if let Some(edit) = edit {
+            if dialog.worksheet.is_some() {
+                let history_state = self
+                    .workbench
+                    .document(dialog.document)
+                    .expect("validated")
+                    .buffer
+                    .state();
+                self.worksheet_record_selection(dialog.view, history_state);
+            }
             if self
                 .workbench
                 .edit(
@@ -136,10 +191,29 @@ impl AppCore {
                 .is_ok()
             {
                 self.markdown.insert_dialog = None;
-                self.effects.push(Effect::FocusEditor(dialog.view));
+                if dialog.worksheet.is_some() {
+                    let history_state = self
+                        .workbench
+                        .document(dialog.document)
+                        .expect("edited")
+                        .buffer
+                        .state();
+                    self.worksheet_record_selection(dialog.view, history_state);
+                }
+                self.focus_md_insert_target(&dialog);
             } else if let Some(d) = &mut self.markdown.insert_dialog {
                 d.error = true;
             }
+        }
+    }
+
+    pub fn focus_md_insert_target(&mut self, dialog: &InsertDialog) {
+        if dialog.worksheet.is_some() {
+            if let Some(state) = self.worksheets.views.get_mut(&dialog.view) {
+                state.focus = true;
+            }
+        } else {
+            self.effects.push(Effect::FocusEditor(dialog.view));
         }
     }
 

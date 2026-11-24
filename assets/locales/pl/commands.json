@@ -252,7 +252,9 @@
     "insertBlock": "Wstaw — Cytat",
     "insertImage": "Obraz…",
     "insertCodePicker": "Kod…",
-    "confirmInsert": "Wstaw"
+    "confirmInsert": "Wstaw",
+    "editTable": "Edytuj tabelę jako arkusz",
+    "tableAction": "Działanie arkusza"
   },
   "json": {
     "showText": "Pokaż tekst",

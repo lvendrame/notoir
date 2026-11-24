@@ -211,8 +211,7 @@ pub fn show(ctx: &egui::Context, kit: &mut Kit, core: &mut AppCore, actions: &mu
     });
     dialog.fresh = false;
     if cancel || modal.should_close() {
-        core.effects
-            .push(crate::core::Effect::FocusEditor(dialog.view));
+        core.focus_md_insert_target(&dialog);
     } else {
         core.markdown.insert_dialog = Some(dialog);
         if let Some(file) = choose_file {

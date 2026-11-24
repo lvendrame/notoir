@@ -56,7 +56,8 @@ pub(super) fn specs(out: &mut Specs) {
     );
     out.push(
         CommandSpec::new("edit.selectAll", Category::Edit, select_all)
-            .keys([KeyBindingDef::new("Mod+A").when("editorFocus")])
+            .keys([KeyBindingDef::new("Mod+A")
+                .when("editorFocus || (worksheetFocus && !worksheetEditing)")])
             .when(editor)
             .expect("valid"),
     );
@@ -171,6 +172,9 @@ fn clipboard_source(core: &AppCore) -> Option<(notoir_core::ids::ViewId, String,
 }
 
 fn copy(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    if core.worksheet_clipboard("copy", None) {
+        return CommandOutcome::Done;
+    }
     if let Some((_, text, _)) = clipboard_source(core)
         && !text.is_empty()
     {
@@ -180,6 +184,9 @@ fn copy(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
 }
 
 fn cut(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    if core.worksheet_clipboard("cut", None) {
+        return CommandOutcome::Done;
+    }
     if let Some((view, text, source)) = clipboard_source(core)
         && !text.is_empty()
     {
@@ -204,6 +211,9 @@ fn paste(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
             return CommandOutcome::Done;
         }
     };
+    if core.worksheet_clipboard("paste", Some(&text)) {
+        return CommandOutcome::Done;
+    }
     let sel = core
         .workbench
         .view(view)
@@ -223,6 +233,9 @@ fn paste(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
 }
 
 fn select_all(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
+    if core.worksheet_clipboard("all", None) {
+        return CommandOutcome::Done;
+    }
     if let Some(v) = active(core) {
         let len = core
             .workbench

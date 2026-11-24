@@ -14,7 +14,7 @@ pub(super) fn specs(out: &mut Specs) {
     let k = KeyBindingDef::new;
     let spec = |id: &'static str, f: fn(&mut AppCore, &CommandInvocation) -> CommandOutcome| {
         CommandSpec::new(id, Category::Selection, f)
-            .when("hasActiveEditor")
+            .when("hasActiveEditor && !inMarkdownTable")
             .expect("valid")
     };
     out.push(

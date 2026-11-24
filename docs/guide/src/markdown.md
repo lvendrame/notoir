@@ -70,6 +70,57 @@ Cancel or Escape closes either dialog without changing the document.
 
 **Insert › Table** asks for the number of columns and data rows (1–100 each). A header row is added automatically.
 
+## Edit tables as worksheets
+
+Hover over a table in Preview or Split and click its pencil icon to open a linked worksheet tab.
+You can also place the source cursor inside a table and run **Edit table as worksheet** from the command palette.
+
+Click a cell to select it; Shift-click another to select a rectangle. Arrow keys move between cells.
+Double-click, Enter, or F2 starts editing. Inactive cells show rendered Markdown, while the cell you edit shows its
+Markdown syntax. Enter or Escape finishes editing; Tab and Shift-Tab move between cells.
+
+The left gutter numbers the rows. Click a number to select its whole row; Shift-click extends a range, and
+Ctrl-click (⌘-click on macOS) adds or removes individual rows. Click a column header to select the whole column;
+the same modifiers select additional columns. Double-click a header, or use Enter/F2, to edit its text.
+Row numbers stay visible when scrolling sideways, and the Markdown header stays visible when scrolling down.
+
+Drag a selected row counter, or any cell in a selected row, to move all selected rows together. A line shows the
+drop position; holding near the top or bottom scrolls the worksheet. Escape cancels the drag. One Undo restores
+the original order and selection. The Markdown header row is fixed; move data rows below it.
+
+Right-click a row number for **Insert row above**, **Insert row below**, or **Delete selected rows**.
+Right-click a column header for **Insert column before**, **Insert column after**, or **Delete selected columns**.
+Right-clicking inside the current selection keeps the group; right-clicking outside selects the clicked row or column.
+Insertion adds one blank row or column at the corresponding edge of the selection. Deletion removes only selected
+rows or columns, including nonadjacent ones. The header row and final column remain protected.
+
+Drag the right edge of a column header to change its width, or the bottom edge of a row number to change its height.
+Text wraps inside each column, and taller rows reveal more lines. Double-click a divider to fit a column to its
+widest cell or a row to its wrapped content. Escape cancels a resize; focused handles also accept arrow keys.
+These sizes belong to the current worksheet view, work with read-only documents, and do not change the saved Markdown.
+Row sizes move with reordered rows, and structural undo/redo restores the layout with the table.
+
+The icon toolbar formats text as bold, italic, strikethrough, inline code, or a link. Hover over a tool to see its name.
+Bold and italic use `Ctrl+B` / `Ctrl+I`
+(⌘B / ⌘I). Formatting applies to selected text inside an active cell, or to the selected cells. **Rows and columns**
+adds or deletes rows and columns; **Alignment** changes Markdown column alignment. The header and final column
+cannot be deleted. Copy and paste rectangular ranges using tabs and newlines; pasted ranges grow the table as needed.
+Line breaks pasted while editing one cell become spaces.
+
+The link icon opens the same **Insert Link** dialog as the Markdown context menu, with **Caption** and **URL or file**.
+Type `@` in the destination to complete workspace files. Insert confirms the captured cell or text selection as one
+undoable edit; Cancel or Escape leaves it unchanged. When several cells are selected, the caption and destination
+apply to each selected cell.
+If the cell already contains one link, its caption and destination are filled in for editing. Inside an active cell,
+place the caret in a link or select its text to edit that link while preserving the surrounding text.
+
+Changes update the Markdown immediately, share its undo/redo history, and use its normal save and autosave settings.
+Escape does not undo changes already made. **Go to Markdown** returns to the source. If source edits break or delete
+the table, the worksheet pauses until the table is repaired or restored with Undo.
+
+You can close the source tab and continue in the worksheet. Worksheet tabs last for the current session; reopening
+Notoir restores the source document instead.
+
 ## Export as HTML
 
 **File › Export as HTML…** saves the document as a standalone web page with a light, dark and print stylesheet built

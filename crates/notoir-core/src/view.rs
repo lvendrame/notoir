@@ -12,6 +12,7 @@ pub enum ViewKind {
     Text,
     MarkdownPreview,
     MarkdownSplit,
+    MarkdownTable,
     JsonTree,
     JsonSplit,
     CsvPreview,
@@ -39,6 +40,7 @@ pub struct EditorView {
     pub id: ViewId,
     pub document_id: DocumentId,
     pub kind: ViewKind,
+    pub markdown_table: Option<TableBinding>,
     pub selection: Selection,
     pub scroll: ScrollPosition,
     /// Only used when `editor.zoomScope = "view"`.
@@ -72,6 +74,7 @@ impl EditorView {
             id,
             document_id,
             kind: ViewKind::Text,
+            markdown_table: None,
             selection: Selection::default(),
             scroll: ScrollPosition::default(),
             zoom: None,
@@ -119,6 +122,15 @@ impl EditorView {
             ..self.clone()
         }
     }
+}
+
+/// Session-local table identity, with reversible source anchors. Checkpoints
+/// use text-history states, not revisions (revisions also advance on undo).
+#[derive(Clone, Debug, PartialEq)]
+pub struct TableBinding {
+    pub id: ViewId,
+    pub range: (usize, usize),
+    pub checkpoints: HashMap<u64, (usize, usize)>,
 }
 
 #[derive(Debug, Default)]
@@ -169,11 +181,51 @@ impl ViewRegistry {
             if Some(v.id) != skip {
                 v.selection = v.selection.map(changes);
             }
+            if let Some(table) = &mut v.markdown_table {
+                table.range = (
+                    changes.map_pos(
+                        table.range.0,
+                        if changes.edits().iter().any(|e| {
+                            e.start == table.range.0
+                                && e.end == e.start
+                                && (e.text.contains('\n')
+                                    || e.text.chars().all(char::is_whitespace))
+                        }) {
+                            notoir_editor::Assoc::After
+                        } else {
+                            notoir_editor::Assoc::Before
+                        },
+                    ),
+                    changes.map_pos(
+                        table.range.1,
+                        if changes
+                            .edits()
+                            .iter()
+                            .any(|e| e.start == table.range.1 && e.end == e.start)
+                        {
+                            notoir_editor::Assoc::Before
+                        } else {
+                            notoir_editor::Assoc::After
+                        },
+                    ),
+                );
+            }
             for f in &mut v.folds {
                 f.header = changes.map_pos(f.header, notoir_editor::Assoc::Before);
                 f.end = changes.map_pos(f.end, notoir_editor::Assoc::Before);
             }
             v.folds.retain(|f| f.end > f.header);
+        }
+    }
+
+    pub fn checkpoint_tables(&mut self, doc: DocumentId, state: u64, restore: bool) {
+        for v in self.views.values_mut().filter(|v| v.document_id == doc) {
+            if let Some(table) = &mut v.markdown_table {
+                if restore && let Some(range) = table.checkpoints.get(&state) {
+                    table.range = *range;
+                }
+                table.checkpoints.insert(state, table.range);
+            }
         }
     }
 }

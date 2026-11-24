@@ -32,6 +32,13 @@ macro_rules! icons {
 }
 
 icons! {
+    AlignLeft => "lucide/align-left",
+    Bold => "lucide/bold",
+    Code => "lucide/code",
+    Italic => "lucide/italic",
+    Strikethrough => "lucide/strikethrough",
+    Table2 => "lucide/table-2",
+    TableEdit => "custom/table-edit",
     ArrowDownAZ => "lucide/arrow-down-a-z",
     Activity => "lucide/activity",
     ArrowDown => "lucide/arrow-down",

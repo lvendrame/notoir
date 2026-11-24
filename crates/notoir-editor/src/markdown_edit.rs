@@ -212,9 +212,157 @@ pub fn link(range: Range, caption: &str, url: &str, image: bool) -> EditResult {
     result(range.from(), range.to(), &text, Range::caret(caret))
 }
 
+/// A parsed link selected for editing. Offsets are characters in `source`.
+#[derive(Clone, Debug, PartialEq)]
+pub struct ExistingLink {
+    pub range: Range,
+    pub caption: String,
+    pub destination: String,
+    raw_caption: String,
+    title: String,
+}
+
+/// Find one unambiguous link at a caret or within a selection. Parsing keeps
+/// escaped Markdown, images and code spans from being mistaken for links.
+pub fn existing_link(source: &str, selection: Range) -> Option<ExistingLink> {
+    use pulldown_cmark::{Event, Options, Parser, Tag, TagEnd};
+    let rope = Rope::from_str(source);
+    let mut open = None;
+    let mut found = Vec::new();
+    let options = Options::ENABLE_TABLES
+        | Options::ENABLE_TASKLISTS
+        | Options::ENABLE_STRIKETHROUGH
+        | Options::ENABLE_FOOTNOTES
+        | Options::ENABLE_HEADING_ATTRIBUTES
+        | Options::ENABLE_YAML_STYLE_METADATA_BLOCKS
+        | Options::ENABLE_PLUSES_DELIMITED_METADATA_BLOCKS;
+    for (event, range) in Parser::new_ext(source, options).into_offset_iter() {
+        match event {
+            Event::Start(Tag::Link {
+                dest_url, title, ..
+            }) => {
+                open = Some((
+                    range.start,
+                    range.end,
+                    dest_url.to_string(),
+                    title.to_string(),
+                    String::new(),
+                    None::<std::ops::Range<usize>>,
+                ));
+            }
+            Event::End(TagEnd::Link) => {
+                let Some((start, end, destination, title, caption, content)) = open.take() else {
+                    continue;
+                };
+                let end = end.max(range.end);
+                let span = Range::new(rope.byte_to_char(start), rope.byte_to_char(end));
+                if (span.from() <= selection.from() && selection.to() <= span.to())
+                    || (selection.from() <= span.from() && span.to() <= selection.to())
+                {
+                    let raw_caption = content.map_or_else(String::new, |r| source[r].to_owned());
+                    found.push(ExistingLink {
+                        range: span,
+                        caption,
+                        destination,
+                        raw_caption,
+                        title,
+                    });
+                }
+            }
+            event => {
+                if let Some((_, _, _, _, caption, content)) = &mut open {
+                    if let Some(content) = content {
+                        content.start = content.start.min(range.start);
+                        content.end = content.end.max(range.end);
+                    } else {
+                        *content = Some(range);
+                    }
+                    match event {
+                        Event::Text(text) | Event::Code(text) => caption.push_str(&text),
+                        Event::SoftBreak | Event::HardBreak => caption.push(' '),
+                        _ => {}
+                    }
+                }
+            }
+        }
+    }
+    (found.len() == 1).then(|| found.remove(0))
+}
+
+/// Update a link, retaining its title and caption markup when only its URL
+/// changes. An edited caption uses the same escaping as Insert Link.
+pub fn update_link(current: &ExistingLink, caption: &str, url: &str) -> EditResult {
+    let caption = if caption == current.caption {
+        current.raw_caption.clone()
+    } else {
+        escape_caption(caption)
+    };
+    let title = if current.title.is_empty() {
+        String::new()
+    } else {
+        format!(
+            " \"{}\"",
+            current
+                .title
+                .replace('\\', "\\\\")
+                .replace('"', "\\\"")
+                .replace(['\r', '\n'], " ")
+        )
+    };
+    let text = format!("[{caption}]({}{title})", destination(url));
+    result(
+        current.range.from(),
+        current.range.to(),
+        &text,
+        Range::caret(text.chars().count()),
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn existing_link_prefills_and_updates_without_nesting() {
+        let raw = "before [**café** \\[notes\\]](https://old.test \"Title\") after";
+        let current = existing_link(raw, Range::new(0, raw.chars().count())).unwrap();
+        assert_eq!(current.caption, "café [notes]");
+        assert_eq!(current.destination, "https://old.test");
+        let edit = update_link(&current, &current.caption, "https://new.test/a b");
+        let mut rope = Rope::from_str(raw);
+        edit.changes.apply(&mut rope);
+        assert_eq!(
+            rope.to_string(),
+            "before [**café** \\[notes\\]](https://new.test/a%20b \"Title\") after"
+        );
+        let edit = update_link(&current, "New [caption]", "https://new.test");
+        let mut rope = Rope::from_str(raw);
+        edit.changes.apply(&mut rope);
+        assert_eq!(
+            rope.to_string(),
+            "before [New \\[caption\\]](https://new.test \"Title\") after"
+        );
+    }
+
+    #[test]
+    fn link_detection_uses_the_caret_and_rejects_code_images_and_ambiguity() {
+        let raw = "α [one](https://one.test) [two](https://two.test)";
+        assert_eq!(
+            existing_link(raw, Range::caret(5)).unwrap().destination,
+            "https://one.test"
+        );
+        assert!(existing_link(raw, Range::new(0, raw.chars().count())).is_none());
+        for raw in [
+            "`[caption](https://test)`",
+            "![caption](https://test)",
+            "\\[caption](https://test)",
+            "plain text",
+        ] {
+            assert!(
+                existing_link(raw, Range::new(0, raw.chars().count())).is_none(),
+                "{raw}"
+            );
+        }
+    }
     fn apply(text: &str, r: Range, kind: Insert<'_>) -> (String, Selection) {
         let mut rope = Rope::from_str(text);
         let edit = insert(&rope, &Selection::single(r), kind).unwrap();

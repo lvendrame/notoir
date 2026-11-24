@@ -252,7 +252,9 @@
     "insertBlock": "挿入 — 引用",
     "insertImage": "画像…",
     "insertCodePicker": "コード…",
-    "confirmInsert": "挿入"
+    "confirmInsert": "挿入",
+    "editTable": "表をワークシートで編集",
+    "tableAction": "ワークシート操作"
   },
   "json": {
     "showText": "テキストを表示",

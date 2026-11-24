@@ -1,6 +1,6 @@
 # 24 — Markdown
 
-**Status:** Done — Markdown display preferences (page/table width, responsive table cells, code wrapping and soft breaks);  render tree with source ranges (`notoir-editor::markdown`: CommonMark + GFM tables, task lists, strikethrough, footnotes, heading attributes, front matter, slugs), Edit / Split / Preview per view (toolbar control, Mod+Shift+V, Mod+K V, `markdown.defaultMode`, draggable split with auto orientation), preview renderer (headings, inline styles, links, local images incl. SVG decoded off the UI thread, quotes, nested lists with clickable task boxes as undoable edits, tables with alignment, highlighted code blocks, rules, footnotes, collapsible front matter, escaped HTML), 100/250 ms debounced re-parse, two-way scroll sync, double-click to source, links (web/mail to the OS, relative files at `#anchor`, in-document anchors, other schemes confirmed), Mod+B / Mod+I / code / insert link, paste URL over selection (M13); Markdown Insert context submenu with selection-aware blocks, link/image dialogs and workspace file completion. Deviations: remote images show the placeholder but cannot be loaded yet (no HTTP client); no per-block layout cache; no Markdown Preview panel; parse runs on the UI thread for all sizes; editor Ctrl/Cmd+click on links later. M26: File → Export as HTML… (`markdown.exportHtml`): a standalone page (`notoir-editor::markdown::to_html` + `html_document`: the preview's extensions, front matter left out, raw HTML escaped, headings with the preview's slugs as ids, wiki links as links to `<Target>.html#heading`, title from the first heading or the file name, embedded light/dark/print stylesheet) written through the save writer on the IO thread; local images stay relative to the export location. Deviation: no PDF export (no PDF renderer bundled — the page prints to PDF from a browser); Mermaid and math not rendered
+**Status:** Done — Linked table worksheets with live two-way source synchronization, inline formatting, structural editing, fixed row counters and column headers, nonadjacent row/column selection, row drag/drop and structural context menus, resizable rows/columns with wrapping and auto-fit, rectangular clipboard operations, reversible source bindings and session-only presentation; Markdown display preferences (page/table width, responsive table cells, code wrapping and soft breaks);  render tree with source ranges (`notoir-editor::markdown`: CommonMark + GFM tables, task lists, strikethrough, footnotes, heading attributes, front matter, slugs), Edit / Split / Preview per view (toolbar control, Mod+Shift+V, Mod+K V, `markdown.defaultMode`, draggable split with auto orientation), preview renderer (headings, inline styles, links, local images incl. SVG decoded off the UI thread, quotes, nested lists with clickable task boxes as undoable edits, tables with alignment, highlighted code blocks, rules, footnotes, collapsible front matter, escaped HTML), 100/250 ms debounced re-parse, two-way scroll sync, double-click to source, links (web/mail to the OS, relative files at `#anchor`, in-document anchors, other schemes confirmed), Mod+B / Mod+I / code / insert link, paste URL over selection (M13); Markdown Insert context submenu with selection-aware blocks, link/image dialogs and workspace file completion. Deviations: remote images show the placeholder but cannot be loaded yet (no HTTP client); no per-block layout cache; no Markdown Preview panel; parse runs on the UI thread for all sizes; editor Ctrl/Cmd+click on links later. M26: File → Export as HTML… (`markdown.exportHtml`): a standalone page (`notoir-editor::markdown::to_html` + `html_document`: the preview's extensions, front matter left out, raw HTML escaped, headings with the preview's slugs as ids, wiki links as links to `<Target>.html#heading`, title from the first heading or the file name, embedded light/dark/print stylesheet) written through the save writer on the IO thread; local images stay relative to the export location. Deviation: no PDF export (no PDF renderer bundled — the page prints to PDF from a browser); Mermaid and math not rendered
 
 ## Purpose
 
@@ -130,6 +130,193 @@ exact filename and path matches rank first, followed by exact filename stems, fi
 document's directory (workspace root for unsaved documents), with forward slashes and Markdown-safe encoding.
 Show no-workspace, indexing and no-results states. The captured view/document/revision must remain valid,
 Markdown, and editable at confirmation; otherwise reject insertion with a localized explanation.
+
+## Linked table worksheets
+
+Preview tables expose a localized edit icon on hover or keyboard focus, without
+changing layout. `markdown.editTable` opens a session-local `MarkdownTable` view
+of the same document, or focuses the worksheet already linked to that table.
+The command is also available from the palette at a table's source position.
+
+The compact worksheet renders inactive cells and exposes raw inline Markdown in
+the active cell. An icon-only toolbar with localized tooltips and accessible labels offers bold, italic, strikethrough, inline code, links,
+row/column insertion and deletion, and Markdown column alignment. One header and
+one column are mandatory; header-only tables are allowed. Column labels and
+cell positions are accessible, theme-aware and localized. No formulas, merged
+cells, arbitrary fonts/colors, or block-level formatting are provided.
+
+The worksheet link icon runs `markdown.insertLink` and reuses the Insert → Link
+dialog: Caption, URL or file, `@` workspace-file completion, Cancel/Escape and
+stale-target validation. Opening or cancelling the dialog does not edit the
+document. Confirmation replaces the captured cell text or selected text within
+an active cell with a safely escaped Markdown link, as one undo step. For a
+rectangular selection, the entered caption and destination apply to all selected
+cells. Cell focus and selection are captured when the dialog opens.
+If a single selected cell contains one link, or the active text selection/caret
+identifies one link, prefill its caption and destination and replace that whole
+link on confirmation. Preserve surrounding cell text and any existing title;
+changing only the URL preserves the caption's Markdown styling and escapes.
+Reference-style links resolve against the document and are edited as inline links.
+
+Clicks select cells; Shift-click extends a rectangular selection. Arrows navigate;
+Enter/F2/double-click edit, Enter finishes, and Tab/Shift-Tab navigate cells.
+Escape leaves cell editing without reverting already synchronized text. Typing
+updates the shared Markdown immediately and uses the document's undo history.
+Formatting acts on selected text/word in an active cell or whole selected cells.
+Rectangular clipboard operations use tabs/newlines, grow the table on paste, and
+are atomic undo steps. Physical line breaks pasted inside one cell become spaces.
+
+### Worksheet row and column selectors
+
+- A fixed left gutter numbers worksheet rows from 1, including the Markdown header.
+  The gutter is presentation only and is absent from source, clipboard data and exports.
+  The header remains visible during vertical scrolling; row counters remain visible during horizontal scrolling.
+- Clicking a row counter selects the whole row. Shift-click selects a range;
+  Ctrl/Command-click adds or removes individual rows, permitting nonadjacent groups.
+  Clicking a column header selects the whole column with the same range/additive modifiers.
+  Double-click or Enter/F2 still edits header text. Changing selection does not change the document.
+- Right-clicking a selected row counter preserves its selected group and offers only
+  Insert row above, Insert row below and Delete selected rows. A counter outside the group
+  selects that row before opening the menu. Column headers behave likewise with
+  Insert column before, Insert column after and Delete selected columns.
+  Insertions add one row or column before the first or after the last selected index.
+- Pressing and dragging a selected row counter or a cell in a selected row moves
+  the selected rows as a block, retaining their original order. A line marks the drop
+  position, and the view scrolls at the vertical edges. Drop commits one undoable source
+  edit; dragging alone never writes. Escape, a drop outside the worksheet, read-only
+  transitions or source changes cancel the operation. Undo/redo restore row order and selection.
+- The Markdown header stays fixed and cannot be moved/deleted or have a row inserted
+  above it; data rows may be reordered below it. The last column cannot be deleted.
+  Delete, formatting, alignment and clipboard operations honor nonadjacent selections
+  without applying to the gaps. Row moves preserve all cell Markdown and column alignment.
+
+### Worksheet dimensions and wrapping
+
+Every column has a draggable divider on the right edge of its header, and every row
+has a height handle at the bottom of its numbered counter. These handles have
+localized tooltips, accessible names, resize cursors and keyboard arrow adjustment.
+Escape restores the size from before a drag. Double-click a column divider to fit
+the widest rendered cell, or a row divider to fit its wrapped content.
+
+Inactive cells wrap Markdown within their column and clip to their row's height;
+expanding the row reveals additional lines. Active cells retain inline Markdown
+editing with soft wrapping and an internal scrollbar. The header's displayed height
+is bounded by the pane so data rows remain reachable. Variable row heights are
+virtualized, while the fixed counter gutter and header remain aligned during scrolling.
+
+Sizes belong to each worksheet view, including read-only views, and never modify
+Markdown, dirty state, save output or the document undo stack. Structural worksheet
+edits carry sizes with their rows/columns; structural undo/redo restores the matching
+layout. Undoing ordinary text edits preserves subsequent view-only size changes.
+
+Table bindings map source character ranges through edits and retain history-state
+checkpoints for undo/redo. Unavailable or ambiguous targets display the last grid
+with edits disabled; source repair or undo restoring the target resumes editing.
+Stale actions never overwrite newer revisions. Read-only state, save, autosave,
+recovery, and dirty indicators belong to the shared source document. Closing a
+source tab does not close its worksheet. Worksheets are omitted from session
+restore; a document with only worksheets retains one ordinary source-tab entry.
+
+```gherkin
+Feature: Linked table worksheets
+
+  Scenario: Resize worksheet rows and columns without changing Markdown
+    Given a worksheet with long cell content
+    When the user drags a column divider and row height handles
+    Then column widths and row heights change independently
+    And header cells remain aligned with their data cells
+    And the source, dirty state and document undo history remain unchanged
+
+  Scenario: Auto-fit worksheet content
+    Given a worksheet with long content in a narrow column
+    When the user double-clicks the row height handle
+    Then the row grows to fit the wrapped content
+    When the user double-clicks a column divider
+    Then the column grows to fit its widest rendered cell
+    And short rows retain the minimum height
+    And the source remains unchanged
+
+  Scenario: Select and delete worksheet rows from their counters
+    Given a worksheet with four data rows
+    When the user clicks a row counter and uses Shift-click and Control-click to adjust the selection
+    Then whole rows are selected and nonadjacent rows can be selected together
+    When the user right-clicks a selected counter
+    Then the context menu offers row insertion above, insertion below and deletion
+    And the existing row selection is preserved
+    When the user deletes the selected rows
+    Then only those rows are deleted and the gaps are preserved
+    And one undo restores the source and row selection
+
+  Scenario: Select worksheet columns and use their context menu
+    Given a worksheet with two columns
+    When the user clicks column headers to select columns
+    Then each selected column includes its header and all data cells
+    When the user right-clicks a selected column header
+    Then the context menu offers insertion before, insertion after and deletion
+    And deleting all columns is disabled
+    When the user inserts columns before and after the selection
+    Then blank columns are inserted at the selected boundaries
+    When the user deletes one selected column
+    Then the remaining column and its data are preserved
+    And undo restores the source
+
+  Scenario: Drag selected worksheet rows together
+    Given two nonadjacent worksheet rows selected through their counters
+    When the user drags a cell in a selected row below the last data row
+    Then the selected rows move together in their original order
+    And the moved rows remain selected
+    When the user undoes the move
+    Then the original source and row selection are restored
+    And redo restores the moved row order and selection
+
+  Scenario: Edit an existing worksheet link
+    Given a worksheet cell containing a Markdown link
+    When the user opens its link dialog
+    Then Caption and URL or file contain the existing caption and destination
+    When the user cancels
+    Then the cell remains unchanged
+    When the user reopens the dialog and changes both fields
+    And confirms the change
+    Then the original link is replaced without nesting another link
+    And one undo restores the original cell
+
+  Scenario: Open a linked table worksheet
+    Given a Markdown document containing a table
+    When the user requests its worksheet
+    Then a worksheet tab shares the source document
+    And opening the same table again focuses the existing worksheet
+    And worksheet changes mark and save the source document
+    And session capture retains only an ordinary source entry
+
+  Scenario: Synchronize worksheet and Markdown edits
+    Given an open table worksheet
+    When source edits move the table and change a cell
+    Then the worksheet follows its original table and displays the changed cell
+    When the worksheet changes a cell
+    Then the source changes immediately
+    And shared undo and redo restore the cell values
+
+  Scenario: Pause and recover an unavailable worksheet
+    Given a worksheet and another identical table in the same document
+    When source edits invalidate the linked table
+    Then the worksheet becomes unavailable and rejects cell writes
+    When source repair restores the table
+    Then the worksheet resumes editing
+    When the linked table is deleted
+    Then the worksheet does not attach to the other table
+    And undo restores the original binding
+
+  Scenario: Edit worksheet structure and paste cell ranges
+    Given an open table worksheet
+    When a rectangular paste extends beyond its dimensions
+    Then rows and columns grow to contain the pasted cells
+    And one undo restores the original table
+    And redo restores the pasted range
+    When the user formats a selected range and changes its alignment
+    Then selected cells contain Markdown formatting and selected columns have that alignment
+    And the header cannot be deleted
+    And deleting a selected column preserves the remaining table
+```
 
 ## Test Cases
 

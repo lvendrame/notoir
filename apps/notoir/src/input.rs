@@ -39,10 +39,18 @@ pub fn keystroke(key: egui::Key, mods: egui::Modifiers, platform: Platform) -> O
 /// and text-editing keys reach the field — except F1 (context help), which no
 /// text field uses.
 pub fn dispatch_keys(ctx: &egui::Context, core: &mut AppCore, context: &ContextSnapshot) {
+    let worksheet_focus = core
+        .workbench
+        .active_view()
+        .and_then(|v| core.worksheets.views.get(&v))
+        .is_some_and(|s| s.keyboard_focus && core.markdown.insert_dialog.is_none());
     // Other text fields (picker filter…) keep their keys; the editor does not.
     // The Explorer tree takes focus too but leaves its shortcuts to the keymap.
     let explorer_tree = ctx.memory(|m| m.has_focus(crate::shell::explorer::tree_id()));
-    let text_field = ctx.egui_wants_keyboard_input() && !core.editor_focused && !explorer_tree;
+    let text_field = ctx.egui_wants_keyboard_input()
+        && !core.editor_focused
+        && !explorer_tree
+        && !worksheet_focus;
     if text_field {
         core.keymap.cancel_pending();
     }

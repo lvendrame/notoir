@@ -37,7 +37,7 @@ Default shortcuts. Linux uses the Windows column, with `Super` in place of `Win`
 | Redo | `⇧⌘Z` | `Ctrl+Shift+Z`, `Ctrl+Y` |  |
 | Replace | `⌥⌘F` | `Ctrl+H` |  |
 | Search in Workspace | `⇧⌘F` | `Ctrl+Shift+F` |  |
-| Select All | `⌘A` | `Ctrl+A` | `editorFocus` |
+| Select All | `⌘A` | `Ctrl+A` | `editorFocus \|\| (worksheetFocus && !worksheetEditing)` |
 | Undo | `⌘Z` | `Ctrl+Z` |  |
 
 ## Selection
@@ -117,8 +117,8 @@ Default shortcuts. Linux uses the Windows column, with `Super` in place of `Win`
 |---|---|---|---|
 | Follow Link | `⌥↩` | `Alt+Enter` | `editorFocus && languageId == 'markdown'` |
 | Open Preview to the Side | `⌘K V` | `Ctrl+K V` |  |
-| Toggle Bold | `⌘B` | `Ctrl+B` | `editorFocus && languageId == 'markdown'` |
-| Toggle Italic | `⌘I` | `Ctrl+I` | `editorFocus && languageId == 'markdown'` |
+| Toggle Bold | `⌘B` | `Ctrl+B` | `(editorFocus \|\| worksheetFocus) && languageId == 'markdown'` |
+| Toggle Italic | `⌘I` | `Ctrl+I` | `(editorFocus \|\| worksheetFocus) && languageId == 'markdown'` |
 | Toggle Preview | `⇧⌘V` | `Ctrl+Shift+V` |  |
 
 ## Compare

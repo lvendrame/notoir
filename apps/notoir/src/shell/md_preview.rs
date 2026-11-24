@@ -54,6 +54,8 @@ struct Style {
 }
 
 struct Ctx<'a> {
+    view: ViewId,
+    revision: u64,
     doc: DocumentId,
     /// Lowercase wiki link targets with no note (styled as missing).
     missing: std::collections::HashSet<String>,
@@ -182,6 +184,8 @@ pub fn show(
         .map(|l| l.target.to_lowercase())
         .collect();
     let cx = Ctx {
+        view,
+        revision: core.markdown.parsed.get(&doc).map_or(0, |p| p.revision),
         doc,
         missing,
         base_dir,
@@ -390,7 +394,7 @@ fn block(
             }
             let widths = table_widths(&natural, limit, cx.table_wrap);
             // Only exceptionally dense tables need horizontal scrolling.
-            egui::ScrollArea::horizontal()
+            let table = egui::ScrollArea::horizontal()
                 .id_salt(("md-table-scroll", cx.doc, b.range.0))
                 .max_width(limit)
                 .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::VisibleWhenNeeded)
@@ -428,6 +432,50 @@ fn block(
                         }
                     });
                 });
+            let id = ui.id().with(("edit-table", cx.view, b.range.0));
+            let table_width =
+                widths.iter().sum::<f32>() + 18.0 * widths.len().saturating_sub(1) as f32;
+            let table_rect = egui::Rect::from_min_size(
+                table.inner_rect.min,
+                egui::vec2(
+                    table_width.min(table.inner_rect.width()),
+                    table.inner_rect.height(),
+                ),
+            );
+            let rect = egui::Rect::from_min_size(
+                egui::pos2(
+                    (table_rect.right() + 4.0).min(table.inner_rect.right() - 28.0),
+                    table_rect.top(),
+                ),
+                egui::vec2(28.0, 28.0),
+            );
+            let response = ui
+                .interact(rect, id, Sense::click())
+                .on_hover_text(t!("markdown:editTable"));
+            let visible = response.hovered()
+                || response.has_focus()
+                || ui.input(|i| {
+                    i.pointer
+                        .hover_pos()
+                        .is_some_and(|p| table_rect.union(rect).contains(p))
+                });
+            let color = kit.color(Tok::TextPrimary);
+            if visible {
+                ui.painter()
+                    .rect_filled(rect, 3.0, kit.color(Tok::BgPanelRaised));
+                kit.icon(ui.ctx(), crate::icons::Icon::TableEdit, 16.0, color)
+                    .paint_at(ui, rect.shrink(6.0));
+            }
+            response.widget_info(|| {
+                egui::WidgetInfo::labeled(egui::WidgetType::Button, true, t!("markdown:editTable"))
+            });
+            if response.clicked() {
+                cmd(
+                    actions,
+                    "markdown.editTable",
+                    json!({"view":cx.view.0,"start":b.range.0,"revision":cx.revision}),
+                );
+            }
         }
         BlockKind::Rule => {
             ui.separator();
@@ -836,6 +884,72 @@ fn flatten(inlines: &[Inline], style: Style, link: Option<&str>, breaks: bool, o
             Inline::HardBreak => out.push(Run::Break),
         }
     }
+}
+
+/// Inline-only worksheet rendering. Links are styled but a click selects the
+/// cell; following a link remains an explicit preview action.
+pub fn worksheet_job(raw: &str, header: bool, kit: &Kit) -> LayoutJob {
+    let doc = notoir_editor::markdown::parse(&format!("| {raw} |\n|---|\n"));
+    let mut runs = Vec::new();
+    if let Some(Block {
+        kind: BlockKind::Table { header: cells, .. },
+        ..
+    }) = doc.blocks.first()
+        && let Some(cell) = cells.first()
+    {
+        flatten(
+            cell,
+            Style {
+                strong: header,
+                ..Default::default()
+            },
+            None,
+            false,
+            &mut runs,
+        );
+    }
+    let mut job = LayoutJob::default();
+    for run in runs {
+        let (text, style, link) = match run {
+            Run::Text(text, style, link) => (text, style, link),
+            Run::Image(_, alt) => (alt, Style::default(), None),
+            Run::Break => (" ".into(), Style::default(), None),
+        };
+        let color = kit.color(if link.is_some() {
+            Tok::SyntaxLink
+        } else if style.code {
+            Tok::SyntaxCode
+        } else {
+            Tok::TextPrimary
+        });
+        job.append(
+            &text,
+            0.0,
+            TextFormat {
+                font_id: if style.code {
+                    crate::fonts::mono(13.0)
+                } else if style.strong {
+                    crate::fonts::semibold(13.0)
+                } else {
+                    FontId::proportional(13.0)
+                },
+                color,
+                italics: style.emphasis,
+                strikethrough: if style.strike {
+                    Stroke::new(1.0, color)
+                } else {
+                    Stroke::NONE
+                },
+                underline: if link.is_some() {
+                    Stroke::new(1.0, color)
+                } else {
+                    Stroke::NONE
+                },
+                ..Default::default()
+            },
+        );
+    }
+    job
 }
 
 #[allow(clippy::too_many_arguments)]

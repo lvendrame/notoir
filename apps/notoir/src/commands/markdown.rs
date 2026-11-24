@@ -10,9 +10,32 @@ use super::{Specs, arg, bad_args};
 use crate::core::AppCore;
 
 pub(super) fn specs(out: &mut Specs) {
+    out.push(
+        CommandSpec::new(
+            "markdown.editTable",
+            Category::Markdown,
+            |c: &mut AppCore, i| {
+                c.worksheet_open(i);
+                CommandOutcome::Done
+            },
+        )
+        .when("hasActiveEditor && languageId == 'markdown' && !inMarkdownTable")
+        .expect("valid"),
+    );
+    out.push(
+        CommandSpec::new(
+            "markdown.tableAction",
+            Category::Markdown,
+            |c: &mut AppCore, i| {
+                c.worksheet_action(i);
+                CommandOutcome::Done
+            },
+        )
+        .hidden(),
+    );
     let k = KeyBindingDef::new;
-    let md = "hasActiveEditor && languageId == 'markdown'";
-    let md_edit = "editorFocus && languageId == 'markdown'";
+    let md = "hasActiveEditor && languageId == 'markdown' && !inMarkdownTable";
+    let md_edit = "(editorFocus || worksheetFocus) && languageId == 'markdown'";
     let spec = |id: &'static str, f: fn(&mut AppCore, &CommandInvocation) -> CommandOutcome| {
         CommandSpec::new(id, Category::Markdown, f)
             .when(md)
@@ -32,10 +55,18 @@ pub(super) fn specs(out: &mut Specs) {
     let edit_spec =
         |id: &'static str, f: fn(&mut AppCore, &CommandInvocation) -> CommandOutcome| {
             CommandSpec::new(id, Category::Markdown, f)
+                .when(
+                    "hasActiveEditor && languageId == 'markdown' && !readOnly && !inMarkdownTable",
+                )
+                .expect("valid")
+        };
+    let inline_spec =
+        |id: &'static str, f: fn(&mut AppCore, &CommandInvocation) -> CommandOutcome| {
+            CommandSpec::new(id, Category::Markdown, f)
                 .when("hasActiveEditor && languageId == 'markdown' && !readOnly")
                 .expect("valid")
         };
-    out.push(edit_spec("markdown.toggleStrikethrough", |c, i| {
+    out.push(inline_spec("markdown.toggleStrikethrough", |c, i| {
         wrap(c, i, "~~")
     }));
     out.push(edit_spec("markdown.insertBlock", insert_block));
@@ -63,10 +94,10 @@ pub(super) fn specs(out: &mut Specs) {
         )
         .hidden(),
     );
-    out.push(edit_spec("markdown.toggleBold", toggle_bold).keys([k("Mod+B").when(md_edit)]));
-    out.push(edit_spec("markdown.toggleItalic", toggle_italic).keys([k("Mod+I").when(md_edit)]));
-    out.push(edit_spec("markdown.toggleCode", toggle_code));
-    out.push(edit_spec("markdown.insertLink", insert_link));
+    out.push(inline_spec("markdown.toggleBold", toggle_bold).keys([k("Mod+B").when(md_edit)]));
+    out.push(inline_spec("markdown.toggleItalic", toggle_italic).keys([k("Mod+I").when(md_edit)]));
+    out.push(inline_spec("markdown.toggleCode", toggle_code));
+    out.push(inline_spec("markdown.insertLink", insert_link));
     out.push(CommandSpec::new("markdown.toggleTask", Category::Markdown, toggle_task).hidden());
     out.push(CommandSpec::new("markdown.openLink", Category::Markdown, open_link).hidden());
     out.push(CommandSpec::new("markdown.revealSource", Category::Markdown, reveal_source).hidden());
@@ -109,6 +140,22 @@ fn show_preview(core: &mut AppCore, _: &CommandInvocation) -> CommandOutcome {
 
 fn wrap(core: &mut AppCore, inv: &CommandInvocation, marker: &str) -> CommandOutcome {
     if let Some(v) = target_view(core, inv) {
+        if core
+            .workbench
+            .view(v)
+            .is_some_and(|v| v.kind == ViewKind::MarkdownTable)
+        {
+            let value = match marker {
+                "**" => "bold",
+                "*" => "italic",
+                "~~" => "strike",
+                _ => "code",
+            };
+            let mut action = inv.clone();
+            action.args = serde_json::json!({"view":v.0,"op":"format","value":value});
+            core.worksheet_action(&action);
+            return CommandOutcome::Done;
+        }
         core.toggle_md_wrap(v, marker);
     }
     CommandOutcome::Done

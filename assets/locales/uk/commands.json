@@ -252,7 +252,9 @@
     "insertBlock": "Вставити — Цитата",
     "insertImage": "Зображення…",
     "insertCodePicker": "Код…",
-    "confirmInsert": "Вставити"
+    "confirmInsert": "Вставити",
+    "editTable": "Редагувати таблицю на аркуші",
+    "tableAction": "Дія аркуша таблиці"
   },
   "json": {
     "showText": "Показати текст",

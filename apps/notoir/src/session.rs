@@ -220,6 +220,25 @@ impl AppCore {
                 let mut active = None;
                 for v in &group.tabs {
                     let Some(view) = wb.view(*v) else { continue };
+                    // Worksheets are session-local presentations. If the source
+                    // has no ordinary view, retain one source entry instead.
+                    if view.kind == ViewKind::MarkdownTable {
+                        let ordinary = wb
+                            .views
+                            .of_document(view.document_id)
+                            .any(|v| v.kind != ViewKind::MarkdownTable);
+                        let first = order
+                            .iter()
+                            .filter_map(|g| wb.layout.group(*g))
+                            .flat_map(|g| g.tabs.iter())
+                            .find(|v| {
+                                wb.view(**v)
+                                    .is_some_and(|v| v.document_id == view.document_id)
+                            });
+                        if ordinary || first != Some(v) {
+                            continue;
+                        }
+                    }
                     let Some(doc) = wb.document(view.document_id) else {
                         continue;
                     };

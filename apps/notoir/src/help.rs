@@ -69,7 +69,9 @@ pub fn topic(core: &AppCore) -> Option<&'static str> {
             ViewKind::Welcome => Some(FIRST_STEPS),
             ViewKind::Diff => Some(COMPARE),
             ViewKind::PluginManager => Some(PLUGINS),
-            ViewKind::MarkdownPreview | ViewKind::MarkdownSplit => Some(MARKDOWN),
+            ViewKind::MarkdownPreview | ViewKind::MarkdownSplit | ViewKind::MarkdownTable => {
+                Some(MARKDOWN)
+            }
             ViewKind::JsonTree | ViewKind::JsonSplit => Some(JSON),
             ViewKind::Text | ViewKind::CsvPreview | ViewKind::CsvSplit => None,
         };

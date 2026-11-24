@@ -34,6 +34,7 @@ pub mod live;
 pub mod logging;
 pub mod markdown;
 pub mod markdown_insert;
+pub mod markdown_table;
 pub mod mcp;
 pub mod mcp_tools;
 pub mod menus;

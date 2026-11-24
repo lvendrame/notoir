@@ -19,6 +19,7 @@ pub mod git_peek;
 pub mod json_tree;
 pub mod layout;
 pub mod markdown_insert;
+pub mod markdown_table;
 pub mod mcp_ui;
 pub mod md_preview;
 pub mod notes_ui;

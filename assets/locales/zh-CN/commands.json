@@ -252,7 +252,9 @@
     "insertBlock": "插入 — 引用",
     "insertImage": "图片…",
     "insertCodePicker": "代码…",
-    "confirmInsert": "插入"
+    "confirmInsert": "插入",
+    "editTable": "以工作表编辑表格",
+    "tableAction": "工作表操作"
   },
   "json": {
     "showText": "显示文本",

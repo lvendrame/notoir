@@ -345,6 +345,7 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 |---|---|---|---|
 | Code… | `markdown.insertCodePicker` |  |  |
 | Complete Link *(hidden)* | `notes.complete` |  |  |
+| Edit table as worksheet | `markdown.editTable` |  |  |
 | Export as HTML… | `markdown.exportHtml` |  |  |
 | Filter by Tag *(hidden)* | `notes.filterTag` |  |  |
 | Find Unlinked Mentions *(hidden)* | `notes.findUnlinked` |  |  |
@@ -366,6 +367,7 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Show Preview | `markdown.showPreview` |  |  |
 | Show Tags | `notes.showTags` |  |  |
 | Strikethrough | `markdown.toggleStrikethrough` |  |  |
+| Table worksheet action *(hidden)* | `markdown.tableAction` |  |  |
 | Toggle Bold | `markdown.toggleBold` | `⌘B` | `Ctrl+B` |
 | Toggle Inline Code | `markdown.toggleCode` |  |  |
 | Toggle Italic | `markdown.toggleItalic` | `⌘I` | `Ctrl+I` |

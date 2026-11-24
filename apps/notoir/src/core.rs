@@ -231,6 +231,7 @@ pub struct AppCore {
     pub queue_with_context: Vec<(CommandInvocation, ContextSnapshot)>,
     pub settings_ui: crate::settings_tab::SettingsUi,
     pub markdown: crate::markdown::MarkdownState,
+    pub worksheets: crate::markdown_table::Worksheets,
     pub json: crate::json::JsonState,
     pub csv: crate::csv::CsvState,
     pub url: crate::url_document::UrlState,
@@ -453,6 +454,7 @@ impl AppCore {
             queue_with_context: Vec::new(),
             settings_ui: Default::default(),
             markdown: Default::default(),
+            worksheets: Default::default(),
             json: Default::default(),
             csv: Default::default(),
             url: Default::default(),
@@ -749,6 +751,27 @@ impl AppCore {
             .set_bool("explorerFocus", self.explorer_focused)
             .set_bool("zenMode", self.zen.is_some())
             .set_bool("editorFocus", self.editor_focused)
+            .set_bool(
+                "worksheetFocus",
+                self.workbench
+                    .active_view()
+                    .and_then(|v| self.worksheets.views.get(&v))
+                    .is_some_and(|s| s.keyboard_focus && self.markdown.insert_dialog.is_none()),
+            )
+            .set_bool(
+                "worksheetEditing",
+                self.workbench
+                    .active_view()
+                    .and_then(|v| self.worksheets.views.get(&v))
+                    .is_some_and(|s| s.editing),
+            )
+            .set_bool(
+                "inMarkdownTable",
+                self.workbench
+                    .active_view()
+                    .and_then(|v| self.workbench.view(v))
+                    .is_some_and(|v| v.kind == notoir_core::view::ViewKind::MarkdownTable),
+            )
             .set_bool("textInputFocus", false)
             .set_bool(
                 "inDiff",

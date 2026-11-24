@@ -252,7 +252,9 @@
     "insertBlock": "Invoegen — Citaat",
     "insertImage": "Afbeelding…",
     "insertCodePicker": "Code…",
-    "confirmInsert": "Invoegen"
+    "confirmInsert": "Invoegen",
+    "editTable": "Tabel als werkblad bewerken",
+    "tableAction": "Werkbladactie"
   },
   "json": {
     "showText": "Tekst tonen",

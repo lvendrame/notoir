@@ -252,7 +252,9 @@
     "insertBlock": "Einfügen — Zitat",
     "insertImage": "Bild…",
     "insertCodePicker": "Code…",
-    "confirmInsert": "Einfügen"
+    "confirmInsert": "Einfügen",
+    "editTable": "Tabelle als Arbeitsblatt bearbeiten",
+    "tableAction": "Arbeitsblattaktion"
   },
   "json": {
     "showText": "Text anzeigen",

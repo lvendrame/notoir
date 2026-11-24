@@ -252,7 +252,9 @@
     "insertBlock": "삽입 — 인용",
     "insertImage": "이미지…",
     "insertCodePicker": "코드…",
-    "confirmInsert": "삽입"
+    "confirmInsert": "삽입",
+    "editTable": "표를 워크시트로 편집",
+    "tableAction": "워크시트 작업"
   },
   "json": {
     "showText": "텍스트 표시",

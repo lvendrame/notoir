@@ -738,7 +738,10 @@ impl Workbench {
                 .map(|g| g.tabs.clone())
                 .unwrap_or_default()
             {
-                let doc = self.views.get(v).map(|v| v.document_id);
+                let doc = self
+                    .views
+                    .get(v)
+                    .map(|v| (v.document_id, v.markdown_table.as_ref().map(|t| t.id)));
                 if seen_docs.contains(&doc) {
                     dropped.push(v);
                 } else {
@@ -826,6 +829,15 @@ impl Workbench {
             .map(|v| v.selection.clone())
             .unwrap_or_default();
         let before = d.buffer.rope().clone();
+        let table_anchors: Vec<_> = if matches!(origin, ChangeOrigin::Reload) {
+            self.views
+                .of_document(doc)
+                .filter_map(|v| v.markdown_table.as_ref().map(|t| (v.id, t.range)))
+                .collect()
+        } else {
+            Vec::new()
+        };
+        self.views.checkpoint_tables(doc, d.buffer.state(), false);
         // Reloads reconcile bookmarks by line number (spec 12).
         let reload_lines = matches!(origin, ChangeOrigin::Reload).then(|| d.bookmark_lines());
         d.buffer.edit(EditRequest {
@@ -848,6 +860,47 @@ impl Workbench {
         let changes = Arc::new(changes);
         d.record_change(revision, changes.clone());
         self.views.map_selections(doc, &changes, view);
+        if !table_anchors.is_empty() {
+            // File reloads replace the entire buffer. Map table anchors through
+            // line-level changes instead, preserving unchanged regions.
+            let after = d.buffer.rope();
+            let diff = notoir_editor::diff::diff_ropes(&before, after, &Default::default());
+            let line_start = |rope: &notoir_editor::Rope, line: usize| {
+                if line >= rope.len_lines() {
+                    rope.len_chars()
+                } else {
+                    rope.line_to_char(line)
+                }
+            };
+            let edits = diff
+                .hunks
+                .iter()
+                .map(|h| {
+                    let start = line_start(after, h.right.start);
+                    let end = line_start(after, h.right.end);
+                    notoir_editor::Edit::new(
+                        line_start(&before, h.left.start),
+                        line_start(&before, h.left.end),
+                        after.slice(start..end).to_string(),
+                    )
+                })
+                .collect();
+            if let Ok(mapped) = ChangeSet::new(edits) {
+                for (id, range) in table_anchors {
+                    if let Some(t) = self
+                        .views
+                        .get_mut(id)
+                        .and_then(|v| v.markdown_table.as_mut())
+                    {
+                        t.range = (
+                            mapped.map_pos(range.0, notoir_editor::Assoc::After),
+                            mapped.map_pos(range.1, notoir_editor::Assoc::Before),
+                        );
+                    }
+                }
+            }
+        }
+        self.views.checkpoint_tables(doc, d.buffer.state(), false);
         if let Some(v) = view.and_then(|v| self.views.get_mut(v)) {
             v.selection = selection_after.clamp(len);
         }
@@ -882,6 +935,7 @@ impl Workbench {
             .documents
             .get_mut(&doc)
             .ok_or(WorkbenchError::NoSuchDocument)?;
+        self.views.checkpoint_tables(doc, d.buffer.state(), false);
         let applied = if undo {
             d.buffer.undo()
         } else {
@@ -910,6 +964,7 @@ impl Workbench {
             });
         }
         d.normalize_bookmarks();
+        self.views.checkpoint_tables(doc, d.buffer.state(), true);
         if let Some(v) = self.views.get_mut(view) {
             v.selection = applied.selection.clamp(len);
         }

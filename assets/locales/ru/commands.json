@@ -252,7 +252,9 @@
     "insertBlock": "Вставить — Цитата",
     "insertImage": "Изображение…",
     "insertCodePicker": "Код…",
-    "confirmInsert": "Вставить"
+    "confirmInsert": "Вставить",
+    "editTable": "Редактировать таблицу на листе",
+    "tableAction": "Действие листа таблицы"
   },
   "json": {
     "showText": "Показать текст",

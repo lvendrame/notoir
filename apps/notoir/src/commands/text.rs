@@ -17,8 +17,8 @@ use crate::shell::overlays::PickerKind;
 
 pub(super) fn specs(out: &mut Specs) {
     let k = KeyBindingDef::new;
-    let edit = "hasActiveEditor && !readOnly";
-    let editor = "hasActiveEditor";
+    let edit = "hasActiveEditor && !readOnly && !inMarkdownTable";
+    let editor = "hasActiveEditor && !inMarkdownTable";
     let line_op = |id: &'static str, f: fn(&mut AppCore, &CommandInvocation) -> CommandOutcome| {
         CommandSpec::new(id, Category::Edit, f)
             .when(edit)

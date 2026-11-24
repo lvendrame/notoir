@@ -190,6 +190,9 @@ fn markdown_modes(ui: &mut egui::Ui, kit: &mut Kit, core: &AppCore, actions: &mu
         return;
     };
     use notoir_core::view::ViewKind;
+    if view.kind == ViewKind::MarkdownTable {
+        return;
+    }
     let modes: [(ViewKind, &str, &'static str); 3] = if core.is_markdown(view.document_id) {
         [
             (ViewKind::Text, "markdown:edit", "markdown.showEditor"),

@@ -252,7 +252,9 @@
     "insertBlock": "Insertar — Cita",
     "insertImage": "Imagen…",
     "insertCodePicker": "Código…",
-    "confirmInsert": "Insertar"
+    "confirmInsert": "Insertar",
+    "editTable": "Editar tabla como hoja de cálculo",
+    "tableAction": "Acción de hoja de cálculo"
   },
   "json": {
     "showText": "Mostrar texto",

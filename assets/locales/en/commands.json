@@ -252,7 +252,9 @@
     "insertBlock": "Insert — Quote",
     "insertImage": "Image…",
     "insertCodePicker": "Code…",
-    "confirmInsert": "Insert"
+    "confirmInsert": "Insert",
+    "editTable": "Edit table as worksheet",
+    "tableAction": "Table worksheet action"
   },
   "json": {
     "showText": "Show Text",

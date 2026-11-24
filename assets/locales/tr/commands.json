@@ -252,7 +252,9 @@
     "insertBlock": "Ekle — Alıntı",
     "insertImage": "Görsel…",
     "insertCodePicker": "Kod…",
-    "confirmInsert": "Ekle"
+    "confirmInsert": "Ekle",
+    "editTable": "Tabloyu çalışma sayfasında düzenle",
+    "tableAction": "Çalışma sayfası işlemi"
   },
   "json": {
     "showText": "Metni Göster",
