@@ -7,6 +7,53 @@ use super::Specs;
 use crate::core::{AppCore, Effect};
 
 pub(super) fn specs(out: &mut Specs, platform: Platform) {
+    for (id, handler) in [
+        (
+            "app.fileAssociations",
+            (|c: &mut AppCore, _: &CommandInvocation| {
+                c.open_associations();
+                CommandOutcome::Done
+            }) as notoir_core::command::HandlerFn<AppCore>,
+        ),
+        (
+            "app.saveAssociations",
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.associations_request(true);
+                CommandOutcome::Done
+            },
+        ),
+        (
+            "app.refreshAssociations",
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.associations_request(false);
+                CommandOutcome::Done
+            },
+        ),
+        (
+            "app.cancelAssociations",
+            |c: &mut AppCore, _: &CommandInvocation| {
+                c.close_associations();
+                CommandOutcome::Done
+            },
+        ),
+        (
+            "app.selectAssociation",
+            |c: &mut AppCore, i: &CommandInvocation| {
+                if let (Some(t), Some(s)) = (i.args["type"].as_str(), i.args["selected"].as_bool())
+                {
+                    c.select_association(t, s);
+                }
+                CommandOutcome::Done
+            },
+        ),
+    ] {
+        let spec = CommandSpec::new(id, Category::Help, handler);
+        out.push(if id == "app.fileAssociations" {
+            spec
+        } else {
+            spec.hidden()
+        });
+    }
     out.push(CommandSpec::new(
         "app.checkForUpdates",
         Category::Help,

@@ -86,7 +86,12 @@
     "removeContextMenu": "Usuń „Otwórz w Notoir”",
     "closeContextMenu": "Zamknij",
     "closeUpdates": "Później",
-    "quitAndInstall": "Zakończ i zainstaluj…"
+    "quitAndInstall": "Zakończ i zainstaluj…",
+    "fileAssociations": "Skojarzenia plików…",
+    "saveAssociations": "Zapisz",
+    "refreshAssociations": "Odśwież",
+    "cancelAssociations": "Anuluj",
+    "selectAssociation": "Skojarzenia plików"
   },
   "workbench": {
     "showNotifications": "Pokaż powiadomienia",

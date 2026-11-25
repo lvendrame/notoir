@@ -48,6 +48,7 @@ pub const PAGES: &[&str] = &[
     NOTES,
     MCP,
     "media.html",
+    "updates.html",
     SHORTCUTS,
 ];
 
@@ -72,6 +73,7 @@ pub fn topic(core: &AppCore) -> Option<&'static str> {
                 Some(KEYBINDINGS)
             }
             ViewKind::Settings | ViewKind::ThemeManager => Some(SETTINGS),
+            ViewKind::FileAssociations => Some("updates.html"),
             ViewKind::Welcome => Some(FIRST_STEPS),
             ViewKind::Diff => Some(COMPARE),
             ViewKind::PluginManager => Some(PLUGINS),

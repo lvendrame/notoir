@@ -1,6 +1,6 @@
 # 31 — Platform Abstraction, Packaging & Updates
 
-**Status:** Partial — app paths, system fonts (M0); async file dialogs, reveal in file manager, single instance (M5); folder picker, move to trash (M7); packaging: cargo-packager config (identifier, icons, document types), `dist` profile with split debug info, `scripts/package.sh` (universal macOS .app/.dmg, .msi + NSIS, .deb + AppImage, checksums, debug-symbol archives, optional signing/notarization/GPG), tag-triggered release workflow (M11); Microsoft Store MSIX build/manifest and Store-owned update/integration policy prepared; Store certification pending. Windows signing preparation: Azure OIDC/PFX hooks, publisher/timestamp checks and publication preflight; external identity setup and signed Windows acceptance still pending. macOS packaging verified locally; Windows and Linux formats are exercised by the release workflow. Finder Open With Apple Events now handled by a native Apple Event handler. M26 updates: `update.mode` off / notify (default) / download; the manifest URL and minisign public key are built in at compile time (`NOTOIR_UPDATE_URL`, `NOTOIR_UPDATE_PUBKEY`, set by the release workflow from repository variables; without them Help → Check for Updates… reports updates unavailable); checks at most daily (last check in `<cache>/update/`) and on demand, over HTTPS (rustls with the Mozilla roots) on their own thread; `update.json` must verify against `update.json.minisig` and name a greater semver and an installer for this platform (macos .dmg, windows .msi, linux-appimage; distro packages are left to the package manager) before anything is offered; the installer downloads into the cache and must match the SHA-256 in the signed manifest (a mismatch is deleted); Install on Quit hands it to the OS (dmg / msi open; an AppImage replaces the running one) after the session, recovery and IO are flushed — never silently. The release workflow requires signing configuration for publishing, writes `update.json` (`scripts/update-manifest.py`), signs it and verifies against the embedded public key. Deviation: the hand-off and the release signing were exercised only in tests / locally (not on a published release)
+**Status:** Partial — default-file association tab, restoration journal, native adapters and scripted verification implemented; native Windows/Linux acceptance pending.  app paths, system fonts (M0); async file dialogs, reveal in file manager, single instance (M5); folder picker, move to trash (M7); packaging: cargo-packager config (identifier, icons, document types), `dist` profile with split debug info, `scripts/package.sh` (universal macOS .app/.dmg, .msi + NSIS, .deb + AppImage, checksums, debug-symbol archives, optional signing/notarization/GPG), tag-triggered release workflow (M11); Microsoft Store MSIX build/manifest and Store-owned update/integration policy prepared; Store certification pending. Windows signing preparation: Azure OIDC/PFX hooks, publisher/timestamp checks and publication preflight; external identity setup and signed Windows acceptance still pending. macOS packaging verified locally; Windows and Linux formats are exercised by the release workflow. Finder Open With Apple Events now handled by a native Apple Event handler. M26 updates: `update.mode` off / notify (default) / download; the manifest URL and minisign public key are built in at compile time (`NOTOIR_UPDATE_URL`, `NOTOIR_UPDATE_PUBKEY`, set by the release workflow from repository variables; without them Help → Check for Updates… reports updates unavailable); checks at most daily (last check in `<cache>/update/`) and on demand, over HTTPS (rustls with the Mozilla roots) on their own thread; `update.json` must verify against `update.json.minisig` and name a greater semver and an installer for this platform (macos .dmg, windows .msi, linux-appimage; distro packages are left to the package manager) before anything is offered; the installer downloads into the cache and must match the SHA-256 in the signed manifest (a mismatch is deleted); Install on Quit hands it to the OS (dmg / msi open; an AppImage replaces the running one) after the session, recovery and IO are flushed — never silently. The release workflow requires signing configuration for publishing, writes `update.json` (`scripts/update-manifest.py`), signs it and verifies against the embedded public key. Deviation: the hand-off and the release signing were exercised only in tests / locally (not on a published release)
 
 ## Purpose
 
@@ -208,3 +208,47 @@ the submission artifact. Microsoft re-signs it after certification. Store packag
 registration commands are unavailable; MSIX declares the alias and file types. Store processes use a
 separate instance channel. See [Store submission](../microsoft-store.md) for identity values, acceptance
 checks and the Partner Center steps. Successful package validation does not claim Store certification.
+
+## Default file associations
+
+Help → File Associations… opens a transient editor tab (also available through the command palette).
+The grid lists common text, Markdown, data, configuration and programming-language extensions, with
+checkboxes reflecting effective OS defaults. Extensions sharing one OS content type have linked checkboxes.
+Save applies changed selections on a worker and closes only after verification; Cancel closes without
+applying unsaved choices. Partial successes remain applied when cancelling. Failed or pending changes
+keep the tab open for retry or Refresh. External changes are detected before overwriting defaults.
+
+Before taking over a default, persist its former handler in a versioned application-data journal. On
+uncheck restore that handler when installed, otherwise use a usable OS fallback. If none exists, explain
+how to choose a replacement; do not report success while Notoir remains the default. Windows standalone
+and Store builds use supported Default Apps UI and verify afterwards; never modify UserChoice hashes.
+Linux uses MIME types and preserves unrelated registrations. macOS requires a registered Notoir.app.
+Package declarations advertise the same extension catalog without making Notoir the default at install time.
+
+```gherkin
+Scenario: Manage default file associations in a tab
+  Given some supported extensions already open with Notoir by default
+  When I choose Help → File Associations…
+  Then a tab lists extension checkboxes reflecting the operating system defaults
+  And choosing the menu again focuses the same tab
+
+Scenario: Save associations and restore the previous default
+  Given two extensions share an operating system content type
+  When I check one extension and save
+  Then both extensions open with Notoir and the tab closes after verification
+  When I reopen the tab, uncheck that type and save
+  Then its previous application is restored and the tab closes
+
+Scenario: Cancel unsaved file associations
+  Given the file associations tab has unsaved checkbox changes
+  When I cancel
+  Then the tab closes without changing operating system defaults
+  And reopening the tab reflects the unchanged defaults
+
+Scenario: Keep association changes open until verified
+  Given the operating system rejects a change or requires user confirmation
+  When I save file associations
+  Then the tab remains open with failure or pending feedback
+  When I complete the requested changes and refresh
+  Then verification closes the tab
+```

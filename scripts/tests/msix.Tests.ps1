@@ -43,6 +43,21 @@ try {
     Assert-True ($parsed.SelectSingleNode('//desktop:ExecutionAlias', $ns).Alias -ceq 'notoir.exe') 'package declares the command alias'
     Assert-True ($parsed.SelectSingleNode('//uap3:FileTypeAssociation', $ns).Parameters -ceq '"%1"') 'file activation quotes paths with spaces'
     Assert-True ($parsed.SelectSingleNode('//rescap:Capability', $ns).Name -ceq 'runFullTrust') 'classic Win32 capability is declared'
+    $ns.AddNamespace('uap', 'http://schemas.microsoft.com/appx/manifest/uap/windows10')
+    $types = @($parsed.SelectNodes('//uap:FileType', $ns) | ForEach-Object { $_.InnerText })
+    foreach ($extension in @('.txt', '.md', '.csv', '.json', '.toml', '.js', '.jsx', '.ts', '.tsx', '.tsa', '.rs', '.rb', '.py', '.go', '.cs')) {
+        Assert-True ($types -contains $extension) "Store package advertises $extension"
+    }
+    $helper = Join-Path $script:NotoirStoreRoot 'crates/notoir-platform/native/associations.ps1'
+    $tokens = $null
+    $parseErrors = $null
+    $ast = [Management.Automation.Language.Parser]::ParseFile($helper, [ref]$tokens, [ref]$parseErrors)
+    Assert-True (@($parseErrors).Count -eq 0) 'association helper parses without errors'
+    $source = $ast.Find({ param($node) $node -is [Management.Automation.Language.StringConstantExpressionAst] -and $node.Value.Contains('public static class NotoirAssociations') }, $true)
+    Assert-True ($null -ne $source) 'native association query source is embedded'
+    Add-Type -TypeDefinition $source.Value
+    Assert-True $true 'Windows association query interop compiles'
+
     $identity.PublisherDisplayName = 'A & B <Publisher>'
     Save-NotoirStoreManifest -Manifest (New-NotoirStoreManifest $identity '0.1.11') -Path $path
     $escaped = [xml](Get-Content -LiteralPath $path -Raw -Encoding utf8)

@@ -298,6 +298,17 @@ impl Renderer<'_, '_> {
                     self.out.activate = Some(view);
                 }
             }
+            (Some(view), Some(notoir_core::view::ViewKind::FileAssociations)) => {
+                let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
+                body_ui.set_clip_rect(body);
+                crate::associations::show(&mut body_ui, self.core, self.actions);
+                if body_ui.ui_contains_pointer()
+                    && body_ui.input(|i| i.pointer.any_pressed())
+                    && self.core.workbench.active_view() != Some(view)
+                {
+                    self.out.activate = Some(view);
+                }
+            }
             (Some(view), Some(notoir_core::view::ViewKind::Settings)) => {
                 let mut body_ui = child.new_child(egui::UiBuilder::new().max_rect(body));
                 body_ui.set_clip_rect(body);

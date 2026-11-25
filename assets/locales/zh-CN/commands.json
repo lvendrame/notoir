@@ -86,7 +86,12 @@
     "removeContextMenu": "移除“用 Notoir 打开”",
     "closeContextMenu": "关闭",
     "closeUpdates": "稍后",
-    "quitAndInstall": "退出并安装…"
+    "quitAndInstall": "退出并安装…",
+    "fileAssociations": "文件关联…",
+    "saveAssociations": "保存",
+    "refreshAssociations": "刷新",
+    "cancelAssociations": "取消",
+    "selectAssociation": "文件关联"
   },
   "workbench": {
     "showNotifications": "显示通知",

@@ -9,5 +9,18 @@
   "failed": "Integration konnte nicht geändert werden.",
   "mac": "Im Finder Dateien oder Ordner auswählen, dann Dienste → Mit Notoir öffnen.",
   "windows": "Im Explorer Dateien, Ordner oder den Ordnerhintergrund rechtsklicken. Windows 11: Weitere Optionen anzeigen → Mit Notoir öffnen.",
-  "linux": "Unterstützt: Nautilus (Skripte) und Dolphin (Aktionen). Andere Dateimanager werden nicht unterstützt."
+  "linux": "Unterstützt: Nautilus (Skripte) und Dolphin (Aktionen). Andere Dateimanager werden nicht unterstützt.",
+  "associations": {
+    "title": "Dateizuordnungen",
+    "description": "Wähle die Dateitypen, die standardmäßig mit Notoir geöffnet werden.",
+    "linked": "Erweiterungen mit demselben Systemdateityp werden gemeinsam geändert.",
+    "shared": "Gemeinsame Zuordnung: {{extensions}}",
+    "windows": "Windows öffnet Standard-Apps. Bestätige die Änderungen, kehre zurück und aktualisiere.",
+    "partial": "Bereits angewendete Änderungen bleiben beim Abbrechen erhalten.",
+    "pending": "Einige Änderungen müssen bestätigt werden. Prüfe die Systemstandards und aktualisiere.",
+    "failed": "Diese Zuordnung konnte nicht geändert werden.",
+    "working": "Dateizuordnungen werden gelesen oder angewendet…",
+    "refresh": "Aktualisieren",
+    "pendingType": "Bestätigung erforderlich"
+  }
 }

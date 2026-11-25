@@ -9,5 +9,18 @@
   "failed": "Integratie kon niet worden gewijzigd.",
   "mac": "Selecteer bestanden of mappen in Finder en kies Voorzieningen → Openen met Notoir.",
   "windows": "Klik rechts op bestanden, mappen of de mapachtergrond in Verkenner. Windows 11: Meer opties weergeven → Openen met Notoir.",
-  "linux": "Ondersteund: Nautilus (Scripts) en Dolphin (Acties). Andere bestandsbeheerders worden niet ondersteund."
+  "linux": "Ondersteund: Nautilus (Scripts) en Dolphin (Acties). Andere bestandsbeheerders worden niet ondersteund.",
+  "associations": {
+    "title": "Bestandskoppelingen",
+    "description": "Kies welke bestandstypen standaard met Notoir worden geopend.",
+    "linked": "Extensies met hetzelfde systeembestandstype veranderen samen.",
+    "shared": "Gedeelde standaard: {{extensions}}",
+    "windows": "Windows opent Standaard-apps. Bevestig de wijzigingen, keer terug en vernieuw.",
+    "partial": "Reeds toegepaste wijzigingen blijven behouden als je annuleert.",
+    "pending": "Sommige wijzigingen moeten worden bevestigd. Controleer de systeemstandaarden en vernieuw.",
+    "failed": "Deze koppeling kon niet worden gewijzigd.",
+    "working": "Bestandskoppelingen lezen of toepassen…",
+    "refresh": "Vernieuwen",
+    "pendingType": "Bevestiging nodig"
+  }
 }

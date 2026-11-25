@@ -25,7 +25,10 @@ pub const TAB_STRIP_HEIGHT: f32 = 34.0;
 
 fn file_icon(doc: &Document) -> Icon {
     match &doc.origin {
-        DocumentOrigin::Virtual { title } if title == crate::settings_tab::SETTINGS_TITLE => {
+        DocumentOrigin::Virtual { title }
+            if title == crate::settings_tab::SETTINGS_TITLE
+                || title == crate::associations::TITLE =>
+        {
             return Icon::Settings;
         }
         DocumentOrigin::Virtual { title } if title == crate::compare::DIFF_DOC_TITLE => {

@@ -9,5 +9,18 @@
   "failed": "Entegrasyon değiştirilemedi.",
   "mac": "Finder’da dosya veya klasör seçin, ardından Servisler → Notoir ile aç.",
   "windows": "Gezgin’de dosya, klasör veya arka plana sağ tıklayın. Windows 11: Daha fazla seçenek göster → Notoir ile aç.",
-  "linux": "Desteklenenler: Nautilus (Betikler), Dolphin (Eylemler). Diğer dosya yöneticileri desteklenmez."
+  "linux": "Desteklenenler: Nautilus (Betikler), Dolphin (Eylemler). Diğer dosya yöneticileri desteklenmez.",
+  "associations": {
+    "title": "Dosya ilişkilendirmeleri",
+    "description": "Varsayılan olarak Notoir ile açılacak dosya türlerini seçin.",
+    "linked": "İşletim sisteminde aynı dosya türünü paylaşan uzantılar birlikte değişir.",
+    "shared": "Paylaşılan varsayılan: {{extensions}}",
+    "windows": "Windows Varsayılan uygulamaları açacak. Değişiklikleri onaylayın, geri dönün ve yenileyin.",
+    "partial": "İptal ederseniz uygulanmış değişiklikler korunur.",
+    "pending": "Bazı değişiklikler onay bekliyor. Sistem varsayılanlarını kontrol edip yenileyin.",
+    "failed": "Bu ilişkilendirme değiştirilemedi.",
+    "working": "Dosya ilişkilendirmeleri okunuyor veya uygulanıyor…",
+    "refresh": "Yenile",
+    "pendingType": "Onay gerekiyor"
+  }
 }

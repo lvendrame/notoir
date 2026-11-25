@@ -86,7 +86,12 @@
     "removeContextMenu": "„Mit Notoir öffnen“ entfernen",
     "closeContextMenu": "Schließen",
     "closeUpdates": "Später",
-    "quitAndInstall": "Beenden und installieren…"
+    "quitAndInstall": "Beenden und installieren…",
+    "fileAssociations": "Dateizuordnungen…",
+    "saveAssociations": "Speichern",
+    "refreshAssociations": "Aktualisieren",
+    "cancelAssociations": "Abbrechen",
+    "selectAssociation": "Dateizuordnungen"
   },
   "workbench": {
     "showNotifications": "Benachrichtigungen anzeigen",

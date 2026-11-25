@@ -86,7 +86,12 @@
     "removeContextMenu": "Remove “Open with Notoir”",
     "closeContextMenu": "Close",
     "closeUpdates": "Later",
-    "quitAndInstall": "Quit and Install…"
+    "quitAndInstall": "Quit and Install…",
+    "fileAssociations": "File Associations…",
+    "saveAssociations": "Save",
+    "refreshAssociations": "Refresh",
+    "cancelAssociations": "Cancel",
+    "selectAssociation": "File Associations"
   },
   "workbench": {
     "showNotifications": "Show Notifications",

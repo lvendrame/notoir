@@ -9,5 +9,18 @@
   "failed": "Nie udało się zmienić integracji.",
   "mac": "W Finderze zaznacz pliki lub foldery, następnie Usługi → Otwórz w Notoir.",
   "windows": "W Eksploratorze kliknij prawym przyciskiem pliki, foldery lub tło. Windows 11: Pokaż więcej opcji → Otwórz w Notoir.",
-  "linux": "Obsługiwane: Nautilus (Skrypty) i Dolphin (Działania). Inne menedżery nie są obsługiwane."
+  "linux": "Obsługiwane: Nautilus (Skrypty) i Dolphin (Działania). Inne menedżery nie są obsługiwane.",
+  "associations": {
+    "title": "Skojarzenia plików",
+    "description": "Wybierz typy plików domyślnie otwierane w Notoir.",
+    "linked": "Rozszerzenia o tym samym systemowym typie pliku zmieniają się razem.",
+    "shared": "Wspólne ustawienie: {{extensions}}",
+    "windows": "Windows otworzy Aplikacje domyślne. Potwierdź zmiany, wróć i odśwież.",
+    "partial": "Zastosowane zmiany pozostaną po anulowaniu.",
+    "pending": "Niektóre zmiany wymagają potwierdzenia. Sprawdź ustawienia domyślne systemu i odśwież.",
+    "failed": "Nie udało się zmienić skojarzenia.",
+    "working": "Odczytywanie lub stosowanie skojarzeń plików…",
+    "refresh": "Odśwież",
+    "pendingType": "Wymaga potwierdzenia"
+  }
 }

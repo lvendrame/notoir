@@ -501,6 +501,7 @@ pub fn menu_bar(platform: Platform) -> Vec<Menu> {
         cmd("help.viewLogs"),
         cmd("recovery.show"),
         SEP,
+        cmd("app.fileAssociations"),
         cmd("app.addContextMenu"),
         cmd("app.removeContextMenu"),
         SEP,

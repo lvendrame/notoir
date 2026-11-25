@@ -494,10 +494,16 @@ Section Install
     File /a "/oname={{this}}" "{{@key}}"
   {{/each}}
 
-  ; Create file associations
+  ; Advertise supported types without replacing the user's default application.
+  WriteRegStr SHCTX "Software\Classes\Notoir.File\shell\open\command" "" '$\"$INSTDIR\${MAINBINARYNAME}.exe$\" -- $\"%1$\"'
+  WriteRegStr SHCTX "Software\Classes\Notoir.File\DefaultIcon" "" '$\"$INSTDIR\${MAINBINARYNAME}.exe$\",0'
+  WriteRegStr SHCTX "Software\Notoir\Capabilities" "ApplicationName" "Notoir"
+  WriteRegStr SHCTX "Software\Notoir\Capabilities" "ApplicationDescription" "Notoir"
+  WriteRegStr SHCTX "Software\RegisteredApplications" "Notoir" "Software\Notoir\Capabilities"
   {{#each file_associations as |association| ~}}
     {{#each association.extensions as |ext| ~}}
-       !insertmacro APP_ASSOCIATE "{{ext}}" "{{or association.name ext}}" "{{association-description association.description ext}}" "$INSTDIR\${MAINBINARYNAME}.exe,0" "Open with ${PRODUCTNAME}" "$INSTDIR\${MAINBINARYNAME}.exe $\"%1$\""
+      WriteRegStr SHCTX "Software\Classes\.{{ext}}\OpenWithProgids" "Notoir.File" ""
+      WriteRegStr SHCTX "Software\Notoir\Capabilities\FileAssociations" ".{{ext}}" "Notoir.File"
     {{/each}}
   {{/each}}
 
@@ -594,12 +600,18 @@ Section Uninstall
     Delete "$INSTDIR\\{{this}}"
   {{/each}}
 
-  ; Delete app associations
-  {{#each file_associations as |association| ~}}
-    {{#each association.ext as |ext| ~}}
-      !insertmacro APP_UNASSOCIATE "{{ext}}" "{{or association.name ext}}"
+  ; Remove only registrations still owned by this installation.
+  ReadRegStr $R7 SHCTX "Software\Classes\Notoir.File\shell\open\command" ""
+  ${If} $R7 == '$\"$INSTDIR\${MAINBINARYNAME}.exe$\" -- $\"%1$\"'
+    {{#each file_associations as |association| ~}}
+      {{#each association.extensions as |ext| ~}}
+        DeleteRegValue SHCTX "Software\Classes\.{{ext}}\OpenWithProgids" "Notoir.File"
+      {{/each}}
     {{/each}}
-  {{/each}}
+    DeleteRegKey SHCTX "Software\Classes\Notoir.File"
+    DeleteRegKey SHCTX "Software\Notoir\Capabilities"
+    DeleteRegValue SHCTX "Software\RegisteredApplications" "Notoir"
+  ${EndIf}
 
   ; Delete deep links
   {{#each deep_link_protocols as |protocol| ~}}

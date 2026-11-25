@@ -9,5 +9,18 @@
   "failed": "Impossible de modifier l’intégration.",
   "mac": "Dans le Finder, sélectionnez des fichiers ou dossiers, puis Services → Ouvrir avec Notoir.",
   "windows": "Dans l’Explorateur, faites un clic droit sur les fichiers, dossiers ou l’arrière-plan. Windows 11 : Afficher plus d’options → Ouvrir avec Notoir.",
-  "linux": "Pris en charge : Nautilus (Scripts) et Dolphin (Actions). Les autres gestionnaires ne sont pas pris en charge."
+  "linux": "Pris en charge : Nautilus (Scripts) et Dolphin (Actions). Les autres gestionnaires ne sont pas pris en charge.",
+  "associations": {
+    "title": "Associations de fichiers",
+    "description": "Choisissez les types de fichiers à ouvrir par défaut avec Notoir.",
+    "linked": "Les extensions partageant un type de fichier système changent ensemble.",
+    "shared": "Application partagée : {{extensions}}",
+    "windows": "Windows ouvrira Applications par défaut. Confirmez les changements, puis revenez et actualisez.",
+    "partial": "Les changements déjà appliqués seront conservés si vous annulez.",
+    "pending": "Certains changements attendent une confirmation. Vérifiez les réglages du système, puis actualisez.",
+    "failed": "Impossible de modifier cette association.",
+    "working": "Lecture ou modification des associations de fichiers…",
+    "refresh": "Actualiser",
+    "pendingType": "Confirmation nécessaire"
+  }
 }

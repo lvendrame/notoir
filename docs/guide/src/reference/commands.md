@@ -337,12 +337,15 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 |---|---|---|---|
 | About Notoir | `help.about` |  |  |
 | Add “Open with Notoir”… | `app.addContextMenu` |  |  |
+| Cancel *(hidden)* | `app.cancelAssociations` |  |  |
 | Check for Updates… | `app.checkForUpdates` |  |  |
 | Close *(hidden)* | `app.closeContextMenu` |  |  |
 | Discard Unsaved Document *(hidden)* | `recovery.discardEntry` |  |  |
 | Discard Unsaved Documents *(hidden)* | `recovery.discard` |  |  |
 | Documentation | `help.documentation` |  |  |
 | Download Update *(hidden)* | `app.downloadUpdate` |  |  |
+| File Associations *(hidden)* | `app.selectAssociation` |  |  |
+| File Associations… | `app.fileAssociations` |  |  |
 | File-manager integration | `app.contextMenu` |  |  |
 | Finish Welcome *(hidden)* | `welcome.finish` |  |  |
 | Help for Current Context | `help.contextHelp` | `F1` | `F1` |
@@ -352,10 +355,12 @@ Every built-in command. Menus, the toolbar, shortcuts, the [command palette](../
 | Later *(hidden)* | `app.closeUpdates` |  |  |
 | Quit and Install… *(hidden)* | `app.quitAndInstall` |  |  |
 | Recover Unsaved Documents… | `recovery.show` |  |  |
+| Refresh *(hidden)* | `app.refreshAssociations` |  |  |
 | Remove “Open with Notoir” | `app.removeContextMenu` |  |  |
 | Restore All Unsaved Documents *(hidden)* | `recovery.restoreAll` |  |  |
 | Restore Unsaved Document *(hidden)* | `recovery.restoreEntry` |  |  |
 | Review Unsaved Documents *(hidden)* | `recovery.review` |  |  |
+| Save *(hidden)* | `app.saveAssociations` |  |  |
 | Uninstall 'notoir' Command from PATH | `app.uninstallShellCommand` |  |  |
 | Welcome | `help.welcome` |  |  |
 | Write Recovery Snapshots *(hidden)* | `recovery.flush` |  |  |

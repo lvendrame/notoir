@@ -86,7 +86,12 @@
     "removeContextMenu": "“Notoir로 열기” 제거",
     "closeContextMenu": "닫기",
     "closeUpdates": "나중에",
-    "quitAndInstall": "종료 후 설치…"
+    "quitAndInstall": "종료 후 설치…",
+    "fileAssociations": "파일 연결…",
+    "saveAssociations": "저장",
+    "refreshAssociations": "새로 고침",
+    "cancelAssociations": "취소",
+    "selectAssociation": "파일 연결"
   },
   "workbench": {
     "showNotifications": "알림 표시",

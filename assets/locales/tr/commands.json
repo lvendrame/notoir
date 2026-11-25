@@ -86,7 +86,12 @@
     "removeContextMenu": "“Notoir ile aç” kaldır",
     "closeContextMenu": "Kapat",
     "closeUpdates": "Daha sonra",
-    "quitAndInstall": "Çık ve yükle…"
+    "quitAndInstall": "Çık ve yükle…",
+    "fileAssociations": "Dosya ilişkilendirmeleri…",
+    "saveAssociations": "Kaydet",
+    "refreshAssociations": "Yenile",
+    "cancelAssociations": "İptal",
+    "selectAssociation": "Dosya ilişkilendirmeleri"
   },
   "workbench": {
     "showNotifications": "Bildirimleri Göster",

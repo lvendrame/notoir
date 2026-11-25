@@ -145,6 +145,7 @@ Plugin Manager, Installed Plugins, Reload Plugins, ───, Open Plugins Folde
 ## Help
 
 Welcome, Documentation, Keyboard Shortcut Reference, ───, Report Issue, View Logs, Recover Unsaved Documents…, ───,
+File Associations… (spec 31), Add / Remove “Open with Notoir”, Install / Uninstall shell command, ───,
 Check for Updates (only when updater is enabled, spec 31), ───, About Notoir (in app menu on macOS).
 
 **Documentation** (`help.documentation`) opens the published user guide (https://lvendrame.github.io/notoir/) in the

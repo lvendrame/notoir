@@ -5,6 +5,7 @@ pub const BRAND: &str = "Notoir";
 
 pub mod app;
 pub mod application;
+pub mod associations;
 pub mod cli;
 pub mod commands;
 pub mod compare;

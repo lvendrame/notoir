@@ -13,6 +13,10 @@ fn main() {
     build.file(source).cargo_metadata(false);
     if os == "macos" {
         build.flag("-fobjc-arc").flag("-fblocks");
+        build.file("native/associations.m");
+        println!("cargo:rerun-if-changed=native/associations.m");
+        println!("cargo:rustc-link-lib=framework=CoreServices");
+        println!("cargo:rustc-link-lib=framework=UniformTypeIdentifiers");
         println!("cargo:rustc-link-lib=framework=Cocoa");
     } else {
         let gtk = pkg_config::Config::new()

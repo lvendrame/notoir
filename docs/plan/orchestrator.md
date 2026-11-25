@@ -179,3 +179,20 @@ Editable XML documents gain the shared Edit/Split/Preview selector, background r
 SVG focused validation: raster alpha/size/budget checks and seven application tests pass (mode switching, unsaved edits/error recovery, session/zoom, normal save, rapid revision changes, plain XML exclusion, theme/layout snapshots). Snapshots in `docs/design/svg-*.png` were reviewed. Formatting and workspace Clippy pass.
 
 SVG final verification: eight SVG application tests, the raster resource/alpha test, formatting, generated references and workspace Clippy pass. The workspace run passed all targets except one intermittent custom-theme deletion assertion; all 16 theme-manager tests passed on an unchanged rerun.
+
+### Default file associations (spec 31)
+
+Help → File Associations… opens a transient, responsive checkbox tab with linked OS content types.
+Workers query effective defaults, journal previous handlers before takeover, restore them or a usable
+fallback on uncheck, and verify before closing. Failures and Windows Default Apps confirmation keep the
+tab open; cancellation discards remaining selections. Untouched types follow external changes. Commands,
+14 locales, native/Store packaging declarations, user guide, context help and design references are updated.
+
+Validation: platform service tests, read-only native macOS inspection, isolated Linux XDG roundtrip,
+and 45 PowerShell/MSIX manifest and query-interop assertions pass. Desktop association changes on
+Windows and Linux, plus installed-package acceptance on all platforms, remain manual runner checks.
+
+Final verification: formatting and workspace Clippy with warnings denied pass; the full workspace run
+passes 942 tests (6 ignored). All 8 final association regressions and documentation/context-help checks
+pass after the external-change and missing-replacement refinements. Desktop/narrow references in all
+three themes are saved in `docs/design/file-associations-*.png`.

@@ -114,6 +114,7 @@ pub struct StartOptions {
     pub wait_for_fonts: bool,
     /// Native printing unless a test replaces the adapter.
     pub printer: Option<Arc<dyn notoir_platform::printing::Printer>>,
+    pub association_backend: Option<Arc<dyn notoir_platform::associations::Backend>>,
     /// File dialogs (native unless a test scripts them).
     pub dialogs: Option<std::sync::Arc<dyn crate::files::Dialogs>>,
     /// Git backend (git2 unless a test replaces it).
@@ -148,6 +149,7 @@ impl StartOptions {
             wait_for_fonts: false,
             dialogs: None,
             printer: None,
+            association_backend: None,
             elevation: None,
             git_backend: None,
             git_remote: None,
@@ -274,6 +276,7 @@ pub struct AppCore {
     pub updates: crate::updates::UpdatesState,
     pub update_poster: Option<crate::io::Poster>,
     pub desktop: crate::desktop::DesktopState,
+    pub associations: crate::associations::State,
 }
 
 /// A `notoir --wait` request (spec 38).
@@ -486,6 +489,10 @@ impl AppCore {
             updates: crate::updates::UpdatesState::new(opts.update.clone()),
             update_poster: opts.update_poster.clone(),
             desktop: Default::default(),
+            associations: crate::associations::State {
+                backend: opts.association_backend.clone(),
+                ..Default::default()
+            },
             language,
             theme_choice,
             custom_themes: Vec::new(),
@@ -1074,6 +1081,7 @@ impl AppCore {
                 }
                 IoResult::ThemeManager(result) => self.theme_manager_done(*result),
                 IoResult::DesktopIntegration(result) => self.desktop_done(result),
+                IoResult::Associations(done) => self.associations_done(done),
                 IoResult::UpdateStamp(ms) => self.updates_stamp(ms),
                 IoResult::UpdateChecked(r) => {
                     let (result, manual) = *r;

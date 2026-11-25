@@ -86,7 +86,12 @@
     "removeContextMenu": "Удалить «Открыть в Notoir»",
     "closeContextMenu": "Закрыть",
     "closeUpdates": "Позже",
-    "quitAndInstall": "Выйти и установить…"
+    "quitAndInstall": "Выйти и установить…",
+    "fileAssociations": "Сопоставления файлов…",
+    "saveAssociations": "Сохранить",
+    "refreshAssociations": "Обновить",
+    "cancelAssociations": "Отмена",
+    "selectAssociation": "Сопоставления файлов"
   },
   "workbench": {
     "showNotifications": "Показать уведомления",

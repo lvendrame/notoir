@@ -86,7 +86,12 @@
     "removeContextMenu": "「Notoirで開く」を削除",
     "closeContextMenu": "閉じる",
     "closeUpdates": "後で",
-    "quitAndInstall": "終了してインストール…"
+    "quitAndInstall": "終了してインストール…",
+    "fileAssociations": "ファイルの関連付け…",
+    "saveAssociations": "保存",
+    "refreshAssociations": "更新",
+    "cancelAssociations": "キャンセル",
+    "selectAssociation": "ファイルの関連付け"
   },
   "workbench": {
     "showNotifications": "通知を表示",

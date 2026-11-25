@@ -9,5 +9,18 @@
   "failed": "Could not change the integration.",
   "mac": "In Finder, select files or folders, then use Services → Open with Notoir.",
   "windows": "In Explorer, right-click files, folders, or a folder background. Windows 11: Show more options → Open with Notoir.",
-  "linux": "Supported: Nautilus (Scripts) and Dolphin (Actions). Other file managers are not supported."
+  "linux": "Supported: Nautilus (Scripts) and Dolphin (Actions). Other file managers are not supported.",
+  "associations": {
+    "title": "File Associations",
+    "description": "Choose the file types that open with Notoir by default.",
+    "linked": "Extensions sharing an operating-system file type change together.",
+    "shared": "Shared default: {{extensions}}",
+    "windows": "Windows will open Default Apps. Confirm the changes there, then return and refresh.",
+    "partial": "Changes already applied will remain if you cancel.",
+    "pending": "Some changes still need confirmation. Review system defaults, then refresh.",
+    "failed": "Could not change this association.",
+    "working": "Reading or applying file associations…",
+    "refresh": "Refresh",
+    "pendingType": "Confirmation needed"
+  }
 }

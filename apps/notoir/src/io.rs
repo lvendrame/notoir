@@ -106,6 +106,7 @@ pub enum IoResult {
     /// The last update check time (ms since epoch), from the cache.
     UpdateStamp(Option<i64>),
     DesktopIntegration(Result<bool, String>),
+    Associations(crate::associations::Done),
     /// An update check finished: (result, started from the menu).
     UpdateChecked(
         Box<(

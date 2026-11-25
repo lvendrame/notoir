@@ -9,5 +9,18 @@
   "failed": "No se pudo cambiar la integración.",
   "mac": "En Finder, selecciona archivos o carpetas y usa Servicios → Abrir con Notoir.",
   "windows": "En el Explorador, haz clic derecho en archivos, carpetas o el fondo. Windows 11: Mostrar más opciones → Abrir con Notoir.",
-  "linux": "Compatibles: Nautilus (Scripts) y Dolphin (Acciones). Otros gestores no son compatibles."
+  "linux": "Compatibles: Nautilus (Scripts) y Dolphin (Acciones). Otros gestores no son compatibles.",
+  "associations": {
+    "title": "Asociaciones de archivos",
+    "description": "Elige los tipos de archivo que se abren con Notoir de forma predeterminada.",
+    "linked": "Las extensiones del mismo tipo del sistema cambian juntas.",
+    "shared": "Aplicación compartida: {{extensions}}",
+    "windows": "Windows abrirá Aplicaciones predeterminadas. Confirma los cambios, vuelve y actualiza.",
+    "partial": "Los cambios ya aplicados se conservarán si cancelas.",
+    "pending": "Algunos cambios requieren confirmación. Revisa los valores predeterminados del sistema y actualiza.",
+    "failed": "No se pudo cambiar esta asociación.",
+    "working": "Leyendo o aplicando asociaciones de archivos…",
+    "refresh": "Actualizar",
+    "pendingType": "Requiere confirmación"
+  }
 }

@@ -9,5 +9,18 @@
   "failed": "无法更改集成。",
   "mac": "在访达中选择文件或文件夹，然后选择服务 → 用 Notoir 打开。",
   "windows": "在资源管理器中右键单击文件、文件夹或背景。Windows 11：显示更多选项 → 用 Notoir 打开。",
-  "linux": "支持 Nautilus（脚本）和 Dolphin（操作）。不支持其他文件管理器。"
+  "linux": "支持 Nautilus（脚本）和 Dolphin（操作）。不支持其他文件管理器。",
+  "associations": {
+    "title": "文件关联",
+    "description": "选择默认使用 Notoir 打开的文件类型。",
+    "linked": "共享同一系统文件类型的扩展名将一起更改。",
+    "shared": "共享默认应用：{{extensions}}",
+    "windows": "Windows 将打开“默认应用”。请确认更改，然后返回并刷新。",
+    "partial": "取消后，已应用的更改仍会保留。",
+    "pending": "某些更改仍需确认。请检查系统默认设置，然后刷新。",
+    "failed": "无法更改此关联。",
+    "working": "正在读取或应用文件关联…",
+    "refresh": "刷新",
+    "pendingType": "需要确认"
+  }
 }

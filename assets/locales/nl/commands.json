@@ -86,7 +86,12 @@
     "removeContextMenu": "“Openen met Notoir” verwijderen",
     "closeContextMenu": "Sluiten",
     "closeUpdates": "Later",
-    "quitAndInstall": "Afsluiten en installeren…"
+    "quitAndInstall": "Afsluiten en installeren…",
+    "fileAssociations": "Bestandskoppelingen…",
+    "saveAssociations": "Opslaan",
+    "refreshAssociations": "Vernieuwen",
+    "cancelAssociations": "Annuleren",
+    "selectAssociation": "Bestandskoppelingen"
   },
   "workbench": {
     "showNotifications": "Meldingen tonen",

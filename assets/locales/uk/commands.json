@@ -86,7 +86,12 @@
     "removeContextMenu": "Видалити «Відкрити в Notoir»",
     "closeContextMenu": "Закрити",
     "closeUpdates": "Пізніше",
-    "quitAndInstall": "Вийти та встановити…"
+    "quitAndInstall": "Вийти та встановити…",
+    "fileAssociations": "Зіставлення файлів…",
+    "saveAssociations": "Зберегти",
+    "refreshAssociations": "Оновити",
+    "cancelAssociations": "Скасувати",
+    "selectAssociation": "Зіставлення файлів"
   },
   "workbench": {
     "showNotifications": "Показати сповіщення",

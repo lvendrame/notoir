@@ -21,6 +21,7 @@ pub enum ViewKind {
     SvgPreview,
     SvgSplit,
     Settings,
+    FileAssociations,
     ThemeManager,
     /// First-run / Help → Welcome page.
     Welcome,

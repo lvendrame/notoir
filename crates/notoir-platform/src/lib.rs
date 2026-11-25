@@ -1,6 +1,7 @@
 //! Cross-platform integration (docs/specs/31-platform-packaging-and-updates.md):
 //! application directories, OS locale, platform labels and system fonts.
 
+pub mod associations;
 pub mod dialogs;
 pub mod download;
 pub mod elevation;

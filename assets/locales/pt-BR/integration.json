@@ -9,5 +9,18 @@
   "failed": "Não foi possível alterar a integração.",
   "mac": "No Finder, selecione arquivos ou pastas e use Serviços → Abrir com Notoir.",
   "windows": "No Explorador, clique com o botão direito em arquivos, pastas ou no fundo da pasta. Windows 11: Mostrar mais opções → Abrir com Notoir.",
-  "linux": "Compatíveis: Nautilus (Scripts) e Dolphin (Ações). Outros gerenciadores não são compatíveis."
+  "linux": "Compatíveis: Nautilus (Scripts) e Dolphin (Ações). Outros gerenciadores não são compatíveis.",
+  "associations": {
+    "title": "Associações de arquivos",
+    "description": "Escolha os tipos de arquivo que abrem com o Notoir por padrão.",
+    "linked": "Extensões do mesmo tipo no sistema operacional mudam juntas.",
+    "shared": "Padrão compartilhado: {{extensions}}",
+    "windows": "O Windows abrirá Aplicativos padrão. Confirme as alterações, volte e atualize.",
+    "partial": "As alterações já aplicadas serão mantidas se você cancelar.",
+    "pending": "Algumas alterações precisam de confirmação. Confira os padrões do sistema e atualize.",
+    "failed": "Não foi possível alterar esta associação.",
+    "working": "Lendo ou aplicando associações de arquivos…",
+    "refresh": "Atualizar",
+    "pendingType": "Confirmação necessária"
+  }
 }

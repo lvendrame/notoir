@@ -12,6 +12,20 @@ Files open as tabs; folders open as workspaces. Default applications stay unchan
 
 If you move Notoir, remove and add the integration again to refresh its application path.
 
+## Default file associations
+
+Choose **Help → File Associations…** to select which file extensions open with Notoir by default.
+Checked extensions already use Notoir. Extensions sharing a system file type change together; hover over
+an extension to see its linked extensions.
+
+**Save** applies your choices and closes the tab after verification. Unchecking a type restores the
+previous application when available, otherwise the system fallback. **Cancel** discards unsaved choices;
+changes already applied after Save remain applied. Failed changes keep the tab open so you can retry.
+
+On Windows, including the Microsoft Store edition, confirm changes in **Default Apps**, then return to
+Notoir or choose **Refresh** to verify them. When removing a default, choose the previous application or
+another replacement there. On macOS, run the installed Notoir.app to manage associations.
+
 ## Checking for updates
 
 For a Microsoft Store installation, use **Microsoft Store → Library → Get updates**. The Store manages
