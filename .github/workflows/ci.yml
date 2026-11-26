@@ -45,6 +45,9 @@ jobs:
       - name: MSIX identity, manifest and version regressions
         shell: pwsh
         run: ./scripts/tests/msix.Tests.ps1
+      - name: Windows linker resolution regressions
+        shell: pwsh
+        run: ./scripts/tests/msvc-environment.Tests.ps1
       - uses: dtolnay/rust-toolchain@1.100.0
       - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2

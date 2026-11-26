@@ -19,6 +19,7 @@ runs:
       with:
         msystem: UCRT64
         path-type: inherit
+        cache: false
         install: make diffutils patch nasm pkgconf mingw-w64-ucrt-x86_64-gcc
     - name: MSVC developer environment
       if: runner.os == 'Windows'
@@ -31,7 +32,9 @@ runs:
           target/native/ffmpeg
           target/native/ffmpeg-9.1.tar.xz
           target/native/ffmpeg-source-9.1.tar.xz
-        key: media-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/build-media-runtime.sh', 'scripts/patches/ffmpeg-9.1-warning-fixes.patch') }}
+        key: media-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ hashFiles('scripts/build-media-runtime.sh', 'scripts/patches/ffmpeg-9.1-warning-fixes.patch') }}-${{ github.run_id }}
+        restore-keys: |
+          media-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ hashFiles('scripts/build-media-runtime.sh', 'scripts/patches/ffmpeg-9.1-warning-fixes.patch') }}-
     - name: Build media runtime (Unix)
       if: runner.os != 'Windows'
       shell: bash

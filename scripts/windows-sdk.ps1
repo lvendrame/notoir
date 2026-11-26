@@ -1,3 +1,14 @@
+function Get-NotoirWindowsLinker {
+    param([Parameter(Mandatory)][string]$Expected)
+    # An exact executable name can return every PATH match in PowerShell.
+    $resolved = (Get-Command link.exe -CommandType Application -ErrorAction Stop |
+        Select-Object -First 1).Source
+    if (-not $resolved -or $resolved -ine $Expected) {
+        throw "Wrong Windows linker: PATH resolves '$resolved'; expected '$Expected'."
+    }
+    return $resolved
+}
+
 function Get-NotoirWindowsSdkTool {
     param([Parameter(Mandatory)][ValidateSet('signtool.exe', 'makeappx.exe')][string]$Name)
     $command = Get-Command $Name -ErrorAction SilentlyContinue

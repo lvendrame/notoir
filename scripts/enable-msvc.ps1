@@ -1,5 +1,6 @@
 param([switch]$VerifyOnly)
 $ErrorActionPreference = 'Stop'
+. "$PSScriptRoot/windows-sdk.ps1"
 
 if (-not $VerifyOnly) {
     $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio/Installer/vswhere.exe'
@@ -19,11 +20,7 @@ if (-not $VerifyOnly) {
     "CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER=$linker" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 }
 
-$resolved = (Get-Command link.exe -CommandType Application -ErrorAction Stop).Source
-$expected = $env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER
-if (-not $expected -or $resolved -ine $expected) {
-    throw "Wrong Windows linker: PATH resolves '$resolved'; expected '$expected'."
-}
+$resolved = Get-NotoirWindowsLinker -Expected $env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER
 Write-Host "Verified Microsoft linker: $resolved"
 
 if ($VerifyOnly) {
