@@ -4,6 +4,8 @@
   "scratchTooltip": "Notizzettel – nicht in einer Datei gespeichert",
   "pin": "Tab anheften",
   "unpin": "Tab lösen",
+  "scrollLeft": "Tabs nach links scrollen",
+  "scrollRight": "Tabs nach rechts scrollen",
   "showAll": "Alle Tabs anzeigen",
   "dropHere": "Datei hier ablegen",
   "settings": "Einstellungen",

@@ -1163,3 +1163,26 @@ fn markdown_display_settings_snapshots() {
         }
     }
 }
+
+#[test]
+fn tab_overflow_snapshots() {
+    for theme in ThemeId::ALL {
+        let mut app = common::start(common::with_language(Language::En, theme));
+        for _ in 0..16 {
+            common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
+        }
+        for width in [1280.0, 640.0] {
+            app.harness.set_size(egui::vec2(width, 500.0));
+            app.harness.run_steps(4);
+            match app.harness.render() {
+                Ok(img) => img
+                    .save(out_dir().join(format!("tab-overflow-{}-{width}.png", theme.id())))
+                    .unwrap(),
+                Err(e) => {
+                    eprintln!("render skipped (no GPU adapter?): {e}");
+                    return;
+                }
+            }
+        }
+    }
+}

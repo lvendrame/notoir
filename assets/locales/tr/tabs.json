@@ -4,6 +4,8 @@
   "scratchTooltip": "Karalama — dosyaya kaydedilmedi",
   "pin": "Sekmeyi Sabitle",
   "unpin": "Sekmenin Sabitlemesini Kaldır",
+  "scrollLeft": "Sekmeleri sola kaydır",
+  "scrollRight": "Sekmeleri sağa kaydır",
   "showAll": "Tüm Sekmeleri Göster",
   "dropHere": "Dosyayı buraya bırakın",
   "settings": "Ayarlar",

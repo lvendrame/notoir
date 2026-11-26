@@ -23,6 +23,19 @@ use crate::theme::{ICON_SM, Tok};
 
 pub const TAB_STRIP_HEIGHT: f32 = 34.0;
 
+/// Transient geometry used to reveal selection only when layout or selection changes.
+#[derive(Clone, Default)]
+struct StripState {
+    active: Option<ViewId>,
+    geometry: Vec<(ViewId, f32)>,
+    width: f32,
+    offset: f32,
+}
+
+fn tab_width(label_width: f32, locked: bool) -> f32 {
+    12.0 + ICON_SM + 6.0 + if locked { ICON_SM + 4.0 } else { 0.0 } + label_width + 8.0 + 20.0 + 8.0
+}
+
 fn file_icon(doc: &Document) -> Icon {
     match &doc.origin {
         DocumentOrigin::Virtual { title }
@@ -200,6 +213,7 @@ pub fn strip(
     actions: &mut Actions,
     drag: &mut Option<TabDrag>,
     tab_rects: &mut Vec<(ViewId, Rect)>,
+    retain_editor_focus: &mut bool,
 ) -> Rect {
     let Some(group) = core.workbench.layout.group(group_id) else {
         return Rect::NOTHING;
@@ -229,18 +243,128 @@ pub fn strip(
     let labels = labels(core, &tabs);
     let overflow_w = 30.0;
     let plus_w = 30.0;
-    let mut tabs_right = rect.left();
+    let geometry: Vec<_> = tabs
+        .iter()
+        .map(|&view| {
+            let v = core.workbench.view(view).expect("group view");
+            let doc = core
+                .workbench
+                .document(v.document_id)
+                .expect("view document");
+            let mut job = egui::text::LayoutJob::default();
+            job.append(
+                labels.get(&view).map_or("", String::as_str),
+                0.0,
+                egui::TextFormat {
+                    font_id: egui::FontId::proportional(13.0),
+                    italics: v.preview,
+                    ..Default::default()
+                },
+            );
+            let width = ui.fonts_mut(|f| f.layout_job(job)).size().x;
+            (view, tab_width(width, doc.read_only != ReadOnly::No))
+        })
+        .collect();
+    let content_width: f32 = geometry.iter().map(|(_, width)| width).sum();
+    let overflow = content_width > (rect.width() - overflow_w - plus_w).max(0.0);
+    // At the minimum group width leave room for a title and all four controls.
+    let arrow_w = if rect.width() < 150.0 { 24.0 } else { 30.0 };
+    let arrows_w = if overflow { 2.0 * arrow_w } else { 0.0 };
     let strip_rect = Rect::from_min_max(
         rect.min,
-        Pos2::new(rect.right() - overflow_w - plus_w, rect.bottom()),
+        Pos2::new(
+            (rect.right() - overflow_w - plus_w - arrows_w).max(rect.left()),
+            rect.bottom(),
+        ),
     );
+    let state_id = ui.id().with(("tab-strip-geometry", group_id));
+    let mut state = ui
+        .ctx()
+        .data_mut(|d| d.get_temp::<StripState>(state_id))
+        .unwrap_or_default();
+    let max_offset = (content_width - strip_rect.width()).max(0.0);
+    if state.active != active || state.geometry != geometry || state.width != strip_rect.width() {
+        let mut left = 0.0;
+        for &(view, width) in &geometry {
+            if Some(view) == active {
+                if left < state.offset || width > strip_rect.width() {
+                    state.offset = left;
+                } else if left + width > state.offset + strip_rect.width() {
+                    state.offset = left + width - strip_rect.width();
+                }
+                break;
+            }
+            left += width;
+        }
+    }
+    state.offset = state.offset.clamp(0.0, max_offset);
+    if overflow {
+        for (index, icon, label, enabled, direction) in [
+            (
+                0,
+                Icon::ChevronLeft,
+                t!("tabs:scrollLeft"),
+                state.offset > 0.5,
+                -1.0,
+            ),
+            (
+                1,
+                Icon::ChevronRight,
+                t!("tabs:scrollRight"),
+                state.offset < max_offset - 0.5,
+                1.0,
+            ),
+        ] {
+            let mut control = ui.new_child(
+                egui::UiBuilder::new()
+                    .max_rect(Rect::from_min_size(
+                        Pos2::new(strip_rect.right() + index as f32 * arrow_w, rect.top()),
+                        Vec2::new(arrow_w, TAB_STRIP_HEIGHT),
+                    ))
+                    .layout(egui::Layout::left_to_right(egui::Align::Center)),
+            );
+            let response = super::icon_button_sized(
+                &mut control,
+                kit,
+                icon,
+                &label,
+                false,
+                enabled,
+                arrow_w.min(28.0),
+            );
+            // Restore editor focus after all groups process this outside click.
+            if core.editor_focused
+                && response.contains_pointer()
+                && ui.input(|i| i.pointer.any_pressed() || i.pointer.any_released())
+            {
+                *retain_editor_focus = true;
+            }
+            if response.clicked() {
+                state.offset =
+                    (state.offset + direction * strip_rect.width() * 0.8).clamp(0.0, max_offset);
+            }
+        }
+    }
+    // A vertical parent layout keeps the available width finite. The content
+    // itself is one unwrapped horizontal row inside the bounded scroll area.
     let mut child = ui.new_child(
         egui::UiBuilder::new()
             .max_rect(strip_rect)
-            .layout(egui::Layout::left_to_right(egui::Align::Center)),
+            .layout(egui::Layout::top_down(egui::Align::Min)),
     );
-    egui::ScrollArea::horizontal()
+    child.set_clip_rect(strip_rect.intersect(ui.clip_rect()));
+    child.style_mut().always_scroll_the_only_direction = true;
+    let actions_before = actions.0.len();
+    let output = egui::ScrollArea::horizontal()
         .id_salt(("tab-strip", group_id))
+        .max_width(strip_rect.width())
+        .min_scrolled_width(0.0)
+        .auto_shrink([false, false])
+        .horizontal_scroll_offset(state.offset)
+        .scroll_source(egui::scroll_area::ScrollSource {
+            drag: egui::scroll_area::DragScroll::Never,
+            ..Default::default()
+        })
         .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysHidden)
         .show(&mut child, |ui| {
             ui.spacing_mut().item_spacing.x = 0.0;
@@ -259,12 +383,19 @@ pub fn strip(
                         drag,
                         group_id,
                     );
-                    tabs_right = tab_rect.right();
                     tab_rects.push((view, tab_rect));
                 }
             });
         });
-    let plus_x = tabs_right.min(strip_rect.right()).max(rect.left());
+    state.active = active;
+    state.geometry = geometry;
+    state.width = strip_rect.width();
+    state.offset = output.state.offset.x;
+    let plus_x = if overflow {
+        strip_rect.right() + arrows_w
+    } else {
+        rect.left() + content_width
+    };
     let mut plus = ui.new_child(
         egui::UiBuilder::new()
             .max_rect(Rect::from_min_size(
@@ -318,6 +449,15 @@ pub fn strip(
             }
         }
     });
+    // An explicit selection must reveal even an already-active title that the
+    // user manually scrolled out of view.
+    if actions.0[actions_before..]
+        .iter()
+        .any(|a| a.id.as_str() == "view.activate")
+    {
+        state.active = None;
+    }
+    ui.ctx().data_mut(|d| d.insert_temp(state_id, state));
     rect
 }
 
@@ -367,14 +507,7 @@ fn tab(
     );
     let galley = ui.fonts_mut(|f| f.layout_job(job));
     let lock = doc.read_only != ReadOnly::No;
-    let width = 12.0
-        + ICON_SM
-        + 6.0
-        + if lock { ICON_SM + 4.0 } else { 0.0 }
-        + galley.size().x
-        + 8.0
-        + 20.0
-        + 8.0;
+    let width = tab_width(galley.size().x, lock);
     let (rect, resp) =
         ui.allocate_exact_size(Vec2::new(width, TAB_STRIP_HEIGHT), Sense::click_and_drag());
     if resp.drag_started() {

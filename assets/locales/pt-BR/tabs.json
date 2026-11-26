@@ -4,6 +4,8 @@
   "scratchTooltip": "Rascunho — não salvo em arquivo",
   "pin": "Fixar Aba",
   "unpin": "Desafixar Aba",
+  "scrollLeft": "Rolar abas para a esquerda",
+  "scrollRight": "Rolar abas para a direita",
   "showAll": "Mostrar Todas as Abas",
   "dropHere": "Solte um arquivo aqui",
   "settings": "Configurações",

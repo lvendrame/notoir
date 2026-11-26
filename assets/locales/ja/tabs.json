@@ -4,6 +4,8 @@
   "scratchTooltip": "スクラッチパッド — ファイルに保存されていません",
   "pin": "タブをピン留め",
   "unpin": "タブのピン留めを外す",
+  "scrollLeft": "タブを左にスクロール",
+  "scrollRight": "タブを右にスクロール",
   "showAll": "すべてのタブを表示",
   "dropHere": "ここにファイルをドロップ",
   "settings": "設定",

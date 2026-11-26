@@ -4,6 +4,8 @@
   "scratchTooltip": "Appunto: non salvato in un file",
   "pin": "Fissa scheda",
   "unpin": "Sblocca scheda",
+  "scrollLeft": "Scorri schede a sinistra",
+  "scrollRight": "Scorri schede a destra",
   "showAll": "Mostra tutte le schede",
   "dropHere": "Trascina qui un file",
   "settings": "Impostazioni",

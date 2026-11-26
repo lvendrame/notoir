@@ -4,6 +4,8 @@
   "scratchTooltip": "Brouillon — non enregistré dans un fichier",
   "pin": "Épingler l'onglet",
   "unpin": "Détacher l'onglet",
+  "scrollLeft": "Faire défiler les onglets vers la gauche",
+  "scrollRight": "Faire défiler les onglets vers la droite",
   "showAll": "Afficher tous les onglets",
   "dropHere": "Déposez un fichier ici",
   "settings": "Paramètres",

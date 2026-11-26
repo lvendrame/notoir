@@ -4,6 +4,8 @@
   "scratchTooltip": "Nota rápida: no guardada en un archivo",
   "pin": "Fijar pestaña",
   "unpin": "Desfijar pestaña",
+  "scrollLeft": "Desplazar pestañas a la izquierda",
+  "scrollRight": "Desplazar pestañas a la derecha",
   "showAll": "Mostrar todas las pestañas",
   "dropHere": "Suelta un archivo aquí",
   "settings": "Configuración",

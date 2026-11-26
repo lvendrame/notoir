@@ -45,7 +45,12 @@ Scratchpad insertion, numbering, default-language and persistence behavior.
 ## Behaviour
 
 - Click activates; middle-click closes; double-click on empty strip area creates a new Untitled file.
-- Overflow: strip scrolls horizontally (wheel / trackpad); a `chevron-down` overflow button lists all tabs of the group.
+- Overflow: strip scrolls horizontally with vertical mouse wheel or horizontal trackpad gestures and left/right
+  chevrons. Chevrons scroll 80% of the viewport without changing selection and disable at either end.
+  A `chevron-down` overflow button lists all tabs of the group; it and the Scratchpad plus remain accessible.
+- Opening or selecting a tab reveals its title with the minimum scroll, as do viewport and tab geometry changes.
+  Titles wider than the viewport align at their leading edge. Manual scrolling does not snap back to selection.
+  Each group keeps independent transient scroll state.
 - Pinned tabs stay at the left, are not closed by Close Others / Close to the Right / Close Saved, and survive
   `Close All` only when `workbench.tabs.closeAllKeepsPinned = true` (default false — Close All closes everything after
   confirming dirty ones).
@@ -114,6 +119,22 @@ the active group if gone), restoring cursor and scroll. Closed Scratchpads that 
 ## Test Cases
 
 ```gherkin
+Feature: Tab overflow
+
+  Scenario: Overflow titles scroll without changing selection
+    Given enough tabs to overflow the tab strip
+    When the user scrolls with the mouse wheel, trackpad, or left/right chevrons
+    Then hidden titles become visible without changing the selected tab
+    And manual scrolling does not snap back to the selected tab
+    And scrolling stops at the first and last titles
+
+  Scenario: Selected tab is revealed in an overflowing strip
+    Given enough tabs to overflow the tab strip
+    When the user activates a hidden tab or selects it from the overflow menu
+    Then its title is visible in the scrolling viewport
+    And it remains visible when the viewport shrinks
+    And closing it reveals the replacement selected tab
+
 Feature: Tab states
 
   Scenario: Dirty indicator

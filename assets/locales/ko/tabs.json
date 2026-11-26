@@ -4,6 +4,8 @@
   "scratchTooltip": "스크래치패드 — 파일에 저장되지 않음",
   "pin": "탭 고정",
   "unpin": "탭 고정 해제",
+  "scrollLeft": "탭을 왼쪽으로 스크롤",
+  "scrollRight": "탭을 오른쪽으로 스크롤",
   "showAll": "모든 탭 표시",
   "dropHere": "여기에 파일을 놓으세요",
   "settings": "설정",

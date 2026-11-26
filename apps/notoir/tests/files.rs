@@ -577,3 +577,269 @@ fn tab_plus_is_accessible_with_overflow_and_in_empty_group() {
         notoir_core::document::DocumentOrigin::Scratchpad { .. }
     ));
 }
+
+fn overflowing_tabs() -> common::TestApp {
+    let mut app = common::start(|_| {});
+    for _ in 0..16 {
+        common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
+    }
+    app.harness.set_size(egui::vec2(800.0, 500.0));
+    app.harness.run_steps(4);
+    app
+}
+
+fn scroll_titles(app: &mut common::TestApp, delta: egui::Vec2) {
+    let left = app.harness.get_by_label("Scroll Tabs Left").rect().left();
+    let y = app
+        .harness
+        .get_by_label("Scroll Tabs Left")
+        .rect()
+        .center()
+        .y;
+    app.harness
+        .input_mut()
+        .events
+        .push(egui::Event::PointerMoved(egui::pos2(left - 20.0, y)));
+    app.harness.run_steps(2);
+    app.harness
+        .input_mut()
+        .events
+        .push(egui::Event::MouseWheel {
+            unit: egui::MouseWheelUnit::Point,
+            delta,
+            phase: egui::TouchPhase::Move,
+            modifiers: egui::Modifiers::NONE,
+        });
+    app.harness.run_steps(30);
+}
+
+// spec 04: "Overflow titles scroll without changing selection"
+#[test]
+fn overflow_titles_scroll_without_changing_selection() {
+    let mut app = overflowing_tabs();
+    // Focus the editor before exercising title-only controls.
+    let y = app.harness.get_by_label("Scroll Tabs Left").rect().bottom() + 100.0;
+    app.harness
+        .event(egui::Event::PointerMoved(egui::pos2(500.0, y)));
+    for pressed in [true, false] {
+        app.harness.event(egui::Event::PointerButton {
+            pos: egui::pos2(500.0, y),
+            button: egui::PointerButton::Primary,
+            pressed,
+            modifiers: egui::Modifiers::NONE,
+        });
+        app.harness.run_steps(2);
+    }
+    assert!(app.harness.state().core.editor_focused);
+    let selected = app.harness.state().core.workbench.layout.active().active;
+    assert!(app.harness.query_by_label("Untitled-16").is_some());
+    let last_before = app.harness.get_by_label("Untitled-16").rect();
+    assert!(
+        last_before.right() <= app.harness.get_by_label("Scroll Tabs Left").rect().left() + 1.0
+    );
+    app.harness.get_by_label("Scroll Tabs Left").click();
+    app.harness.run_steps(4);
+    assert!(app.harness.state().core.editor_focused, "after first arrow");
+    assert!(app.harness.get_by_label("Untitled-16").rect().left() > last_before.left());
+    let manually_scrolled = app.harness.get_by_label("Untitled-16").rect();
+    // Manual scrolling must survive further frames without snapping back.
+    app.harness.run_steps(6);
+    assert_eq!(
+        app.harness.get_by_label("Untitled-16").rect(),
+        manually_scrolled
+    );
+    assert_eq!(
+        app.harness.state().core.workbench.layout.active().active,
+        selected
+    );
+    for _ in 0..12 {
+        app.harness.get_by_label("Scroll Tabs Left").click();
+        app.harness.run_steps(3);
+    }
+    assert!(
+        app.harness.state().core.editor_focused,
+        "after repeated left"
+    );
+    let first = app.harness.get_by_label("Untitled-1").rect();
+    assert!(first.left() >= 0.0);
+    scroll_titles(&mut app, egui::vec2(0.0, -160.0));
+    assert!(app.harness.state().core.editor_focused, "after wheel");
+    let first_after = app.harness.get_by_label("Untitled-1").rect();
+    assert!(
+        first_after.left() < first.left(),
+        "{first:?} -> {first_after:?}"
+    );
+    scroll_titles(&mut app, egui::vec2(-160.0, 0.0));
+    assert!(app.harness.get_by_label("Untitled-1").rect().left() < first_after.left());
+    for _ in 0..12 {
+        app.harness.get_by_label("Scroll Tabs Right").click();
+        app.harness.run_steps(3);
+    }
+    let last_after = app.harness.get_by_label("Untitled-16").rect();
+    assert!((last_before.left() - last_after.left()).abs() < 1.0);
+    assert_eq!(
+        app.harness.state().core.workbench.layout.active().active,
+        selected
+    );
+    assert!(app.harness.state().core.editor_focused);
+}
+
+// spec 04: "Selected tab is revealed in an overflowing strip"
+#[test]
+fn selected_tab_is_revealed_in_an_overflowing_strip() {
+    let mut app = overflowing_tabs();
+    let tabs = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .layout
+        .active()
+        .tabs
+        .clone();
+    common::run(&mut app, "view.activate", json!({"view": tabs[0].0}));
+    let first = app.harness.get_by_label("Untitled-1").rect();
+    assert!(first.left() >= 0.0);
+    app.harness.get_by_label("Show All Tabs").click();
+    app.harness.run_steps(3);
+    app.harness
+        .get_all_by_label("Untitled-16")
+        .last()
+        .unwrap()
+        .click();
+    app.harness.run_steps(4);
+    assert_eq!(
+        app.harness.state().core.workbench.layout.active().active,
+        Some(tabs[15])
+    );
+    app.harness.key_press_modifiers(ctrl(), Key::PageDown);
+    app.harness.run_steps(4);
+    assert_eq!(
+        app.harness.state().core.workbench.layout.active().active,
+        Some(tabs[0])
+    );
+    assert!(app.harness.get_by_label("Untitled-1").rect().left() >= first.left() - 1.0);
+    common::run(&mut app, "view.activate", json!({"view": tabs[15].0}));
+    let last = app.harness.get_by_label("Untitled-16").rect();
+    assert!(last.right() <= app.harness.get_by_label("Scroll Tabs Left").rect().left() + 1.0);
+    app.harness.set_size(egui::vec2(640.0, 400.0));
+    app.harness.run_steps(4);
+    let last = app.harness.get_by_label("Untitled-16").rect();
+    assert!(last.right() <= app.harness.get_by_label("Scroll Tabs Left").rect().left() + 1.0);
+    common::run(&mut app, "file.close", serde_json::Value::Null);
+    let core = &app.harness.state().core;
+    let replacement_label = core.document_title(core.workbench.active_document().unwrap());
+    let replacement = app.harness.get_by_label(&replacement_label).rect();
+    assert!(
+        replacement.right() <= app.harness.get_by_label("Scroll Tabs Left").rect().left() + 1.0
+    );
+}
+
+#[test]
+fn overflow_scroll_is_independent_between_groups() {
+    let mut app = overflowing_tabs();
+    let left_group = app.harness.state().core.workbench.layout.active_group;
+    common::run(&mut app, "view.splitRight", serde_json::Value::Null);
+    for _ in 0..8 {
+        common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
+    }
+    app.harness.set_size(egui::vec2(1280.0, 600.0));
+    app.harness.run_steps(4);
+    for pressed in [true, false] {
+        app.harness.event(egui::Event::PointerButton {
+            pos: egui::pos2(900.0, 250.0),
+            button: egui::PointerButton::Primary,
+            pressed,
+            modifiers: egui::Modifiers::NONE,
+        });
+        app.harness.run_steps(2);
+    }
+    assert!(app.harness.state().core.editor_focused);
+    let left_before = app.harness.get_by_label("Untitled-15").rect();
+    let right_before = app.harness.get_by_label("Untitled-24").rect();
+    app.harness
+        .get_all_by_label("Scroll Tabs Left")
+        .nth(1)
+        .unwrap()
+        .click();
+    app.harness.run_steps(4);
+    assert_eq!(app.harness.get_by_label("Untitled-15").rect(), left_before);
+    assert!(app.harness.get_by_label("Untitled-24").rect().left() > right_before.left());
+    let right_after = app.harness.get_by_label("Untitled-24").rect();
+    common::run(
+        &mut app,
+        "workbench.focusGroup",
+        json!({"group":left_group.0}),
+    );
+    app.harness
+        .get_all_by_label("Scroll Tabs Left")
+        .next()
+        .unwrap()
+        .click();
+    app.harness.run_steps(4);
+    assert_eq!(app.harness.get_by_label("Untitled-24").rect(), right_after);
+    assert!(app.harness.state().core.editor_focused);
+    assert!(app.harness.get_by_label("Untitled-15").rect().left() > left_before.left());
+}
+
+#[test]
+fn oversized_tab_aligns_its_leading_edge_and_controls_stay_accessible() {
+    let dir = tempfile::tempdir().unwrap();
+    let name = format!("{}.txt", "long-name-".repeat(20));
+    let path = dir.path().join(&name);
+    std::fs::write(&path, "").unwrap();
+    let mut app = common::start(move |o| o.open_paths = vec![(path, None)]);
+    common::settle(&mut app);
+    let view = app
+        .harness
+        .state()
+        .core
+        .workbench
+        .layout
+        .active()
+        .active
+        .unwrap();
+    common::run(&mut app, "file.newUntitled", serde_json::Value::Null);
+    app.harness.set_size(egui::vec2(640.0, 400.0));
+    app.harness.run_steps(4);
+    common::run(&mut app, "view.activate", json!({"view": view.0}));
+    let title = app.harness.get_by_label(&name).rect();
+    let right = app.harness.get_by_label("Scroll Tabs Left").rect().left();
+    assert!(title.left() >= 0.0 && title.left() < right);
+    assert!(title.right() > right);
+    app.harness.get_by_label("New Scratchpad").click();
+    app.harness.run_steps(4);
+    assert_eq!(
+        app.harness
+            .state()
+            .core
+            .workbench
+            .layout
+            .active()
+            .tabs
+            .len(),
+        3
+    );
+    assert!(app.harness.query_by_label("Scratch 1").is_some());
+}
+
+#[test]
+fn reselecting_active_tab_from_overflow_reveals_it() {
+    let mut app = overflowing_tabs();
+    let initial = app.harness.get_by_label("Untitled-16").rect();
+    for _ in 0..12 {
+        app.harness.get_by_label("Scroll Tabs Left").click();
+        app.harness.run_steps(3);
+    }
+    assert!(app.harness.get_by_label("Untitled-16").rect().left() > initial.left());
+    app.harness.get_by_label("Show All Tabs").click();
+    app.harness.run_steps(3);
+    app.harness
+        .get_all_by_label("Untitled-16")
+        .last()
+        .unwrap()
+        .click();
+    app.harness.run_steps(4);
+    let revealed = app.harness.get_by_label("Untitled-16").rect();
+    assert!((revealed.left() - initial.left()).abs() < 1.0);
+}

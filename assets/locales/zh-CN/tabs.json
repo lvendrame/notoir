@@ -4,6 +4,8 @@
   "scratchTooltip": "草稿 — 未保存到文件",
   "pin": "固定标签页",
   "unpin": "取消固定标签页",
+  "scrollLeft": "向左滚动标签页",
+  "scrollRight": "向右滚动标签页",
   "showAll": "显示所有标签页",
   "dropHere": "将文件拖放到此处",
   "settings": "设置",

@@ -4,6 +4,8 @@
   "scratchTooltip": "Scratchpad — not saved to a file",
   "pin": "Pin Tab",
   "unpin": "Unpin Tab",
+  "scrollLeft": "Scroll Tabs Left",
+  "scrollRight": "Scroll Tabs Right",
   "showAll": "Show All Tabs",
   "dropHere": "Drop a file here",
   "settings": "Settings",

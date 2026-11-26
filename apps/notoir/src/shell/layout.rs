@@ -84,6 +84,7 @@ pub fn show(
         None => core.workbench.layout.root.clone(),
     };
     let only_group = core.workbench.layout.groups.len() == 1;
+    let focused_before = ui.memory(|m| m.focused());
     let mut r = Renderer {
         kit,
         core,
@@ -92,6 +93,7 @@ pub fn show(
         previews,
         trees,
         focus_request,
+        retain_editor_focus: false,
         context,
         actions,
         now,
@@ -100,6 +102,12 @@ pub fn show(
         only_group,
     };
     r.node(ui, &root, rect, &mut Vec::new());
+    if r.retain_editor_focus
+        && let Some(focused) = focused_before
+    {
+        ui.memory_mut(|m| m.request_focus(focused));
+        out.editor_focused = true;
+    }
     handle_drag(ui, kit, drag, &areas, actions);
     handle_path_drag(ui, kit, path_drag, &areas, core);
     handle_file_drop(ui, &areas, core);
@@ -114,6 +122,7 @@ struct Renderer<'a, 'k> {
     previews: &'a mut super::md_preview::Previews,
     trees: &'a mut super::json_tree::JsonTrees,
     focus_request: Option<ViewId>,
+    retain_editor_focus: bool,
     context: &'a ContextSnapshot,
     actions: &'a mut Actions,
     now: f64,
@@ -242,6 +251,7 @@ impl Renderer<'_, '_> {
                 self.actions,
                 self.drag,
                 &mut tab_rects,
+                &mut self.retain_editor_focus,
             )
         };
         let body = Rect::from_min_max(Pos2::new(rect.left(), strip.bottom()), rect.max);
