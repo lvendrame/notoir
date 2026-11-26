@@ -115,3 +115,13 @@
 @@ -1304 +1304 @@
 -        matroska->current_id = id64 | 1 << 7 * res;
 +        matroska->current_id = id64 | UINT64_C(1) << (7 * res);
+--- a/libavcodec/aac/aacdec_fixed_dequant.h
++++ b/libavcodec/aac/aacdec_fixed_dequant.h
+@@ -125 +125 @@
+-                coefs[i] = -(int64_t)coefs[i] * c * (1 << -s);
++                coefs[i] = -(int64_t)coefs[i] * c * (INT64_C(1) << -s);
+--- a/libavcodec/mpegaudiodec_template.c
++++ b/libavcodec/mpegaudiodec_template.c
+@@ -250 +250 @@
+-        norm = ((INT64_C(1) << n) * FRAC_ONE) / ((1 << n) - 1);
++        norm = ((INT64_C(1) << n) * FRAC_ONE) / ((INT64_C(1) << n) - 1);
