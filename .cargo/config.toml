@@ -1,0 +1,3 @@
+[build]
+# Apply to Cargo manifest lints as well as compiler and Clippy lint warnings.
+warnings = "deny"
