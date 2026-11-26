@@ -136,3 +136,284 @@
 @@ -578 +578 @@
 -                XCHG(top_border + (32 << pixel_shift), src_cr + (1 << pixel_shift), xchg);
 +                XCHG(top_border + (32 << pixel_shift), src_cr + 1 + pixel_shift, xchg);
+--- a/libavcodec/h264qpel_template.c
++++ b/libavcodec/h264qpel_template.c
+@@ -308,2 +308,3 @@
+-static void FUNCC2(OPNAME ## NAME ## _qpel ## SIZE ## _mc00)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC2(OPNAME ## NAME ## _qpel ## SIZE ## _mc00)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -314,2 +315,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc10)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc10)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -321,2 +323,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc20)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc20)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -326,2 +329,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc30)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc30)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -333,2 +337,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc01)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc01)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -343,2 +348,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc02)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc02)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -351,2 +357,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc03)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc03)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -361,2 +368,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc11)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc11)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -373,2 +381,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc31)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc31)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -385,2 +394,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc13)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc13)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -397,2 +407,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc33)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc33)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -409,2 +420,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc22)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc22)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -415,2 +427,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc21)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc21)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -425,2 +438,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc23)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc23)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -435,2 +449,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc12)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc12)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+@@ -448,2 +463,3 @@
+-static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc32)(uint8_t *dst, const uint8_t *restrict src, ptrdiff_t stride)\
+-{\
++static void FUNCC(OPNAME ## NAME ## _qpel ## SIZE ## _mc32)(uint8_t *dst, const uint8_t *src_arg, ptrdiff_t stride)\
++{\
++    const uint8_t *restrict src = src_arg;\
+--- a/libavcodec/hevc/filter.c
++++ b/libavcodec/hevc/filter.c
+@@ -223,3 +223,3 @@
+-    copy_vert(l->sao_pixel_buffer_v[c_idx] + (((2 * x_ctb) * h + y) << sh), src, sh, height, 1 << sh, stride_src);
+-
+-    copy_vert(l->sao_pixel_buffer_v[c_idx] + (((2 * x_ctb + 1) * h + y) << sh), src + ((width - 1) << sh), sh, height, 1 << sh, stride_src);
++    copy_vert(l->sao_pixel_buffer_v[c_idx] + (((2 * x_ctb) * h + y) << sh), src, sh, height, 1 + sh, stride_src);
++
++    copy_vert(l->sao_pixel_buffer_v[c_idx] + (((2 * x_ctb + 1) * h + y) << sh), src + ((width - 1) << sh), sh, height, 1 + sh, stride_src);
+@@ -394 +394 @@
+-                    pos += (1 << sh);
++                    pos += (1 + sh);
+@@ -421 +421 @@
+-                    pos += (1 << sh);
++                    pos += (1 + sh);
+@@ -436 +436 @@
+-                    copy_vert(dst - (1 << sh),
++                    copy_vert(dst - (1 + sh),
+@@ -438 +438 @@
+-                              sh, height, stride_dst, 1 << sh);
++                              sh, height, stride_dst, 1 + sh);
+@@ -448 +448 @@
+-                              sh, height, stride_dst, 1 << sh);
++                              sh, height, stride_dst, 1 + sh);
+--- a/libavcodec/hevc/hevcdec.c
++++ b/libavcodec/hevc/hevcdec.c
+@@ -1763 +1763 @@
+-    src   += y_off * srcstride + (x_off * (1 << sps->pixel_shift));
++    src   += y_off * srcstride + (x_off * (1 + sps->pixel_shift));
+@@ -1926 +1926 @@
+-    src0  += y_off * srcstride + (x_off * (1 << sps->pixel_shift));
++    src0  += y_off * srcstride + (x_off * (1 + sps->pixel_shift));
+@@ -1933 +1933 @@
+-        int offset0 = EPEL_EXTRA_BEFORE * (srcstride + (1 << sps->pixel_shift));
++        int offset0 = EPEL_EXTRA_BEFORE * (srcstride + (1 + sps->pixel_shift));
+@@ -1935 +1935 @@
+-                          (edge_emu_stride + (1 << sps->pixel_shift));
++                          (edge_emu_stride + (1 + sps->pixel_shift));
+@@ -2013 +2013 @@
+-        int offset1 = EPEL_EXTRA_BEFORE * (src1stride + (1 << sps->pixel_shift));
++        int offset1 = EPEL_EXTRA_BEFORE * (src1stride + (1 + sps->pixel_shift));
+@@ -2015 +2015 @@
+-                          (edge_emu_stride + (1 << sps->pixel_shift));
++                          (edge_emu_stride + (1 + sps->pixel_shift));
+@@ -2032 +2032 @@
+-        int offset1 = EPEL_EXTRA_BEFORE * (src2stride + (1 << sps->pixel_shift));
++        int offset1 = EPEL_EXTRA_BEFORE * (src2stride + (1 + sps->pixel_shift));
+@@ -2034 +2034 @@
+-                          (edge_emu_stride + (1 << sps->pixel_shift));
++                          (edge_emu_stride + (1 + sps->pixel_shift));
+--- a/libavcodec/vlc.c
++++ b/libavcodec/vlc.c
+@@ -75 +75 @@
+-        memset(vlc->table + vlc->table_allocated - (1 << vlc->bits), 0, sizeof(*vlc->table) << vlc->bits);
++        memset(vlc->table + vlc->table_allocated - ((ptrdiff_t)1 << vlc->bits), 0, sizeof(*vlc->table) << vlc->bits);
+@@ -340 +340 @@
+-        code += 1U << (32 - len);
++        code += UINT64_C(1) << (32 - len);
+@@ -555 +555 @@
+-        code += 1U << (32 - len);
++        code += UINT64_C(1) << (32 - len);
+--- a/libavcodec/vp9dsp_template.c
++++ b/libavcodec/vp9dsp_template.c
+@@ -33 +33 @@
+-static void vert_4x4_c(uint8_t *restrict _dst, ptrdiff_t stride,
++static void vert_4x4_c(uint8_t *_dst_arg, ptrdiff_t stride,
+@@ -36 +36 @@
+-    pixel *dst = (pixel *) _dst;
++    pixel *restrict dst = (pixel *) _dst_arg;
+@@ -47 +47 @@
+-static void vert_8x8_c(uint8_t *restrict _dst, ptrdiff_t stride,
++static void vert_8x8_c(uint8_t *_dst_arg, ptrdiff_t stride,
+@@ -50 +50 @@
+-    pixel *dst = (pixel *) _dst;
++    pixel *restrict dst = (pixel *) _dst_arg;
+@@ -72 +72 @@
+-static void vert_16x16_c(uint8_t *restrict _dst, ptrdiff_t stride,
++static void vert_16x16_c(uint8_t *_dst_arg, ptrdiff_t stride,
+@@ -75 +75 @@
+-    pixel *dst = (pixel *) _dst;
++    pixel *restrict dst = (pixel *) _dst_arg;
+@@ -103 +103 @@
+-static void vert_32x32_c(uint8_t *restrict _dst, ptrdiff_t stride,
++static void vert_32x32_c(uint8_t *_dst_arg, ptrdiff_t stride,
+@@ -106 +106 @@
+-    pixel *dst = (pixel *) _dst;
++    pixel *restrict dst = (pixel *) _dst_arg;
+@@ -1173 +1173 @@
+-                                                 (int)(t + (1U << (bits - 1))) >> bits : \
++                                                 (int)(t + (1U << ((bits) ? (bits) - 1 : 0))) >> bits : \
+@@ -1188 +1188 @@
+-                                             (int)(out[j] + (1U << (bits - 1))) >> bits : \
++                                             (int)(out[j] + (1U << ((bits) ? (bits) - 1 : 0))) >> bits : \
+--- a/libavutil/opt.c
++++ b/libavutil/opt.c
+@@ -521 +521 @@
+-                d = intnum &~operand;
++                d = (unsigned int)intnum & ~operand;
+--- a/libavutil/ripemd.c
++++ b/libavutil/ripemd.c
+@@ -139 +139 @@
+-    uint32_t a, b, c, d, e, f, g, h, t av_unused;
++    uint32_t a, b, c, d, e, f, g, h;
+@@ -152,0 +153 @@
++    uint32_t t;
+@@ -196 +197 @@
+-    uint32_t a, b, c, d, e, f, g, h, t av_unused;
++    uint32_t a, b, c, d, e, f, g, h;
+@@ -207,0 +209 @@
++    uint32_t t;
+@@ -321 +323 @@
+-    uint32_t a, b, c, d, e, f, g, h, i, j, t av_unused;
++    uint32_t a, b, c, d, e, f, g, h, i, j;
+@@ -335,0 +338 @@
++    uint32_t t;
+@@ -393 +396 @@
+-    uint32_t a, b, c, d, e, f, g, h, i, j, t av_unused;
++    uint32_t a, b, c, d, e, f, g, h, i, j;
+@@ -404,0 +408 @@
++    uint32_t t;
+--- a/libswscale/format.c
++++ b/libswscale/format.c
+@@ -1287,2 +1287,2 @@
+-            c.m[1][4] = Q(1 << (depth1 - 1));
+-            c.m[2][4] = Q(1 << (depth2 - 1));
++            c.m[1][4] = Q(INT64_C(1) << (depth1 - 1));
++            c.m[2][4] = Q(INT64_C(1) << (depth2 - 1));
+--- a/libswscale/ops.c
++++ b/libswscale/ops.c
+@@ -250 +250 @@
+-        AVRational64 mult = Q(1 << op->shift.amount);
++        AVRational64 mult = Q(INT64_C(1) << op->shift.amount);
+@@ -315,6 +315,4 @@
+-enum {
+-    SWS_COMP_IDENTITY = SWS_COMP_ZERO | SWS_COMP_EXACT |
+-                        SWS_COMP_COPY | SWS_COMP_CONST,
+-
+-    SWS_COMP_DIRTY = ~(SWS_COMP_COPY | SWS_COMP_CONST),
+-};
++/* These masks have the same component-flag type as their users. */
++#define SWS_COMP_IDENTITY ((SwsCompFlags) (SWS_COMP_ZERO | SWS_COMP_EXACT | \
++                                          SWS_COMP_COPY | SWS_COMP_CONST))
++#define SWS_COMP_DIRTY ((SwsCompFlags) ~(SWS_COMP_COPY | SWS_COMP_CONST))
+--- a/libswscale/swscale.c
++++ b/libswscale/swscale.c
+@@ -329 +329,2 @@
+-        memcpy(src2, src, sizeof(src2));
++        for (int plane = 0; plane < 4; plane++)
++            src2[plane] = src[plane];
+@@ -588 +589 @@
+-              (1U << (mult_shift - 1));
++              (INT64_C(1) << (mult_shift - 1));
+@@ -1091 +1092,2 @@
+-    memcpy(src2,       srcSlice,  sizeof(src2));
++    for (int plane = 0; plane < 4; plane++)
++        src2[plane] = srcSlice[plane];
+--- a/libswscale/yuv2rgb.c
++++ b/libswscale/yuv2rgb.c
+@@ -175 +175,10 @@
+-#define YUV2RGBFUNC(func_name, dst_type, alpha, yuv422, nb_dst_planes)      \
++#define YUV2RGB_TABLES_RGB(type) type *r, *g, *b;
++#define YUV2RGB_TABLES_MONO(type) type *g;
++#define YUV2RGB_VALUES_RGB int U, V, Y;
++#define YUV2RGB_VALUES_MONO int Y;
++
++#define YUV2RGBFUNC(func_name, dst_type, alpha, yuv422, nb_dst_planes) \
++    YUV2RGBFUNC_DECL(func_name, dst_type, alpha, yuv422, nb_dst_planes, \
++                     YUV2RGB_TABLES_RGB, YUV2RGB_VALUES_RGB)
++
++#define YUV2RGBFUNC_DECL(func_name, dst_type, alpha, yuv422, nb_dst_planes, tables, values) \
+@@ -189 +198 @@
+-            av_unused dst_type *r, *g, *b;                                  \
++            tables(dst_type)                                  \
+@@ -212 +221 @@
+-                av_unused int U, V, Y;                                      \
++                values                                      \
+@@ -556 +565,2 @@
+-YUV2RGBFUNC(yuv2rgb_c_1_ordered_dither, uint8_t, 0, 0, 1)
++YUV2RGBFUNC_DECL(yuv2rgb_c_1_ordered_dither, uint8_t, 0, 0, 1,
++                 YUV2RGB_TABLES_MONO, YUV2RGB_VALUES_MONO)
+@@ -588 +598 @@
+-        av_unused int Y, U, V;
++        int Y;
