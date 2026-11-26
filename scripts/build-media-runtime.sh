@@ -84,6 +84,10 @@ if [[ ! -f "$prefix/notoir-build-id" ]] || [[ $(cat "$prefix/notoir-build-id") !
     # Feature probes deliberately compile unsupported code. Escalate warnings
     # for the actual build only, so probes cannot silently disable required flags.
     case "$target" in
+        # NASM Mach-O objects carry no LC_BUILD_VERSION, so ld64 warns "no platform
+        # load command found ... assuming: macOS" for every x86 asm object. The
+        # assumption is correct; keep fatal linker warnings for arm64 only.
+        x86_64-apple-darwin) printf '\nCFLAGS += -Werror\n' >> ffbuild/config.mak ;;
         *apple-darwin) printf '\nCFLAGS += -Werror\nLDFLAGS += -Wl,-fatal_warnings\n' >> ffbuild/config.mak ;;
         *windows-msvc) printf '\nCFLAGS += -WX\nLDFLAGS += -WX\nHOSTCFLAGS += -WX\nHOSTLDFLAGS += -WX\n' >> ffbuild/config.mak ;;
         *linux-gnu)

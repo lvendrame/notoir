@@ -8,7 +8,6 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
-import tomllib
 
 root = Path(__file__).resolve().parent.parent
 os.chdir(root)
@@ -36,8 +35,12 @@ for path in libs:
 for name in ['FFmpeg-LICENSE.txt', 'FFmpeg-BUILD.txt']:
     shutil.copyfile(runtime / name, stage / name)
 manifest_dir = root / 'apps/notoir'
-config = copy.deepcopy(tomllib.loads((manifest_dir/'Cargo.toml').read_text())['package']['metadata']['packager'])
-config['version'] = tomllib.loads((root/'Cargo.toml').read_text())['workspace']['package']['version']
+# `cargo metadata` instead of tomllib: Ubuntu 22.04 release runners ship Python 3.10.
+metadata = json.loads(subprocess.run(['cargo', 'metadata', '--no-deps', '--format-version', '1'],
+                                     check=True, capture_output=True, text=True).stdout)
+package = next(p for p in metadata['packages'] if p['name'] == 'notoir')
+config = copy.deepcopy(package['metadata']['packager'])
+config['version'] = package['version']
 config['name'] = 'notoir'
 config['out-dir'] = str(root/'target/packages')
 config['binaries-dir'] = str(Path(binaries).resolve())

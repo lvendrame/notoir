@@ -101,7 +101,14 @@ case "$(uname -s)" in
     ;;
   MINGW*|MSYS*|CYGWIN*)
     OS=windows
-    export PATH="$PWD/scripts:$PATH"
+    # Git Bash puts /usr/bin first, where GNU coreutils' `link` shadows the MSVC
+    # linker that rustc resolves as `link.exe` from PATH inside a VS dev env.
+    msvc_linker=$(cygpath -u "${NOTOIR_MSVC_LINKER:?run scripts/enable-msvc.ps1 first}")
+    export PATH="$PWD/scripts:$(dirname "$msvc_linker"):$PATH"
+    if [[ ! "$(command -v link.exe)" -ef "$msvc_linker" ]]; then
+      echo "Wrong Windows linker: PATH resolves '$(command -v link.exe)'; expected '$msvc_linker'" >&2
+      exit 1
+    fi
     pwsh -NoProfile -NonInteractive -File scripts/sign-windows.ps1 -ValidateOnly
     rm -rf target/windows-signing-receipts
     mkdir -p target/windows-signing-receipts
