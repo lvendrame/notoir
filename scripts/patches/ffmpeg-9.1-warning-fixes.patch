@@ -383,10 +383,15 @@
 -        memcpy(src2, src, sizeof(src2));
 +        for (int plane = 0; plane < 4; plane++)
 +            src2[plane] = src[plane];
-@@ -588 +589 @@
+@@ -585 +586,3 @@
+-    *coeff = AV_CEIL_RSHIFT(((uint64_t) dst_range << total_shift) / src_range, src_shift);
++    const uint64_t scaled_ratio = ((uint64_t) dst_range << total_shift) / src_range;
++    const uint64_t rounding = (UINT64_C(1) << src_shift) - 1;
++    *coeff = (scaled_ratio + rounding) >> src_shift;
+@@ -588 +591 @@
 -              (1U << (mult_shift - 1));
 +              (INT64_C(1) << (mult_shift - 1));
-@@ -1091 +1092,2 @@
+@@ -1091 +1094,2 @@
 -    memcpy(src2,       srcSlice,  sizeof(src2));
 +    for (int plane = 0; plane < 4; plane++)
 +        src2[plane] = srcSlice[plane];
