@@ -178,7 +178,7 @@ fn render(
     w = (w * limit).floor().max(1.0);
     h = (h * limit).floor().max(1.0);
     let bytes = w as usize * h as usize * 4 * 3; // raster, upload and texture copies
-    used.fetch_update(Ordering::AcqRel, Ordering::Acquire, |n| {
+    used.try_update(Ordering::AcqRel, Ordering::Acquire, |n| {
         n.checked_add(bytes).filter(|n| *n <= BUDGET)
     })
     .map_err(|_| "svg:memoryLimit".to_owned())?;

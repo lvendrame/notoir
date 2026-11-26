@@ -130,6 +130,7 @@ esac
 # Matching source and native build recipes accompany every package set.
 cp target/native/ffmpeg-source-9.1.tar.xz "$OUT/"
 cp scripts/build-media-runtime.sh "$OUT/FFmpeg-build.sh"
+cp scripts/patches/ffmpeg-9.1-warning-fixes.patch "$OUT/FFmpeg-warning-fixes.patch"
 # Checksums for everything shipped (apps are directories: only archives are summed).
 (
   cd "$OUT"

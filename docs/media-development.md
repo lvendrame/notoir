@@ -27,11 +27,15 @@ source target/native/media-env.sh
 cargo test --workspace
 ```
 
-A C compiler, make, tar, xz, curl and pkg-config are required. x86 builds need NASM.
-On Windows, run through MSYS2 MINGW64 with an MSVC developer environment on PATH;
+A C compiler, make, patch, tar, xz, curl and pkg-config are required. Linux uses Clang;
+x86 builds need NASM. On Windows, run through MSYS2 UCRT64 with an MSVC developer environment on PATH;
 pass `x86_64-pc-windows-msvc`. CI's local `media-runtime` action provisions these tools.
 `FFMPEG_SOURCE_ARCHIVE` can point to an already downloaded source tarball; its checksum is
-still verified. Build artifacts remain under `target/native` and are cached by script hash.
+still verified. Compiler and linker warnings fail the native build. The versioned patch in
+`scripts/patches/` fixes disabled-codec guards, an uninitialized parser branch and an obsolete
+Darwin linker flag; it does not suppress diagnostics. Build artifacts remain under `target/native`
+and are cached by the script and patch hashes. Keep MSYS2's `/usr/bin` out of the global Windows
+PATH; CI verifies Microsoft's linker and builds/runs a Rust smoke executable after media setup.
 
 `package.sh` builds each macOS architecture separately, creates universal dylibs, and
 places them in the app Resources/media directory with a relative executable rpath.
@@ -41,7 +45,7 @@ comes from `scripts/prepare-media-package.py`; it refuses a missing native paylo
 Linux packaging additionally requires patchelf. Python 3.11+ generates packaging metadata.
 Store packaging requires FFMPEG_DIR from the CI action and bundles the same native DLLs.
 
-Every package set includes the exact unmodified FFmpeg source archive and build script.
+Every package set includes the exact unmodified FFmpeg source archive, build script and warning-fix patch.
 FFmpeg's LGPL license/build configuration are installed with its libraries. About credits FFmpeg.
 Publish the matching source/build artifacts alongside installer downloads and retain the existing
 release verification gates. Cargo-deny exceptions are scoped to the two WTFPL Rust wrapper crates;

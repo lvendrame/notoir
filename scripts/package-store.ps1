@@ -34,6 +34,7 @@ try {
     Copy-Item -Path "$env:FFMPEG_DIR/FFmpeg-*.txt" -Destination $payload
     Copy-Item -LiteralPath 'target/native/ffmpeg-source-9.1.tar.xz' -Destination $out
     Copy-Item -LiteralPath 'scripts/build-media-runtime.sh' -Destination (Join-Path $out 'FFmpeg-build.sh')
+    Copy-Item -LiteralPath 'scripts/patches/ffmpeg-9.1-warning-fixes.patch' -Destination (Join-Path $out 'FFmpeg-warning-fixes.patch')
     Assert-NotoirStoreRuntime -Executable $exe -Report (Join-Path $out 'runtime-dependencies.txt')
     $languages = @(Get-ChildItem -LiteralPath 'assets/locales' -Directory | ForEach-Object {
         if ($_.Name -eq 'en') { 'en-US' } else { $_.Name }

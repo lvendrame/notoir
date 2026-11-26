@@ -106,7 +106,7 @@ fn checked_bytes(w: u32, h: u32) -> Result<usize, String> {
 }
 fn reserve(budget: &Arc<AtomicUsize>, bytes: usize) -> Result<Lease, String> {
     budget
-        .fetch_update(Ordering::AcqRel, Ordering::Acquire, |n| {
+        .try_update(Ordering::AcqRel, Ordering::Acquire, |n| {
             n.checked_add(bytes).filter(|n| *n <= MEMORY_BUDGET)
         })
         .map_err(|_| "media:memoryLimit".to_owned())?;

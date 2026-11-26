@@ -13,7 +13,6 @@ serde_json.workspace = true
 toml.workspace = true
 thiserror.workspace = true
 tracing.workspace = true
-globset.workspace = true
 ureq.workspace = true
 arboard.workspace = true
 

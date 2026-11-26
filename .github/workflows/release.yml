@@ -118,7 +118,7 @@ jobs:
       HAS_GPG_KEY: ${{ secrets.GPG_PRIVATE_KEY != '' }}
     steps:
       - uses: actions/checkout@v5
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.100.0
       - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2
       - name: Linux system libraries
@@ -169,6 +169,7 @@ jobs:
             target/packages/*.tar.gz
             target/packages/*.tar.xz
             target/packages/FFmpeg-build.sh
+            target/packages/FFmpeg-warning-fixes.patch
             target/packages/SHA256SUMS-*.txt
           if-no-files-found: error
 
@@ -182,7 +183,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v5
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.100.0
       - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2
       - name: cargo-packager

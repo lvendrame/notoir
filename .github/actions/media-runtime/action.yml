@@ -13,24 +13,25 @@ runs:
       if: runner.os == 'macOS'
       shell: bash
       run: brew list nasm >/dev/null 2>&1 || brew install nasm
-    - name: MSVC developer environment
-      if: runner.os == 'Windows'
-      uses: ilammy/msvc-dev-cmd@v1
     - name: Windows media build tools
       if: runner.os == 'Windows'
       uses: msys2/setup-msys2@v2
       with:
-        msystem: MINGW64
+        msystem: UCRT64
         path-type: inherit
-        install: make diffutils nasm pkgconf mingw-w64-x86_64-gcc
+        install: make diffutils patch nasm pkgconf mingw-w64-ucrt-x86_64-gcc
+    - name: MSVC developer environment
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: ./scripts/enable-msvc.ps1
     - name: Cache native decoder
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: |
           target/native/ffmpeg
           target/native/ffmpeg-9.1.tar.xz
           target/native/ffmpeg-source-9.1.tar.xz
-        key: media-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/build-media-runtime.sh') }}
+        key: media-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/build-media-runtime.sh', 'scripts/patches/ffmpeg-9.1-warning-fixes.patch') }}
     - name: Build media runtime (Unix)
       if: runner.os != 'Windows'
       shell: bash
@@ -48,6 +49,7 @@ runs:
         prefix="$PWD/target/native/ffmpeg/x86_64-pc-windows-msvc"
         echo "FFMPEG_DIR=$(cygpath -m "$prefix")" >> "$GITHUB_ENV"
         cygpath -w "$prefix/bin" >> "$GITHUB_PATH"
-        # Git Bash needs these tools when packaging invokes the build script.
-        cygpath -w /mingw64/bin >> "$GITHUB_PATH"
-        cygpath -w /usr/bin >> "$GITHUB_PATH"
+    - name: Verify Windows linker after media setup
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: ./scripts/enable-msvc.ps1 -VerifyOnly

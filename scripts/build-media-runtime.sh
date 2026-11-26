@@ -9,6 +9,7 @@ sha256=1a4d394ae63d190a526cd052eb4415c156b5c5e2df37efab41a7de0b8fde2433
 target=${1:-$(rustc -vV | sed -n 's/^host: //p')}
 prefix="$repo/target/native/ffmpeg/$target"
 source_archive=${FFMPEG_SOURCE_ARCHIVE:-"$repo/target/native/ffmpeg-$version.tar.xz"}
+warning_patch="$repo/scripts/patches/ffmpeg-9.1-warning-fixes.patch"
 mkdir -p "$repo/target/native"
 if [[ ! -f "$source_archive" ]]; then
     curl --fail --location --retry 3 "https://ffmpeg.org/releases/ffmpeg-$version.tar.xz" -o "$source_archive"
@@ -16,14 +17,16 @@ fi
 if command -v sha256sum >/dev/null; then actual=$(sha256sum "$source_archive"); else actual=$(shasum -a 256 "$source_archive"); fi
 [[ ${actual%% *} == "$sha256" ]] || { echo 'FFmpeg source checksum mismatch' >&2; exit 1; }
 # This script's checksum also invalidates cached native builds when flags change.
-if command -v sha256sum >/dev/null; then stamp=$(sha256sum "$0"); else stamp=$(shasum -a 256 "$0"); fi
+if command -v sha256sum >/dev/null; then stamp=$(cat "$0" "$warning_patch" | sha256sum); else stamp=$(cat "$0" "$warning_patch" | shasum -a 256); fi
+stamp=${stamp%% *}
 if [[ ! -f "$prefix/notoir-build-id" ]] || [[ $(cat "$prefix/notoir-build-id") != "$stamp" ]]; then
-    build="$repo/target/native/build-$target"
-    mkdir -p "$build"
+    # A changed recipe must not reuse objects compiled with older flags.
+    build=$(mktemp -d "$repo/target/native/build-$target.XXXXXX")
     tar -xf "$source_archive" -C "$build"
     cd "$build/ffmpeg-$version"
+    patch --batch --forward -p1 < "$warning_patch"
     args=(--prefix="$prefix" --disable-autodetect --disable-everything --disable-programs --disable-doc --disable-avdevice --disable-avfilter
-        --disable-network --disable-gpl --disable-nonfree --disable-static --enable-shared
+        --disable-network --disable-gpl --disable-nonfree --disable-static --enable-shared --fatal-warnings
         --enable-avcodec --enable-avformat --enable-avutil --enable-swscale --enable-swresample
         --enable-protocol=file --enable-demuxer=mov,matroska,mp3,wav,flac,ogg,aac
         --enable-parser=h264,hevc,vp8,vp9,aac,mpegaudio,flac,opus,vorbis
@@ -39,10 +42,19 @@ if [[ ! -f "$prefix/notoir-build-id" ]] || [[ $(cat "$prefix/notoir-build-id") !
             # Start in an MSVC developer environment, through MSYS2 bash.
             args+=(--toolchain=msvc --target-os=win64 --arch=x86_64 --disable-debug)
             ;;
-        *linux-gnu) args+=(--enable-pic --extra-ldflags='-Wl,-rpath,$ORIGIN') ;;
+        *linux-gnu) args+=(--cc=clang --enable-pic) ;;
         *) echo "Unsupported media build target: $target" >&2; exit 1 ;;
     esac
     ./configure "${args[@]}"
+    # Feature probes deliberately compile unsupported code. Escalate warnings
+    # for the actual build only, so probes cannot silently disable required flags.
+    case "$target" in
+        *apple-darwin) printf '\nCFLAGS += -Werror\nLDFLAGS += -Wl,-fatal_warnings\n' >> ffbuild/config.mak ;;
+        *windows-msvc) printf '\nCFLAGS += -WX\nLDFLAGS += -WX\n' >> ffbuild/config.mak ;;
+        *linux-gnu)
+            printf '\n%s\n%s\n' 'CFLAGS += -Werror' "LDFLAGS += -Wl,-rpath,'\$\$ORIGIN' -Wl,--fatal-warnings" >> ffbuild/config.mak
+            ;;
+    esac
     make -j "${NOTOIR_BUILD_JOBS:-4}"
     make install
     printf '%s\n' "$stamp" > "$prefix/notoir-build-id"
@@ -60,4 +72,5 @@ cd "$repo"
 } > target/native/media-env.sh
 # Release packaging publishes this unmodified source archive alongside binaries.
 cp "$source_archive" "$repo/target/native/ffmpeg-source-$version.tar.xz"
+cp "$warning_patch" "$repo/target/native/FFmpeg-warning-fixes.patch"
 echo "Media runtime ready: $prefix"

@@ -3071,7 +3071,6 @@ name = "notoir-plugins"
 version = "0.1.14"
 dependencies = [
  "arboard",
- "globset",
  "mlua",
  "notoir-core",
  "serde",
