@@ -1,6 +1,40 @@
 #!/usr/bin/env bash
 # Reproducible LGPL-only local-file decoder; no user-installed runtime needed.
 # Run from the repo root. Exports are written to target/native/media-env.sh.
+
+# FFmpeg installs MSVC import libraries beside its DLLs. Rust's FFMPEG_DIR
+# discovery expects import libraries in lib/; leave the runtime DLLs in bin/.
+prepare_windows_import_libraries() (
+    set -euo pipefail
+    local native_prefix=${1:?Windows FFmpeg prefix is required}
+    local component source_library destination_library
+    local components=(avcodec avformat avutil swresample swscale)
+    local missing=()
+    for component in "${components[@]}"; do
+        if [[ ! -s "$native_prefix/bin/$component.lib" && ! -s "$native_prefix/lib/$component.lib" ]]; then
+            missing+=("$component.lib")
+        fi
+    done
+    if [[ ${#missing[@]} -ne 0 ]]; then
+        printf 'Missing Windows FFmpeg import libraries under %s/{bin,lib}: %s\n' "$native_prefix" "${missing[*]}" >&2
+        exit 1
+    fi
+    mkdir -p "$native_prefix/lib"
+    for component in "${components[@]}"; do
+        source_library="$native_prefix/bin/$component.lib"
+        destination_library="$native_prefix/lib/$component.lib"
+        if [[ -s "$source_library" && ! "$source_library" -ef "$destination_library" ]]; then
+            cp -p "$source_library" "$destination_library"
+        fi
+    done
+    printf 'Windows FFmpeg import libraries verified in %s/lib\n' "$native_prefix"
+)
+
+# Allow the layout preparation to be exercised without starting a native build.
+if [[ ${BASH_SOURCE[0]} != "$0" ]]; then
+    return 0
+fi
+
 set -euo pipefail
 cd "$(dirname "$0")/.."
 repo=$PWD
@@ -60,10 +94,14 @@ if [[ ! -f "$prefix/notoir-build-id" ]] || [[ $(cat "$prefix/notoir-build-id") !
     # exits nonzero and set -e prevents installation or a successful cache stamp.
     make --keep-going -j "${NOTOIR_BUILD_JOBS:-4}"
     make install
-    printf '%s\n' "$stamp" > "$prefix/notoir-build-id"
     cp COPYING.LGPLv2.1 "$prefix/FFmpeg-LICENSE.txt"
     printf '%s\n' "FFmpeg $version; source SHA256 $sha256" "${args[@]}" > "$prefix/FFmpeg-BUILD.txt"
 fi
+case "$target" in
+    *windows-msvc) prepare_windows_import_libraries "$prefix" ;;
+esac
+# Validate/repair cached Windows layouts too, before recording success.
+printf '%s\n' "$stamp" > "$prefix/notoir-build-id"
 cd "$repo"
 # Dynamic loader test paths are development-only; installers use relative paths.
 {

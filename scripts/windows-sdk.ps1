@@ -9,6 +9,17 @@ function Get-NotoirWindowsLinker {
     return $resolved
 }
 
+function Assert-NotoirWindowsMediaLibraries {
+    param([Parameter(Mandatory)][string]$Prefix)
+    $missing = @('avcodec', 'avformat', 'avutil', 'swresample', 'swscale') | Where-Object {
+        $path = Join-Path $Prefix "lib/$_.lib"
+        -not (Test-Path -LiteralPath $path -PathType Leaf) -or (Get-Item -LiteralPath $path).Length -eq 0
+    }
+    if ($missing) {
+        throw "Missing Windows FFmpeg import libraries in '$Prefix/lib': $($missing -join ', ')"
+    }
+}
+
 function Get-NotoirWindowsSdkTool {
     param([Parameter(Mandatory)][ValidateSet('signtool.exe', 'makeappx.exe')][string]$Name)
     $command = Get-Command $Name -ErrorAction SilentlyContinue

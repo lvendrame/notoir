@@ -36,6 +36,18 @@ still verified. Compiler and linker warnings fail the native build. The versione
 Darwin linker flag; it does not suppress diagnostics. Build artifacts remain under `target/native`
 and are cached by the script and patch hashes. Keep MSYS2's `/usr/bin` out of the global Windows
 PATH; CI verifies Microsoft's linker and builds/runs a Rust smoke executable after media setup.
+On Windows, FFmpeg installs MSVC import libraries beside its DLLs. The build script copies the
+five required `.lib` files into `FFMPEG_DIR/lib` for `ffmpeg-sys-next`, while retaining DLLs in
+`FFMPEG_DIR/bin`. Cached layouts are repaired and validated before reporting readiness or
+recording a successful build stamp. The Windows preflight links and calls a version function
+from every required FFmpeg library before starting the Cargo build.
+Cargo uses the literal linker name `link.exe` after verifying that PATH resolves it to the
+absolute Microsoft executable. Rust 1.100 requires that exact configured name to distinguish
+MSVC progress messages from linker diagnostics; an absolute-path override incorrectly promotes
+"Creating library..." progress output to `linker_messages` warnings. The preflight deliberately
+exports a probe symbol and keeps `-D warnings` plus explicit `-D linker_messages` enabled
+to exercise that distinction. The explicit lint is required for direct rustc invocations;
+Cargo's `build.warnings = "deny"` remains active for all workspace builds.
 
 `package.sh` builds each macOS architecture separately, creates universal dylibs, and
 places them in the app Resources/media directory with a relative executable rpath.
@@ -59,6 +71,12 @@ it still fails on errors and never installs libraries or records a successful ca
 a failed build. Run `node --test scripts/tests/native-build-failures.test.cjs` to verify this
 failure path locally. Upstream FATE test success does not establish a warning-free MSVC build;
 review the complete native compiler output for the enabled codecs.
+The same local Node suite exercises missing/empty imports, cached-layout repair, paths with
+spaces, and real x86_64 Windows COFF linking through Rust's LLVM linker. It also cross-compiles
+with the pinned Rust compiler to reproduce MSVC progress-message classification and prove
+that genuine linker warnings still fail. Install the cross-target first with
+`rustup target add x86_64-pc-windows-msvc`. These checks do not execute Windows binaries or
+replace native Windows runtime verification.
 
 Decoder tests exercise actual PNG/GIF, WebM and PCM WAV decoding. Audio tests use a deterministic
 null sink, never the developer's speakers. UI tests verify media identity, save protection, split

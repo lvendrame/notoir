@@ -71,6 +71,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@1.100.0
         with:
           components: clippy
+          targets: x86_64-pc-windows-msvc
       - uses: ./.github/actions/media-runtime
       - uses: Swatinem/rust-cache@v2
       - name: Linux system libraries

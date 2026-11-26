@@ -16,18 +16,46 @@ if (-not $VerifyOnly) {
     }
     $linker = Join-Path $env:VCToolsInstallDir 'bin/Hostx64/x64/link.exe'
     if (-not (Test-Path -LiteralPath $linker)) { throw "Microsoft linker was not found: $linker" }
-    $env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER = $linker
-    "CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER=$linker" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    $env:NOTOIR_MSVC_LINKER = $linker
+    "NOTOIR_MSVC_LINKER=$linker" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    # Rust 1.100 recognizes MSVC informational output only for this exact name.
+    # The absolute executable selected from PATH is verified before each build.
+    $env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER = 'link.exe'
+    'CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER=link.exe' | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 }
 
-$resolved = Get-NotoirWindowsLinker -Expected $env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER
+$resolved = Get-NotoirWindowsLinker -Expected $env:NOTOIR_MSVC_LINKER
 Write-Host "Verified Microsoft linker: $resolved"
 
 if ($VerifyOnly) {
+    Assert-NotoirWindowsMediaLibraries -Prefix $env:FFMPEG_DIR
     $probe = Join-Path $env:RUNNER_TEMP 'notoir-linker-probe.rs'
     $exe = Join-Path $env:RUNNER_TEMP 'notoir-linker-probe.exe'
-    [IO.File]::WriteAllText($probe, 'fn main() {}')
-    & rustc --crate-name notoir_linker_probe -D warnings $probe -o $exe
+    $source = @'
+#[link(name = "avcodec")]
+unsafe extern "C" { fn avcodec_version() -> u32; }
+#[link(name = "avformat")]
+unsafe extern "C" { fn avformat_version() -> u32; }
+#[link(name = "avutil")]
+unsafe extern "C" { fn avutil_version() -> u32; }
+#[link(name = "swresample")]
+unsafe extern "C" { fn swresample_version() -> u32; }
+#[link(name = "swscale")]
+unsafe extern "C" { fn swscale_version() -> u32; }
+fn main() {
+    unsafe {
+        assert!(avcodec_version() > 0);
+        assert!(avformat_version() > 0);
+        assert!(avutil_version() > 0);
+        assert!(swresample_version() > 0);
+        assert!(swscale_version() > 0);
+    }
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn notoir_media_smoke_export() -> u32 { 1 }
+'@
+    [IO.File]::WriteAllText($probe, $source)
+    & rustc --edition 2024 --crate-name notoir_linker_probe -D warnings -D linker_messages -C "linker=$env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER" -C link-arg=/EXPORT:notoir_media_smoke_export -L "native=$env:FFMPEG_DIR/lib" $probe -o $exe
     if ($LASTEXITCODE -ne 0) { throw 'Rust/MSVC linker smoke test failed.' }
     & $exe
     if ($LASTEXITCODE -ne 0) { throw 'Rust/MSVC smoke test executable failed.' }

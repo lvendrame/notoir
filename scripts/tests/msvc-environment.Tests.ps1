@@ -24,6 +24,32 @@ try {
     }
     if (-not $rejected) { throw 'Accepted the Unix linker before the Microsoft linker.' }
     Write-Host 'PASS: Unix linker first is rejected'
+
+    $prefix = Join-Path ([IO.Path]::GetTempPath()) ([guid]::NewGuid().ToString())
+    try {
+        $null = New-Item -ItemType Directory -Path (Join-Path $prefix 'lib') -Force
+        foreach ($name in @('avcodec', 'avformat', 'avutil', 'swresample', 'swscale')) {
+            [IO.File]::WriteAllText((Join-Path $prefix "lib/$name.lib"), 'import library fixture')
+        }
+        Assert-NotoirWindowsMediaLibraries -Prefix $prefix
+        Write-Host 'PASS: all five canonical import-library paths are accepted'
+
+        $library = Join-Path $prefix 'lib/swscale.lib'
+        foreach ($empty in @($false, $true)) {
+            if ($empty) { [IO.File]::WriteAllBytes($library, [byte[]]@()) }
+            else { Remove-Item -LiteralPath $library }
+            $rejected = $false
+            try { Assert-NotoirWindowsMediaLibraries -Prefix $prefix }
+            catch {
+                if ($_.Exception.Message -notlike 'Missing Windows FFmpeg import libraries*swscale*') { throw }
+                $rejected = $true
+            }
+            if (-not $rejected) { throw "Accepted an absent/empty import library (empty=$empty)." }
+        }
+        Write-Host 'PASS: missing and empty import libraries are rejected before Cargo'
+    } finally {
+        if (Test-Path -LiteralPath $prefix) { Remove-Item -LiteralPath $prefix -Recurse -Force }
+    }
 } finally {
     Remove-Item Function:Get-Command
 }
