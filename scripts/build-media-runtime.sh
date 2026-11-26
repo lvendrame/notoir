@@ -40,7 +40,8 @@ if [[ ! -f "$prefix/notoir-build-id" ]] || [[ $(cat "$prefix/notoir-build-id") !
             ;;
         *windows-msvc)
             # Start in an MSVC developer environment, through MSYS2 bash.
-            args+=(--toolchain=msvc --target-os=win64 --arch=x86_64 --disable-debug)
+            args+=(--toolchain=msvc --target-os=win64 --arch=x86_64 --disable-debug
+                --host-ld="$PWD/compat/windows/mslink")
             ;;
         *linux-gnu) args+=(--cc=clang --enable-pic) ;;
         *) echo "Unsupported media build target: $target" >&2; exit 1 ;;
@@ -50,7 +51,7 @@ if [[ ! -f "$prefix/notoir-build-id" ]] || [[ $(cat "$prefix/notoir-build-id") !
     # for the actual build only, so probes cannot silently disable required flags.
     case "$target" in
         *apple-darwin) printf '\nCFLAGS += -Werror\nLDFLAGS += -Wl,-fatal_warnings\n' >> ffbuild/config.mak ;;
-        *windows-msvc) printf '\nCFLAGS += -WX\nLDFLAGS += -WX\n' >> ffbuild/config.mak ;;
+        *windows-msvc) printf '\nCFLAGS += -WX\nLDFLAGS += -WX\nHOSTCFLAGS += -WX\nHOSTLDFLAGS += -WX\n' >> ffbuild/config.mak ;;
         *linux-gnu)
             printf '\n%s\n%s\n' 'CFLAGS += -Werror' "LDFLAGS += -Wl,-rpath,'\$\$ORIGIN' -Wl,--fatal-warnings" >> ffbuild/config.mak
             ;;

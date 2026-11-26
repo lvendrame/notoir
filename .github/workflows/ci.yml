@@ -28,6 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          rust-version: "1.100.0"
+          command-arguments: --deny warnings
 
   windows-signing:
     name: Windows packaging checks

@@ -107,3 +107,11 @@
  
  OBJS      := $(sort $(OBJS:%=$(SUBDIR)%))
  SHLIBOBJS := $(sort $(SHLIBOBJS:%=$(SUBDIR)%))
+--- a/libavformat/matroskadec.c
++++ b/libavformat/matroskadec.c
+@@ -945 +945 @@
+-    total ^= 1 << ff_log2_tab[total];
++    total ^= UINT64_C(1) << ff_log2_tab[total];
+@@ -1304 +1304 @@
+-        matroska->current_id = id64 | 1 << 7 * res;
++        matroska->current_id = id64 | UINT64_C(1) << (7 * res);

@@ -8,6 +8,8 @@ all-features = false
 [advisories]
 version = 2
 yanked = "deny"
+# Keep the existing transitive-advisory checks when cargo-deny's defaults change.
+unmaintained = "all"
 # Unmaintained, not vulnerable; both come with syntect and have no maintained
 # drop-in replacement there. Review when syntect moves on.
 ignore = [
