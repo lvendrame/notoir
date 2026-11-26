@@ -56,7 +56,9 @@ if [[ ! -f "$prefix/notoir-build-id" ]] || [[ $(cat "$prefix/notoir-build-id") !
             printf '\n%s\n%s\n' 'CFLAGS += -Werror' "LDFLAGS += -Wl,-rpath,'\$\$ORIGIN' -Wl,--fatal-warnings" >> ffbuild/config.mak
             ;;
     esac
-    make -j "${NOTOIR_BUILD_JOBS:-4}"
+    # Collect independent compilation failures in one pass. A failed build still
+    # exits nonzero and set -e prevents installation or a successful cache stamp.
+    make --keep-going -j "${NOTOIR_BUILD_JOBS:-4}"
     make install
     printf '%s\n' "$stamp" > "$prefix/notoir-build-id"
     cp COPYING.LGPLv2.1 "$prefix/FFmpeg-LICENSE.txt"

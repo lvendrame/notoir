@@ -125,3 +125,14 @@
 @@ -250 +250 @@
 -        norm = ((INT64_C(1) << n) * FRAC_ONE) / ((1 << n) - 1);
 +        norm = ((INT64_C(1) << n) * FRAC_ONE) / ((INT64_C(1) << n) - 1);
+--- a/libavcodec/h264_mb.c
++++ b/libavcodec/h264_mb.c
+@@ -564 +564 @@
+-        XCHG(top_border + (0 << pixel_shift), src_y + (1 << pixel_shift), xchg);
++        XCHG(top_border + (0 << pixel_shift), src_y + 1 + pixel_shift, xchg);
+@@ -576 +576 @@
+-                XCHG(top_border + (16 << pixel_shift), src_cb + (1 << pixel_shift), xchg);
++                XCHG(top_border + (16 << pixel_shift), src_cb + 1 + pixel_shift, xchg);
+@@ -578 +578 @@
+-                XCHG(top_border + (32 << pixel_shift), src_cr + (1 << pixel_shift), xchg);
++                XCHG(top_border + (32 << pixel_shift), src_cr + 1 + pixel_shift, xchg);

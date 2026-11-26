@@ -78,6 +78,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libxkbcommon-dev libgtk-3-dev libwayland-dev libfontconfig1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
+      - name: Native build failure handling
+        if: runner.os != 'Windows'
+        run: node --test scripts/tests/native-build-failures.test.cjs
       - run: cargo clippy --workspace --all-targets --keep-going -- -D warnings
       - run: cargo test --workspace --no-fail-fast
 

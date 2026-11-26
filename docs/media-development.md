@@ -54,6 +54,12 @@ See https://ffmpeg.org/legal.html for the upstream distribution requirements.
 
 ## Validation
 
+Native compilation uses `make --keep-going` to collect independent diagnostics in one pass;
+it still fails on errors and never installs libraries or records a successful cache stamp after
+a failed build. Run `node --test scripts/tests/native-build-failures.test.cjs` to verify this
+failure path locally. Upstream FATE test success does not establish a warning-free MSVC build;
+review the complete native compiler output for the enabled codecs.
+
 Decoder tests exercise actual PNG/GIF, WebM and PCM WAV decoding. Audio tests use a deterministic
 null sink, never the developer's speakers. UI tests verify media identity, save protection, split
 views, zoom, session restoration and pause behavior. Render snapshots cover all built-in themes
